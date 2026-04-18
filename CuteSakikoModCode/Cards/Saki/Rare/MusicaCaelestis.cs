@@ -1,0 +1,53 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
+
+[Pool(typeof(CuteSakiCardPool))]
+public class MusicaCaelestis : CustomCardModel
+{
+    public MusicaCaelestis() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    {
+    }
+
+    public override string PortraitPath =>
+        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromPower<MusicaCaelestisPower>();
+        }
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        var existing = Owner.Creature.GetPower<MusicaCaelestisPower>();
+        if (existing == null)
+            await PowerCmd.Apply<MusicaCaelestisPower>(Owner.Creature, 1, Owner.Creature, this);
+        else
+            // 可叠加层数
+            await PowerCmd.ModifyAmount(existing, 1, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        EnergyCost.UpgradeBy(-1); // 2 → 1
+    }
+}

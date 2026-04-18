@@ -1,0 +1,256 @@
+[gd_scene load_steps=30 format=3 uid="uid://mjqk6r3d0pdo"]
+
+[ext_resource type="Shader" uid="uid://d3oc6s2kea7wb" path="res://CuteSakikoMod/images/bg/vfx_water_reflection.gdshader" id="1_01smy"]
+[ext_resource type="Texture2D" uid="uid://d1pcr66auna" path="res://CuteSakikoMod/images/bg/underdocks_00.png" id="2_ucmh7"]
+[ext_resource type="Texture2D" uid="uid://bm16nywey8w84" path="res://CuteSakikoMod/images/ancient/AnotherSelf.png" id="3_dslr7"]
+[ext_resource type="Texture2D" uid="uid://cg8kn32yhccnn" path="res://CuteSakikoMod/images/bg/ground_spark.png" id="4_qmnj8"]
+[ext_resource type="Texture2D" uid="uid://dftk48wsovhki" path="res://CuteSakikoMod/images/bg/trial_stand_light.png" id="5_4oeou"]
+[ext_resource type="Texture2D" uid="uid://bno88bk6ddclr" path="res://CuteSakikoMod/images/bg/square_speck.png" id="6_6rw7e"]
+[ext_resource type="Texture2D" uid="uid://0acsxns3ar87" path="res://CuteSakikoMod/images/bg/twinkle_star.png" id="7_hnlut"]
+[ext_resource type="Texture2D" uid="uid://c50iigu16453w" path="res://CuteSakikoMod/images/bg/light.png" id="9_tfupd"]
+[ext_resource type="Material" uid="uid://c4ycqv0gdxvmr" path="res://CuteSakikoMod/images/bg/canvas_item_material_additive_shared.tres" id="shared_additive_mat"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4pq5v"]
+noise_type = 0
+frequency = 0.0259
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ro3e1"]
+width = 50
+height = 50
+noise = SubResource("FastNoiseLite_4pq5v")
+seamless = true
+seamless_blend_skirt = 0.093
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ca8tp"]
+shader = ExtResource("1_01smy")
+shader_parameter/noise = SubResource("NoiseTexture2D_ro3e1")
+shader_parameter/mask = ExtResource("2_ucmh7")
+shader_parameter/speed = 0.023
+shader_parameter/strength = 0.023
+
+[sub_resource type="Gradient" id="Gradient_2gkwv"]
+offsets = PackedFloat32Array(0, 0.196477, 0.420054, 0.601626, 0.757453, 0.891599, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.160784, 0, 0.462745, 1, 0.454902, 0.737255, 1, 1, 0.466973, 0.748742, 1, 1, 0.466667, 0.258824, 1, 1, 0.0512158, 0, 0.691579, 1, 0.0509804, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g4cvj"]
+gradient = SubResource("Gradient_2gkwv")
+
+[sub_resource type="Curve" id="Curve_v57b4"]
+_data = [Vector2(0, 0.497359), 0.0, 3.42211, 0, 0, Vector2(0.0728643, 0.83932), 0.0, 0.0, 0, 0, Vector2(0.199749, 0.258398), 0.0, 0.0, 0, 0, Vector2(0.30402, 0.99588), 0.0, 0.0, 0, 0, Vector2(0.427136, 0.501479), 0.0, 0.0, 0, 0, Vector2(0.527638, 0.7734), 0.0, 0.0, 0, 0, Vector2(0.633166, 0.353159), -4.67636, 0.0, 0, 0, Vector2(0.767588, 0.594866), 0.0, 0.0, 0, 0, Vector2(0.797739, 0.257025), 0.0, 0.0, 0, 0, Vector2(0.904523, 0.442426), 0.0, 0.0, 0, 0, Vector2(1, 0.138918), -3.3946, 0.0, 0, 0]
+point_count = 11
+
+[sub_resource type="CurveTexture" id="CurveTexture_wn5hr"]
+curve = SubResource("Curve_v57b4")
+
+[sub_resource type="Curve" id="Curve_3tghm"]
+_data = [Vector2(0, 0), 0.0, 1.68527, 0, 0, Vector2(1, 1), 2.0572, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_k6ysb"]
+curve = SubResource("Curve_3tghm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yu24j"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(800, 1, 1)
+gravity = Vector3(0, -200, 0)
+scale_min = 0.1
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_wn5hr")
+color = Color(1, 1, 1, 0.0392157)
+color_ramp = SubResource("GradientTexture1D_g4cvj")
+turbulence_enabled = true
+turbulence_noise_strength = 20.0
+turbulence_noise_speed_random = 2.56
+turbulence_influence_min = 0.164
+turbulence_influence_max = 0.196
+turbulence_influence_over_life = SubResource("CurveTexture_k6ysb")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_lmitq"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aah3q"]
+
+[sub_resource type="Gradient" id="Gradient_8yskr"]
+offsets = PackedFloat32Array(0, 0.170306, 0.286026, 0.423581, 0.611354, 0.720524, 0.847162, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.513726, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.513726, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sbu3o"]
+gradient = SubResource("Gradient_8yskr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mpmq0"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.5
+color = Color(0.454902, 1, 0.788235, 0.419608)
+color_ramp = SubResource("GradientTexture1D_sbu3o")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oi880"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vhct3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rogyo"]
+
+[sub_resource type="Curve" id="Curve_nvr8r"]
+_data = [Vector2(0, 0.321019), 0.0, 0.0, 0, 0, Vector2(0.502521, 0.507939), 0.0, 0.0, 0, 0, Vector2(1, 0.36242), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_qsqhg"]
+offsets = PackedFloat32Array(0, 0.411546, 0.994413)
+colors = PackedColorArray(0.34902, 0.34902, 0.34902, 1, 1, 1, 1, 1, 0.34902, 0.34902, 0.34902, 1)
+
+[node name="AnotherSelf" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_ca8tp")
+layout_mode = 0
+offset_left = -330.0
+offset_top = -49.0
+offset_right = 2252.0
+offset_bottom = 1172.0
+texture = ExtResource("3_dslr7")
+expand_mode = 2
+
+[node name="idle_specks" type="GPUParticles2D" parent="."]
+material = ExtResource("shared_additive_mat")
+position = Vector2(894, 1103)
+amount = 30
+texture = ExtResource("4_qmnj8")
+lifetime = 10.0
+preprocess = 5.0
+process_material = SubResource("ParticleProcessMaterial_yu24j")
+
+[node name="light_overlay" type="GPUParticles2D" parent="."]
+modulate = Color(0.9999997, 0.8729759, 0.2643505, 1)
+clip_children = 1
+material = SubResource("CanvasItemMaterial_lmitq")
+position = Vector2(995.3043, 681.8734)
+rotation = 0.027925268
+amount = 1
+texture = ExtResource("5_4oeou")
+lifetime = 10.0
+preprocess = 2.0
+local_coords = true
+process_material = SubResource("ShaderMaterial_aah3q")
+
+[node name="light_overlay2" type="GPUParticles2D" parent="."]
+modulate = Color(0.90972, 0.207225, 0.89416, 1)
+material = SubResource("CanvasItemMaterial_lmitq")
+position = Vector2(1569, 370)
+rotation = -0.231258
+amount = 1
+texture = ExtResource("5_4oeou")
+lifetime = 10.0
+preprocess = 2.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_mpmq0")
+
+[node name="square_specks" type="GPUParticles2D" parent="."]
+material = ExtResource("shared_additive_mat")
+position = Vector2(30.381989, 392.93442)
+amount = 30
+texture = ExtResource("6_6rw7e")
+lifetime = 14.0
+preprocess = 15.0
+process_material = SubResource("ShaderMaterial_oi880")
+
+[node name="square_specks2" type="GPUParticles2D" parent="."]
+modulate = Color(0.9216227, 0.89772373, 0.5017191, 1)
+material = ExtResource("shared_additive_mat")
+position = Vector2(1575.6434, 546.162)
+rotation = -6.2831855
+amount = 30
+texture = ExtResource("6_6rw7e")
+lifetime = 14.0
+preprocess = 15.0
+process_material = SubResource("ShaderMaterial_vhct3")
+
+[node name="twinkle_star_specks" type="GPUParticles2D" parent="."]
+material = ExtResource("shared_additive_mat")
+position = Vector2(959.45715, 54.896698)
+amount = 30
+texture = ExtResource("7_hnlut")
+lifetime = 12.0
+preprocess = 18.0
+process_material = SubResource("ShaderMaterial_rogyo")
+
+[node name="light7" type="CPUParticles2D" parent="."]
+material = ExtResource("shared_additive_mat")
+position = Vector2(338, 997)
+scale = Vector2(5.22916, 5)
+skew = -0.000679374
+amount = 2
+texture = ExtResource("9_tfupd")
+lifetime = 3.0
+local_coords = true
+spread = 20.21
+gravity = Vector2(0, 0)
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_nvr8r")
+color = Color(0.901961, 0.443137, 0.384314, 0.0862745)
+color_ramp = SubResource("Gradient_qsqhg")
+
+[node name="light8" type="CPUParticles2D" parent="."]
+material = ExtResource("shared_additive_mat")
+position = Vector2(1746, 642)
+scale = Vector2(5.22916, 5)
+skew = -0.000679374
+amount = 2
+texture = ExtResource("9_tfupd")
+lifetime = 3.0
+local_coords = true
+spread = 20.21
+gravity = Vector2(0, 0)
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_nvr8r")
+color = Color(0.611454, 0.500251, 1, 0.0862745)
+color_ramp = SubResource("Gradient_qsqhg")
+
+[node name="light9" type="CPUParticles2D" parent="."]
+material = ExtResource("shared_additive_mat")
+position = Vector2(1205.106, 656.05334)
+scale = Vector2(11.32, 10.823)
+skew = -0.000679374
+amount = 2
+texture = ExtResource("9_tfupd")
+lifetime = 3.0
+local_coords = true
+spread = 20.21
+gravity = Vector2(0, 0)
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_nvr8r")
+color = Color(0.647059, 0.619608, 0.0392157, 0.152941)
+color_ramp = SubResource("Gradient_qsqhg")
+
+[node name="light10" type="CPUParticles2D" parent="."]
+material = ExtResource("shared_additive_mat")
+position = Vector2(451.23337, 482.76053)
+rotation = 1.5707964
+scale = Vector2(20, 5)
+skew = -0.000679374
+amount = 2
+texture = ExtResource("9_tfupd")
+lifetime = 3.0
+local_coords = true
+spread = 20.21
+gravity = Vector2(0, 0)
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_nvr8r")
+color = Color(0.71641606, 0.5758566, 0.3569769, 0.40392157)
+color_ramp = SubResource("Gradient_qsqhg")

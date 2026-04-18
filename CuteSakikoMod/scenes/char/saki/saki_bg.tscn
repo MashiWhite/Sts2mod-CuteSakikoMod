@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cx5rdp7ge8w72"]
+
+[ext_resource type="Texture2D" uid="uid://0c6jjs78ir18" path="res://CuteSakikoMod/images/others/saki/saki_bg.png" id="1_8p2f3"]
+
+[node name="WatcherBg" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -92.0
+offset_top = -92.0
+offset_right = 2322.0
+offset_bottom = 1415.0
+texture = ExtResource("1_8p2f3")

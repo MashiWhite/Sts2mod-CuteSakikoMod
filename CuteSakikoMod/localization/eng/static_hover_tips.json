@@ -1,0 +1,10 @@
+{
+  "CUTESAKIKOMOD_NOTE_ATTACK.title": "攻击音符",
+  "CUTESAKIKOMOD_NOTE_ATTACK.description": "打出的攻击牌会累积攻击音符。",
+  "CUTESAKIKOMOD_NOTE_SKILL.title": "技能音符",
+  "CUTESAKIKOMOD_NOTE_SKILL.description": "打出的技能牌会累积技能音符。",
+  "CUTESAKIKOMOD_NOTE_POWER.title": "能力音符",
+  "CUTESAKIKOMOD_NOTE_POWER.description": "打出的能力牌会累积能力音符。",
+  "CUTESAKIKOMOD_NOTE_SPECIAL.title": "特殊音符",
+  "CUTESAKIKOMOD_NOTE_SPECIAL.description": "打出的其他牌会累积特殊音符。"
+}

@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbipb5ak6snpw"]
+
+[ext_resource type="Texture2D" uid="uid://86umhexlclko" path="res://CuteSakikoMod/images/char/anon/Anon1.png" id="1_ajfbk"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Bounds" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = -128.0
+offset_top = -318.0
+offset_right = 124.0
+offset_bottom = -2.0
+
+[node name="IntentPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -324)
+
+[node name="CenterPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -171)
+
+[node name="Visuals" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-2, -160)
+texture = ExtResource("1_ajfbk")

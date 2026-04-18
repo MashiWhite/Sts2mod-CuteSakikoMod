@@ -1,0 +1,62 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb31c7s6ojha1"]
+
+[ext_resource type="Script" uid="uid://jf6sgq0tgliu" path="res://CuteSakikoModCode/Nodes/SakiRestSiteCharacter.cs" id="1_letbo"]
+[ext_resource type="Texture2D" uid="uid://1hu8s0dkcwcq" path="res://CuteSakikoMod/images/others/anon/anon_sitting.png" id="2_yr1er"]
+[ext_resource type="PackedScene" uid="uid://bgy88bk44xxvk" path="res://CuteSakikoMod/scenes/ui/Sakiselection_reticle.tscn" id="3_s5l6r"]
+
+[node name="AnonRestSite" type="Node2D"]
+position = Vector2(-7, -47)
+script = ExtResource("1_letbo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-0.4854393, -79.10372)
+scale = Vector2(0.47308934, 0.47308934)
+texture = ExtResource("2_yr1er")
+
+[node name="ControlRoot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 11.5
+offset_top = 59.5
+offset_right = 11.5
+offset_bottom = 59.5
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true
+
+[node name="SelectionReticle" parent="ControlRoot" instance=ExtResource("3_s5l6r")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -60.0
+offset_top = -233.00002
+offset_right = 100.888885
+offset_bottom = 12.333328
+scale = Vector2(1.5, 1.5)
+
+[node name="Hitbox" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -121.66667
+offset_top = -275.0
+offset_right = 41.0
+offset_bottom = -28.333313
+scale = Vector2(1.5, 1.5)
+
+[node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 97.0
+offset_top = -215.0
+offset_right = 97.0
+offset_bottom = -215.0
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true
+
+[node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -95.0
+offset_top = -216.0
+offset_right = -95.0
+offset_bottom = -216.0
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true

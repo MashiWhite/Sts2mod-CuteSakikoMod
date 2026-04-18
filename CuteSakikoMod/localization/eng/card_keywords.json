@@ -1,0 +1,85 @@
+{
+  "CUTESAKIKOMOD-PRESSURE.title": "压力",
+  "CUTESAKIKOMOD-PRESSURE.description": "每层[gold]压力[/gold]使受到的伤害增加5%。",
+
+  "CUTESAKIKOMOD-MEMORY.title": "回忆",
+  "CUTESAKIKOMOD-MEMORY.description": "回忆卡牌每打出一次增加一点耗能。被消耗时造成两次打出效果，但在本场战斗中移出回忆卡池。",
+
+  "CUTESAKIKOMOD-SWORD.title": "骑士之剑",
+  "CUTESAKIKOMOD-SWORD.description": "自身[gold]压力[/gold]每增加1层，骑士之剑的伤害就增加1点。",
+
+  "CUTESAKIKOMOD-MEMORYSAKI.title": "祥子的回忆",
+  "CUTESAKIKOMOD-MEMORYSAKI.description": "鼓声的应援：获得1点力量。\n创可贴的关心：获得1层再生。\n命运的相遇：下一张能力牌免费。\n一起长大的约定：获得3点活力。\n星空下的嬉戏：获得1层敏捷。",
+
+  "CUTESAKIKOMOD-EGGS.title": "彩蛋",
+  "CUTESAKIKOMOD-EGGS.description": "一些不顾平衡，和MOD关联不大的彩蛋卡。",
+
+  "CUTESAKIKOMOD-NOCHEST.title": "十二丸钢板的减费",
+  "CUTESAKIKOMOD-NOCHEST.description": "减费公式为12/(2×队友数)。敲后为12/（队友数）。",
+
+  "CUTESAKIKOMOD-PLAYPIANO.title": "琴奏",
+  "CUTESAKIKOMOD-PLAYPIANO.description": "属于小祥的特殊打击。",
+
+  "CUTESAKIKOMOD-PLAYGUITAR.title": "弦奏",
+  "CUTESAKIKOMOD-PLAYGUITAR.description": "属于爱音的特殊打击。",
+
+  "CUTESAKIKOMOD-CCHORD.title": "C和弦",
+  "CUTESAKIKOMOD-CCHORD.description": "随机造成{0}点伤害，获得{1}点格挡。",
+
+  "CUTESAKIKOMOD-GCHORD.title": "G和弦",
+  "CUTESAKIKOMOD-GCHORD.description": "所有友方获得{0}点活力。",
+
+  "CUTESAKIKOMOD-DCHORD.title": "D和弦",
+  "CUTESAKIKOMOD-DCHORD.description": "所有友方获得{0}层易伤和{1}点力量。",
+
+  "CUTESAKIKOMOD-ACHORD.title": "A和弦",
+  "CUTESAKIKOMOD-ACHORD.description": "对所有敌人造成{0}点伤害。",
+
+  "CUTESAKIKOMOD-ECHORD.title": "E和弦",
+  "CUTESAKIKOMOD-ECHORD.description": "所有友方获得{0}点力量。",
+
+  "CUTESAKIKOMOD-C#CHORD.title": "#C和弦",
+  "CUTESAKIKOMOD-C#CHORD.description": "获得{0}层活力。",
+
+  "CUTESAKIKOMOD-D#CHORD.title": "#D和弦",
+  "CUTESAKIKOMOD-D#CHORD.description": "随机造成{0}点伤害。",
+
+  "CUTESAKIKOMOD-AMCHORD.title": "Am和弦",
+  "CUTESAKIKOMOD-AMCHORD.description": "所有队友获得{0}点格挡。",
+
+  "CUTESAKIKOMOD-GMCHORD.title": "Gm和弦",
+  "CUTESAKIKOMOD-GMCHORD.description": "所有友方恢复{0}点血量。",
+
+  "CUTESAKIKOMOD-EMCHORD.title": "Em和弦",
+  "CUTESAKIKOMOD-EMCHORD.description": "所有友方本回合获得{0}点倒映。",
+
+  "CUTESAKIKOMOD-DMCHORD.title": "Dm和弦",
+  "CUTESAKIKOMOD-DMCHORD.description": "所有友方获得{0}层再生。",
+
+  "CUTESAKIKOMOD-BMCHORD.title": "Bm和弦",
+  "CUTESAKIKOMOD-BMCHORD.description": "所有友方获得{0}点敏捷。",
+
+  "CUTESAKIKOMOD-C#MCHORD.title": "#Cm和弦",
+  "CUTESAKIKOMOD-C#MCHORD.description": "所有友方获得{0}点格挡。",
+
+  "CUTESAKIKOMOD-D#MCHORD.title": "#Dm和弦",
+  "CUTESAKIKOMOD-D#MCHORD.description": "所有友方获得{0}层覆甲。",
+
+  "CUTESAKIKOMOD-G7CHORD.title": "G7和弦",
+  "CUTESAKIKOMOD-G7CHORD.description": "所有敌人本回合减{0}点力量。",
+
+  "CUTESAKIKOMOD-D7CHORD.title": "D7和弦",
+  "CUTESAKIKOMOD-D7CHORD.description": "所有敌人获得{0}层虚弱。",
+
+  "CUTESAKIKOMOD-A7CHORD.title": "A7和弦",
+  "CUTESAKIKOMOD-A7CHORD.description": "击晕敌人{0}回合。",
+
+  "CUTESAKIKOMOD-E7CHORD.title": "E7和弦",
+  "CUTESAKIKOMOD-E7CHORD.description": "所有友方获得{0}层壁垒。",
+
+  "CUTESAKIKOMOD-C#7CHORD.title": "#C7和弦",
+  "CUTESAKIKOMOD-C#7CHORD.description": "所有友方获得{0}点能量。",
+
+  "CUTESAKIKOMOD-D#7CHORD.title": "#D7和弦",
+  "CUTESAKIKOMOD-D#7CHORD.description": "所有友方抽{0}张牌。"
+}

@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://ggsi6f08ei64"]
+
+[ext_resource type="Texture2D" uid="uid://bm8ldbm75ytbb" path="res://CuteSakikoMod/images/ui/music/attack.png" id="1_d6qcv"]
+[ext_resource type="Script" uid="uid://js4ljse7y3cc" path="res://CuteSakikoModCode/Nodes/NoteDisplay.cs" id="1_so1q4"]
+[ext_resource type="Texture2D" uid="uid://dqpc2fri25hth" path="res://CuteSakikoMod/images/ui/music/skill.png" id="2_so1q4"]
+[ext_resource type="Texture2D" uid="uid://bbqdm7fxn05cs" path="res://CuteSakikoMod/images/ui/music/power.png" id="3_3pfrw"]
+[ext_resource type="Texture2D" uid="uid://ccre056a2j8lj" path="res://CuteSakikoMod/images/ui/music/special.png" id="4_6ujcu"]
+
+[node name="NoteDisplay" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_so1q4")
+
+[node name="IconContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 271.0
+offset_bottom = 52.0
+
+[node name="atkIcon" type="TextureRect" parent="IconContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_d6qcv")
+expand_mode = 3
+
+[node name="sklIcon" type="TextureRect" parent="IconContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_so1q4")
+expand_mode = 3
+
+[node name="powIcon" type="TextureRect" parent="IconContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_3pfrw")
+expand_mode = 3
+
+[node name="speIcon" type="TextureRect" parent="IconContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("4_6ujcu")
+expand_mode = 3

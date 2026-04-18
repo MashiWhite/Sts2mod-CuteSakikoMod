@@ -1,0 +1,51 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
+
+[Pool(typeof(CuteSakikoEggCardPool))]
+public class MirageComing : CustomCardModel
+{
+    public MirageComing() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    {
+    }
+
+    public override string PortraitPath =>
+        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromPower<PigPower>();
+            yield return HoverTipFactory.FromCard<PigEat>();
+        }
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        // 给予自身 PigPower（不可叠加，Single）
+        await PowerCmd.Apply<PigPower>(Owner.Creature, 1, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        // 升级：费用 1 -> 0
+        EnergyCost.UpgradeBy(-1);
+    }
+}

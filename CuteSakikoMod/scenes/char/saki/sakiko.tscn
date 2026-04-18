@@ -1,0 +1,289 @@
+[gd_scene load_steps=47 format=3 uid="uid://dmmcd01m3hq7j"]
+
+[ext_resource type="Texture2D" uid="uid://ddx1ouy5huw2i" path="res://CuteSakikoMod/images/char/saki/atk/atk001.png" id="1_2nb6d"]
+[ext_resource type="Texture2D" uid="uid://b0isvgy1va615" path="res://CuteSakikoMod/images/char/saki/Saki1.png" id="1_rbmi6"]
+[ext_resource type="Texture2D" uid="uid://c3ikoj5uiww1w" path="res://CuteSakikoMod/images/char/saki/atk/atk002.png" id="2_df3ic"]
+[ext_resource type="Texture2D" uid="uid://dpsotejj4wfih" path="res://CuteSakikoMod/images/char/saki/atk/atk003.png" id="3_ghn64"]
+[ext_resource type="Texture2D" uid="uid://r46tm07esck0" path="res://CuteSakikoMod/images/char/saki/atk/atk004.png" id="4_sq55n"]
+[ext_resource type="Texture2D" uid="uid://bxah2iygo62ai" path="res://CuteSakikoMod/images/char/saki/atk/atk005.png" id="5_ib5xn"]
+[ext_resource type="Texture2D" uid="uid://cqfk22tdoxt7r" path="res://CuteSakikoMod/images/char/saki/atk/atk006.png" id="6_1t2j0"]
+[ext_resource type="Texture2D" uid="uid://bp26duy7f8ckg" path="res://CuteSakikoMod/images/char/saki/atk/atk007.png" id="7_a0hml"]
+[ext_resource type="Texture2D" uid="uid://bhxg1l8dr0yvf" path="res://CuteSakikoMod/images/char/saki/atk/atk008.png" id="8_jtmlc"]
+[ext_resource type="Texture2D" uid="uid://1x7nn0f8frfq" path="res://CuteSakikoMod/images/char/saki/atk/atk009.png" id="9_qtiwn"]
+[ext_resource type="Texture2D" uid="uid://da4khkis6rxn0" path="res://CuteSakikoMod/images/char/saki/atk/atk010.png" id="10_8vt08"]
+[ext_resource type="Texture2D" uid="uid://cytdcnm00mj8" path="res://CuteSakikoMod/images/char/saki/atk/atk011.png" id="11_2fyp3"]
+[ext_resource type="Texture2D" uid="uid://cqgtmwis7acl8" path="res://CuteSakikoMod/images/char/saki/atk/atk012.png" id="12_elhc2"]
+[ext_resource type="Texture2D" uid="uid://bvkgx1cxxjwtg" path="res://CuteSakikoMod/images/char/saki/hurt/Saki1.png" id="13_1t2j0"]
+[ext_resource type="Texture2D" uid="uid://cm6j2fducbxbg" path="res://CuteSakikoMod/images/char/saki/die/d1.png" id="13_nxnsh"]
+[ext_resource type="Texture2D" uid="uid://1cwdy8208wgx" path="res://CuteSakikoMod/images/char/saki/die/d2.png" id="14_3y0qh"]
+[ext_resource type="Texture2D" uid="uid://bgdc6cwh15rer" path="res://CuteSakikoMod/images/char/saki/hurt/Saki2.png" id="14_a0hml"]
+[ext_resource type="Texture2D" uid="uid://75fr101qno7a" path="res://CuteSakikoMod/images/char/saki/saki2.png" id="14_dxi2s"]
+[ext_resource type="Texture2D" uid="uid://1mwxigi47t2q" path="res://CuteSakikoMod/images/char/saki/hurt/saki3.png" id="15_jtmlc"]
+[ext_resource type="Texture2D" uid="uid://kybm2hmtlnr3" path="res://CuteSakikoMod/images/char/saki/saki3.png" id="15_niheu"]
+[ext_resource type="Texture2D" uid="uid://h7brkt1vyuwg" path="res://CuteSakikoMod/images/char/saki/die/d3.png" id="15_r2i85"]
+[ext_resource type="Texture2D" uid="uid://bb3pfm8t8ctor" path="res://CuteSakikoMod/images/char/saki/saki4.png" id="16_jqn37"]
+[ext_resource type="Texture2D" uid="uid://c5sra5s6akp53" path="res://CuteSakikoMod/images/char/saki/hurt/saki4.png" id="16_qtiwn"]
+[ext_resource type="Texture2D" uid="uid://cgvw1c4fslkic" path="res://CuteSakikoMod/images/char/saki/die/d4.png" id="16_upso8"]
+[ext_resource type="Texture2D" uid="uid://d3keu3wbsed7t" path="res://CuteSakikoMod/images/char/saki/hurt/saki5.png" id="17_8vt08"]
+[ext_resource type="Texture2D" uid="uid://50xgyjbo70lk" path="res://CuteSakikoMod/images/char/saki/saki5.png" id="17_50578"]
+[ext_resource type="Texture2D" uid="uid://ddb3avakbbkyy" path="res://CuteSakikoMod/images/char/saki/die/d5.png" id="17_jm1ek"]
+[ext_resource type="Texture2D" uid="uid://besps7bcj4bt4" path="res://CuteSakikoMod/images/char/saki/die/d6.png" id="18_1028p"]
+[ext_resource type="Texture2D" uid="uid://dwrkin1gcqrjh" path="res://CuteSakikoMod/images/char/saki/saki6.png" id="18_g8bvm"]
+[ext_resource type="Texture2D" uid="uid://8dwdw5u1umve" path="res://CuteSakikoMod/images/char/saki/saki7.png" id="19_lb8eb"]
+[ext_resource type="Texture2D" uid="uid://ou2yqhsdhjx0" path="res://CuteSakikoMod/images/char/saki/die/d7.png" id="19_lcxn3"]
+[ext_resource type="Texture2D" uid="uid://1hoft4jggi4j" path="res://CuteSakikoMod/images/char/saki/die/d8.png" id="20_yfx37"]
+[ext_resource type="Texture2D" uid="uid://b0cvlf6dcajjg" path="res://CuteSakikoMod/images/char/saki/die/d9.png" id="21_1jgi2"]
+[ext_resource type="Texture2D" uid="uid://bar8lu4gkyx41" path="res://CuteSakikoMod/images/char/saki/die/d10.png" id="22_ajnvu"]
+[ext_resource type="Texture2D" uid="uid://bfah7k3kgohuq" path="res://CuteSakikoMod/images/char/saki/die/d11.png" id="23_nf2cb"]
+[ext_resource type="Texture2D" uid="uid://dibv4c1oiiixl" path="res://CuteSakikoMod/images/char/saki/die/d12.png" id="24_ljvug"]
+[ext_resource type="Texture2D" uid="uid://dms05wfhb6vyl" path="res://CuteSakikoMod/images/char/saki/die/d13.png" id="25_dds5s"]
+[ext_resource type="Texture2D" uid="uid://cu07m67vuw8au" path="res://CuteSakikoMod/images/char/saki/die/d14.png" id="26_jmlvk"]
+[ext_resource type="Texture2D" uid="uid://cklc461ed3egi" path="res://CuteSakikoMod/images/char/saki/die/d15.png" id="27_fxy8g"]
+[ext_resource type="Texture2D" uid="uid://bx7o6yv26ayc6" path="res://CuteSakikoMod/images/char/saki/die/d16.png" id="28_gonsy"]
+
+[sub_resource type="Animation" id="Animation_upso8"]
+resource_name = "attack"
+length = 24.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("1_2nb6d"), ExtResource("2_df3ic"), ExtResource("3_ghn64"), ExtResource("4_sq55n"), ExtResource("5_ib5xn"), ExtResource("6_1t2j0"), ExtResource("7_a0hml"), ExtResource("8_jtmlc"), ExtResource("9_qtiwn"), ExtResource("10_8vt08"), ExtResource("11_2fyp3"), ExtResource("12_elhc2"), ExtResource("12_elhc2"), ExtResource("11_2fyp3"), ExtResource("10_8vt08"), ExtResource("9_qtiwn"), ExtResource("8_jtmlc"), ExtResource("7_a0hml"), ExtResource("6_1t2j0"), ExtResource("5_ib5xn"), ExtResource("4_sq55n"), ExtResource("3_ghn64"), ExtResource("2_df3ic"), ExtResource("1_2nb6d")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -190)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/AnimationPlayer:speed_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [40.0]
+}
+
+[sub_resource type="Animation" id="Animation_jm1ek"]
+resource_name = "cast"
+length = 24.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("1_2nb6d"), ExtResource("2_df3ic"), ExtResource("3_ghn64"), ExtResource("4_sq55n"), ExtResource("5_ib5xn"), ExtResource("6_1t2j0"), ExtResource("7_a0hml"), ExtResource("8_jtmlc"), ExtResource("9_qtiwn"), ExtResource("10_8vt08"), ExtResource("11_2fyp3"), ExtResource("12_elhc2"), ExtResource("12_elhc2"), ExtResource("11_2fyp3"), ExtResource("10_8vt08"), ExtResource("9_qtiwn"), ExtResource("8_jtmlc"), ExtResource("7_a0hml"), ExtResource("6_1t2j0"), ExtResource("5_ib5xn"), ExtResource("4_sq55n"), ExtResource("3_ghn64"), ExtResource("2_df3ic"), ExtResource("1_2nb6d")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -190)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/AnimationPlayer:speed_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [30.0]
+}
+
+[sub_resource type="Animation" id="Animation_nxnsh"]
+resource_name = "die"
+length = 16.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("13_nxnsh"), ExtResource("14_3y0qh"), ExtResource("15_r2i85"), ExtResource("16_upso8"), ExtResource("17_jm1ek"), ExtResource("18_1028p"), ExtResource("19_lcxn3"), ExtResource("20_yfx37"), ExtResource("21_1jgi2"), ExtResource("22_ajnvu"), ExtResource("23_nf2cb"), ExtResource("24_ljvug"), ExtResource("25_dds5s"), ExtResource("26_jmlvk"), ExtResource("27_fxy8g"), ExtResource("28_gonsy")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-100, -158)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/AnimationPlayer:speed_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [30.0]
+}
+
+[sub_resource type="Animation" id="Animation_1028p"]
+resource_name = "hurt"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7, 7.9999995),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("13_1t2j0"), ExtResource("14_a0hml"), ExtResource("15_jtmlc"), ExtResource("16_qtiwn"), ExtResource("17_8vt08"), ExtResource("16_qtiwn"), ExtResource("15_jtmlc"), ExtResource("14_a0hml"), ExtResource("13_1t2j0")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.99, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-30, -160), Vector2(-30, -160), Vector2(-30, -160)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/AnimationPlayer:speed_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [30.0]
+}
+
+[sub_resource type="Animation" id="Animation_3y0qh"]
+resource_name = "idle_loop"
+length = 13.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12.01),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("1_rbmi6"), ExtResource("14_dxi2s"), ExtResource("15_niheu"), ExtResource("16_jqn37"), ExtResource("17_50578"), ExtResource("18_g8bvm"), ExtResource("19_lb8eb"), ExtResource("18_g8bvm"), ExtResource("17_50578"), ExtResource("16_jqn37"), ExtResource("15_niheu"), ExtResource("14_dxi2s"), ExtResource("1_rbmi6")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/AnimationPlayer:speed_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 12, 13),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 25.0, 25.0, 1.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/Sprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -160)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_upso8"]
+_data = {
+&"attack": SubResource("Animation_upso8"),
+&"cast": SubResource("Animation_jm1ek"),
+&"die": SubResource("Animation_nxnsh"),
+&"hurt": SubResource("Animation_1028p"),
+&"idle_loop": SubResource("Animation_3y0qh")
+}
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Bounds" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = -127.0
+offset_top = -341.0
+offset_right = 109.0
+offset_bottom = -15.0
+
+[node name="IntentPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-11, -168)
+
+[node name="CenterPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -171)
+
+[node name="Visuals" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Visuals"]
+position = Vector2(2, -190)
+texture = ExtResource("1_2nb6d")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_upso8")
+}
+autoplay = "idle_loop"
+speed_scale = 40.0
+next/attack = &"idle_loop"
+next/cast = &"idle_loop"
+next/hurt = &"idle_loop"

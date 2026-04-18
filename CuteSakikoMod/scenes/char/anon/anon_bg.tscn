@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://coomquisdon5q"]
+
+[ext_resource type="Texture2D" uid="uid://bdxlu6ahcconl" path="res://CuteSakikoMod/images/others/anon/anon_bg.png" id="1_af4q3"]
+
+[node name="WatcherBg" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 372.0
+offset_top = 103.0
+offset_right = 2377.878
+offset_bottom = 1230.0
+texture = ExtResource("1_af4q3")

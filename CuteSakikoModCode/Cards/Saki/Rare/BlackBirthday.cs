@@ -1,0 +1,77 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
+
+[Pool(typeof(CuteSakiCardPool))]
+public sealed class BlackBirthday : CustomCardModel
+{
+    public BlackBirthday() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    {
+    }
+
+    public override string PortraitPath =>
+        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    protected override IEnumerable<DynamicVar> CanonicalVars
+    {
+        get
+        {
+            // 基础值 = 1（给予1层 BlackRebirthPower），升级后变为2
+            yield return new PowerVar<BlackRebirthPower>(1);
+        }
+    }
+
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromPower<BlackRebirthPower>();
+        }
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await PowerCmd.Apply<BlackRebirthPower>(Owner.Creature, 1, Owner.Creature, this);
+
+        var creature = Owner.Creature;
+        var currentHp = creature.CurrentHp;
+        if (currentHp <= 10) return;
+
+        var lostHp = currentHp - 10;
+
+        await CreatureCmd.SetCurrentHp(creature, 10);
+
+        await DamageCmd.Attack(lostHp)
+            .FromCard(this)
+            .TargetingAllOpponents(CombatState)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
+
+        // 从 DynamicVars 读取层数（基础1，升级后2）
+        var powerAmount = (int)DynamicVars["BlackRebirthPower"].BaseValue;
+        await PowerCmd.Apply<BlackRebirthPower>(creature, powerAmount, creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        // 升级：增加 PowerVar 的值（1 -> 2）
+        DynamicVars["BlackRebirthPower"].UpgradeValueBy(1);
+    }
+}

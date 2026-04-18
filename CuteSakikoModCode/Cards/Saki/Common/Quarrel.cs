@@ -1,0 +1,56 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+
+[Pool(typeof(CuteSakiCardPool))]
+public class Quarrel() : CustomCardModel(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+{
+    public override string PortraitPath =>
+        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            // 返回压力能力的悬停提示
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+            // 如果有其他提示，继续 yield return
+        }
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Target == null) return;
+
+        var selfPressureGain = IsUpgraded ? 5 : 10;
+        var enemyPressureGain = IsUpgraded ? 15 : 10;
+
+        // 自身增加压力
+        await PowerCmd.Apply<PressurePower>(Owner.Creature, selfPressureGain, Owner.Creature, this);
+
+        // 给选中的敌人增加压力
+        await PowerCmd.Apply<PressurePower>(cardPlay.Target, enemyPressureGain, Owner.Creature, this);
+
+        // 临时能力：下回合扣除等量压力
+        await PowerCmd.Apply<QuarrelSelfPower>(Owner.Creature, selfPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<QuarrelEnemyPower>(cardPlay.Target, enemyPressureGain, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+    }
+}

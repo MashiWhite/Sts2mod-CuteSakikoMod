@@ -1,0 +1,64 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+
+[Pool(typeof(CuteSakiCardPool))]
+public class Glare() : CustomCardModel(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+{
+    public override string PortraitPath =>
+        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(7m, ValueProp.Move),
+        new PowerVar<PressurePower>(8m)
+    ];
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+        }
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        var target = cardPlay.Target;
+        if (target == null) return;
+
+        // 造成伤害
+        var damage = DynamicVars["Damage"].IntValue;
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .Targeting(target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
+
+        // 施加压力
+        var pressureAmount = DynamicVars["PressurePower"].IntValue;
+        await PowerCmd.Apply<PressurePower>(target, pressureAmount, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        // 升级：伤害 7 → 10，压力 5 → 8
+        DynamicVars["Damage"].UpgradeValueBy(3m);
+        DynamicVars["PressurePower"].UpgradeValueBy(2m);
+    }
+}

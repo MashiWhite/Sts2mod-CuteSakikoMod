@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1o05keyx0hrv"]
+
+[ext_resource type="Texture2D" uid="uid://cx18ekla2ruv1" path="res://CuteSakikoMod/images/others/Mutsumi.png" id="2_ijk21"]
+
+[node name="Mutsumi" type="Node2D"]
+position = Vector2(-40, -53)
+metadata/_edit_group_ = true
+
+[node name="Visuals" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(38.81129, -85.10404)
+scale = Vector2(0.85360485, 0.85360485)
+texture = ExtResource("2_ijk21")
+
+[node name="Bounds" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -39.0
+offset_top = -214.0
+offset_right = 124.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CenterPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(40.14737, -85.99751)
+
+[node name="IntentPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(40.14737, -97.60875)

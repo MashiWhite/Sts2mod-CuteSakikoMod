@@ -1,0 +1,128 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+
+[Pool(typeof(CuteSakiCardPool))]
+public class Chord : CustomCardModel
+{
+    // 定义琴奏牌的类型列表（用于随机生成）
+    private static readonly Type[] QinPlayTypes = new[]
+    {
+        typeof(StrikeFast),
+        typeof(StrikeSlow),
+        typeof(StrikeOpulent)
+    };
+
+    public Chord() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+    }
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
+
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
+
+    public override string PortraitPath =>
+        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    protected override bool ShouldGlowGoldInternal
+    {
+        get
+        {
+            var pressure = Owner.Creature.GetPower<PressurePower>();
+            if (pressure == null) return false;
+            return IsUpgraded || pressure.Amount >= 1;
+        }
+    }
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Playpiano);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromCard<StrikeSlow>();
+            yield return HoverTipFactory.FromCard<StrikeOpulent>();
+            yield return HoverTipFactory.FromCard<StrikeFast>();
+        }
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        var cardsToGenerate = 0;
+        if (IsUpgraded)
+        {
+            cardsToGenerate = 2;
+        }
+        else
+        {
+            var pressure = Owner.Creature.GetPower<PressurePower>();
+            if (pressure != null && pressure.Amount >= 1)
+            {
+                await PowerCmd.ModifyAmount(pressure, -1, Owner.Creature, this);
+                cardsToGenerate = 2;
+            }
+            else
+            {
+                cardsToGenerate = 1;
+            }
+        }
+
+        if (cardsToGenerate <= 0) return;
+
+        var rng = Owner.RunState.Rng.CombatCardSelection;
+        var availableTypes = QinPlayTypes.ToList();
+        var selectedTypes = new List<Type>();
+        for (var i = 0; i < cardsToGenerate && availableTypes.Count > 0; i++)
+        {
+            var chosen = rng.NextItem(availableTypes);
+            selectedTypes.Add(chosen);
+            availableTypes.Remove(chosen);
+        }
+
+        foreach (var type in selectedTypes)
+        {
+            CardModel tempCard;
+            if (type == typeof(StrikeFast))
+                tempCard = CombatState.CreateCard<StrikeFast>(Owner);
+            else if (type == typeof(StrikeSlow))
+                tempCard = CombatState.CreateCard<StrikeSlow>(Owner);
+            else if (type == typeof(StrikeOpulent))
+                tempCard = CombatState.CreateCard<StrikeOpulent>(Owner);
+            else
+                continue;
+
+            if (IsUpgraded && tempCard.IsUpgradable)
+                CardCmd.Upgrade(tempCard);
+
+            if (tempCard.Pile?.Type != PileType.Hand)
+                await CardPileCmd.Add(tempCard, PileType.Hand);
+
+            tempCard.ExhaustOnNextPlay = false;
+            await CardCmd.AutoPlay(choiceContext, tempCard, cardPlay.Target);
+
+            if (tempCard.Pile != null && tempCard.Pile.IsCombatPile)
+                await CardPileCmd.RemoveFromCombat(tempCard);
+        }
+    }
+
+    protected override void OnUpgrade()
+    {
+        // 升级后无需消耗压力
+    }
+}

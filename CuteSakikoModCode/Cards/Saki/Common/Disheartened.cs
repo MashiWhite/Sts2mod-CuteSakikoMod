@@ -1,0 +1,61 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+
+[Pool(typeof(CuteSakiCardPool))]
+public class Disheartened : CustomCardModel
+{
+    public Disheartened() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    {
+    }
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    public override string PortraitPath =>
+        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(IsUpgraded ? 8m : 5m, ValueProp.Move)
+    ];
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get { yield return HoverTipFactory.FromPower<VulnerablePower>(); }
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Target == null) return;
+
+        // 造成伤害
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
+
+        // 给予易伤
+        var vulnerableAmount = IsUpgraded ? 2 : 1;
+        await PowerCmd.Apply<VulnerablePower>(cardPlay.Target, vulnerableAmount, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        // 升级效果已在 CanonicalVars 中通过 IsUpgraded 处理伤害
+        // 易伤层数在 OnPlay 中通过 IsUpgraded 判断
+    }
+}

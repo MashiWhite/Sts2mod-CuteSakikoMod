@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxn30iqa0k3bh"]
+
+[ext_resource type="Script" uid="uid://jf6sgq0tgliu" path="res://CuteSakikoModCode/Nodes/SakiRestSiteCharacter.cs" id="1_75sqw"]
+[ext_resource type="Texture2D" uid="uid://cdif1hwk8n3mo" path="res://CuteSakikoMod/images/others/saki/saki_sitting.png" id="2_8vtxr"]
+[ext_resource type="PackedScene" uid="uid://bgy88bk44xxvk" path="res://CuteSakikoMod/scenes/ui/Sakiselection_reticle.tscn" id="3_krthd"]
+
+[node name="SakiRestSite" type="Node2D"]
+position = Vector2(-7, -47)
+script = ExtResource("1_75sqw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(13.5, -78.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8vtxr")
+
+[node name="ControlRoot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 11.5
+offset_top = 59.5
+offset_right = 11.5
+offset_bottom = 59.5
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true
+
+[node name="SelectionReticle" parent="ControlRoot" instance=ExtResource("3_krthd")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -60.0
+offset_top = -219.0
+offset_right = 103.55556
+offset_bottom = 9.0
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true
+
+[node name="Hitbox" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -121.66667
+offset_top = -261.0
+offset_right = 41.888885
+offset_bottom = -32.1111
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true
+
+[node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 97.0
+offset_top = -215.0
+offset_right = 97.0
+offset_bottom = -215.0
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true
+
+[node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -95.0
+offset_top = -216.0
+offset_right = -95.0
+offset_bottom = -216.0
+scale = Vector2(1.5, 1.5)
+metadata/_edit_use_anchors_ = true

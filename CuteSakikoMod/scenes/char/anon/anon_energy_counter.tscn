@@ -1,0 +1,76 @@
+[gd_scene load_steps=5 format=3 uid="uid://dq55arqt2a1yp"]
+
+[ext_resource type="Script" uid="uid://cb83j0lwxihue" path="res://CuteSakikoModCode/Nodes/SakiEnergyCounter.cs" id="1_ifoa0"]
+[ext_resource type="Texture2D" uid="uid://cynpjq77hjg8i" path="res://CuteSakikoMod/images/charui/anon/anon_big_energy.png" id="2_vov5c"]
+[ext_resource type="Script" uid="uid://3ifa5el0q3ut" path="res://CuteSakikoModCode/Nodes/SakiMegaLabel.cs" id="3_r1kip"]
+
+[sub_resource type="FontVariation" id="FontVariation_kreon_bold_shared_font"]
+spacing_glyph = 2
+
+[node name="SakiEnergyCounter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 128.0
+script = ExtResource("1_ifoa0")
+metadata/_edit_lock_ = true
+
+[node name="EnergyVfxBack" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(64, 64)
+
+[node name="Layers" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RotationLayers" type="Control" parent="Layers"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 122.0
+offset_bottom = 125.0
+
+[node name="Layer1" type="TextureRect" parent="Layers"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_vov5c")
+expand_mode = 1
+
+[node name="EnergyVfxFront" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(66.10429, 18.4499)
+rotation = -2.4493284
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -25.0
+offset_right = -15.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8862745, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.1882353)
+theme_override_colors/font_outline_color = Color(0, 0.23798081, 0.59862196, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 16
+theme_override_constants/shadow_outline_size = 16
+theme_override_fonts/font = SubResource("FontVariation_kreon_bold_shared_font")
+theme_override_font_sizes/font_size = 32
+text = "3/3"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_r1kip")
+theme_override_colors/font_outline_color = Color(0, 0.23798081, 0.59862196, 1)

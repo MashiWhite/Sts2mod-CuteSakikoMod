@@ -1,0 +1,46 @@
+﻿using BaseLib.Abstracts;
+using BaseLib.Extensions;
+using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+using CuteSakikoMod.CuteSakikoModCode.Character;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using CuteSakikoMod.CuteSakikoModCode.Powers;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+
+[Pool(typeof(CuteSakiCardPool))]
+public class Parry : CustomCardModel
+{
+    public Parry() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
+
+    public override string PortraitPath => (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromCard<KnightSword>();
+            yield return HoverTipFactory.FromPower<ParryPower>();
+        }
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        var layers = IsUpgraded ? 9 : 6;
+        await PowerCmd.Apply<ParryPower>(Owner.Creature, layers, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        // 升级后层数提升，已在OnPlay中处理
+    }
+}
