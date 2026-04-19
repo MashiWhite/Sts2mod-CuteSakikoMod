@@ -20,6 +20,9 @@
   "CUTESAKIKOMOD-PLAYPIANO.title": "琴奏",
   "CUTESAKIKOMOD-PLAYPIANO.description": "属于小祥的特殊打击。",
 
+  "CUTESAKIKOMOD-ANONCCHORD.title": "爱音C和弦",
+  "CUTESAKIKOMOD-ANONCCHORD.description": "在本场战斗中升级所有友方手牌中的{0}张牌。",
+
   "CUTESAKIKOMOD-PLAYGUITAR.title": "弦奏",
   "CUTESAKIKOMOD-PLAYGUITAR.description": "属于爱音的特殊打击。",
 
@@ -45,7 +48,7 @@
   "CUTESAKIKOMOD-D#CHORD.description": "随机造成{0}点伤害。",
 
   "CUTESAKIKOMOD-AMCHORD.title": "Am和弦",
-  "CUTESAKIKOMOD-AMCHORD.description": "所有队友获得{0}点格挡。",
+  "CUTESAKIKOMOD-AMCHORD.description": "所有友方获得{0}点格挡。",
 
   "CUTESAKIKOMOD-GMCHORD.title": "Gm和弦",
   "CUTESAKIKOMOD-GMCHORD.description": "所有友方恢复{0}点血量。",
@@ -81,5 +84,9 @@
   "CUTESAKIKOMOD-C#7CHORD.description": "所有友方获得{0}点能量。",
 
   "CUTESAKIKOMOD-D#7CHORD.title": "#D7和弦",
-  "CUTESAKIKOMOD-D#7CHORD.description": "所有友方抽{0}张牌。"
+  "CUTESAKIKOMOD-D#7CHORD.description": "所有友方抽{0}张牌。",
+
+  "CUTESAKIKOMOD-NONOTE.title": "特殊演奏",
+  "CUTESAKIKOMOD-NONOTE.description": "这张卡本身不会获得音符。"
+  
 }

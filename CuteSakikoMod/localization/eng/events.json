@@ -1,0 +1,30 @@
+﻿
+{
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.title": "购买效果器",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.description": "你在路边发现了一个乐器商店……\n里面有许多效果器售卖。\n\n看上去能给你的[pink]吉他[/pink]带来一些特别的声音。",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.BUY_LOW.title": "低级效果器（50金币）",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.BUY_LOW.description": "选择一张牌附魔[purple]“演奏”[/purple]。",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.BUY_HIGH.title": "高级效果器（100金币）",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.BUY_HIGH.description": "选择三张牌附魔[purple]“演奏”[/purple]。",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.NO_MONEY.title": "没有钱……",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.NO_MONEY.description": "默默走开。",
+
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.LOW_SUCCESS.description": "你买下了低级效果器，给[pink]吉他[/pink]换上了新的音色。",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.HIGH_SUCCESS.description": "高级效果器！这下你的[pink]吉他[/pink]演奏起来更加华丽了！",
+
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.NO_MONEY_NOTHING.description": "你摸了摸口袋，只能默默走开。",
+
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_PAYS.description": "「让我来付吧。」\n\n一个温柔的声音在身后响起。是[pink]Soyorin！Love！[/pink]",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_PAYS.options.GET_FREE_ENCHANT_AND_GOLD.title": "接受好意",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_PAYS.options.GET_FREE_ENCHANT_AND_GOLD.description": "选择三张牌附魔[purple]“演奏”[/purple]并获得50金币。",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_PAYS.options.REFUND.title": "退货",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_PAYS.options.REFUND.description": "把效果器退了，获得150金币。",
+
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_GIFT.description": "素世为你付了钱，还把找零塞给了你，然后化为一阵凉爽的风离开了。\n\n[sine]就像从未存在过一样。[/sine]",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_REFUND.description": "你把效果器退了回去，素世瞪了你一眼，然后化为一阵凉爽的风离开了。\n[sine]你不好意思的拿着钱离开了。[/sine]",
+
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SELECT_CARD_TITLE": "选择附魔的牌",
+  "CUTESAKIKOMOD-GUITAR_EFFECTS_PEDAL_EVENT.pages.SELECT_CARD_TITLE.description": "选择附魔的牌"
+
+
+}

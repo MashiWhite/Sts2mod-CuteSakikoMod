@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.Commands;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
-[Pool(typeof(CuteAnonCardPool))]
+
 public class AnonDefend : CuteAnonCard
 {
     public AnonDefend() : base(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
@@ -25,6 +25,8 @@ public class AnonDefend : CuteAnonCard
     
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        TriggerBanter();
+        
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
     }
 

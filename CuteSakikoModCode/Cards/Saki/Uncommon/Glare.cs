@@ -25,7 +25,7 @@ public class Glare() : CustomCardModel(1, CardType.Attack, CardRarity.Uncommon, 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7m, ValueProp.Move),
-        new PowerVar<PressurePower>(8m)
+        new PowerVar<PressurePower>(10m)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
@@ -57,7 +57,7 @@ public class Glare() : CustomCardModel(1, CardType.Attack, CardRarity.Uncommon, 
 
     protected override void OnUpgrade()
     {
-        // 升级：伤害 7 → 10，压力 5 → 8
+        // 升级：伤害 7 → 10，压力 10 → 12
         DynamicVars["Damage"].UpgradeValueBy(3m);
         DynamicVars["PressurePower"].UpgradeValueBy(2m);
     }

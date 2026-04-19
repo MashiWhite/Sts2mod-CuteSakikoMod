@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -21,6 +17,28 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
         static ChordManager()
         {
             RegisterChords();
+        }
+        
+        private static List<string> _temporaryChordIds = new();
+        
+        private static void AddTemporaryChord(string id, ChordCategory cat, CardType[] seq,
+            string titleKey, string descKey, string iconName, int[] baseValues,
+            Func<PlayerChoiceContext, Creature, int, Task> effect)
+        {
+            var def = new ChordDefinition
+            {
+                Id = id,
+                Category = cat,
+                NoteSequence = seq,
+                TitleKey = titleKey,
+                DescKey = descKey,
+                IconName = iconName,
+                BaseValues = baseValues,
+                Effect = effect,
+                IsTemporaryOnly = true
+            };
+            AllChords[id] = def;
+            _temporaryChordIds.Add(id);
         }
 
         private static void RegisterChords()
@@ -232,9 +250,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                             await PowerCmd.Apply<WeakPower>(enemy, 1 * mult, owner, null);
                 });
 
-            // A7【能 技 技 技】击晕敌人1回合
+            // A7【能 技 能 技】击晕敌人1回合
             AddChord("A7", ChordCategory.Dominant,
-                new[] { CardType.Power, CardType.Skill, CardType.Skill, CardType.Skill },
+                new[] { CardType.Power, CardType.Skill, CardType.Power, CardType.Skill },
                 "CUTESAKIKOMOD-A7CHORD.title", "CUTESAKIKOMOD-A7CHORD.description", "a7_chord",
                 new[] { 1 },
                 async (ctx, owner, mult) =>
@@ -280,6 +298,38 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     if (player != null)
                         await CardPileCmd.Draw(ctx, 1 * mult, player);
                 });
+            
+            //爱音C和弦
+            AddTemporaryChord("AnonCChord", ChordCategory.Anon,
+                new[] { CardType.Skill, CardType.Skill, CardType.Skill },
+                "CUTESAKIKOMOD-ANONCCHORD.title", "CUTESAKIKOMOD-ANONCCHORD.description", "anon_c_chord",
+                new[] { 1 },   // 基础升级张数
+                async (ctx, owner, mult) =>
+                {
+                    var combat = owner.CombatState;
+                    if (combat == null) return;
+
+                    int upgradeCount = 1 * mult;   // 普通为1，先古为2
+                    var allUpgradable = new List<CardModel>();
+
+                    // 收集所有友方手牌中可升级的牌
+                    foreach (var player in combat.Players)
+                    {
+                        var hand = player.PlayerCombatState?.Hand;
+                        if (hand == null) continue;
+                        allUpgradable.AddRange(hand.Cards.Where(c => c.IsUpgradable));
+                    }
+
+                    // 随机选择指定数量的卡牌升级
+                    var rng = combat.RunState.Rng.CombatCardSelection;
+                    var selected = allUpgradable.OrderBy(x => rng.NextInt()).Take(upgradeCount).ToList();
+
+                    foreach (var card in selected)
+                    {
+                        CardCmd.Upgrade(card);
+                        await Cmd.CustomScaledWait(0.15f, 0.2f);
+                    }
+                });
         }
 
         private static void AddChord(string id, ChordCategory cat, CardType[] seq,
@@ -299,10 +349,23 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 Effect = effect
             };
         }
+        
+        //获得临时和弦
+        public static List<string> GetTemporaryChordIds(ChordCategory? category = null)
+        {
+            var query = _temporaryChordIds.Where(id => AllChords[id].IsTemporaryOnly);
+            if (category.HasValue)
+                query = query.Where(id => AllChords[id].Category == category.Value);
+            return query.ToList();
+        }
 
         /// <summary> 获取指定分类下可学习的和弦ID（排除初始和弦） </summary>
         public static List<string> GetLearnableChordIds(ChordCategory category)
         {
+            // 爱音分类不参与学习
+            if (category == ChordCategory.Anon)
+                return new List<string>();
+
             var exclude = category switch
             {
                 ChordCategory.Major => new[] { "C" },
@@ -311,7 +374,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 _ => Array.Empty<string>()
             };
             return AllChords.Values
-                .Where(c => c.Category == category && !exclude.Contains(c.Id))
+                .Where(c => c.Category == category 
+                            && !exclude.Contains(c.Id) 
+                            && !c.IsTemporaryOnly)
                 .Select(c => c.Id)
                 .ToList();
         }

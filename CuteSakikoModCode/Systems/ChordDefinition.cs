@@ -13,7 +13,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
         Major,
         Minor,
         Dominant,
-        Bonus   // 新增，用于额外槽位
+        Bonus,   // 新增，用于额外槽位
+        Anon 
     }
 
     public class ChordDefinition
@@ -25,6 +26,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
         public string TitleKey { get; set; }
         public string DescKey { get; set; }
         public string IconName { get; set; }
+        
+        public bool IsTemporaryOnly { get; set; } // 新增，默认为 false
         // 效果执行委托，amountMultiplier 用于先古翻倍
         public Func<PlayerChoiceContext, Creature, int, Task> Effect { get; set; }
 

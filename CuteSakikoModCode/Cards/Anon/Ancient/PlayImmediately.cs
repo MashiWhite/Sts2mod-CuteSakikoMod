@@ -1,15 +1,12 @@
-﻿using BaseLib.Abstracts;
+﻿
 using BaseLib.Extensions;
-using BaseLib.Utils;
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
+
 
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient
@@ -36,6 +33,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
+            TriggerBanter();
             await PowerCmd.Apply<PlayImmediatelyPower>(Owner.Creature, 1, Owner.Creature, this);
         }
 

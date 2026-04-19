@@ -1,5 +1,6 @@
 ﻿
 using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -17,6 +18,7 @@ public class AnonStrike : CuteAnonCard
     }
 
     protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
+    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CutesakiKeywords.Playguitar };
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -25,6 +27,8 @@ public class AnonStrike : CuteAnonCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        TriggerBanter();
+        
         if (cardPlay.Target == null) return;
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)

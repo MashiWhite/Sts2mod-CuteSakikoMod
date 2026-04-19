@@ -65,5 +65,6 @@ public class Bansogo() : CustomCardModel(1, CardType.Skill, CardRarity.Common, T
     protected override void OnUpgrade()
     {
         EnergyCost.UpgradeBy(-1);
+        RemoveKeyword(CardKeyword.Exhaust);
     }
 }

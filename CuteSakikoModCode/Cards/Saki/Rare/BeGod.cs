@@ -23,7 +23,7 @@ public class BeGod : CustomCardModel
     public override string PortraitPath =>
         (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => System.Array.Empty<DynamicVar>();
+    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
     
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

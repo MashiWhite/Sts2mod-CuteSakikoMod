@@ -32,7 +32,7 @@ public class EmptyLure() : CustomCardModel(0, CardType.Skill, CardRarity.Common,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new EnergyVar(1),
-        new CardsVar(1)
+        new CardsVar(2)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

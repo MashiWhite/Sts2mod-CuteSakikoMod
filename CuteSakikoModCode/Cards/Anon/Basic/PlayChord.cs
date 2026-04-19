@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
@@ -17,9 +19,19 @@ public class PlayChord : CuteAnonCard, ITranscendenceCard
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => System.Array.Empty<DynamicVar>();
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords
+    {
+        get
+        {
+            yield return CutesakiKeywords.NoNote; // 自身不产生音符
+        }
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        TriggerBanter();
+        
         var relic = Owner.Relics.FirstOrDefault(r => r is AnonGuitar) as AnonGuitar;
         if (relic == null) return;
 
