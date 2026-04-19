@@ -24,7 +24,7 @@ public class HateSelf() : CustomCardModel(1, CardType.Skill, CardRarity.Common, 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new PowerVar<PressurePower>(5m),
-        new CardsVar(1)
+        new CardsVar(2)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
@@ -51,8 +51,7 @@ public class HateSelf() : CustomCardModel(1, CardType.Skill, CardRarity.Common, 
 
     protected override void OnUpgrade()
     {
-        // 升级：压力增加2层（5->7），抽牌增加1张（1->2）
-        DynamicVars["PressurePower"].UpgradeValueBy(2m);
-        DynamicVars.Cards.UpgradeValueBy(1m);
+        // 升级：压力增加5层（5->10）
+        DynamicVars["PressurePower"].UpgradeValueBy(5m);
     }
 }

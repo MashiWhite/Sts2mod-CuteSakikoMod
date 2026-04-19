@@ -92,5 +92,36 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
             }
             return false;
         }
+        
+        /// <summary>
+        /// 将当前音符序列中最后一个音符的类型改为指定类型。
+        /// 如果队列为空，则不做任何操作。
+        /// </summary>
+        /// <returns>是否成功修改</returns>
+        public static bool ModifyLastNote(Player player, CardType newType)
+        {
+            var data = GetData(player);
+            if (data.Notes.Count == 0) return false;
+
+            var notesArray = data.Notes.ToArray();
+            notesArray[^1] = newType;
+
+            data.Notes.Clear();
+            foreach (var note in notesArray)
+                data.Notes.Enqueue(note);
+
+            return true;
+        }
+        
+        /// <summary>
+        /// 获取当前音符序列中最后一个音符的类型。
+        /// 如果队列为空，则返回 null。
+        /// </summary>
+        public static CardType? GetLastNote(Player player)
+        {
+            var data = GetData(player);
+            if (data.Notes.Count == 0) return null;
+            return data.Notes.Last();
+        }
     }
 }

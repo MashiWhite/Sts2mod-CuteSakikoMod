@@ -66,7 +66,7 @@ public class VentAngry() : CustomCardModel(1, CardType.Attack, CardRarity.Common
         if (cardPlay.Target.Monster != null && !cardPlay.Target.Monster.IntendsToAttack)
         {
             var drawCount = IsUpgraded ? 2 : 1;
-            var pressureAmount = IsUpgraded ? 8 : 5;
+            var pressureAmount = IsUpgraded ? 10 : 8;
 
             // 抽牌
             await CardPileCmd.Draw(choiceContext, drawCount, Owner);
@@ -79,6 +79,6 @@ public class VentAngry() : CustomCardModel(1, CardType.Attack, CardRarity.Common
 
     protected override void OnUpgrade()
     {
-        // 升级仅影响抽牌数和压力层数，已在逻辑中处理
+        DynamicVars.Damage.UpgradeValueBy(4m);
     }
 }

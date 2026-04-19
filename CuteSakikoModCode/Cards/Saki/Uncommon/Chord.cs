@@ -28,7 +28,7 @@ public class Chord : CustomCardModel
         typeof(StrikeOpulent)
     };
 
-    public Chord() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public Chord() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
     }
 

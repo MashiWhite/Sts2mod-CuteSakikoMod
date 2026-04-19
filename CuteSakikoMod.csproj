@@ -100,13 +100,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="CuteSakikoModCode\Cards\Anon\Common\" />
-        <Folder Include="CuteSakikoModCode\Cards\Anon\Rare\" />
-        <Folder Include="CuteSakikoModCode\Cards\Anon\Token\" />
-        <Folder Include="CuteSakikoModCode\Cards\Anon\Uncommon\" />
         <Folder Include="CuteSakikoModCode\Cards\Saki\Curse\" />
         <Folder Include="CuteSakikoModCode\Cards\Saki\Event\" />
-        <Folder Include="CuteSakikoModCode\Enchantments\" />
         <Folder Include="CuteSakikoModCode\Monsters\Normal\" />
         <Folder Include="CuteSakikoMod\images\potions\"/>
         <Folder Include="CuteSakikoMod\images\powers\big\"/>
