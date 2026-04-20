@@ -17,15 +17,12 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 // 改为 Uncommon 命名空间
 
-[Pool(typeof(CuteSakiCardPool))]
-public class HeartAtk : CustomCardModel
+
+public class HeartAtk : CuteSakikoModCard
 {
     public HeartAtk() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) // 稀有度改为 Uncommon
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 基础版本有消耗关键词
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

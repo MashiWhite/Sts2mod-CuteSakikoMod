@@ -52,9 +52,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
             UpdateCostBasedOnLastNote();
         }
 
-        public override async Task AfterCardEnteredCombat(CardModel card)
+        public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
         {
-            await base.AfterCardEnteredCombat(card);
+            await base.AfterCardDrawn(choiceContext, card, fromHandDraw);
 
             if (card != this) return;
 
@@ -67,7 +67,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
             if (lastNote == CardType.Attack)
                 EnergyCost.SetThisTurn(0);
             else
-                EnergyCost.SetThisTurn(1); // 恢复原费用
+                EnergyCost.SetThisTurn(1);
         }
 
         protected override void OnUpgrade()

@@ -17,11 +17,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class DontAssociateMe() : CustomCardModel(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+
+public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
 
     // 动态变量：格挡值（基础13，升级17）
     protected override IEnumerable<DynamicVar> CanonicalVars =>

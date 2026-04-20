@@ -17,8 +17,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public sealed class DoAnything : CustomCardModel
+
+public sealed class DoAnything : CuteSakikoModCard
 {
     private decimal _nextPressure;
 
@@ -26,9 +26,6 @@ public sealed class DoAnything : CustomCardModel
     {
         _nextPressure = 8m;
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
 
     protected override IEnumerable<DynamicVar> CanonicalVars

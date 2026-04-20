@@ -15,11 +15,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Bansogo() : CustomCardModel(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+
+public class Bansogo() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

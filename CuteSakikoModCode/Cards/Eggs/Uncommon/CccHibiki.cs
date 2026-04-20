@@ -14,11 +14,9 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class CccHibiki() : CustomCardModel(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+
+public class CccHibiki() : CuteSakikoModEggCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

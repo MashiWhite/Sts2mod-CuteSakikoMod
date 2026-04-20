@@ -16,8 +16,7 @@ using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Common;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class NoChest : CustomCardModel
+public class NoChest : CuteSakikoModEggCard
 {
     private int _totalReduction;
 
@@ -26,9 +25,6 @@ public class NoChest : CustomCardModel
     }
 
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     [SavedProperty]
     public int TotalReduction

@@ -13,13 +13,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class CalmnessLady : CuteSakikoModCard
-{
-    public CalmnessLady() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
-    {
-    }
 
+public class CalmnessLady() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+{
     protected override IEnumerable<DynamicVar> CanonicalVars => System.Array.Empty<DynamicVar>();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

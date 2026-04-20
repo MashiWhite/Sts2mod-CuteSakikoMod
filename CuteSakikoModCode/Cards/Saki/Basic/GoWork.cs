@@ -1,6 +1,7 @@
 ﻿using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Ancient;
 using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
@@ -12,16 +13,14 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class GoWork() : CustomCardModel(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+public class GoWork() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy), ITranscendenceCard
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
+    
     // 始终带有消耗关键词（升级后仍保留）
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
@@ -55,6 +54,8 @@ public class GoWork() : CustomCardModel(1, CardType.Attack, CardRarity.Basic, Ta
         await PowerCmd.Apply<PressurePower>(cardPlay.Target, DynamicVars["PressurePower"].IntValue, Owner.Creature,
             this);
     }
+    
+    public CardModel GetTranscendenceTransformedCard() => ModelDb.Card<NoWork>();
 
     protected override void OnUpgrade()
     {

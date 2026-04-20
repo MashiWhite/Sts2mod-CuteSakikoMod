@@ -19,8 +19,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class StrikeOpulent : CustomCardModel
+public class StrikeOpulent : CuteSakikoModCard
 {
     public StrikeOpulent() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
@@ -29,9 +28,6 @@ public class StrikeOpulent : CustomCardModel
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

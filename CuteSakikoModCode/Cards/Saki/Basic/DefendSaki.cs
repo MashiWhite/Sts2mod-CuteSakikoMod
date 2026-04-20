@@ -19,7 +19,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[Pool(typeof(CuteSakiCardPool))]
 public class DefendSaki() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 
 {
@@ -33,9 +32,6 @@ public class DefendSaki() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Basi
         new PowerVar<PressurePower>(1m)
     ];
     
-    
-    
-
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {
         get

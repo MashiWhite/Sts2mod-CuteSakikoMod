@@ -16,16 +16,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public sealed class BlackBirthday : CustomCardModel
+public sealed class BlackBirthday() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public BlackBirthday() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
-    {
-    }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

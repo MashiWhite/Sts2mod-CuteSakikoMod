@@ -14,15 +14,12 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class MirageComing : CustomCardModel
+public class MirageComing : CuteSakikoModEggCard
 {
     public MirageComing() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust ];
 

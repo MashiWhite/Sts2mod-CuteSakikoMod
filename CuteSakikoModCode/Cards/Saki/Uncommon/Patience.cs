@@ -16,12 +16,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Patience() : CustomCardModel(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class Patience() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new EnergyVar(1), // 能量，升级后变为2

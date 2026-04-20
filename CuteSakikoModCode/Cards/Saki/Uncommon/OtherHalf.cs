@@ -16,12 +16,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class OtherHalf() : CustomCardModel(2, CardType.Power, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class OtherHalf() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
     protected override IEnumerable<DynamicVar> CanonicalVars => [];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips

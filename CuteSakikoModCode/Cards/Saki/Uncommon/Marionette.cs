@@ -16,11 +16,9 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Marionette() : CustomCardModel(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+
+public class Marionette() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

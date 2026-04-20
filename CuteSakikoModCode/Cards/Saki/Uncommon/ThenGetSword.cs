@@ -14,12 +14,9 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class ThenGetSword() : CustomCardModel(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly) // 目标改为任意队友
-{
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
+public class ThenGetSword() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly) // 目标改为任意队友
+{
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

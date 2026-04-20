@@ -16,17 +16,14 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class SymbolFour() : CustomCardModel(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+
+public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     // 动态变量：总压力（初始值，升级后更新）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar("TotalPressure", IsUpgraded ? 8m : 4m, ValueProp.Move)
     ];
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {

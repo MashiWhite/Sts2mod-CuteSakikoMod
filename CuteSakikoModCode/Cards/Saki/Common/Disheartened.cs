@@ -15,17 +15,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Disheartened : CustomCardModel
+
+public class Disheartened : CuteSakikoModCard
 {
     public Disheartened() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

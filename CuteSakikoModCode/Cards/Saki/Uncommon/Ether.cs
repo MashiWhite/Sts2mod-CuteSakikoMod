@@ -14,11 +14,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Ether() : CustomCardModel(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+
+public class Ether() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 动态变量：层数固定1（不可叠层，但用于描述）
     protected override IEnumerable<DynamicVar> CanonicalVars =>

@@ -15,11 +15,8 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Quarrel() : CustomCardModel(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {

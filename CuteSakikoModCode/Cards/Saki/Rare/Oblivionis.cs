@@ -14,11 +14,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Oblivionis() : CustomCardModel(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+
+public class Oblivionis() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 动态变量：能力层数（基础1层，升级后无变化，但保留用于描述）
     protected override IEnumerable<DynamicVar> CanonicalVars =>

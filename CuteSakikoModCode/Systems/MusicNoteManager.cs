@@ -94,6 +94,17 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
         }
         
         /// <summary>
+        /// 清除所有音符，并返回清除的音符数量。
+        /// </summary>
+        public static int ClearNotesAndGetCount(Player player)
+        {
+            var data = GetData(player);
+            int count = data.Notes.Count;
+            data.Notes.Clear();
+            return count;
+        }
+        
+        /// <summary>
         /// 将当前音符序列中最后一个音符的类型改为指定类型。
         /// 如果队列为空，则不做任何操作。
         /// </summary>

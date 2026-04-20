@@ -16,11 +16,9 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class AllForget() : CustomCardModel(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+
+public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {

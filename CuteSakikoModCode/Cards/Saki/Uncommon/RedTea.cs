@@ -14,11 +14,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class RedTea() : CustomCardModel(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+
+public class RedTea() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 保留关键词
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];

@@ -14,15 +14,11 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class UnNeverMemory() : CustomCardModel(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override bool HasEnergyCostX => true;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [];
 

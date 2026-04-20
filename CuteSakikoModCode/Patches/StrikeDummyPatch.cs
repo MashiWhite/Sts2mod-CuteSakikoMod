@@ -19,7 +19,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
             if (__result != 0m) return;
             if (!props.IsPoweredAttack()) return;
             if (cardSource == null) return;
-            if (cardSource.Keywords.Contains(CutesakiKeywords.Playpiano))
+            if (cardSource.Keywords.Contains(CutesakiKeywords.Playpiano) ||
+                cardSource.Keywords.Contains(CutesakiKeywords.Playguitar))
             {
                 __result = __instance.DynamicVars["ExtraDamage"].BaseValue;
             }
@@ -32,7 +33,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
             if (__result != 0m) return;
             if (!props.IsPoweredAttack()) return;
             if (cardSource == null) return;
-            if (cardSource.Keywords.Contains(CutesakiKeywords.Playpiano))
+            if (cardSource.Keywords.Contains(CutesakiKeywords.Playpiano) ||
+                cardSource.Keywords.Contains(CutesakiKeywords.Playguitar))
             {
                 __result = __instance.DynamicVars["ExtraDamage"].BaseValue;
             }

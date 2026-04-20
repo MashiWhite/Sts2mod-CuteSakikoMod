@@ -17,13 +17,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class StrikeSlow() : CustomCardModel(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+public class StrikeSlow() :CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     public override bool GainsBlock => true;
 

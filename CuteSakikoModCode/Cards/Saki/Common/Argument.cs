@@ -17,11 +17,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Argument() : CustomCardModel(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
+
+public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+
 
     // 添加悬停提示，显示生成的“逃避”卡牌
     protected override IEnumerable<IHoverTip> ExtraHoverTips

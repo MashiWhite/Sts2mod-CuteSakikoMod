@@ -13,15 +13,12 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class HbkBank : CustomCardModel
+public class HbkBank : CuteSakikoModEggCard
 {
     public HbkBank() : base(0, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Innate];
 

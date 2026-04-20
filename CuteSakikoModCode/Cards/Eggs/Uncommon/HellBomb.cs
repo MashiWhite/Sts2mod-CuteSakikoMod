@@ -12,16 +12,13 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class HellBomb : CustomCardModel
+
+public class HellBomb : CuteSakikoModEggCard
 {
     public HellBomb() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
     {
     }
-
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 

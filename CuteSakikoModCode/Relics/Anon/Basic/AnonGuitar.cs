@@ -149,12 +149,20 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             _noteDisplay?.UpdateNotes(MusicNoteManager.GetCurrentNotes(Owner));
         }
 
-        private void UpdateNoteDisplay()
+        public void UpdateNoteDisplay()
         {
             if (_noteDisplay != null && GodotObject.IsInstanceValid(_noteDisplay))
                 _noteDisplay.UpdateNotes(MusicNoteManager.GetCurrentNotes(Owner));
             else if (Owner.Creature.CombatState != null)
                 EnsureNoteDisplay();
+        }
+        
+        private async Task NotifyChordPlayed(PlayerChoiceContext choiceContext)
+        {
+            foreach (var power in Owner.Creature.Powers.OfType<UnforgettablePerformancePower>())
+            {
+                await power.OnChordPlayed(choiceContext);
+            }
         }
 
         private void EnsureStoredChordDisplay()
@@ -240,7 +248,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             foreach (var chordId in stored)
             {
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+                {
                     await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+                    await NotifyChordPlayed(choiceContext);
+                }
             }
             ClearSequence();
         }
@@ -300,7 +311,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
 
             var lastChordId = stored.Last();
             if (ChordManager.AllChords.TryGetValue(lastChordId, out var def))
+            {
                 await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+                await NotifyChordPlayed(choiceContext);
+            }
 
             MusicNoteManager.RemoveChord(Owner, lastChordId);
             UpdateStoredChordDisplay();

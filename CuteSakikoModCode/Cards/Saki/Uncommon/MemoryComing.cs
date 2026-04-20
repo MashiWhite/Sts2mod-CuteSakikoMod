@@ -15,11 +15,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class MemoryComing() : CustomCardModel(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) // 费用改为1
+public class MemoryComing() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) // 费用改为1
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 动态变量：能力层数（基础1层，升级后为2层，用于描述）
     protected override IEnumerable<DynamicVar> CanonicalVars =>

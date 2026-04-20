@@ -1,4 +1,6 @@
-﻿
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using CuteSakikoMod.CuteSakikoModCode.Enchantments;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
@@ -6,11 +8,12 @@ using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Gold;
 using MegaCrit.Sts2.Core.Events;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
-
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Events
 {
@@ -18,6 +21,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events
     {
         private const int LowCost = 50;
         private const int HighCost = 100;
+
+        private IHoverTip _enchantTip;
 
         public override string? CustomInitialPortraitPath =>
             "CuteSakikoMod/images/events/guitar_effects_pedal.png";
@@ -37,14 +42,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events
         {
             var options = new List<EventOption>();
 
-            // 获取附魔的悬停提示
             var enchantTips = HoverTipFactory.FromEnchantment<PlayEnchantment>();
-            var enchantTip = enchantTips.FirstOrDefault();
+            _enchantTip = enchantTips.FirstOrDefault();
 
             if (Owner!.Gold >= LowCost)
-                options.Add(Option(BuyLow, tips: enchantTip));
+                options.Add(Option(BuyLow, tips: _enchantTip));
             if (Owner!.Gold >= HighCost)
-                options.Add(Option(BuyHigh, tips: enchantTip));
+                options.Add(Option(BuyHigh, tips: _enchantTip));
             options.Add(Option(NoMoney));
 
             return options;
@@ -67,10 +71,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events
         private async Task NoMoney()
         {
             var rng = Owner!.RunState.Rng.UpFront;
-            if (rng.NextInt(100) < 10)
+            if (rng.NextInt(100) < 5)
             {
                 SetEventState(PageDescription("SOYO_PAYS"), [
-                    Option(GetFreeEnchantAndGold, "SOYO_PAYS"),
+                    Option(GetFreeEnchantAndGold, "SOYO_PAYS", tips: _enchantTip),
                     Option(Refund, "SOYO_PAYS"),
                 ]);
             }

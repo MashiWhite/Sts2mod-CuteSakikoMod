@@ -16,8 +16,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class SymbolOne() : CustomCardModel(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
 {
     private decimal _permanentBonus; // 永久累积的额外伤害
 
@@ -26,9 +25,6 @@ public class SymbolOne() : CustomCardModel(1, CardType.Attack, CardRarity.Uncomm
         new DamageVar(IsUpgraded ? 8m : 6m, ValueProp.Move),
         new DamageVar("TotalDamage", IsUpgraded ? 8m : 6m, ValueProp.Move)
     ];
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {

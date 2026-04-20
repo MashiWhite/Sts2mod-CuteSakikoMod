@@ -76,7 +76,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Alchyr.Sts2.BaseLib" Version="3.0.5" />
+        <PackageReference Include="Alchyr.Sts2.BaseLib" Version="3.0.7" />
         <PackageReference Include="Alchyr.Sts2.ModAnalyzers" Version="*"/>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
     </ItemGroup>

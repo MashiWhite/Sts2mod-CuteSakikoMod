@@ -4,10 +4,12 @@ using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models;
 using StringExtensions = BaseLib.Extensions.StringExtensions;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
@@ -49,5 +51,10 @@ public sealed class KabutoNote : CustomRelicModel
             // 闪烁遗物图标，提示生效
             Flash();
         }
+    }
+    
+    public override RelicModel? GetUpgradeReplacement()
+    {
+        return ModelDb.Relic<PostItNote>().ToMutable();
     }
 }

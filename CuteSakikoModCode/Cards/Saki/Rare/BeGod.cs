@@ -13,16 +13,10 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class BeGod : CustomCardModel
+
+public class BeGod() : CuteSakikoModCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public BeGod() : base(3, CardType.Power, CardRarity.Rare, TargetType.Self)
-    {
-    }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
+    
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
     
 

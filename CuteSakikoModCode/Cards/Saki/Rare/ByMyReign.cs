@@ -16,11 +16,9 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class ByMyReign() : CustomCardModel(3, CardType.Attack, CardRarity.Rare, TargetType.Self)
+
+public class ByMyReign() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 设置为多人卡限定
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;

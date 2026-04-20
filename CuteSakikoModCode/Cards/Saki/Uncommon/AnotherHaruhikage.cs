@@ -18,12 +18,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class AnotherHaruhikage() : CustomCardModel(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
-{
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
+public class AnotherHaruhikage() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+{
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(13m, ValueProp.Move),

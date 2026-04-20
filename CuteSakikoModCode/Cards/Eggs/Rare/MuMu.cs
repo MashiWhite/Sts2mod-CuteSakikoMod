@@ -14,16 +14,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class MuMu : CustomCardModel
+
+public class MuMu : CuteSakikoModEggCard
 {
     public MuMu() : base(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new DamageVar(IsUpgraded ? 9m : 6m, ValueProp.Move); }

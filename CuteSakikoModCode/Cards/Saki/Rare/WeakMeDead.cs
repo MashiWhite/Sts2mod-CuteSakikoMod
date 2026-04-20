@@ -15,8 +15,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class WeakMeDead : CustomCardModel
+public class WeakMeDead : CuteSakikoModCard
 {
     public WeakMeDead() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
@@ -26,9 +25,7 @@ public class WeakMeDead : CustomCardModel
     {
         get { yield return HoverTipFactory.FromPower<BreakDownPower>(); }
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         IsUpgraded ? new[] { CardKeyword.Retain } : Array.Empty<CardKeyword>();

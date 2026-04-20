@@ -14,13 +14,10 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class HateSelf() : CustomCardModel(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+
+public class HateSelf() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
-
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new PowerVar<PressurePower>(5m),

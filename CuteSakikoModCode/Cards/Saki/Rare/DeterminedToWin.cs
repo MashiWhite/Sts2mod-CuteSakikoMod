@@ -15,18 +15,11 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class DeterminedToWin : CustomCardModel
+
+public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
-    public DeterminedToWin() : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
-    {
-    }
-
     protected override bool HasEnergyCostX => true;
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

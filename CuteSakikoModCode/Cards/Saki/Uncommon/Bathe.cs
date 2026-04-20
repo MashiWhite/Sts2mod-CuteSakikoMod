@@ -15,15 +15,13 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Bathe : CustomCardModel
+
+public class Bathe : CuteSakikoModCard
 {
     public Bathe() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     // 不再使用 Exhaust 关键词，因为结果堆由 GetResultPileType 动态决定
     public override IEnumerable<CardKeyword> CanonicalKeywords => new CardKeyword[] { };

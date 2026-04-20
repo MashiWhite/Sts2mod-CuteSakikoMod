@@ -16,15 +16,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Legato : CustomCardModel
+
+public class Legato : CuteSakikoModCard
 {
     public Legato() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

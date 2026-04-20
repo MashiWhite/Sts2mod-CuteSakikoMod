@@ -13,17 +13,15 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class MeteorHephaestus : CustomCardModel
+
+public class MeteorHephaestus : CuteSakikoModEggCard
 {
     public MeteorHephaestus() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
 
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 

@@ -15,12 +15,10 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class MusicalScore() : CustomCardModel(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
-{
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
+public class MusicalScore() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+{
+    
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         IsUpgraded ? [CardKeyword.Retain] : [];
 

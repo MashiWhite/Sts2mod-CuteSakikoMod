@@ -15,11 +15,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class WishHappiness() : CustomCardModel(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
+public class WishHappiness() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 多人游戏限定
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;

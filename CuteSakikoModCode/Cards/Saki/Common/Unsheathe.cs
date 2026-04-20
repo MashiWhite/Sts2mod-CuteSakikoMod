@@ -21,15 +21,8 @@ using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Unsheathe : CustomCardModel
+public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    public Unsheathe() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
-    {
-    }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

@@ -15,15 +15,13 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class MusicaCaelestis : CustomCardModel
+
+public class MusicaCaelestis : CuteSakikoModCard
 {
     public MusicaCaelestis() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {

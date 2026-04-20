@@ -16,11 +16,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class StressResponse() : CustomCardModel(2, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
+public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

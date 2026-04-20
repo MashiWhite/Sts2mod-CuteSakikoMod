@@ -17,8 +17,8 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Chord : CustomCardModel
+
+public class Chord : CuteSakikoModCard
 {
     // 定义琴奏牌的类型列表（用于随机生成）
     private static readonly Type[] QinPlayTypes = new[]
@@ -35,9 +35,6 @@ public class Chord : CustomCardModel
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override bool ShouldGlowGoldInternal
     {

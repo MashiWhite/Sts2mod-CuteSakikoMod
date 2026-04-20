@@ -17,17 +17,12 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Ancient;
 // 按稀有度放在 Ancient 文件夹
 
-[Pool(typeof(CuteSakiCardPool))]
-public class NoWork : CustomCardModel
+public class NoWork : CuteSakikoModCard
 {
     // 构造函数：0 费，攻击，古代，目标任意敌人
     public NoWork() : base(0, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
     {
     }
-
-    // 卡牌立绘路径（与 GoWork 保持一致的模式）
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 始终带有消耗关键词
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

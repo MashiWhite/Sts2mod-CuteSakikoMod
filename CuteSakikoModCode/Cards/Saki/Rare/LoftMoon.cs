@@ -13,11 +13,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class LoftMoon() : CustomCardModel(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
+
+public class LoftMoon() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 关键词：保留（句首）、消耗（句末）
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];

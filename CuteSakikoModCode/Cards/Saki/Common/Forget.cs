@@ -17,12 +17,9 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Forget() : CustomCardModel(1, CardType.Skill, CardRarity.Common, TargetType.Self)
-{
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
+public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+{
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(6m, ValueProp.Move)

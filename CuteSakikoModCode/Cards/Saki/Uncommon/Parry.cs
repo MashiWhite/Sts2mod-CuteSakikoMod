@@ -15,14 +15,11 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class Parry : CustomCardModel
+public class Parry : CuteSakikoModCard
 {
     public Parry() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
-
-    public override string PortraitPath => (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {

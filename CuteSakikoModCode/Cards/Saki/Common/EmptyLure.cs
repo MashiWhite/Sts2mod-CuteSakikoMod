@@ -14,11 +14,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class EmptyLure() : CustomCardModel(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+
+public class EmptyLure() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     // 关键词：虚无（回合结束消耗）
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal];

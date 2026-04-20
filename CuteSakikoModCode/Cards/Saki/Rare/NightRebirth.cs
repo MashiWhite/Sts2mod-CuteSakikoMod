@@ -15,17 +15,14 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class NightRebirth : CustomCardModel
+
+public class NightRebirth : CuteSakikoModCard
 {
     private int _threshold = 4; // 升级前：8层压力换1能量
 
     public NightRebirth() : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

@@ -11,15 +11,12 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Common;
 
-[Pool(typeof(CuteSakikoEggCardPool))]
-public class Bonfire : CustomCardModel
+
+public class Bonfire : CuteSakikoModEggCard
 {
     public Bonfire() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

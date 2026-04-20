@@ -18,12 +18,9 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-[Pool(typeof(CuteSakiCardPool))]
-public class DifficultChoice() : CustomCardModel(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
-{
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 
+public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+{
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

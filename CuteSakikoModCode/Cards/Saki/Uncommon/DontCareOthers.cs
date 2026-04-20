@@ -22,8 +22,6 @@ public class DontCareOthers : CuteSakikoModCard
     {
     }
 
-
-
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
