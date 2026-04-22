@@ -53,8 +53,4 @@ public sealed class KabutoNote : CustomRelicModel
         }
     }
     
-    public override RelicModel? GetUpgradeReplacement()
-    {
-        return ModelDb.Relic<PostItNote>().ToMutable();
-    }
 }

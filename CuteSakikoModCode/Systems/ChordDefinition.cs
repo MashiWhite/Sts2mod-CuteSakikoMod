@@ -10,11 +10,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
 {
     public enum ChordCategory
     {
-        Major,
-        Minor,
-        Dominant,
+        Major,//大三
+        Minor,//小三
+        Dominant,//属七
         Bonus,   // 新增，用于额外槽位
-        Anon 
+        Anon //爱音和弦
     }
 
     public class ChordDefinition

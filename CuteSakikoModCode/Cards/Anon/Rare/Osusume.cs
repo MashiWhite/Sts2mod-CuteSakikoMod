@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,11 +6,11 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
 {
-    public class LookCChord : CuteAnonCard
+    public class Osusume : CuteAnonCard
     {
-        public LookCChord() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+        public Osusume() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
         {
         }
 
@@ -23,7 +19,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
             get
             {
                 yield return CardKeyword.Exhaust;
-                yield return CutesakiKeywords.NoNote; // 不产生音符，避免意外匹配
+                yield return CutesakiKeywords.NoNote; // 自身不产生音符
             }
         }
 
@@ -31,7 +27,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
         {
             get
             {
-                if (ChordManager.AllChords.TryGetValue("AnonCChord", out var def))
+                if (ChordManager.AllChords.TryGetValue("AnonDChord", out var def))
                 {
                     string condition = def.GetConditionText();
                     string effectDesc = ChordDisplayHelper.GetFormattedDescription(def, 1);
@@ -50,13 +46,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
             if (guitar == null) return;
 
             var currentDominant = guitar.GetCurrentChords().GetValueOrDefault(ChordCategory.Dominant);
-            if (currentDominant == "AnonCChord")
+            if (currentDominant == "AnonDChord")
             {
-                await guitar.AddChordToStored(choiceContext, "AnonCChord");
+                await guitar.AddChordToStored(choiceContext, "AnonDChord");
             }
             else
             {
-                guitar.TempReplaceChord(ChordCategory.Dominant, "AnonCChord");
+                guitar.TempReplaceChord(ChordCategory.Dominant, "AnonDChord");
             }
         }
 

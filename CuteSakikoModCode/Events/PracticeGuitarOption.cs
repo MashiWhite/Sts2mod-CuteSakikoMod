@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Runs;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Events
 {
@@ -30,24 +28,41 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events
         {
             var rng = _player.RunState.Rng.UpFront;
 
+            // 替换三个主槽位（排除 Bonus 分类）
             foreach (ChordCategory cat in Enum.GetValues<ChordCategory>())
             {
+                if (cat == ChordCategory.Bonus) continue; // Bonus 单独处理
                 var pool = ChordManager.GetLearnableChordIds(cat);
                 if (pool.Count == 0) continue;
                 _relic.ReplaceChord(cat, rng.NextItem(pool));
             }
 
-            // 只要遗物有额外槽位字段（非空即表示支持），就随机替换
-            // 普通吉他 _bonusChord 为 null，不会进入此逻辑
-            if (_relic.HasBonusChord() || _relic.GetBonusChord() != null) // 实际上 HasBonusChord 更准确
+            // 处理所有 Bonus 槽位：逐个替换，保持数量不变
+            var bonusChords = _relic.GetBonusChords();
+            if (bonusChords.Count > 0)
             {
                 var allPools = new List<string>();
                 allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
                 allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
                 allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
+        
                 if (allPools.Count > 0)
                 {
-                    _relic.SetBonusChord(rng.NextItem(allPools));
+                    // 记录当前 Bonus 数量
+                    int bonusCount = bonusChords.Count;
+            
+                    // 清空所有 Bonus（方法一：逐个移除）
+                    var oldIds = bonusChords.ToList();
+                    foreach (var oldId in oldIds)
+                    {
+                        _relic.RemoveBonusChord(oldId);
+                    }
+            
+                    // 重新添加相同数量的随机 Bonus
+                    for (int i = 0; i < bonusCount; i++)
+                    {
+                        _relic.AddBonusChord(rng.NextItem(allPools));
+                    }
                 }
             }
 

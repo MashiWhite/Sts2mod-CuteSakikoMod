@@ -11,7 +11,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
 {
     public class LittleMoments : CuteAnonCard
     {
-        private bool _isTransforming;
+        private static bool _isTransforming;
 
         public LittleMoments() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
         {
@@ -24,7 +24,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
                 yield return HoverTipFactory.FromCard<Lifetime>(IsUpgraded);
             }
         }
-        
+
         protected override IEnumerable<DynamicVar> CanonicalVars
         {
             get
@@ -33,14 +33,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
             }
         }
 
-          protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             TriggerBanter();
 
-            // 抽牌
             await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
 
-            // 创建复制加入抽牌堆
             if (CombatState != null && Owner != null)
             {
                 var copy = CombatState.CreateCard<LittleMoments>(Owner);
@@ -52,10 +50,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
                 await CardPileCmd.Add(copy, PileType.Draw, CardPilePosition.Random);
             }
 
-            // 等待操作完成
             await Cmd.CustomScaledWait(0.1f, 0.15f);
 
-            // 检查转化
             await TryTransform();
         }
 
@@ -64,25 +60,30 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
             if (_isTransforming) return;
             if (CombatState == null || Owner == null) return;
 
-            // 获取玩家所有战斗中的卡牌
-            var allCards = Owner.PlayerCombatState?.AllCards;
-            if (allCards == null) return;
-
-            var littleMomentsCards = allCards.OfType<LittleMoments>().ToList();
-            if (littleMomentsCards.Count < 5) return;
+            // 仅检查手牌中的数量
+            var hand = PileType.Hand.GetPile(Owner);
+            if (hand == null) return;
+            int handCount = hand.Cards.OfType<LittleMoments>().Count();
+            if (handCount < 5) return;
 
             _isTransforming = true;
 
-            // 移除所有小小的瞬间（包括自身）
-            foreach (var card in littleMomentsCards)
+            // 但移除时，清理所有牌堆中的残留
+            var allCards = Owner.PlayerCombatState?.AllCards;
+            if (allCards != null)
             {
-                if (card.Pile != null)
-                {
+                var validCards = allCards.OfType<LittleMoments>()
+                    .Where(c => c.Pile != null 
+                                && c.Pile.IsCombatPile 
+                                && c.Pile.Type != PileType.Play
+                                && c.Pile.Type != PileType.Exhaust
+                                && CombatState.ContainsCard(c))
+                    .ToList();
+
+                foreach (var card in validCards)
                     await CardPileCmd.RemoveFromCombat(card);
-                }
             }
 
-            // 生成一辈子
             var lifetime = CombatState.CreateCard<Lifetime>(Owner);
             if (IsUpgraded)
             {

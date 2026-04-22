@@ -1,8 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://cs3a5onikvhi4"]
+[gd_scene load_steps=3 format=3 uid="uid://cs3a5onikvhi4"]
 
 [ext_resource type="Texture2D" uid="uid://by56jxk6tsfnh" path="res://CuteSakikoMod/images/others/saki/big_energy.png" id="1_7xeqh"]
-[ext_resource type="Script" uid="uid://cb83j0lwxihue" path="res://CuteSakikoModCode/Nodes/SakiEnergyCounter.cs" id="1_ommvv"]
-[ext_resource type="Script" uid="uid://3ifa5el0q3ut" path="res://CuteSakikoModCode/Nodes/SakiMegaLabel.cs" id="4_ia4xt"]
 
 [sub_resource type="FontVariation" id="FontVariation_kreon_bold_shared_font"]
 spacing_glyph = 2
@@ -12,7 +10,6 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 128.0
 offset_bottom = 128.0
-script = ExtResource("1_ommvv")
 metadata/_edit_lock_ = true
 
 [node name="EnergyVfxBack" type="Node2D" parent="."]
@@ -54,10 +51,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = -25.0
-offset_right = -15.0
-offset_bottom = 21.0
+offset_left = 19.0
+offset_top = -24.0
+offset_right = -18.0
+offset_bottom = 22.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.9647059, 0.8862745, 1)
@@ -72,4 +69,3 @@ theme_override_font_sizes/font_size = 32
 text = "3/3"
 horizontal_alignment = 1
 vertical_alignment = 1
-script = ExtResource("4_ia4xt")

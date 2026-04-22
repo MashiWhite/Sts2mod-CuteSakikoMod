@@ -3,6 +3,7 @@ using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -330,7 +331,62 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                         await Cmd.CustomScaledWait(0.15f, 0.2f);
                     }
                 });
+            
+            // 在 RegisterChords 方法中添加，建议放在其他爱音临时和弦附近
+            AddTemporaryChord("AnonDChord", ChordCategory.Anon,
+                new[] { CardType.Skill, CardType.Attack, CardType.Attack, CardType.Attack },
+                "CUTESAKIKOMOD-ANONDCHORD.title", "CUTESAKIKOMOD-ANONDCHORD.description", "anon_d_chord",
+                new int[0],
+                async (ctx, owner, mult) =>
+                {
+                    var combat = owner.CombatState;
+                    if (combat == null) return;
+
+                    // 获取所有友方玩家（包括自己）
+                    var allies = combat.Players.ToList();
+                    foreach (var player in allies)
+                    {
+                        // 为每个友方生成一瓶随机药水并加入其药水栏
+                        var randomPotion = PotionFactory.CreateRandomPotionInCombat(
+                            player, 
+                            player.RunState.Rng.CombatPotionGeneration
+                        ).ToMutable();
+                        await PotionCmd.TryToProcure(randomPotion, player);
+                    }
+                });
+            
+            // 爱音F和弦【攻 攻 攻 攻】50%对全体敌人造成12点伤害，50%使所有友方获得1层虚弱
+            AddTemporaryChord("AnonFChord", ChordCategory.Anon,
+                new[] { CardType.Attack, CardType.Attack, CardType.Attack, CardType.Attack },
+                "CUTESAKIKOMOD-ANONFCHORD.title", "CUTESAKIKOMOD-ANONFCHORD.description", "anon_f_chord",
+                new[] { 12, 1 }, // BaseValues: [伤害值, 虚弱层数]
+                async (ctx, owner, mult) =>
+                {
+                    var combat = owner.CombatState;
+                    if (combat == null) return;
+
+                    // 50% 概率判定（使用战斗专用随机）
+                    bool dealDamage = combat.RunState.Rng.CombatCardSelection.NextDouble() < 0.5;
+
+                    if (dealDamage)
+                    {
+                        // 对全体敌人造成 12 * mult 点伤害
+                        var enemies = combat.Enemies;
+                        if (enemies != null && enemies.Any())
+                            await CreatureCmd.Damage(ctx, enemies, 12 * mult, ValueProp.Move, owner, null);
+                    }
+                    else
+                    {
+                        // 对全体友方施加 1 * mult 层虚弱
+                        var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
+                        foreach (var ally in allies)
+                            await PowerCmd.Apply<WeakPower>(ally, 1 * mult, owner, null);
+                    }
+                });
+            
         }
+        
+        
 
         private static void AddChord(string id, ChordCategory cat, CardType[] seq,
             string titleKey, string descKey, string iconName,

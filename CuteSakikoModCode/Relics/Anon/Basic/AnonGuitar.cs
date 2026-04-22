@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Events;
 using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -18,66 +12,70 @@ using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
 {
-    [Pool(typeof(CuteAnonRelicPool))]
     public class AnonGuitar : CuteAnonRelic
     {
         public override RelicRarity Rarity => RelicRarity.Starter;
 
-        // 主槽位字典，增加一个 Bonus 键用于存储额外槽位
         [SavedProperty]
         private Dictionary<ChordCategory, string> _currentChords = new()
         {
             [ChordCategory.Major] = "C",
             [ChordCategory.Minor] = "Am",
             [ChordCategory.Dominant] = "G7"
-            // Bonus 键默认不存在，表示无额外槽位
         };
+
+        [SavedProperty]
+        private List<string> _bonusChords = new();
 
         [SavedProperty]
         private bool _initialized;
 
         private NoteDisplay _noteDisplay;
         private StoredChordDisplay _storedChordDisplay;
-
-        // 保存临时替换前的原始和弦，用于战斗结束时恢复
         private Dictionary<ChordCategory, string>? _preTempChords;
 
+        // 将 private 改为 protected
+        protected static Dictionary<Player, List<string>> _pendingBonusTransfer = new();
+        
         protected virtual int MaxLearnedChordsPerCategory => 1;
         protected virtual int EffectMultiplier => 1;
 
-        // ========== 额外槽位辅助方法（操作字典中的 Bonus 键） ==========
-        public string GetBonusChord()
+        // ========== Bonus 管理 ==========
+        public IReadOnlyList<string> GetBonusChords() => _bonusChords.AsReadOnly();
+
+        public void AddBonusChord(string chordId)
         {
-            return _currentChords.TryGetValue(ChordCategory.Bonus, out var chord) ? chord : null;
+            if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+            _bonusChords.Add(chordId);
+            Flash();
         }
+
+        public bool RemoveBonusChord(string chordId)
+        {
+            bool removed = _bonusChords.Remove(chordId);
+            if (removed) Flash();
+            return removed;
+        }
+
+        public bool HasBonusChord() => _bonusChords.Count > 0;
+
+        public string GetBonusChord() => _bonusChords.FirstOrDefault();
 
         public void SetBonusChord(string chordId)
         {
             if (!ChordManager.AllChords.ContainsKey(chordId)) return;
-            _currentChords[ChordCategory.Bonus] = chordId;
+            _bonusChords.Clear();
+            _bonusChords.Add(chordId);
             Flash();
         }
 
-        public bool HasBonusChord()
-        {
-            return _currentChords.ContainsKey(ChordCategory.Bonus) &&
-                   !string.IsNullOrEmpty(_currentChords[ChordCategory.Bonus]);
-        }
-
-        // ========== 临时替换逻辑 ==========
-        /// <summary>
-        /// 将指定分类的当前和弦临时替换为指定的临时和弦ID。
-        /// 战斗结束后会自动恢复为原始和弦。
-        /// </summary>
-        /// <param name="category">要替换的分类，例如 ChordCategory.Major</param>
-        /// <param name="tempChordId">临时和弦ID，必须是 ChordManager 中注册的临时和弦</param>
+        // ========== 临时替换 ==========
         public void TempReplaceChord(ChordCategory category, string tempChordId)
         {
             if (!ChordManager.AllChords.TryGetValue(tempChordId, out var def) || !def.IsTemporaryOnly)
@@ -85,7 +83,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             if (!_currentChords.ContainsKey(category))
                 return;
 
-            // 保存原始和弦（如果尚未保存该分类）
             _preTempChords ??= new Dictionary<ChordCategory, string>();
             if (!_preTempChords.ContainsKey(category))
                 _preTempChords[category] = _currentChords[category];
@@ -94,9 +91,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             Flash();
         }
 
-        /// <summary>
-        /// 恢复所有被临时替换的分类到原始和弦。
-        /// </summary>
         public void RestoreTempChords()
         {
             if (_preTempChords == null) return;
@@ -116,10 +110,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
 
             if (!_initialized)
             {
-                // 确保字典存在
                 _currentChords ??= new Dictionary<ChordCategory, string>();
+                _bonusChords ??= new List<string>();
 
-                // 补全三个主槽位
                 if (string.IsNullOrEmpty(_currentChords.GetValueOrDefault(ChordCategory.Major)))
                     _currentChords[ChordCategory.Major] = ChordManager.GetBaseChordId(ChordCategory.Major);
                 if (string.IsNullOrEmpty(_currentChords.GetValueOrDefault(ChordCategory.Minor)))
@@ -127,17 +120,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
                 if (string.IsNullOrEmpty(_currentChords.GetValueOrDefault(ChordCategory.Dominant)))
                     _currentChords[ChordCategory.Dominant] = ChordManager.GetBaseChordId(ChordCategory.Dominant);
 
-                // 注意：额外槽位（Bonus）在此处不主动初始化，由子类或休息处处理
-
                 _initialized = true;
             }
         }
 
-        // ========== UI 管理 ==========
+        // ========== UI 管理（完整实现） ==========
         private void EnsureNoteDisplay()
         {
             if (_noteDisplay != null && GodotObject.IsInstanceValid(_noteDisplay)) return;
-            if (Owner.Creature.CombatState == null) return;
+            if (Owner?.Creature?.CombatState == null) return;
             var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner.Creature);
             if (creatureNode == null) return;
             var scene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/ui/note_display.tscn");
@@ -153,10 +144,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         {
             if (_noteDisplay != null && GodotObject.IsInstanceValid(_noteDisplay))
                 _noteDisplay.UpdateNotes(MusicNoteManager.GetCurrentNotes(Owner));
-            else if (Owner.Creature.CombatState != null)
+            else if (Owner?.Creature?.CombatState != null)
                 EnsureNoteDisplay();
         }
-        
+
         private async Task NotifyChordPlayed(PlayerChoiceContext choiceContext)
         {
             foreach (var power in Owner.Creature.Powers.OfType<UnforgettablePerformancePower>())
@@ -168,7 +159,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         private void EnsureStoredChordDisplay()
         {
             if (_storedChordDisplay != null && GodotObject.IsInstanceValid(_storedChordDisplay)) return;
-            if (Owner.Creature.CombatState == null) return;
+            if (Owner?.Creature?.CombatState == null) return;
             var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner.Creature);
             if (creatureNode == null) return;
             var scene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/ui/stored_chord_display.tscn");
@@ -187,7 +178,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
                 var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
                 _storedChordDisplay.UpdateChords(stored, EffectMultiplier);
             }
-            else if (Owner.Creature.CombatState != null)
+            else if (Owner?.Creature?.CombatState != null)
                 EnsureStoredChordDisplay();
         }
 
@@ -208,26 +199,34 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             if (cardPlay.Card.Owner != Owner) return;
             if (Owner.Creature.CombatState == null) return;
 
-            // 获取 NoNote 关键词，并显式声明为 CardKeyword 类型以帮助编译器
             CardKeyword noNoteKeyword = CutesakiKeywords.NoNote;
-            bool shouldSkipNote = noNoteKeyword != null && cardPlay.Card.Keywords.Contains(noNoteKeyword);
-
-            if (!shouldSkipNote)
+            if (noNoteKeyword != null && cardPlay.Card.Keywords.Contains(noNoteKeyword))
             {
-                var newChords = MusicNoteManager.AddNote(Owner, cardPlay.Card.Type, _currentChords);
+                UpdateNoteDisplay();
+                UpdateStoredChordDisplay();
+                return;
+            }
 
-                bool hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
-                if (hasAutoPlay && newChords.Count > 0)
+            var newChords = MusicNoteManager.AddNote(Owner, cardPlay.Card.Type, _currentChords, _bonusChords);
+
+            bool hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
+            if (hasAutoPlay && newChords.Count > 0)
+            {
+                foreach (var chordId in newChords)
                 {
-                    foreach (var chordId in newChords)
+                    if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                     {
-                        if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                        {
-                            await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-                            MusicNoteManager.RemoveChord(Owner, chordId);
-                        }
+                        await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+                        MusicNoteManager.RemoveChord(Owner, chordId);
                     }
                 }
+                await NotifyChordPlayed(choiceContext);
+            }
+
+            if (newChords.Count == 0)
+            {
+                foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
+                    await power.OnNoteWithoutChord();
             }
 
             UpdateNoteDisplay();
@@ -248,23 +247,36 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             foreach (var chordId in stored)
             {
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                {
                     await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-                    await NotifyChordPlayed(choiceContext);
-                }
             }
             ClearSequence();
+            await NotifyChordPlayed(choiceContext);
         }
-        
-        /// <summary>
-        /// 获取所有已学习和弦的 ID 列表（可选按分类筛选）
-        /// </summary>
+
+        public async Task AddChordToStored(PlayerChoiceContext choiceContext, string chordId)
+        {
+            if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+
+            MusicNoteManager.AddChordDirectly(Owner, chordId);
+
+            bool hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
+            if (hasAutoPlay)
+            {
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+                {
+                    await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+                    MusicNoteManager.RemoveChord(Owner, chordId);
+                }
+            }
+
+            UpdateStoredChordDisplay();
+        }
+
         public List<string> GetLearnedChordIds(params ChordCategory[] categories)
         {
             var result = new List<string>();
             var filter = categories.Length > 0 ? new HashSet<ChordCategory>(categories) : null;
 
-            // 三个主槽位
             foreach (var kv in _currentChords)
             {
                 if (string.IsNullOrEmpty(kv.Value)) continue;
@@ -273,37 +285,23 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
                     result.Add(kv.Value);
             }
 
-            // 额外槽位（如果请求的分类包含 Bonus，或未指定分类）
-            if ((filter == null || filter.Contains(ChordCategory.Bonus)) && HasBonusChord())
-                result.Add(GetBonusChord());
+            if ((filter == null || filter.Contains(ChordCategory.Bonus)) && _bonusChords.Count > 0)
+                result.AddRange(_bonusChords);
 
             return result;
         }
 
-        /// <summary>
-        /// 演奏指定分类的已学习和弦（不分类则演奏全部）
-        /// </summary>
         public async Task TriggerLearnedChords(PlayerChoiceContext choiceContext, params ChordCategory[] categories)
         {
             var chordIds = GetLearnedChordIds(categories);
             foreach (var chordId in chordIds)
-            {
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                     await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-            }
         }
 
-        /// <summary>
-        /// 演奏所有已学习和弦（便捷方法）
-        /// </summary>
-        public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext)
-        {
+        public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext) =>
             await TriggerLearnedChords(choiceContext);
-        }
-        
-        /// <summary>
-        /// 演奏最新储存的一个和弦（队列尾部），并消耗该和弦。
-        /// </summary>
+
         public async Task TriggerLastStoredChord(PlayerChoiceContext choiceContext)
         {
             var stored = MusicNoteManager.GetStoredChords(Owner);
@@ -311,13 +309,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
 
             var lastChordId = stored.Last();
             if (ChordManager.AllChords.TryGetValue(lastChordId, out var def))
-            {
                 await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-                await NotifyChordPlayed(choiceContext);
-            }
 
             MusicNoteManager.RemoveChord(Owner, lastChordId);
             UpdateStoredChordDisplay();
+            await NotifyChordPlayed(choiceContext);
         }
 
         public void ReplaceChord(ChordCategory category, string newChordId)
@@ -329,36 +325,38 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
 
         public IReadOnlyDictionary<ChordCategory, string> GetCurrentChords() => _currentChords;
 
+        // ========== 悬浮提示 ==========
         protected override IEnumerable<IHoverTip> ExtraHoverTips
         {
             get
             {
-                var tips = new List<IHoverTip>();
+                if (!this.IsMutable) yield break;
+
                 var desc = new LocString("relics", "ANON_GUITAR_CHORDS_DESC");
                 var lines = new List<string>();
 
-                // 三个主槽位（排除 Bonus 键）
                 foreach (var kv in _currentChords.Where(kv => kv.Key != ChordCategory.Bonus))
                 {
                     if (ChordManager.AllChords.TryGetValue(kv.Value, out var def))
                     {
-                        string titleText = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-                        string descText = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
-                        lines.Add($"[{titleText}]({def.GetConditionText()})\n{descText}");
+                        string title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
+                        string text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
+                        lines.Add($"[{title}]({def.GetConditionText()})\n{text}");
                     }
                 }
 
-                // 额外槽位（如果存在）
-                if (HasBonusChord() && ChordManager.AllChords.TryGetValue(GetBonusChord(), out var bonusDef))
+                foreach (var chordId in _bonusChords)
                 {
-                    string titleText = new LocString("card_keywords", bonusDef.TitleKey).GetFormattedText();
-                    string descText = ChordDisplayHelper.GetFormattedDescription(bonusDef, EffectMultiplier);
-                    lines.Add($"[{titleText}]({bonusDef.GetConditionText()})\n{descText}");
+                    if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+                    {
+                        string title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
+                        string text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
+                        lines.Add($"[{title}]({def.GetConditionText()})\n{text}");
+                    }
                 }
 
                 desc.Add("Chords", string.Join("\n\n", lines));
-                tips.Add(new HoverTip(new LocString("relics", "ANON_GUITAR_CHORDS_TITLE"), desc));
-                return tips;
+                yield return new HoverTip(new LocString("relics", "ANON_GUITAR_CHORDS_TITLE"), desc);
             }
         }
 
@@ -372,30 +370,53 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             options.Add(new PracticeGuitarOption(player, this));
             return true;
         }
+        
+        /// <summary>
+        /// 演奏所有已储存的和弦，但不清除音符序列（保留当前音符队列）。
+        /// </summary>
+        public async Task TriggerAllStoredChordsKeepNotes(PlayerChoiceContext choiceContext)
+        {
+            var stored = MusicNoteManager.GetStoredChords(Owner);
+            foreach (var chordId in stored)
+            {
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+                {
+                    await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+                }
+            }
+            // 清空储存队列，但保留音符
+            MusicNoteManager.ClearStoredChords(Owner);
+            UpdateStoredChordDisplay();
+
+            await NotifyChordPlayed(choiceContext);
+        }
 
         public override async Task AfterRemoved()
         {
+            // 将当前 Bonus 保存到缓存，供替换遗物（如闪亮吉他）继承
+            if (_bonusChords.Count > 0)
+            {
+                _pendingBonusTransfer[Owner] = new List<string>(_bonusChords);
+            }
+
             CleanupUI();
+            MusicNoteManager.ClearAll(Owner);
             await base.AfterRemoved();
         }
 
         public override async Task AfterCombatEnd(CombatRoom room)
         {
-            RestoreTempChords(); // 战斗结束时恢复临时替换
-            MusicNoteManager.ClearAll(Owner);
+            RestoreTempChords();
+            MusicNoteManager.ClearCombatData(Owner);
             CleanupUI();
             await base.AfterCombatEnd(room);
-        }
-
-        public override RelicModel? GetUpgradeReplacement()
-        {
-            return ModelDb.Relic<FlashAnonGuitar>().ToMutable();
         }
 
         public void CopyChordsTo(AnonGuitar target)
         {
             foreach (var kv in _currentChords)
                 target._currentChords[kv.Key] = kv.Value;
+            target._bonusChords = new List<string>(_bonusChords);
         }
     }
 }

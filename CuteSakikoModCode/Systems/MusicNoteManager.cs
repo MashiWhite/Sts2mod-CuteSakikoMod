@@ -10,10 +10,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
         private class PlayerData
         {
             public Queue<CardType> Notes { get; } = new();
-            public List<string> StoredChords { get; } = new(); // 改为 List，支持按内容移除
+            public List<string> StoredChords { get; } = new();
         }
 
         private static Dictionary<Player, PlayerData> _data = new();
+        public const int MaxStoredChords = 3;
 
         private static PlayerData GetData(Player player)
         {
@@ -25,15 +26,20 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
             return data;
         }
 
-        public const int MaxStoredChords = 3; // 战斗中最多储存 3 个和弦
-
-        /// <summary>
-        /// 添加音符，匹配已学习和弦，成功则加入全局储存队列。
-        /// 返回本次新添加到 StoredChords 中的和弦 ID 列表（用于自动演奏等）。
-        /// </summary>
+        // ---------- 兼容旧版调用（无 Bonus 参数） ----------
         public static List<string> AddNote(Player player, CardType type,
             IReadOnlyDictionary<ChordCategory, string> learnedChords)
         {
+            return AddNote(player, type, learnedChords, Enumerable.Empty<string>());
+        }
+
+        // ---------- 新版调用（含 Bonus 列表） ----------
+        public static List<string> AddNote(Player player, CardType type,
+            IReadOnlyDictionary<ChordCategory, string> learnedChords,
+            IEnumerable<string> bonusChordIds)
+        {
+            if (player == null) return new List<string>();
+            
             var data = GetData(player);
             data.Notes.Enqueue(type);
             while (data.Notes.Count > 4)
@@ -42,47 +48,87 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
             var sequence = data.Notes.ToList();
             var newChords = new List<string>();
 
-            foreach (var kv in learnedChords)
+            // 匹配主槽位
+            if (learnedChords != null)
             {
-                var chordId = kv.Value;
-                if (string.IsNullOrEmpty(chordId)) continue;
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
-                    ChordManager.MatchesChord(def, sequence))
+                foreach (var kv in learnedChords)
                 {
-                    data.StoredChords.Add(chordId);
-                    newChords.Add(chordId);
-                    // 全局上限控制：超出上限时移除最早的和弦（索引0）
-                    while (data.StoredChords.Count > MaxStoredChords)
-                        data.StoredChords.RemoveAt(0);
+                    var chordId = kv.Value;
+                    if (string.IsNullOrEmpty(chordId)) continue;
+                    if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
+                        ChordManager.MatchesChord(def, sequence))
+                    {
+                        data.StoredChords.Add(chordId);
+                        newChords.Add(chordId);
+                    }
                 }
             }
+
+            // 匹配 Bonus 槽位
+            if (bonusChordIds != null)
+            {
+                foreach (var chordId in bonusChordIds)
+                {
+                    if (string.IsNullOrEmpty(chordId)) continue;
+                    if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
+                        ChordManager.MatchesChord(def, sequence))
+                    {
+                        data.StoredChords.Add(chordId);
+                        newChords.Add(chordId);
+                    }
+                }
+            }
+
+            while (data.StoredChords.Count > MaxStoredChords)
+                data.StoredChords.RemoveAt(0);
+
             return newChords;
         }
 
-        public static IReadOnlyList<CardType> GetCurrentNotes(Player player) =>
-            GetData(player).Notes.ToList().AsReadOnly();
+        // ---------- 其他原有方法保持不变 ----------
+        public static IReadOnlyList<CardType> GetCurrentNotes(Player player)
+        {
+            if (player == null) return new List<CardType>();
+            return GetData(player).Notes.ToList().AsReadOnly();
+        }
 
-        public static IReadOnlyList<string> GetStoredChords(Player player) =>
-            GetData(player).StoredChords.AsReadOnly();
+        public static IReadOnlyList<string> GetStoredChords(Player player)
+        {
+            if (player == null) return new List<string>();
+            return GetData(player).StoredChords.AsReadOnly();
+        }
 
-        public static void ClearStoredChords(Player player) =>
+        public static void ClearStoredChords(Player player)
+        {
+            if (player == null) return;
             GetData(player).StoredChords.Clear();
+        }
 
-        public static void ClearNotes(Player player) =>
+        public static void ClearNotes(Player player)
+        {
+            if (player == null) return;
             GetData(player).Notes.Clear();
+        }
+
+        public static void ClearCombatData(Player player)
+        {
+            if (player == null) return;
+            if (_data.TryGetValue(player, out var data))
+            {
+                data.Notes.Clear();
+                data.StoredChords.Clear();
+            }
+        }
 
         public static void ClearAll(Player player)
         {
-            if (_data.ContainsKey(player))
-                _data.Remove(player);
+            if (player == null) return;
+            _data.Remove(player);
         }
 
-        /// <summary>
-        /// 从储存队列中移除指定和弦 ID 的一个实例（优先移除最近添加的）。
-        /// 返回 true 表示成功移除，false 表示未找到。
-        /// </summary>
         public static bool RemoveChord(Player player, string chordId)
         {
+            if (player == null) return false;
             var list = GetData(player).StoredChords;
             int index = list.FindLastIndex(c => c == chordId);
             if (index >= 0)
@@ -92,25 +138,28 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
             }
             return false;
         }
-        
-        /// <summary>
-        /// 清除所有音符，并返回清除的音符数量。
-        /// </summary>
+
+        public static void AddChordDirectly(Player player, string chordId)
+        {
+            if (player == null) return;
+            var data = GetData(player);
+            data.StoredChords.Add(chordId);
+            while (data.StoredChords.Count > MaxStoredChords)
+                data.StoredChords.RemoveAt(0);
+        }
+
         public static int ClearNotesAndGetCount(Player player)
         {
+            if (player == null) return 0;
             var data = GetData(player);
             int count = data.Notes.Count;
             data.Notes.Clear();
             return count;
         }
-        
-        /// <summary>
-        /// 将当前音符序列中最后一个音符的类型改为指定类型。
-        /// 如果队列为空，则不做任何操作。
-        /// </summary>
-        /// <returns>是否成功修改</returns>
+
         public static bool ModifyLastNote(Player player, CardType newType)
         {
+            if (player == null) return false;
             var data = GetData(player);
             if (data.Notes.Count == 0) return false;
 
@@ -123,13 +172,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
 
             return true;
         }
-        
-        /// <summary>
-        /// 获取当前音符序列中最后一个音符的类型。
-        /// 如果队列为空，则返回 null。
-        /// </summary>
+
         public static CardType? GetLastNote(Player player)
         {
+            if (player == null) return null;
             var data = GetData(player);
             if (data.Notes.Count == 0) return null;
             return data.Notes.Last();
