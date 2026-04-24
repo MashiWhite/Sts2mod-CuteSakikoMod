@@ -5,6 +5,7 @@ using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -12,6 +13,7 @@ using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Saves.Runs;
@@ -40,11 +42,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         private StoredChordDisplay _storedChordDisplay;
         private Dictionary<ChordCategory, string>? _preTempChords;
 
-        // 将 private 改为 protected
         protected static Dictionary<Player, List<string>> _pendingBonusTransfer = new();
-        
+
         protected virtual int MaxLearnedChordsPerCategory => 1;
+        public int GetEffectMultiplier() => EffectMultiplier;
         protected virtual int EffectMultiplier => 1;
+   
 
         // ========== Bonus 管理 ==========
         public IReadOnlyList<string> GetBonusChords() => _bonusChords.AsReadOnly();
@@ -124,7 +127,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             }
         }
 
-        // ========== UI 管理（完整实现） ==========
+        // ========== UI 管理 ==========
         private void EnsureNoteDisplay()
         {
             if (_noteDisplay != null && GodotObject.IsInstanceValid(_noteDisplay)) return;
@@ -148,12 +151,39 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
                 EnsureNoteDisplay();
         }
 
+        // 在 AnonGuitar.cs 的 NotifyChordPlayed 方法中替换或追加以下逻辑
         private async Task NotifyChordPlayed(PlayerChoiceContext choiceContext)
         {
+            // 1. 通知“难忘的演奏”能力
             foreach (var power in Owner.Creature.Powers.OfType<UnforgettablePerformancePower>())
-            {
                 await power.OnChordPlayed(choiceContext);
+
+            // 2. 谢幕卡牌回收逻辑：将所有“谢幕”从其他牌堆移回手牌
+            const string curtainCallId = "CUTESAKIKOMOD-CURTAIN_CALL";
+            var player = Owner;
+            if (player == null) return;
+
+            // 收集所有需要移回手牌的谢幕卡牌
+            var cardsToMove = new List<CardModel>();
+            var searchPiles = new[] { PileType.Discard, PileType.Draw, PileType.Exhaust };
+
+            foreach (var pileType in searchPiles)
+            {
+                var pile = pileType.GetPile(player);
+                if (pile == null) continue;
+                // 找出所有匹配的谢幕卡牌
+                cardsToMove.AddRange(pile.Cards.Where(c => c.Id.Entry == curtainCallId));
             }
+
+            // 一次性将它们移回手牌
+            foreach (var card in cardsToMove)
+            {
+                // CardPileCmd.Add 会自动处理牌堆转移，无需先移除
+                await CardPileCmd.Add(card, PileType.Hand);
+            }
+
+            if (cardsToMove.Count > 0)
+                Flash(); // 吉他闪烁提示
         }
 
         private void EnsureStoredChordDisplay()
@@ -207,13 +237,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
                 return;
             }
 
-            var newChords = MusicNoteManager.AddNote(Owner, cardPlay.Card.Type, _currentChords, _bonusChords);
+            var newChords = MusicNoteManager.AddNote(Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
 
             bool hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
             if (hasAutoPlay && newChords.Count > 0)
             {
                 foreach (var chordId in newChords)
                 {
+                    // 使用 ChordEffectPlayer 播放特效
+                    _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
+
                     if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                     {
                         await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
@@ -246,10 +279,25 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             var stored = MusicNoteManager.GetStoredChords(Owner);
             foreach (var chordId in stored)
             {
+                _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                     await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
             }
             ClearSequence();
+            await NotifyChordPlayed(choiceContext);
+        }
+
+        public async Task TriggerAllStoredChordsKeepNotes(PlayerChoiceContext choiceContext)
+        {
+            var stored = MusicNoteManager.GetStoredChords(Owner);
+            foreach (var chordId in stored)
+            {
+                _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+                    await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+            }
+            MusicNoteManager.ClearStoredChords(Owner);
+            UpdateStoredChordDisplay();
             await NotifyChordPlayed(choiceContext);
         }
 
@@ -262,6 +310,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             bool hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
             if (hasAutoPlay)
             {
+                _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
@@ -288,6 +337,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             if ((filter == null || filter.Contains(ChordCategory.Bonus)) && _bonusChords.Count > 0)
                 result.AddRange(_bonusChords);
 
+            // 添加临时和弦
+            if (_temporaryChords.Count > 0)
+                result.AddRange(_temporaryChords);
+
             return result;
         }
 
@@ -295,8 +348,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         {
             var chordIds = GetLearnedChordIds(categories);
             foreach (var chordId in chordIds)
+            {
+                _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                     await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+            }
         }
 
         public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext) =>
@@ -308,6 +364,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             if (stored.Count == 0) return;
 
             var lastChordId = stored.Last();
+            _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { lastChordId }, 0f);
             if (ChordManager.AllChords.TryGetValue(lastChordId, out var def))
                 await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
 
@@ -320,6 +377,33 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         {
             if (!ChordManager.AllChords.ContainsKey(newChordId)) return;
             _currentChords[category] = newChordId;
+            Flash();
+        }
+        
+        // 临时已记忆和弦列表（用于练习的证明等效果）
+        private List<string> _temporaryChords = new();
+
+        /// <summary>添加一个临时已记忆和弦</summary>
+        public void AddTemporaryChord(string chordId)
+        {
+            if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+            _temporaryChords.Add(chordId);
+            Flash();
+        }
+
+        /// <summary>移除指定的临时和弦</summary>
+        public bool RemoveTemporaryChord(string chordId)
+        {
+            bool removed = _temporaryChords.Remove(chordId);
+            if (removed) Flash();
+            return removed;
+        }
+
+        /// <summary>清除所有临时和弦</summary>
+        public void ClearTemporaryChords()
+        {
+            if (_temporaryChords.Count == 0) return;
+            _temporaryChords.Clear();
             Flash();
         }
 
@@ -354,6 +438,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
                         lines.Add($"[{title}]({def.GetConditionText()})\n{text}");
                     }
                 }
+                
+                foreach (var chordId in _temporaryChords)
+                {
+                    if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+                    {
+                        string title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
+                        string text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
+                        lines.Add($"[临时] [{title}]({def.GetConditionText()})\n{text}");
+                    }
+                }
 
                 desc.Add("Chords", string.Join("\n\n", lines));
                 yield return new HoverTip(new LocString("relics", "ANON_GUITAR_CHORDS_TITLE"), desc);
@@ -370,30 +464,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
             options.Add(new PracticeGuitarOption(player, this));
             return true;
         }
-        
-        /// <summary>
-        /// 演奏所有已储存的和弦，但不清除音符序列（保留当前音符队列）。
-        /// </summary>
-        public async Task TriggerAllStoredChordsKeepNotes(PlayerChoiceContext choiceContext)
-        {
-            var stored = MusicNoteManager.GetStoredChords(Owner);
-            foreach (var chordId in stored)
-            {
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                {
-                    await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-                }
-            }
-            // 清空储存队列，但保留音符
-            MusicNoteManager.ClearStoredChords(Owner);
-            UpdateStoredChordDisplay();
-
-            await NotifyChordPlayed(choiceContext);
-        }
 
         public override async Task AfterRemoved()
         {
-            // 将当前 Bonus 保存到缓存，供替换遗物（如闪亮吉他）继承
             if (_bonusChords.Count > 0)
             {
                 _pendingBonusTransfer[Owner] = new List<string>(_bonusChords);

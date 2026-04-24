@@ -1,6 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,13 +10,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class WeakMeDeadPower : CustomPowerModel
+public sealed class WeakMeDeadPower : CuteSakikoModPower
 {
-    public override string CustomPackedIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;

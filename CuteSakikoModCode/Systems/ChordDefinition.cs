@@ -41,7 +41,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     CardType.Attack => "[red]攻[/red]",
                     CardType.Skill => "[blue]技[/blue]",
                     CardType.Power => "[gold]能[/gold]",
-                    _ => "[white]特[/white]"
+                    _ => "[pink]特[/pink]"
                 });
             }
             return string.Join(" ", parts);

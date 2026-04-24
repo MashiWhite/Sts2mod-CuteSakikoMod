@@ -1,22 +1,16 @@
-﻿using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class MemoryBurningPower : CustomPowerModel
+public sealed class MemoryBurningPower : CuteSakikoModPower
 {
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single; // 不可叠加

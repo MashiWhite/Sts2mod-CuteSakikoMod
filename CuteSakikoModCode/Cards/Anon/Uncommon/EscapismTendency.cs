@@ -20,7 +20,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
         {
             get
             {
-                yield return new PowerVar<EscapismTendencyPower>(10m);
+                yield return new PowerVar<EscapismTendencyPower>(5m);
             }
         }
 
@@ -52,7 +52,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 
         protected override void OnUpgrade()
         {
-            DynamicVars["EscapismTendencyPower"].UpgradeValueBy(5m); // 10 → 15
+            DynamicVars["EscapismTendencyPower"].UpgradeValueBy(3m); // 5-8
         }
     }
 }

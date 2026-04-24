@@ -83,7 +83,7 @@ public class Marionette() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
                     await CardPileCmd.Add(selected, PileType.Draw, CardPilePosition.Top);
                 }
             
-        }
+            }
 
     }
 

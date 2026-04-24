@@ -1,0 +1,62 @@
+﻿
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.Powers;
+
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
+{
+    public class EasyNow() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+    {
+        private bool _targetAll = false;
+
+        public override TargetType TargetType => _targetAll ? TargetType.AllEnemies : TargetType.AnyEnemy;
+
+        public override IEnumerable<CardKeyword> CanonicalKeywords
+        {
+            get { yield return CardKeyword.Exhaust; }
+        }
+
+        protected override IEnumerable<DynamicVar> CanonicalVars
+        {
+            get
+            {
+                // 基础力量减少：2 点，升级后通过 OnUpgrade 增加到 3
+                yield return new PowerVar<StrengthPower>(2m);
+            }
+        }
+
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+        {
+            TriggerBanter();
+
+            int strengthLoss = DynamicVars["StrengthPower"].IntValue;
+
+            if (_targetAll)
+            {
+                // 对所有敌人施加负力量
+                var enemies = Owner.Creature.CombatState?.Enemies;
+                if (enemies != null)
+                {
+                    foreach (var enemy in enemies)
+                        await PowerCmd.Apply<StrengthPower>(enemy, -strengthLoss, Owner.Creature, this);
+                }
+            }
+            else
+            {
+                // 对单个目标施加负力量
+                if (cardPlay.Target == null) return;
+                await PowerCmd.Apply<StrengthPower>(cardPlay.Target, -strengthLoss, Owner.Creature, this);
+            }
+        }
+
+        protected override void OnUpgrade()
+        {
+            // 力量减少值：2 → 3
+            DynamicVars["StrengthPower"].UpgradeValueBy(1m);
+            // 目标变为所有敌人
+            _targetAll = true;
+        }
+    }
+}

@@ -5,13 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class GoldPower : CustomPowerModel
+public sealed class GoldPower : CuteSakikoModPower
 {
-    public override string CustomPackedIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;

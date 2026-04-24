@@ -2,14 +2,20 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
 {
-    public class StageNerves : CuteAnonCard
+    public class StageNerves() : CuteAnonCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
-        public StageNerves() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+        
+        protected override IEnumerable<IHoverTip> ExtraHoverTips
         {
+            get
+            {
+                yield return HoverTipFactory.FromPower<StageNervesPower>();
+            }
         }
 
         protected override IEnumerable<DynamicVar> CanonicalVars

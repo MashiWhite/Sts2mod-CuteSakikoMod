@@ -1,5 +1,4 @@
-﻿using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -8,17 +7,12 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class PatiencePower : CustomPowerModel
+public sealed class PatiencePower : CuteSakikoModPower
 {
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;

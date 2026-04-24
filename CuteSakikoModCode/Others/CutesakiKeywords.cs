@@ -37,4 +37,7 @@ public class CutesakiKeywords
 
     [CustomEnum("NoNote")] [KeywordProperties(AutoKeywordPosition.None)]
     public static CardKeyword NoNote;
+    
+    [CustomEnum("OtherAnon")] [KeywordProperties(AutoKeywordPosition.None)]
+    public static CardKeyword OtherAnon;
 }

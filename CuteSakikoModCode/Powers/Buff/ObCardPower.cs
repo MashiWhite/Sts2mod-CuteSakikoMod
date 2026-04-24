@@ -1,5 +1,4 @@
-﻿using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Combat;
@@ -10,26 +9,17 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class ObCardPower : CustomPowerModel
+public sealed class ObCardPower : CuteSakikoModPower
 {
     private const int ExtraReplay = 1;
     private readonly HashSet<CardModel> _modifiedCards = new();
     private readonly Dictionary<CardModel, int> _originalCosts = new();
     private readonly Dictionary<CardModel, bool> _hadExhaustKeyword = new();
     private bool _isRemoving;
-
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {

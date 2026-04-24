@@ -1,4 +1,4 @@
-﻿using BaseLib.Abstracts;
+﻿
 using BaseLib.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using MegaCrit.Sts2.Core.Combat;
@@ -9,13 +9,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class EtherPower : CustomPowerModel
+public sealed class EtherPower : CuteSakikoModPower
 {
-    public override string CustomPackedIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single; // 不可叠层

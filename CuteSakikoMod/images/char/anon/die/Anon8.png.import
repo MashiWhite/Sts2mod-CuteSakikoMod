@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://86umhexlclko"
-path="res://.godot/imported/Anon1.png-3aa32ec63995f2143b6804de8e18c59c.ctex"
+uid="uid://crakahk35k2k6"
+path="res://.godot/imported/Anon8.png-6a0d32589b6511e9bffa09611206904b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/char/anon/Anon1.png"
-dest_files=["res://.godot/imported/Anon1.png-3aa32ec63995f2143b6804de8e18c59c.ctex"]
+source_file="res://CuteSakikoMod/images/char/anon/die/Anon8.png"
+dest_files=["res://.godot/imported/Anon8.png-6a0d32589b6511e9bffa09611206904b.ctex"]
 
 [params]
 

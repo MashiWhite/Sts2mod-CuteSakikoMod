@@ -1,5 +1,4 @@
-﻿using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Combat;
@@ -10,20 +9,14 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
-using StringExtensions = BaseLib.Extensions.StringExtensions; // 引入 CutesakiKeywords
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class BearMemoryPower : CustomPowerModel
+public sealed class BearMemoryPower : CuteSakikoModPower
 {
     // 静态字典，用于跟踪每张卡牌本次打出还需要获得的压力次数
     private static readonly Dictionary<CardModel, int> _pendingPressure = new();
-
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;

@@ -17,19 +17,13 @@ using StringExtensions = BaseLib.Extensions.StringExtensions;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 
-public sealed class PressurePower : CustomPowerModel
+public sealed class PressurePower : CuteSakikoModPower
 {
     public PressurePower()
     {
         DisplayAmountChanged += OnDisplayAmountChanged;
     }
-
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
+    
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;

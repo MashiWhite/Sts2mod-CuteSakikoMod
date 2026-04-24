@@ -1,4 +1,7 @@
-﻿using BaseLib.Config;
+﻿using System.Reflection;
+using BaseLib.Abstracts;
+using BaseLib.Config;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
 using Godot;
 using Godot.Bridge;
 using HarmonyLib;
@@ -8,12 +11,8 @@ using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
-using System.Reflection;
-using System.Threading.Tasks;
-using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Scripts;
+namespace CuteSakikoMod.CuteSakikoModCode.Others;
 
 [ModInitializer("Init")]
 public class Entry
@@ -131,7 +130,7 @@ public class Entry
 
     private static void OnRunStarted(RunState state)
     {
-        if (!ModConfig.可爱小祥彩蛋卡) return;
+        if (!ModConfig.彩蛋卡) return;
         var player = state.Players.FirstOrDefault(p => p.Creature.IsPlayer);
         if (player == null) return;
         if (player.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id)) return;
@@ -145,7 +144,7 @@ public class Entry
 
     public class ModConfig : SimpleModConfig
     {
-        public static bool 可爱小祥彩蛋卡 { get; set; } = false;
+        public static bool 彩蛋卡 { get; set; } = false;
         public static bool Config2 { get; set; } = false;
         public static bool Config3 { get; set; } = false;
     }

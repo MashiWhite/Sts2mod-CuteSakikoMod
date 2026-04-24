@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxnmowa3nmkje"
-path="res://.godot/imported/bathe.png-587a58be6af0da1bc8199e41b522c770.ctex"
+uid="uid://hnhr5qhfc5un"
+path="res://.godot/imported/Anon7.png-54feb3bf9333dd21a05831faa287e6be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/card_portraits/bathe.png"
-dest_files=["res://.godot/imported/bathe.png-587a58be6af0da1bc8199e41b522c770.ctex"]
+source_file="res://CuteSakikoMod/images/char/anon/loop/Anon7.png"
+dest_files=["res://.godot/imported/Anon7.png-54feb3bf9333dd21a05831faa287e6be.ctex"]
 
 [params]
 

@@ -27,7 +27,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token
         {
             get
             {
-                yield return new PowerVar<WalkHandingPower>(8m);
+                yield return new PowerVar<WalkHandingPower>(6m);
             }
         }
 
@@ -57,7 +57,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token
 
         protected override void OnUpgrade()
         {
-            DynamicVars["WalkHandingPower"].UpgradeValueBy(5m); // 8 → 13
+            DynamicVars["WalkHandingPower"].UpgradeValueBy(3m); // 6-9
         }
     }
 }

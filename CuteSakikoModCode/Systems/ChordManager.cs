@@ -164,16 +164,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                         await CreatureCmd.Heal(ally, 3 * mult);
                 });
 
-            // Em【技 技 攻 技】所有友方本回合获得1点倒映（数值已调整）
+            // Em【技 技 攻 技】所有友方本回合获得1点倒映
             AddChord("Em", ChordCategory.Minor,
                 new[] { CardType.Skill, CardType.Skill, CardType.Attack, CardType.Skill },
                 "CUTESAKIKOMOD-EMCHORD.title", "CUTESAKIKOMOD-EMCHORD.description", "em_chord",
-                new[] { 2 },
+                new[] { 1 },
                 async (ctx, owner, mult) =>
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<ReflectPower>(ally, 2 * mult, owner, null);
+                        await PowerCmd.Apply<ReflectPower>(ally, 1 * mult, owner, null);
                 });
 
             // Dm【技 攻 技】所有友方获得1层再生
@@ -382,8 +382,32 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                         foreach (var ally in allies)
                             await PowerCmd.Apply<WeakPower>(ally, 1 * mult, owner, null);
                     }
-                });
+                }); 
             
+            //灰爱音和弦【特 攻 攻】 减少2生命，抽1获得1能量
+            AddTemporaryChord("GreyAnonChord", ChordCategory.Anon,
+                new[] { CardType.Status, CardType.Attack, CardType.Attack },
+                "CUTESAKIKOMOD-GREYANONCHORD.title", "CUTESAKIKOMOD-GREYANONCHORD.description", "grey_anon_chord",
+                new[] { 2, 1, 1 }, // 生命减少、抽牌、能量
+                async (ctx, owner, mult) =>
+                {
+                    var combat = owner.CombatState;
+                    if (combat == null) return;
+
+                    // 失去 1*mult 点生命值（不可格挡，不受力量影响）
+                    await CreatureCmd.Damage(ctx, owner, 1 * mult, 
+                        ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, 
+                        owner, null);
+
+                    // 抽牌
+                    var player = owner.Player;
+                    if (player != null)
+                        await CardPileCmd.Draw(ctx, 1 * mult, player);
+
+                    // 获得能量
+                    if (player != null)
+                        await PlayerCmd.GainEnergy(1 * mult, player);
+                });
         }
         
         
@@ -453,8 +477,22 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
             var pattern = chord.NoteSequence;
             if (sequence.Count < pattern.Length) return false;
             for (int i = 0; i < pattern.Length; i++)
-                if (sequence[sequence.Count - pattern.Length + i] != pattern[i])
+            {
+                var expected = pattern[i];
+                var actual = sequence[sequence.Count - pattern.Length + i];
+        
+                // 如果和弦定义中的类型是 Status，代表“特”（通配非攻/技/能）
+                if (expected == CardType.Status)
+                {
+                    // 匹配除 Attack、Skill、Power 之外的所有类型
+                    if (actual == CardType.Attack || actual == CardType.Skill || actual == CardType.Power)
+                        return false;
+                }
+                else if (expected != actual)
+                {
                     return false;
+                }
+            }
             return true;
         }
     }

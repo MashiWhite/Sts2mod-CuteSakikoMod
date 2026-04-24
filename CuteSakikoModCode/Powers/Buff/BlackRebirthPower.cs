@@ -1,6 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,15 +10,9 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class BlackRebirthPower : CustomPowerModel
+public sealed class BlackRebirthPower : CuteSakikoModPower
 {
     private int _cumulativePressure; // 累计未用于回血的压力
-
-    public override string CustomPackedIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;

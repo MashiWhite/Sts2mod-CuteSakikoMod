@@ -1,7 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -17,7 +15,7 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class PigPower : CustomPowerModel
+public sealed class PigPower : CuteSakikoModPower
 {
     // 存储生物 -> 动画播放器的映射
     internal static Dictionary<Creature, AnimationPlayer> PigAnimPlayers = new();
@@ -29,12 +27,6 @@ public sealed class PigPower : CustomPowerModel
     {
         _pigScene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/others/pig.tscn");
     }
-
-    public override string CustomPackedIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;

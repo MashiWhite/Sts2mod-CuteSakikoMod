@@ -1,6 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -10,13 +8,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class DaggersDrawnPower : CustomPowerModel
+public sealed class DaggersDrawnPower : CuteSakikoModPower
 {
-    public override string CustomPackedIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter; // 可叠加层数

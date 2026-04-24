@@ -19,6 +19,9 @@
 
   "CUTESAKIKOMOD-PLAYPIANO.title": "琴奏",
   "CUTESAKIKOMOD-PLAYPIANO.description": "属于小祥的特殊打击。",
+  
+  "CUTESAKIKOMOD-OTHERANON.title": "异世界爱音",
+  "CUTESAKIKOMOD-OTHERANON.description": "[sine][pink]好像不是我认识的歌，但是却感觉很熟悉。[/pink][/sine]",
 
   "CUTESAKIKOMOD-ANONCCHORD.title": "爱音C和弦",
   "CUTESAKIKOMOD-ANONCCHORD.description": "在本场战斗中升级所有友方手牌中的{0}张牌。",
@@ -93,5 +96,8 @@
   "CUTESAKIKOMOD-ANONDCHORD.description": "所有友方获得1瓶随机药水。",
 
   "CUTESAKIKOMOD-ANONFCHORD.title": "爱音F和弦",
-  "CUTESAKIKOMOD-ANONFCHORD.description": "50% 对所有敌人造成 {0} 点伤害。\n50% 使所有友方获得 {1} 层[gold]虚弱[/gold]。"
+  "CUTESAKIKOMOD-ANONFCHORD.description": "50% 对所有敌人造成 {0} 点伤害。\n50% 使所有友方获得 {1} 层[gold]虚弱[/gold]。",
+
+  "CUTESAKIKOMOD-GREYANONCHORD.title": "灰爱音和弦",
+  "CUTESAKIKOMOD-GREYANONCHORD.description": "减少{0}点生命，抽{1}张牌，获得{2}点能量。"
 }

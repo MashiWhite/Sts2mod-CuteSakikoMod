@@ -1,5 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -7,22 +6,13 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using StringExtensions = BaseLib.Extensions.StringExtensions;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class MasqueradePower : CustomPowerModel
+public sealed class MasqueradePower : CuteSakikoModPower
 {
     private List<(Creature owner, ModelId powerId, int amount)> _removedPowers = new();
-
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;

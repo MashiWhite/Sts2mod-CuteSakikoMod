@@ -1,6 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -10,15 +8,9 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-public sealed class MeteorHephaestusPower : CustomPowerModel
+public sealed class MeteorHephaestusPower : CuteSakikoModPower
 {
     private bool _isUpgraded; // 决定是否翻倍层数
-
-    public override string CustomPackedIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter; // 可叠层，层数决定夺取次数

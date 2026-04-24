@@ -39,7 +39,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 
             await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
             await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
-
+            
             _timesPlayedThisCombat++;
             EnergyCost.UpgradeBy(1); // 每次打出费用永久 +1
         }
