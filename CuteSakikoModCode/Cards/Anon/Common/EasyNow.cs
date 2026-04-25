@@ -40,14 +40,14 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
                 if (enemies != null)
                 {
                     foreach (var enemy in enemies)
-                        await PowerCmd.Apply<StrengthPower>(enemy, -strengthLoss, Owner.Creature, this);
+                        await PowerCmd.Apply<StrengthPower>(choiceContext,enemy, -strengthLoss, Owner.Creature, this);
                 }
             }
             else
             {
                 // 对单个目标施加负力量
                 if (cardPlay.Target == null) return;
-                await PowerCmd.Apply<StrengthPower>(cardPlay.Target, -strengthLoss, Owner.Creature, this);
+                await PowerCmd.Apply<StrengthPower>(choiceContext,cardPlay.Target, -strengthLoss, Owner.Creature, this);
             }
         }
 

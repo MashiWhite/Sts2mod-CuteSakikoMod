@@ -14,7 +14,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
             TriggerBanter();
 
             int stacks = IsUpgraded ? 2 : 1;
-            await PowerCmd.Apply<MarksOfPracticePower>(Owner.Creature, stacks, Owner.Creature, this);
+            await PowerCmd.Apply<MarksOfPracticePower>(choiceContext,Owner.Creature, stacks, Owner.Creature, this);
         }
         
         protected override IEnumerable<IHoverTip> ExtraHoverTips

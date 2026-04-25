@@ -8,11 +8,9 @@ using MegaCrit.Sts2.Core.Localization;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
 {
-    public class Osusume : CuteAnonCard
+    public class Osusume() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
-        public Osusume() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
-        {
-        }
+        public override string ChordId => "AnonDChord";
 
         public override IEnumerable<CardKeyword> CanonicalKeywords
         {
@@ -20,6 +18,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
             {
                 yield return CardKeyword.Exhaust;
                 yield return CutesakiKeywords.NoNote; // 自身不产生音符
+                yield return CutesakiKeywords.Chord;
             }
         }
 

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -66,7 +60,7 @@ public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Unco
         var totalPressure = currentTotal;
 
         // 给予目标压力
-        await PowerCmd.Apply<PressurePower>(target, (int)totalPressure, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,target, (int)totalPressure, Owner.Creature, this);
 
         // 获得等量格挡
         await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(totalPressure, ValueProp.Move), cardPlay);

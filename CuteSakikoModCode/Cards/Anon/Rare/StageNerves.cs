@@ -32,7 +32,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
             TriggerBanter();
 
             int amount = DynamicVars["StageNervesPower"].IntValue;
-            await PowerCmd.Apply<StageNervesPower>(Owner.Creature, amount, Owner.Creature, this);
+            await PowerCmd.Apply<StageNervesPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
         }
 
         protected override void OnUpgrade()

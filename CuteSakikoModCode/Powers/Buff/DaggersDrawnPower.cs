@@ -32,6 +32,6 @@ public sealed class DaggersDrawnPower : CuteSakikoModPower
             allCreatures.AddRange(CombatState.HittableEnemies);
 
         // 给每个生物施加对应层数的压力
-        foreach (var creature in allCreatures) await PowerCmd.Apply<PressurePower>(creature, amount, Owner, null);
+        foreach (var creature in allCreatures) await PowerCmd.Apply<PressurePower>(choiceContext,creature, amount, Owner, null);
     }
 }

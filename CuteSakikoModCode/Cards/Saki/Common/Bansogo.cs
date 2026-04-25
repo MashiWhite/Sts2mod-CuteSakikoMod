@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -54,7 +48,7 @@ public class Bansogo() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
         if (pressure != null && pressure.Amount > 0)
         {
             // 消耗1层压力
-            await PowerCmd.ModifyAmount(pressure, -1, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
             // 抽1张牌
             await CardPileCmd.Draw(choiceContext, 1, Owner);
         }

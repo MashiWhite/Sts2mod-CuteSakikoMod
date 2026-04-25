@@ -29,7 +29,7 @@ public class DrumSupport() : CustomCardModel(0, CardType.Skill, CardRarity.Token
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = DynamicVars["StrengthPower"].IntValue;
-        await PowerCmd.Apply<StrengthPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
         EnergyCost.UpgradeBy(1);
     }
 
@@ -38,8 +38,8 @@ public class DrumSupport() : CustomCardModel(0, CardType.Skill, CardRarity.Token
     {
         if (card != this) return;
         var amount = DynamicVars["StrengthPower"].IntValue;
-        await PowerCmd.Apply<StrengthPower>(Owner.Creature, amount, Owner.Creature, this);
-        await PowerCmd.Apply<StrengthPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

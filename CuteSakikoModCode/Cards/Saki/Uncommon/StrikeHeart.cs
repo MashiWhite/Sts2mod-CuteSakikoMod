@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -45,7 +39,7 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
 
         // 施加等量层数的破防
         if (pressureAmount > 0)
-            await PowerCmd.Apply<BreakDefendPower>(cardPlay.Target, pressureAmount, Owner.Creature, this);
+            await PowerCmd.Apply<BreakDefendPower>(choiceContext,cardPlay.Target, pressureAmount, Owner.Creature, this);
 
         // 造成多次1点伤害（使用动态伤害值，受力量加成）
         var hitCount = IsUpgraded ? 10 : 6;

@@ -37,7 +37,7 @@ public class MirageComing : CuteSakikoModEggCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 给予自身 PigPower（不可叠加，Single）
-        await PowerCmd.Apply<PigPower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<PigPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

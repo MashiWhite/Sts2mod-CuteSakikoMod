@@ -88,7 +88,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
                     combined.UpgradeInternal();
                     combined.FinalizeUpgradeInternal();
                 }
-                await CardPileCmd.AddGeneratedCardToCombat(combined, PileType.Hand, true);
+                await CardPileCmd.AddGeneratedCardToCombat(combined, PileType.Hand, Owner);
             }
             finally
             {

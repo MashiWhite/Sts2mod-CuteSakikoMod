@@ -48,7 +48,7 @@ public class Disheartened : CuteSakikoModCard
 
         // 给予易伤
         var vulnerableAmount = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<VulnerablePower>(cardPlay.Target, vulnerableAmount, Owner.Creature, this);
+        await PowerCmd.Apply<VulnerablePower>(choiceContext,cardPlay.Target, vulnerableAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

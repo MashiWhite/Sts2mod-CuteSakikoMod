@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -46,7 +40,7 @@ public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity
 
         // 施加能力：基础4层，升级6层
         var powerAmount = IsUpgraded ? 6 : 4;
-        await PowerCmd.Apply<DontAssociateMePower>(Owner.Creature, powerAmount, Owner.Creature, this);
+        await PowerCmd.Apply<DontAssociateMePower>(choiceContext,Owner.Creature, powerAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

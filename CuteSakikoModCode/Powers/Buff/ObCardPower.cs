@@ -74,7 +74,7 @@ public sealed class ObCardPower : CuteSakikoModPower
         // 减少压力
         var pressure = Owner.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount > 0)
-            await PowerCmd.ModifyAmount(pressure, -1, Owner, card);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner, card);
 
         // 新打出的卡牌已在手牌中，且已被修改过，无需再全量遍历
     }

@@ -1,19 +1,17 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Hooks;
+﻿using BaseLib.Hooks;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;   // 新增：提供 ThrowingPlayerChoiceContext
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 
@@ -56,19 +54,23 @@ public sealed class PressurePower : CuteSakikoModPower
         return new[] { segment };
     }
 
-    // 压力变化时检测
-    public override async Task AfterPowerAmountChanged(PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
+    // ********** 修复签名：添加 PlayerChoiceContext 参数 **********
+    public override async Task AfterPowerAmountChanged(
+        PlayerChoiceContext choiceContext,   // 新参数
+        PowerModel power,
+        decimal amount,
+        Creature? applier,
+        CardModel? cardSource)
     {
         if (power != this) return;
         
-        // 压力增加时，提升自己手上（当前玩家）的骑士之剑伤害
+        // 压力增加时，提升自己手牌中骑士之剑的伤害
         if (amount > 0 && Owner != null && Owner.IsPlayer && CombatState != null)
         {
             int delta = (int)amount;
             if (delta <= 0) return;
             var player = Owner.Player;
-            // 只考虑手牌、抽牌堆、弃牌堆、消耗堆
-            var piles = new[] { PileType.Hand, PileType.Draw, PileType.Discard,PileType.Exhaust };
+            var piles = new[] { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust };
             foreach (var pileType in piles)
             {
                 var pile = pileType.GetPile(player);
@@ -83,7 +85,7 @@ public sealed class PressurePower : CuteSakikoModPower
             }
         }
 
-        await CheckAndTriggerCollapse();
+        await CheckAndTriggerCollapse(choiceContext);   // 传入上下文
     }
 
     // 生命值减少时检测
@@ -91,22 +93,24 @@ public sealed class PressurePower : CuteSakikoModPower
     {
         if (creature != Owner) return;
         if (delta >= 0) return; // 只关心生命值减少
-        await CheckAndTriggerCollapse();
+        // 没有 PlayerChoiceContext，使用 ThrowingPlayerChoiceContext
+        await CheckAndTriggerCollapse(new ThrowingPlayerChoiceContext());
     }
 
-    private async Task CheckAndTriggerCollapse()
+    // 更新该方法，添加 PlayerChoiceContext 参数
+    private async Task CheckAndTriggerCollapse(PlayerChoiceContext ctx)
     {
         if (Owner == null || !Owner.IsAlive) return;
         if (Amount >= Owner.CurrentHp)
         {
             // 清除所有压力
-            await PowerCmd.ModifyAmount(this, -Amount, Owner, null);
+            await PowerCmd.ModifyAmount(ctx, this, -Amount, Owner, null);
             // 获得一层崩溃
-            await PowerCmd.Apply<BreakDownPower>(Owner, 1, Owner, null);
+            await PowerCmd.Apply<BreakDownPower>(ctx, Owner, 1, Owner, null);
         }
     }
 
-    // 移除自动增加压力的代码，只保留伤害加成
+    // 伤害加成（这个方法是正确的，无需修改）
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer,
         CardModel? cardSource)
     {

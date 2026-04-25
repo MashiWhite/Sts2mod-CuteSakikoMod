@@ -55,7 +55,7 @@ public class NoWork : CuteSakikoModCard
             .Execute(choiceContext);
 
         // 施加压力
-        await PowerCmd.Apply<PressurePower>(cardPlay.Target, DynamicVars["PressurePower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, DynamicVars["PressurePower"].IntValue, Owner.Creature,
             this);
     }
 

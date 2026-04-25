@@ -58,7 +58,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
         {
             var reduceAmount = IsUpgraded ? 3 : 2;
             // 使用 PowerCmd.ModifyAmount 安全减少压力层数
-            await PowerCmd.ModifyAmount(pressure, -reduceAmount, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, -reduceAmount, Owner.Creature, this);
         }
     }
 

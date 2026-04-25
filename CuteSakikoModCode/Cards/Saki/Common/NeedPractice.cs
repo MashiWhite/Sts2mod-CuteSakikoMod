@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -72,17 +66,17 @@ public class NeedPractice() : CuteSakikoModCard(1, CardType.Attack, CardRarity.C
                 var existing = enemy.GetPower<PressurePower>();
                 if (existing != null)
                 {
-                    await PowerCmd.ModifyAmount(existing, amountToAdd, Owner.Creature, this);
+                    await PowerCmd.ModifyAmount(choiceContext,existing, amountToAdd, Owner.Creature, this);
                 }
                 else
                 {
                     var clonedPressure = (PressurePower)targetPressure.ClonePreservingMutability();
-                    await PowerCmd.Apply(clonedPressure, enemy, amountToAdd, Owner.Creature, this);
+                    await PowerCmd.Apply(choiceContext,clonedPressure, enemy, amountToAdd, Owner.Creature, this);
                 }
             }
 
             // 6. 减少目标自身的压力（减去已分配出去的一半）
-            await PowerCmd.ModifyAmount(targetPressure, -halfPressure, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,targetPressure, -halfPressure, Owner.Creature, this);
         }
         // 若无其他敌人，则不进行任何压力转移，目标压力保持不变
     }

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -43,7 +37,7 @@ public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity
         var damagePerHit = Math.Max(1, layers / 4);
 
         // 消耗所有压力
-        await PowerCmd.ModifyAmount(pressure, -layers, Owner.Creature, this);
+        await PowerCmd.ModifyAmount(choiceContext,pressure, -layers, Owner.Creature, this);
 
         var hitCount = IsUpgraded ? 7 : 5;
 

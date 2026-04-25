@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -71,7 +65,7 @@ public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
         if (targetPressure > selfPressure)
         {
             var shrinkAmount = IsUpgraded ? 2 : 1;
-            await PowerCmd.Apply<ShrinkPower>(target, shrinkAmount, Owner.Creature, this);
+            await PowerCmd.Apply<ShrinkPower>(choiceContext,target, shrinkAmount, Owner.Creature, this);
         }
     }
 

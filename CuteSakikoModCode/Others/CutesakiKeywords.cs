@@ -40,4 +40,7 @@ public class CutesakiKeywords
     
     [CustomEnum("OtherAnon")] [KeywordProperties(AutoKeywordPosition.None)]
     public static CardKeyword OtherAnon;
+    
+    [CustomEnum("Chord")] [KeywordProperties(AutoKeywordPosition.None)]
+    public static CardKeyword Chord;
 }

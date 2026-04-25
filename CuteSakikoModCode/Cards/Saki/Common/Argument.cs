@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -43,7 +37,7 @@ public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Commo
             .Execute(choiceContext);
 
         var shirk = CombatState.CreateCard<Shirk>(Owner);
-        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(shirk, PileType.Discard, true));
+        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(shirk, PileType.Discard, Owner));
         await Cmd.Wait(0.5f);
     }
 

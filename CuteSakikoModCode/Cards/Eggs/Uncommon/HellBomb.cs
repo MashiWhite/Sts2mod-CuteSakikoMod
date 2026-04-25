@@ -1,10 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -36,7 +31,7 @@ public class HellBomb : CuteSakikoModEggCard
         var bomb = CombatState.CreateCard<HellBombOn>(targetPlayer);
         if (IsUpgraded) CardCmd.Upgrade(bomb);
 
-        await CardPileCmd.AddGeneratedCardToCombat(bomb, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(bomb, PileType.Hand, Owner);
 
         // 永久删除牌库中的这张卡牌（整局游戏移除）
         if (this.DeckVersion != null)

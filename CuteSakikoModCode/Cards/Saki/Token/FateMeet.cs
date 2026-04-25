@@ -26,7 +26,7 @@ public class FateMeet() : CustomCardModel(1, CardType.Skill, CardRarity.Token, T
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 施加免费下一张能力牌的效果（1层）
-        await PowerCmd.Apply<FreePowerPower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<FreePowerPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
 
         // 每次打出后费用永久增加1（本场战斗）
         EnergyCost.UpgradeBy(1);
@@ -37,7 +37,7 @@ public class FateMeet() : CustomCardModel(1, CardType.Skill, CardRarity.Token, T
         bool causedByEthereal)
     {
         if (card != this) return;
-        await PowerCmd.Apply<FreePowerPower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<FreePowerPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -37,12 +31,12 @@ public class OtherHalf() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncom
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
 
         // 对自己施加主能力，并存储目标敌人
-        var power = await PowerCmd.Apply<OtherHalfPower>(Owner.Creature, 1, Owner.Creature, this);
+        var power = await PowerCmd.Apply<OtherHalfPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
         if (power != null)
             power.Target = cardPlay.Target;
 
         // 对目标敌人施加视觉标记能力
-        await PowerCmd.Apply<OtherHalfTargetPower>(cardPlay.Target, 1, Owner.Creature, this);
+        await PowerCmd.Apply<OtherHalfTargetPower>(choiceContext,cardPlay.Target, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

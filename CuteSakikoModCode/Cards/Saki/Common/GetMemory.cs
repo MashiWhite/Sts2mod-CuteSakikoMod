@@ -30,7 +30,7 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
         try
         {
             // 打出时获得3层压力
-            await PowerCmd.Apply<PressurePower>(Owner.Creature, 3, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, 3, Owner.Creature, this);
 
             // 获取本场战斗中已经被消耗的回忆卡牌的ModelId
             var exhaustedPile = PileType.Exhaust.GetPile(Owner);
@@ -68,7 +68,7 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
                         newCard.FinalizeUpgradeInternal();
                     }
 
-                    await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Hand, true);
+                    await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Hand, Owner);
                 }
             }
         }

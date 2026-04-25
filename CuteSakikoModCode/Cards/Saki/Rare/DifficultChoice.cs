@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -77,8 +71,8 @@ public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity
         {
             var pressureAmt = selected.DynamicVars["PressurePower"].IntValue;
             var strengthAmt = selected.DynamicVars["StrengthPower"].IntValue;
-            await PowerCmd.Apply<PressurePower>(Owner.Creature, pressureAmt, Owner.Creature, this);
-            await PowerCmd.Apply<StrengthPower>(Owner.Creature, strengthAmt, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureAmt, Owner.Creature, this);
+            await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, strengthAmt, Owner.Creature, this);
         }
         else if (selected is GoldOption)
         {

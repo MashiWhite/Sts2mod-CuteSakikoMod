@@ -72,7 +72,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<VigorPower>(ally, 3 * mult, owner, null);
+                        await PowerCmd.Apply<VigorPower>(ctx,ally, 3 * mult, owner, null);
                 });
 
             // D【技 攻 攻 攻】所有友方本回合获得1层易伤和2点力量（数值已调整）
@@ -85,8 +85,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
                     {
-                        await PowerCmd.Apply<VulnerablePower>(ally, 1 * mult, owner, null);
-                        await PowerCmd.Apply<StrengthPower>(ally, 2 * mult, owner, null);
+                        await PowerCmd.Apply<VulnerablePower>(ctx,ally, 1 * mult, owner, null);
+                        await PowerCmd.Apply<StrengthPower>(ctx,ally, 2 * mult, owner, null);
                     }
                 });
 
@@ -111,7 +111,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<StrengthPower>(ally, 1 * mult, owner, null);
+                        await PowerCmd.Apply<StrengthPower>(ctx,ally, 1 * mult, owner, null);
                 });
 
             // #C【攻 攻】获得1层活力
@@ -121,7 +121,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 new[] { 1 },
                 async (ctx, owner, mult) =>
                 {
-                    await PowerCmd.Apply<VigorPower>(owner, 1 * mult, owner, null);
+                    await PowerCmd.Apply<VigorPower>(ctx,owner, 1 * mult, owner, null);
                 });
 
             // #D【技 攻】随机造成3点伤害
@@ -173,7 +173,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<ReflectPower>(ally, 1 * mult, owner, null);
+                        await PowerCmd.Apply<ReflectPower>(ctx,ally, 1 * mult, owner, null);
                 });
 
             // Dm【技 攻 技】所有友方获得1层再生
@@ -185,7 +185,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<RegenPower>(ally, 1 * mult, owner, null);
+                        await PowerCmd.Apply<RegenPower>(ctx,ally, 1 * mult, owner, null);
                 });
 
             // Bm【能 技 技】所有友方获得1点敏捷（数值已调整）
@@ -197,7 +197,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<DexterityPower>(ally, 1 * mult, owner, null);
+                        await PowerCmd.Apply<DexterityPower>(ctx,ally, 1 * mult, owner, null);
                 });
 
             // #Cm【技 技】所有友方获得3点格挡
@@ -221,7 +221,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<PlatingPower>(ally, 1 * mult, owner, null);
+                        await PowerCmd.Apply<PlatingPower>(ctx,ally, 1 * mult, owner, null);
                 });
 
             // ========== 属七和弦 ==========
@@ -235,7 +235,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     var enemies = owner.CombatState?.Enemies;
                     if (enemies != null)
                         foreach (var enemy in enemies)
-                            await PowerCmd.Apply<ChordTempStrengthDownPower>(enemy, 2 * mult, owner, null);
+                            await PowerCmd.Apply<ChordTempStrengthDownPower>(ctx,enemy, 2 * mult, owner, null);
                 });
 
             // D7【技 技 攻】所有敌人获得1层虚弱
@@ -248,7 +248,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     var enemies = owner.CombatState?.Enemies;
                     if (enemies != null)
                         foreach (var enemy in enemies)
-                            await PowerCmd.Apply<WeakPower>(enemy, 1 * mult, owner, null);
+                            await PowerCmd.Apply<WeakPower>(ctx,enemy, 1 * mult, owner, null);
                 });
 
             // A7【能 技 能 技】击晕敌人1回合
@@ -273,7 +273,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                 {
                     var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                     foreach (var ally in allies)
-                        await PowerCmd.Apply<BarricadePower>(ally, 1 * mult, owner, null);
+                        await PowerCmd.Apply<BarricadePower>(ctx,ally, 1 * mult, owner, null);
                 });
 
             // #C7【攻 技】所有友方获得1点能量
@@ -366,7 +366,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     if (combat == null) return;
 
                     // 50% 概率判定（使用战斗专用随机）
-                    bool dealDamage = combat.RunState.Rng.CombatCardSelection.NextDouble() < 0.5;
+                    bool dealDamage = combat.RunState.Rng.CombatCardSelection.NextDouble() < 0.75;
 
                     if (dealDamage)
                     {
@@ -380,7 +380,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                         // 对全体友方施加 1 * mult 层虚弱
                         var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
                         foreach (var ally in allies)
-                            await PowerCmd.Apply<WeakPower>(ally, 1 * mult, owner, null);
+                            await PowerCmd.Apply<WeakPower>(ctx,ally, 1 * mult, owner, null);
                     }
                 }); 
             
@@ -407,6 +407,38 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     // 获得能量
                     if (player != null)
                         await PlayerCmd.GainEnergy(1 * mult, player);
+                });
+            
+            //碧天伴走
+            AddTemporaryChord("HekitenbansouChord", ChordCategory.Anon,
+                new[] { CardType.Attack, CardType.Skill, CardType.Attack, CardType.Skill },
+                "CUTESAKIKOMOD-HEKITENBANSOUCHORD.title", "CUTESAKIKOMOD-HEKITENBANSOUCHORD.description", "hekitenbansou_chord",
+                new[] { 1 },   // 基础转化层数，会随倍率变化
+                async (ctx, owner, mult) =>
+                {
+                    var combat = owner.CombatState;
+                    if (combat == null) return;
+
+                    var allies = combat.Players.Select(p => p.Creature).ToList();
+
+                    foreach (var ally in allies)
+                    {
+                        // 脆弱 → 敏捷（固定1层的倍数）
+                        var frail = ally.Powers.OfType<FrailPower>().FirstOrDefault();
+                        if (frail != null)
+                        {
+                            frail.RemoveInternal();
+                            await PowerCmd.Apply<DexterityPower>(ctx,ally, 1 * mult, owner, null);
+                        }
+
+                        // 虚弱 → 力量（固定1层的倍数）
+                        var weak = ally.Powers.OfType<WeakPower>().FirstOrDefault();
+                        if (weak != null)
+                        {
+                            weak.RemoveInternal();
+                            await PowerCmd.Apply<StrengthPower>(ctx,ally, 1 * mult, owner, null);
+                        }
+                    }
                 });
         }
         

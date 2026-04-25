@@ -43,7 +43,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             TriggerBanter();
 
             // 给予 1 层能力
-            await PowerCmd.Apply<UnforgettablePerformancePower>(Owner.Creature, 1, Owner.Creature, this);
+            await PowerCmd.Apply<UnforgettablePerformancePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
         }
 
         protected override void OnUpgrade()

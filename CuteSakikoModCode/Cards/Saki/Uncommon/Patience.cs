@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -41,7 +35,7 @@ public class Patience() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncomm
         // 增加能量
         await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
         // 施加忍耐能力（持续到下一回合开始前）
-        await PowerCmd.Apply<PatiencePower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<PatiencePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

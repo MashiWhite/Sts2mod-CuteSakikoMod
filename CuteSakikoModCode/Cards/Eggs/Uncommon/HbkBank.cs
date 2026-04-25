@@ -35,7 +35,7 @@ public class HbkBank : CuteSakikoModEggCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var power = Owner.Creature.GetPower<HbkBankPower>();
-        if (power == null) await PowerCmd.Apply<HbkBankPower>(Owner.Creature, 1, Owner.Creature, this);
+        if (power == null) await PowerCmd.Apply<HbkBankPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

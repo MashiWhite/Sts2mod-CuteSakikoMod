@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -70,7 +64,7 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
             await CardPileCmd.Draw(choiceContext, drawCount, Owner);
 
             // 给敌人施加压力
-            await PowerCmd.Apply<PressurePower>(cardPlay.Target, pressureAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, pressureAmount, Owner.Creature, this);
         }
     }
 

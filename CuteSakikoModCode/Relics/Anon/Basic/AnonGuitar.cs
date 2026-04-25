@@ -43,10 +43,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         private Dictionary<ChordCategory, string>? _preTempChords;
 
         protected static Dictionary<Player, List<string>> _pendingBonusTransfer = new();
+        
+        public IReadOnlyList<string> GetTemporaryChords() => _temporaryChords.AsReadOnly();
 
         protected virtual int MaxLearnedChordsPerCategory => 1;
-        public int GetEffectMultiplier() => EffectMultiplier;
         protected virtual int EffectMultiplier => 1;
+        public int GetEffectMultiplier() => EffectMultiplier;
    
 
         // ========== Bonus 管理 ==========
@@ -480,6 +482,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         public override async Task AfterCombatEnd(CombatRoom room)
         {
             RestoreTempChords();
+            _temporaryChords.Clear();   // 清除碧天伴走等临时和弦
             MusicNoteManager.ClearCombatData(Owner);
             CleanupUI();
             await base.AfterCombatEnd(room);

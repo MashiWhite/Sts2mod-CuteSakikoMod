@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -56,7 +50,7 @@ public class NightRebirth : CuteSakikoModCard
         var energyGain = pressureAmount / _threshold; // 整数除法，向下取整
         if (energyGain > 0) await PlayerCmd.GainEnergy(energyGain, Owner);
         // 消耗所有压力
-        await PowerCmd.ModifyAmount(pressure, -pressureAmount, Owner.Creature, this);
+        await PowerCmd.ModifyAmount(choiceContext,pressure, -pressureAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

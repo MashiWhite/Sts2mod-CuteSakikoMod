@@ -46,7 +46,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
                 newCard.FinalizeUpgradeInternal();
             }
 
-            await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Hand, Owner);
         }
 
         protected override void OnUpgrade()

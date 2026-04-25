@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -44,7 +38,7 @@ public class PressureOut() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Co
         if (pressure != null && pressure.Amount > 0)
         {
             var reduce = Math.Min(5, pressure.Amount); // 防止减到负数
-            await PowerCmd.ModifyAmount(pressure, -reduce, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, -reduce, Owner.Creature, this);
         }
     }
 

@@ -39,7 +39,7 @@ public class HateSelf() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common
     {
         
         // 施加压力
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
             this);
 
         // 抽牌

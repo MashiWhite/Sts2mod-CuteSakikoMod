@@ -1,12 +1,6 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -41,7 +35,7 @@ public class ThenGetSword() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Un
 
         // 为目标玩家生成一张骑士之剑
         var sword = CombatState.CreateCard<KnightSword>(targetPlayer);
-        await CardPileCmd.AddGeneratedCardToCombat(sword, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(sword, PileType.Hand, targetPlayer);
     }
 
     protected override void OnUpgrade()

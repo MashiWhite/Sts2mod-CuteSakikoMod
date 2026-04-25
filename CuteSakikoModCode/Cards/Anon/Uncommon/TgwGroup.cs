@@ -10,6 +10,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 {
     public class TgwGroup() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
+        public override IEnumerable<CardKeyword> CanonicalKeywords
+        {
+            get { yield return CardKeyword.Exhaust; }
+        }
         /// <summary>嵌套动态变量，实时计算总金币</summary>
         private class TgwGoldVar : DynamicVar
         {

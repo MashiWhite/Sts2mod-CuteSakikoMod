@@ -1,13 +1,6 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
-using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -80,7 +73,7 @@ public class ByMyReign() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
                 {
                     // 手牌中没有剑时，添加一张
                     var newSword = CombatState.CreateCard<KnightSword>(player);
-                    await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, true);
+                    await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, Owner);
                 }
             }
         

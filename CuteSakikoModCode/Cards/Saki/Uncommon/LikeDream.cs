@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -40,7 +34,7 @@ public class LikeDream() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
         var currentAmount = pressure?.Amount ?? 0;
         if (currentAmount > 0)
             // 翻倍：增加相同数量的层数
-            await PowerCmd.Apply<PressurePower>(Owner.Creature, currentAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, currentAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

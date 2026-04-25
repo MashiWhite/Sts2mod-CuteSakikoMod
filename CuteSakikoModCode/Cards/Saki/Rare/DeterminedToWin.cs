@@ -58,7 +58,7 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
             // 给予压力
             if (pressure > 0)
             {
-                await PowerCmd.Apply<PressurePower>(cardPlay.Target, pressure, Owner.Creature, this);
+                await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, pressure, Owner.Creature, this);
             }
         }
     }

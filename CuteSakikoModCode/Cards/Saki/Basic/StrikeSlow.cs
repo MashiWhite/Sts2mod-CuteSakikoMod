@@ -61,7 +61,7 @@ public class StrikeSlow() :CuteSakikoModCard(1, CardType.Attack, CardRarity.Basi
         if (hasPressure)
         {
             // 消耗1层压力
-            await PowerCmd.ModifyAmount(pressure, -1, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
             
         }
 

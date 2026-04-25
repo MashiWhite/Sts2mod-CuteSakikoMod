@@ -32,7 +32,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare
                 .Execute(choiceContext);
 
             int pressureAmount = DynamicVars["PressurePower"].IntValue;
-            await PowerCmd.Apply<PressurePower>(cardPlay.Target, pressureAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, pressureAmount, Owner.Creature, this);
         }
 
         protected override void OnUpgrade()

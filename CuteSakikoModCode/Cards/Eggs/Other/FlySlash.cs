@@ -21,6 +21,8 @@ public class FlySlash : CustomCardModel
 
     public override string PortraitPath =>
         (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -51,7 +53,7 @@ public class FlySlash : CustomCardModel
         var jr1 = CombatState.CreateCard<Jr1>(Owner);
         if (IsUpgraded && jr1.IsUpgradable)
             CardCmd.Upgrade(jr1);
-        await CardPileCmd.AddGeneratedCardToCombat(jr1, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(jr1, PileType.Hand, Owner);
 
         await CardPileCmd.RemoveFromCombat(this);
     }

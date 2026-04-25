@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -44,7 +38,7 @@ public class Obsession() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
 
         // 使全体敌人获得压力
         var pressureAmount = DynamicVars["PressurePower"].IntValue;
-        await PowerCmd.Apply<PressurePower>(CombatState.HittableEnemies, pressureAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,CombatState.HittableEnemies, pressureAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

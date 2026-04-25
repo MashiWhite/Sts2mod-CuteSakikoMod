@@ -1,9 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -50,13 +45,13 @@ public class MeteorHephaestus : CuteSakikoModEggCard
             if (selfPower == null)
             {
                 var layers = IsUpgraded ? 2 : 1;
-                var power = await PowerCmd.Apply<MeteorHephaestusPower>(Owner.Creature, layers, Owner.Creature, this);
+                var power = await PowerCmd.Apply<MeteorHephaestusPower>(choiceContext,Owner.Creature, layers, Owner.Creature, this);
                 power.SetUpgraded(IsUpgraded);
             }
             else
             {
                 var add = IsUpgraded ? 2 : 1;
-                await PowerCmd.ModifyAmount(selfPower, add, Owner.Creature, this);
+                await PowerCmd.ModifyAmount(choiceContext,selfPower, add, Owner.Creature, this);
                 // 如果当前卡牌是升级版，确保能力的升级标志为 true
                 if (IsUpgraded) selfPower.SetUpgraded(true);
             }

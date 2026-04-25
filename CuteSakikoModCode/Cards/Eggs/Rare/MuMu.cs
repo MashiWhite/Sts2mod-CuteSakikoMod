@@ -1,10 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -55,7 +50,7 @@ public class MuMu : CuteSakikoModEggCard
             if (IsUpgraded && token.IsUpgradable)
                 CardCmd.Upgrade(token);
             // 将防御斩加入手牌（但会立即执行效果并移除）
-            await CardPileCmd.AddGeneratedCardToCombat(token, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(token, PileType.Hand, Owner);
             // 立即执行防御斩的效果
             if (token is DefensiveSlash defSlash)
                 await defSlash.ExecuteEffect(choiceContext);
@@ -66,7 +61,7 @@ public class MuMu : CuteSakikoModEggCard
             var token = CombatState.CreateCard<FlySlash>(Owner);
             if (IsUpgraded && token.IsUpgradable)
                 CardCmd.Upgrade(token);
-            await CardPileCmd.AddGeneratedCardToCombat(token, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(token, PileType.Hand, Owner);
         }
     }
 

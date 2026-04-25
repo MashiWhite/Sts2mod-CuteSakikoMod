@@ -24,70 +24,73 @@
   "CUTESAKIKOMOD-OTHERANON.description": "[sine][pink]好像不是我认识的歌，但是却感觉很熟悉。[/pink][/sine]",
 
   "CUTESAKIKOMOD-ANONCCHORD.title": "爱音C和弦",
-  "CUTESAKIKOMOD-ANONCCHORD.description": "在本场战斗中升级所有友方手牌中的{0}张牌。",
+  "CUTESAKIKOMOD-ANONCCHORD.description": "在本场战斗中升级所有友方手牌中的[blue]{0}[/blue]张牌。",
 
   "CUTESAKIKOMOD-PLAYGUITAR.title": "弦奏",
   "CUTESAKIKOMOD-PLAYGUITAR.description": "属于爱音的特殊打击。",
 
+  "CUTESAKIKOMOD-CHORD.title": "和弦",
+  "CUTESAKIKOMOD-CHORD.description": "第一次打出会获得/替换[gold]和弦[/gold]。\n再次打出会储存一个相应[gold]和弦[/gold]。",
+
   "CUTESAKIKOMOD-CCHORD.title": "C和弦",
-  "CUTESAKIKOMOD-CCHORD.description": "随机造成{0}点伤害，获得{1}点格挡。",
+  "CUTESAKIKOMOD-CCHORD.description": "随机造成[blue]{0}[/blue]点伤害，获得[blue]{1}[/blue]点格挡。",
 
   "CUTESAKIKOMOD-GCHORD.title": "G和弦",
-  "CUTESAKIKOMOD-GCHORD.description": "所有友方获得{0}点活力。",
+  "CUTESAKIKOMOD-GCHORD.description": "所有友方获得[blue]{0}[/blue]点活力。",
 
   "CUTESAKIKOMOD-DCHORD.title": "D和弦",
-  "CUTESAKIKOMOD-DCHORD.description": "所有友方获得{0}层易伤和{1}点力量。",
+  "CUTESAKIKOMOD-DCHORD.description": "所有友方获得[blue]{0}[/blue]层易伤和[blue]{1}[/blue]点力量。",
 
   "CUTESAKIKOMOD-ACHORD.title": "A和弦",
-  "CUTESAKIKOMOD-ACHORD.description": "对所有敌人造成{0}点伤害。",
+  "CUTESAKIKOMOD-ACHORD.description": "对所有敌人造成[blue]{0}[/blue]点伤害。",
 
   "CUTESAKIKOMOD-ECHORD.title": "E和弦",
-  "CUTESAKIKOMOD-ECHORD.description": "所有友方获得{0}点力量。",
+  "CUTESAKIKOMOD-ECHORD.description": "所有友方获得[blue]{0}[/blue]点力量。",
 
   "CUTESAKIKOMOD-C#CHORD.title": "#C和弦",
-  "CUTESAKIKOMOD-C#CHORD.description": "获得{0}层活力。",
+  "CUTESAKIKOMOD-C#CHORD.description": "获得[blue]{0}[/blue]层活力。",
 
   "CUTESAKIKOMOD-D#CHORD.title": "#D和弦",
-  "CUTESAKIKOMOD-D#CHORD.description": "随机造成{0}点伤害。",
+  "CUTESAKIKOMOD-D#CHORD.description": "随机造成[blue]{0}[/blue]点伤害。",
 
   "CUTESAKIKOMOD-AMCHORD.title": "Am和弦",
-  "CUTESAKIKOMOD-AMCHORD.description": "所有友方获得{0}点格挡。",
+  "CUTESAKIKOMOD-AMCHORD.description": "所有友方获得[blue]{0}[/blue]点格挡。",
 
   "CUTESAKIKOMOD-GMCHORD.title": "Gm和弦",
-  "CUTESAKIKOMOD-GMCHORD.description": "所有友方恢复{0}点血量。",
+  "CUTESAKIKOMOD-GMCHORD.description": "所有友方恢复[blue]{0}[/blue]点血量。",
 
   "CUTESAKIKOMOD-EMCHORD.title": "Em和弦",
-  "CUTESAKIKOMOD-EMCHORD.description": "所有友方本回合获得{0}点倒映。",
+  "CUTESAKIKOMOD-EMCHORD.description": "所有友方本回合获得[blue]{0}[/blue]点倒映。",
 
   "CUTESAKIKOMOD-DMCHORD.title": "Dm和弦",
-  "CUTESAKIKOMOD-DMCHORD.description": "所有友方获得{0}层再生。",
+  "CUTESAKIKOMOD-DMCHORD.description": "所有友方获得[blue]{0}[/blue]层再生。",
 
   "CUTESAKIKOMOD-BMCHORD.title": "Bm和弦",
-  "CUTESAKIKOMOD-BMCHORD.description": "所有友方获得{0}点敏捷。",
+  "CUTESAKIKOMOD-BMCHORD.description": "所有友方获得[blue]{0}[/blue]点敏捷。",
 
   "CUTESAKIKOMOD-C#MCHORD.title": "#Cm和弦",
-  "CUTESAKIKOMOD-C#MCHORD.description": "所有友方获得{0}点格挡。",
+  "CUTESAKIKOMOD-C#MCHORD.description": "所有友方获得[blue]{0}[/blue]点格挡。",
 
   "CUTESAKIKOMOD-D#MCHORD.title": "#Dm和弦",
-  "CUTESAKIKOMOD-D#MCHORD.description": "所有友方获得{0}层覆甲。",
+  "CUTESAKIKOMOD-D#MCHORD.description": "所有友方获得[blue]{0}[/blue]层覆甲。",
 
   "CUTESAKIKOMOD-G7CHORD.title": "G7和弦",
-  "CUTESAKIKOMOD-G7CHORD.description": "所有敌人本回合减{0}点力量。",
+  "CUTESAKIKOMOD-G7CHORD.description": "所有敌人本回合减[blue]{0}[/blue]点力量。",
 
   "CUTESAKIKOMOD-D7CHORD.title": "D7和弦",
-  "CUTESAKIKOMOD-D7CHORD.description": "所有敌人获得{0}层虚弱。",
+  "CUTESAKIKOMOD-D7CHORD.description": "所有敌人获得[blue]{0}[/blue]层虚弱。",
 
   "CUTESAKIKOMOD-A7CHORD.title": "A7和弦",
-  "CUTESAKIKOMOD-A7CHORD.description": "击晕敌人{0}回合。",
+  "CUTESAKIKOMOD-A7CHORD.description": "击晕敌人[blue]{0}[/blue]回合。",
 
   "CUTESAKIKOMOD-E7CHORD.title": "E7和弦",
-  "CUTESAKIKOMOD-E7CHORD.description": "所有友方获得{0}层壁垒。",
+  "CUTESAKIKOMOD-E7CHORD.description": "所有友方获得[blue]{0}[/blue]层壁垒。",
 
   "CUTESAKIKOMOD-C#7CHORD.title": "#C7和弦",
-  "CUTESAKIKOMOD-C#7CHORD.description": "所有友方获得{0}点能量。",
+  "CUTESAKIKOMOD-C#7CHORD.description": "所有友方获得[blue]{0}[/blue]点能量。",
 
   "CUTESAKIKOMOD-D#7CHORD.title": "#D7和弦",
-  "CUTESAKIKOMOD-D#7CHORD.description": "所有友方抽{0}张牌。",
+  "CUTESAKIKOMOD-D#7CHORD.description": "所有友方抽[blue]{0}[/blue]张牌。",
 
   "CUTESAKIKOMOD-NONOTE.title": "特殊演奏",
   "CUTESAKIKOMOD-NONOTE.description": "这张卡本身不会获得音符。",
@@ -96,8 +99,11 @@
   "CUTESAKIKOMOD-ANONDCHORD.description": "所有友方获得1瓶随机药水。",
 
   "CUTESAKIKOMOD-ANONFCHORD.title": "爱音F和弦",
-  "CUTESAKIKOMOD-ANONFCHORD.description": "50% 对所有敌人造成 {0} 点伤害。\n50% 使所有友方获得 {1} 层[gold]虚弱[/gold]。",
+  "CUTESAKIKOMOD-ANONFCHORD.description": "75% 对所有敌人造成[blue]{0}[/blue]点伤害。\n25% 使所有友方获得[blue]{1}[/blue]层[gold]虚弱[/gold]。",
 
   "CUTESAKIKOMOD-GREYANONCHORD.title": "灰爱音和弦",
-  "CUTESAKIKOMOD-GREYANONCHORD.description": "减少{0}点生命，抽{1}张牌，获得{2}点能量。"
+  "CUTESAKIKOMOD-GREYANONCHORD.description": "减少[blue]{0}[/blue]点生命，抽[blue]{1}[/blue]张牌，获得[blue]{2}[/blue]点能量。",
+
+  "CUTESAKIKOMOD-HEKITENBANSOUCHORD.title": "碧天伴走",
+  "CUTESAKIKOMOD-HEKITENBANSOUCHORD.description": "将所有友方的[red]脆弱[/red]转化为[blue]{0}[/blue]层[gold]敏捷[/gold]，[red]虚弱[/red]转化为[blue]{0}[/blue]层[gold]力量[/gold]。"
 }

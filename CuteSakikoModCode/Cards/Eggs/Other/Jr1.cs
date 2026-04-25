@@ -21,7 +21,8 @@ public class Jr1 : CustomCardModel
 
     public override string PortraitPath =>
         (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
+    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
+    
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {
         get
@@ -64,7 +65,7 @@ public class Jr1 : CustomCardModel
         var jr2 = CombatState.CreateCard<Jr2>(Owner);
         if (IsUpgraded && jr2.IsUpgradable)
             CardCmd.Upgrade(jr2);
-        await CardPileCmd.AddGeneratedCardToCombat(jr2, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(jr2, PileType.Hand, Owner);
 
         await CardPileCmd.RemoveFromCombat(this);
     }

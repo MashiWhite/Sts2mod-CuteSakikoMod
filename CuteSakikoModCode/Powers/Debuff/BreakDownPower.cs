@@ -63,7 +63,7 @@ public sealed class BreakDownPower : CustomPowerModel
         if (side != Owner.Side) return;
         if (_hasTakenDamageSinceLastOwnTurnEnd && Amount > 0)
         {
-            await PowerCmd.ModifyAmount(this, -1, null, null);
+            await PowerCmd.ModifyAmount(choiceContext,this, -1, null, null);
             _hasTakenDamageSinceLastOwnTurnEnd = false;
         }
     }

@@ -44,13 +44,13 @@ public class Noise() : CustomCardModel(1, CardType.Status, CardRarity.Status, Ta
         if (target == null) return;
 
         var amount = DynamicVars["PressurePower"].IntValue;
-        await PowerCmd.Apply<PressurePower>(target, amount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,target, amount, Owner.Creature, this);
     }
 
     public override async Task OnTurnEndInHand(PlayerChoiceContext choiceContext)
     {
         var amount = DynamicVars["PressurePower"].IntValue;
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
 
         // 延迟到下一帧移除，避免破坏当前循环
         Callable.From(async () => await CardPileCmd.RemoveFromCombat(this)).CallDeferred();

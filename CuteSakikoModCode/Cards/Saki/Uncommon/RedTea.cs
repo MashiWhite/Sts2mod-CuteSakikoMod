@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -46,7 +40,7 @@ public class RedTea() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon
         var myTreat = CombatState.CreateCard<MyTreat>(Owner);
         if (IsUpgraded) CardCmd.Upgrade(myTreat);
         // 加入弃牌堆
-        await CardPileCmd.AddGeneratedCardToCombat(myTreat, PileType.Discard, true);
+        await CardPileCmd.AddGeneratedCardToCombat(myTreat, PileType.Discard, Owner);
     }
 
     protected override void OnUpgrade()

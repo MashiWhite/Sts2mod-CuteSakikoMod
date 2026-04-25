@@ -40,11 +40,11 @@ public class BuyGold : CustomCardModel
         // 获得黄金层数 = 50 / 金价（向下取整），与实际花费无关
         var goldGain = spendGold / goldPrice;
         if (goldGain > 0)
-            await PowerCmd.Apply<GoldPower>(player.Creature, goldGain, player.Creature, this);
+            await PowerCmd.Apply<GoldPower>(choiceContext,player.Creature, goldGain, player.Creature, this);
 
         // 负债 = 不足的金币数量（不除以金价）
         if (goldShort > 0)
-            await PowerCmd.Apply<DebtPower>(player.Creature, goldShort, player.Creature, this);
+            await PowerCmd.Apply<DebtPower>(choiceContext,player.Creature, goldShort, player.Creature, this);
 
         // 升级后抽一张牌
         if (IsUpgraded)

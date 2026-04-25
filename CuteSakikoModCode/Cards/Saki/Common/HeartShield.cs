@@ -41,7 +41,7 @@ public class HeartShield() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Com
         var pressureToGain = IsUpgraded ? 4 : 2;
 
         // 先施加压力
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, pressureToGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureToGain, Owner.Creature, this);
 
         // 获取当前压力层数（已包含刚施加的）
         var pressure = Owner.Creature.GetPower<PressurePower>();

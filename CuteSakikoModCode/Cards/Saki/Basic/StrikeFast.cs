@@ -70,7 +70,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
             if (hasPressure)
             {
                 // 消耗1层压力
-                await PowerCmd.ModifyAmount(pressure, -1, Owner.Creature, this);
+                await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
 
                 if (IsUpgraded)
                     // 升级后：两次2点伤害

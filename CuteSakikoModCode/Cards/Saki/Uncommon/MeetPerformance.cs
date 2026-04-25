@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -38,7 +32,7 @@ public class MeetPerformance() : CuteSakikoModCard(2, CardType.Power, CardRarity
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         var layers = IsUpgraded ? 3 : 2;
-        await PowerCmd.Apply<MeetPerformancePower>(Owner.Creature, layers, Owner.Creature, this);
+        await PowerCmd.Apply<MeetPerformancePower>(choiceContext,Owner.Creature, layers, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

@@ -1,8 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -58,7 +54,7 @@ public class DontCareOthers : CuteSakikoModCard
         }
 
         if (totalPressure > 0)
-            await PowerCmd.Apply<PressurePower>(Owner.Creature, totalPressure, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, totalPressure, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

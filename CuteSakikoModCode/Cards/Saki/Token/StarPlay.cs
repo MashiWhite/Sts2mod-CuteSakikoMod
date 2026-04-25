@@ -29,7 +29,7 @@ public class StarPlay() : CustomCardModel(0, CardType.Skill, CardRarity.Token, T
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = DynamicVars["DexterityPower"].IntValue;
-        await PowerCmd.Apply<DexterityPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<DexterityPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
         EnergyCost.UpgradeBy(1);
     }
 
@@ -38,8 +38,8 @@ public class StarPlay() : CustomCardModel(0, CardType.Skill, CardRarity.Token, T
     {
         if (card != this) return;
         var amount = DynamicVars["DexterityPower"].IntValue;
-        await PowerCmd.Apply<DexterityPower>(Owner.Creature, amount, Owner.Creature, this);
-        await PowerCmd.Apply<DexterityPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<DexterityPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<DexterityPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

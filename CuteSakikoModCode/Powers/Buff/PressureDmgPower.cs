@@ -28,7 +28,7 @@ public sealed class PressureDmgPower : CuteSakikoModPower
         var strengthToGain = pressureAmount / 5 * Amount; // 每5层压力获得 Amount 力量
         if (strengthToGain > 0)
         {
-            await PowerCmd.Apply<StrengthPower>(Owner, strengthToGain, Owner, null);
+            await PowerCmd.Apply<StrengthPower>(choiceContext,Owner, strengthToGain, Owner, null);
             _strengthGained = strengthToGain;
         }
     }
@@ -41,7 +41,7 @@ public sealed class PressureDmgPower : CuteSakikoModPower
             var strength = Owner.GetPower<StrengthPower>();
             if (strength != null)
                 // 使用 PowerCmd.ModifyAmount 安全减少力量层数
-                await PowerCmd.ModifyAmount(strength, -_strengthGained, Owner, null);
+                await PowerCmd.ModifyAmount(choiceContext,strength, -_strengthGained, Owner, null);
             _strengthGained = 0;
         }
     }

@@ -90,7 +90,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
                 lifetime.UpgradeInternal();
                 lifetime.FinalizeUpgradeInternal();
             }
-            await CardPileCmd.AddGeneratedCardToCombat(lifetime, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(lifetime, PileType.Hand, Owner);
 
             _isTransforming = false;
         }

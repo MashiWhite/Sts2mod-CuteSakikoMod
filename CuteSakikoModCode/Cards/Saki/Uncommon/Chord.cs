@@ -1,12 +1,6 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -71,7 +65,7 @@ public class Chord : CuteSakikoModCard
             var pressure = Owner.Creature.GetPower<PressurePower>();
             if (pressure != null && pressure.Amount >= 1)
             {
-                await PowerCmd.ModifyAmount(pressure, -1, Owner.Creature, this);
+                await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
                 cardsToGenerate = 2;
             }
             else

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -53,11 +47,11 @@ public class FeatherBirds() : CuteSakikoModCard(2, CardType.Attack, CardRarity.U
                     .Execute(choiceContext);
 
                 // 施加压力
-                await PowerCmd.Apply<PressurePower>(enemy, pressureAmount, Owner.Creature, this);
+                await PowerCmd.Apply<PressurePower>(choiceContext,enemy, pressureAmount, Owner.Creature, this);
             }
 
         // 自身获得压力
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, pressureAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

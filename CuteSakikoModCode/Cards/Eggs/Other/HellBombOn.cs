@@ -49,7 +49,7 @@ public class HellBombOn : CustomCardModel
         // 创建新的炸弹给目标（保持升级状态）
         var newBomb = CombatState.CreateCard<HellBombOn>(targetPlayer);
         if (IsUpgraded) CardCmd.Upgrade(newBomb);
-        await CardPileCmd.AddGeneratedCardToCombat(newBomb, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(newBomb, PileType.Hand, Owner);
 
         // 移除当前炸弹
         await CardPileCmd.RemoveFromCombat(this);

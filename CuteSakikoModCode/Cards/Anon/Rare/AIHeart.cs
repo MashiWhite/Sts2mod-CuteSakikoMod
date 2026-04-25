@@ -12,6 +12,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
     // ReSharper disable once InconsistentNaming
     public class AIHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
+        
+        public override string ChordId => "GreyAnonChord";
         public override IEnumerable<CardKeyword> CanonicalKeywords
         {
             get
@@ -19,6 +21,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
                 yield return CardKeyword.Exhaust;
                 yield return CutesakiKeywords.OtherAnon;
                 yield return CutesakiKeywords.NoNote;
+                yield return CutesakiKeywords.Chord;
             }
         }
 

@@ -42,7 +42,7 @@ public sealed class PigPower : CuteSakikoModPower
         // 每回合开始将一张猪进食加入手牌
         var pigEat = CombatState.CreateCard<PigEat>(player);
 
-        await CardPileCmd.AddGeneratedCardToCombat(pigEat, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(pigEat, PileType.Hand, player);
     }
 
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)

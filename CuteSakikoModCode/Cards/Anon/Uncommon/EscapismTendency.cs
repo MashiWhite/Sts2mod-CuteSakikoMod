@@ -37,7 +37,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             TriggerBanter();
 
             int amount = DynamicVars["EscapismTendencyPower"].IntValue;
-            await PowerCmd.Apply<EscapismTendencyPower>(Owner.Creature, amount, Owner.Creature, this);
+            await PowerCmd.Apply<EscapismTendencyPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
 
             var allies = CombatState.Players.Where(p => p != Owner && p.Creature.IsAlive).ToList();
             if (allies.Any())
@@ -46,7 +46,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
                 // 使用目标玩家的 CombatState 创建卡牌实例，这是关键！
                 var walkCard = targetAlly.Creature.CombatState.CreateCard<WalkHanding>(targetAlly);
                 if (IsUpgraded) walkCard.UpgradeInternal();
-                await CardPileCmd.AddGeneratedCardToCombat(walkCard, PileType.Hand, true);
+                await CardPileCmd.AddGeneratedCardToCombat(walkCard, PileType.Hand, Owner);
             }
         }
 

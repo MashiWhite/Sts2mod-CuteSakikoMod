@@ -41,7 +41,7 @@ public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, Tar
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PlayerCmd.GainGold(DynamicVars["Gold"].IntValue, Owner);
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
             this);
     }
 

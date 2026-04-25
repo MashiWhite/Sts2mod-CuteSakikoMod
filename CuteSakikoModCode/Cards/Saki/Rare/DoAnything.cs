@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.CardSelection;
@@ -64,7 +58,7 @@ public sealed class DoAnything : CuteSakikoModCard
         if (selectedCard != null) await CardPileCmd.Add(selectedCard, PileType.Hand);
 
         var pressureToGain = _nextPressure;
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, pressureToGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureToGain, Owner.Creature, this);
 
         _nextPressure *= 2;
         if (DynamicVars.TryGetValue("PressureGain", out var var)) var.BaseValue = _nextPressure;

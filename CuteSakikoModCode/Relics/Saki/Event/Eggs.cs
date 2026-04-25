@@ -1,9 +1,6 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -17,27 +14,17 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
 
-[Pool(typeof(CuteSakiRelicPool))]
-public sealed class Eggs : CustomRelicModel
+public sealed class Eggs : CuteSakikoModRelic
 {
     [SavedProperty] private readonly List<ModelId> _gainedEggCards = new();
 
     [SavedProperty] private bool _hasGivenChoice; // 关键：保存是否已经给过彩蛋牌
 
     public override RelicRarity Rarity => RelicRarity.Event;
-
-    protected override string BigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").BigRelicImagePath();
-
-    public override string PackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").RelicImagePath();
-
-    protected override string PackedIconOutlinePath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + "_outline.png").RelicImagePath();
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {
@@ -106,7 +93,7 @@ public sealed class Eggs : CustomRelicModel
             var tempCard = player.Creature.CombatState.CreateCard(selectedCard, player);
             if (permanentCard.IsUpgraded && tempCard.IsUpgradable)
                 CardCmd.Upgrade(tempCard);
-            await CardPileCmd.AddGeneratedCardToCombat(tempCard, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(tempCard, PileType.Hand, player);
         }
     }
 

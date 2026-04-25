@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -64,7 +58,7 @@ public class MusicalScore() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Ra
         await CardPileCmd.Draw(choiceContext, 1, Owner);
 
         // 施加能力，使本回合所有牌费用减一（包括后续抽到的）
-        await PowerCmd.Apply<MusicalScorePower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<MusicalScorePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

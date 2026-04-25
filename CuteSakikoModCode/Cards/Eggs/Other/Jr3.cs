@@ -20,6 +20,8 @@ public class Jr3 : CustomCardModel
 
     public override string PortraitPath =>
         (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

@@ -45,7 +45,7 @@ public sealed class BearMemoryPower : CuteSakikoModPower
     }
 
     // 在每次卡牌打出后，检查是否需要施加压力
-    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    public override async Task AfterCardPlayed(PlayerChoiceContext ctx, CardPlay cardPlay)
     {
         var card = cardPlay.Card;
         if (card.Owner?.Creature != Owner) return;
@@ -57,7 +57,7 @@ public sealed class BearMemoryPower : CuteSakikoModPower
                 // 减少计数，本次是额外打出的一次
                 _pendingPressure[card] = remaining - 1;
                 // 立即施加压力
-                TaskHelper.RunSafely(PowerCmd.Apply<PressurePower>(Owner, 1, Owner, card));
+                TaskHelper.RunSafely(PowerCmd.Apply<PressurePower>(ctx,Owner, 1, Owner, card));
             }
         }
     }

@@ -54,8 +54,8 @@ public sealed class HbkBankPower : CuteSakikoModPower
             if (sell.IsUpgradable) CardCmd.Upgrade(sell);
         }
 
-        await CardPileCmd.AddGeneratedCardToCombat(buy, PileType.Hand, true);
-        await CardPileCmd.AddGeneratedCardToCombat(sell, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(buy, PileType.Hand, player);
+        await CardPileCmd.AddGeneratedCardToCombat(sell, PileType.Hand, player);
     }
 
     public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)

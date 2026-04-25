@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -38,7 +32,7 @@ public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Un
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = DynamicVars["DaggersDrawnPower"].IntValue;
-        await PowerCmd.Apply<DaggersDrawnPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<DaggersDrawnPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

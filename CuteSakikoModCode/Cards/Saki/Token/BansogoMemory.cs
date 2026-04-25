@@ -30,7 +30,7 @@ public class BansogoMemory() : CustomCardModel(0, CardType.Skill, CardRarity.Tok
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = DynamicVars["RegenPower"].IntValue;
-        await PowerCmd.Apply<RegenPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<RegenPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
 
         // 每次打出后费用永久增加1（本场战斗）
         EnergyCost.UpgradeBy(1);
@@ -42,7 +42,7 @@ public class BansogoMemory() : CustomCardModel(0, CardType.Skill, CardRarity.Tok
     {
         if (card != this) return;
         var amount = DynamicVars["RegenPower"].IntValue;
-        await PowerCmd.Apply<RegenPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<RegenPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

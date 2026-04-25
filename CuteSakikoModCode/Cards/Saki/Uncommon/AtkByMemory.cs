@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Factories;
@@ -75,7 +69,7 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
             if (newCard != null) newCards.Add(newCard);
         }
         if (newCards.Count > 0)
-            await CardPileCmd.AddGeneratedCardsToCombat(newCards, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardsToCombat(newCards, PileType.Hand, Owner);
     }
 
     protected override void OnUpgrade()

@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -42,7 +36,7 @@ public class BearMemory() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var powerAmount = 1; // 升级只改变费用，能力层数不变
-        await PowerCmd.Apply<BearMemoryPower>(Owner.Creature, powerAmount, Owner.Creature, this);
+        await PowerCmd.Apply<BearMemoryPower>(choiceContext,Owner.Creature, powerAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

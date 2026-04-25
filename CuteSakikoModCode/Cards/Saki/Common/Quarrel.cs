@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -37,14 +31,14 @@ public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
         var enemyPressureGain = IsUpgraded ? 15 : 10;
 
         // 自身增加压力
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, selfPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, selfPressureGain, Owner.Creature, this);
 
         // 给选中的敌人增加压力
-        await PowerCmd.Apply<PressurePower>(cardPlay.Target, enemyPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, enemyPressureGain, Owner.Creature, this);
 
         // 临时能力：下回合扣除等量压力
-        await PowerCmd.Apply<QuarrelSelfPower>(Owner.Creature, selfPressureGain, Owner.Creature, this);
-        await PowerCmd.Apply<QuarrelEnemyPower>(cardPlay.Target, enemyPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<QuarrelSelfPower>(choiceContext,Owner.Creature, selfPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<QuarrelEnemyPower>(choiceContext,cardPlay.Target, enemyPressureGain, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -52,10 +46,10 @@ public class PressureTrans() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
         if (hasPressure)
         {
             // 消耗2层压力
-            await PowerCmd.ModifyAmount(selfPressure, -1, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,selfPressure, -1, Owner.Creature, this);
 
             var pressureToGive = IsUpgraded ? 4 : 3;
-            await PowerCmd.Apply<PressurePower>(cardPlay.Target, pressureToGive, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, pressureToGive, Owner.Creature, this);
         }
 
         await DamageCmd.Attack(baseDamage)

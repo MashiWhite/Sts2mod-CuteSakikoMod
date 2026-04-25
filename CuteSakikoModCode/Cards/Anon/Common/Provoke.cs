@@ -32,7 +32,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 
             // 2. 使目标敌人获得力量
             int strengthAmount = DynamicVars["StrengthPower"].IntValue;
-            await PowerCmd.Apply<StrengthPower>(cardPlay.Target, strengthAmount, Owner.Creature, this);
+            await PowerCmd.Apply<StrengthPower>(choiceContext,cardPlay.Target, strengthAmount, Owner.Creature, this);
         }
 
         protected override void OnUpgrade()

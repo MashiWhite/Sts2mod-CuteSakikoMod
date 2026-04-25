@@ -35,12 +35,12 @@ public sealed class MusicaCaelestisPower : CuteSakikoModPower
     
 
     // 监听任何生物获得崩溃 (BreakDownPower)
-    public override async Task AfterPowerAmountChanged(PowerModel power, decimal amount, Creature? applier,
+    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext,PowerModel power, decimal amount, Creature? applier,
         CardModel? cardSource)
     {
         // 如果变化的是 BreakDownPower 且是增加层数
         if (power is BreakDownPower && amount > 0)
             // 自身增加1层能力
-            await PowerCmd.ModifyAmount(this, 1, null, null);
+            await PowerCmd.ModifyAmount(choiceContext,this, 1, null, null);
     }
 }

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -37,7 +31,7 @@ public class PressureDmg() : CuteSakikoModCard(1, CardType.Power, CardRarity.Unc
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<PressureDmgPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<PressureDmgPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
     }
 
 

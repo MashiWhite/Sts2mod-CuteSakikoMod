@@ -1,10 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -43,7 +38,7 @@ public class CccHibiki() : CuteSakikoModEggCard(1, CardType.Skill, CardRarity.Un
         var trueHaru = CombatState.CreateCard<TrueHaruhikage>(Owner);
         if (IsUpgraded) CardCmd.Upgrade(trueHaru);
         // 加入手牌
-        await CardPileCmd.AddGeneratedCardToCombat(trueHaru, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(trueHaru, PileType.Hand, Owner);
     }
 
     protected override void OnUpgrade()

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -21,7 +15,7 @@ public class CalmnessLady() : CuteSakikoModCard(1, CardType.Power, CardRarity.Ra
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         int layers = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<CalmnessLadyPower>(Owner.Creature, layers, Owner.Creature, this);
+        await PowerCmd.Apply<CalmnessLadyPower>(choiceContext,Owner.Creature, layers, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

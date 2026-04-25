@@ -45,7 +45,7 @@ public sealed class BreakDefendPower : CustomPowerModel
         if (Amount <= 0) return;
 
         // 减少1层压力
-        await PowerCmd.ModifyAmount(this, -1, dealer, cardSource);
+        await PowerCmd.ModifyAmount(choiceContext,this, -1, dealer, cardSource);
 
         // 如果层数归零，移除能力
         if (Amount <= 0)

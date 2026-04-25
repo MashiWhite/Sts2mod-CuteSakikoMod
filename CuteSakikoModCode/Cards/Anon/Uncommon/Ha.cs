@@ -1,10 +1,8 @@
 ﻿
-using System.Reflection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -15,41 +13,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
     {
         protected override IEnumerable<DynamicVar> CanonicalVars
         {
-            get
-            {
-                yield return new DamageVar(10m, ValueProp.Move);
-            }
+            get { yield return new DamageVar(10m, ValueProp.Move); }
         }
 
         public override IEnumerable<CardKeyword> CanonicalKeywords
         {
-            get
-            {
-                yield return CardKeyword.Exhaust;
-            }
-        }
-
-        // 辅助方法：从怪物身上获取一个有效的后续状态 ID
-        private static string GetFallbackFollowUpStateId(MonsterModel monster)
-        {
-            // 尝试通过反射获取状态机
-            var stateMachineProp = monster.GetType().GetProperty("StateMachine", BindingFlags.Public | BindingFlags.Instance)
-                                ?? monster.GetType().GetProperty("MoveStateMachine", BindingFlags.Public | BindingFlags.Instance);
-            if (stateMachineProp != null)
-            {
-                var stateMachine = stateMachineProp.GetValue(monster);
-                if (stateMachine != null)
-                {
-                    var statesProp = stateMachine.GetType().GetProperty("States", BindingFlags.Public | BindingFlags.Instance);
-                    if (statesProp?.GetValue(stateMachine) is Dictionary<string, MonsterState> statesDict && statesDict.Count > 0)
-                    {
-                        // 优先使用 "Idle"，否则取第一个状态
-                        return statesDict.ContainsKey("Idle") ? "Idle" : statesDict.Keys.First();
-                    }
-                }
-            }
-            // 最终回退
-            return "Idle";
+            get { yield return CardKeyword.Exhaust; }
         }
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -57,7 +26,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             TriggerBanter();
 
             var targetCreature = cardPlay.Target;
-            if (targetCreature == null || !targetCreature.IsMonster) return;
+            if (targetCreature == null || !targetCreature.IsAlive) return;
 
             // 1. 造成卡牌自身伤害
             var damage = DynamicVars.Damage.BaseValue;
@@ -67,30 +36,38 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);
 
-            // 2. 替换敌人意图为造成15点伤害
-            var monster = targetCreature.Monster;
-            string followUpId = GetFallbackFollowUpStateId(monster);
+            // 2. 目标必须在伤害后仍然存活且为怪物，才替换意图
+            if (!targetCreature.IsAlive || !targetCreature.IsMonster) return;
 
+            var monster = targetCreature.Monster;
+            if (monster == null) return;
+
+            // 使用固定后续状态 "Idle" 避免复杂的状态机反射
             var attackIntent = new SingleAttackIntent(15);
             var customMove = new MoveState(
                 "HA_ATTACK",
                 async (targets) =>
                 {
                     var player = Owner.Creature;
-                    await CreatureCmd.Damage(choiceContext, player, 15, ValueProp.Move, targetCreature, null);
+                    // 对手方目标设为玩家本身（或所有玩家），此处简单起见选择第一个玩家
+                    var targetsToHit = Owner.Creature.CombatState?.Players.Select(p => p.Creature).ToList();
+                    if (targetsToHit != null && targetsToHit.Any())
+                        await CreatureCmd.Damage(choiceContext, targetsToHit, 15, ValueProp.Move, targetCreature, null);
                 },
                 attackIntent
             )
             {
-                FollowUpStateId = followUpId
+                FollowUpStateId = "Idle"
             };
 
-            monster.SetMoveImmediate(customMove, forceTransition: true);
+            // 再次确认怪物未被移除
+            if (targetCreature.IsAlive && targetCreature.Monster != null)
+                targetCreature.Monster.SetMoveImmediate(customMove, forceTransition: true);
         }
 
         protected override void OnUpgrade()
         {
-            DynamicVars.Damage.UpgradeValueBy(5m);
+            DynamicVars.Damage.UpgradeValueBy(5m); // 10 → 15
         }
     }
 }

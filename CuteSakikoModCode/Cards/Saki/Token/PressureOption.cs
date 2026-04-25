@@ -43,10 +43,10 @@ public class PressureOption() : CustomCardModel(0, CardType.Skill, CardRarity.To
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获得压力
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
             this);
         // 获得力量
-        await PowerCmd.Apply<StrengthPower>(Owner.Creature, DynamicVars["StrengthPower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, DynamicVars["StrengthPower"].IntValue, Owner.Creature,
             this);
     }
 

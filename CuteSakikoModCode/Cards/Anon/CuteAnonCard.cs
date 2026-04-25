@@ -16,6 +16,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon
             : base(cost, type, rarity, target)
         {
         }
+        
+        public virtual string ChordId => null;
 
         public override string CustomPortraitPath =>
             (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();

@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -38,7 +32,7 @@ public class MemoryComing() : CuteSakikoModCard(1, CardType.Power, CardRarity.Un
     {
         // 根据升级状态决定施加层数：未升级1层，升级2层
         var amount = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<MemoryComingPower>(Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<MemoryComingPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

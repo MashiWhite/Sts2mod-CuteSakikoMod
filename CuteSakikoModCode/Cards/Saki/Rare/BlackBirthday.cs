@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -41,7 +35,7 @@ public sealed class BlackBirthday() : CuteSakikoModCard(2, CardType.Power, CardR
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<BlackRebirthPower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<BlackRebirthPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
 
         var creature = Owner.Creature;
         var currentHp = creature.CurrentHp;
@@ -59,7 +53,7 @@ public sealed class BlackBirthday() : CuteSakikoModCard(2, CardType.Power, CardR
 
         // 从 DynamicVars 读取层数（基础1，升级后2）
         var powerAmount = (int)DynamicVars["BlackRebirthPower"].BaseValue;
-        await PowerCmd.Apply<BlackRebirthPower>(creature, powerAmount, creature, this);
+        await PowerCmd.Apply<BlackRebirthPower>(choiceContext,creature, powerAmount, creature, this);
     }
 
     protected override void OnUpgrade()

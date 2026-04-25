@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -45,7 +39,7 @@ public class Read() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, Ta
             return;
 
         // 消耗5层压力
-        await PowerCmd.ModifyAmount(pressure, -5, Owner.Creature, this);
+        await PowerCmd.ModifyAmount(choiceContext,pressure, -5, Owner.Creature, this);
 
         var maxHpGain = IsUpgraded ? 2 : 1;
         await CreatureCmd.GainMaxHp(Owner.Creature, maxHpGain);

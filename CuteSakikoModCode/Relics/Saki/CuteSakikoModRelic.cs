@@ -1,39 +1,20 @@
 ﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
 using BaseLib.Utils;
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
-using Godot;
+using StringExtensions = BaseLib.Extensions.StringExtensions;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki;
 
 [Pool(typeof(CuteSakiRelicPool))]
 public abstract class CuteSakikoModRelic : CustomRelicModel
 {
-    public override string PackedIconPath
-    {
-        get
-        {
-            var path = $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".RelicImagePath();
-            return ResourceLoader.Exists(path) ? path : "relic.png".RelicImagePath();
-        }
-    }
+    protected override string BigIconPath =>
+        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").BigRelicImagePath();
 
-    protected override string PackedIconOutlinePath
-    {
-        get
-        {
-            var path = $"{Id.Entry.RemovePrefix().ToLowerInvariant()}_outline.png".RelicImagePath();
-            return ResourceLoader.Exists(path) ? path : "relic_outline.png".RelicImagePath();
-        }
-    }
+    public override string PackedIconPath =>
+        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").RelicImagePath();
 
-    protected override string BigIconPath
-    {
-        get
-        {
-            var path = $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".BigRelicImagePath();
-            return ResourceLoader.Exists(path) ? path : "relic.png".BigRelicImagePath();
-        }
-    }
+    protected override string PackedIconOutlinePath =>
+        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + "_outline.png").RelicImagePath();
 }

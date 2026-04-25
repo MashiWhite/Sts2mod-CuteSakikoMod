@@ -1,10 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -75,7 +70,7 @@ public class NoChest : CuteSakikoModEggCard
             var lookCard = combatState.CreateCard<LookNoChest>(ally);
             if (IsUpgraded)
                 CardCmd.Upgrade(lookCard);
-            await CardPileCmd.AddGeneratedCardToCombat(lookCard, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(lookCard, PileType.Hand, Owner);
         }
     }
 
@@ -84,8 +79,8 @@ public class NoChest : CuteSakikoModEggCard
     {
         UpdateCost(); // 更新当前实例费用（实际上费用在抽到时已更新，但保险）
 
-        await PowerCmd.Apply<PlatingPower>(Owner.Creature, 12, Owner.Creature, this);
-        if (IsUpgraded) await PowerCmd.Apply<BarricadePower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<PlatingPower>(choiceContext,Owner.Creature, 12, Owner.Creature, this);
+        if (IsUpgraded) await PowerCmd.Apply<BarricadePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
     }
 
     private void UpdateCost()

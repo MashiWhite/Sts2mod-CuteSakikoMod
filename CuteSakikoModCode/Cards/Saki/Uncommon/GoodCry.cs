@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -44,7 +38,7 @@ public class GoodCry : CuteSakikoModCard
         if (pressure != null && pressure.Amount > 0)
         {
             var reducePressure = 5;
-            await PowerCmd.ModifyAmount(pressure, -reducePressure, creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, -reducePressure, creature, this);
         }
 
         // 抽牌
@@ -56,7 +50,7 @@ public class GoodCry : CuteSakikoModCard
         if (breakdown != null && breakdown.Amount > 0)
         {
             var reduceBreakdown = IsUpgraded ? 2 : 1;
-            await PowerCmd.ModifyAmount(breakdown, -reduceBreakdown, creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,breakdown, -reduceBreakdown, creature, this);
         }
     }
 

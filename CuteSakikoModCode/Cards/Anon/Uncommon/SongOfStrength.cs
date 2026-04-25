@@ -56,9 +56,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             int dexterityAmount = (skillCount / perN) * x;
 
             if (strengthAmount > 0)
-                await PowerCmd.Apply<StrengthPower>(Owner.Creature, strengthAmount, Owner.Creature, this);
+                await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, strengthAmount, Owner.Creature, this);
             if (dexterityAmount > 0)
-                await PowerCmd.Apply<DexterityPower>(Owner.Creature, dexterityAmount, Owner.Creature, this);
+                await PowerCmd.Apply<DexterityPower>(choiceContext,Owner.Creature, dexterityAmount, Owner.Creature, this);
         }
 
         protected override void OnUpgrade()

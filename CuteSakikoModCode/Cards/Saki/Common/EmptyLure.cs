@@ -39,7 +39,7 @@ public class EmptyLure() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Commo
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
 
         var fraud = CombatState.CreateCard<Fraud>(Owner);
-        await CardPileCmd.AddGeneratedCardToCombat(fraud, PileType.Discard, true);
+        await CardPileCmd.AddGeneratedCardToCombat(fraud, PileType.Discard, Owner);
     }
 
     protected override void OnUpgrade()

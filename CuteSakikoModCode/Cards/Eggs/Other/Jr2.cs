@@ -22,6 +22,8 @@ public class Jr2 : CustomCardModel
 
     public override string PortraitPath =>
         (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -50,13 +52,13 @@ public class Jr2 : CustomCardModel
             .Execute(choiceContext);
 
         // 给予一层气绝
-        await PowerCmd.Apply<FaintingPower>(cardPlay.Target, 1, Owner.Creature, this);
+        await PowerCmd.Apply<FaintingPower>(choiceContext,cardPlay.Target, 1, Owner.Creature, this);
 
         // 将致命连击3加入手牌（升级版本）
         var jr3 = CombatState.CreateCard<Jr3>(Owner);
         if (IsUpgraded && jr3.IsUpgradable)
             CardCmd.Upgrade(jr3);
-        await CardPileCmd.AddGeneratedCardToCombat(jr3, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(jr3, PileType.Hand, Owner);
 
         await CardPileCmd.RemoveFromCombat(this);
     }

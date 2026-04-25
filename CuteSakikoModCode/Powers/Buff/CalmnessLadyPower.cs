@@ -37,7 +37,7 @@ public sealed class CalmnessLadyPower : CuteSakikoModPower
     {
         if (Amount <= 0) return;
         // 消耗一层能力
-        await PowerCmd.ModifyAmount(this, -1, null, null);
+        await PowerCmd.ModifyAmount(new ThrowingPlayerChoiceContext(), this, -1, null, null);
         // 反弹伤害
         if (_pendingDealer != null && _pendingDealer.IsAlive && _pendingDamage > 0)
         {

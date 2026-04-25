@@ -1,12 +1,11 @@
 ﻿
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -61,7 +60,7 @@ public sealed class MasqueradePower : CuteSakikoModPower
             if (canonical != null)
             {
                 var newPower = canonical.ToMutable();
-                await PowerCmd.Apply(newPower, creature, amount, Owner, null);
+                await PowerCmd.Apply(choiceContext,newPower, creature, amount, Owner, null);
             }
         }
         _removedPowers.Clear();

@@ -71,7 +71,7 @@ public sealed class MeteorHephaestusPower : CuteSakikoModPower
             if (canonical != null)
             {
                 var newPower = canonical.ToMutable();
-                await PowerCmd.Apply(newPower, Owner, finalAmount, Owner, null);
+                await PowerCmd.Apply(choiceContext,newPower, Owner, finalAmount, Owner, null);
             }
         }
     }

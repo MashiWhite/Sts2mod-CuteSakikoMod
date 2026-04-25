@@ -54,7 +54,7 @@ public sealed class MemoryComingPower : CuteSakikoModPower
         if (randomCards.Count == 0) return;
 
         var mutableCards = randomCards.Select(card => card.IsMutable ? card : card.ToMutable()).ToList();
-        await CardPileCmd.AddGeneratedCardsToCombat(mutableCards, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardsToCombat(mutableCards, PileType.Hand, player);
         Flash();
     }
 }

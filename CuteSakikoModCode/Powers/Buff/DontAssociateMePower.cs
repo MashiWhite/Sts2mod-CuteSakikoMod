@@ -42,7 +42,7 @@ public sealed class DontAssociateMePower : CuteSakikoModPower
         if (Amount <= 0) return;
 
         // 触发一次攻击即施加压力
-        await PowerCmd.Apply<PressurePower>(dealer, Amount, Owner, cardSource);
+        await PowerCmd.Apply<PressurePower>(choiceContext,dealer, Amount, Owner, cardSource);
     }
 
     // 在下一回合开始时（自身回合）移除能力

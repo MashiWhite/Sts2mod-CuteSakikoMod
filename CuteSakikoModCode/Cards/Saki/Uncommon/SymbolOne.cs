@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -53,7 +47,7 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
         if (pressure != null && pressure.Amount >= 2)
         {
             // 消耗2层压力
-            await PowerCmd.ModifyAmount(pressure, -2, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, -2, Owner.Creature, this);
 
             var increase = IsUpgraded ? 8m : 6m;
             _permanentBonus += increase;

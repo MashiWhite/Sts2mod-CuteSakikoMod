@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -54,7 +48,7 @@ public class HeartAtk : CuteSakikoModCard
         var pressure = cardPlay.Target.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount > 0)
             // 压力层数翻倍（将当前值作为增加量，即 amount += amount）
-            await PowerCmd.ModifyAmount(pressure, pressure.Amount, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,pressure, pressure.Amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

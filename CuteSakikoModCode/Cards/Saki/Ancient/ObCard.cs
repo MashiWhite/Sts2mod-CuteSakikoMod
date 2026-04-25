@@ -39,7 +39,7 @@ public class ObCard() : CuteSakikoModCard(3, CardType.Power, CardRarity.Ancient,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<ObCardPower>(Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<ObCardPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

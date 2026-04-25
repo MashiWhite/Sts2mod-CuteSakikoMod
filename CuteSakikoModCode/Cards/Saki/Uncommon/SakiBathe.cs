@@ -55,7 +55,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon
             var pressure = Owner.Creature.GetPower<PressurePower>();
             var required = IsUpgraded ? 10 : 15;
             if (pressure != null && pressure.Amount >= required)
-                await PowerCmd.ModifyAmount(pressure, -required, Owner.Creature, this);
+                await PowerCmd.ModifyAmount(choiceContext,pressure, -required, Owner.Creature, this);
 
             await Cmd.CustomScaledWait(0.1f, 0.15f);
             await TryCombine();
@@ -104,7 +104,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon
                     combined.UpgradeInternal();
                     combined.FinalizeUpgradeInternal();
                 }
-                await CardPileCmd.AddGeneratedCardToCombat(combined, PileType.Hand, true);
+                await CardPileCmd.AddGeneratedCardToCombat(combined, PileType.Hand, Owner);
             }
             finally
             {

@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -52,11 +46,11 @@ public class WishHappiness() : CuteSakikoModCard(1, CardType.Skill, CardRarity.U
         const int pressureAmount = 2;
 
         // 自身增加压力
-        await PowerCmd.Apply<PressurePower>(Owner.Creature, pressureAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureAmount, Owner.Creature, this);
 
         // 如果目标玩家不是自己，则也给目标玩家增加压力
         if (targetPlayer != Owner)
-            await PowerCmd.Apply<PressurePower>(targetPlayer.Creature, pressureAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext,targetPlayer.Creature, pressureAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

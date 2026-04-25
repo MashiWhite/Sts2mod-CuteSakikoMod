@@ -51,7 +51,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status
 
             // 复制自身并加入手牌
             var copy = CreateClone();
-            await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, Owner);
         }
 
         protected override void OnUpgrade()

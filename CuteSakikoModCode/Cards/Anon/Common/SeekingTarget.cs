@@ -45,7 +45,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
             int vulnAmount = DynamicVars["VulnerablePower"].IntValue;
             foreach (var enemy in combat.Enemies.Where(e => e.IsAlive))
             {
-                await PowerCmd.Apply<VulnerablePower>(enemy, vulnAmount, Owner.Creature, this);
+                await PowerCmd.Apply<VulnerablePower>(choiceContext,enemy, vulnAmount, Owner.Creature, this);
             }
         }
 

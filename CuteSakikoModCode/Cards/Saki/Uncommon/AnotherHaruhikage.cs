@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -55,7 +49,7 @@ public class AnotherHaruhikage() : CuteSakikoModCard(2, CardType.Attack, CardRar
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);
 
-                await PowerCmd.Apply<PressurePower>(enemy, pressureAmount, Owner.Creature, this);
+                await PowerCmd.Apply<PressurePower>(choiceContext,enemy, pressureAmount, Owner.Creature, this);
             }
 
         // 用杂音填满手牌
@@ -86,7 +80,7 @@ public class AnotherHaruhikage() : CuteSakikoModCard(2, CardType.Attack, CardRar
                 noise = CombatState.CreateCard<Noise>(Owner);
             }
 
-            await CardPileCmd.AddGeneratedCardToCombat(noise, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(noise, PileType.Hand, Owner);
         }
     }
 

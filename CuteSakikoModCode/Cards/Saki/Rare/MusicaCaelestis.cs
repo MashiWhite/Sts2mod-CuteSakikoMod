@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -38,10 +32,10 @@ public class MusicaCaelestis : CuteSakikoModCard
     {
         var existing = Owner.Creature.GetPower<MusicaCaelestisPower>();
         if (existing == null)
-            await PowerCmd.Apply<MusicaCaelestisPower>(Owner.Creature, 1, Owner.Creature, this);
+            await PowerCmd.Apply<MusicaCaelestisPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
         else
             // 可叠加层数
-            await PowerCmd.ModifyAmount(existing, 1, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext,existing, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

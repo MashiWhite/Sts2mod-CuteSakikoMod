@@ -12,11 +12,9 @@ using MegaCrit.Sts2.Core.Localization;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 {
-    public class LookCChord : CuteAnonCard
+    public class LookCChord() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
-        public LookCChord() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
-        {
-        }
+        public override string ChordId => "AnonCChord";
 
         public override IEnumerable<CardKeyword> CanonicalKeywords
         {
@@ -24,6 +22,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
             {
                 yield return CardKeyword.Exhaust;
                 yield return CutesakiKeywords.NoNote; // 不产生音符，避免意外匹配
+                yield return CutesakiKeywords.Chord;
             }
         }
 

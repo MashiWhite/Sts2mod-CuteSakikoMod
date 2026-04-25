@@ -16,8 +16,8 @@ public class PigEat : CustomCardModel
     public PigEat() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
-
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal,CardKeyword.Exhaust };
 
     public override string PortraitPath =>
         (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();

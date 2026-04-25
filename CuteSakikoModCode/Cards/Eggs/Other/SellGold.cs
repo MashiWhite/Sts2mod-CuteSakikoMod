@@ -34,7 +34,7 @@ public class SellGold : CustomCardModel
         var goldToSell = currentGoldLayers; // 全部卖出
 
         // 减少黄金层数
-        await PowerCmd.ModifyAmount(goldPower, -goldToSell, player.Creature, this);
+        await PowerCmd.ModifyAmount(choiceContext,goldPower, -goldToSell, player.Creature, this);
         // 获得金币 = 卖出层数 × 金价
         var goldGain = goldToSell * goldPrice;
         await PlayerCmd.GainGold(goldGain, player);

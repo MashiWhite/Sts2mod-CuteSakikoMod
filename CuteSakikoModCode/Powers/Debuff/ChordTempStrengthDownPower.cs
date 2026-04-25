@@ -4,6 +4,7 @@ using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -34,8 +35,8 @@ public class ChordTempStrengthDownPower : CustomTemporaryPowerModel
     protected override Func<Creature, Decimal, Creature?, CardModel?, bool, Task> ApplyPowerFunc =>
         async (target, amount, applier, cardSource, silent) =>
         {
-            // 注意：amount 为正时表示施加正面效果，此处我们希望减少力量，所以取负值
-            await PowerCmd.Apply<StrengthPower>(target, -amount, applier, cardSource, silent);
+            await PowerCmd.Apply<StrengthPower>(
+                new ThrowingPlayerChoiceContext(), target, -amount, applier, cardSource, silent);
         };
 
     // 持续到本回合结束（即轮到敌人回合结束时移除）

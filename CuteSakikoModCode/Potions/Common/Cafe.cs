@@ -1,9 +1,7 @@
 ﻿using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using Godot;
@@ -43,6 +41,6 @@ public sealed class Cafe : CustomPotionModel
     {
         AssertValidForTargetedPotion(target);
         NCombatRoom.Instance?.PlaySplashVfx(target, new Color("8B4513"));
-        await PowerCmd.Apply<PressurePower>(target, DynamicVars["PressurePower"].BaseValue, Owner.Creature, null);
+        await PowerCmd.Apply<PressurePower>(choiceContext,target, DynamicVars["PressurePower"].BaseValue, Owner.Creature, null);
     }
 }

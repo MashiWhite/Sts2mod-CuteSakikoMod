@@ -51,8 +51,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token
             await PowerCmd.Remove(escapismPower);
 
             int amount = DynamicVars["WalkHandingPower"].IntValue;
-            await PowerCmd.Apply<WalkHandingPower>(target, amount, Owner.Creature, this);
-            await PowerCmd.Apply<WalkHandingPower>(Owner.Creature, amount, Owner.Creature, this);
+            await PowerCmd.Apply<WalkHandingPower>(choiceContext,target, amount, Owner.Creature, this);
+            await PowerCmd.Apply<WalkHandingPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
         }
 
         protected override void OnUpgrade()

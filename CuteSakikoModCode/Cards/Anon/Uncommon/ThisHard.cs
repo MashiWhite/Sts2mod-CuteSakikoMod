@@ -11,13 +11,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 {
     public class ThisHard() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
-
+        public override string ChordId => "AnonFChord";
+        
         public override IEnumerable<CardKeyword> CanonicalKeywords
         {
             get
             {
                 yield return CardKeyword.Exhaust;
                 yield return CutesakiKeywords.NoNote; // 不产生音符
+                yield return CutesakiKeywords.Chord;
             }
         }
 

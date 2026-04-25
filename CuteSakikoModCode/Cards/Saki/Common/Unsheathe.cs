@@ -1,9 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -14,10 +10,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
-using System.Linq;
-using System.Threading.Tasks;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
@@ -81,7 +74,7 @@ public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
             // 没有找到，创建一张新的骑士之剑
             var newSword = CombatState.CreateCard<KnightSword>(Owner);
             if (IsUpgraded) CardCmd.Upgrade(newSword);
-            await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, Owner);
         }
     }
 
