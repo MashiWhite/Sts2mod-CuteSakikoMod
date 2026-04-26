@@ -1,13 +1,12 @@
-﻿
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 {
-    public class EasyNow() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+    public class EasyNow() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         private bool _targetAll = false;
 
@@ -22,8 +21,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
         {
             get
             {
-                // 基础力量减少：1 点，升级后通过 OnUpgrade 增加到 2
-                yield return new PowerVar<StrengthPower>(1m);
+                yield return new PowerVar<StrengthPower>(2m);
             }
         }
 
@@ -53,7 +51,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 
         protected override void OnUpgrade()
         {
-            // 力量减少值：1-2
             DynamicVars["StrengthPower"].UpgradeValueBy(1m);
             // 目标变为所有敌人
             _targetAll = true;

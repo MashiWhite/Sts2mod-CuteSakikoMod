@@ -50,7 +50,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             int x = ResolveEnergyXValue();
             if (x <= 0) return;
 
-            int perN = IsUpgraded ? 2 : 3;
+            int perN = IsUpgraded ? 3 : 4;
 
             int strengthAmount = (attackCount / perN) * x;
             int dexterityAmount = (skillCount / perN) * x;

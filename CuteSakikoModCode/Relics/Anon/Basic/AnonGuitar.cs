@@ -241,6 +241,24 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
                 UpdateStoredChordDisplay();
                 return;
             }
+            
+            // “意犹未尽”能力：若储存已满，自动演奏最早的和弦
+            var lingeringPower = Owner.Creature.GetPower<LingeringTastePower>();
+            if (lingeringPower != null)
+            {
+                var storedChords = MusicNoteManager.GetStoredChords(Owner);
+                if (storedChords.Count >= MusicNoteManager.MaxStoredChords && storedChords.Count > 0)
+                {
+                    var firstChordId = storedChords[0]; // 最早加入的和弦
+                    if (ChordManager.AllChords.TryGetValue(firstChordId, out var def))
+                    {
+                        // 演奏该和弦，使用吉他当前的倍率
+                        await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+                    }
+                    // 从储存队列中移除已演奏的和弦
+                    MusicNoteManager.RemoveChord(Owner, firstChordId);
+                }
+            }
 
             var newChords = MusicNoteManager.AddNote(Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
 

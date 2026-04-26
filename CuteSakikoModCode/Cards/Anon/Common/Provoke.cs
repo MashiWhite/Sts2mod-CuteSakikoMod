@@ -14,8 +14,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
         {
             get
             {
-                // 未升级：16 格挡，3 力量
-                yield return new BlockVar(16m, ValueProp.Move);
+                // 未升级：18 格挡，3 力量
+                yield return new BlockVar(18m, ValueProp.Move);
                 yield return new PowerVar<StrengthPower>(3m);
             }
         }
@@ -37,7 +37,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 
         protected override void OnUpgrade()
         {
-            // 格挡 16 → 20（增加 4）
+            // 格挡 18 → 22（增加 4）
             DynamicVars.Block.UpgradeValueBy(4m);
             // 力量 3 → 2（减少 1）
             DynamicVars["StrengthPower"].UpgradeValueBy(-1m);

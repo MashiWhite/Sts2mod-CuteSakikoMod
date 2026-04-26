@@ -17,7 +17,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
             get
             {
                 yield return CutesakiKeywords.NoNote;
-                yield return CardKeyword.Exhaust;
 
             }
         }

@@ -1,4 +1,5 @@
 ﻿
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Random;
@@ -90,6 +91,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
 
             while (data.StoredChords.Count > MaxStoredChords)
                 data.StoredChords.RemoveAt(0);
+            
+            // 触发“吉他主唱”效果（如有）
+            if (player?.Creature != null)
+            {
+                var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
+                if (vocalPower != null)
+                {
+                    _ = vocalPower.OnNoteGained(1);
+                }
+            }
 
             return newChords;
         }

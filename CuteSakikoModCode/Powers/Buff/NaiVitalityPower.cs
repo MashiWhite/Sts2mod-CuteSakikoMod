@@ -11,7 +11,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
     public class NaiVitalityPower : CuteSakikoModPower
     {
         public override PowerType Type => PowerType.Buff;
-        public override PowerStackType StackType => PowerStackType.None;
+        public override PowerStackType StackType => PowerStackType.Single;
 
         private bool _willTriggerNextTurn;
 

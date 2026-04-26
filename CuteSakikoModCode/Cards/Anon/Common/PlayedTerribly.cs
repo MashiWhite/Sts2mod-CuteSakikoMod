@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -8,9 +7,9 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 {
-    public class PlayedTerribly() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
+    public class PlayedTerribly() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
     {
         protected override IEnumerable<DynamicVar> CanonicalVars
         {

@@ -402,6 +402,24 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     }
                 }); 
             
+            // 爱音G和弦【技 技 攻】所有友方抽1牌，获1能量
+            AddTemporaryChord("AnonGChord", ChordCategory.Anon,
+                new[] { CardType.Skill, CardType.Skill, CardType.Attack },
+                "CUTESAKIKOMOD-ANONGCHORD.title", "CUTESAKIKOMOD-ANONGCHORD.description", "anon_g_chord",
+                new[] { 1, 1 },
+                async (ctx, owner, mult) =>
+                {
+                    var combat = owner.CombatState;
+                    if (combat == null) return;
+
+                    foreach (var player in combat.Players)
+                    {
+                        if (player == null) continue;
+                        await CardPileCmd.Draw(ctx, 1 * mult, player);
+                        await PlayerCmd.GainEnergy(1 * mult, player);
+                    }
+                });
+            
             //灰爱音和弦【特 攻 攻】 减少2生命，抽1获得1能量
             AddTemporaryChord("GreyAnonChord", ChordCategory.Anon,
                 new[] { CardType.Status, CardType.Attack, CardType.Attack },

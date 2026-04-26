@@ -11,13 +11,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 {
     public class UnforgettablePerformance() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
-        public override IEnumerable<CardKeyword> CanonicalKeywords
-        {
-            get
-            {
-                yield return CutesakiKeywords.NoNote; // 自身不产生音符
-            }
-        }
         
         protected override IEnumerable<IHoverTip> ExtraHoverTips
         {

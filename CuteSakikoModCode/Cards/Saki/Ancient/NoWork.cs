@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -23,9 +17,7 @@ public class NoWork : CuteSakikoModCard
     public NoWork() : base(0, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
     {
     }
-
-    // 始终带有消耗关键词
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    
 
     // 动态变量：伤害和压力
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -62,7 +54,7 @@ public class NoWork : CuteSakikoModCard
     // 升级效果：伤害 +7 (16→23)，压力 +10 (10→20)
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(7m);
+        DynamicVars.Damage.UpgradeValueBy(4m);
         DynamicVars["PressurePower"].UpgradeValueBy(10m);
     }
 }
