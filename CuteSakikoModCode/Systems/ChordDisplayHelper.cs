@@ -21,8 +21,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
         {
             if (ChordManager.AllChords.TryGetValue(chord, out var def))
             {
-                // 假设图标存放在 Mod 的 images/chords/ 目录下
-                string path = $"CuteSakikoMod/images/ui/chords/{def.IconName}.png";
+                string path = $"res://CuteSakikoMod/images/ui/chords/{def.IconName}.png";
                 return GD.Load<Texture2D>(path);
             }
             return null;

@@ -355,6 +355,24 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
                     }
                 });
             
+            // 在 ChordManager.RegisterChords() 中添加
+            AddTemporaryChord("AnonEChord", ChordCategory.Anon,
+                new[] { CardType.Skill, CardType.Attack, CardType.Skill, CardType.Skill },
+                "CUTESAKIKOMOD-ANONECHORD.title", "CUTESAKIKOMOD-ANONECHORD.description", "anon_e_chord",
+                new[] { 1, 4 }, // 残影层数, 格挡
+                async (ctx, owner, mult) =>
+                {
+                    var combat = owner.CombatState;
+                    if (combat == null) return;
+
+                    var allies = combat.Players.Select(p => p.Creature).ToList();
+                    foreach (var ally in allies)
+                    {
+                        await PowerCmd.Apply<BlurPower>(ctx,ally, 1 * mult, owner, null);
+                        await CreatureCmd.GainBlock(ally, 4 * mult, (ValueProp)0, null);
+                    }
+                });
+            
             // 爱音F和弦【攻 攻 攻 攻】50%对全体敌人造成12点伤害，50%使所有友方获得1层虚弱
             AddTemporaryChord("AnonFChord", ChordCategory.Anon,
                 new[] { CardType.Attack, CardType.Attack, CardType.Attack, CardType.Attack },

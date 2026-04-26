@@ -11,12 +11,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
     public class NaiVitalityPower : CuteSakikoModPower
     {
         public override PowerType Type => PowerType.Buff;
-        public override PowerStackType StackType => PowerStackType.Single;
+        public override PowerStackType StackType => PowerStackType.None;
 
         private bool _willTriggerNextTurn;
 
-        // 回合结束时判断
-        public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+        // 在回合结束之前（手牌和能量尚未重置）检查条件
+        public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
         {
             if (side != CombatSide.Player) return;
 
@@ -31,7 +31,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
             await Task.CompletedTask;
         }
 
-        // 下回合开始时触发（正确的重载签名）
+        // 下回合开始时触发
         public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
         {
             if (!_willTriggerNextTurn) return;

@@ -1,6 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿
 using MegaCrit.Sts2.Core.Entities.Powers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;

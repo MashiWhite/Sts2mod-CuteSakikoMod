@@ -6,37 +6,31 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
-
-
-public class Masquerade : CuteSakikoModCard
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare
 {
-    public Masquerade() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class Masquerade : CuteSakikoModCard
     {
-    }
-
-
-
-    protected override IEnumerable<DynamicVar> CanonicalVars => System.Array.Empty<DynamicVar>();
-    
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
-    {
-        get
+        public Masquerade() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
         {
-            yield return HoverTipFactory.FromPower<MasqueradePower>();
         }
-    }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-    {
-        // 施加 MasqueradePower 到自身（用于记录和恢复）
-        var power = await PowerCmd.Apply<MasqueradePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
-        // 执行移除所有生物能力的操作
-        await power.RemoveAllPowers();
-    }
+        protected override IEnumerable<DynamicVar> CanonicalVars => System.Array.Empty<DynamicVar>();
 
-    protected override void OnUpgrade()
-    {
-        EnergyCost.UpgradeBy(-1); // 1 → 0
+        protected override IEnumerable<IHoverTip> ExtraHoverTips
+        {
+            get { yield return HoverTipFactory.FromPower<MasqueradePower>(); }
+        }
+
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+        {
+            var power = await PowerCmd.Apply<MasqueradePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+            if (power != null)
+                await power.RemoveAllPowers(choiceContext);
+        }
+
+        protected override void OnUpgrade()
+        {
+            EnergyCost.UpgradeBy(-1); // 1 → 0
+        }
     }
 }

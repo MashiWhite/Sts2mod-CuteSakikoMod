@@ -32,11 +32,10 @@ public class ChordTempStrengthDownPower : CustomTemporaryPowerModel
     public override AbstractModel OriginModel => null;
 
     // 应用力量的委托：负值表示减少力量
-    protected override Func<Creature, Decimal, Creature?, CardModel?, bool, Task> ApplyPowerFunc =>
-        async (target, amount, applier, cardSource, silent) =>
+    protected override Func<PlayerChoiceContext, Creature, Decimal, Creature?, CardModel?, bool, Task> ApplyPowerFunc =>
+        async (ctx, target, amount, applier, cardSource, silent) =>
         {
-            await PowerCmd.Apply<StrengthPower>(
-                new ThrowingPlayerChoiceContext(), target, -amount, applier, cardSource, silent);
+            await PowerCmd.Apply<StrengthPower>(ctx, target, -amount, applier, cardSource, silent);
         };
 
     // 持续到本回合结束（即轮到敌人回合结束时移除）

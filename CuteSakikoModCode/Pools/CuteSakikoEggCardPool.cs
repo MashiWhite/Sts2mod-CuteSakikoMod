@@ -8,8 +8,8 @@ public class CuteSakikoEggCardPool : CustomCardPoolModel
 {
     public override string Title => Character.CuteSaki.CharacterEggId; //This is not a display name.
 
-    public override string BigEnergyIconPath => "charui/big_energy.png".ImagePath();
-    public override string TextEnergyIconPath => "charui/text_energy.png".ImagePath();
+    public override string BigEnergyIconPath => "charui/saki/saki_big_energy.png".ImagePath();
+    public override string TextEnergyIconPath => "charui/saki/saki_text_energy.png".ImagePath();
 
 
     /* These HSV values will determine the color of your card back.

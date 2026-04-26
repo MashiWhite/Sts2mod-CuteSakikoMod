@@ -5,65 +5,70 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Powers;
 
-
-namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
-
-public sealed class MasqueradePower : CuteSakikoModPower
+namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
 {
-    private List<(Creature owner, ModelId powerId, int amount)> _removedPowers = new();
-
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single;
-
-    public async Task RemoveAllPowers()
+    public sealed class MasqueradePower : CuteSakikoModPower
     {
-        if (Owner.CombatState == null) return;
+        /// <summary>假面舞会是否正在生效（用于补丁跳过沙坑效果）</summary>
+        public static bool IsActive { get; private set; }
 
-        var allCreatures = Owner.CombatState.Creatures.ToList();
-        foreach (var creature in allCreatures)
+        private List<(Creature owner, ModelId powerId, int amount)> _removedPowers = new();
+
+        public override PowerType Type => PowerType.Buff;
+        public override PowerStackType StackType => PowerStackType.Single;
+
+        public override bool ShouldDie(Creature creature) => false;
+
+        public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
         {
-            var powers = creature.Powers.ToList();
-            foreach (var power in powers)
+            await base.AfterApplied(applier, cardSource);
+            IsActive = true; // 假面舞会生效
+        }
+
+        public async Task RemoveAllPowers(PlayerChoiceContext choiceContext)
+        {
+            if (Owner.CombatState == null) return;
+
+            var allCreatures = Owner.CombatState.Creatures.ToList();
+            foreach (var creature in allCreatures)
             {
-                if (power is MasqueradePower) continue;
-                _removedPowers.Add((creature, power.Id, power.Amount));
-                await PowerCmd.Remove(power);
+                if (creature.IsDead) continue;
+
+                var powers = creature.Powers.ToList();
+                foreach (var power in powers)
+                {
+                    if (power == null || power is MasqueradePower) continue;
+
+                    // 完全跳过沙坑能力，不记录也不移除
+                    if (power is SandpitPower)
+                        continue;
+
+                    _removedPowers.Add((creature, power.Id, power.Amount));
+                    await PowerCmd.Remove(power);
+                }
             }
         }
-    }
 
-    // 无限次阻止敌人死亡（每次都会触发）
-    public override bool ShouldDie(Creature creature)
-    {
-        if (!creature.IsPlayer) return false; // 敌人永远不死
-        return base.ShouldDie(creature);
-    }
-
-    // 阻止死亡后，回复1血并击晕
-    public override async Task AfterPreventingDeath(Creature creature)
-    {
-        if (creature.IsPlayer) return;
-        await CreatureCmd.SetCurrentHp(creature, 1);
-        await CreatureCmd.Stun(creature);
-        Flash();
-    }
-
-    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
-    {
-        if (player.Creature != Owner) return;
-
-        foreach (var (creature, powerId, amount) in _removedPowers)
+        public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
         {
-            if (creature.IsDead) continue;
-            var canonical = ModelDb.GetById<PowerModel>(powerId);
-            if (canonical != null)
+            if (player.Creature != Owner) return;
+
+            foreach (var (creature, powerId, amount) in _removedPowers)
             {
-                var newPower = canonical.ToMutable();
-                await PowerCmd.Apply(choiceContext,newPower, creature, amount, Owner, null);
+                if (creature.IsDead) continue;
+                var canonical = ModelDb.GetById<PowerModel>(powerId);
+                if (canonical != null)
+                {
+                    var newPower = canonical.ToMutable();
+                    await PowerCmd.Apply(choiceContext, newPower, creature, amount, Owner, null);
+                }
             }
+
+            _removedPowers.Clear();
+            await PowerCmd.Remove(this);
+            IsActive = false; // 假面舞会结束
         }
-        _removedPowers.Clear();
-        await PowerCmd.Remove(this);
     }
 }

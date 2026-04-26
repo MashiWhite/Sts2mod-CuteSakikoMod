@@ -22,6 +22,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status
         {
             get
             {
+                yield return CardKeyword.Retain;
                 yield return CardKeyword.Exhaust;
             }
         }
@@ -33,7 +34,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status
             get
             {
                 // 基础格挡值 1，升级后变为 2
-                yield return new BlockVar(1m, ValueProp.Move);
+                yield return new BlockVar(2m, ValueProp.Move);
             }
         }
 
@@ -56,8 +57,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status
 
         protected override void OnUpgrade()
         {
-            // 升级：格挡值从 1 提升到 2
-            DynamicVars.Block.UpgradeValueBy(1m);
+            // 升级：格挡值从 2 提升到 4
+            DynamicVars.Block.UpgradeValueBy(2m);
         }
     }
 }

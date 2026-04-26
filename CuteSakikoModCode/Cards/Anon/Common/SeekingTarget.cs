@@ -15,7 +15,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
         {
             get
             {
-                yield return new DamageVar(7m, ValueProp.Move);
+                yield return new DamageVar(8m, ValueProp.Move);
                 yield return new PowerVar<VulnerablePower>(1m);
             }
         }
@@ -51,7 +51,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 
         protected override void OnUpgrade()
         {
-            DynamicVars.Damage.UpgradeValueBy(4m); // 7 → 11
+            DynamicVars.Damage.UpgradeValueBy(4m); // 8 → 12
             DynamicVars["VulnerablePower"].UpgradeValueBy(1m); // 1 → 2
         }
     }

@@ -19,20 +19,22 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             TriggerBanter();
 
             var exhaustPile = PileType.Exhaust.GetPile(Owner);
-            if (exhaustPile == null || exhaustPile.Cards.Count == 0)
-                return;
+            if (exhaustPile == null || exhaustPile.Cards.Count == 0) return;
 
-            // 排除所有其他“沉思”牌（同一ID）
             var availableCards = exhaustPile.Cards.Where(c => c.Id != this.Id).ToList();
-            if (availableCards.Count == 0)
-                return;
+            if (availableCards.Count == 0) return;
 
             int pickCount = IsUpgraded ? 2 : 1;
             int maxCount = availableCards.Count;
             if (maxCount < pickCount) pickCount = maxCount;
 
+            // 根据数量选择不同的本地化键
+            string promptKey = pickCount == 2
+                ? "CUTESAKIKOMOD-CONTEMPLATION.selectionScreenPrompt.2"
+                : "CUTESAKIKOMOD-CONTEMPLATION.selectionScreenPrompt.1";
+
             var prefs = new CardSelectorPrefs(
-                new LocString("cards", "CUTESAKIKOMOD-CONTEMPLATION.selectionScreenPrompt"),
+                new LocString("cards", promptKey),
                 pickCount,
                 pickCount
             )
@@ -52,9 +54,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             }
         }
 
-        protected override void OnUpgrade()
-        {
-            // 升级效果在 OnPlay 中通过 IsUpgraded 控制数量
-        }
+        protected override void OnUpgrade() { }
     }
 }

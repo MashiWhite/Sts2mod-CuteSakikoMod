@@ -23,9 +23,6 @@
   "CUTESAKIKOMOD-OTHERANON.title": "异世界爱音",
   "CUTESAKIKOMOD-OTHERANON.description": "[sine][pink]好像不是我认识的歌，但是却感觉很熟悉。[/pink][/sine]",
 
-  "CUTESAKIKOMOD-ANONCCHORD.title": "爱音C和弦",
-  "CUTESAKIKOMOD-ANONCCHORD.description": "在本场战斗中升级所有友方手牌中的[blue]{0}[/blue]张牌。",
-
   "CUTESAKIKOMOD-PLAYGUITAR.title": "弦奏",
   "CUTESAKIKOMOD-PLAYGUITAR.description": "属于爱音的特殊打击。",
 
@@ -95,8 +92,14 @@
   "CUTESAKIKOMOD-NONOTE.title": "特殊演奏",
   "CUTESAKIKOMOD-NONOTE.description": "这张卡本身不会获得音符。",
 
+  "CUTESAKIKOMOD-ANONCCHORD.title": "爱音C和弦",
+  "CUTESAKIKOMOD-ANONCCHORD.description": "在本场战斗中升级所有友方手牌中的[blue]{0}[/blue]张牌。",
+
   "CUTESAKIKOMOD-ANONDCHORD.title": "爱音D和弦",
   "CUTESAKIKOMOD-ANONDCHORD.description": "所有友方获得1瓶随机药水。",
+
+  "CUTESAKIKOMOD-ANONECHORD.title": "爱音E和弦",
+  "CUTESAKIKOMOD-ANONECHORD.description": "所有友方获得[blue]{0}[/blue]层[gold]残影[/gold]，\n获得[blue]{1}[/blue]点[gold]格挡[/gold]。",
 
   "CUTESAKIKOMOD-ANONFCHORD.title": "爱音F和弦",
   "CUTESAKIKOMOD-ANONFCHORD.description": "75% 对所有敌人造成[blue]{0}[/blue]点伤害。\n25% 使所有友方获得[blue]{1}[/blue]层[gold]虚弱[/gold]。",

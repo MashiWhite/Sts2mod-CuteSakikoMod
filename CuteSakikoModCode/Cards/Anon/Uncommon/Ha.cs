@@ -1,4 +1,5 @@
 ﻿
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -28,7 +29,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             var targetCreature = cardPlay.Target;
             if (targetCreature == null || !targetCreature.IsAlive) return;
 
-            // 1. 造成卡牌自身伤害
+            // 造成伤害
             var damage = DynamicVars.Damage.BaseValue;
             await DamageCmd.Attack(damage)
                 .FromCard(this)
@@ -36,38 +37,38 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);
 
-            // 2. 目标必须在伤害后仍然存活且为怪物，才替换意图
+            // 目标必须依然存活且为怪物
             if (!targetCreature.IsAlive || !targetCreature.IsMonster) return;
 
             var monster = targetCreature.Monster;
             if (monster == null) return;
 
-            // 使用固定后续状态 "Idle" 避免复杂的状态机反射
+            string followUpId = MonsterUtils.GetFallbackFollowUpStateId(monster);
+            if (string.IsNullOrEmpty(followUpId)) return; // 无法获取有效状态，不替换意图
+
             var attackIntent = new SingleAttackIntent(15);
             var customMove = new MoveState(
                 "HA_ATTACK",
                 async (targets) =>
                 {
-                    var player = Owner.Creature;
-                    // 对手方目标设为玩家本身（或所有玩家），此处简单起见选择第一个玩家
-                    var targetsToHit = Owner.Creature.CombatState?.Players.Select(p => p.Creature).ToList();
-                    if (targetsToHit != null && targetsToHit.Any())
-                        await CreatureCmd.Damage(choiceContext, targetsToHit, 15, ValueProp.Move, targetCreature, null);
+                    var players = Owner.Creature.CombatState?.Players.Select(p => p.Creature).ToList();
+                    if (players != null && players.Any())
+                        await CreatureCmd.Damage(choiceContext, players, 15, ValueProp.Move, targetCreature, null);
                 },
                 attackIntent
             )
             {
-                FollowUpStateId = "Idle"
+                FollowUpStateId = followUpId
             };
 
-            // 再次确认怪物未被移除
+            // 最后确认怪物未被移除
             if (targetCreature.IsAlive && targetCreature.Monster != null)
-                targetCreature.Monster.SetMoveImmediate(customMove, forceTransition: true);
+                monster.SetMoveImmediate(customMove, forceTransition: true);
         }
 
         protected override void OnUpgrade()
         {
-            DynamicVars.Damage.UpgradeValueBy(5m); // 10 → 15
+            DynamicVars.Damage.UpgradeValueBy(5m);
         }
     }
 }

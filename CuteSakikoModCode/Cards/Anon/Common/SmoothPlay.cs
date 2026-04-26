@@ -9,16 +9,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 {
-    public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
+    public class SmoothPlay() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
     {
-        // 攻击次数，升级后由4变为5
-        private int _hitCount = 4;
-
         protected override IEnumerable<DynamicVar> CanonicalVars
         {
             get
             {
-                yield return new DamageVar(5m, ValueProp.Move);
+                yield return new DamageVar(3m, ValueProp.Move);
             }
         }
 
@@ -29,10 +26,17 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
             var combat = Owner.Creature.CombatState;
             if (combat == null) return;
 
-            var damage = DynamicVars.Damage.BaseValue;
-            var rng = Owner.RunState.Rng.CombatCardSelection;
+            // 统计攻击音符数量
+            var currentNotes = MusicNoteManager.GetCurrentNotes(Owner);
+            int attackCount = currentNotes.Count(n => n == CardType.Attack);
 
-            for (int i = 0; i < _hitCount; i++)
+            // 清除所有音符
+            MusicNoteManager.ClearNotes(Owner);
+
+            // 根据攻击音符数量造成多次随机伤害
+            int damage = DynamicVars.Damage.IntValue;
+            var rng = Owner.RunState.Rng.CombatCardSelection;
+            for (int i = 0; i < attackCount; i++)
             {
                 var hittable = combat.HittableEnemies;
                 if (!hittable.Any()) break;
@@ -44,30 +48,18 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
                     .Execute(choiceContext);
             }
 
-            // 额外获得一个随机音符（排除Status）
+            // 演奏最新储存的和弦
             var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
             if (guitar != null)
-            {
-                var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
-                CardType randomType = noteTypes[rng.NextInt(noteTypes.Length)];
+                await guitar.TriggerLastStoredChord(choiceContext);
 
-                // 使用真实和弦列表
-                var mainChords = guitar.GetCurrentChords();
-                var bonusChords = guitar.GetBonusChords();
-                var tempChords = guitar.GetTemporaryChords();
-
-                MusicNoteManager.AddNote(Owner, randomType, mainChords,
-                    bonusChords.Concat(tempChords));
-
-                // 刷新 UI
-                guitar.UpdateNoteDisplay();
-                guitar.UpdateStoredChordDisplay();
-            }
+            // 刷新音符UI
+            guitar?.UpdateNoteDisplay();
         }
 
         protected override void OnUpgrade()
         {
-            _hitCount = 5; // 攻击次数提升为5
+            DynamicVars.Damage.UpgradeValueBy(2m); // 3 → 5
         }
     }
 }

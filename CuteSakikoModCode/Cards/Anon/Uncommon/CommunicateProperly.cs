@@ -1,4 +1,5 @@
 ﻿
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -20,29 +21,29 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             TriggerBanter();
 
             var targetCreature = cardPlay.Target;
-            // 安全检查：目标必须存在、存活、且为怪物
             if (targetCreature == null || !targetCreature.IsAlive || !targetCreature.IsMonster)
                 return;
 
             var monster = targetCreature.Monster;
             if (monster == null) return;
 
+            string followUpId = MonsterUtils.GetFallbackFollowUpStateId(monster);
+            if (string.IsNullOrEmpty(followUpId)) return;
+
             var defendIntent = new DefendIntent();
             var customMove = new MoveState(
                 "COMMUNICATE_PROPERLY_BLOCK",
                 async (targets) =>
                 {
-                    // 再次检查目标是否存活（异步操作期间可能死亡）
                     if (!targetCreature.IsAlive) return;
                     await CreatureCmd.GainBlock(targetCreature, 15, ValueProp.Move, null);
                 },
                 defendIntent
             )
             {
-                FollowUpStateId = "Idle" // 固定后续状态，避免状态机异常
+                FollowUpStateId = followUpId
             };
 
-            // 最终确认怪物未被移除
             if (targetCreature.IsAlive && targetCreature.Monster != null)
                 monster.SetMoveImmediate(customMove, forceTransition: true);
         }

@@ -22,8 +22,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
         {
             get
             {
-                // 基础力量减少：2 点，升级后通过 OnUpgrade 增加到 3
-                yield return new PowerVar<StrengthPower>(2m);
+                // 基础力量减少：1 点，升级后通过 OnUpgrade 增加到 2
+                yield return new PowerVar<StrengthPower>(1m);
             }
         }
 
@@ -53,7 +53,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
 
         protected override void OnUpgrade()
         {
-            // 力量减少值：2 → 3
+            // 力量减少值：1-2
             DynamicVars["StrengthPower"].UpgradeValueBy(1m);
             // 目标变为所有敌人
             _targetAll = true;
