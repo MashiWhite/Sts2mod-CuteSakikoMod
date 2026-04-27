@@ -17,7 +17,7 @@
   "CUTESAKIKOMOD-GUITAR_VOCAL.title": "我要当吉他主唱~",
   "CUTESAKIKOMOD-GUITAR_VOCAL.description": "每获得1个[pink]音符[/pink]就随机造成{IfUpgraded:show:2|1}点伤害。",
   "CUTESAKIKOMOD-STAGE_JITTERS.title": "糟了糟了！",
-  "CUTESAKIKOMOD-STAGE_JITTERS.description": "造成{CalculatedDamage:diff()}点伤害。\n每储存一个[pink]音符[/pink]与[pink]和弦[/pink]就降低2点伤害。",
+  "CUTESAKIKOMOD-STAGE_JITTERS.description": "造成{CalculatedDamage:diff()}点伤害。\n每个储存的[pink]音符[/pink]与[pink]和弦[/pink]都会降低此牌2点伤害。",
   "CUTESAKIKOMOD-FANTASY_STAGE.title": "幻想中的Live",
   "CUTESAKIKOMOD-FANTASY_STAGE.description": "演奏[gold]所有[/gold]储存[pink]和弦[/pink]。\n对所有敌人造成{Damage:diff()}点伤害。",
   "CUTESAKIKOMOD-KEEP_CENTER.title": "绝对不能让出C位！",

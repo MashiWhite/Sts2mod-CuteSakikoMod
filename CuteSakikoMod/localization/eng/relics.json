@@ -8,6 +8,7 @@
   "CUTESAKIKOMOD-EGGS.title": "彩蛋",
   "CUTESAKIKOMOD-EGGS.flavor": "[jitter]传说中Mirage的潘多拉魔盒。[/jitter]",
   "CUTESAKIKOMOD-EGGS.description": "击败BOSS后的卡牌奖励中会额外出现1张[gold]彩蛋卡牌[/gold]。\n第一次战斗开始时自选一张[gold]彩蛋卡牌[/gold]",
+  "CUTESAKIKOMOD-EGGS.selectPrompt": "选择一张彩蛋牌",
   "CUTESAKIKOMOD-MASK.title": "人偶面具",
   "CUTESAKIKOMOD-MASK.flavor": "戴上面具，就能成为另一个自己。",
   "CUTESAKIKOMOD-MASK.description": "每回合开始时，减少自身一半[gold]压力[/gold]，并对所有敌人造成等量伤害。",

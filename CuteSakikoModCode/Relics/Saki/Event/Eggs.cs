@@ -71,26 +71,29 @@ public sealed class Eggs : CuteSakikoModRelic
         var available = allEggCards.Where(c => !_gainedEggCards.Contains(c.Id)).ToList();
         if (available.Count == 0) return;
 
-        var prompt = new LocString("CUTESAKIKOMOD-EGGS.selectPrompt", "选择一张彩蛋牌");
+        // ✅ 修复：为每个可选卡牌创建带 Owner 的临时副本，确保选择界面可以正确获取 player
+        var tempCards = available.Select(can => player.RunState.CreateCard(can, player)).ToList();
+
+        var prompt = new LocString("relics", "CUTESAKIKOMOD-EGGS.selectPrompt");
         var prefs = new CardSelectorPrefs(prompt, 1);
         var choiceContext = new BlockingPlayerChoiceContext();
         var selectedCard = (await CardSelectCmd.FromSimpleGrid(
             choiceContext,
-            available,
+            tempCards,        // 现在每个卡牌都有 Owner
             player,
             prefs)).FirstOrDefault();
         if (selectedCard == null) return;
 
-        // 永久加入牌库
-        var permanentCard = player.RunState.CreateCard(selectedCard, player);
+        // 后续逻辑保持不变：根据选中卡牌的 ID 创建永久卡牌
+        var canonical = ModelDb.GetById<CardModel>(selectedCard.Id);
+        var permanentCard = player.RunState.CreateCard(canonical, player);
         await CardPileCmd.Add(permanentCard, PileType.Deck);
         EggCardGainedEvent.Trigger(permanentCard);
         CardCmd.Preview(permanentCard);
 
-        // 如果当前在战斗中，则生成一张临时复制加入手牌（用于本场战斗）
         if (player.Creature.CombatState != null)
         {
-            var tempCard = player.Creature.CombatState.CreateCard(selectedCard, player);
+            var tempCard = player.Creature.CombatState.CreateCard(canonical, player);
             if (permanentCard.IsUpgraded && tempCard.IsUpgradable)
                 CardCmd.Upgrade(tempCard);
             await CardPileCmd.AddGeneratedCardToCombat(tempCard, PileType.Hand, player);
