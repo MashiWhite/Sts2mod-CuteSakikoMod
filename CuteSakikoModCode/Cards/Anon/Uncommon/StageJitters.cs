@@ -14,18 +14,18 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
         {
             get
             {
-                // 基础伤害：未升级15，升级后18
+                // 基础伤害（未升级15，升级后18）
                 yield return new CalculationBaseVar(15m);
-                // 每个音符/和弦降低的伤害值
+                // 每个储存的音符或和弦降低的伤害值（额外伤害）
                 yield return new ExtraDamageVar(2m);
-                // 最终计算后的伤害（实时显示）
+                // 动态计算最终伤害（支持染色）
                 yield return new CalculatedDamageVar(ValueProp.Move)
                     .WithMultiplier((card, _) =>
                     {
                         if (card.Owner == null) return 0m;
                         int noteCount = MusicNoteManager.GetCurrentNotes(card.Owner).Count;
                         int chordCount = MusicNoteManager.GetStoredChords(card.Owner).Count;
-                        // 每储存一个音符或和弦就降低2点伤害，倍率为负数
+                        // 倍率 = -(音符总数 + 和弦总数)，使伤害降低
                         return -(decimal)(noteCount + chordCount);
                     });
             }
@@ -36,9 +36,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             ArgumentNullException.ThrowIfNull(cardPlay.Target);
             TriggerBanter();
 
-            // 使用计算后的伤害值进行攻击
-            var damage = DynamicVars.CalculatedDamage;
-            await DamageCmd.Attack(damage)
+            // 使用计算后的伤害值（会自动应用染色和实时计算）
+            await DamageCmd.Attack(DynamicVars.CalculatedDamage)
                 .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
@@ -47,7 +46,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 
         protected override void OnUpgrade()
         {
-            // 基础伤害提升 15 → 18
+            // 基础伤害 15 → 18
             DynamicVars.CalculationBase.UpgradeValueBy(3m);
         }
     }

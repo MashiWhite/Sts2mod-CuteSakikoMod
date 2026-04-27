@@ -168,11 +168,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems
 
         public static void ClearCombatData(Player player)
         {
-            if (player == null) return;
             if (_data.TryGetValue(player, out var data))
             {
                 data.Notes.Clear();
                 data.StoredChords.Clear();
+                data.NotesGainedThisTurn = 0;   // 重置音符计数
+                data.LastRoundNumber = 0;      // 重置回合编号
             }
         }
 
