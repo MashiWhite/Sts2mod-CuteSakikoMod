@@ -1,6 +1,9 @@
-﻿
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -9,11 +12,10 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
 {
-
-public class MarksOfPracticePower : CuteSakikoModPower
+    public class MarksOfPracticePower : CuteSakikoModPower
     {
         public override PowerType Type => PowerType.Buff;
-        public override PowerStackType StackType => PowerStackType.Counter; // 可叠加
+        public override PowerStackType StackType => PowerStackType.Counter;
 
         public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
         {
@@ -21,12 +23,24 @@ public class MarksOfPracticePower : CuteSakikoModPower
             RefreshTemporaryChords();
         }
 
+        public override async Task AfterPowerAmountChanged(
+            PlayerChoiceContext choiceContext,
+            PowerModel power,
+            Decimal amount,
+            Creature? applier,
+            CardModel? cardSource)
+        {
+            await base.AfterPowerAmountChanged(choiceContext, power, amount, applier, cardSource);
+            // 层数变化（叠加或减少）时刷新临时和弦
+            if (power == this)
+                RefreshTemporaryChords();
+        }
+
         public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
         {
             if (side == CombatSide.Player)
             {
                 ClearTemporaryChords();
-                // 移除所有层数
                 RemoveInternal();
             }
             await base.AfterTurnEnd(choiceContext, side);
@@ -46,7 +60,6 @@ public class MarksOfPracticePower : CuteSakikoModPower
             var guitar = owner.Player.Relics.OfType<AnonGuitar>().FirstOrDefault();
             if (guitar == null) return;
 
-            // 先清空旧的临时和弦，再根据当前 Amount 生成新的
             guitar.ClearTemporaryChords();
 
             int count = this.Amount;
