@@ -1,5 +1,6 @@
 ﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -31,11 +32,7 @@ public sealed class MemoryComingPower : CuteSakikoModPower
                 .ToList();
         }
 
-        var exhaustedPile = PileType.Exhaust.GetPile(Owner.Player);
-        var exhaustedMemoryIds = exhaustedPile?.Cards
-            .Where(card => card.CanonicalKeywords.Contains(CutesakiKeywords.Memory))
-            .Select(card => card.Id)
-            .ToHashSet() ?? new HashSet<ModelId>();
+        var exhaustedMemoryIds = SakiMemoryManager.ExhaustedMemoryIds.ToHashSet();
 
         var availableMemoryCards = _allMemoryCards
             .Where(card => !exhaustedMemoryIds.Contains(card.Id))

@@ -1,5 +1,6 @@
 ﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Factories;
@@ -44,11 +45,7 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
         var needed = maxHandSize - currentSize;
         if (needed <= 0) return;
 
-        var exhaustedPile = PileType.Exhaust.GetPile(Owner);
-        var exhaustedMemoryIds = exhaustedPile?.Cards
-            .Where(card => card.CanonicalKeywords.Contains(CutesakiKeywords.Memory))
-            .Select(card => card.Id)
-            .ToHashSet() ?? new HashSet<ModelId>();
+        var exhaustedMemoryIds = SakiMemoryManager.ExhaustedMemoryIds.ToHashSet();
 
         var memoryCardModels = ModelDb.AllCards
             .Where(card => card.CanonicalKeywords.Contains(CutesakiKeywords.Memory) &&

@@ -3,13 +3,13 @@
   "CUTESAKIKOMOD-PRESSURE.description": "每层[gold]压力[/gold]使受到的伤害增加5%。",
 
   "CUTESAKIKOMOD-MEMORY.title": "回忆",
-  "CUTESAKIKOMOD-MEMORY.description": "回忆卡牌每打出一次增加一点耗能。被消耗时造成两次打出效果，但在本场战斗中移出回忆卡池。",
+  "CUTESAKIKOMOD-MEMORY.description": "每打出一次增加一点花费。\n被[gold]消耗[/gold]时造成两次打出效果，但在本场战斗中移出回忆卡池。",
 
   "CUTESAKIKOMOD-SWORD.title": "骑士之剑",
   "CUTESAKIKOMOD-SWORD.description": "自身[gold]压力[/gold]每增加1层，骑士之剑的伤害就增加1点。",
 
   "CUTESAKIKOMOD-MEMORYSAKI.title": "祥子的回忆",
-  "CUTESAKIKOMOD-MEMORYSAKI.description": "鼓声的应援：获得1点力量。\n创可贴的关心：获得1层再生。\n命运的相遇：下一张能力牌免费。\n一起长大的约定：获得3点活力。\n星空下的嬉戏：获得1层敏捷。",
+  "CUTESAKIKOMOD-MEMORYSAKI.description": "右键遗物查看本场战斗中未被消耗的回忆卡牌。\n[b][blue]时常令我痛苦，又时刻激励着我前行。[/blue][/b]",
 
   "CUTESAKIKOMOD-EGGS.title": "彩蛋",
   "CUTESAKIKOMOD-EGGS.description": "一些不顾平衡，和MOD关联不大的彩蛋卡。",
@@ -22,6 +22,9 @@
   
   "CUTESAKIKOMOD-OTHERANON.title": "异世界爱音",
   "CUTESAKIKOMOD-OTHERANON.description": "[sine][pink]好像不是我认识的歌，但是却感觉很熟悉。[/pink][/sine]",
+
+  "CUTESAKIKOMOD-REMEMBERCHORD.description": "右键遗物打开[pink]和弦图鉴[/pink]。\n[b][pink]呜哇...好久没练习了，都快忘了。[/pink][/b]",
+  "CUTESAKIKOMOD-REMEMBERCHORD.title": "爱音的和弦",
 
   "CUTESAKIKOMOD-PLAYGUITAR.title": "弦奏",
   "CUTESAKIKOMOD-PLAYGUITAR.description": "属于爱音的特殊打击。",

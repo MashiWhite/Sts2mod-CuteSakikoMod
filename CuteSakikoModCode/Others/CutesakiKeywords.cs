@@ -5,6 +5,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
 
 
 
+
 public class CutesakiKeywords
 {
     // 自定义枚举的名字。最终会变成{前缀}-{枚举值大写}的形式，例如TEST-UNIQUE
@@ -43,4 +44,7 @@ public class CutesakiKeywords
     
     [CustomEnum("Chord")] [KeywordProperties(AutoKeywordPosition.None)]
     public static CardKeyword Chord;
+    
+    [CustomEnum("RememberChord")] [KeywordProperties(AutoKeywordPosition.None)]
+    public static CardKeyword RememberChord;
 }

@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -70,11 +71,7 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
         await PowerCmd.ModifyAmount(choiceContext,targetPressure, -requiredPressure, Owner.Creature, this);
 
         // 4. 获取可选回忆卡牌（排除已消耗的）
-        var exhaustedPile = PileType.Exhaust.GetPile(Owner);
-        var exhaustedMemoryIds = exhaustedPile?.Cards
-            .Where(card => card.CanonicalKeywords.Contains(CutesakiKeywords.Memory))
-            .Select(card => card.Id)
-            .ToHashSet() ?? new HashSet<ModelId>();
+        var exhaustedMemoryIds = SakiMemoryManager.ExhaustedMemoryIds.ToHashSet();
 
         var availableMemoryCards = ModelDb.AllCards
             .Where(card =>

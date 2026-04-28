@@ -183,7 +183,7 @@
   "CUTESAKIKOMOD-PRESSURE_OPTION.title": "负重前行",
   "CUTESAKIKOMOD-PRESSURE_OPTION.description": "获得{PressurePower}层[gold]压力[/gold]和{StrengthPower}点[gold]力量[/gold]。",
   "CUTESAKIKOMOD-MEMORY_BURNING.title": "燃烧回忆",
-  "CUTESAKIKOMOD-MEMORY_BURNING.description": "[gold]回忆卡牌[/gold]的耗能变为0。\n每当打出[gold]回忆卡牌[/gold]时，将其消耗。",
+  "CUTESAKIKOMOD-MEMORY_BURNING.description": "[gold]回忆卡牌[/gold]的耗能变为0。\n每当打出[gold]回忆卡牌[/gold]时，将其[gold]消耗[/gold]。",
   "CUTESAKIKOMOD-BONFIRE.title": "小火堆",
   "CUTESAKIKOMOD-BONFIRE.description": "回复{IfUpgraded:show:10%|5%}最大生命值。\n随机永久升级牌组中的{IfUpgraded:show:2|1}张牌。",
   "CUTESAKIKOMOD-READ.title": "阅读",

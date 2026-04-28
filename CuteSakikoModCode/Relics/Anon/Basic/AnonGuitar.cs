@@ -14,10 +14,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
-using MegaCrit.Sts2.Core.Nodes.Screens.Capstones;
-using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Saves.Runs;
 
@@ -27,6 +24,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
     {
         public override RelicRarity Rarity => RelicRarity.Starter;
 
+        
+        
         [SavedProperty]
         private Dictionary<ChordCategory, string> _currentChords = new()
         {
@@ -437,6 +436,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic
         {
             get
             {
+                yield return HoverTipFactory.FromKeyword(CutesakiKeywords.RememberChord);
+                
                 if (!this.IsMutable) yield break;
 
                 var desc = new LocString("relics", "ANON_GUITAR_CHORDS_DESC");

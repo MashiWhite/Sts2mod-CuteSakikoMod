@@ -2,6 +2,7 @@
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Relics;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Nodes;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches
@@ -11,7 +12,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
     {
         static void Postfix(NRelicInventoryHolder __instance)
         {
-            if (__instance.Relic.Model is AnonGuitar)
+            // 原有：AnonGuitar 的处理
+            if (__instance.Relic.Model is AnonGuitar anonGuitar)
             {
                 __instance.MouseFilter = Control.MouseFilterEnum.Stop;
                 __instance.GuiInput += (InputEvent e) =>
@@ -21,6 +23,38 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
                         && mb.Pressed)
                     {
                         ChordLibraryScreen.OpenBrowse();
+                        __instance.AcceptEvent();
+                    }
+                };
+            }
+
+            // 新增：KabutoNote 的处理
+            if (__instance.Relic.Model is KabutoNote kabuto)
+            {
+                __instance.MouseFilter = Control.MouseFilterEnum.Stop;
+                __instance.GuiInput += (InputEvent e) =>
+                {
+                    if (e is InputEventMouseButton mb
+                        && mb.ButtonIndex == MouseButton.Right
+                        && mb.Pressed)
+                    {
+                        kabuto.OpenMemoryLibrary();
+                        __instance.AcceptEvent();
+                    }
+                };
+            }
+
+            // 新增：PostItNote 的处理
+            if (__instance.Relic.Model is PostItNote postIt)
+            {
+                __instance.MouseFilter = Control.MouseFilterEnum.Stop;
+                __instance.GuiInput += (InputEvent e) =>
+                {
+                    if (e is InputEventMouseButton mb
+                        && mb.ButtonIndex == MouseButton.Right
+                        && mb.Pressed)
+                    {
+                        postIt.OpenMemoryLibrary();
                         __instance.AcceptEvent();
                     }
                 };
