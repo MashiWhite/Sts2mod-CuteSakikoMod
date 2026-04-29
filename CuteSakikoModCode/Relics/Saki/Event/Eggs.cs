@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -8,13 +7,11 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
-
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
 
@@ -26,10 +23,7 @@ public sealed class Eggs : CuteSakikoModRelic
 
     public override RelicRarity Rarity => RelicRarity.Event;
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
-    {
-        get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Eggs); }
-    }
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Eggs];
 
     public override async Task AfterObtained()
     {
@@ -79,7 +73,7 @@ public sealed class Eggs : CuteSakikoModRelic
         var choiceContext = new BlockingPlayerChoiceContext();
         var selectedCard = (await CardSelectCmd.FromSimpleGrid(
             choiceContext,
-            tempCards,        // 现在每个卡牌都有 Owner
+            tempCards, // 现在每个卡牌都有 Owner
             player,
             prefs)).FirstOrDefault();
         if (selectedCard == null) return;

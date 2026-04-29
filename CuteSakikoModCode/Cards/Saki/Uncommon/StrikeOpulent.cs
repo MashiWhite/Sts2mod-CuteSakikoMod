@@ -1,11 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -16,6 +9,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -25,7 +19,7 @@ public class StrikeOpulent : CuteSakikoModCard
     {
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
@@ -41,14 +35,14 @@ public class StrikeOpulent : CuteSakikoModCard
                 var owner = card.Owner;
                 if (owner == null) return 0;
                 var qinCount =
-                    owner.PlayerCombatState.AllCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano));
+                    owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
                 var multiplier = card.IsUpgraded ? 2 : 1;
                 return qinCount * multiplier;
             });
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -69,11 +63,11 @@ public class StrikeOpulent : CuteSakikoModCard
             .Execute(choiceContext);
 
         // 计算额外攻击次数
-        var qinCount = Owner.PlayerCombatState.AllCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano));
+        var qinCount = Owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
         var multiplier = IsUpgraded ? 2 : 1;
         var totalExtraHits = qinCount * multiplier;
-        decimal extraDamage = ((DamageVar)DynamicVars["ExtraDamage"]).BaseValue ;
-        
+        var extraDamage = ((DamageVar)DynamicVars["ExtraDamage"]).BaseValue;
+
         for (var i = 0; i < totalExtraHits; i++)
             await DamageCmd.Attack(extraDamage)
                 .FromCard(this)

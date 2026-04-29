@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -10,7 +9,6 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
-
 
 public class Chord : CuteSakikoModCard
 {
@@ -26,7 +24,7 @@ public class Chord : CuteSakikoModCard
     {
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
@@ -40,11 +38,10 @@ public class Chord : CuteSakikoModCard
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Playpiano);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
             yield return HoverTipFactory.FromCard<StrikeSlow>();
@@ -65,7 +62,7 @@ public class Chord : CuteSakikoModCard
             var pressure = Owner.Creature.GetPower<PressurePower>();
             if (pressure != null && pressure.Amount >= 1)
             {
-                await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
+                await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
                 cardsToGenerate = 2;
             }
             else

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Systems;
+﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -7,50 +6,49 @@ using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
+
+public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        public override IEnumerable<CardKeyword> CanonicalKeywords
-        {
-            get { yield return CardKeyword.Exhaust; }
-        }
+        get { yield return CardKeyword.Exhaust; }
+    }
 
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-        {
-            TriggerBanter();
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        TriggerBanter();
 
-            var targetCreature = cardPlay.Target;
-            if (targetCreature == null || !targetCreature.IsAlive || !targetCreature.IsMonster)
-                return;
+        var targetCreature = cardPlay.Target;
+        if (targetCreature == null || !targetCreature.IsAlive || !targetCreature.IsMonster)
+            return;
 
-            var monster = targetCreature.Monster;
-            if (monster == null) return;
+        var monster = targetCreature.Monster;
+        if (monster == null) return;
 
-            string followUpId = MonsterUtils.GetFallbackFollowUpStateId(monster);
-            if (string.IsNullOrEmpty(followUpId)) return;
+        var followUpId = MonsterUtils.GetFallbackFollowUpStateId(monster);
+        if (string.IsNullOrEmpty(followUpId)) return;
 
-            var defendIntent = new DefendIntent();
-            var customMove = new MoveState(
-                "COMMUNICATE_PROPERLY_BLOCK",
-                async (targets) =>
-                {
-                    if (!targetCreature.IsAlive) return;
-                    await CreatureCmd.GainBlock(targetCreature, 15, ValueProp.Move, null);
-                },
-                defendIntent
-            )
+        var defendIntent = new DefendIntent();
+        var customMove = new MoveState(
+            "COMMUNICATE_PROPERLY_BLOCK",
+            async targets =>
             {
-                FollowUpStateId = followUpId
-            };
-
-            if (targetCreature.IsAlive && targetCreature.Monster != null)
-                monster.SetMoveImmediate(customMove, forceTransition: true);
-        }
-
-        protected override void OnUpgrade()
+                if (!targetCreature.IsAlive) return;
+                await CreatureCmd.GainBlock(targetCreature, 15, ValueProp.Move, null);
+            },
+            defendIntent
+        )
         {
-            AddKeyword(CardKeyword.Retain);
-        }
+            FollowUpStateId = followUpId
+        };
+
+        if (targetCreature.IsAlive && targetCreature.Monster != null)
+            monster.SetMoveImmediate(customMove, true);
+    }
+
+    protected override void OnUpgrade()
+    {
+        AddKeyword(CardKeyword.Retain);
     }
 }

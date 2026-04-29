@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -9,65 +8,66 @@ using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+
+public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        protected override IEnumerable<IHoverTip> ExtraHoverTips
+        get
         {
-            get
-            {
-                yield return HoverTipFactory.FromPower<PressurePower>();
-                yield return HoverTipFactory.FromPower<BreakDownPower>();
-                yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory);
-            }
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
+    }
 
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        try
         {
-            try
+            await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, 3, Owner.Creature, this);
+
+            var exhaustedMemoryIds = SakiMemoryManager.Instance.ExhaustedMemoryIds.ToHashSet();
+
+            var availableMemoryCards = ModelDb.AllCards
+                .Where(card =>
+                    card.HasModKeyword(CutesakiKeywords.Memory) && // 修改这里
+                    !exhaustedMemoryIds.Contains(card.Id))
+                .ToList();
+
+            if (availableMemoryCards.Count > 0)
             {
-                await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, 3, Owner.Creature, this);
+                var randomCard = CardFactory.GetDistinctForCombat(
+                    Owner,
+                    availableMemoryCards,
+                    1,
+                    Owner.RunState.Rng.CombatCardGeneration
+                ).FirstOrDefault();
 
-                var exhaustedMemoryIds = SakiMemoryManager.ExhaustedMemoryIds.ToHashSet();
-
-                var availableMemoryCards = ModelDb.AllCards
-                    .Where(card =>
-                        card.CanonicalKeywords.Contains(CutesakiKeywords.Memory) && !exhaustedMemoryIds.Contains(card.Id))
-                    .ToList();
-
-                if (availableMemoryCards.Count > 0)
+                if (randomCard != null)
                 {
-                    var randomCard = CardFactory.GetDistinctForCombat(
-                        Owner,
-                        availableMemoryCards,
-                        1,
-                        Owner.RunState.Rng.CombatCardGeneration
-                    ).FirstOrDefault();
+                    var newCard = randomCard.IsMutable ? randomCard : randomCard.ToMutable();
 
-                    if (randomCard != null)
+                    if (IsUpgraded)
                     {
-                        CardModel newCard = randomCard.IsMutable ? randomCard : randomCard.ToMutable();
-
-                        if (IsUpgraded)
-                        {
-                            newCard.UpgradeInternal();
-                            newCard.FinalizeUpgradeInternal();
-                        }
-
-                        await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Hand, Owner);
+                        newCard.UpgradeInternal();
+                        newCard.FinalizeUpgradeInternal();
                     }
+
+                    await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Hand, Owner);
                 }
             }
-            finally
-            {
-                await CardCmd.Discard(choiceContext, this);
-            }
         }
-
-        protected override void OnUpgrade()
+        finally
         {
+            await CardCmd.Discard(choiceContext, this);
         }
+    }
+
+    protected override void OnUpgrade()
+    {
     }
 }

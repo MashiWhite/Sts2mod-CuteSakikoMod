@@ -1,17 +1,11 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using Godot;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
+﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers;
 
-public abstract class CuteSakikoModPower : CustomPowerModel
+[RegisterPower(Inherit = true)]
+public abstract class CuteSakikoModPower : ModPowerTemplate
 {
-    //Loads from CuteSakikoMod/images/powers/your_power.png
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
+    public override PowerAssetProfile AssetProfile => this.PowerAssetProfile();
 }

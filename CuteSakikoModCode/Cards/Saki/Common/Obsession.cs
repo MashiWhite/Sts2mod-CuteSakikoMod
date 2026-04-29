@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,17 +9,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class Obsession() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(7m, ValueProp.Move),
         new PowerVar<PressurePower>(3m)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -38,7 +35,8 @@ public class Obsession() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
 
         // 使全体敌人获得压力
         var pressureAmount = DynamicVars["PressurePower"].IntValue;
-        await PowerCmd.Apply<PressurePower>(choiceContext,CombatState.HittableEnemies, pressureAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, CombatState.HittableEnemies, pressureAmount, Owner.Creature,
+            this);
     }
 
     protected override void OnUpgrade()

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,7 +11,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public sealed class BlackBirthday() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
@@ -23,7 +21,7 @@ public sealed class BlackBirthday() : CuteSakikoModCard(2, CardType.Power, CardR
     }
 
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -35,7 +33,7 @@ public sealed class BlackBirthday() : CuteSakikoModCard(2, CardType.Power, CardR
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<BlackRebirthPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<BlackRebirthPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
 
         var creature = Owner.Creature;
         var currentHp = creature.CurrentHp;
@@ -53,7 +51,7 @@ public sealed class BlackBirthday() : CuteSakikoModCard(2, CardType.Power, CardR
 
         // 从 DynamicVars 读取层数（基础1，升级后2）
         var powerAmount = (int)DynamicVars["BlackRebirthPower"].BaseValue;
-        await PowerCmd.Apply<BlackRebirthPower>(choiceContext,creature, powerAmount, creature, this);
+        await PowerCmd.Apply<BlackRebirthPower>(choiceContext, creature, powerAmount, creature, this);
     }
 
     protected override void OnUpgrade()

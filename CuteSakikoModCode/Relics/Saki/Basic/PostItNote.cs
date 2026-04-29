@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -11,60 +10,62 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Screens;
+using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
+
+public sealed class PostItNote : CuteSakikoModRelic
 {
-    public sealed class PostItNote : CuteSakikoModRelic
+    public override RelicRarity Rarity => RelicRarity.Starter;
+
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Memorysaki];
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        public override RelicRarity Rarity => RelicRarity.Starter;
-
-        protected override IEnumerable<IHoverTip> ExtraHoverTips
+        get
         {
-            get
-            {
-                yield return HoverTipFactory.FromPower<PressurePower>();
-                yield return HoverTipFactory.FromPower<BreakDownPower>();
-                yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memorysaki);
-            }
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+        }
+    }
+
+    public override async Task AfterSideTurnStart(CombatSide side, ICombatState combatState)
+    {
+        if (side != Owner.Creature.Side) return;
+
+        if (combatState.RoundNumber == 1)
+        {
+            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 5, Owner.Creature,
+                null);
+            Flash();
         }
 
-        public override async Task AfterSideTurnStart(CombatSide side, ICombatState combatState)
-        {
-            if (side != Owner.Creature.Side) return;
+        if (combatState.HittableEnemies != null)
+            foreach (var enemy in combatState.HittableEnemies)
+                await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), enemy, 5, Owner.Creature, null);
+    }
 
-            if (combatState.RoundNumber == 1)
-            {
-                await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 5, Owner.Creature, null);
-                Flash();
-            }
+    /// <summary>
+    ///     右键打开回忆卡牌查看界面（复用原版牌堆系统）
+    /// </summary>
+    public void OpenMemoryLibrary()
+    {
+        var player = Owner;
+        if (player == null) return;
 
-            if (combatState.HittableEnemies != null)
-                foreach (var enemy in combatState.HittableEnemies)
-                    await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), enemy, 5, Owner.Creature, null);
-        }
+        var templates = ModelDb.AllCards
+            .Where(c => c.HasModKeyword(CutesakiKeywords.Memory) &&
+                        !SakiMemoryManager.Instance.ExhaustedMemoryIds.Contains(c.Id))
+            .ToList();
 
-        /// <summary>
-        /// 右键打开回忆卡牌查看界面（复用原版牌堆系统）
-        /// </summary>
-        public void OpenMemoryLibrary()
-        {
-            var player = Owner;
-            if (player == null) return;
+        if (templates.Count == 0) return;
 
-            var templates = ModelDb.AllCards
-                .Where(c => c.CanonicalKeywords.Contains(CutesakiKeywords.Memory) &&
-                            !SakiMemoryManager.ExhaustedMemoryIds.Contains(c.Id))
-                .ToList();
+        var cards = templates.Select(t => player.RunState.CreateCard(t, player)).ToList();
 
-            if (templates.Count == 0) return;
+        var pile = new CardPile(PileType.Exhaust);
+        foreach (var card in cards)
+            pile.AddInternal(card);
 
-            var cards = templates.Select(t => player.RunState.CreateCard(t, player)).ToList();
-
-            var pile = new CardPile(PileType.Exhaust);
-            foreach (var card in cards)
-                pile.AddInternal(card);
-
-            NCardPileScreen.ShowScreen(pile, System.Array.Empty<string>());
-        }
+        NCardPileScreen.ShowScreen(pile, Array.Empty<string>());
     }
 }

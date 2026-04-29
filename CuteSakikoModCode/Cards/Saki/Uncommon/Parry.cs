@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -14,19 +13,19 @@ public class Parry : CuteSakikoModCard
     {
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
             yield return HoverTipFactory.FromCard<KnightSword>();
-            yield return HoverTipFactory.FromPower<ParryPower>();
+            yield return HoverTipFactory.FromPower<SakiParryPower>();
         }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var layers = IsUpgraded ? 9 : 6;
-        await PowerCmd.Apply<ParryPower>(choiceContext,Owner.Creature, layers, Owner.Creature, this);
+        await PowerCmd.Apply<SakiParryPower>(choiceContext, Owner.Creature, layers, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

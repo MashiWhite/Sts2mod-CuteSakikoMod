@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -8,9 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
-
 
 public class DontCareOthers : CuteSakikoModCard
 {
@@ -27,7 +24,7 @@ public class DontCareOthers : CuteSakikoModCard
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -54,7 +51,7 @@ public class DontCareOthers : CuteSakikoModCard
         }
 
         if (totalPressure > 0)
-            await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, totalPressure, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, totalPressure, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

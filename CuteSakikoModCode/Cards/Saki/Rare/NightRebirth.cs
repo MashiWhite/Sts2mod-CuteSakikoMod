@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -8,7 +7,6 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
-
 
 public class NightRebirth : CuteSakikoModCard
 {
@@ -32,7 +30,7 @@ public class NightRebirth : CuteSakikoModCard
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -50,7 +48,7 @@ public class NightRebirth : CuteSakikoModCard
         var energyGain = pressureAmount / _threshold; // 整数除法，向下取整
         if (energyGain > 0) await PlayerCmd.GainEnergy(energyGain, Owner);
         // 消耗所有压力
-        await PowerCmd.ModifyAmount(choiceContext,pressure, -pressureAmount, Owner.Creature, this);
+        await PowerCmd.ModifyAmount(choiceContext, pressure, -pressureAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

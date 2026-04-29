@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -20,7 +19,7 @@ public class GoodCry : CuteSakikoModCard
         get { yield return new CardsVar(IsUpgraded ? 2 : 1); }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -38,7 +37,7 @@ public class GoodCry : CuteSakikoModCard
         if (pressure != null && pressure.Amount > 0)
         {
             var reducePressure = 5;
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -reducePressure, creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -reducePressure, creature, this);
         }
 
         // 抽牌
@@ -50,7 +49,7 @@ public class GoodCry : CuteSakikoModCard
         if (breakdown != null && breakdown.Amount > 0)
         {
             var reduceBreakdown = IsUpgraded ? 2 : 1;
-            await PowerCmd.ModifyAmount(choiceContext,breakdown, -reduceBreakdown, creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, breakdown, -reduceBreakdown, creature, this);
         }
     }
 

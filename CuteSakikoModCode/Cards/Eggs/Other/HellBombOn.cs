@@ -1,28 +1,15 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using MegaCrit.Sts2.Core.Combat;
+﻿using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-[Pool(typeof(TokenCardPool))]
-public class HellBombOn : CustomCardModel
+public class HellBombOn() : ModTokenCard(1, CardType.Skill, CardRarity.Token, TargetType.AnyAlly)
 {
-    public HellBombOn() : base(1, CardType.Skill, CardRarity.Token, TargetType.AnyAlly)
-    {
-    }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [];
@@ -31,10 +18,10 @@ public class HellBombOn : CustomCardModel
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(75m, ValueProp.Move),
+        new DamageVar(75m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromKeyword(CardKeyword.Exhaust); }
     }

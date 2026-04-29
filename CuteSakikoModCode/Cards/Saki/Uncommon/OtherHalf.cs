@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -14,7 +13,7 @@ public class OtherHalf() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncom
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -31,12 +30,12 @@ public class OtherHalf() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncom
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
 
         // 对自己施加主能力，并存储目标敌人
-        var power = await PowerCmd.Apply<OtherHalfPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        var power = await PowerCmd.Apply<OtherHalfPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
         if (power != null)
             power.Target = cardPlay.Target;
 
         // 对目标敌人施加视觉标记能力
-        await PowerCmd.Apply<OtherHalfTargetPower>(choiceContext,cardPlay.Target, 1, Owner.Creature, this);
+        await PowerCmd.Apply<OtherHalfTargetPower>(choiceContext, cardPlay.Target, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

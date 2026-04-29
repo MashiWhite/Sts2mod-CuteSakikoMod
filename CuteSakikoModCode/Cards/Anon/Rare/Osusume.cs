@@ -6,58 +6,46 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
+
+public class Osusume() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    public class Osusume() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public override string ChordId => "AnonDChord";
+
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote, CutesakiKeywords.Chord];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        public override string ChordId => "AnonDChord";
-
-        public override IEnumerable<CardKeyword> CanonicalKeywords
+        get
         {
-            get
+            if (ChordManager.AllChords.TryGetValue("AnonDChord", out var def))
             {
-                yield return CardKeyword.Exhaust;
-                yield return CutesakiKeywords.NoNote; // 自身不产生音符
-                yield return CutesakiKeywords.Chord;
+                var condition = def.GetConditionText();
+                var effectDesc = ChordDisplayHelper.GetFormattedDescription(def, 1);
+                var fullDesc = $"{condition}\n{effectDesc}";
+                var title = new LocString("card_keywords", def.TitleKey);
+                yield return new HoverTip(title, fullDesc);
             }
         }
+    }
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips
-        {
-            get
-            {
-                if (ChordManager.AllChords.TryGetValue("AnonDChord", out var def))
-                {
-                    string condition = def.GetConditionText();
-                    string effectDesc = ChordDisplayHelper.GetFormattedDescription(def, 1);
-                    string fullDesc = $"{condition}\n{effectDesc}";
-                    var title = new LocString("card_keywords", def.TitleKey);
-                    yield return new HoverTip(title, fullDesc);
-                }
-            }
-        }
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        TriggerBanter();
 
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-        {
-            TriggerBanter();
+        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        if (guitar == null) return;
 
-            var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-            if (guitar == null) return;
+        var currentDominant = guitar.GetCurrentChords().GetValueOrDefault(ChordCategory.Dominant);
+        if (currentDominant == "AnonDChord")
+            await guitar.AddChordToStored(choiceContext, "AnonDChord");
+        else
+            guitar.TempReplaceChord(ChordCategory.Dominant, "AnonDChord");
+    }
 
-            var currentDominant = guitar.GetCurrentChords().GetValueOrDefault(ChordCategory.Dominant);
-            if (currentDominant == "AnonDChord")
-            {
-                await guitar.AddChordToStored(choiceContext, "AnonDChord");
-            }
-            else
-            {
-                guitar.TempReplaceChord(ChordCategory.Dominant, "AnonDChord");
-            }
-        }
-
-        protected override void OnUpgrade()
-        {
-            AddKeyword(CardKeyword.Innate);
-        }
+    protected override void OnUpgrade()
+    {
+        AddKeyword(CardKeyword.Innate);
     }
 }

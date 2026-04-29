@@ -1,10 +1,12 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
+﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Potions;
 
-[Pool(typeof(CuteSakiPotionPool))]
-public abstract class CuteSakikoModPotion : CustomPotionModel;
+[RegisterPotion(typeof(CuteSakiPotionPool), Inherit = true)]
+public abstract class CuteSakikoModPotion : ModPotionTemplate
+{
+    public override PotionAssetProfile AssetProfile => this.PotionAssetProfile();
+}

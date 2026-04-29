@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -9,7 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
-
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -27,7 +26,7 @@ public sealed class BearMemoryPower : CuteSakikoModPower
     {
         // 只影响拥有者打出的回忆牌
         if (card.Owner?.Creature != Owner) return playCount;
-        if (!card.CanonicalKeywords.Contains(CutesakiKeywords.Memory)) return playCount;
+        if (!card.HasModKeyword(CutesakiKeywords.Memory)) return playCount;
 
         var extra = Amount;
         if (extra <= 0) return playCount;
@@ -57,7 +56,7 @@ public sealed class BearMemoryPower : CuteSakikoModPower
                 // 减少计数，本次是额外打出的一次
                 _pendingPressure[card] = remaining - 1;
                 // 立即施加压力
-                TaskHelper.RunSafely(PowerCmd.Apply<PressurePower>(ctx,Owner, 1, Owner, card));
+                TaskHelper.RunSafely(PowerCmd.Apply<PressurePower>(ctx, Owner, 1, Owner, card));
             }
         }
     }

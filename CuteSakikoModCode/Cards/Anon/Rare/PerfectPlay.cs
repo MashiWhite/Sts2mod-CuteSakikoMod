@@ -1,38 +1,26 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
+
+public class PerfectPlay() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    public class PerfectPlay : CuteAnonCard
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote, CutesakiKeywords.Chord];
+
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        public PerfectPlay() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
-        {
-        }
+        TriggerBanter();
+        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        if (guitar == null) return;
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords
-        {
-            get
-            {
-                yield return CutesakiKeywords.NoNote;
+        await guitar.TriggerAllLearnedChords(choiceContext);
+    }
 
-            }
-        }
-
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-        {
-            TriggerBanter();
-            var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-            if (guitar == null) return;
-
-            await guitar.TriggerAllLearnedChords(choiceContext);
-        }
-
-        protected override void OnUpgrade()
-        {
-            AddKeyword(CardKeyword.Innate);
-        }
+    protected override void OnUpgrade()
+    {
+        AddKeyword(CardKeyword.Innate);
     }
 }

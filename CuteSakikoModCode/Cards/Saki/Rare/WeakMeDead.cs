@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -15,11 +14,11 @@ public class WeakMeDead : CuteSakikoModCard
     {
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<BreakDownPower>(); }
     }
-    
+
 
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         IsUpgraded ? new[] { CardKeyword.Retain } : Array.Empty<CardKeyword>();
@@ -29,7 +28,7 @@ public class WeakMeDead : CuteSakikoModCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 施加能力，持续本回合（层数1，回合结束移除）
-        await PowerCmd.Apply<WeakMeDeadPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<WeakMeDeadPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

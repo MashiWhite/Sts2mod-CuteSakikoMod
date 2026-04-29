@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,17 +9,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class Glare() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7m, ValueProp.Move),
         new PowerVar<PressurePower>(10m)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -44,7 +41,7 @@ public class Glare() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon
 
         // 施加压力
         var pressureAmount = DynamicVars["PressurePower"].IntValue;
-        await PowerCmd.Apply<PressurePower>(choiceContext,target, pressureAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, target, pressureAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

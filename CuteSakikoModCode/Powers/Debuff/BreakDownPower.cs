@@ -1,6 +1,4 @@
-﻿using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using MegaCrit.Sts2.Core.Combat;
+﻿using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -8,19 +6,12 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 
-public sealed class BreakDownPower : CustomPowerModel
+public sealed class BreakDownPower : CuteSakikoModPower
 {
     private bool _hasTakenDamageSinceLastOwnTurnEnd;
-
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
-
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
 
     public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
@@ -63,7 +54,7 @@ public sealed class BreakDownPower : CustomPowerModel
         if (side != Owner.Side) return;
         if (_hasTakenDamageSinceLastOwnTurnEnd && Amount > 0)
         {
-            await PowerCmd.ModifyAmount(choiceContext,this, -1, null, null);
+            await PowerCmd.ModifyAmount(choiceContext, this, -1, null, null);
             _hasTakenDamageSinceLastOwnTurnEnd = false;
         }
     }

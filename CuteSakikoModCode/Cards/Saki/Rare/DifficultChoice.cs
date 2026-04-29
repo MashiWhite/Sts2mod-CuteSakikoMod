@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -11,7 +10,6 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
-
 
 public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
@@ -25,7 +23,7 @@ public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity
     ];
 
     // 悬停提示
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -71,8 +69,8 @@ public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity
         {
             var pressureAmt = selected.DynamicVars["PressurePower"].IntValue;
             var strengthAmt = selected.DynamicVars["StrengthPower"].IntValue;
-            await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureAmt, Owner.Creature, this);
-            await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, strengthAmt, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmt, Owner.Creature, this);
+            await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, strengthAmt, Owner.Creature, this);
         }
         else if (selected is GoldOption)
         {

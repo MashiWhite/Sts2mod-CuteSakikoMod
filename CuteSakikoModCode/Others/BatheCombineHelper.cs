@@ -1,7 +1,6 @@
-﻿namespace CuteSakikoMod.CuteSakikoModCode.Others
+﻿namespace CuteSakikoMod.CuteSakikoModCode.Others;
+
+public static class BatheCombineHelper
 {
-    public static class BatheCombineHelper
-    {
-        public static bool IsCombining { get; set; }
-    }
+    public static bool IsCombining { get; set; }
 }

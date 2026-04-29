@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -9,10 +8,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
 
-
 public class CccHibiki() : CuteSakikoModEggCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -20,7 +17,7 @@ public class CccHibiki() : CuteSakikoModEggCard(1, CardType.Skill, CardRarity.Un
         new BlockVar(13m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {

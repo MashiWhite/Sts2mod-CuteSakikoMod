@@ -1,28 +1,26 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class ThenGetSword() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly) // 目标改为任意队友
 {
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     // 多人游戏限定
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
             yield return HoverTipFactory.FromCard<KnightSword>();
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sword);
         }
     }
 

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -10,23 +9,22 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
-
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new DamageVar(8m, ValueProp.Move); }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sword);
             yield return HoverTipFactory.FromCard<KnightSword>(IsUpgraded);
             yield return HoverTipFactory.FromPower<BreakDownPower>();
             yield return HoverTipFactory.FromPower<PressurePower>();
@@ -46,7 +44,7 @@ public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
 
         // 检查手牌是否已有骑士之剑
         var handPile = PileType.Hand.GetPile(Owner);
-        bool hasInHand = handPile != null && handPile.Cards.Any(c => c is KnightSword);
+        var hasInHand = handPile != null && handPile.Cards.Any(c => c is KnightSword);
         if (hasInHand) return;
 
         // 从抽牌堆和弃牌堆中寻找骑士之剑

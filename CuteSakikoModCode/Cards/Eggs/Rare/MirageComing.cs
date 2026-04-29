@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -14,18 +8,13 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
-public class MirageComing : CuteSakikoModEggCard
+public class MirageComing() : CuteSakikoModEggCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public MirageComing() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
-    {
-    }
-    
-
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust ];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -37,7 +26,7 @@ public class MirageComing : CuteSakikoModEggCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 给予自身 PigPower（不可叠加，Single）
-        await PowerCmd.Apply<PigPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<PigPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

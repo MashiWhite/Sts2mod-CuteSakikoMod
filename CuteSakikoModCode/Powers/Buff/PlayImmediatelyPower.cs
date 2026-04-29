@@ -1,13 +1,9 @@
-﻿
-using MegaCrit.Sts2.Core.Entities.Powers;
+﻿using MegaCrit.Sts2.Core.Entities.Powers;
 
+namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
+public sealed class PlayImmediatelyPower : CuteSakikoModPower
 {
-    public sealed class PlayImmediatelyPower : CuteSakikoModPower
-    {
-        public override PowerType Type => PowerType.Buff;
-        public override PowerStackType StackType => PowerStackType.Single; // 不可叠层
-        
-    }
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Single; // 不可叠层
 }

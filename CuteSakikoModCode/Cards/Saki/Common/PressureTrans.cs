@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,7 +11,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class PressureTrans() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7m, ValueProp.Move)
@@ -27,7 +25,7 @@ public class PressureTrans() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -46,10 +44,10 @@ public class PressureTrans() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
         if (hasPressure)
         {
             // 消耗2层压力
-            await PowerCmd.ModifyAmount(choiceContext,selfPressure, -1, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, selfPressure, -1, Owner.Creature, this);
 
             var pressureToGive = IsUpgraded ? 4 : 3;
-            await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, pressureToGive, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, pressureToGive, Owner.Creature, this);
         }
 
         await DamageCmd.Attack(baseDamage)

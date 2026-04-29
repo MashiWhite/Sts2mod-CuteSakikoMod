@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -11,13 +10,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
-
-
     // 添加悬停提示，显示生成的“逃避”卡牌
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromCard<Shirk>(); }
     }
@@ -29,7 +25,6 @@ public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Commo
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-       
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .TargetingAllOpponents(CombatState)

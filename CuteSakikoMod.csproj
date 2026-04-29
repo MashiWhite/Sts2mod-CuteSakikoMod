@@ -76,9 +76,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Alchyr.Sts2.BaseLib" Version="3.0.9" />
-        <PackageReference Include="Alchyr.Sts2.ModAnalyzers" Version="*"/>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
+        <PackageReference Include="STS2.ModAnalyzers.RitsuLib" Version="0.1.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="STS2.RitsuLib" Version="0.2.9"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -100,21 +103,45 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="CuteSakikoModCode\Cards\Saki\Curse\" />
-        <Folder Include="CuteSakikoModCode\Cards\Saki\Event\" />
-        <Folder Include="CuteSakikoModCode\Monsters\Normal\" />
+        <Folder Include="CuteSakikoModCode\Cards\Saki\Curse\"/>
+        <Folder Include="CuteSakikoModCode\Cards\Saki\Event\"/>
+        <Folder Include="CuteSakikoModCode\Monsters\Normal\"/>
         <Folder Include="CuteSakikoMod\images\potions\"/>
         <Folder Include="CuteSakikoMod\images\powers\big\"/>
         <Folder Include="CuteSakikoMod\images\relics\big\"/>
-        <Folder Include="CuteSakikoMod\images\ui\rest_site\" />
+        <Folder Include="CuteSakikoMod\images\ui\rest_site\"/>
         <Folder Include="CuteSakikoMod\scenes\Ancient\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Steamworks.NET">
-        <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slay the Spire 2\data_sts2_windows_x86_64\Steamworks.NET.dll</HintPath>
-      </Reference>
+        <Reference Include="Steamworks.NET">
+            <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slay the Spire 2\data_sts2_windows_x86_64\Steamworks.NET.dll</HintPath>
+        </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+        <Content Remove="packages\sts2.ritsulib\0.2.9\contentFiles\any\net9.0\mod_manifest.json"/>
+    </ItemGroup>
+
+    <Target Name="CopyToModsFolderOnBuild" AfterTargets="Build">
+        <Message Text="Copying mod files to game mods folder." Importance="high"/>
+        <!-- 你的模组文件夹 -->
+        <MakeDir Directories="$(ModsPath)$(MSBuildProjectName)" Condition="!Exists('$(ModsPath)$(MSBuildProjectName)')"/>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
+        <Copy SourceFiles="CuteSakikoMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
+        <!-- 可选：复制资源 pck（如果已经通过 GodotPublish 生成） -->
+
+        <!-- 复制 RitsuLib 模组文件（如果第一次或缺失） -->
+        <!-- <PropertyGroup>
+             <RitsuLibNuGetDir>$(NuGetPackageRoot)sts2.ritsulib\0.2.9</RitsuLibNuGetDir>
+             <RitsuLibModDest>$(ModsPath)STS2-RitsuLib</RitsuLibModDest>
+         </PropertyGroup>
+         <MakeDir Directories="$(RitsuLibModDest)" Condition="!Exists('$(RitsuLibModDest)')"/>
+         <ItemGroup>
+             <RitsuLibFiles Include="$(RitsuLibNuGetDir)\contentFiles\any\net9.0\**\*"/>
+         </ItemGroup>
+         <Copy SourceFiles="@(RitsuLibFiles)" DestinationFolder="$(RitsuLibModDest)" SkipUnchangedFiles="true"/>-->
+    </Target>
 
 
     <Target Name="CheckDependencyPaths">
@@ -126,16 +153,6 @@
                 Condition="'$(GodotPath)' == '' or !Exists('$(GodotPath)')"/>
     </Target>
 
-    <Target Name="CopyToModsFolderOnBuild" AfterTargets="PostBuildEvent">
-        <Message Text="Copying .dll and manifest to mods folder." Importance="high"/>
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/"/>
-        <Copy SourceFiles="CuteSakikoMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/"/>
-        <Message Text="Copying BaseLib to mods folder." Importance="high"/>
-        <ItemGroup>
-            <BaseLibFiles Include="$(NuGetPackageRoot)/alchyr.sts2.baselib/**/lib/**/BaseLib.dll;$(NuGetPackageRoot)/alchyr.sts2.baselib/**/Content/BaseLib.pck;$(NuGetPackageRoot)/alchyr.sts2.baselib/**/Content/BaseLib.json;"/>
-        </ItemGroup>
-        <Copy SourceFiles="@(BaseLibFiles)" DestinationFolder="$(ModsPath)BaseLib/"/>
-    </Target>
 
     <Target Name="GodotPublish" AfterTargets="Publish" Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
         <Message Text="Exporting Godot .pck to mods folder" Importance="high"/>

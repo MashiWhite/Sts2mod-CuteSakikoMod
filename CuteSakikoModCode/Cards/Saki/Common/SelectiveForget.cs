@@ -1,31 +1,24 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(8m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory); }
+        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -37,7 +30,7 @@ public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity
         var discardPile = PileType.Discard.GetPile(Owner);
 
         var memoryCards = discardPile.Cards
-            .Where(card => card.CanonicalKeywords.Contains(CutesakiKeywords.Memory))
+            .Where(card => card.HasModKeyword(CutesakiKeywords.Memory))
             .ToList();
 
         if (memoryCards.Count == 0) return;

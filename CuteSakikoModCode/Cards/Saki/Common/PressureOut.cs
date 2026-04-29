@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,8 +9,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class PressureOut() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
-
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -38,7 +36,7 @@ public class PressureOut() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Co
         if (pressure != null && pressure.Amount > 0)
         {
             var reduce = Math.Min(5, pressure.Amount); // 防止减到负数
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -reduce, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -reduce, Owner.Creature, this);
         }
     }
 

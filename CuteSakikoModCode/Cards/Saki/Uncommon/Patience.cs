@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,14 +11,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class Patience() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new EnergyVar(1), // 能量，升级后变为2
         new CardsVar(1) // 抽牌，升级后变为2
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -35,7 +33,7 @@ public class Patience() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncomm
         // 增加能量
         await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
         // 施加忍耐能力（持续到下一回合开始前）
-        await PowerCmd.Apply<PatiencePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<PatiencePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

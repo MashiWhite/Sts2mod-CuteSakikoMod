@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,11 +9,9 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -41,7 +38,7 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
             var reducePerCard = IsUpgraded ? 2 : 1;
             var totalReduce = cardCount * reducePerCard;
             // 使用 PowerCmd.ModifyAmount 安全减少压力层数
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -totalReduce, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -totalReduce, Owner.Creature, this);
         }
     }
 

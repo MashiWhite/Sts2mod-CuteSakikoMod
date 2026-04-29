@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,7 +9,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 // 改为 Uncommon 命名空间
-
 
 public class HeartAtk : CuteSakikoModCard
 {
@@ -26,7 +24,7 @@ public class HeartAtk : CuteSakikoModCard
         new DamageVar(8m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -48,7 +46,7 @@ public class HeartAtk : CuteSakikoModCard
         var pressure = cardPlay.Target.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount > 0)
             // 压力层数翻倍（将当前值作为增加量，即 amount += amount）
-            await PowerCmd.ModifyAmount(choiceContext,pressure, pressure.Amount, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, pressure.Amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

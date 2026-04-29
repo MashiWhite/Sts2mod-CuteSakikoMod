@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -12,11 +11,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class MusicaCaelestisPower : CuteSakikoModPower
 {
-
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter; // 可叠层
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<BreakDownPower>(); }
     }
@@ -26,21 +24,22 @@ public sealed class MusicaCaelestisPower : CuteSakikoModPower
     {
         if (player.Creature != Owner) return;
         if (Amount <= 0) return;
-        
+
         var draw = Amount;
         var energy = Amount;
         await CardPileCmd.Draw(choiceContext, draw, player);
         await PlayerCmd.GainEnergy(energy, player);
     }
-    
+
 
     // 监听任何生物获得崩溃 (BreakDownPower)
-    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext,PowerModel power, decimal amount, Creature? applier,
+    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power,
+        decimal amount, Creature? applier,
         CardModel? cardSource)
     {
         // 如果变化的是 BreakDownPower 且是增加层数
         if (power is BreakDownPower && amount > 0)
             // 自身增加1层能力
-            await PowerCmd.ModifyAmount(choiceContext,this, 1, null, null);
+            await PowerCmd.ModifyAmount(choiceContext, this, 1, null, null);
     }
 }

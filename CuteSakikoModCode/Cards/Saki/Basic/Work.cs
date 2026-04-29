@@ -1,10 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,12 +6,13 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
+[RegisterCharacterStarterCard(typeof(CuteSaki))]
 public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
-
     // 始终添加消耗关键词（基础版本）
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
@@ -27,7 +22,7 @@ public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, Tar
         new PowerVar<PressurePower>(1m)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -41,7 +36,8 @@ public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, Tar
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PlayerCmd.GainGold(DynamicVars["Gold"].IntValue, Owner);
-        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, DynamicVars["PressurePower"].IntValue,
+            Owner.Creature,
             this);
     }
 

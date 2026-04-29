@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -20,7 +19,7 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
         new DamageVar("TotalDamage", IsUpgraded ? 8m : 6m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -47,7 +46,7 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
         if (pressure != null && pressure.Amount >= 2)
         {
             // 消耗2层压力
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -2, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -2, Owner.Creature, this);
 
             var increase = IsUpgraded ? 8m : 6m;
             _permanentBonus += increase;

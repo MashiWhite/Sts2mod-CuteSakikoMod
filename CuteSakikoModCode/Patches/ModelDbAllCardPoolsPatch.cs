@@ -1,5 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
+﻿using CuteSakikoMod.CuteSakikoModCode.Pools;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Models;
 

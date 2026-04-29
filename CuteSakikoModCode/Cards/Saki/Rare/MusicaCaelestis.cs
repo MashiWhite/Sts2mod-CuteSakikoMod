@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,15 +8,14 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-
 public class MusicaCaelestis : CuteSakikoModCard
 {
     public MusicaCaelestis() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
-    
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -32,10 +30,10 @@ public class MusicaCaelestis : CuteSakikoModCard
     {
         var existing = Owner.Creature.GetPower<MusicaCaelestisPower>();
         if (existing == null)
-            await PowerCmd.Apply<MusicaCaelestisPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+            await PowerCmd.Apply<MusicaCaelestisPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
         else
             // 可叠加层数
-            await PowerCmd.ModifyAmount(choiceContext,existing, 1, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, existing, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

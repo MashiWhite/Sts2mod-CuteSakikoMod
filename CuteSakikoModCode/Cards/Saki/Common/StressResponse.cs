@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,13 +11,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(5m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -37,7 +35,7 @@ public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity
         var damagePerHit = Math.Max(1, layers / 4);
 
         // 消耗所有压力
-        await PowerCmd.ModifyAmount(choiceContext,pressure, -layers, Owner.Creature, this);
+        await PowerCmd.ModifyAmount(choiceContext, pressure, -layers, Owner.Creature, this);
 
         var hitCount = IsUpgraded ? 7 : 5;
 

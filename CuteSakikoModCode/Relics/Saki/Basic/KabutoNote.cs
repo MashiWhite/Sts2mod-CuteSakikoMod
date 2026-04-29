@@ -1,4 +1,4 @@
-﻿
+﻿using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -11,38 +11,44 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Screens;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 
+[RegisterCharacterStarterRelic(typeof(CuteSaki))]
+[RegisterTouchOfOrobasRefinement(typeof(PostItNote))]
 public sealed class KabutoNote : CuteSakikoModRelic
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Memorysaki];
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memorysaki);
         }
     }
 
     // 在回合开始时触发（每回合都会调用）
-    public override async Task AfterSideTurnStart(CombatSide side,ICombatState combatState)
+    public override async Task AfterSideTurnStart(CombatSide side, ICombatState combatState)
     {
         // 只处理拥有者所在的一侧，且仅在战斗的第一回合（RoundNumber == 1）
         if (side == Owner.Creature.Side && combatState.RoundNumber == 1)
         {
             // 给遗物持有者施加 3 层压力
-            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(),Owner.Creature, 3, Owner.Creature, null);
+            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 3, Owner.Creature,
+                null);
             // 闪烁遗物图标，提示生效
             Flash();
         }
     }
-    
+
     /// <summary>
-    /// 右键打开回忆卡牌查看界面（复用原版牌堆查看系统）
+    ///     右键打开回忆卡牌查看界面（复用原版牌堆查看系统）
     /// </summary>
     public void OpenMemoryLibrary()
     {
@@ -51,8 +57,8 @@ public sealed class KabutoNote : CuteSakikoModRelic
 
         // 获取所有未消耗的回忆卡牌模板
         var templates = ModelDb.AllCards
-            .Where(c => c.CanonicalKeywords.Contains(CutesakiKeywords.Memory) &&
-                        !SakiMemoryManager.ExhaustedMemoryIds.Contains(c.Id))
+            .Where(c => c.HasModKeyword(CutesakiKeywords.Memory) &&
+                        !SakiMemoryManager.Instance.ExhaustedMemoryIds.Contains(c.Id))
             .ToList();
 
         if (templates.Count == 0) return;
@@ -66,7 +72,6 @@ public sealed class KabutoNote : CuteSakikoModRelic
             pile.AddInternal(card);
 
         // 调用原版牌堆查看界面（关闭热键设为空数组）
-        NCardPileScreen.ShowScreen(pile, System.Array.Empty<string>());
+        NCardPileScreen.ShowScreen(pile, Array.Empty<string>());
     }
-    
 }

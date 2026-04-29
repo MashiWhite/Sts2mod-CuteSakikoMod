@@ -1,46 +1,39 @@
-﻿using BaseLib.Hooks;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;   // 新增：提供 ThrowingPlayerChoiceContext
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Combat.HealthBars;
+
+// 新增：提供 ThrowingPlayerChoiceContext
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 
-public sealed class PressurePower : CuteSakikoModPower
+public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
 {
     public PressurePower()
     {
         DisplayAmountChanged += OnDisplayAmountChanged;
     }
-    
+
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { };
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
-    {
-        get { yield return HoverTipFactory.FromPower<BreakDownPower>(); }
-    }
-
-    private void OnDisplayAmountChanged()
-    {
-        if (Amount <= 0 && IsMutable)
-            TaskHelper.RunSafely(PowerCmd.Remove(this));
-    }
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromPower<BreakDownPower>()];
 
     // 生命条覆盖：从左向右增长
-    public override IEnumerable<HealthBarForecastSegment> GetHealthBarForecastSegments(HealthBarForecastContext context)
+    public IEnumerable<HealthBarForecastSegment> GetHealthBarForecastSegments(HealthBarForecastContext context)
     {
         if (Owner == null || Owner.MaxHp <= 0 || Amount <= 0)
             return Enumerable.Empty<HealthBarForecastSegment>();
@@ -49,25 +42,32 @@ public sealed class PressurePower : CuteSakikoModPower
         var segment = new HealthBarForecastSegment(
             pressureAmount,
             new Color(1f, 1f, 0f, 0.8f),
-            HealthBarForecastDirection.FromLeft
+            HealthBarForecastGrowthDirection.FromLeft
         );
         return new[] { segment };
     }
 
+
+    private void OnDisplayAmountChanged()
+    {
+        if (Amount <= 0 && IsMutable)
+            TaskHelper.RunSafely(PowerCmd.Remove(this));
+    }
+
     // ********** 修复签名：添加 PlayerChoiceContext 参数 **********
     public override async Task AfterPowerAmountChanged(
-        PlayerChoiceContext choiceContext,   // 新参数
+        PlayerChoiceContext choiceContext, // 新参数
         PowerModel power,
         decimal amount,
         Creature? applier,
         CardModel? cardSource)
     {
         if (power != this) return;
-        
+
         // 压力增加时，提升自己手牌中骑士之剑的伤害
         if (amount > 0 && Owner != null && Owner.IsPlayer && CombatState != null)
         {
-            int delta = (int)amount;
+            var delta = (int)amount;
             if (delta <= 0) return;
             var player = Owner.Player;
             var piles = new[] { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust };
@@ -76,16 +76,12 @@ public sealed class PressurePower : CuteSakikoModPower
                 var pile = pileType.GetPile(player);
                 if (pile == null) continue;
                 foreach (var card in pile.Cards)
-                {
                     if (card is KnightSword ks)
-                    {
                         ks.DynamicVars.Damage.BaseValue += delta;
-                    }
-                }
             }
         }
 
-        await CheckAndTriggerCollapse(choiceContext);   // 传入上下文
+        await CheckAndTriggerCollapse(choiceContext); // 传入上下文
     }
 
     // 生命值减少时检测

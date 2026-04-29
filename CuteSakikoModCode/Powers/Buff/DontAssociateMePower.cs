@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -14,12 +13,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class DontAssociateMePower : CuteSakikoModPower
 {
-
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -42,7 +40,7 @@ public sealed class DontAssociateMePower : CuteSakikoModPower
         if (Amount <= 0) return;
 
         // 触发一次攻击即施加压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,dealer, Amount, Owner, cardSource);
+        await PowerCmd.Apply<PressurePower>(choiceContext, dealer, Amount, Owner, cardSource);
     }
 
     // 在下一回合开始时（自身回合）移除能力

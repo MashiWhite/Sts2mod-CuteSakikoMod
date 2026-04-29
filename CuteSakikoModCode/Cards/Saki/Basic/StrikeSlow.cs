@@ -1,11 +1,5 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -14,13 +8,14 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-public class StrikeSlow() :CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+[RegisterCharacterStarterCard(typeof(CuteSaki), 2)]
+public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
-    
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
 
     public override bool GainsBlock => true;
 
@@ -41,7 +36,7 @@ public class StrikeSlow() :CuteSakikoModCard(1, CardType.Attack, CardRarity.Basi
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -59,11 +54,8 @@ public class StrikeSlow() :CuteSakikoModCard(1, CardType.Attack, CardRarity.Basi
         var hasPressure = pressure != null && pressure.Amount > 0;
 
         if (hasPressure)
-        {
             // 消耗1层压力
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
-            
-        }
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
 
         // 造成伤害
         await DamageCmd.Attack(baseDamage)
@@ -79,7 +71,7 @@ public class StrikeSlow() :CuteSakikoModCard(1, CardType.Attack, CardRarity.Basi
 
     protected override void OnUpgrade()
     {
-       DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars.Block.UpgradeValueBy(3m); 
+        DynamicVars.Damage.UpgradeValueBy(2m);
+        DynamicVars.Block.UpgradeValueBy(3m);
     }
 }

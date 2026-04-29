@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -10,16 +9,14 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new PowerVar<DaggersDrawnPower>(5m) // 基础层数3，升级后5
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -32,7 +29,7 @@ public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Un
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = DynamicVars["DaggersDrawnPower"].IntValue;
-        await PowerCmd.Apply<DaggersDrawnPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<DaggersDrawnPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

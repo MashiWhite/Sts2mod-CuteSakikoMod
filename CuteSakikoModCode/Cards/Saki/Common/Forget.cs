@@ -1,11 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -17,7 +10,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -25,7 +17,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
         new BlockVar(6m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -47,7 +39,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
         var selected = selectedCards.FirstOrDefault();
         if (selected != null) await CardCmd.Exhaust(choiceContext, selected);
 
-        
+
         // 获得格挡
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
 
@@ -58,7 +50,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
         {
             var reduceAmount = IsUpgraded ? 3 : 2;
             // 使用 PowerCmd.ModifyAmount 安全减少压力层数
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -reduceAmount, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -reduceAmount, Owner.Creature, this);
         }
     }
 

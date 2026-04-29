@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,17 +11,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class AnotherHaruhikage() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
 {
-    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(13m, ValueProp.Move),
         new PowerVar<PressurePower>(10m)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -49,7 +46,7 @@ public class AnotherHaruhikage() : CuteSakikoModCard(2, CardType.Attack, CardRar
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);
 
-                await PowerCmd.Apply<PressurePower>(choiceContext,enemy, pressureAmount, Owner.Creature, this);
+                await PowerCmd.Apply<PressurePower>(choiceContext, enemy, pressureAmount, Owner.Creature, this);
             }
 
         // 用杂音填满手牌

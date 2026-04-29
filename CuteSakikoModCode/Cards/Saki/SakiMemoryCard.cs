@@ -1,30 +1,23 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki;
 
-[Pool(typeof(TokenCardPool))]
+[RegisterCard(typeof(TokenCardPool), Inherit = true)]
 public abstract class SakiMemoryCard(int cost, CardType type, CardRarity rarity, TargetType target) :
-    CustomCardModel(cost, type, rarity, target)
+    ModCardTemplate(cost, type, rarity, target)
 {
-    
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Memory];
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Memory];
+
+    public override CardAssetProfile AssetProfile => this.CardAssetProfile();
+
     public virtual Task ProcessMemoryEffect(PlayerChoiceContext choiceContext)
     {
         return Task.CompletedTask;
     }
-    
-
-    public override string CustomPortraitPath => 
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-    public override string BetaPortraitPath => 
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
 }

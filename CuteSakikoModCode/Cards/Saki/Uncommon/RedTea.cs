@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -8,10 +7,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class RedTea() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-
     // 保留关键词
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
 
@@ -22,7 +19,7 @@ public class RedTea() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon
     ];
 
     // 悬停提示：显示“买单”卡牌
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {

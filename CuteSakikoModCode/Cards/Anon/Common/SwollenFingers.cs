@@ -1,43 +1,38 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Systems;
+﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
+
+public class SwollenFingers() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    public class SwollenFingers() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        protected override IEnumerable<DynamicVar> CanonicalVars
-        {
-            get
-            {
-                yield return new DamageVar(8m, ValueProp.Move);
-            }
-        }
+        get { yield return new DamageVar(8m, ValueProp.Move); }
+    }
 
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-        {
-            ArgumentNullException.ThrowIfNull(cardPlay.Target);
-            TriggerBanter();
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target);
+        TriggerBanter();
 
-            // 造成伤害
-            var damage = DynamicVars.Damage.BaseValue;
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
+        // 造成伤害
+        var damage = DynamicVars.Damage.BaseValue;
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
 
-            // 将上一个打出的音符变为攻击
-            MusicNoteManager.ModifyLastNote(Owner, CardType.Attack);
-        }
+        // 将上一个打出的音符变为攻击
+        MusicNoteManager.ModifyLastNote(Owner, CardType.Attack);
+    }
 
-        protected override void OnUpgrade()
-        {
-            DynamicVars.Damage.UpgradeValueBy(3m); // 8 → 11
-        }
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(3m); // 8 → 11
     }
 }

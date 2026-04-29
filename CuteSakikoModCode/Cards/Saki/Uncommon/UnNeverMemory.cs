@@ -1,10 +1,10 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -16,9 +16,9 @@ public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.U
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory); }
+        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -31,7 +31,7 @@ public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.U
 
         // 获取消耗堆中的所有回忆牌（可变实例）并复制一份列表，避免迭代中修改
         var memoryCards = exhaustPile.Cards
-            .Where(c => c.CanonicalKeywords.Contains(CutesakiKeywords.Memory))
+            .Where(c => c.HasModKeyword(CutesakiKeywords.Memory))
             .ToList();
 
         if (memoryCards.Count == 0) return;

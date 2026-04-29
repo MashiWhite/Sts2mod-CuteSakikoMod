@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,14 +11,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-
     // 添加动态变量：伤害（基础1点）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(1m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -39,7 +37,8 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
 
         // 施加等量层数的破防
         if (pressureAmount > 0)
-            await PowerCmd.Apply<BreakDefendPower>(choiceContext,cardPlay.Target, pressureAmount, Owner.Creature, this);
+            await PowerCmd.Apply<BreakDefendPower>(choiceContext, cardPlay.Target, pressureAmount, Owner.Creature,
+                this);
 
         // 造成多次1点伤害（使用动态伤害值，受力量加成）
         var hitCount = IsUpgraded ? 10 : 6;

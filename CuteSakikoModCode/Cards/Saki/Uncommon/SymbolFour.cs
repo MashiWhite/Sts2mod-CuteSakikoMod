@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,7 +9,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     // 动态变量：总压力（初始值，升级后更新）
@@ -19,7 +17,7 @@ public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Unco
         new DamageVar("TotalPressure", IsUpgraded ? 8m : 4m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -60,7 +58,7 @@ public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Unco
         var totalPressure = currentTotal;
 
         // 给予目标压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,target, (int)totalPressure, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, target, (int)totalPressure, Owner.Creature, this);
 
         // 获得等量格挡
         await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(totalPressure, ValueProp.Move), cardPlay);

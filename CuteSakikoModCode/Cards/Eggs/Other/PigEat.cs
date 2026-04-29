@@ -1,26 +1,13 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-[Pool(typeof(TokenCardPool))]
-public class PigEat : CustomCardModel
+public class PigEat() : ModTokenCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public PigEat() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
-    {
-    }
-    
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal,CardKeyword.Exhaust };
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal, CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 

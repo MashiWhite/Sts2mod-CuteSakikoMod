@@ -1,5 +1,4 @@
-﻿
-using MegaCrit.Sts2.Core.Combat;
+﻿using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -10,54 +9,51 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff
+namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+
+public class CloseObservePower : CuteSakikoModPower
 {
-    public class CloseObservePower : CuteSakikoModPower
+    private const string DamageIncrease = "DamageIncrease";
+
+    public override PowerType Type => PowerType.Debuff;
+    public override PowerStackType StackType => PowerStackType.Counter;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        private const string DamageIncrease = "DamageIncrease";
+        get { yield return new DynamicVar("DamageIncrease", 1.5m); }
+    }
 
-        public override PowerType Type => PowerType.Debuff;
-        public override PowerStackType StackType => PowerStackType.Counter;
+    public override decimal ModifyDamageMultiplicative(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+    {
+        if (target != Owner || !props.IsPoweredAttack())
+            return 1m;
 
-        protected override IEnumerable<DynamicVar> CanonicalVars
+        var multiplier = DynamicVars["DamageIncrease"].BaseValue;
+        if (dealer != null)
         {
-            get
-            {
-                yield return new DynamicVar("DamageIncrease", 1.5m);
-            }
+            var relic = dealer.Player?.GetRelic<PaperPhrog>();
+            if (relic != null)
+                multiplier = relic.ModifyVulnerableMultiplier(target, multiplier, props, dealer, cardSource);
+            var cruelty = dealer.GetPower<CrueltyPower>();
+            if (cruelty != null)
+                multiplier = cruelty.ModifyVulnerableMultiplier(target, multiplier, props, dealer, cardSource);
         }
 
-        public override Decimal ModifyDamageMultiplicative(
-            Creature? target,
-            Decimal amount,
-            ValueProp props,
-            Creature? dealer,
-            CardModel? cardSource)
-        {
-            if (target != Owner || !props.IsPoweredAttack())
-                return 1m;
+        var debilitate = target.GetPower<DebilitatePower>();
+        if (debilitate != null)
+            multiplier = debilitate.ModifyVulnerableMultiplier(target, multiplier, props, dealer, cardSource);
 
-            Decimal multiplier = DynamicVars["DamageIncrease"].BaseValue;
-            if (dealer != null)
-            {
-                PaperPhrog relic = dealer.Player?.GetRelic<PaperPhrog>();
-                if (relic != null)
-                    multiplier = relic.ModifyVulnerableMultiplier(target, multiplier, props, dealer, cardSource);
-                CrueltyPower cruelty = dealer.GetPower<CrueltyPower>();
-                if (cruelty != null)
-                    multiplier = cruelty.ModifyVulnerableMultiplier(target, multiplier, props, dealer, cardSource);
-            }
-            DebilitatePower debilitate = target.GetPower<DebilitatePower>();
-            if (debilitate != null)
-                multiplier = debilitate.ModifyVulnerableMultiplier(target, multiplier, props, dealer, cardSource);
+        return multiplier;
+    }
 
-            return multiplier;
-        }
-
-        public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
-        {
-            if (side != CombatSide.Enemy) return;
-            await PowerCmd.TickDownDuration(this);
-        }
+    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    {
+        if (side != CombatSide.Enemy) return;
+        await PowerCmd.TickDownDuration(this);
     }
 }

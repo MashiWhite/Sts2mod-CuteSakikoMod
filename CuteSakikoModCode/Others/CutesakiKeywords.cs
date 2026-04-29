@@ -1,50 +1,42 @@
-﻿using BaseLib.Patches.Content;
-using MegaCrit.Sts2.Core.Entities.Cards;
+﻿using STS2RitsuLib.Content;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Others;
 
-
-
-
+[RegisterOwnedCardKeyword(nameof(Pressure))]
+[RegisterOwnedCardKeyword(nameof(Memory),
+    CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.AfterCardDescription)]
+[RegisterOwnedCardKeyword(nameof(Sword))]
+[RegisterOwnedCardKeyword(nameof(Eggs))]
+[RegisterOwnedCardKeyword(nameof(Nochest))]
+[RegisterOwnedCardKeyword(nameof(Playpiano))]
+[RegisterOwnedCardKeyword(nameof(Playguitar))]
+[RegisterOwnedCardKeyword(nameof(NoNote),
+    CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
+[RegisterOwnedCardKeyword(nameof(OtherAnon))]
+[RegisterOwnedCardKeyword(nameof(Chord))]
+[RegisterOwnedCardKeyword(nameof(RememberChord))]
+[RegisterOwnedCardKeyword(nameof(Memorysaki))]
 public class CutesakiKeywords
 {
-    // 自定义枚举的名字。最终会变成{前缀}-{枚举值大写}的形式，例如TEST-UNIQUE
-    [CustomEnum("Pressure")] [KeywordProperties(AutoKeywordPosition.After)]
-    public static CardKeyword Pressure;
+    public static readonly string Pressure = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Pressure));
+    public static readonly string Memory = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Memory));
+    public static readonly string Sword = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Sword));
+    public static readonly string Eggs = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Eggs));
+    public static readonly string Nochest = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Nochest));
+    public static readonly string Playpiano = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Playpiano));
 
-    // 自定义枚举的名字。最终会变成{前缀}-{枚举值大写}的形式，例如TEST-UNIQUE
-    [CustomEnum("Memory")] [KeywordProperties(AutoKeywordPosition.After)]
-    public static CardKeyword Memory;
+    public static readonly string
+        Playguitar = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Playguitar));
 
-    // 自定义枚举的名字。最终会变成{前缀}-{枚举值大写}的形式，例如TEST-UNIQUE
-    [CustomEnum("Memorysaki")] [KeywordProperties(AutoKeywordPosition.After)]
-    public static CardKeyword Memorysaki;
+    public static readonly string NoNote = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(NoNote));
+    public static readonly string OtherAnon = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(OtherAnon));
+    public static readonly string Chord = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Chord));
 
-    // 自定义枚举的名字。最终会变成{前缀}-{枚举值大写}的形式，例如TEST-UNIQUE
-    [CustomEnum("Sword")] [KeywordProperties(AutoKeywordPosition.After)]
-    public static CardKeyword Sword;
+    public static readonly string RememberChord =
+        ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(RememberChord));
 
-    [CustomEnum("Eggs")] [KeywordProperties(AutoKeywordPosition.After)]
-    public static CardKeyword Eggs;
-
-    [CustomEnum("Nochest")] [KeywordProperties(AutoKeywordPosition.After)]
-    public static CardKeyword Nochest;
-
-    [CustomEnum("Playpiano")] [KeywordProperties(AutoKeywordPosition.None)]
-    public static CardKeyword Playpiano;
-    
-    [CustomEnum("Playguitar")] [KeywordProperties(AutoKeywordPosition.None)]
-    public static CardKeyword Playguitar;
-
-    [CustomEnum("NoNote")] [KeywordProperties(AutoKeywordPosition.None)]
-    public static CardKeyword NoNote;
-    
-    [CustomEnum("OtherAnon")] [KeywordProperties(AutoKeywordPosition.None)]
-    public static CardKeyword OtherAnon;
-    
-    [CustomEnum("Chord")] [KeywordProperties(AutoKeywordPosition.None)]
-    public static CardKeyword Chord;
-    
-    [CustomEnum("RememberChord")] [KeywordProperties(AutoKeywordPosition.None)]
-    public static CardKeyword RememberChord;
+    public static readonly string
+        Memorysaki = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Memorysaki));
 }
