@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqskmg7jpki7e"
-path="res://.godot/imported/a_i_heart.png-6150c344a7421e86211482a3b013c8e5.ctex"
+uid="uid://b3egpyl5hdgx6"
+path="res://.godot/imported/ai_heart.png-6257eb1fff4f5e8607a3f6f968c5f8ee.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/a_i_heart.png"
-dest_files=["res://.godot/imported/a_i_heart.png-6150c344a7421e86211482a3b013c8e5.ctex"]
+source_file="res://CuteSakikoMod/images/cards/ai_heart.png"
+dest_files=["res://.godot/imported/ai_heart.png-6257eb1fff4f5e8607a3f6f968c5f8ee.ctex"]
 
 [params]
 
