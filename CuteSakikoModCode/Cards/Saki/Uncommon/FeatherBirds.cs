@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,17 +9,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class FeatherBirds() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(10m, ValueProp.Move),
         new PowerVar<PressurePower>(5m)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -47,11 +44,11 @@ public class FeatherBirds() : CuteSakikoModCard(2, CardType.Attack, CardRarity.U
                     .Execute(choiceContext);
 
                 // 施加压力
-                await PowerCmd.Apply<PressurePower>(choiceContext,enemy, pressureAmount, Owner.Creature, this);
+                await PowerCmd.Apply<PressurePower>(choiceContext, enemy, pressureAmount, Owner.Creature, this);
             }
 
         // 自身获得压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

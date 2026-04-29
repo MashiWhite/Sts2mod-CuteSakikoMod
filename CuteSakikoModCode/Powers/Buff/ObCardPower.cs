@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -10,18 +9,17 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 
-
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class ObCardPower : CuteSakikoModPower
 {
     private const int ExtraReplay = 1;
+    private readonly Dictionary<CardModel, bool> _hadExhaustKeyword = new();
     private readonly HashSet<CardModel> _modifiedCards = new();
     private readonly Dictionary<CardModel, int> _originalCosts = new();
-    private readonly Dictionary<CardModel, bool> _hadExhaustKeyword = new();
     private bool _isRemoving;
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -53,6 +51,7 @@ public sealed class ObCardPower : CuteSakikoModPower
                 if (!_modifiedCards.Contains(card))
                     ApplyModificationsToCard(card);
         }
+
         await Task.CompletedTask;
     }
 
@@ -74,7 +73,7 @@ public sealed class ObCardPower : CuteSakikoModPower
         // 减少压力
         var pressure = Owner.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount > 0)
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner, card);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner, card);
 
         // 新打出的卡牌已在手牌中，且已被修改过，无需再全量遍历
     }
@@ -97,6 +96,7 @@ public sealed class ObCardPower : CuteSakikoModPower
             var originalCost = card.EnergyCost.GetWithModifiers(CostModifiers.None);
             _originalCosts[card] = originalCost;
         }
+
         if (!_hadExhaustKeyword.ContainsKey(card))
             _hadExhaustKeyword[card] = card.Keywords.Contains(CardKeyword.Exhaust);
 
@@ -130,6 +130,7 @@ public sealed class ObCardPower : CuteSakikoModPower
                 }
             }
         }
+
         _modifiedCards.Clear();
         _originalCosts.Clear();
         _hadExhaustKeyword.Clear();

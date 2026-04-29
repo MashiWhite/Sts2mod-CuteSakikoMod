@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -11,7 +10,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class WishHappiness() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
 {
-
     // 多人游戏限定
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
@@ -23,7 +21,7 @@ public class WishHappiness() : CuteSakikoModCard(1, CardType.Skill, CardRarity.U
     ];
 
     // 悬停提示（显示能量和压力）
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -46,11 +44,12 @@ public class WishHappiness() : CuteSakikoModCard(1, CardType.Skill, CardRarity.U
         const int pressureAmount = 2;
 
         // 自身增加压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmount, Owner.Creature, this);
 
         // 如果目标玩家不是自己，则也给目标玩家增加压力
         if (targetPlayer != Owner)
-            await PowerCmd.Apply<PressurePower>(choiceContext,targetPlayer.Creature, pressureAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext, targetPlayer.Creature, pressureAmount, Owner.Creature,
+                this);
     }
 
     protected override void OnUpgrade()

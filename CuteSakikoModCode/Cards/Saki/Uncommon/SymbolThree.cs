@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -13,14 +12,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class SymbolThree() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(14m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -47,10 +44,11 @@ public class SymbolThree() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Unc
         if (pressure != null && pressure.Amount >= 2)
         {
             // 消耗2层压力
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -2, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -2, Owner.Creature, this);
 
             var weakAmount = IsUpgraded ? 2 : 1;
-            await PowerCmd.Apply<WeakPower>(choiceContext,CombatState.HittableEnemies, weakAmount, Owner.Creature, this);
+            await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies, weakAmount, Owner.Creature,
+                this);
         }
     }
 

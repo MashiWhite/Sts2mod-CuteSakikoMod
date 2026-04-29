@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -7,14 +6,13 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.ValueProps;
 
-
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Ancient;
 
 public sealed class Mask : CuteSakikoModRelic
 {
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<PressurePower>(); }
     }

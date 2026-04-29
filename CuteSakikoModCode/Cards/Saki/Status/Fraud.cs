@@ -1,22 +1,13 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 
-[Pool(typeof(StatusCardPool))]
-public class Fraud() : CustomCardModel(-1, CardType.Status, CardRarity.Status, TargetType.None)
+public class Fraud() : ModStatusCard(-1, CardType.Status, CardRarity.Status, TargetType.None)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
     // 不能被打出，虚无
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Unplayable, CardKeyword.Ethereal];
 

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -7,21 +6,15 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
 
-
-public class HellBomb : CuteSakikoModEggCard
+public class HellBomb() : CuteSakikoModEggCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
 {
-    public HellBomb() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
-    {
-    }
-    
-
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromCard<HellBombOn>(IsUpgraded); }
     }
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Target == null) return;
@@ -34,10 +27,7 @@ public class HellBomb : CuteSakikoModEggCard
         await CardPileCmd.AddGeneratedCardToCombat(bomb, PileType.Hand, Owner);
 
         // 永久删除牌库中的这张卡牌（整局游戏移除）
-        if (this.DeckVersion != null)
-        {
-            await CardPileCmd.RemoveFromDeck(this.DeckVersion, true);
-        }
+        if (DeckVersion != null) await CardPileCmd.RemoveFromDeck(DeckVersion);
         // 同时从战斗中移除当前实例（避免残留）
         await CardPileCmd.RemoveFromCombat(this);
     }

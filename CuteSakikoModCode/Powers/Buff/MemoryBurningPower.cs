@@ -1,17 +1,15 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class MemoryBurningPower : CuteSakikoModPower
 {
-
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single; // 不可叠加
     public override bool AllowNegative => false;
@@ -28,7 +26,7 @@ public sealed class MemoryBurningPower : CuteSakikoModPower
         if (card.Owner?.Creature != Owner) return false;
 
         // 只对回忆卡牌生效
-        if (!card.CanonicalKeywords.Contains(CutesakiKeywords.Memory)) return false;
+        if (!card.HasModKeyword(CutesakiKeywords.Memory)) return false;
 
         // 将费用改为 0
         modifiedCost = 0;
@@ -41,6 +39,6 @@ public sealed class MemoryBurningPower : CuteSakikoModPower
         var card = cardPlay.Card;
         if (card.Owner?.Creature != Owner) return;
 
-        if (card.CanonicalKeywords.Contains(CutesakiKeywords.Memory)) await CardCmd.Exhaust(choiceContext, card);
+        if (card.HasModKeyword(CutesakiKeywords.Memory)) await CardCmd.Exhaust(choiceContext, card);
     }
 }

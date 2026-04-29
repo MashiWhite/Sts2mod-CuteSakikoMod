@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,13 +11,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class PressureDmg() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new PowerVar<PressureDmgPower>(IsUpgraded ? 2m : 1m) // 升级后 Amount 变为2
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -31,7 +29,7 @@ public class PressureDmg() : CuteSakikoModCard(1, CardType.Power, CardRarity.Unc
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<PressureDmgPower>(choiceContext,Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<PressureDmgPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 
 

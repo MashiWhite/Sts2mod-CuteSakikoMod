@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,13 +11,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class MeetPerformance() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new("Power", 1m) // 占位变量
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -32,7 +30,7 @@ public class MeetPerformance() : CuteSakikoModCard(2, CardType.Power, CardRarity
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         var layers = IsUpgraded ? 3 : 2;
-        await PowerCmd.Apply<MeetPerformancePower>(choiceContext,Owner.Creature, layers, Owner.Creature, this);
+        await PowerCmd.Apply<MeetPerformancePower>(choiceContext, Owner.Creature, layers, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

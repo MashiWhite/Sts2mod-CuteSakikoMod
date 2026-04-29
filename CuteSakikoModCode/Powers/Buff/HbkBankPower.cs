@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -11,13 +10,12 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 
-
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class HbkBankPower : CuteSakikoModPower
 {
     private HbkBank _parentCard;
-    
+
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
 

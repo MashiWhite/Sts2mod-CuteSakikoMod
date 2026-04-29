@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -8,7 +7,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Saves.Runs;
-
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -20,7 +18,7 @@ public sealed class OtherHalfPower : CuteSakikoModPower
     public override PowerStackType StackType => PowerStackType.Single;
     public override bool AllowNegative => false;
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -31,7 +29,7 @@ public sealed class OtherHalfPower : CuteSakikoModPower
 
     // 当压力层数变化时触发
     public override async Task AfterPowerAmountChanged(
-        PlayerChoiceContext choiceContext,   // 必须保留（新签名要求），但可以不使用
+        PlayerChoiceContext choiceContext, // 必须保留（新签名要求），但可以不使用
         PowerModel power,
         decimal amount,
         Creature? applier,
@@ -44,7 +42,7 @@ public sealed class OtherHalfPower : CuteSakikoModPower
         var gain = (int)amount;
         if (gain <= 0) return;
 
-        await PowerCmd.Apply<PressurePower>(choiceContext,Target, gain, Owner, cardSource);
+        await PowerCmd.Apply<PressurePower>(choiceContext, Target, gain, Owner, cardSource);
     }
 
     // 当主能力被移除时，同时移除目标身上的标记能力

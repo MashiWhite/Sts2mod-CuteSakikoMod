@@ -1,16 +1,17 @@
-﻿
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Models;
-
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class CalmnessLadyPower : CuteSakikoModPower
 {
+    private int _pendingDamage;
+
+    private Creature? _pendingDealer;
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
@@ -40,7 +41,6 @@ public sealed class CalmnessLadyPower : CuteSakikoModPower
         await PowerCmd.ModifyAmount(new ThrowingPlayerChoiceContext(), this, -1, null, null);
         // 反弹伤害
         if (_pendingDealer != null && _pendingDealer.IsAlive && _pendingDamage > 0)
-        {
             await CreatureCmd.Damage(
                 new ThrowingPlayerChoiceContext(),
                 _pendingDealer,
@@ -48,11 +48,7 @@ public sealed class CalmnessLadyPower : CuteSakikoModPower
                 ValueProp.Unpowered,
                 Owner,
                 null);
-        }
         _pendingDealer = null;
         _pendingDamage = 0;
     }
-
-    private Creature? _pendingDealer;
-    private int _pendingDamage;
 }

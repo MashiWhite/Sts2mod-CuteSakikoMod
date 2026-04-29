@@ -1,36 +1,18 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Common;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Common;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-[Pool(typeof(TokenCardPool))]
-public class LookNoChest : CustomCardModel
+public class LookNoChest() : ModTokenCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public LookNoChest() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
-    {
-    }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
     // 虚无、消耗
     public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal, CardKeyword.Exhaust };
 
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
-
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
-    {
-        get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Nochest); }
-    }
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Nochest];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

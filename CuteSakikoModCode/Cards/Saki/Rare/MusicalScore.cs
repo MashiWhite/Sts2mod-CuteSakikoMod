@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,15 +8,13 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-
 public class MusicalScore() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         IsUpgraded ? [CardKeyword.Retain] : [];
 
     // 悬停提示：显示回忆中的和弦（根据升级状态显示对应版本）
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -58,7 +55,7 @@ public class MusicalScore() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Ra
         await CardPileCmd.Draw(choiceContext, 1, Owner);
 
         // 施加能力，使本回合所有牌费用减一（包括后续抽到的）
-        await PowerCmd.Apply<MusicalScorePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<MusicalScorePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

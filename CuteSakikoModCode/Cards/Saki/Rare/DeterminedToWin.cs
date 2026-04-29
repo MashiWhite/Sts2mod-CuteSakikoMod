@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -9,11 +8,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-
 public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
     protected override bool HasEnergyCostX => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
@@ -23,30 +21,27 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get
-        {
-            yield return HoverTipFactory.FromPower<PressurePower>();
-        }
+        get { yield return HoverTipFactory.FromPower<PressurePower>(); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Target == null) return;
 
-        int x = ResolveEnergyXValue(); // 获取X值（消耗的能量）
-        int hits = x + 1; // 攻击次数 = X+1
+        var x = ResolveEnergyXValue(); // 获取X值（消耗的能量）
+        var hits = x + 1; // 攻击次数 = X+1
         if (hits <= 0) return;
 
-        int step = IsUpgraded ? 2 : 1;
-        int baseDamage = 5;
-        int basePressure = 2;
+        var step = IsUpgraded ? 2 : 1;
+        var baseDamage = 5;
+        var basePressure = 2;
 
-        for (int i = 0; i < hits; i++)
+        for (var i = 0; i < hits; i++)
         {
-            int damage = baseDamage + i * step;
-            int pressure = basePressure + i * step;
+            var damage = baseDamage + i * step;
+            var pressure = basePressure + i * step;
 
             // 造成伤害
             await DamageCmd.Attack(damage)
@@ -57,9 +52,7 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
 
             // 给予压力
             if (pressure > 0)
-            {
-                await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, pressure, Owner.Creature, this);
-            }
+                await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, pressure, Owner.Creature, this);
         }
     }
 

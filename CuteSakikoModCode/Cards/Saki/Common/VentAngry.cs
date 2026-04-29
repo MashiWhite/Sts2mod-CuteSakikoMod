@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,11 +9,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-
-    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(8m, ValueProp.Move)
@@ -32,7 +28,7 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -64,7 +60,7 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
             await CardPileCmd.Draw(choiceContext, drawCount, Owner);
 
             // 给敌人施加压力
-            await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, pressureAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, pressureAmount, Owner.Creature, this);
         }
     }
 

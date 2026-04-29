@@ -1,34 +1,24 @@
-﻿using BaseLib.Abstracts;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using Godot;
+using STS2RitsuLib.Scaffolding.Content;
+using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Pools;
 
-public class CuteSakikoEggCardPool : CustomCardPoolModel
+public class CuteSakikoEggCardPool : TypeListCardPoolModel
 {
-    public override string Title => Character.CuteSaki.CharacterEggId; //This is not a display name.
+    private static readonly Material?
+        _poolFrameMaterial = MaterialUtils.CreateRgbShaderMaterial(0.502f, 0f, 0f);
 
+    public override string Title => CuteSaki.CharacterEggId; //This is not a display name.
+    public override string EnergyColorName => CuteSaki.CharacterEggId;
     public override string BigEnergyIconPath => "charui/saki/saki_big_energy.png".ImagePath();
     public override string TextEnergyIconPath => "charui/saki/saki_text_energy.png".ImagePath();
+    public override Color EnergyOutlineColor => new("#420000");
+    public override Material? PoolFrameMaterial => _poolFrameMaterial;
 
-
-    /* These HSV values will determine the color of your card back.
-    They are applied as a shader onto an already colored image,
-    so it may take some experimentation to find a color you like.
-    Generally they should be values between 0 and 1. */
-    public override float H => 2.1f; //Hue; changes the color.
-    public override float S => 0.65f; //Saturation
-    public override float V => 0.37f; //Brightness
-
-    //Alternatively, leave these values at 1 and provide a custom frame image.
-    /*public override Texture2D CustomFrame(CustomCardModel card)
-    {
-        //This will attempt to load CuteSakikoMod/images/cards/frame.png
-        return PreloadManager.Cache.GetTexture2D("cards/frame.png".ImagePath());
-    }*/
-
-    //Color of small card icons
-    public override Color DeckEntryCardColor => new("#21405e");
+    public override Color DeckEntryCardColor => new("#800000");
 
     public override bool IsColorless => false;
 }

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -11,14 +10,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Ancient;
 // 按稀有度放在 Ancient 文件夹
 
-public class NoWork : CuteSakikoModCard
+public class NoWork() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
 {
-    // 构造函数：0 费，攻击，古代，目标任意敌人
-    public NoWork() : base(0, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
-    {
-    }
-    
-
     // 动态变量：伤害和压力
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -27,7 +20,7 @@ public class NoWork : CuteSakikoModCard
     ];
 
     // 悬停提示：显示压力能力说明
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -47,7 +40,8 @@ public class NoWork : CuteSakikoModCard
             .Execute(choiceContext);
 
         // 施加压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, DynamicVars["PressurePower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, DynamicVars["PressurePower"].IntValue,
+            Owner.Creature,
             this);
     }
 

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -13,27 +12,27 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 // 新增
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(6m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory);
         }
     }
 
@@ -68,14 +67,14 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
             return;
 
         // 3. 消耗压力
-        await PowerCmd.ModifyAmount(choiceContext,targetPressure, -requiredPressure, Owner.Creature, this);
+        await PowerCmd.ModifyAmount(choiceContext, targetPressure, -requiredPressure, Owner.Creature, this);
 
         // 4. 获取可选回忆卡牌（排除已消耗的）
-        var exhaustedMemoryIds = SakiMemoryManager.ExhaustedMemoryIds.ToHashSet();
+        var exhaustedMemoryIds = SakiMemoryManager.Instance.ExhaustedMemoryIds.ToHashSet();
 
         var availableMemoryCards = ModelDb.AllCards
             .Where(card =>
-                card.CanonicalKeywords.Contains(CutesakiKeywords.Memory) &&
+                card.HasModKeyword(CutesakiKeywords.Memory) && // 修改这里
                 !exhaustedMemoryIds.Contains(card.Id))
             .ToList();
 
@@ -100,11 +99,7 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
         var selectedCardModel = selectedCards.FirstOrDefault();
 
 
-        if (selectedCardModel == null)
-        {
-
-            return;
-        }
+        if (selectedCardModel == null) return;
 
         // 6. 通过 CardFactory 生成可用的卡牌实例
         var generatedCard = CardFactory.GetDistinctForCombat(
@@ -114,10 +109,7 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
             Owner.RunState.Rng.CombatCardGeneration
         ).FirstOrDefault();
 
-        if (generatedCard == null)
-        {
-            return;
-        }
+        if (generatedCard == null) return;
 
         // 7. 如果需要升级（本卡升级后获得的回忆卡牌也升级？根据设计可选）
         if (IsUpgraded)
@@ -128,7 +120,6 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
 
         // 8. 加入手牌
         await CardPileCmd.AddGeneratedCardToCombat(generatedCard, PileType.Hand, Owner);
-  
     }
 
     protected override void OnUpgrade()

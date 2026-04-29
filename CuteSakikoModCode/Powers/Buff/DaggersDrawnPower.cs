@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -10,11 +9,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class DaggersDrawnPower : CuteSakikoModPower
 {
-
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter; // 可叠加层数
     public override bool AllowNegative => false;
-    
+
     // 每回合开始时触发（能力拥有者的回合开始）
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
@@ -32,6 +30,7 @@ public sealed class DaggersDrawnPower : CuteSakikoModPower
             allCreatures.AddRange(CombatState.HittableEnemies);
 
         // 给每个生物施加对应层数的压力
-        foreach (var creature in allCreatures) await PowerCmd.Apply<PressurePower>(choiceContext,creature, amount, Owner, null);
+        foreach (var creature in allCreatures)
+            await PowerCmd.Apply<PressurePower>(choiceContext, creature, amount, Owner, null);
     }
 }

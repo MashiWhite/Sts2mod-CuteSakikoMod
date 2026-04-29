@@ -1,28 +1,15 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-[Pool(typeof(TokenCardPool))]
-public class Jr2 : CustomCardModel
+public class Jr2() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    public Jr2() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
-    {
-    }
-
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-    
     public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
     protected override IEnumerable<DynamicVar> CanonicalVars
@@ -30,7 +17,7 @@ public class Jr2 : CustomCardModel
         get { yield return new DamageVar(IsUpgraded ? 13m : 9m, ValueProp.Move); }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -52,7 +39,7 @@ public class Jr2 : CustomCardModel
             .Execute(choiceContext);
 
         // 给予一层气绝
-        await PowerCmd.Apply<FaintingPower>(choiceContext,cardPlay.Target, 1, Owner.Creature, this);
+        await PowerCmd.Apply<FaintingPower>(choiceContext, cardPlay.Target, 1, Owner.Creature, this);
 
         // 将致命连击3加入手牌（升级版本）
         var jr3 = CombatState.CreateCard<Jr3>(Owner);

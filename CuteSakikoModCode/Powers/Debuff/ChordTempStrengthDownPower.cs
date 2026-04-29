@@ -1,63 +1,47 @@
-﻿
-using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
-using StringExtensions = BaseLib.Extensions.StringExtensions;
+using STS2RitsuLib.Combat.Powers;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 
 /// <summary>
-/// 和弦造成的临时力量下降（本回合）
+///     和弦造成的临时力量下降（本回合）
 /// </summary>
-
-
-public class ChordTempStrengthDownPower : CustomTemporaryPowerModel
+[RegisterPower]
+public class ChordTempStrengthDownPower : ModTemporaryPowerTemplate
 {
-    // 内部实际应用的力量能力（这里是降低 StrengthPower）
-    public override PowerModel InternallyAppliedPower => ModelDb.Power<StrengthPower>().ToMutable();
-    
-    public override string CustomPackedIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
+    public override LocString Title => new("powers", Id.Entry + ".title");
 
-    public override string CustomBigIconPath =>
-        (StringExtensions.RemovePrefix(Id.Entry).ToLowerInvariant() + ".png").PowerImagePath();
+    public override PowerAssetProfile AssetProfile => this.PowerAssetProfile();
 
-    // 来源模型，用于悬停提示显示来源（可返回 null 或虚拟模型）
+    // 内部实际应用的力量能力
+    public override PowerModel InternallyAppliedPower =>
+        ModelDb.Power<StrengthPower>().ToMutable();
+
+    // 来源模型（用于悬停提示，可留空）
     public override AbstractModel OriginModel => null;
 
-    // 应用力量的委托：负值表示减少力量
-    protected override Func<PlayerChoiceContext, Creature, Decimal, Creature?, CardModel?, bool, Task> ApplyPowerFunc =>
-        async (ctx, target, amount, applier, cardSource, silent) =>
-        {
-            await PowerCmd.Apply<StrengthPower>(ctx, target, -amount, applier, cardSource, silent);
-        };
+    // 表示这是一个负面效果（这样 SignedAmount 会自动取负）
+    protected override bool IsPositive => false;
 
-    // 持续到本回合结束（即轮到敌人回合结束时移除）
+    // 持续到本回合结束（即敌人回合结束时移除）
     protected override bool UntilEndOfOtherSideTurn => false;
 
     // 不额外持续回合
-    protected override int LastForXExtraTurns => 0;
+    protected override int LastForXExtraTurns => 1; // 修复 KeyNotFoundException
 
-    // 能力类型：负面（Debuff）
-    public override PowerType Type => PowerType.Debuff;
-
-    // 是否为正收益（用于显示颜色等）
-    public virtual bool IsPositive => false;
-
-
-
-    // 悬停提示
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    // 可选：如果你希望悬停提示额外显示力量相关信息，保留并修正
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
-            yield return HoverTipFactory.FromPower<StrengthPower>();
+            // 注意：FromPower 需要传入 power 实例，而不是泛型参数
+            yield return HoverTipFactory.FromPower(InternallyAppliedPower);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -9,20 +8,14 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
-public class Apathetic : CuteSakikoModCard
+public class Apathetic() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public Apathetic() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
-    {
-    }
-    
-
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new BlockVar(10m, ValueProp.Move); }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<ArtifactPower>(); }
     }
@@ -33,7 +26,7 @@ public class Apathetic : CuteSakikoModCard
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
 
         // 获得1层人工制品
-        await PowerCmd.Apply<ArtifactPower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<ArtifactPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

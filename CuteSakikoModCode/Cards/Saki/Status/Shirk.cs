@@ -1,21 +1,12 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 
-[Pool(typeof(StatusCardPool))]
-public class Shirk() : CustomCardModel(-1, CardType.Status, CardRarity.Status, TargetType.None)
+public class Shirk() : ModStatusCard(-1, CardType.Status, CardRarity.Status, TargetType.None)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Unplayable, CardKeyword.Ethereal];
     public override int MaxUpgradeLevel => 0;
 

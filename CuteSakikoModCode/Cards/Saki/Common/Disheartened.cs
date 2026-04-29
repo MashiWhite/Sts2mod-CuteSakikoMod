@@ -1,11 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -15,7 +8,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class Disheartened : CuteSakikoModCard
 {
     public Disheartened() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
@@ -23,14 +15,14 @@ public class Disheartened : CuteSakikoModCard
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-    
+
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(IsUpgraded ? 8m : 5m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<VulnerablePower>(); }
     }
@@ -48,7 +40,7 @@ public class Disheartened : CuteSakikoModCard
 
         // 给予易伤
         var vulnerableAmount = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<VulnerablePower>(choiceContext,cardPlay.Target, vulnerableAmount, Owner.Creature, this);
+        await PowerCmd.Apply<VulnerablePower>(choiceContext, cardPlay.Target, vulnerableAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

@@ -1,4 +1,4 @@
-﻿
+﻿using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -8,21 +8,21 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-
+[RegisterCharacterStarterCard(typeof(CuteSaki), 2)]
 public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano];
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => 
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(6m, ValueProp.Move),
-        new DamageVar("ExtraDamage",3m, ValueProp.Move)
+        new DamageVar("ExtraDamage", 3m, ValueProp.Move)
     ];
 
     protected override bool ShouldGlowGoldInternal
@@ -34,7 +34,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -64,7 +64,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
             if (hasPressure)
             {
                 // 消耗1层压力
-                await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
+                await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
 
                 if (IsUpgraded)
                     // 升级后：两次2点伤害

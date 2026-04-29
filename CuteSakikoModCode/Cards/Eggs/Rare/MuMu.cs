@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -9,19 +8,14 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
-
-public class MuMu : CuteSakikoModEggCard
+public class MuMu() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
-    public MuMu() : base(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
-    {
-    }
-    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new DamageVar(IsUpgraded ? 9m : 6m, ValueProp.Move); }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {

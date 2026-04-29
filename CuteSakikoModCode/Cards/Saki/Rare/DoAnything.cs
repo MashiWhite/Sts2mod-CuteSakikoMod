@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -10,7 +9,6 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
-
 
 public sealed class DoAnything : CuteSakikoModCard
 {
@@ -31,7 +29,7 @@ public sealed class DoAnything : CuteSakikoModCard
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -58,7 +56,7 @@ public sealed class DoAnything : CuteSakikoModCard
         if (selectedCard != null) await CardPileCmd.Add(selectedCard, PileType.Hand);
 
         var pressureToGain = _nextPressure;
-        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureToGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureToGain, Owner.Creature, this);
 
         _nextPressure *= 2;
         if (DynamicVars.TryGetValue("PressureGain", out var var)) var.BaseValue = _nextPressure;

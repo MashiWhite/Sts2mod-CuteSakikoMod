@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,10 +8,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class Bansogo() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -29,7 +26,7 @@ public class Bansogo() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
         }
     }
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -48,7 +45,7 @@ public class Bansogo() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
         if (pressure != null && pressure.Amount > 0)
         {
             // 消耗1层压力
-            await PowerCmd.ModifyAmount(choiceContext,pressure, -1, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
             // 抽1张牌
             await CardPileCmd.Draw(choiceContext, 1, Owner);
         }

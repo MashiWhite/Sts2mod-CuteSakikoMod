@@ -1,57 +1,56 @@
-﻿using BaseLib.Abstracts;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Singletons
+namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
+
+[RegisterSingleton]
+public class SakiMemoryManager : SingletonModel
 {
-    public class SakiMemoryManager : CustomSingletonModel
+    private readonly HashSet<ModelId> _exhaustedMemoryIds = new();
+
+    public SakiMemoryManager()
     {
-        private static readonly HashSet<ModelId> _exhaustedMemoryIds = new();
+        _exhaustedMemoryIds.Clear();
+    }
 
-        public static IReadOnlyCollection<ModelId> ExhaustedMemoryIds => _exhaustedMemoryIds;
+    public override bool ShouldReceiveCombatHooks => true;
 
-        public SakiMemoryManager() : base(true, true)
+    // 正确的获取实例方式
+    public static SakiMemoryManager Instance => ModelDb.Singleton<SakiMemoryManager>();
+
+    public IReadOnlyCollection<ModelId> ExhaustedMemoryIds => _exhaustedMemoryIds;
+
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Card.HasModKeyword(CutesakiKeywords.Memory))
+            cardPlay.Card.EnergyCost.UpgradeBy(1);
+        await Task.CompletedTask;
+    }
+
+    public override async Task AfterCardExhausted(PlayerChoiceContext choiceContext, CardModel card,
+        bool causedByEthereal)
+    {
+        if (card.HasModKeyword(CutesakiKeywords.Memory))
         {
-            _exhaustedMemoryIds.Clear();
-        }
-
-        // 手动打出回忆牌 → 永久涨费
-        public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-        {
-            if (cardPlay.Card.CanonicalKeywords.Contains(CutesakiKeywords.Memory))
+            if (card is SakiMemoryCard customCard)
             {
-                cardPlay.Card.EnergyCost.UpgradeBy(1);
+                await customCard.ProcessMemoryEffect(choiceContext);
+                await customCard.ProcessMemoryEffect(choiceContext);
             }
-            await Task.CompletedTask;
-        }
 
-        // 被消耗时 → 触发两次打出效果，并移出可用池
-        public override async Task AfterCardExhausted(
-            PlayerChoiceContext choiceContext,
-            CardModel card,
-            bool causedByEthereal)
-        {
-            if (card.CanonicalKeywords.Contains(CutesakiKeywords.Memory))
-            {
-                if (card is SakiMemoryCard customCard)
-                {
-                    // 统一调用两次，次数不再由卡牌内部控制
-                    await customCard.ProcessMemoryEffect(choiceContext);
-                    await customCard.ProcessMemoryEffect(choiceContext);
-                }
-                _exhaustedMemoryIds.Add(card.Id);
-            }
+            _exhaustedMemoryIds.Add(card.Id);
         }
+    }
 
-        // 战斗结束清空集合
-        public override async Task AfterCombatEnd(CombatRoom room)
-        {
-            _exhaustedMemoryIds.Clear();
-            await Task.CompletedTask;
-        }
+    public override async Task AfterCombatEnd(CombatRoom room)
+    {
+        _exhaustedMemoryIds.Clear();
+        await Task.CompletedTask;
     }
 }

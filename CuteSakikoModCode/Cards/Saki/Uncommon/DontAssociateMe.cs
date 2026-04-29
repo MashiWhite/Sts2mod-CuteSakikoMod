@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -11,11 +10,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-
-
     // 动态变量：格挡值（基础13，升级17）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -23,7 +19,7 @@ public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity
     ];
 
     // 悬停提示，显示能力详情
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -40,7 +36,7 @@ public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity
 
         // 施加能力：基础4层，升级6层
         var powerAmount = IsUpgraded ? 6 : 4;
-        await PowerCmd.Apply<DontAssociateMePower>(choiceContext,Owner.Creature, powerAmount, Owner.Creature, this);
+        await PowerCmd.Apply<DontAssociateMePower>(choiceContext, Owner.Creature, powerAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

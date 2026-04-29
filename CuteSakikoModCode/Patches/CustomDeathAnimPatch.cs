@@ -19,10 +19,7 @@ public static class CustomDeathAnimPatch
 
         // 在 Visuals 子节点中寻找 AnimationPlayer
         var ap = FindAnimationPlayer(visuals);
-        if (ap != null && ap.HasAnimation("die"))
-        {
-            TaskHelper.RunSafely(PlayDeathAnimationAsync(ap));
-        }
+        if (ap != null && ap.HasAnimation("die")) TaskHelper.RunSafely(PlayDeathAnimationAsync(ap));
     }
 
     private static async Task PlayDeathAnimationAsync(AnimationPlayer ap)
@@ -43,6 +40,7 @@ public static class CustomDeathAnimPatch
             var found = FindAnimationPlayer(child);
             if (found != null) return found;
         }
+
         return null;
     }
 }

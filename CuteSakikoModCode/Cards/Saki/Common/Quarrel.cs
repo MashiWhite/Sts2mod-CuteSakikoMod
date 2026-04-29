@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -11,8 +10,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
-
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -31,14 +29,15 @@ public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
         var enemyPressureGain = IsUpgraded ? 15 : 10;
 
         // 自身增加压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, selfPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, selfPressureGain, Owner.Creature, this);
 
         // 给选中的敌人增加压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,cardPlay.Target, enemyPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, enemyPressureGain, Owner.Creature, this);
 
         // 临时能力：下回合扣除等量压力
-        await PowerCmd.Apply<QuarrelSelfPower>(choiceContext,Owner.Creature, selfPressureGain, Owner.Creature, this);
-        await PowerCmd.Apply<QuarrelEnemyPower>(choiceContext,cardPlay.Target, enemyPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<QuarrelSelfPower>(choiceContext, Owner.Creature, selfPressureGain, Owner.Creature, this);
+        await PowerCmd.Apply<QuarrelEnemyPower>(choiceContext, cardPlay.Target, enemyPressureGain, Owner.Creature,
+            this);
     }
 
     protected override void OnUpgrade()

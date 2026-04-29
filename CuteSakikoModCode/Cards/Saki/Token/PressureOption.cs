@@ -1,25 +1,16 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 
-[Pool(typeof(TokenCardPool))]
-public class PressureOption() : CustomCardModel(0, CardType.Skill, CardRarity.Token, TargetType.Self, false)
+public class PressureOption() : ModTokenCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
-    public override string PortraitPath =>
-        (Id.Entry.RemovePrefix().ToLowerInvariant() + ".png").CardImagePath();
-
     // 消耗关键词
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
@@ -31,7 +22,8 @@ public class PressureOption() : CustomCardModel(0, CardType.Skill, CardRarity.To
     ];
 
     // 悬停提示
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+
     {
         get
         {
@@ -43,10 +35,12 @@ public class PressureOption() : CustomCardModel(0, CardType.Skill, CardRarity.To
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获得压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, DynamicVars["PressurePower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, DynamicVars["PressurePower"].IntValue,
+            Owner.Creature,
             this);
         // 获得力量
-        await PowerCmd.Apply<StrengthPower>(choiceContext,Owner.Creature, DynamicVars["StrengthPower"].IntValue, Owner.Creature,
+        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars["StrengthPower"].IntValue,
+            Owner.Creature,
             this);
     }
 

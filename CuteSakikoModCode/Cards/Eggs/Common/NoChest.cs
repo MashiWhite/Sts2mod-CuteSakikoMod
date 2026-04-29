@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -34,11 +33,11 @@ public class NoChest : CuteSakikoModEggCard
     }
 
     // 固有（Innate）和保留（Retain）
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Innate };
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Innate];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -79,8 +78,8 @@ public class NoChest : CuteSakikoModEggCard
     {
         UpdateCost(); // 更新当前实例费用（实际上费用在抽到时已更新，但保险）
 
-        await PowerCmd.Apply<PlatingPower>(choiceContext,Owner.Creature, 12, Owner.Creature, this);
-        if (IsUpgraded) await PowerCmd.Apply<BarricadePower>(choiceContext,Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<PlatingPower>(choiceContext, Owner.Creature, 12, Owner.Creature, this);
+        if (IsUpgraded) await PowerCmd.Apply<BarricadePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     private void UpdateCost()

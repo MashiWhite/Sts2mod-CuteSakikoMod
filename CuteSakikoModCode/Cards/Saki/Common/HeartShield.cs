@@ -1,11 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -18,14 +11,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class HeartShield() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    
     // 动态变量：压力层数（基础2层）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new PowerVar<PressurePower>(2m)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -41,7 +33,7 @@ public class HeartShield() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Com
         var pressureToGain = IsUpgraded ? 4 : 2;
 
         // 先施加压力
-        await PowerCmd.Apply<PressurePower>(choiceContext,Owner.Creature, pressureToGain, Owner.Creature, this);
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureToGain, Owner.Creature, this);
 
         // 获取当前压力层数（已包含刚施加的）
         var pressure = Owner.Creature.GetPower<PressurePower>();

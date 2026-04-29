@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,60 +8,61 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
+
+public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    protected override IEnumerable<DynamicVar> CanonicalVars
     {
-
-        /// <summary>动态变量：实时计算总格挡（基于当前储存的和弦数）</summary>
-        private class SuccessRecitalBlockVar : DynamicVar
+        get
         {
-            public SuccessRecitalBlockVar() : base("TotalBlock", 0m) { }
+            yield return new DynamicVar("BaseBlock", 5m); // 基础倍数
+            yield return new SuccessRecitalBlockVar(); // 实时总格挡
+        }
+    }
 
-            public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target, bool runGlobalHooks)
-            {
-                base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
-                if (card.Owner == null) return;
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        TriggerBanter();
 
-                int perBlock = (int)card.DynamicVars["BaseBlock"].BaseValue;
-                int chordCount = MusicNoteManager.GetStoredChords(card.Owner).Count; // 使用储存和弦数
-                BaseValue = perBlock * chordCount;
-            }
+        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        if (guitar == null) return;
+
+        var perBlock = (int)DynamicVars["BaseBlock"].BaseValue;
+
+        // 演奏前获取当前储存的和弦数量（实际将被演奏的数量）
+        var chordCount = MusicNoteManager.GetStoredChords(Owner).Count;
+
+        // 演奏所有储存的和弦
+        await guitar.TriggerAllStoredChords(choiceContext);
+
+        // 获得格挡 = 实际演奏数量 × 倍数
+        var totalBlock = perBlock * chordCount;
+        if (totalBlock > 0)
+            await CreatureCmd.GainBlock(Owner.Creature, totalBlock, ValueProp.Move, null);
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["BaseBlock"].UpgradeValueBy(1m); // 5 → 6
+    }
+
+    /// <summary>动态变量：实时计算总格挡（基于当前储存的和弦数）</summary>
+    private class SuccessRecitalBlockVar : DynamicVar
+    {
+        public SuccessRecitalBlockVar() : base("TotalBlock", 0m)
+        {
         }
 
-        protected override IEnumerable<DynamicVar> CanonicalVars
+        public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target,
+            bool runGlobalHooks)
         {
-            get
-            {
-                yield return new DynamicVar("BaseBlock", 5m);   // 基础倍数
-                yield return new SuccessRecitalBlockVar();      // 实时总格挡
-            }
-        }
+            base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
+            if (card.Owner == null) return;
 
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-        {
-            TriggerBanter();
-
-            var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-            if (guitar == null) return;
-
-            int perBlock = (int)DynamicVars["BaseBlock"].BaseValue;
-
-            // 演奏前获取当前储存的和弦数量（实际将被演奏的数量）
-            int chordCount = MusicNoteManager.GetStoredChords(Owner).Count;
-
-            // 演奏所有储存的和弦
-            await guitar.TriggerAllStoredChords(choiceContext);
-
-            // 获得格挡 = 实际演奏数量 × 倍数
-            int totalBlock = perBlock * chordCount;
-            if (totalBlock > 0)
-                await CreatureCmd.GainBlock(Owner.Creature, totalBlock, ValueProp.Move, null);
-        }
-
-        protected override void OnUpgrade()
-        {
-            DynamicVars["BaseBlock"].UpgradeValueBy(1m); // 5 → 6
+            var perBlock = (int)card.DynamicVars["BaseBlock"].BaseValue;
+            var chordCount = MusicNoteManager.GetStoredChords(card.Owner).Count; // 使用储存和弦数
+            BaseValue = perBlock * chordCount;
         }
     }
 }

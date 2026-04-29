@@ -1,11 +1,4 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,23 +6,23 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-
-public class Legato : CuteSakikoModCard
+public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
-    public Legato() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
+        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Playpiano); }
     }
-    
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            int baseDamage = 7; // 基础伤害固定7，升级不变
-            int extraPerQin = IsUpgraded ? 6 : 4;
+            var baseDamage = 7; // 基础伤害固定7，升级不变
+            var extraPerQin = IsUpgraded ? 6 : 4;
 
             yield return new CalculationBaseVar(baseDamage);
             yield return new ExtraDamageVar(extraPerQin);
@@ -37,17 +30,10 @@ public class Legato : CuteSakikoModCard
             {
                 var owner = card.Owner;
                 if (owner == null) return 0m;
-                int qinCount = owner.PlayerCombatState.AllCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano));
+                var qinCount =
+                    owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
                 return qinCount;
             });
-        }
-    }
-
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
-    {
-        get
-        {
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Playpiano);
         }
     }
 
@@ -61,8 +47,8 @@ public class Legato : CuteSakikoModCard
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        int playCount = IsUpgraded ? 2 : 1;
-        for (int i = 0; i < playCount; i++)
+        var playCount = IsUpgraded ? 2 : 1;
+        for (var i = 0; i < playCount; i++)
         {
             var qinCard = GetNextQinCard();
             if (qinCard == null) break;
@@ -72,6 +58,7 @@ public class Legato : CuteSakikoModCard
                 qinCard.RemoveFromCurrentPile();
                 await CardPileCmd.Add(qinCard, PileType.Hand);
             }
+
             qinCard.ExhaustOnNextPlay = false;
             await CardCmd.AutoPlay(choiceContext, qinCard, cardPlay.Target);
         }
@@ -81,15 +68,15 @@ public class Legato : CuteSakikoModCard
     {
         var player = Owner;
         var discard = PileType.Discard.GetPile(player);
-        var qin = discard?.Cards.FirstOrDefault(c => c.Keywords.Contains(CutesakiKeywords.Playpiano));
+        var qin = discard?.Cards.FirstOrDefault(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
         if (qin != null) return qin;
 
         var draw = PileType.Draw.GetPile(player);
-        qin = draw?.Cards.FirstOrDefault(c => c.Keywords.Contains(CutesakiKeywords.Playpiano));
+        qin = draw?.Cards.FirstOrDefault(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
         if (qin != null) return qin;
 
         var hand = PileType.Hand.GetPile(player);
-        return hand?.Cards.FirstOrDefault(c => c.Keywords.Contains(CutesakiKeywords.Playpiano));
+        return hand?.Cards.FirstOrDefault(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
     }
 
     protected override void OnUpgrade()

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,16 +9,14 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-
 public class NeedPractice() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(9m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -66,17 +63,17 @@ public class NeedPractice() : CuteSakikoModCard(1, CardType.Attack, CardRarity.C
                 var existing = enemy.GetPower<PressurePower>();
                 if (existing != null)
                 {
-                    await PowerCmd.ModifyAmount(choiceContext,existing, amountToAdd, Owner.Creature, this);
+                    await PowerCmd.ModifyAmount(choiceContext, existing, amountToAdd, Owner.Creature, this);
                 }
                 else
                 {
                     var clonedPressure = (PressurePower)targetPressure.ClonePreservingMutability();
-                    await PowerCmd.Apply(choiceContext,clonedPressure, enemy, amountToAdd, Owner.Creature, this);
+                    await PowerCmd.Apply(choiceContext, clonedPressure, enemy, amountToAdd, Owner.Creature, this);
                 }
             }
 
             // 6. 减少目标自身的压力（减去已分配出去的一半）
-            await PowerCmd.ModifyAmount(choiceContext,targetPressure, -halfPressure, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -halfPressure, Owner.Creature, this);
         }
         // 若无其他敌人，则不进行任何压力转移，目标压力保持不变
     }

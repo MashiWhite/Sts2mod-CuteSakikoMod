@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -13,13 +12,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(8m, ValueProp.Move)
     ];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
@@ -65,7 +63,7 @@ public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
         if (targetPressure > selfPressure)
         {
             var shrinkAmount = IsUpgraded ? 2 : 1;
-            await PowerCmd.Apply<ShrinkPower>(choiceContext,target, shrinkAmount, Owner.Creature, this);
+            await PowerCmd.Apply<ShrinkPower>(choiceContext, target, shrinkAmount, Owner.Creature, this);
         }
     }
 

@@ -1,28 +1,16 @@
-﻿using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
-using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-
 public class PowerOfMemory() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
-    {
-        get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memorysaki); }
-    }
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Memorysaki];
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -49,7 +37,7 @@ public class PowerOfMemory() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
                     {
                         var pile = pileType.GetPile(owner);
                         if (pile == null) continue;
-                        memoryCount += pile.Cards.Count(c => c.CanonicalKeywords.Contains(CutesakiKeywords.Memory));
+                        memoryCount += pile.Cards.Count(c => c.HasModKeyword(CutesakiKeywords.Memory));
                     }
 
                     return memoryCount;

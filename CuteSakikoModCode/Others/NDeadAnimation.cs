@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Character;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Combat;
@@ -33,7 +34,7 @@ public class NDeadAnimation
                         {
                             var charProp = p.GetType().GetProperty("Character",
                                 BindingFlags.Public | BindingFlags.Instance);
-                            if (charProp?.GetValue(p) is Character.CuteSaki)
+                            if (charProp?.GetValue(p) is CuteSaki)
                             {
                                 isSaki = true;
                                 break;
@@ -56,7 +57,7 @@ public class NDeadAnimation
             if (combatRoom == null) return;
 
             foreach (var child in combatRoom.GetChildren())
-                if (child is NCreature nCreature && nCreature.Entity?.Player?.Character is Character.CuteSaki)
+                if (child is NCreature nCreature && nCreature.Entity?.Player?.Character is CuteSaki)
                 {
                     var animPlayer = nCreature.GetNodeOrNull<AnimationPlayer>("Visuals/AnimationPlayer");
                     if (animPlayer != null && animPlayer.HasAnimation("die"))

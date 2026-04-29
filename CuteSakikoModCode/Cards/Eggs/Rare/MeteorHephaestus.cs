@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -8,19 +7,14 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
-
-public class MeteorHephaestus : CuteSakikoModEggCard
+public class MeteorHephaestus() : CuteSakikoModEggCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public MeteorHephaestus() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
-    {
-    }
-
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
-    
+
 
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<MeteorHephaestusPower>(); }
     }
@@ -45,13 +39,14 @@ public class MeteorHephaestus : CuteSakikoModEggCard
             if (selfPower == null)
             {
                 var layers = IsUpgraded ? 2 : 1;
-                var power = await PowerCmd.Apply<MeteorHephaestusPower>(choiceContext,Owner.Creature, layers, Owner.Creature, this);
+                var power = await PowerCmd.Apply<MeteorHephaestusPower>(choiceContext, Owner.Creature, layers,
+                    Owner.Creature, this);
                 power.SetUpgraded(IsUpgraded);
             }
             else
             {
                 var add = IsUpgraded ? 2 : 1;
-                await PowerCmd.ModifyAmount(choiceContext,selfPower, add, Owner.Creature, this);
+                await PowerCmd.ModifyAmount(choiceContext, selfPower, add, Owner.Creature, this);
                 // 如果当前卡牌是升级版，确保能力的升级标志为 true
                 if (IsUpgraded) selfPower.SetUpgraded(true);
             }

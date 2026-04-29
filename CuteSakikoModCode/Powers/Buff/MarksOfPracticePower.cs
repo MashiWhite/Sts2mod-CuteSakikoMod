@@ -1,87 +1,83 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
+namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+
+public class MarksOfPracticePower : CuteSakikoModPower
 {
-    public class MarksOfPracticePower : CuteSakikoModPower
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Counter;
+
+    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
-        public override PowerType Type => PowerType.Buff;
-        public override PowerStackType StackType => PowerStackType.Counter;
+        await base.AfterApplied(applier, cardSource);
+        RefreshTemporaryChords();
+    }
 
-        public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
-        {
-            await base.AfterApplied(applier, cardSource);
+    public override async Task AfterPowerAmountChanged(
+        PlayerChoiceContext choiceContext,
+        PowerModel power,
+        decimal amount,
+        Creature? applier,
+        CardModel? cardSource)
+    {
+        await base.AfterPowerAmountChanged(choiceContext, power, amount, applier, cardSource);
+        // 层数变化（叠加或减少）时刷新临时和弦
+        if (power == this)
             RefreshTemporaryChords();
-        }
+    }
 
-        public override async Task AfterPowerAmountChanged(
-            PlayerChoiceContext choiceContext,
-            PowerModel power,
-            Decimal amount,
-            Creature? applier,
-            CardModel? cardSource)
-        {
-            await base.AfterPowerAmountChanged(choiceContext, power, amount, applier, cardSource);
-            // 层数变化（叠加或减少）时刷新临时和弦
-            if (power == this)
-                RefreshTemporaryChords();
-        }
-
-        public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
-        {
-            if (side == CombatSide.Player)
-            {
-                ClearTemporaryChords();
-                RemoveInternal();
-            }
-            await base.AfterTurnEnd(choiceContext, side);
-        }
-
-        public override async Task AfterRemoved(Creature oldOwner)
+    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    {
+        if (side == CombatSide.Player)
         {
             ClearTemporaryChords();
-            await base.AfterRemoved(oldOwner);
+            RemoveInternal();
         }
 
-        private void RefreshTemporaryChords()
-        {
-            var owner = this.Owner;
-            if (owner?.Player == null) return;
+        await base.AfterTurnEnd(choiceContext, side);
+    }
 
-            var guitar = owner.Player.Relics.OfType<AnonGuitar>().FirstOrDefault();
-            if (guitar == null) return;
+    public override async Task AfterRemoved(Creature oldOwner)
+    {
+        ClearTemporaryChords();
+        await base.AfterRemoved(oldOwner);
+    }
 
-            guitar.ClearTemporaryChords();
+    private void RefreshTemporaryChords()
+    {
+        var owner = Owner;
+        if (owner?.Player == null) return;
 
-            int count = this.Amount;
-            if (count <= 0) return;
+        var guitar = owner.Player.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        if (guitar == null) return;
 
-            var allPools = new List<string>();
-            allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
-            allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
-            allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
-            if (allPools.Count == 0) return;
+        guitar.ClearTemporaryChords();
 
-            var rng = owner.Player.RunState.Rng.UpFront;
-            for (int i = 0; i < count; i++)
-                guitar.AddTemporaryChord(rng.NextItem(allPools));
-        }
+        var count = Amount;
+        if (count <= 0) return;
 
-        private void ClearTemporaryChords()
-        {
-            var owner = this.Owner;
-            if (owner?.Player == null) return;
-            var guitar = owner.Player.Relics.OfType<AnonGuitar>().FirstOrDefault();
-            guitar?.ClearTemporaryChords();
-        }
+        var allPools = new List<string>();
+        allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
+        allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
+        allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
+        if (allPools.Count == 0) return;
+
+        var rng = owner.Player.RunState.Rng.UpFront;
+        for (var i = 0; i < count; i++)
+            guitar.AddTemporaryChord(rng.NextItem(allPools));
+    }
+
+    private void ClearTemporaryChords()
+    {
+        var owner = Owner;
+        if (owner?.Player == null) return;
+        var guitar = owner.Player.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        guitar?.ClearTemporaryChords();
     }
 }
