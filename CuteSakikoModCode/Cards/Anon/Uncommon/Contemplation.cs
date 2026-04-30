@@ -29,8 +29,8 @@ public class Contemplation() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncomm
 
         // 根据数量选择不同的本地化键
         var promptKey = pickCount == 2
-            ? "CUTESAKIKOMOD-CONTEMPLATION.selectionScreenPrompt.2"
-            : "CUTESAKIKOMOD-CONTEMPLATION.selectionScreenPrompt.1";
+            ? "CUTE_SAKIKO_MOD_CARD_CONTEMPLATION.selectionScreenPrompt.2"
+            : "CUTE_SAKIKO_MOD_CARD_CONTEMPLATION.selectionScreenPrompt.1";
 
         var prefs = new CardSelectorPrefs(
                 new LocString("cards", promptKey),

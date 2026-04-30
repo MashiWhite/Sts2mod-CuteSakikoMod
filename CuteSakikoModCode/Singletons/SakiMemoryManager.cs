@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -17,6 +18,9 @@ public class SakiMemoryManager : SingletonModel
     public SakiMemoryManager()
     {
         _exhaustedMemoryIds.Clear();
+        
+        // 订阅战斗事件钩子，这样 AfterCardPlayed、AfterCardExhausted 等方法才会被触发
+        ModHelper.SubscribeForCombatStateHooks(Id.Entry, state => [this]);
     }
 
     public override bool ShouldReceiveCombatHooks => true;

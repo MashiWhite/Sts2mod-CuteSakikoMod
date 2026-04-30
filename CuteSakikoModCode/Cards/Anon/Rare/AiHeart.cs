@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.Localization;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 // ReSharper disable once InconsistentNaming
-public class AIHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override string ChordId => "GreyAnonChord";
 

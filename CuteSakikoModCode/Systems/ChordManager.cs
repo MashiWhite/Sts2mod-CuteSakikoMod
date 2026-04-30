@@ -370,33 +370,24 @@ public static class ChordManager
                 }
             });
 
-        // 爱音F和弦【攻 攻 攻 攻】50%对全体敌人造成12点伤害，50%使所有友方获得1层虚弱
+        // 爱音F和弦【攻 攻 攻 攻】对全体敌人造成13点伤害，使所有友方获得1层虚弱
         AddTemporaryChord("AnonFChord", ChordCategory.Anon,
             new[] { CardType.Attack, CardType.Attack, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-ANONFCHORD.title", "CUTESAKIKOMOD-ANONFCHORD.description", "anon_f_chord",
-            new[] { 12, 1 }, // BaseValues: [伤害值, 虚弱层数]
+            new[] { 13, 1 }, // BaseValues: [伤害值, 虚弱层数]
             async (ctx, owner, mult) =>
             {
                 var combat = owner.CombatState;
                 if (combat == null) return;
-
-                // 50% 概率判定（使用战斗专用随机）
-                var dealDamage = combat.RunState.Rng.CombatCardSelection.NextDouble() < 0.75;
-
-                if (dealDamage)
-                {
-                    // 对全体敌人造成 12 * mult 点伤害
-                    var enemies = combat.Enemies;
-                    if (enemies != null && enemies.Any())
-                        await CreatureCmd.Damage(ctx, enemies, 12 * mult, ValueProp.Move, owner, null);
-                }
-                else
-                {
-                    // 对全体友方施加 1 * mult 层虚弱
-                    var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
-                    foreach (var ally in allies)
-                        await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
-                }
+                // 对全体敌人造成 12 * mult 点伤害
+                var enemies = combat.Enemies;
+                if (enemies != null && enemies.Any()) 
+                    await CreatureCmd.Damage(ctx, enemies, 13 * mult, ValueProp.Move, owner, null);
+                // 对全体友方施加 1 * mult 层虚弱
+                var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
+                foreach (var ally in allies)
+                    await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
+                
             });
 
         // 爱音G和弦【技 技 攻】所有友方抽1牌，获1能量
@@ -417,11 +408,11 @@ public static class ChordManager
                 }
             });
 
-        //灰爱音和弦【特 攻 攻】 减少2生命，抽1获得1能量
+        //灰爱音和弦【特 攻 攻】 减少1生命，抽1获得1能量
         AddTemporaryChord("GreyAnonChord", ChordCategory.Anon,
             new[] { CardType.Status, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-GREYANONCHORD.title", "CUTESAKIKOMOD-GREYANONCHORD.description", "grey_anon_chord",
-            new[] { 2, 1, 1 }, // 生命减少、抽牌、能量
+            new[] { 1, 1, 1 }, // 生命减少、抽牌、能量
             async (ctx, owner, mult) =>
             {
                 var combat = owner.CombatState;

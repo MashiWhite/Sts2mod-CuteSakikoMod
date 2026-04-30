@@ -31,7 +31,7 @@ public class MyBad() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, T
 
         // 自定义选择提示（使用本地化键）
         var prefs = new CardSelectorPrefs(
-            new LocString("cards", "CUTESAKIKOMOD-MY_BAD.selectionScreenPrompt"),
+            new LocString("cards", "CUTE_SAKIKO_MOD_CARD_MY_BAD.selectionScreenPrompt"),
             1,
             1
         );

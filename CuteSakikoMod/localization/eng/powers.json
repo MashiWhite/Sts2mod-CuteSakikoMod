@@ -1,7 +1,7 @@
 {
   "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.title": "压力",
-  "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.description": "每层[gold]压力[/gold]使受到的伤害增加1%。层数大于等于当前生命值时，清除所有[gold]压力[/gold]，给予一层[gold]崩溃[/gold]。",
-  "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.smartDescription": "使受到的伤害增加{Amount}%。层数大于等于当前生命值时，清除所有[gold]压力[/gold]，给予一层[gold]崩溃[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.description": "每层[gold]压力[/gold]使受到的伤害增加1%。层数大于当前生命值时，清除所有[gold]压力[/gold]，给予一层[gold]崩溃[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.smartDescription": "使受到的伤害增加{Amount}%。层数大于当前生命值时，清除所有[gold]压力[/gold]，给予一层[gold]崩溃[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_PATIENCE_POWER.title": "忍耐",
   "CUTE_SAKIKO_MOD_POWER_PATIENCE_POWER.description": "受到伤害时，获得等量的[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_PATIENCE_POWER.smartDescription": "受到伤害时，获得等量的[gold]压力[/gold]。",

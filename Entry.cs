@@ -76,9 +76,7 @@ public class Entry
             RunManager.Instance.RunStarted += OnRunStarted;
         else
             Logger.Warn("RunManager.Instance is null, RunStarted event not subscribed.");
-
-        // 6. 异步预加载所有资源（不等待，避免阻塞启动）
-        _ = Task.Run(PreloadAllAssetsAsync);
+        
     }
 
     private static void OnRunStarted(RunState state)
@@ -94,80 +92,6 @@ public class Entry
             var eggs = ModelDb.Relic<Eggs>().ToMutable();
             await RelicCmd.Obtain(eggs, player);
         });
-    }
-
-    // ==================== 预缓存资源 ====================
-    private static async Task PreloadAllAssetsAsync()
-    {
-        try
-        {
-            Logger.Info("Starting async asset preloading...");
-
-            var assembly = Assembly.GetExecutingAssembly();
-            var allTypes = assembly.GetTypes();
-
-            // 预加载卡片立绘
-            var cardTypes = allTypes.Where(t => t.IsSubclassOf(typeof(ModCardTemplate)) && !t.IsAbstract);
-            foreach (var type in cardTypes)
-            {
-                var snakeName = GetSnakeCaseName(type);
-                var path = $"res://{ModId}/images/cards/{snakeName}.png";
-                // 直接调用 GetTexture2D，如果文件缺失会打印警告但不崩溃
-                PreloadManager.Cache.GetTexture2D(path);
-            }
-
-            // 预加载能力图标
-            var powerTypes = allTypes.Where(t => t.IsSubclassOf(typeof(ModPowerTemplate)) && !t.IsAbstract);
-            foreach (var type in powerTypes)
-            {
-                var snakeName = GetSnakeCaseName(type);
-                PreloadManager.Cache.GetTexture2D($"res://{ModId}/images/powers/{snakeName}.png");
-                PreloadManager.Cache.GetTexture2D($"res://{ModId}/images/powers/big/{snakeName}.png");
-            }
-
-            // 预加载遗物图标
-            var relicTypes = allTypes.Where(t => t.IsSubclassOf(typeof(ModRelicTemplate)) && !t.IsAbstract);
-            foreach (var type in relicTypes)
-            {
-                var snakeName = GetSnakeCaseName(type);
-                PreloadManager.Cache.GetTexture2D($"res://{ModId}/images/relics/{snakeName}.png");
-                PreloadManager.Cache.GetTexture2D($"res://{ModId}/images/relics/{snakeName}_outline.png");
-                PreloadManager.Cache.GetTexture2D($"res://{ModId}/images/relics/big/{snakeName}.png");
-            }
-
-            // 预加载药水图标
-            var potionTypes = allTypes.Where(t => t.IsSubclassOf(typeof(ModPotionTemplate)) && !t.IsAbstract);
-            foreach (var type in potionTypes)
-            {
-                var snakeName = GetSnakeCaseName(type);
-                PreloadManager.Cache.GetTexture2D($"res://{ModId}/images/potions/{snakeName}.png");
-                PreloadManager.Cache.GetTexture2D($"res://{ModId}/images/potions/{snakeName}_outline.png");
-            }
-
-            // 预加载场景
-            var scenesDir = $"res://{ModId}/scenes/";
-            using var dir = DirAccess.Open(scenesDir);
-            if (dir != null)
-            {
-                dir.ListDirBegin();
-                string fileName;
-                while ((fileName = dir.GetNext()) != "")
-                {
-                    if (fileName == "." || fileName == "..") continue;
-                    var fullPath = scenesDir + fileName;
-                    if (dir.CurrentIsDir()) continue;
-                    if (fileName.EndsWith(".tscn")) PreloadManager.Cache.GetScene(fullPath);
-                }
-
-                dir.ListDirEnd();
-            }
-
-            Logger.Info("Async asset preloading completed.");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error($"PreloadAllAssetsAsync failed: {ex.Message}");
-        }
     }
 
     // 工具方法：PascalCase → snake_case

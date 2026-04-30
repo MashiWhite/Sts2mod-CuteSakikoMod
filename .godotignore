@@ -1,0 +1,13 @@
+﻿# 忽略整个 packages 文件夹
+packages/
+
+# 忽略你的构建输出目录
+.godot/
+bin/
+obj/
+
+# 忽略你的 IDE 配置文件
+.idea/
+.vs/
+*.csproj
+*.sln

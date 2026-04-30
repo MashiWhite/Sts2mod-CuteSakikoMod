@@ -49,7 +49,7 @@ public class Marionette() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
         if (discardPile != null && discardPile.Cards.Count > 0)
         {
             var prefs = new CardSelectorPrefs(
-                new LocString("cards", "CUTESAKIKOMOD-MARIONETTE.selectionScreenPrompt"),
+                new LocString("cards", "CUTE_SAKIKO_MOD_CARD_MARIONETTE.selectionScreenPrompt"),
                 1,
                 1
             );

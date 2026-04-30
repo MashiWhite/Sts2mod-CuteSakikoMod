@@ -18,7 +18,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 
 [RegisterCharacterStarterRelic(typeof(CuteSaki))]
 [RegisterTouchOfOrobasRefinement(typeof(PostItNote))]
-public sealed class KabutoNote : CuteSakikoModRelic
+public class KabutoNote : CuteSakikoModRelic  // ← 去掉 sealed
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
 
@@ -33,16 +33,11 @@ public sealed class KabutoNote : CuteSakikoModRelic
         }
     }
 
-    // 在回合开始时触发（每回合都会调用）
     public override async Task AfterSideTurnStart(CombatSide side, ICombatState combatState)
     {
-        // 只处理拥有者所在的一侧，且仅在战斗的第一回合（RoundNumber == 1）
         if (side == Owner.Creature.Side && combatState.RoundNumber == 1)
         {
-            // 给遗物持有者施加 3 层压力
-            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 3, Owner.Creature,
-                null);
-            // 闪烁遗物图标，提示生效
+            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 3, Owner.Creature, null);
             Flash();
         }
     }

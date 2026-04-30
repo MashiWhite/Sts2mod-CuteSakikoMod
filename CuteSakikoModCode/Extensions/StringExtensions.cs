@@ -110,4 +110,6 @@ public static class AssetHelper
             $"res://{Entry.ModId}/images/potions/{snake}_outline.png"
         );
     }
+    
+
 }
