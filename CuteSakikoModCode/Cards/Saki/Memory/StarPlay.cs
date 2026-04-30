@@ -4,7 +4,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Memory;
 
 public class StarPlay() : SakiMemoryCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
@@ -14,12 +14,6 @@ public class StarPlay() : SakiMemoryCard(0, CardType.Skill, CardRarity.Token, Ta
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-    {
-        var amount = DynamicVars["DexterityPower"].IntValue;
-        await PowerCmd.Apply<DexterityPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
-    }
-
-    public override async Task ProcessMemoryEffect(PlayerChoiceContext choiceContext)
     {
         var amount = DynamicVars["DexterityPower"].IntValue;
         await PowerCmd.Apply<DexterityPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);

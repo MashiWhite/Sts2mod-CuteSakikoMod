@@ -15,9 +15,5 @@ public abstract class SakiMemoryCard(int cost, CardType type, CardRarity rarity,
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Memory];
 
     public override CardAssetProfile AssetProfile => this.CardAssetProfile();
-
-    public virtual Task ProcessMemoryEffect(PlayerChoiceContext choiceContext)
-    {
-        return Task.CompletedTask;
-    }
+    
 }

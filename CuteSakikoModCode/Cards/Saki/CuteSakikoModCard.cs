@@ -1,6 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -11,4 +12,5 @@ public abstract class CuteSakikoModCard(int cost, CardType type, CardRarity rari
     ModCardTemplate(cost, type, rarity, target)
 {
     public override CardAssetProfile AssetProfile => this.CardAssetProfile();
+    
 }

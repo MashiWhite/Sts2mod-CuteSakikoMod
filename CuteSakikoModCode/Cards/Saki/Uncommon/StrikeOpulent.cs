@@ -32,11 +32,11 @@ public class StrikeOpulent : CuteSakikoModCard
             // 添加一个动态变量，显示额外攻击次数
             yield return new CalculatedIntVar("TotalExtraHits", (card, target) =>
             {
-                var owner = card.Owner;
-                if (owner == null) return 0;
-                var qinCount =
-                    owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
-                var multiplier = card.IsUpgraded ? 2 : 1;
+                var allCards = card?.Owner?.PlayerCombatState?.AllCards;
+                if (allCards == null) return 0;
+
+                var qinCount = allCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+                var multiplier = card!.IsUpgraded ? 2 : 1;
                 return qinCount * multiplier;
             });
         }

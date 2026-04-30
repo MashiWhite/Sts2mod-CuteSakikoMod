@@ -52,7 +52,7 @@ public class CuteSaki : ModCharacterTemplate<CuteSakiCardPool, CuteSakiRelicPool
             ),
             new CharacterVfxAssetSet(
                 // 卡牌拖尾场景。
-                // TrailPath: "res://scenes/vfx/card_trail_ironclad.tscn"
+                TrailPath: "res://CuteSakikoMod/scenes/ui/card_trail_sakiko.tscn"
             ),
             Audio: new CharacterAudioAssetSet(
                 // 攻击音效

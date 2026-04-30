@@ -1,16 +1,17 @@
 <Project Sdk="Godot.NET.Sdk/4.5.1" InitialTargets="CheckDependencyPaths">
-
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>true</ImplicitUsings>
-        <Nullable>enable</Nullable> <!--Makes code analysis regarding null values stricter.-->
+        <Nullable>enable</Nullable>
+        <GenerateDependencyFile>false</GenerateDependencyFile>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DefaultItemExcludes>packages/**</DefaultItemExcludes>
         <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
         <PathMap>$(AppOutputBase)=.\</PathMap>
     </PropertyGroup>
 
-    <!-- OS Detection -->
+    <!-- OS Detection & Paths -->
     <PropertyGroup>
         <IsWindows>false</IsWindows>
         <IsLinux>false</IsLinux>
@@ -20,50 +21,37 @@
         <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
     </PropertyGroup>
 
-    <!-- // NOTE: Megadot is version 4.5.1, and the game won't load your .pck if the Godot version used is newer. -->
-
-    <!-- Windows -->
     <PropertyGroup Condition="'$(IsWindows)' == 'true'">
-        <!-- 直接指定 Steam 库路径，不再使用注册表自动检测 -->
         <SteamLibraryPath>E:/SteamLibrary/steamapps</SteamLibraryPath>
-
-        <!-- 直接指定 Godot 可执行文件路径 -->
         <GodotPath>E:/SLJT2/anti/GODOT/Godot_v4.5.1-stable_mono_win64.exe</GodotPath>
-
-        <!-- 以下属性基于 SteamLibraryPath 自动生成，无需额外修改 -->
         <Sts2Path>$(SteamLibraryPath)/common/Slay the Spire 2</Sts2Path>
         <ModsPath>$(Sts2Path)/mods/</ModsPath>
         <Sts2DataDir>$(Sts2Path)/data_sts2_windows_x86_64</Sts2DataDir>
     </PropertyGroup>
 
-    <!-- Linux -->
     <PropertyGroup Condition="'$(IsLinux)' == 'true'">
         <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">$(HOME)/.local/share/Steam/steamapps</SteamLibraryPath>
         <GodotPath Condition="'$(GodotPath)' == ''">$(SteamLibraryPath)/common/Godot Engine/godot.x11.opt.tools.64</GodotPath>
-
-        <!-- The below should not need to be changed. -->
         <Sts2Path>$(SteamLibraryPath)/common/Slay the Spire 2</Sts2Path>
         <ModsPath>$(Sts2Path)/mods/</ModsPath>
         <Sts2DataDir>$(Sts2Path)/data_sts2_linuxbsd_x86_64</Sts2DataDir>
     </PropertyGroup>
 
-    <!-- macOS -->
     <PropertyGroup Condition="'$(IsOSX)' == 'true'">
         <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">$(HOME)/Library/Application Support/Steam/steamapps</SteamLibraryPath>
         <GodotPath Condition="'$(GodotPath)' == ''">$(HOME)/Applications/Godot_mono.app/Contents/MacOS/Godot</GodotPath>
-
-        <!-- The below should not need to be changed. -->
         <Sts2Path>$(SteamLibraryPath)/common/Slay the Spire 2</Sts2Path>
         <ModsPath>$(Sts2Path)/SlayTheSpire2.app/Contents/MacOS/mods/</ModsPath>
         <Sts2DataDir>$(Sts2Path)/SlayTheSpire2.app/Contents/Resources/data_sts2_macos_x86_64</Sts2DataDir>
     </PropertyGroup>
 
     <PropertyGroup>
-        <!-- Diasble architecture mismatch warning; mods are ideally built for all platforms (MSIL)
-             while your local StS2 version will be for your specific platform. -->
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
+        <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
+        <RitsuLibPackageVersion>0.2.15</RitsuLibPackageVersion>
     </PropertyGroup>
 
+    <!-- 引用 -->
     <ItemGroup Condition="Exists('$(Sts2DataDir)')">
         <Reference Include="0Harmony">
             <HintPath>$(Sts2DataDir)/0Harmony.dll</HintPath>
@@ -71,6 +59,10 @@
         </Reference>
         <Reference Include="sts2">
             <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Steamworks.NET">
+            <HintPath>$(Sts2DataDir)/Steamworks.NET.dll</HintPath>
             <Private>false</Private>
         </Reference>
     </ItemGroup>
@@ -81,9 +73,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="STS2.RitsuLib" Version="0.2.9"/>
+        <PackageReference Include="STS2.RitsuLib" Version="0.2.15" />
     </ItemGroup>
 
+    <!-- 资源排除与包含 -->
     <ItemGroup>
         <Compile Remove="CuteSakikoMod/**"/>
         <Compile Remove="materials/**"/>
@@ -97,63 +90,73 @@
 
     <ItemGroup>
         <None Include=".gitignore"/>
+        <None Include=".godotignore"/>
         <None Include="CuteSakikoMod.json"/>
         <None Include="project.godot"/>
         <None Include="CuteSakikoMod/**"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="CuteSakikoModCode\Cards\Saki\Curse\"/>
-        <Folder Include="CuteSakikoModCode\Cards\Saki\Event\"/>
-        <Folder Include="CuteSakikoModCode\Monsters\Normal\"/>
-        <Folder Include="CuteSakikoMod\images\potions\"/>
-        <Folder Include="CuteSakikoMod\images\powers\big\"/>
-        <Folder Include="CuteSakikoMod\images\relics\big\"/>
-        <Folder Include="CuteSakikoMod\images\ui\rest_site\"/>
-        <Folder Include="CuteSakikoMod\scenes\Ancient\"/>
+      <Folder Include="CuteSakikoModCode\CardPiles\" />
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Steamworks.NET">
-            <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slay the Spire 2\data_sts2_windows_x86_64\Steamworks.NET.dll</HintPath>
-        </Reference>
+      <Content Include="audio\look_cchord.mp3" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Remove="packages\sts2.ritsulib\0.2.9\contentFiles\any\net9.0\mod_manifest.json"/>
-    </ItemGroup>
-
+  
+    
+    <!-- 构建后复制你自己的 Mod -->
     <Target Name="CopyToModsFolderOnBuild" AfterTargets="Build">
         <Message Text="Copying mod files to game mods folder." Importance="high"/>
-        <!-- 你的模组文件夹 -->
         <MakeDir Directories="$(ModsPath)$(MSBuildProjectName)" Condition="!Exists('$(ModsPath)$(MSBuildProjectName)')"/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
         <Copy SourceFiles="CuteSakikoMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
-        <!-- 可选：复制资源 pck（如果已经通过 GodotPublish 生成） -->
-
-        <!-- 复制 RitsuLib 模组文件（如果第一次或缺失） -->
-        <!-- <PropertyGroup>
-             <RitsuLibNuGetDir>$(NuGetPackageRoot)sts2.ritsulib\0.2.9</RitsuLibNuGetDir>
-             <RitsuLibModDest>$(ModsPath)STS2-RitsuLib</RitsuLibModDest>
-         </PropertyGroup>
-         <MakeDir Directories="$(RitsuLibModDest)" Condition="!Exists('$(RitsuLibModDest)')"/>
-         <ItemGroup>
-             <RitsuLibFiles Include="$(RitsuLibNuGetDir)\contentFiles\any\net9.0\**\*"/>
-         </ItemGroup>
-         <Copy SourceFiles="@(RitsuLibFiles)" DestinationFolder="$(RitsuLibModDest)" SkipUnchangedFiles="true"/>-->
     </Target>
 
+    <!-- 硬编码复制 RitsuLib 文件（稳定可靠） -->
+    <Target Name="CopyRitsuLibToModsFolder" AfterTargets="CopyToModsFolderOnBuild">
+        <PropertyGroup>
+            <RitsuLibModDest>$(ModsPath)STS2-RitsuLib</RitsuLibModDest>
+            <RitsuLibPackageBase>$(MSBuildProjectDirectory)\packages\sts2.ritsulib\$(RitsuLibPackageVersion)\</RitsuLibPackageBase>
+        </PropertyGroup>
 
-    <Target Name="CheckDependencyPaths">
-        <Error
-                Text=" Slay the Spire 2 data not found at path '$(Sts2DataDir)'"
-                Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')"/>
-        <Error
-                Text=" Godot not found at path '$(GodotPath)'"
-                Condition="'$(GodotPath)' == '' or !Exists('$(GodotPath)')"/>
+        <Message Importance="high" Text="Copying RitsuLib mod files (v$(RitsuLibPackageVersion)) to $(RitsuLibModDest)"/>
+        <MakeDir Directories="$(RitsuLibModDest)" Condition="!Exists('$(RitsuLibModDest)')"/>
+
+        <!-- 只复制 mod_manifest.json 和 DLL -->
+        <Copy SourceFiles="$(RitsuLibPackageBase)contentFiles\any\net9.0\mod_manifest.json"
+              DestinationFolder="$(RitsuLibModDest)"/>
+        <Copy SourceFiles="$(RitsuLibPackageBase)lib\net9.0\STS2-RitsuLib.dll"
+              DestinationFolder="$(RitsuLibModDest)"/>
     </Target>
-
-
+    
+    <!-- 把你 audio 目录下的文件原样复制到模组文件夹（保留 audio 根目录） -->
+    <Target Name="CopyAudioToModsFolder" AfterTargets="CopyToModsFolderOnBuild">
+        <Message Text="Copying audio files to game mods folder." Importance="high"/>
+        <ItemGroup>
+            <!-- 把 None 组里 audio 目录下的文件筛选出来，重新映射目标路径 -->
+            <AudioFilesToCopy Include="@(None)"
+                              Condition="$([System.String]::new('%(Identity)').Contains('audio'))" />
+            <!-- 构造目标路径：mods/CuteSakikoMod + audio/子路径/文件名.mp3 -->
+            <MappedAudioFiles Include="@(AudioFilesToCopy)">
+                <DestPath>$(ModsPath)$(MSBuildProjectName)\%(Identity)</DestPath>
+            </MappedAudioFiles>
+        </ItemGroup>
+        <Copy SourceFiles="@(MappedAudioFiles)"
+              DestinationFiles="@(MappedAudioFiles->'%(DestPath)')"
+              SkipUnchangedFiles="true"/>
+    </Target>
+    
+    <Target Name="GodotPublishOnBuild" AfterTargets="Build"
+            Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
+        <Message Text="Exporting Godot .pck to mods folder (from Build)" Importance="high"/>
+        <Exec Command="&quot;$(GodotPath)&quot; --headless --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
+              EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
+              ContinueOnError="WarnAndContinue"/>
+    </Target>
+    
+    <!-- 发布时自动打包 PCK -->
     <Target Name="GodotPublish" AfterTargets="Publish" Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
         <Message Text="Exporting Godot .pck to mods folder" Importance="high"/>
         <Exec Command="&quot;$(GodotPath)&quot; --headless --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
@@ -161,7 +164,22 @@
               ContinueOnError="WarnAndContinue"/>
     </Target>
 
-    <Target Name="GodotPublishSkipped" AfterTargets="Publish" Condition="'$(GodotPath)' == '' or !Exists('$(GodotPath)')">
-        <Message Text="Skipping Godot .pck export because GodotPath is not configured." Importance="high"/>
+    <!-- 路径检查 -->
+    <Target Name="CheckDependencyPaths">
+        <Error Text=" Slay the Spire 2 data not found at path '$(Sts2DataDir)'"
+               Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')"/>
+        <Error Text=" Godot not found at path '$(GodotPath)'"
+               Condition="'$(GodotPath)' == '' or !Exists('$(GodotPath)')"/>
     </Target>
+    
+    <ItemGroup>
+        <!-- 把 audio 目录下的文件作为普通文件包含，但不参与编译 -->
+        <None Include="audio\**\*">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <!-- 这一行是关键：告诉 Godot 不要把这个文件扫描进资源系统 -->
+            <GodotResource>false</GodotResource>
+        </None>
+    </ItemGroup>
+    
+    
 </Project>
