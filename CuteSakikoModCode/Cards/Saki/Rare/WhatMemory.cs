@@ -10,7 +10,7 @@ using STS2RitsuLib.Keywords;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 
-public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class WhatMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     
@@ -25,7 +25,7 @@ public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var allCards = new List<CardModel>();
-        foreach (var pileType in new[] { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust })
+        foreach (var pileType in new[] { PileType.Hand})
         {
             var pile = pileType.GetPile(Owner);
             if (pile != null) allCards.AddRange(pile.Cards);
@@ -42,7 +42,6 @@ public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare
 
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Innate);
-        EnergyCost.UpgradeBy(-1);
+        AddKeyword(CardKeyword.Retain);
     }
 }
