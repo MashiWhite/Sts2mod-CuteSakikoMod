@@ -7,12 +7,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
 public partial class ChordButton : TextureButton
 {
-    private string _chordId;
+    public string ChordId { get; private set; }
     private int _multiplier = 1;
 
     public void Setup(string chordId, int mult = 1)
     {
-        _chordId = chordId;
+        ChordId = chordId;
         _multiplier = mult;
 
         var tex = ChordDisplayHelper.GetChordTexture(chordId);
@@ -25,11 +25,10 @@ public partial class ChordButton : TextureButton
         {
             var tips = new List<IHoverTip>
             {
-                ChordDisplayHelper.GetChordHoverTip(_chordId, _multiplier)
+                ChordDisplayHelper.GetChordHoverTip(ChordId, _multiplier)
             };
             var tipSet = NHoverTipSet.CreateAndShow(this, tips);
             if (tipSet != null)
-                // 将提示框移动到按钮右侧（延迟一帧保证面板已创建）
                 CallDeferred(nameof(RepositionTooltip), tipSet);
         };
         MouseExited += () => NHoverTipSet.Remove(this);
@@ -37,6 +36,7 @@ public partial class ChordButton : TextureButton
 
     private void RepositionTooltip(NHoverTipSet tipSet)
     {
-        if (tipSet is Control tipControl) tipControl.GlobalPosition = GlobalPosition + new Vector2(Size.X + 10, 0);
+        if (tipSet is Control tipControl)
+            tipControl.GlobalPosition = GlobalPosition + new Vector2(Size.X + 10, 0);
     }
 }

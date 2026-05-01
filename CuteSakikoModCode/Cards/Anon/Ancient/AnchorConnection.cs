@@ -1,8 +1,11 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Runs;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient;
 
@@ -19,13 +22,13 @@ public class AnchorConnection() : CuteAnonCard(1, CardType.Skill, CardRarity.Anc
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var selectedChords = await ChordLibraryScreen.SelectChords(2);
-        if (selectedChords == null || selectedChords.Count < 2) return;
-
+        var selectedChordIds = await ChordSelectCmd.SelectChords(choiceContext, Owner, 2);
+        if (selectedChordIds.Count < 2) return; // 用户取消或无有效选择
+    
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         var multiplier = guitar?.GetEffectMultiplier() ?? 1;
-
-        foreach (var chordId in selectedChords)
+    
+        foreach (var chordId in selectedChordIds)
             if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 await def.Effect(choiceContext, Owner.Creature, multiplier);
     }

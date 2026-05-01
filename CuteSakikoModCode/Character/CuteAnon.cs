@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Nodes.Combat;
@@ -51,7 +52,7 @@ public class CuteAnon : ModCharacterTemplate<CuteAnonCardPool, CuteAnonRelicPool
             ),
             new CharacterVfxAssetSet(
                 // 卡牌拖尾场景。
-                // TrailPath: "res://scenes/vfx/card_trail_ironclad.tscn"
+                TrailPath: "res://CuteSakikoMod/scenes/ui/card_trail_anon.tscn"
             ),
             Audio: new CharacterAudioAssetSet(
                 // 攻击音效

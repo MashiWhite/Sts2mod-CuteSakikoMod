@@ -12,7 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
 [RegisterArchaicToothTranscendence(typeof(PlayImmediately))]
 [RegisterCharacterStarterCard(typeof(CuteAnon))]
-public class PlayChord() : CuteAnonCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
+public class PlayChord() : CuteAnonCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote];
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
@@ -35,6 +35,6 @@ public class PlayChord() : CuteAnonCard(1, CardType.Skill, CardRarity.Basic, Tar
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 升级后0费
+        AddKeyword(CardKeyword.Retain);
     }
 }

@@ -6,13 +6,13 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class Apathetic() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class Apathetic() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(10m, ValueProp.Move); }
+        get { yield return new BlockVar(13m, ValueProp.Move); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

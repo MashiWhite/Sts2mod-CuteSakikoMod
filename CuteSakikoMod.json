@@ -3,7 +3,7 @@
   "name": "可爱小祥mod",
   "author": "MashiWhite",
   "description": "一个核心是可爱小祥的mod。",
-  "version": "v0.0.3",
+  "version": "v0.0.3.3",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [

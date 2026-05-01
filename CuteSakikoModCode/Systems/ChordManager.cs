@@ -20,6 +20,27 @@ public static class ChordManager
     }
 
     public static Dictionary<string, ChordDefinition> AllChords { get; } = new();
+    public static List<ChordDefinition> AllChordsList { get; } = new();   // 新增
+
+    private static void AddChord(string id, ChordCategory cat, CardType[] seq,
+        string titleKey, string descKey, string iconName,
+        int[] baseValues,
+        Func<PlayerChoiceContext, Creature, int, Task> effect)
+    {
+        var def = new ChordDefinition
+        {
+            Id = id,
+            Category = cat,
+            NoteSequence = seq,
+            TitleKey = titleKey,
+            DescKey = descKey,
+            IconName = iconName,
+            BaseValues = baseValues,
+            Effect = effect
+        };
+        AllChords[id] = def;
+        AllChordsList.Add(def);
+    }
 
     private static void AddTemporaryChord(string id, ChordCategory cat, CardType[] seq,
         string titleKey, string descKey, string iconName, int[] baseValues,
@@ -38,6 +59,7 @@ public static class ChordManager
             IsTemporaryOnly = true
         };
         AllChords[id] = def;
+        AllChordsList.Add(def);
         _temporaryChordIds.Add(id);
     }
 
@@ -468,23 +490,7 @@ public static class ChordManager
     }
 
 
-    private static void AddChord(string id, ChordCategory cat, CardType[] seq,
-        string titleKey, string descKey, string iconName,
-        int[] baseValues,
-        Func<PlayerChoiceContext, Creature, int, Task> effect)
-    {
-        AllChords[id] = new ChordDefinition
-        {
-            Id = id,
-            Category = cat,
-            NoteSequence = seq,
-            TitleKey = titleKey,
-            DescKey = descKey,
-            IconName = iconName,
-            BaseValues = baseValues,
-            Effect = effect
-        };
-    }
+   
 
     //获得临时和弦
     public static List<string> GetTemporaryChordIds(ChordCategory? category = null)

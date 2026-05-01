@@ -50,23 +50,69 @@ public class KabutoNote : CuteSakikoModRelic  // ← 去掉 sealed
         var player = Owner;
         if (player == null) return;
 
-        // 获取所有未消耗的回忆卡牌模板
-        var templates = ModelDb.AllCards
-            .Where(c => c.HasModKeyword(CutesakiKeywords.Memory) &&
-                        !SakiMemoryManager.Instance.ExhaustedMemoryIds.Contains(c.Id))
-            .ToList();
+        var combatState = player.PlayerCombatState;
+        if (combatState == null) return;
 
-        if (templates.Count == 0) return;
+        var exhaustedIds = SakiMemoryManager.Instance.ExhaustedMemoryIds;
+        var seenIds = new HashSet<ModelId>();
+        var cardsToShow = new List<CardModel>();
 
-        // 为每张卡牌创建可变实例（用于界面展示，需要 Owner 但非必要）
-        var cards = templates.Select(t => player.RunState.CreateCard(t, player)).ToList();
+        bool ShouldShow(CardModel card)
+        {
+            if (card == null) return false;
+            if (exhaustedIds.Contains(card.Id)) return false;
+            // 排除升级卡牌
+            if (card.IsUpgraded) return false;
+            if (seenIds.Contains(card.Id)) return false;
+            return true;
+        }
 
-        // 构造一个临时牌堆（类型随意，Exhaust 仅用于界面底部文字）
-        var pile = new CardPile(PileType.Exhaust);
-        foreach (var card in cards)
-            pile.AddInternal(card);
+        // 1. 原始模板库中的回忆卡（基础版）
+        foreach (var template in ModelDb.AllCards)
+        {
+            // 直接检查模板是否带有关键字（模拟 HasModKeyword）
+            if (template.HasModKeyword(CutesakiKeywords.Memory))
+            {
+                var instance = player.RunState.CreateCard(template, player);
+                if (ShouldShow(instance))
+                {
+                    seenIds.Add(instance.Id);
+                    cardsToShow.Add(instance);
+                }
+            }
+        }
 
-        // 调用原版牌堆查看界面（关闭热键设为空数组）
-        NCardPileScreen.ShowScreen(pile, Array.Empty<string>());
+        // 2. 战斗中所有牌堆里的实际卡牌（包含临时添加关键字的）
+        var piles = new[] 
+        { 
+            combatState.Hand, 
+            combatState.DrawPile, 
+            combatState.DiscardPile, 
+            combatState.ExhaustPile 
+        };
+
+        foreach (var pile in piles)
+        {
+            if (pile == null) continue;
+            foreach (var card in pile.Cards)
+            {
+                if (card.HasModKeyword(CutesakiKeywords.Memory))
+                {
+                    if (ShouldShow(card))
+                    {
+                        seenIds.Add(card.Id);
+                        cardsToShow.Add(card);
+                    }
+                }
+            }
+        }
+
+        if (cardsToShow.Count == 0) return;
+
+        var displayPile = new CardPile(PileType.Exhaust);
+        foreach (var card in cardsToShow)
+            displayPile.AddInternal(card);
+
+        NCardPileScreen.ShowScreen(displayPile, Array.Empty<string>());
     }
 }

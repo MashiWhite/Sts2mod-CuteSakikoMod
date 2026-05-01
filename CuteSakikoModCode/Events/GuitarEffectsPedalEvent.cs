@@ -107,10 +107,8 @@ public sealed class GuitarEffectsPedalEvent : ModEventTemplate
             RequireManualConfirmation = count > 1
         };
 
-        bool Filter(CardModel card)
-        {
-            return card.Enchantment == null || card.Enchantment.Id != canonicalEnchantment.Id;
-        }
+        // ✅ 修正：只允许没有任何附魔的卡牌
+        bool Filter(CardModel card) => card.Enchantment == null;
 
         var selected = await CardSelectCmd.FromDeckForEnchantment(
             Owner!,

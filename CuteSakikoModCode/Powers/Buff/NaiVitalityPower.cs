@@ -31,11 +31,13 @@ public class NaiVitalityPower : CuteSakikoModPower
     // 下回合开始时触发
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        // 只在能力拥有者自己的回合触发
+        if (player != Owner.Player) return;
+        
         if (!_willTriggerNextTurn) return;
         _willTriggerNextTurn = false;
 
-        if (player == null) return;
-
+        // 这里 player 已经确保是拥有者，不需要再判断 null
         await PlayerCmd.GainEnergy(1, player);
         await CardPileCmd.Draw(choiceContext, 1, player);
     }

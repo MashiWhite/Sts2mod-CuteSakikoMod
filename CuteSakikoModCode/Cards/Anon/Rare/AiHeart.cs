@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Commands;          // 新增，用于 CardPileCmd
+using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status; // 新增，引用 NotNeeded
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
@@ -18,7 +20,6 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -30,6 +31,7 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
                 var fullDesc = $"{condition}\n{effectDesc}";
                 var title = new LocString("card_keywords", def.TitleKey);
                 yield return new HoverTip(title, fullDesc);
+                yield return HoverTipFactory.FromCard<NotNeeded>(IsUpgraded);
             }
         }
     }
@@ -39,13 +41,25 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
         TriggerBanter();
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar == null) return;
+        if (guitar != null)
+        {
+            var currentMinor = guitar.GetCurrentChords().GetValueOrDefault(ChordCategory.Minor);
+            if (currentMinor == "GreyAnonChord")
+                await guitar.AddChordToStored(choiceContext, "GreyAnonChord");
+            else
+                guitar.TempReplaceChord(ChordCategory.Minor, "GreyAnonChord");
+        }
 
-        var currentMinor = guitar.GetCurrentChords().GetValueOrDefault(ChordCategory.Minor);
-        if (currentMinor == "GreyAnonChord")
-            await guitar.AddChordToStored(choiceContext, "GreyAnonChord");
-        else
-            guitar.TempReplaceChord(ChordCategory.Minor, "GreyAnonChord");
+        // ----- 新增效果：添加一张费用为 0 的 NotNeeded 到手牌 -----
+        var notNeeded =  CombatState.CreateCard<NotNeeded>(Owner);
+        notNeeded.EnergyCost.SetCustomBaseCost(0);   // 正确的方法名
+        if (IsUpgraded)
+        {
+            notNeeded.UpgradeInternal();
+            notNeeded.FinalizeUpgradeInternal();
+        }
+        await CardPileCmd.AddGeneratedCardToCombat(notNeeded, PileType.Hand, Owner);
+        // -------------------------------------------------------
     }
 
     protected override void OnUpgrade()
