@@ -1,7 +1,9 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
@@ -76,7 +78,7 @@ public class CuteAnon : ModCharacterTemplate<CuteAnonCardPool, CuteAnonRelicPool
                 // 多人模式剪刀石头布-剪刀。
                 "res://CuteSakikoMod/images/others/anon/multiplayer_hand_scissors.png"
             )));
-
+    
 
     //一堆有关颜色
     public override Color DialogueColor => new("#ff8899");
