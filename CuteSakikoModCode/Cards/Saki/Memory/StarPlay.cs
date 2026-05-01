@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Memory;
 
-public class StarPlay() : SakiMemoryCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
+public class StarPlay() : SakiMemoryCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

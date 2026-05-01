@@ -6,6 +6,8 @@ using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
+using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
@@ -67,6 +69,7 @@ public static class ChordManager
     {
         // ========== 大三和弦 ==========
         // 初始 C【攻 攻 技】随机造成3点伤害并获得3点格挡
+        // C 和弦
         AddChord("C", ChordCategory.Major,
             new[] { CardType.Attack, CardType.Attack, CardType.Skill },
             "CUTESAKIKOMOD-CCHORD.title", "CUTESAKIKOMOD-CCHORD.description", "c_chord",
@@ -75,13 +78,20 @@ public static class ChordManager
             {
                 var combat = owner.CombatState;
                 if (combat == null) return;
-                var enemies = combat.HittableEnemies;
+
+                // 1. 获取已排序的敌人列表，保证两端顺序一致
+                var enemies = combat.HittableEnemies
+                    .OrderBy(e => e.Monster?.Id.Entry)
+                    .ToList();
+
                 if (enemies.Any())
                 {
+                    // 2. 用同步随机数随机选一个
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
                     await CreatureCmd.Damage(ctx, target, 3 * mult, ValueProp.Move, owner, null);
                 }
 
+                // 3. 获得格挡（无随机）
                 await CreatureCmd.GainBlock(owner, 3 * mult, 0, null);
             });
 
@@ -150,10 +160,16 @@ public static class ChordManager
             new[] { 3 },
             async (ctx, owner, mult) =>
             {
-                var enemies = owner.CombatState?.HittableEnemies;
-                if (enemies != null && enemies.Any())
+                var combat = owner.CombatState;
+                if (combat == null) return;
+
+                var enemies = combat.HittableEnemies
+                    .OrderBy(e => e.Monster?.Id.Entry)
+                    .ToList();
+
+                if (enemies.Any())
                 {
-                    var target = owner.CombatState.RunState.Rng.CombatCardSelection.NextItem(enemies);
+                    var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
                     await CreatureCmd.Damage(ctx, target, 3 * mult, ValueProp.Move, owner, null);
                 }
             });
@@ -323,16 +339,15 @@ public static class ChordManager
         AddTemporaryChord("AnonCChord", ChordCategory.Anon,
             new[] { CardType.Skill, CardType.Skill, CardType.Skill },
             "CUTESAKIKOMOD-ANONCCHORD.title", "CUTESAKIKOMOD-ANONCCHORD.description", "anon_c_chord",
-            new[] { 1 }, // 基础升级张数
+            new[] { 1 },
             async (ctx, owner, mult) =>
             {
                 var combat = owner.CombatState;
                 if (combat == null) return;
 
-                var upgradeCount = 1 * mult; // 普通为1，先古为2
+                var upgradeCount = 1 * mult;
                 var allUpgradable = new List<CardModel>();
 
-                // 收集所有友方手牌中可升级的牌
                 foreach (var player in combat.Players)
                 {
                     var hand = player.PlayerCombatState?.Hand;
@@ -340,9 +355,16 @@ public static class ChordManager
                     allUpgradable.AddRange(hand.Cards.Where(c => c.IsUpgradable));
                 }
 
-                // 随机选择指定数量的卡牌升级
+                if (allUpgradable.Count == 0) return;
+
                 var rng = combat.RunState.Rng.CombatCardSelection;
-                var selected = allUpgradable.OrderBy(x => rng.NextInt()).Take(upgradeCount).ToList();
+
+                // 先按 Id 排序，保证两端输入一致，然后随机打乱
+                var selected = allUpgradable
+                    .OrderBy(c => c.Id.Entry)               // 确定性排序
+                    .OrderBy(x => rng.NextInt())            // 用同步随机数打乱
+                    .Take(upgradeCount)
+                    .ToList();
 
                 foreach (var card in selected)
                 {
@@ -365,7 +387,6 @@ public static class ChordManager
                 var allies = combat.Players.ToList();
                 foreach (var player in allies)
                 {
-                    // 为每个友方生成一瓶随机药水并加入其药水栏
                     var randomPotion = PotionFactory.CreateRandomPotionInCombat(
                         player,
                         player.RunState.Rng.CombatPotionGeneration

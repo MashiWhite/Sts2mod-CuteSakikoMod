@@ -9,7 +9,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class LittleMoments() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    private static bool _isTransforming;
+    // 改为实例字段，避免多个玩家相互影响
+    private bool _isTransforming;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -36,7 +37,7 @@ public class LittleMoments() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, 
                 copy.FinalizeUpgradeInternal();
             }
 
-            await CardPileCmd.Add(copy, PileType.Draw, CardPilePosition.Random);
+            await CardPileCmd.Add(copy, PileType.Draw, CardPilePosition.Top);
         }
 
         await Cmd.CustomScaledWait(0.1f, 0.15f);
@@ -49,37 +50,33 @@ public class LittleMoments() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, 
         if (_isTransforming) return;
         if (CombatState == null || Owner == null) return;
 
-        // 仅检查手牌中的数量
         var hand = PileType.Hand.GetPile(Owner);
         if (hand == null) return;
+
         var handCount = hand.Cards.OfType<LittleMoments>().Count();
         if (handCount < 5) return;
 
         _isTransforming = true;
 
-        // 但移除时，清理所有牌堆中的残留
-        var allCards = Owner.PlayerCombatState?.AllCards;
-        if (allCards != null)
-        {
-            var validCards = allCards.OfType<LittleMoments>()
-                .Where(c => c.Pile != null
-                            && c.Pile.IsCombatPile
-                            && c.Pile.Type != PileType.Play
-                            && c.Pile.Type != PileType.Exhaust
-                            && CombatState.ContainsCard(c))
-                .ToList();
+        // 收集所有牌堆中的 LittleMoments
+        var targetPiles = new[] { PileType.Hand, PileType.Draw, PileType.Discard };
+        var allLittleMoments = targetPiles
+            .Select(pileType => pileType.GetPile(Owner))
+            .Where(pile => pile != null)
+            .SelectMany(pile => pile.Cards.OfType<LittleMoments>())
+            .ToList();
 
-            foreach (var card in validCards)
-                await CardPileCmd.RemoveFromCombat(card);
-        }
+        // 移除全部
+        foreach (var card in allLittleMoments)
+            await CardPileCmd.RemoveFromCombat(card);
 
+        // 创建 Lifetime
         var lifetime = CombatState.CreateCard<Lifetime>(Owner);
         if (IsUpgraded)
         {
             lifetime.UpgradeInternal();
             lifetime.FinalizeUpgradeInternal();
         }
-
         await CardPileCmd.AddGeneratedCardToCombat(lifetime, PileType.Hand, Owner);
 
         _isTransforming = false;

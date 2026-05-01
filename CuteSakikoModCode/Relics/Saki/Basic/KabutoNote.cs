@@ -61,8 +61,6 @@ public class KabutoNote : CuteSakikoModRelic  // ← 去掉 sealed
         {
             if (card == null) return false;
             if (exhaustedIds.Contains(card.Id)) return false;
-            // 排除升级卡牌
-            if (card.IsUpgraded) return false;
             if (seenIds.Contains(card.Id)) return false;
             return true;
         }

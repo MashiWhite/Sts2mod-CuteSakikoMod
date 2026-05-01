@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using STS2RitsuLib.Combat.CardTargeting;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Potions.Common;
 
@@ -17,7 +18,7 @@ public sealed class Cafe : CuteSakikoModPotion
 
     public override PotionUsage Usage => PotionUsage.CombatOnly;
 
-    public override TargetType TargetType => TargetType.AnyPlayer;
+    public override TargetType TargetType => CustomTargetType.Anyone;
 
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

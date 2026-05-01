@@ -5,7 +5,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Memory;
 
-public class FateMeet() : SakiMemoryCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
+public class FateMeet() : SakiMemoryCard(0, CardType.Skill, CardRarity.Ancient, TargetType.Self)
 {
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

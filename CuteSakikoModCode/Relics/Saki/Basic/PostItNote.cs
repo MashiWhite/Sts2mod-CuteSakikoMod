@@ -10,7 +10,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 
 public sealed class PostItNote : KabutoNote  // 继承 KabutoNote
 {
-    public override RelicRarity Rarity => RelicRarity.Rare;  // 设定稀有度（按需调整）
+    public override RelicRarity Rarity => RelicRarity.Starter; 
 
     public override async Task AfterSideTurnStart(CombatSide side, ICombatState combatState)
     {

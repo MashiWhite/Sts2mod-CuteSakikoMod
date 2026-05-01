@@ -23,8 +23,7 @@ public class PrepSupply() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon,
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
-            // 演奏所有储存的和弦
-            await guitar.TriggerAllStoredChords(choiceContext);
+            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
 
         // 获得能量
         var energyGain = DynamicVars.Energy.IntValue;

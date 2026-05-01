@@ -18,11 +18,10 @@ public static class MusicNoteManager
             data = new PlayerData();
             _data[player] = data;
         }
-
         return data;
     }
 
-    // ---------- 新版调用（含 Bonus 列表） ----------
+    // ---------- 音符与储存和弦管理 ----------
     public static List<string> AddNote(Player player, CardType type,
         IReadOnlyDictionary<ChordCategory, string> learnedChords,
         IEnumerable<string> bonusChordIds)
@@ -40,10 +39,7 @@ public static class MusicNoteManager
             data.LastRoundNumber = currentRound;
         }
 
-        // 记录获得一个音符（无论是否匹配和弦）
         data.NotesGainedThisTurn++;
-
-        // 原有逻辑…
         data.Notes.Enqueue(type);
         while (data.Notes.Count > 4)
             data.Notes.Dequeue();
@@ -51,6 +47,7 @@ public static class MusicNoteManager
         var sequence = data.Notes.ToList();
         var newChords = new List<string>();
 
+        // 检查已学习和弦
         if (learnedChords != null)
             foreach (var kv in learnedChords)
             {
@@ -64,6 +61,7 @@ public static class MusicNoteManager
                 }
             }
 
+        // 检查奖励和弦
         if (bonusChordIds != null)
             foreach (var chordId in bonusChordIds)
             {
@@ -79,7 +77,7 @@ public static class MusicNoteManager
         while (data.StoredChords.Count > MaxStoredChords)
             data.StoredChords.RemoveAt(0);
 
-        // 触发“吉他主唱”效果（如有）
+        // 触发“吉他主唱”效果（两端都执行，能力同步由 PowerCmd 保证）
         if (player?.Creature != null)
         {
             var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
@@ -89,11 +87,9 @@ public static class MusicNoteManager
         return newChords;
     }
 
-    /// <summary>获取本回合已获得的音符总数</summary>
     public static int GetNotesGainedThisTurn(Player player)
     {
         if (player == null) return 0;
-        // 调用此方法时也进行回合检查，防止回合切换后残留值
         var data = GetData(player);
         var combat = player.Creature?.CombatState;
         var currentRound = combat?.RoundNumber ?? 0;
@@ -102,21 +98,17 @@ public static class MusicNoteManager
             data.NotesGainedThisTurn = 0;
             data.LastRoundNumber = currentRound;
         }
-
         return data.NotesGainedThisTurn;
     }
 
-    /// <summary>随机移除一个音符队列中的音符。成功返回 true，音符为空返回 false。</summary>
     public static bool RemoveRandomNote(Player player, Rng rng)
     {
+        // 两端都执行，依靠同步 Rng 保证结果相同
         if (player == null) return false;
         var data = GetData(player);
         if (data.Notes.Count == 0) return false;
-
-        // 将队列转为数组，随机选一个移除，再重建队列
         var notesArray = data.Notes.ToArray();
         var removeIndex = rng.NextInt(notesArray.Length);
-
         data.Notes.Clear();
         for (var i = 0; i < notesArray.Length; i++)
             if (i != removeIndex)
@@ -124,17 +116,16 @@ public static class MusicNoteManager
         return true;
     }
 
-    // ---------- 其他原有方法保持不变 ----------
     public static IReadOnlyList<CardType> GetCurrentNotes(Player player)
     {
-        if (player == null) return new List<CardType>();
-        return GetData(player).Notes.ToList().AsReadOnly();
+        var data = GetData(player);
+        return data.Notes.ToList().AsReadOnly();
     }
 
     public static IReadOnlyList<string> GetStoredChords(Player player)
     {
-        if (player == null) return new List<string>();
-        return GetData(player).StoredChords.AsReadOnly();
+        var data = GetData(player);
+        return data.StoredChords.AsReadOnly();
     }
 
     public static void ClearStoredChords(Player player)
@@ -151,12 +142,13 @@ public static class MusicNoteManager
 
     public static void ClearCombatData(Player player)
     {
+        if (player == null) return;
         if (_data.TryGetValue(player, out var data))
         {
             data.Notes.Clear();
             data.StoredChords.Clear();
-            data.NotesGainedThisTurn = 0; // 重置音符计数
-            data.LastRoundNumber = 0; // 重置回合编号
+            data.NotesGainedThisTurn = 0;
+            data.LastRoundNumber = 0;
         }
     }
 
@@ -169,14 +161,14 @@ public static class MusicNoteManager
     public static bool RemoveChord(Player player, string chordId)
     {
         if (player == null) return false;
-        var list = GetData(player).StoredChords;
+        var data = GetData(player);
+        var list = data.StoredChords;
         var index = list.FindLastIndex(c => c == chordId);
         if (index >= 0)
         {
             list.RemoveAt(index);
             return true;
         }
-
         return false;
     }
 
@@ -203,14 +195,11 @@ public static class MusicNoteManager
         if (player == null) return false;
         var data = GetData(player);
         if (data.Notes.Count == 0) return false;
-
         var notesArray = data.Notes.ToArray();
         notesArray[^1] = newType;
-
         data.Notes.Clear();
         foreach (var note in notesArray)
             data.Notes.Enqueue(note);
-
         return true;
     }
 
@@ -224,9 +213,7 @@ public static class MusicNoteManager
 
     private class PlayerData
     {
-        public int LastRoundNumber; // 用于检测回合切换
-
-        // 新增：本回合获得的音符总数（用于某些卡牌效果）
+        public int LastRoundNumber;
         public int NotesGainedThisTurn;
         public Queue<CardType> Notes { get; } = new();
         public List<string> StoredChords { get; } = new();

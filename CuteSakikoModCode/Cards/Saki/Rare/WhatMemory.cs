@@ -41,7 +41,7 @@ public class WhatMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare
     }
 
     protected override void OnUpgrade()
-    {
+    { 
         AddKeyword(CardKeyword.Retain);
     }
 }
