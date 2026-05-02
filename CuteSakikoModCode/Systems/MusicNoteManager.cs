@@ -22,70 +22,76 @@ public static class MusicNoteManager
     }
 
     // ---------- 音符与储存和弦管理 ----------
-    public static List<string> AddNote(Player player, CardType type,
-        IReadOnlyDictionary<ChordCategory, string> learnedChords,
-        IEnumerable<string> bonusChordIds)
+   public static (List<string> newChords, string? overflowChordId) AddNote(
+    Player player, CardType type,
+    IReadOnlyDictionary<ChordCategory, string> learnedChords,
+    IEnumerable<string> bonusChordIds)
+{
+    if (player == null) return (new List<string>(), null);
+
+    var data = GetData(player);
+
+    // 回合重置
+    var combat = player.Creature?.CombatState;
+    var currentRound = combat?.RoundNumber ?? 0;
+    if (data.LastRoundNumber != currentRound)
     {
-        if (player == null) return new List<string>();
-
-        var data = GetData(player);
-
-        // 跨回合自动清零
-        var combat = player.Creature?.CombatState;
-        var currentRound = combat?.RoundNumber ?? 0;
-        if (data.LastRoundNumber != currentRound)
-        {
-            data.NotesGainedThisTurn = 0;
-            data.LastRoundNumber = currentRound;
-        }
-
-        data.NotesGainedThisTurn++;
-        data.Notes.Enqueue(type);
-        while (data.Notes.Count > 4)
-            data.Notes.Dequeue();
-
-        var sequence = data.Notes.ToList();
-        var newChords = new List<string>();
-
-        // 检查已学习和弦
-        if (learnedChords != null)
-            foreach (var kv in learnedChords)
-            {
-                var chordId = kv.Value;
-                if (string.IsNullOrEmpty(chordId)) continue;
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
-                    ChordManager.MatchesChord(def, sequence))
-                {
-                    data.StoredChords.Add(chordId);
-                    newChords.Add(chordId);
-                }
-            }
-
-        // 检查奖励和弦
-        if (bonusChordIds != null)
-            foreach (var chordId in bonusChordIds)
-            {
-                if (string.IsNullOrEmpty(chordId)) continue;
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
-                    ChordManager.MatchesChord(def, sequence))
-                {
-                    data.StoredChords.Add(chordId);
-                    newChords.Add(chordId);
-                }
-            }
-
-        while (data.StoredChords.Count > MaxStoredChords)
-            data.StoredChords.RemoveAt(0);
-
-        // 触发“吉他主唱”效果（两端都执行，能力同步由 PowerCmd 保证）
-        if (player?.Creature != null)
-        {
-            var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
-            if (vocalPower != null) _ = vocalPower.OnNoteGained(1);
-        }
-
-        return newChords;
+        data.NotesGainedThisTurn = 0;
+        data.LastRoundNumber = currentRound;
     }
+
+    data.NotesGainedThisTurn++;
+    data.Notes.Enqueue(type);
+    while (data.Notes.Count > 4)
+        data.Notes.Dequeue();
+
+    var sequence = data.Notes.ToList();
+    var newChords = new List<string>();
+
+    // 已学习和弦匹配
+    if (learnedChords != null)
+        foreach (var kv in learnedChords)
+        {
+            var chordId = kv.Value;
+            if (string.IsNullOrEmpty(chordId)) continue;
+            if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
+                ChordManager.MatchesChord(def, sequence))
+            {
+                data.StoredChords.Add(chordId);
+                newChords.Add(chordId);
+            }
+        }
+
+    // 奖励和弦匹配
+    if (bonusChordIds != null)
+        foreach (var chordId in bonusChordIds)
+        {
+            if (string.IsNullOrEmpty(chordId)) continue;
+            if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
+                ChordManager.MatchesChord(def, sequence))
+            {
+                data.StoredChords.Add(chordId);
+                newChords.Add(chordId);
+            }
+        }
+
+    // 溢出处理：记录即将被移除的最旧和弦ID
+    string? overflowChordId = null;
+    while (data.StoredChords.Count > MaxStoredChords)
+    {
+        overflowChordId = data.StoredChords[0]; // 最旧的
+        data.StoredChords.RemoveAt(0);
+    }
+
+    // 吉他主唱效果
+    if (player?.Creature != null)
+    {
+        var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
+        if (vocalPower != null) _ = vocalPower.OnNoteGained(1);
+    }
+
+    return (newChords, overflowChordId);
+}
 
     public static int GetNotesGainedThisTurn(Player player)
     {

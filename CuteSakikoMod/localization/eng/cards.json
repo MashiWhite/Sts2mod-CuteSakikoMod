@@ -16,6 +16,8 @@
   "CUTE_SAKIKO_MOD_CARD_PLAY_IMMEDIATELY.description": "每当获得[pink]和弦[/pink]时，立即将其[gold]演奏[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_PREP_SUPPLY.title": "演出前的补给",
   "CUTE_SAKIKO_MOD_CARD_PREP_SUPPLY.description": "演奏[gold]所有[/gold]储存的[pink]和弦[/pink]，\n获得{Energy:energyIcons()}。",
+  "CUTE_SAKIKO_MOD_CARD_STUNNING_PERFORMANCE.title": "震撼演奏",
+  "CUTE_SAKIKO_MOD_CARD_STUNNING_PERFORMANCE.description": "造成{CalculatedDamage:diff()}点伤害。\n本回合内每获得1个[pink]音符[/pink]这张牌伤害就提升{ExtraDamage:diff()}点。",
   "CUTE_SAKIKO_MOD_CARD_STEADY_PRACTICE.title": "坚持练习",
   "CUTE_SAKIKO_MOD_CARD_STEADY_PRACTICE.description": "每回合结束时，演奏[gold]最新[/gold]储存的[pink]和弦[/pink]。",
   "CUTE_SAKIKO_MOD_CARD_GUITAR_VOCAL.title": "我要当吉他主唱~",

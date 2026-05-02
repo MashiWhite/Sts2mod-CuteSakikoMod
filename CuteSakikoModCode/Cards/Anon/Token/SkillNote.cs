@@ -12,6 +12,11 @@ public class SkillNote() : ModTokenCard(0, CardType.Skill, CardRarity.Token, Tar
         // 空效果，仅获得音符
     }
 
+    public async Task OnChosen()
+    {
+    
+    }
+    
     protected override void OnUpgrade()
     {
     }

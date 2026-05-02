@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -18,15 +19,11 @@ public class Strum() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, Targ
         var combatState = Owner.Creature.CombatState;
         if (combatState == null) return;
 
-        // 准备三种音符的模板（规范实例）
-        var templateAtk = ModelDb.Card<AtkNote>();
-        var templateSkill = ModelDb.Card<SkillNote>();
-        var templatePower = ModelDb.Card<PowerNote>();
+        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        if (guitar == null) return;
 
-        // 连续选择三次
         for (var i = 0; i < 3; i++)
         {
-            // 每次选择前从模板克隆全新实例，并关联战斗状态
             var options = new List<CardModel>
             {
                 combatState.CreateCard<AtkNote>(Owner),
@@ -34,13 +31,15 @@ public class Strum() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, Targ
                 combatState.CreateCard<PowerNote>(Owner)
             };
 
-            var selected = await CardSelectCmd.FromChooseACardScreen(
-                choiceContext,
-                options,
-                Owner
-            );
+            var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, Owner);
+            if (selected != null)
+            {
+                // ★ 完全复用打牌逻辑，包括溢出和自动播放
+                await guitar.OnNoteGenerated(choiceContext, selected.Type);
+            }
 
-            if (selected != null) await CardCmd.AutoPlay(choiceContext, selected, null);
+            foreach (var option in options)
+                combatState.RemoveCard(option);
         }
     }
 

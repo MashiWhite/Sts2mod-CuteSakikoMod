@@ -14,7 +14,7 @@ public sealed class BreakDownPower : CuteSakikoModPower
     private bool _hasTakenDamageSinceLastOwnTurnEnd;
 
     public override PowerType Type => PowerType.Debuff;
-    public override PowerStackType StackType => PowerStackType.Counter;
+    public override PowerStackType StackType => PowerStackType.Single;
     public override bool AllowNegative => false;
 
     // 自身造成伤害减少 50%

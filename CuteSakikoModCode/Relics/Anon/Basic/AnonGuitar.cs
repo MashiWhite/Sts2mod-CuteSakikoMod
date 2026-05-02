@@ -208,7 +208,21 @@ public class AnonGuitar : CuteAnonRelic
         return result;
     }
 
-    // ========== 核心战斗逻辑 ==========
+    // ========== 统一演奏方法 ==========
+    /// <summary>
+    /// 演奏一个和弦（图标+效果+通知），可选择是否从储存区移除
+    /// </summary>
+    private async Task PlaySingleChord(PlayerChoiceContext ctx, string chordId, bool removeStored = true)
+    {
+        _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
+        if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+            await def.Effect(ctx, Owner.Creature, EffectMultiplier);
+        if (removeStored)
+            MusicNoteManager.RemoveChord(Owner, chordId);
+        await NotifyChordPlayed(ctx);
+    }
+
+    // ========== 核心方法：音符处理 ==========
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         EnsureInitialized();
@@ -229,30 +243,21 @@ public class AnonGuitar : CuteAnonRelic
         if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
             overflowChordId = storedBefore[0];
 
-        var newChords = MusicNoteManager.AddNote(Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
+        var (newChords, actualOverflow) = MusicNoteManager.AddNote(
+            Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
 
-        // 溢出和弦效果
+        // 溢出（意犹未尽）：如果 AddNote 实际溢出了一个和弦，而又与我们的预测相符，则演奏
         if (newChords.Count > 0 && overflowChordId != null)
         {
-            if (ChordManager.AllChords.TryGetValue(overflowChordId, out var overflowDef))
-                await overflowDef.Effect(choiceContext, Owner.Creature, EffectMultiplier);
+            // actualOverflow 可能为 null 如果没发生溢出（比如音符未构成新和弦）
+            if (actualOverflow == overflowChordId)
+                await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
         }
 
-        // 自动播放新和弦
         var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
         if (hasAutoPlay && newChords.Count > 0)
-        {
             foreach (var chordId in newChords)
-            {
-                _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                {
-                    await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-                    MusicNoteManager.RemoveChord(Owner, chordId);
-                }
-            }
-            await NotifyChordPlayed(choiceContext);
-        }
+                await PlaySingleChord(choiceContext, chordId, removeStored: false);
 
         if (newChords.Count == 0)
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
@@ -262,6 +267,36 @@ public class AnonGuitar : CuteAnonRelic
         UpdateStoredChordDisplay();
     }
 
+    /// <summary>
+    /// 当产生一个新音符时调用（打牌或扫弦等），统一处理溢出和自动播放
+    /// </summary>
+    public async Task OnNoteGenerated(PlayerChoiceContext choiceContext, CardType noteType)
+    {
+        if (Owner.Creature.CombatState == null) return;
+
+        // 添加音符，同时获得新和弦列表和溢出的旧和弦ID
+        var (newChords, overflowChordId) = MusicNoteManager.AddNote(
+            Owner, noteType, _currentChords, _bonusChords.Concat(_temporaryChords));
+
+        // 溢出演奏（如果有）
+        if (newChords.Count > 0 && overflowChordId != null)
+            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false); // 关键：不移除储存区
+
+        // 自动演奏（即刻演奏）
+        var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
+        if (hasAutoPlay && newChords.Count > 0)
+            foreach (var chordId in newChords)
+                await PlaySingleChord(choiceContext, chordId, removeStored: false);
+
+        if (newChords.Count == 0)
+            foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
+                await power.OnNoteWithoutChord();
+
+        UpdateNoteDisplay();
+        UpdateStoredChordDisplay();
+    }
+
+    // ========== 其他演奏触发方法 ==========
     public void ClearSequence()
     {
         MusicNoteManager.ClearNotes(Owner);
@@ -272,30 +307,20 @@ public class AnonGuitar : CuteAnonRelic
 
     public async Task TriggerAllStoredChords(PlayerChoiceContext choiceContext)
     {
-        var stored = MusicNoteManager.GetStoredChords(Owner);
+        var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
         foreach (var chordId in stored)
-        {
-            _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
-            if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-        }
+            await PlaySingleChord(choiceContext, chordId, removeStored: true);
         ClearSequence();
-        await NotifyChordPlayed(choiceContext);
     }
 
     public async Task TriggerAllStoredChordsKeepNotes(PlayerChoiceContext choiceContext)
     {
-        var stored = MusicNoteManager.GetStoredChords(Owner);
+        var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
         foreach (var chordId in stored)
-        {
-            _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
-            if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-        }
+            await PlaySingleChord(choiceContext, chordId, removeStored: false);
         MusicNoteManager.ClearStoredChords(Owner);
         UpdateStoredChordDisplay();
         SyncToSaved();
-        await NotifyChordPlayed(choiceContext);
     }
 
     public async Task AddChordToStored(PlayerChoiceContext choiceContext, string chordId)
@@ -304,14 +329,7 @@ public class AnonGuitar : CuteAnonRelic
         MusicNoteManager.AddChordDirectly(Owner, chordId);
         var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
         if (hasAutoPlay)
-        {
-            _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
-            if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-            {
-                await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-                MusicNoteManager.RemoveChord(Owner, chordId);
-            }
-        }
+            await PlaySingleChord(choiceContext, chordId, removeStored: false);
         UpdateStoredChordDisplay();
         SyncToSaved();
     }
@@ -320,30 +338,23 @@ public class AnonGuitar : CuteAnonRelic
     {
         var chordIds = GetLearnedChordIds(categories);
         foreach (var chordId in chordIds)
-        {
-            _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
-            if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-        }
+            await PlaySingleChord(choiceContext, chordId, removeStored: false);
     }
 
-    public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext) => await TriggerLearnedChords(choiceContext);
+    public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext)
+        => await TriggerLearnedChords(choiceContext);
 
     public async Task TriggerLastStoredChord(PlayerChoiceContext choiceContext)
     {
         var stored = MusicNoteManager.GetStoredChords(Owner);
         if (stored.Count == 0) return;
-        var lastChordId = stored.Last();
-        _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { lastChordId }, 0f);
-        if (ChordManager.AllChords.TryGetValue(lastChordId, out var def))
-            await def.Effect(choiceContext, Owner.Creature, EffectMultiplier);
-        MusicNoteManager.RemoveChord(Owner, lastChordId);
+        await PlaySingleChord(choiceContext, stored.Last(), removeStored: true);
         UpdateStoredChordDisplay();
         SyncToSaved();
-        await NotifyChordPlayed(choiceContext);
     }
 
-    private async Task NotifyChordPlayed(PlayerChoiceContext choiceContext)
+    // ========== 通知（公开） ==========
+    public async Task NotifyChordPlayed(PlayerChoiceContext choiceContext)
     {
         foreach (var power in Owner.Creature.Powers.OfType<UnforgettablePerformancePower>())
             await power.OnChordPlayed(choiceContext);
