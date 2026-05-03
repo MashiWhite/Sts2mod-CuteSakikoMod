@@ -14,7 +14,7 @@
   "CUTE_SAKIKO_MOD_RELIC_MASK.description": "每回合开始时，减少自身一半[gold]压力[/gold]，并对所有敌人造成等量伤害。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.flavor": "[pink]Rikki不在，好久都没练习了，和弦都快忘光了，得好好练习一下。[/pink]",
   "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.title": "爱音的吉他",
-  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。\n可在休息处[gold]练习[/gold]随机你的[pink]和弦组[/pink]。",
+  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。\n可在休息处选择[gold]练习吉他[/gold]随机你的[pink]和弦组[/pink]。\n先选择[gold]练习吉他[/gold]不消耗休息处次数。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.title": "爱音的乐谱",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.description": "可以额外记忆一个随机和弦。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.flavor": "[pink]爱音的乐谱，虽然已经破破烂烂的，但至少还是找了回来。[/pink]",

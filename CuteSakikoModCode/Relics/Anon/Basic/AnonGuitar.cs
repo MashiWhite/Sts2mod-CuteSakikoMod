@@ -48,6 +48,9 @@ public class AnonGuitar : CuteAnonRelic
     private Dictionary<ChordCategory, string>? _preTempChords;
     private StoredChordDisplay _storedChordDisplay;
 
+    // 休息站控制
+    private bool _normalOptionUsed;
+
     public override RelicRarity Rarity => RelicRarity.Starter;
     protected virtual int MaxLearnedChordsPerCategory => 1;
     protected virtual int EffectMultiplier => 1;
@@ -209,9 +212,6 @@ public class AnonGuitar : CuteAnonRelic
     }
 
     // ========== 统一演奏方法 ==========
-    /// <summary>
-    /// 演奏一个和弦（图标+效果+通知），可选择是否从储存区移除
-    /// </summary>
     private async Task PlaySingleChord(PlayerChoiceContext ctx, string chordId, bool removeStored = true)
     {
         _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
@@ -246,10 +246,8 @@ public class AnonGuitar : CuteAnonRelic
         var (newChords, actualOverflow) = MusicNoteManager.AddNote(
             Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
 
-        // 溢出（意犹未尽）：如果 AddNote 实际溢出了一个和弦，而又与我们的预测相符，则演奏
         if (newChords.Count > 0 && overflowChordId != null)
         {
-            // actualOverflow 可能为 null 如果没发生溢出（比如音符未构成新和弦）
             if (actualOverflow == overflowChordId)
                 await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
         }
@@ -267,22 +265,16 @@ public class AnonGuitar : CuteAnonRelic
         UpdateStoredChordDisplay();
     }
 
-    /// <summary>
-    /// 当产生一个新音符时调用（打牌或扫弦等），统一处理溢出和自动播放
-    /// </summary>
     public async Task OnNoteGenerated(PlayerChoiceContext choiceContext, CardType noteType)
     {
         if (Owner.Creature.CombatState == null) return;
 
-        // 添加音符，同时获得新和弦列表和溢出的旧和弦ID
         var (newChords, overflowChordId) = MusicNoteManager.AddNote(
             Owner, noteType, _currentChords, _bonusChords.Concat(_temporaryChords));
 
-        // 溢出演奏（如果有）
         if (newChords.Count > 0 && overflowChordId != null)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false); // 关键：不移除储存区
+            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
 
-        // 自动演奏（即刻演奏）
         var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
         if (hasAutoPlay && newChords.Count > 0)
             foreach (var chordId in newChords)
@@ -353,7 +345,7 @@ public class AnonGuitar : CuteAnonRelic
         SyncToSaved();
     }
 
-    // ========== 通知（公开） ==========
+    // ========== 通知 ==========
     public async Task NotifyChordPlayed(PlayerChoiceContext choiceContext)
     {
         foreach (var power in Owner.Creature.Powers.OfType<UnforgettablePerformancePower>())
@@ -478,16 +470,63 @@ public class AnonGuitar : CuteAnonRelic
         _storedChordDisplay = null;
     }
 
-    // ========== 休息站选项 ==========
+    // ========== 休息站选项（控制流程）==========
+    public override bool ShouldDisableRemainingRestSiteOptions(Player player)
+    {
+        if (player != Owner) return true;
+        // 普通选项一旦被选择，就关闭休息站
+        return _normalOptionUsed;
+    }
+
     public override bool TryModifyRestSiteOptions(Player player, ICollection<RestSiteOption> options)
     {
         if (player != Owner) return false;
+
+        _normalOptionUsed = false; // 重置
+
+        // 包装原有选项，使其选中后设置 _normalOptionUsed
+        var wrappedOptions = new List<RestSiteOption>();
+        foreach (var option in options)
+        {
+            if (option is PracticeGuitarOption) continue;
+            wrappedOptions.Add(new WrappedRestSiteOption(option, this));
+        }
+
+        options.Clear();
+        foreach (var wo in wrappedOptions)
+            options.Add(wo);
+
+        // 添加练习吉他选项
         var canLearn = ChordManager.GetLearnableChordIds(ChordCategory.Major).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Minor).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Dominant).Count > 0;
-        if (!canLearn) return false;
-        options.Add(new PracticeGuitarOption(player, this));
+        if (canLearn)
+            options.Add(new PracticeGuitarOption(player, this));
+
         return true;
+    }
+
+    private class WrappedRestSiteOption : RestSiteOption
+    {
+        private readonly RestSiteOption _original;
+        private readonly AnonGuitar _guitar;
+
+        public WrappedRestSiteOption(RestSiteOption original, AnonGuitar guitar) : base(guitar.Owner)
+        {
+            _original = original;
+            _guitar = guitar;
+        }
+
+        public override string OptionId => _original.OptionId;
+        public override LocString Description => _original.Description;
+
+        public override async Task<bool> OnSelect()
+        {
+            bool result = await _original.OnSelect();
+            if (result)
+                _guitar._normalOptionUsed = true;
+            return result;
+        }
     }
 
     // ========== 遗物移除/战斗结束 ==========

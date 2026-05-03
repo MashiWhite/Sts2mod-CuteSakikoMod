@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class MarksOfPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class MarksOfPractice() : CuteAnonCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

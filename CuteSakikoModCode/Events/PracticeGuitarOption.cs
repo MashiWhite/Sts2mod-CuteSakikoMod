@@ -24,12 +24,15 @@ public class PracticeGuitarOption : RestSiteOption
 
     public override async Task<bool> OnSelect()
     {
+        // 已禁用则不再处理
+        if (!IsEnabled) return false;
+
         var rng = _player.RunState.Rng.UpFront;
 
         // 替换三个主槽位（排除 Bonus 分类）
         foreach (var cat in Enum.GetValues<ChordCategory>())
         {
-            if (cat == ChordCategory.Bonus) continue; // Bonus 单独处理
+            if (cat == ChordCategory.Bonus) continue;
             var pool = ChordManager.GetLearnableChordIds(cat);
             if (pool.Count == 0) continue;
             _relic.ReplaceChord(cat, rng.NextItem(pool));
@@ -46,18 +49,15 @@ public class PracticeGuitarOption : RestSiteOption
 
             if (allPools.Count > 0)
             {
-                // 记录当前 Bonus 数量
                 var bonusCount = bonusChords.Count;
-
-                // 清空所有 Bonus（方法一：逐个移除）
                 var oldIds = bonusChords.ToList();
                 foreach (var oldId in oldIds) _relic.RemoveBonusChord(oldId);
-
-                // 重新添加相同数量的随机 Bonus
                 for (var i = 0; i < bonusCount; i++) _relic.AddBonusChord(rng.NextItem(allPools));
             }
         }
 
+        // 自身变灰，防止重复选择；返回 true 表示本次选择有效
+        IsEnabled = false;
         return true;
     }
 }

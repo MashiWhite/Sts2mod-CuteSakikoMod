@@ -16,7 +16,7 @@ public class GoodCry : CuteSakikoModCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new CardsVar(IsUpgraded ? 2 : 1); }
+        get { yield return new CardsVar(2); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -41,20 +41,18 @@ public class GoodCry : CuteSakikoModCard
         }
 
         // 抽牌
-        var drawCount = IsUpgraded ? 2 : 1;
-        await CardPileCmd.Draw(choiceContext, drawCount, Owner);
+        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
 
         // 若有崩溃，额外减少崩溃层数
         var breakdown = creature.GetPower<BreakDownPower>();
         if (breakdown != null && breakdown.Amount > 0)
         {
-            var reduceBreakdown = IsUpgraded ? 2 : 1;
-            await PowerCmd.ModifyAmount(choiceContext, breakdown, -reduceBreakdown, creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, breakdown, -1, creature, this);
         }
     }
 
     protected override void OnUpgrade()
     {
-        // 升级效果在 CanonicalVars 中处理抽牌数，崩溃减少在逻辑中判断
+        DynamicVars.Cards.UpgradeValueBy(1m);
     }
 }

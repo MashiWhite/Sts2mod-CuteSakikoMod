@@ -16,7 +16,7 @@ public class MarksOfPracticePower : CuteSakikoModPower
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
-        RefreshTemporaryChords();
+        AdjustTemporaryChords();
     }
 
     public override async Task AfterPowerAmountChanged(
@@ -27,19 +27,13 @@ public class MarksOfPracticePower : CuteSakikoModPower
         CardModel? cardSource)
     {
         await base.AfterPowerAmountChanged(choiceContext, power, amount, applier, cardSource);
-        // 层数变化（叠加或减少）时刷新临时和弦
         if (power == this)
-            RefreshTemporaryChords();
+            AdjustTemporaryChords();
     }
 
+    // 回合结束不再移除自身，整场战斗持续
     public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
     {
-        if (side == CombatSide.Player)
-        {
-            ClearTemporaryChords();
-            RemoveInternal();
-        }
-
         await base.AfterTurnEnd(choiceContext, side);
     }
 
@@ -49,7 +43,8 @@ public class MarksOfPracticePower : CuteSakikoModPower
         await base.AfterRemoved(oldOwner);
     }
 
-    private void RefreshTemporaryChords()
+    /// <summary> 按当前层数调整临时和弦数量，不改变已有和弦种类 </summary>
+    private void AdjustTemporaryChords()
     {
         var owner = Owner;
         if (owner?.Player == null) return;
@@ -57,20 +52,38 @@ public class MarksOfPracticePower : CuteSakikoModPower
         var guitar = owner.Player.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        guitar.ClearTemporaryChords();
+        int targetCount = Amount;
+        var existing = guitar.GetTemporaryChords().ToList();
+        int currentCount = existing.Count;
 
-        var count = Amount;
-        if (count <= 0) return;
+        if (currentCount < targetCount)
+        {
+            // 需要添加新随机和弦（缺少的数量）
+            var allPools = new List<string>();
+            allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
+            allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
+            allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
+            if (allPools.Count == 0) return;
 
-        var allPools = new List<string>();
-        allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
-        allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
-        allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
-        if (allPools.Count == 0) return;
-
-        var rng = owner.Player.RunState.Rng.UpFront;
-        for (var i = 0; i < count; i++)
-            guitar.AddTemporaryChord(rng.NextItem(allPools));
+            var rng = owner.Player.RunState.Rng.UpFront;
+            for (int i = 0; i < targetCount - currentCount; i++)
+            {
+                string chordId = rng.NextItem(allPools);
+                guitar.AddTemporaryChord(chordId);
+            }
+        }
+        else if (currentCount > targetCount)
+        {
+            // 需要移除多余的临时和弦（从末尾开始移除）
+            while (currentCount > targetCount)
+            {
+                string lastChordId = existing.Last();
+                guitar.RemoveTemporaryChord(lastChordId);
+                existing.RemoveAt(existing.Count - 1);
+                currentCount--;
+            }
+        }
+        // 如果相等，什么都不做
     }
 
     private void ClearTemporaryChords()
