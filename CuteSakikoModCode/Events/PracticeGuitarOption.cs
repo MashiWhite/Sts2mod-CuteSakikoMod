@@ -24,12 +24,11 @@ public class PracticeGuitarOption : RestSiteOption
 
     public override async Task<bool> OnSelect()
     {
-        // 已禁用则不再处理
         if (!IsEnabled) return false;
 
         var rng = _player.RunState.Rng.UpFront;
 
-        // 替换三个主槽位（排除 Bonus 分类）
+        // 替换三个主槽位
         foreach (var cat in Enum.GetValues<ChordCategory>())
         {
             if (cat == ChordCategory.Bonus) continue;
@@ -38,7 +37,7 @@ public class PracticeGuitarOption : RestSiteOption
             _relic.ReplaceChord(cat, rng.NextItem(pool));
         }
 
-        // 处理所有 Bonus 槽位：逐个替换，保持数量不变
+        // 处理 Bonus 槽位
         var bonusChords = _relic.GetBonusChords();
         if (bonusChords.Count > 0)
         {
@@ -56,7 +55,8 @@ public class PracticeGuitarOption : RestSiteOption
             }
         }
 
-        // 自身变灰，防止重复选择；返回 true 表示本次选择有效
+        // 标记练习已完成，且自身变灰
+        _relic.MarkPracticeUsed();
         IsEnabled = false;
         return true;
     }
