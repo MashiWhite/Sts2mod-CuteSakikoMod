@@ -1,5 +1,6 @@
 ﻿
 using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -228,9 +229,24 @@ public class AnonGuitar : CuteAnonRelic
     public async Task AddChordToStored(PlayerChoiceContext choiceContext, string chordId)
     {
         if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+
+        // ← 打牌溢出同款逻辑 ↓
+        var storedBefore = MusicNoteManager.GetStoredChords(Owner);
+        string? overflowChordId = null;
+        var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
+        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
+            overflowChordId = storedBefore[0];          // 最早的那个和弦
+
         MusicNoteManager.AddChordDirectly(Owner, chordId);
+
+        if (overflowChordId != null)
+            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false); // false，因为 AddChordDirectly 已经移除了
+        // ↑ 打牌溢出同款逻辑结束 ↑
+
+        // 立即演奏（若有）
         if (Owner.Creature.HasPower<PlayImmediatelyPower>())
             await PlaySingleChord(choiceContext, chordId, removeStored: false);
+
         UpdateStoredChordDisplay();
         SyncToSaved();
     }
@@ -256,9 +272,11 @@ public class AnonGuitar : CuteAnonRelic
     {
         foreach (var power in Owner.Creature.Powers.OfType<UnforgettablePerformancePower>())
             await power.OnChordPlayed(choiceContext);
-        const string curtainCallId = "CUTESAKIKOMOD-CURTAIN_CALL";
+
+        var curtainCallId = ModelDb.Card<CurtainCall>().Id.Entry;
         var player = Owner;
         if (player == null) return;
+
         var cardsToMove = new List<CardModel>();
         var searchPiles = new[] { PileType.Discard, PileType.Draw, PileType.Exhaust };
         foreach (var pileType in searchPiles)
@@ -267,7 +285,10 @@ public class AnonGuitar : CuteAnonRelic
             if (pile == null) continue;
             cardsToMove.AddRange(pile.Cards.Where(c => c.Id.Entry == curtainCallId));
         }
-        foreach (var card in cardsToMove) await CardPileCmd.Add(card, PileType.Hand);
+
+        foreach (var card in cardsToMove)
+            await CardPileCmd.Add(card, PileType.Hand);
+
         if (cardsToMove.Count > 0) Flash();
     }
 

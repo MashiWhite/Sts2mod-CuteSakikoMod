@@ -24,16 +24,16 @@
 [ext_resource type="Texture2D" uid="uid://cgcr72883vpdj" path="res://CuteSakikoMod/images/char/anon/attack/Anon12.png" id="13_iaxgm"]
 [ext_resource type="Texture2D" uid="uid://bpt62eog2ud14" path="res://CuteSakikoMod/images/char/anon/attack/Anon13.png" id="14_siem2"]
 [ext_resource type="Texture2D" uid="uid://b8mjtcgi0g77n" path="res://CuteSakikoMod/images/char/anon/attack/Anon14.png" id="15_j62vx"]
-[ext_resource type="Texture2D" uid="uid://dxg4p7j8q7nkt" path="res://CuteSakikoMod/images/char/anon/die/Anon1.png" id="25_6w6ng"]
-[ext_resource type="Texture2D" uid="uid://fdnr3bf3lt2t" path="res://CuteSakikoMod/images/char/anon/die/Anon2.png" id="26_juffp"]
-[ext_resource type="Texture2D" uid="uid://b4ub34faaxvtj" path="res://CuteSakikoMod/images/char/anon/die/Anon3.png" id="27_xp1th"]
-[ext_resource type="Texture2D" uid="uid://curaqktqjvx66" path="res://CuteSakikoMod/images/char/anon/die/Anon4.png" id="28_0tbit"]
-[ext_resource type="Texture2D" uid="uid://hxg40fy7kt6i" path="res://CuteSakikoMod/images/char/anon/die/Anon5.png" id="29_a12r7"]
-[ext_resource type="Texture2D" uid="uid://dtjlqauvlbg1a" path="res://CuteSakikoMod/images/char/anon/die/Anon6.png" id="30_65mke"]
-[ext_resource type="Texture2D" uid="uid://c2sicaigxeedf" path="res://CuteSakikoMod/images/char/anon/die/Anon7.png" id="31_bbsp1"]
-[ext_resource type="Texture2D" uid="uid://crakahk35k2k6" path="res://CuteSakikoMod/images/char/anon/die/Anon8.png" id="32_nn0s0"]
-[ext_resource type="Texture2D" uid="uid://c3so86phjblvj" path="res://CuteSakikoMod/images/char/anon/die/Anon9.png" id="33_3pceo"]
-[ext_resource type="Texture2D" uid="uid://dvocpnjf6x4w5" path="res://CuteSakikoMod/images/char/anon/die/Anon10.png" id="34_xxrs8"]
+[ext_resource type="Texture2D" uid="uid://dxg4p7j8q7nkt" path="res://CuteSakikoMod/images/char/anon/hurt/Anon1.png" id="25_6w6ng"]
+[ext_resource type="Texture2D" uid="uid://fdnr3bf3lt2t" path="res://CuteSakikoMod/images/char/anon/hurt/Anon2.png" id="26_juffp"]
+[ext_resource type="Texture2D" uid="uid://b4ub34faaxvtj" path="res://CuteSakikoMod/images/char/anon/hurt/Anon3.png" id="27_xp1th"]
+[ext_resource type="Texture2D" uid="uid://curaqktqjvx66" path="res://CuteSakikoMod/images/char/anon/hurt/Anon4.png" id="28_0tbit"]
+[ext_resource type="Texture2D" uid="uid://hxg40fy7kt6i" path="res://CuteSakikoMod/images/char/anon/hurt/Anon5.png" id="29_a12r7"]
+[ext_resource type="Texture2D" uid="uid://dtjlqauvlbg1a" path="res://CuteSakikoMod/images/char/anon/hurt/Anon6.png" id="30_65mke"]
+[ext_resource type="Texture2D" uid="uid://c2sicaigxeedf" path="res://CuteSakikoMod/images/char/anon/hurt/Anon7.png" id="31_bbsp1"]
+[ext_resource type="Texture2D" uid="uid://crakahk35k2k6" path="res://CuteSakikoMod/images/char/anon/hurt/Anon8.png" id="32_nn0s0"]
+[ext_resource type="Texture2D" uid="uid://c3so86phjblvj" path="res://CuteSakikoMod/images/char/anon/hurt/Anon9.png" id="33_3pceo"]
+[ext_resource type="Texture2D" uid="uid://dvocpnjf6x4w5" path="res://CuteSakikoMod/images/char/anon/hurt/Anon10.png" id="34_xxrs8"]
 [ext_resource type="Texture2D" uid="uid://cgo2e875sun38" path="res://CuteSakikoMod/images/char/anon/die/Anon11.png" id="35_v8my7"]
 [ext_resource type="Texture2D" uid="uid://bn6p8g654y3u7" path="res://CuteSakikoMod/images/char/anon/die/Anon12.png" id="36_aodxt"]
 [ext_resource type="Texture2D" uid="uid://bistt0rr8f0vt" path="res://CuteSakikoMod/images/char/anon/die/Anon13.png" id="37_iaxgm"]
@@ -200,18 +200,18 @@ _data = {
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -116.0
+offset_left = -113.0
 offset_top = -318.0
-offset_right = 111.0
+offset_right = 109.0
 offset_bottom = -2.0
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(8, -348)
+position = Vector2(18.330566, -345.46277)
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(7.4262085, -188.04636)
+position = Vector2(15.851257, -185.95863)
 
 [node name="Visuals" type="Sprite2D" parent="."]
 unique_name_in_owner = true
