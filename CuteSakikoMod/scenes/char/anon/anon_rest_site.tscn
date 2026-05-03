@@ -9,11 +9,13 @@ position = Vector2(-7, -47)
 script = ExtResource("1_letbo")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(-0.4854393, -79.10372)
 scale = Vector2(0.47308934, 0.47308934)
 texture = ExtResource("2_yr1er")
 
 [node name="ControlRoot" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
 offset_left = 11.5
@@ -60,3 +62,8 @@ offset_right = -95.0
 offset_bottom = -216.0
 scale = Vector2(1.5, 1.5)
 metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="ControlRoot"]
+position = Vector2(-7.519213, -92.32506)
+scale = Vector2(0.31484708, 0.31484708)
+texture = ExtResource("2_yr1er")

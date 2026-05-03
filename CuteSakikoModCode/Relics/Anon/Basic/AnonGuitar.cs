@@ -50,6 +50,7 @@ public class AnonGuitar : CuteAnonRelic
     private bool _normalOptionUsed;
     private bool _practiceUsedThisVisit;
     private readonly List<WrappedRestSiteOption> _wrappedOptions = new();
+    private bool _subscribed;
 
     public override RelicRarity Rarity => RelicRarity.Starter;
     protected virtual int MaxLearnedChordsPerCategory => 1;
@@ -57,6 +58,7 @@ public class AnonGuitar : CuteAnonRelic
 
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.RememberChord];
 
+    // ========== 初始化 ==========
     private void EnsureInitialized()
     {
         if (_initialized) return;
@@ -230,20 +232,17 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (!ChordManager.AllChords.ContainsKey(chordId)) return;
 
-        // ← 打牌溢出同款逻辑 ↓
         var storedBefore = MusicNoteManager.GetStoredChords(Owner);
         string? overflowChordId = null;
         var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
         if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
-            overflowChordId = storedBefore[0];          // 最早的那个和弦
+            overflowChordId = storedBefore[0];
 
         MusicNoteManager.AddChordDirectly(Owner, chordId);
 
         if (overflowChordId != null)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false); // false，因为 AddChordDirectly 已经移除了
-        // ↑ 打牌溢出同款逻辑结束 ↑
+            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
 
-        // 立即演奏（若有）
         if (Owner.Creature.HasPower<PlayImmediatelyPower>())
             await PlaySingleChord(choiceContext, chordId, removeStored: false);
 
@@ -382,7 +381,7 @@ public class AnonGuitar : CuteAnonRelic
         _storedChordDisplay = null;
     }
 
-    // ========== 休息站控制 ==========
+      // ========== 休息站控制 ==========
     public override bool ShouldDisableRemainingRestSiteOptions(Player player)
     {
         if (player != Owner) return true;
@@ -397,12 +396,10 @@ public class AnonGuitar : CuteAnonRelic
         _practiceUsedThisVisit = false;
         _wrappedOptions.Clear();
 
-        // 在此方法中，其他遗物尚未添加额外选项，我们只负责添加练习吉他
         var canLearn = ChordManager.GetLearnableChordIds(ChordCategory.Major).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Minor).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Dominant).Count > 0;
 
-        // 避免重复添加练习吉他选项（如果之前已添加）
         var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);
         if (existingPractice != null) options.Remove(existingPractice);
 
@@ -418,6 +415,55 @@ public class AnonGuitar : CuteAnonRelic
         if (room is RestSiteRoom)
         {
             WrapAllNonPracticeOptions();
+            SubscribeRestSiteEvent();
+        }
+    }
+
+    private void SubscribeRestSiteEvent()
+    {
+        if (_subscribed) return;
+        _subscribed = true;
+        RunManager.Instance.RestSiteSynchronizer.AfterPlayerOptionChosen += OnPlayerOptionChosen;
+    }
+
+    private void UnsubscribeRestSiteEvent()
+    {
+        if (!_subscribed) return;
+        _subscribed = false;
+        var sync = RunManager.Instance.RestSiteSynchronizer;
+        if (sync != null) sync.AfterPlayerOptionChosen -= OnPlayerOptionChosen;
+    }
+
+    private void OnPlayerOptionChosen(RestSiteOption option, bool success, ulong playerId)
+    {
+        if (playerId != Owner.NetId || !success) return;
+        if (option is not WrappedRestSiteOption wrapped) return;
+
+        var sync = RunManager.Instance.RestSiteSynchronizer;
+        if (sync == null) return;
+
+        var restSitesField = typeof(RestSiteSynchronizer).GetField("_restSites", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (restSitesField == null) return;
+
+        var restSites = restSitesField.GetValue(sync) as System.Collections.IList;
+        if (restSites == null) return;
+
+        int localSlot = Owner.RunState.GetPlayerSlotIndex(Owner);
+        if (localSlot < 0 || localSlot >= restSites.Count) return;
+
+        var playerRestSite = restSites[localSlot];
+        var listField = playerRestSite.GetType().GetField("options", BindingFlags.Public | BindingFlags.Instance);
+        if (listField == null) return;
+
+        var list = listField.GetValue(playerRestSite) as List<RestSiteOption>;
+        if (list == null) return;
+
+        // 移除除自己和练习吉他之外的所有包装选项
+        var toRemove = _wrappedOptions.Where(w => w != wrapped).ToList();
+        foreach (var item in toRemove)
+        {
+            list.Remove(item);
+            _wrappedOptions.Remove(item);
         }
     }
 
@@ -426,14 +472,12 @@ public class AnonGuitar : CuteAnonRelic
         var sync = RunManager.Instance.RestSiteSynchronizer;
         if (sync == null) return;
 
-        // 获取 _restSites 私有字段
         var restSitesField = typeof(RestSiteSynchronizer).GetField("_restSites", BindingFlags.NonPublic | BindingFlags.Instance);
         if (restSitesField == null) return;
 
         var restSites = restSitesField.GetValue(sync) as System.Collections.IList;
         if (restSites == null) return;
 
-        // 找到本地玩家的槽位索引
         int localSlot = Owner.RunState.GetPlayerSlotIndex(Owner);
         if (localSlot < 0 || localSlot >= restSites.Count) return;
 
@@ -447,7 +491,6 @@ public class AnonGuitar : CuteAnonRelic
         for (int i = 0; i < options.Count; i++)
         {
             var opt = options[i];
-            // 跳过练习吉他和已经被包裹的选项
             if (opt is PracticeGuitarOption || opt is WrappedRestSiteOption) continue;
 
             var wrapped = new WrappedRestSiteOption(opt, this);
@@ -480,11 +523,7 @@ public class AnonGuitar : CuteAnonRelic
             if (result)
             {
                 _guitar._normalOptionUsed = true;
-                // 禁用所有其他包装选项
-                foreach (var wrapped in _guitar._wrappedOptions)
-                {
-                    if (wrapped != this) wrapped.IsEnabled = false;
-                }
+                // 不再直接操作列表，由事件驱动
             }
             return result;
         }
@@ -493,6 +532,7 @@ public class AnonGuitar : CuteAnonRelic
     // ========== 遗物移除/战斗结束 ==========
     public override async Task AfterRemoved()
     {
+        UnsubscribeRestSiteEvent();
         if (_bonusChords.Count > 0) _pendingBonusTransfer[Owner] = new List<string>(_bonusChords);
         CleanupUI();
         MusicNoteManager.ClearAll(Owner);
@@ -501,6 +541,7 @@ public class AnonGuitar : CuteAnonRelic
 
     public override async Task AfterCombatEnd(CombatRoom room)
     {
+        UnsubscribeRestSiteEvent();
         RestoreTempChords();
         _temporaryChords.Clear();
         MusicNoteManager.ClearCombatData(Owner);
