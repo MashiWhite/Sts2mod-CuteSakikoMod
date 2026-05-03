@@ -9,11 +9,13 @@ position = Vector2(-7, -47)
 script = ExtResource("1_75sqw")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(13.5, -78.5)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_8vtxr")
 
 [node name="ControlRoot" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
 offset_left = 11.5
@@ -62,3 +64,8 @@ offset_right = -95.0
 offset_bottom = -216.0
 scale = Vector2(1.5, 1.5)
 metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="ControlRoot"]
+position = Vector2(1.0625119, -90.07438)
+scale = Vector2(1.0113635, 1.0113635)
+texture = ExtResource("2_8vtxr")

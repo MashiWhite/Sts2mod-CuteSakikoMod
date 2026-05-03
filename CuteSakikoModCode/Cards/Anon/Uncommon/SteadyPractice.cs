@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class SteadyPractice() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class SteadyPractice() : CuteAnonCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -21,7 +21,6 @@ public class SteadyPractice() : CuteAnonCard(2, CardType.Power, CardRarity.Uncom
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 2 → 1
         AddKeyword(CardKeyword.Innate);
     }
 }

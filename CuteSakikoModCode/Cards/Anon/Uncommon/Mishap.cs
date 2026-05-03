@@ -13,8 +13,8 @@ public class Mishap() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, Tar
     {
         get
         {
-            // 基础格挡 25，升级后 35
-            yield return new BlockVar(25m, ValueProp.Move);
+            // 基础格挡 30，升级后 35
+            yield return new BlockVar(30m, ValueProp.Move);
         }
     }
 
@@ -42,6 +42,6 @@ public class Mishap() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, Tar
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(10m); // 20 → 30
+        DynamicVars.Block.UpgradeValueBy(5m); // 30 → 35
     }
 }

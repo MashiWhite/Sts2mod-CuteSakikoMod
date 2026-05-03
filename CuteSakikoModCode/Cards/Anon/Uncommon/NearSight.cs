@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class NearSight() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class NearSight() : CuteAnonCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -30,6 +30,5 @@ public class NearSight() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, 
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 2 → 1
     }
 }

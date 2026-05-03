@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class NaiVitality() : CuteAnonCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class NaiVitality() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -27,7 +27,7 @@ public class NaiVitality() : CuteAnonCard(1, CardType.Power, CardRarity.Uncommon
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 0c
+        EnergyCost.UpgradeBy(-1); // 1c
         AddKeyword(CardKeyword.Innate);
     }
 }

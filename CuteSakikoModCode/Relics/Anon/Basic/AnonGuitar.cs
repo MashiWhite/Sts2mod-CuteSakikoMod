@@ -61,7 +61,6 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (_initialized) return;
         _initialized = true;
-
         _currentChords = new Dictionary<ChordCategory, string>();
         foreach (var raw in _savedChords)
         {
@@ -72,10 +71,8 @@ public class AnonGuitar : CuteAnonRelic
                 _currentChords[(ChordCategory)catInt] = parts[1];
             }
         }
-
         _bonusChords = new List<string>(_savedBonusChords);
         _temporaryChords = new List<string>(_savedTemporaryChords);
-
         if (_currentChords.Count == 0)
         {
             _currentChords[ChordCategory.Major] = ChordManager.GetBaseChordId(ChordCategory.Major);
@@ -97,7 +94,6 @@ public class AnonGuitar : CuteAnonRelic
         await base.AfterObtained();
         EnsureInitialized();
     }
-
     // ========== 公共接口 ==========
     public IReadOnlyList<string> GetTemporaryChords() => _temporaryChords.AsReadOnly();
     public int GetEffectMultiplier() => EffectMultiplier;
@@ -145,44 +141,63 @@ public class AnonGuitar : CuteAnonRelic
     }
 
     // ========== 核心方法 ==========
-    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+   public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+{
+    EnsureInitialized();
+    if (cardPlay.Card.Owner != Owner) return;
+    if (Owner.Creature.CombatState == null) return;
+
+    var noNoteKeyword = CutesakiKeywords.NoNote;
+    if (noNoteKeyword != null && cardPlay.Card.HasModKeyword(noNoteKeyword))
     {
-        EnsureInitialized();
-        if (cardPlay.Card.Owner != Owner) return;
-        if (Owner.Creature.CombatState == null) return;
-
-        var noNoteKeyword = CutesakiKeywords.NoNote;
-        if (noNoteKeyword != null && cardPlay.Card.HasModKeyword(noNoteKeyword))
-        {
-            UpdateNoteDisplay();
-            UpdateStoredChordDisplay();
-            return;
-        }
-
-        var storedBefore = MusicNoteManager.GetStoredChords(Owner);
-        string? overflowChordId = null;
-        var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
-        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
-            overflowChordId = storedBefore[0];
-
-        var (newChords, actualOverflow) = MusicNoteManager.AddNote(
-            Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
-
-        if (newChords.Count > 0 && overflowChordId != null && actualOverflow == overflowChordId)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
-
-        var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
-        if (hasAutoPlay && newChords.Count > 0)
-            foreach (var chordId in newChords)
-                await PlaySingleChord(choiceContext, chordId, removeStored: false);
-
-        if (newChords.Count == 0)
-            foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
-                await power.OnNoteWithoutChord();
-
         UpdateNoteDisplay();
         UpdateStoredChordDisplay();
+        return;
     }
+
+    // --- 原有：生成本牌音符 ---
+    var storedBefore = MusicNoteManager.GetStoredChords(Owner);
+    string? overflowChordId = null;
+    var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
+    if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
+        overflowChordId = storedBefore[0];
+
+    var (newChords, actualOverflow) = MusicNoteManager.AddNote(
+        Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
+
+    if (newChords.Count > 0 && overflowChordId != null && actualOverflow == overflowChordId)
+        await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
+
+    var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
+    if (hasAutoPlay && newChords.Count > 0)
+        foreach (var chordId in newChords)
+            await PlaySingleChord(choiceContext, chordId, removeStored: false);
+
+    if (newChords.Count == 0)
+        foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
+            await power.OnNoteWithoutChord();
+
+    // --- 新增：处理 MessyPlayPower 额外随机音符 ---
+    var messyPlay = Owner.Creature?.GetPower<MessyPlayPower>();
+    if (messyPlay != null && messyPlay.Amount > 0)
+    {
+        var combat = Owner.Creature!.CombatState;
+        if (combat != null)
+        {
+            var possibleTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
+            var rng = combat.RunState.Rng.CombatCardSelection;
+            for (int i = 0; i < messyPlay.Amount; i++)
+            {
+                var randomType = rng.NextItem(possibleTypes);
+                await OnNoteGenerated(choiceContext, randomType);
+            }
+        }
+    }
+
+    // --- UI 更新 ---
+    UpdateNoteDisplay();
+    UpdateStoredChordDisplay();
+}
 
     public async Task OnNoteGenerated(PlayerChoiceContext choiceContext, CardType noteType)
     {
@@ -230,20 +245,17 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (!ChordManager.AllChords.ContainsKey(chordId)) return;
 
-        // ← 打牌溢出同款逻辑 ↓
         var storedBefore = MusicNoteManager.GetStoredChords(Owner);
         string? overflowChordId = null;
         var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
         if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
-            overflowChordId = storedBefore[0];          // 最早的那个和弦
+            overflowChordId = storedBefore[0];
 
         MusicNoteManager.AddChordDirectly(Owner, chordId);
 
         if (overflowChordId != null)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false); // false，因为 AddChordDirectly 已经移除了
-        // ↑ 打牌溢出同款逻辑结束 ↑
+            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
 
-        // 立即演奏（若有）
         if (Owner.Creature.HasPower<PlayImmediatelyPower>())
             await PlaySingleChord(choiceContext, chordId, removeStored: false);
 
@@ -382,7 +394,7 @@ public class AnonGuitar : CuteAnonRelic
         _storedChordDisplay = null;
     }
 
-    // ========== 休息站控制 ==========
+    // ========== 休息站控制（最终版） ==========
     public override bool ShouldDisableRemainingRestSiteOptions(Player player)
     {
         if (player != Owner) return true;
@@ -392,23 +404,16 @@ public class AnonGuitar : CuteAnonRelic
     public override bool TryModifyRestSiteOptions(Player player, ICollection<RestSiteOption> options)
     {
         if (player != Owner) return false;
-
         _normalOptionUsed = false;
         _practiceUsedThisVisit = false;
         _wrappedOptions.Clear();
 
-        // 在此方法中，其他遗物尚未添加额外选项，我们只负责添加练习吉他
         var canLearn = ChordManager.GetLearnableChordIds(ChordCategory.Major).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Minor).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Dominant).Count > 0;
-
-        // 避免重复添加练习吉他选项（如果之前已添加）
         var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);
         if (existingPractice != null) options.Remove(existingPractice);
-
-        if (canLearn)
-            options.Add(new PracticeGuitarOption(player, this));
-
+        if (canLearn) options.Add(new PracticeGuitarOption(player, this));
         return true;
     }
 
@@ -425,31 +430,22 @@ public class AnonGuitar : CuteAnonRelic
     {
         var sync = RunManager.Instance.RestSiteSynchronizer;
         if (sync == null) return;
-
-        // 获取 _restSites 私有字段
         var restSitesField = typeof(RestSiteSynchronizer).GetField("_restSites", BindingFlags.NonPublic | BindingFlags.Instance);
         if (restSitesField == null) return;
-
         var restSites = restSitesField.GetValue(sync) as System.Collections.IList;
         if (restSites == null) return;
-
-        // 找到本地玩家的槽位索引
         int localSlot = Owner.RunState.GetPlayerSlotIndex(Owner);
         if (localSlot < 0 || localSlot >= restSites.Count) return;
-
         var playerRestSite = restSites[localSlot];
         var optionsField = playerRestSite.GetType().GetField("options", BindingFlags.Public | BindingFlags.Instance);
         if (optionsField == null) return;
-
         var options = optionsField.GetValue(playerRestSite) as List<RestSiteOption>;
         if (options == null) return;
 
         for (int i = 0; i < options.Count; i++)
         {
             var opt = options[i];
-            // 跳过练习吉他和已经被包裹的选项
             if (opt is PracticeGuitarOption || opt is WrappedRestSiteOption) continue;
-
             var wrapped = new WrappedRestSiteOption(opt, this);
             options[i] = wrapped;
             _wrappedOptions.Add(wrapped);
@@ -462,14 +458,12 @@ public class AnonGuitar : CuteAnonRelic
     {
         private readonly RestSiteOption _original;
         private readonly AnonGuitar _guitar;
-
         public WrappedRestSiteOption(RestSiteOption original, AnonGuitar guitar) : base(guitar.Owner)
         {
             _original = original;
             _guitar = guitar;
             IsEnabled = original.IsEnabled;
         }
-
         public override string OptionId => _original.OptionId;
         public override LocString Description => _original.Description;
 
@@ -480,7 +474,7 @@ public class AnonGuitar : CuteAnonRelic
             if (result)
             {
                 _guitar._normalOptionUsed = true;
-                // 禁用所有其他包装选项
+                // 禁用其他包装选项（不修改列表）
                 foreach (var wrapped in _guitar._wrappedOptions)
                 {
                     if (wrapped != this) wrapped.IsEnabled = false;

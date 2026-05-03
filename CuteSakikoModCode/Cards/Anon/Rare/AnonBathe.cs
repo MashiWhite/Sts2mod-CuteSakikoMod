@@ -5,9 +5,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class AnonBathe() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class AnonBathe() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     private static bool _isTransforming;
 

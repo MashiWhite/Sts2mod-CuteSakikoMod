@@ -17,9 +17,7 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
 
     protected override IEnumerable<string> RegisteredKeywordIds =>
         [CutesakiKeywords.NoNote, CutesakiKeywords.Chord, CutesakiKeywords.OtherAnon];
-
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -65,6 +63,5 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
     protected override void OnUpgrade()
     {
         EnergyCost.UpgradeBy(-1);
-        AddKeyword(CardKeyword.Innate);
     }
 }
