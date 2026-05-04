@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
@@ -7,6 +8,7 @@ using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
+using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.Settings;
@@ -75,6 +77,8 @@ public class Entry
         else
             Logger.Warn("RunManager.Instance is null, RunStarted event not subscribed.");
         
+        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
+        
     }
 
     private static void OnRunStarted(RunState state)
@@ -99,6 +103,8 @@ public class Entry
         var snake = Regex.Replace(name, "([a-z0-9])([A-Z])", "$1_$2").ToLower();
         return snake;
     }
+    
+   
 }
 
 // 配置数据类（如果还没有单独文件，可以放在这里，但建议独立文件）
