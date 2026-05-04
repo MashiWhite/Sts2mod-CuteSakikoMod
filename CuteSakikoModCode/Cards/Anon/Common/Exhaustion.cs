@@ -66,6 +66,5 @@ public class Exhaustion() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, T
     protected override void OnUpgrade()
     {
         DynamicVars["Cards"].UpgradeValueBy(1m);
-        DynamicVars["Energy"].UpgradeValueBy(1m);
     }
 }
