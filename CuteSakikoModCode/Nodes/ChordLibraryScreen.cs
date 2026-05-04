@@ -49,112 +49,138 @@ public partial class ChordLibraryScreen : Control
         return await _selectionTcs.Task;
     }
 
-    public override void _Ready()
+   public override void _Ready()
+{
+    var parent = GetParent();
+    parent?.MoveChild(this, 0);
+
+    // ===== 背景 =====
+    var bg = new ColorRect
     {
-        var parent = GetParent();
-        parent?.MoveChild(this, 0);
-
-        // 背景
-        var bg = new ColorRect
+        Color = new Color(0, 0, 0, 0.6f),
+        MouseFilter = _isSelectMode ? MouseFilterEnum.Ignore : MouseFilterEnum.Stop
+    };
+    // 锚定为全屏
+    bg.AnchorLeft = 0; bg.AnchorRight = 1;
+    bg.AnchorTop = 0; bg.AnchorBottom = 1;
+    // 上下留出安全区域（相对于屏幕高度取固定值）
+    float topMargin = 80f;
+    float bottomMargin = 0;
+    bg.OffsetTop = topMargin;
+    bg.OffsetBottom = -bottomMargin; // 负值表示从底部往上缩进
+    bg.OffsetLeft = 0;
+    bg.OffsetRight = 0;
+    // 非选择模式下点击背景关闭
+    if (!_isSelectMode)
+    {
+        bg.GuiInput += e =>
         {
-            Color = new Color(0, 0, 0, 0.6f),
-            MouseFilter = _isSelectMode ? MouseFilterEnum.Ignore : MouseFilterEnum.Stop
+            if (e is InputEventMouseButton mb && mb.ButtonIndex == MouseButton.Left && mb.Pressed)
+                QueueFree();
         };
-        bg.AnchorLeft = 0;
-        bg.AnchorRight = 1;
-        bg.AnchorTop = 0;
-        bg.AnchorBottom = 1;
-        bg.OffsetTop = 80;
-        bg.OffsetBottom = 200;
-        if (!_isSelectMode)
-        {
-            bg.GuiInput += e =>
-            {
-                if (e is InputEventMouseButton mb && mb.ButtonIndex == MouseButton.Left && mb.Pressed)
-                    QueueFree();
-            };
-        }
-        AddChild(bg);
-
-        // 顶部栏
-        var topBar = new ColorRect
-        {
-            Color = new Color(0.15f, 0.1f, 0.2f),
-            MouseFilter = MouseFilterEnum.Ignore
-        };
-        topBar.AnchorLeft = 0;
-        topBar.AnchorRight = 1;
-        topBar.Position = new Vector2(0, 80);
-        topBar.Size = new Vector2(GetViewportRect().Size.X, 60);
-        AddChild(topBar);
-
-        var titleLabel = new Label
-        {
-            Text = _isSelectMode ? $"选择 {_targetCount} 个和弦 (已选 0)" : "和弦图鉴",
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        titleLabel.AnchorLeft = 0;
-        titleLabel.AnchorRight = 1;
-        titleLabel.AnchorTop = 0;
-        titleLabel.AnchorBottom = 1;
-        titleLabel.AddThemeFontSizeOverride("font_size", 24);
-        titleLabel.AddThemeColorOverride("font_color", new Color(1f, 0.85f, 0.2f));
-        topBar.AddChild(titleLabel);
-
-        // 滚动区域
-        var scroll = new ScrollContainer();
-        scroll.AnchorLeft = 0;
-        scroll.AnchorRight = 1;
-        scroll.AnchorTop = 0;
-        scroll.AnchorBottom = 1;
-        scroll.OffsetLeft = 800;
-        scroll.OffsetTop = 200;
-        scroll.OffsetRight = -40;
-        scroll.OffsetBottom = -20;
-        AddChild(scroll);
-
-        var vbox = new VBoxContainer();
-        vbox.AddThemeConstantOverride("separation", 24);
-        scroll.AddChild(vbox);
-
-        var categories = new[]
-        {
-            ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant,
-            ChordCategory.Anon, ChordCategory.Bonus
-        };
-
-        foreach (var cat in categories)
-        {
-            var chords = ChordManager.AllChordsList.Where(c => c.Category == cat).ToList();
-            if (chords.Count == 0) continue;
-
-            var catLabel = new Label { Text = GetCategoryDisplayName(cat) };
-            catLabel.AddThemeFontSizeOverride("font_size", 20);
-            catLabel.AddThemeColorOverride("font_color", new Color(1f, 0.85f, 0.2f));
-            vbox.AddChild(catLabel);
-
-            var grid = new GridContainer { Columns = 6 };
-            foreach (var chordDef in chords)
-            {
-                var btn = new ChordButton();
-                btn.Setup(chordDef.Id);
-                btn.Modulate = _isSelectMode && _selectedChords.Contains(chordDef.Id)
-                    ? new Color(1, 1, 0.5f) : Colors.White;
-
-                if (_isSelectMode)
-                {
-                    var chordId = chordDef.Id;
-                    btn.Pressed += () => OnChordButtonPressed(chordId, titleLabel);
-                }
-
-                // 将按钮存入字典，方便快速修改颜色
-                _chordButtons[chordDef.Id] = btn;
-                grid.AddChild(btn);
-            }
-            vbox.AddChild(grid);
-        }
     }
+    AddChild(bg);
+
+    // ===== 顶部栏 =====
+    var topBar = new ColorRect
+    {
+        Color = new Color(0.15f, 0.1f, 0.2f),
+        MouseFilter = MouseFilterEnum.Ignore
+    };
+    // 锚定到顶部，与背景同宽（通过锚点左右拉伸，再偏移）
+    topBar.AnchorLeft = 0; topBar.AnchorRight = 1;
+    topBar.AnchorTop = 0; topBar.AnchorBottom = 0; // 高度由 offset 决定
+    topBar.OffsetTop = topMargin;          // 与背景顶部对齐
+    topBar.OffsetBottom = topMargin + 60f; // 固定高度 60
+    AddChild(topBar);
+
+    var titleLabel = new Label
+    {
+        Text = _isSelectMode ? $"选择 {_targetCount} 个和弦 (已选 0)" : "和弦图鉴",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center
+    };
+    titleLabel.AnchorLeft = 0; titleLabel.AnchorRight = 1;
+    titleLabel.AnchorTop = 0; titleLabel.AnchorBottom = 1;
+    titleLabel.AddThemeFontSizeOverride("font_size", 24);
+    titleLabel.AddThemeColorOverride("font_color", new Color(1f, 0.85f, 0.2f));
+    topBar.AddChild(titleLabel);
+
+    // ===== 滚动区域 =====
+    var scroll = new ScrollContainer();
+    // 锚定到背景内部
+    scroll.AnchorLeft = 0; scroll.AnchorRight = 1;
+    scroll.AnchorTop = 0; scroll.AnchorBottom = 1;
+    // 左右边距：屏幕宽度的 15% 或最小 200px 用来避免边缘太挤
+    float leftMargin = Mathf.Max(200f, GetViewportRect().Size.X * 0.15f);
+    float rightMargin = -Mathf.Max(40f, GetViewportRect().Size.X * 0.05f); // 负值
+    scroll.OffsetLeft = leftMargin;
+    scroll.OffsetRight = rightMargin;
+    // 上下边距：位于 topBar 下方、背景底部上方
+    scroll.OffsetTop = topBar.OffsetBottom + 20f; // 与顶栏间隔 20
+    scroll.OffsetBottom = bg.OffsetBottom + 20f;  // bg.OffsetBottom 是负值，+20 就是距离底部 20
+    AddChild(scroll);
+
+    // ===== 内容容器 =====
+    var vbox = new VBoxContainer();
+    vbox.AddThemeConstantOverride("separation", 24);
+    scroll.AddChild(vbox);
+
+    var categories = new[]
+    {
+        ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant,
+        ChordCategory.Anon, ChordCategory.Bonus
+    };
+
+    foreach (var cat in categories)
+    {
+        var chords = ChordManager.AllChordsList.Where(c => c.Category == cat).ToList();
+        if (chords.Count == 0) continue;
+
+        var catLabel = new Label { Text = GetCategoryDisplayName(cat) };
+        catLabel.AddThemeFontSizeOverride("font_size", 20);
+        catLabel.AddThemeColorOverride("font_color", new Color(1f, 0.85f, 0.2f));
+        vbox.AddChild(catLabel);
+
+        var grid = new GridContainer();
+        // 动态列数：根据可用宽度计算
+        float availableWidth = scroll.Size.X - 40f; // 预留内部边距
+        float colWidth = 120f; // 每个按钮最小宽度
+        int columns = Mathf.Max(1, Mathf.FloorToInt(availableWidth / colWidth));
+        grid.Columns = columns;
+        foreach (var chordDef in chords)
+        {
+            var btn = new ChordButton();
+            btn.Setup(chordDef.Id);
+            btn.Modulate = _isSelectMode && _selectedChords.Contains(chordDef.Id)
+                ? new Color(1, 1, 0.5f) : Colors.White;
+
+            if (_isSelectMode)
+            {
+                var chordId = chordDef.Id;
+                btn.Pressed += () => OnChordButtonPressed(chordId, titleLabel);
+            }
+            _chordButtons[chordDef.Id] = btn;
+            grid.AddChild(btn);
+        }
+        vbox.AddChild(grid);
+    }
+
+    // 监听窗口大小变化，重新调整布局
+    GetViewport().SizeChanged += OnViewportSizeChanged;
+}
+
+private void OnViewportSizeChanged()
+{
+    // 重新计算滚动区域的边距和网格列数
+    float leftMargin = Mathf.Max(200f, GetViewportRect().Size.X * 0.15f);
+    float rightMargin = -Mathf.Max(40f, GetViewportRect().Size.X * 0.05f);
+
+    var scroll = FindChild("ScrollContainer") as ScrollContainer; // 如果你给 scroll 加了名字可以这样找
+    // 或者直接在 _Ready 中保存引用
+    // 这里简化：遍历子节点找到 ScrollContainer (略)
+    // 更好的做法：在类中保存 scroll 引用
+}
 
     private void OnChordButtonPressed(string chordId, Label titleLabel)
     {

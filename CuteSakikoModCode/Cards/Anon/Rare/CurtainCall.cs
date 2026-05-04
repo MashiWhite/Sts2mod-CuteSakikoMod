@@ -15,7 +15,7 @@ public class CurtainCall() : CuteAnonCard(0, CardType.Attack, CardRarity.Rare, T
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(8m, ValueProp.Move); }
+        get { yield return new DamageVar(10m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -33,6 +33,6 @@ public class CurtainCall() : CuteAnonCard(0, CardType.Attack, CardRarity.Rare, T
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m); // 8 → 13
+        DynamicVars.Damage.UpgradeValueBy(6m); // 10 → 16
     }
 }
