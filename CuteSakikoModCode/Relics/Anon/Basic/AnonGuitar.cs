@@ -349,9 +349,18 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (Owner.Creature.CombatState == null) return;
 
-        var (newChords, overflowChordId) = MusicNoteManager.AddNote(
+        // 获取当前存储的和弦，用于溢出判断
+        var storedBefore = MusicNoteManager.GetStoredChords(Owner);
+        string? overflowChordId = null;
+        var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
+        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
+            overflowChordId = storedBefore[0];
+
+        // 添加音符，但不再直接使用 AddNote 返回的 overflowChordId
+        var (newChords, _) = MusicNoteManager.AddNote(
             Owner, noteType, _currentChords, _bonusChords.Concat(_temporaryChords));
 
+        // 只有拥有 LingeringTastePower 且确实生成了新和弦时，才演奏溢出的和弦
         if (newChords.Count > 0 && overflowChordId != null)
             await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
 

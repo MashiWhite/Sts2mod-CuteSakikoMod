@@ -1,9 +1,7 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;

@@ -32,6 +32,8 @@
   "CUTE_SAKIKO_MOD_CARD_LINGERING_TASTE.description": "溢出储存的[pink]和弦[/pink]会自动[gold]演奏[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_TEAM_SUNSHINE.title": "团队的小太阳",
   "CUTE_SAKIKO_MOD_CARD_TEAM_SUNSHINE.description": "将你的[pink]属七和弦[/pink]替换为[pink]爱音G和弦[/pink]。",
+  "CUTE_SAKIKO_MOD_CARD_WHEN_PERFORM.title": "什么时候演奏？",
+  "CUTE_SAKIKO_MOD_CARD_WHEN_PERFORM.description": "为每回合抽到的第一张牌[gold]附魔[/gold]:[purple]演奏[/purple]。",
   "CUTE_SAKIKO_MOD_CARD_SECRET_PRACTICE.title": "偷偷练习",
   "CUTE_SAKIKO_MOD_CARD_SECRET_PRACTICE.description": "演奏[gold]所有[/gold]储存的[pink]和弦[/pink]。\n获得{Block:diff()}点[gold]格挡[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_MASTERED_ALL.title": "全都会了！",
