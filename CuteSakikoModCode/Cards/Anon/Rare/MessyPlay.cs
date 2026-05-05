@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class MessyPlay() : CuteAnonCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class MessyPlay() : CuteAnonCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -28,5 +28,6 @@ public class MessyPlay() : CuteAnonCard(1, CardType.Power, CardRarity.Rare, Targ
     {
         // 升级：能力层数 +1 （1 → 2），本地化描述自动更新
         DynamicVars["MessyPlayPower"].UpgradeValueBy(1m);
+        EnergyCost.UpgradeBy(-1); // 3 → 2
     }
 }

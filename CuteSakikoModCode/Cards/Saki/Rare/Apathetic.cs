@@ -14,7 +14,7 @@ public class Apathetic() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare,
     
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(13m, ValueProp.Move); }
+        get { yield return new BlockVar(10m, ValueProp.Move); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -33,9 +33,8 @@ public class Apathetic() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare,
 
     protected override void OnUpgrade()
     {
-        // 升级：格挡 8 → 10
+        // 升级：格挡 10 → 13
         DynamicVars.Block.UpgradeValueBy(3m);
-        // 费用 1 → 0
-        EnergyCost.UpgradeBy(-1);
+
     }
 }

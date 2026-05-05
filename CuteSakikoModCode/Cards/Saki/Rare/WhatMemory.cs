@@ -1,47 +1,59 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Keywords;
-
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-
-public class WhatMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-    
+
+    // 基础选择数量 1，升级后变为 2
+    protected override IEnumerable<DynamicVar> CanonicalVars
+    {
+        get { yield return new CardsVar(1); }
+    }
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get
-        {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
-        }
+        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var allCards = new List<CardModel>();
-        foreach (var pileType in new[] { PileType.Hand})
+        int maxSelect = DynamicVars.Cards.IntValue;   // 读取当前选择数量
+
+        var prompt = new LocString("cards", "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.selectionScreenPrompt");
+
+        var prefs = new CardSelectorPrefs(prompt, 0, maxSelect)
         {
-            var pile = pileType.GetPile(Owner);
-            if (pile != null) allCards.AddRange(pile.Cards);
-        }
-        allCards = allCards.Distinct().ToList();
-        foreach (var card in allCards)
+            RequireManualConfirmation = true   // 允许选 0 张
+        };
+
+        var selectedCards = await CardSelectCmd.FromHand(
+            choiceContext,
+            Owner,
+            prefs,
+            c => c != this,
+            this
+        );
+
+        foreach (var card in selectedCards)
         {
             card.EnergyCost.SetThisCombat(0, true);
-            // 关键：用扩展方法 AddModKeyword，不要用 CardCmd.ApplyKeyword
             card.AddModKeyword(CutesakiKeywords.Memory);
         }
-        await Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
-    { 
+    {
         AddKeyword(CardKeyword.Retain);
+        DynamicVars.Cards.UpgradeValueBy(1);   // 1 → 2
     }
 }
