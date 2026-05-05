@@ -46,7 +46,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
 
     protected override void OnUpgrade()
     {
-        DynamicVars["BaseBlock"].UpgradeValueBy(1m); // 5 → 6
+        DynamicVars.Block.UpgradeValueBy(1m); // 5 → 6
     }
 
     /// <summary>动态变量：实时计算总格挡（基于当前储存的和弦数）</summary>
@@ -62,7 +62,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
             base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
             if (card.Owner == null) return;
 
-            var perBlock = (int)card.DynamicVars["BaseBlock"].BaseValue;
+            var perBlock = (int)card.DynamicVars.Block.BaseValue;
             var chordCount = MusicNoteManager.GetStoredChords(card.Owner).Count; // 使用储存和弦数
             BaseValue = perBlock * chordCount;
         }

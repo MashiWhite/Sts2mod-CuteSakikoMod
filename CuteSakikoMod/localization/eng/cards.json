@@ -40,7 +40,7 @@
   "CUTE_SAKIKO_MOD_CARD_MASTERED_ALL.title": "全都会了！",
   "CUTE_SAKIKO_MOD_CARD_MASTERED_ALL.description": "造成{Damage:diff()}点伤害。\n如果此牌击杀了敌人，演奏[gold]所有[/gold][pink]已学习和弦[/pink]。",
   "CUTE_SAKIKO_MOD_CARD_SUCCESS_RECITAL.title": "成功的演出",
-  "CUTE_SAKIKO_MOD_CARD_SUCCESS_RECITAL.description": "演奏[gold]所有[/gold]储存的[pink]和弦[/pink]，\n获得[blue]{InCombat:{TotalBlock:diff()}|{BaseBlock:diff()}*和弦数}[/blue]点[gold]格挡[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_SUCCESS_RECITAL.description": "演奏[gold]所有[/gold]储存的[pink]和弦[/pink]，\n获得[blue]{InCombat:{TotalBlock:diff()}|{Block:diff()}*和弦数}[/blue]点[gold]格挡[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_THIS_HARD.title": "这个真的好难",
   "CUTE_SAKIKO_MOD_CARD_THIS_HARD.description": "在本场战斗中将你的[pink]大三和弦[/pink]替换为[pink]爱音F和弦[/pink]。",
   "CUTE_SAKIKO_MOD_CARD_ANCHOR_CONNECTION.title": "连接之锚",
