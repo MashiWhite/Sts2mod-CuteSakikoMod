@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Combat.Ui.ExtraCornerAmountLabels;
 
@@ -15,30 +13,44 @@ public sealed class MessyPlayPower : CuteSakikoModPower,
     IPowerExtraIconAmountLabelsChangeSource
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter; // 层数 = 额外音符数
+    public override PowerStackType StackType => PowerStackType.Counter;
 
     private int _noteCount;
     private int _threshold;
     public bool IsGeneratingNotes { get; private set; }
 
+    // 暴露给描述系统
+    private DynamicVar NoteCountVar => DynamicVars["NoteCount"];
+    private DynamicVar ThresholdVar => DynamicVars["Threshold"];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars
+    {
+        get
+        {
+            yield return new DynamicVar("NoteCount", 0);
+            yield return new DynamicVar("Threshold", 0);
+        }
+    }
+
     public void StartGeneratingNotes() => IsGeneratingNotes = true;
     public void EndGeneratingNotes() => IsGeneratingNotes = false;
 
-    // 公开方法，用于升级或重新施加时更新阈值
     public void UpdateThreshold(int newThreshold)
     {
         _threshold = Math.Min(_threshold == 0 ? newThreshold : _threshold, newThreshold);
         if (_noteCount > _threshold)
-            _noteCount = _threshold;   // 进度不能超过阈值
+            _noteCount = _threshold;
+        ThresholdVar.BaseValue = _threshold;
+        NoteCountVar.BaseValue = _noteCount;
         InvalidateLabels();
-        InvokeDisplayAmountChanged();  // 刷新能力图标（确保角标更新）
+        InvokeDisplayAmountChanged();
     }
 
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
         int newThreshold = (cardSource is MessyPlay { IsUpgraded: true }) ? 2 : 3;
-        UpdateThreshold(newThreshold); // 首次施加时也会设置阈值
+        UpdateThreshold(newThreshold);
         IsGeneratingNotes = false;
     }
 
@@ -46,6 +58,7 @@ public sealed class MessyPlayPower : CuteSakikoModPower,
     {
         if (IsGeneratingNotes) return false;
         _noteCount++;
+        NoteCountVar.BaseValue = _noteCount;
         InvalidateLabels();
         return _noteCount >= _threshold;
     }
@@ -53,13 +66,14 @@ public sealed class MessyPlayPower : CuteSakikoModPower,
     public void ResetNoteCount()
     {
         _noteCount = 0;
+        NoteCountVar.BaseValue = 0;
         InvalidateLabels();
     }
 
     private void InvalidateLabels()
     {
         PowerExtraIconAmountLabelsInvalidated?.Invoke();
-        InvokeDisplayAmountChanged();  // 双保险
+        InvokeDisplayAmountChanged();
     }
 
     public event Action? PowerExtraIconAmountLabelsInvalidated;

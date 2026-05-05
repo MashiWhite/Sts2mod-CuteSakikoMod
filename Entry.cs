@@ -78,6 +78,7 @@ public class Entry
             Logger.Warn("RunManager.Instance is null, RunStarted event not subscribed.");
         
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
+        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
         
     }
 

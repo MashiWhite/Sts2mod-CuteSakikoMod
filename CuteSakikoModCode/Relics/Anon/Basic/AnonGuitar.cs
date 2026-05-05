@@ -1,4 +1,5 @@
 ﻿
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
@@ -22,6 +23,7 @@ using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using STS2RitsuLib.Audio;
 
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
@@ -41,6 +43,8 @@ public class AnonGuitar : CuteAnonRelic
     private string _savedChordsData = "";
     private string _savedBonusChordsData = "";
     private string _savedTemporaryChordsData = "";
+    
+    protected static Dictionary<Player, (string chords, string bonus, string temp)> _pendingChordTransfer = new();
 
     // ===== 运行时状态 =====
     private Dictionary<ChordCategory, string> _currentChords = new();
@@ -144,13 +148,22 @@ public class AnonGuitar : CuteAnonRelic
     }
 
     // ========== 统一演奏方法 ==========
+    private static readonly string AudioDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio");
+    private static readonly string[] StrumFiles = { "guitar_strum1.mp3", "guitar_strum2.mp3", "guitar_strum3.mp3","guitar_strum4.mp3","guitar_strum5.mp3" };
+    private static readonly System.Random _rand = new();
+
     private async Task PlaySingleChord(PlayerChoiceContext ctx, string chordId, bool removeStored = true)
     {
         _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
         if (ChordManager.AllChords.TryGetValue(chordId, out var def))
             await def.Effect(ctx, Owner.Creature, EffectMultiplier);
-        if (removeStored) MusicNoteManager.RemoveChord(Owner, chordId);
+        if (removeStored)
+            MusicNoteManager.RemoveChord(Owner, chordId);
         await NotifyChordPlayed(ctx);
+
+        // 播放随机扫弦音效
+        var sfx = Path.Combine(AudioDir, StrumFiles[_rand.Next(StrumFiles.Length)]);
+        FmodStudioStreamingFiles.TryPlaySoundFile(sfx, volume: 1f);
     }
 
     // ========== 核心方法 ==========
@@ -483,9 +496,21 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (_bonusChords.Count > 0)
             _pendingBonusTransfer[Owner] = new List<string>(_bonusChords);
+        // 保存和弦数据供子类迁移
+        _pendingChordTransfer[Owner] = (_savedChordsData, _savedBonusChordsData, _savedTemporaryChordsData);
         CleanupUI();
         MusicNoteManager.ClearAll(Owner);
         await base.AfterRemoved();
+    }
+    
+    public void RestoreChordData(string chordsData, string bonusData, string tempData)
+    {
+        _savedChordsData = chordsData;
+        _savedBonusChordsData = bonusData;
+        _savedTemporaryChordsData = tempData;
+        _initialized = false; // 强制重新初始化
+        EnsureInitialized();
+        SyncToSaved();
     }
 
     public override async Task AfterCombatEnd(CombatRoom room)

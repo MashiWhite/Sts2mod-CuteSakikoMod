@@ -11,22 +11,20 @@ public class FlashAnonGuitar : AnonGuitar
 
     public override async Task AfterObtained()
     {
-        // 从静态缓存中获取旧吉他的 Bonus 列表（如果有）
-        List<string> oldBonus = null;
-        if (_pendingBonusTransfer.TryGetValue(Owner, out var list))
+        // ✅ 从旧吉他继承完整和弦数据
+        if (_pendingChordTransfer.TryGetValue(Owner, out var chordData))
         {
-            oldBonus = list;
-            _pendingBonusTransfer.Remove(Owner); // 取出后清除
+            RestoreChordData(chordData.chords, chordData.bonus, chordData.temp);
+            _pendingChordTransfer.Remove(Owner);
         }
 
+        // Bonus 数据已通过 RestoreChordData 恢复，此处不再需要从 _pendingBonusTransfer 合并
+        _pendingBonusTransfer.Remove(Owner);
+
+        // 继续执行基类的初始化（此时 _initialized 已为 true，不会再覆盖数据）
         await base.AfterObtained();
 
-        // 合并旧 Bonus
-        if (oldBonus != null)
-            foreach (var chord in oldBonus)
-                AddBonusChord(chord);
-
-        // 添加闪亮吉他自带的 Bonus
+        // 添加闪亮吉他特有的随机 Bonus
         var rng = Owner.RunState.Rng.UpFront;
         var allPools = new List<string>();
         allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));

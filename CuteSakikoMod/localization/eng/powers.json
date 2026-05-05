@@ -16,7 +16,7 @@
   "CUTE_SAKIKO_MOD_POWER_QUARREL_SELF_POWER.smartDescription": "下回合开始时，失去[blue]{Amount}[/blue]层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_MESSY_PLAY_POWER.title": "弹得乱七八糟",
   "CUTE_SAKIKO_MOD_POWER_MESSY_PLAY_POWER.description": "每获得一定数量[pink]音符[/pink]，额外产生随机[pink]音符[/pink]。",
-  "CUTE_SAKIKO_MOD_POWER_MESSY_PLAY_POWER.smartDescription": "可获得{Amount}个额外音符。\n进度：{Progress}",
+  "CUTE_SAKIKO_MOD_POWER_MESSY_PLAY_POWER.smartDescription": "可获得{Amount}个额外音符。\n进度：{NoteCount}/{Threshold}",
   "CUTE_SAKIKO_MOD_POWER_ESCAPISM_TENDENCY_POWER.title": "习惯逃避",
   "CUTE_SAKIKO_MOD_POWER_ESCAPISM_TENDENCY_POWER.description": "每回合开始时随机丢弃1张手牌。回合结束时获得层数等量格挡。",
   "CUTE_SAKIKO_MOD_POWER_ESCAPISM_TENDENCY_POWER.smartDescription": "每回合开始时随机丢弃1张手牌。回合结束时获得{Amount}点格挡。",

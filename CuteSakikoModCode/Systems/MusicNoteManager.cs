@@ -21,8 +21,7 @@ public static class MusicNoteManager
         return data;
     }
 
-    // ---------- 音符与储存和弦管理 ----------
-   public static (List<string> newChords, string? overflowChordId) AddNote(
+public static (List<string> newChords, string? overflowChordId) AddNote(
     Player player, CardType type,
     IReadOnlyDictionary<ChordCategory, string> learnedChords,
     IEnumerable<string> bonusChordIds)
@@ -31,7 +30,6 @@ public static class MusicNoteManager
 
     var data = GetData(player);
 
-    // 回合重置
     var combat = player.Creature?.CombatState;
     var currentRound = combat?.RoundNumber ?? 0;
     if (data.LastRoundNumber != currentRound)
@@ -48,7 +46,7 @@ public static class MusicNoteManager
     var sequence = data.Notes.ToList();
     var newChords = new List<string>();
 
-    // 已学习和弦匹配
+    // 已学习和弦
     if (learnedChords != null)
         foreach (var kv in learnedChords)
         {
@@ -62,7 +60,7 @@ public static class MusicNoteManager
             }
         }
 
-    // 奖励和弦匹配
+    // 奖励和弦
     if (bonusChordIds != null)
         foreach (var chordId in bonusChordIds)
         {
@@ -75,15 +73,14 @@ public static class MusicNoteManager
             }
         }
 
-    // 溢出处理：记录即将被移除的最旧和弦ID
+    // 溢出处理
     string? overflowChordId = null;
     while (data.StoredChords.Count > MaxStoredChords)
     {
-        overflowChordId = data.StoredChords[0]; // 最旧的
+        overflowChordId = data.StoredChords[0];
         data.StoredChords.RemoveAt(0);
     }
 
-    // 吉他主唱效果
     if (player?.Creature != null)
     {
         var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
