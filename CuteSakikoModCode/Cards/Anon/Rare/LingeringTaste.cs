@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class LingeringTaste() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class LingeringTaste() : CuteAnonCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -21,7 +21,7 @@ public class LingeringTaste() : CuteAnonCard(2, CardType.Power, CardRarity.Rare,
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 2 → 1
+        EnergyCost.UpgradeBy(-1); // 3 → 2
         AddKeyword(CardKeyword.Innate);
     }
 }

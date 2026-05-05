@@ -401,11 +401,13 @@
   "CUTE_SAKIKO_MOD_CARD_JR3.title": "致命连击3",
   "CUTE_SAKIKO_MOD_CARD_JR3.description": "造成{IfUpgraded:show:15|11}点伤害，然后造成{IfUpgraded:show:16|12}点伤害。\n[gold]移除[/gold]",
   "CUTE_SAKIKO_MOD_CARD_HBK_BANK.title": "HiBiKi银行",
-  "CUTE_SAKIKO_MOD_CARD_HBK_BANK.description": "每回合开始时，将一张{IfUpgraded:show:[gold]买黄金+[/gold]和一张[gold]卖黄金+[/gold]|[gold]买黄金[/gold]和一张[gold]卖黄金[/gold]}加入手牌。",
+  "CUTE_SAKIKO_MOD_CARD_HBK_BANK.description": "每回合开始时，选择一种{IfUpgraded:show:[gold]黄金[/gold]交易手段+|[gold]黄金[/gold]交易手段}。",
   "CUTE_SAKIKO_MOD_CARD_BUY_GOLD.title": "买黄金",
   "CUTE_SAKIKO_MOD_CARD_BUY_GOLD.description": "消耗50金币，根据当前[gold]金价[/gold]获得等值[gold]黄金[/gold]。\n金币不足部分转为负债。{IfUpgraded:show:\n抽1张牌。|}",
   "CUTE_SAKIKO_MOD_CARD_SELL_GOLD.title": "卖黄金",
   "CUTE_SAKIKO_MOD_CARD_SELL_GOLD.description": "卖出[red]所有[/red][gold]黄金[/gold]，根据当前[gold]金价[/gold]获得等值金币。{IfUpgraded:show:\n获得{energyPrefix:energyIcons(1)}。|}",
+  "CUTE_SAKIKO_MOD_CARD_GOLD_BRICK.title": "金砖也是砖",
+  "CUTE_SAKIKO_MOD_CARD_GOLD_BRICK.description": "打出需要30层[gold]黄金[/gold]。\n造成{InCombat:{TotalDamage:diff()}|[gold]黄金[/gold]层数*{IfUpgraded:show:2|1}}点伤害并[gold]眩晕[/gold]敌人。",
   "CUTE_SAKIKO_MOD_CARD_METEOR_HEPHAESTUS.title": "陨星赫波",
   "CUTE_SAKIKO_MOD_CARD_METEOR_HEPHAESTUS.description": "每回合结束时，随机夺取队友的{IfUpgraded:show:2|1}个[gold]能力[/gold]{IfUpgraded:show:并翻倍层数|}。\n当场上其他人已经有该能力时，改为获得{energyPrefix:energyIcons(2)}，抽1张牌。"
 }

@@ -140,7 +140,9 @@
   "CUTE_SAKIKO_MOD_POWER_METEOR_HEPHAESTUS_POWER.title": "星骸坍缩",
   "CUTE_SAKIKO_MOD_POWER_METEOR_HEPHAESTUS_POWER.description": "每回合结束时，随机夺取层数等量次增益：每次随机选择一名队友，夺取其1个随机增益。",
   "CUTE_SAKIKO_MOD_POWER_METEOR_HEPHAESTUS_POWER.smartDescription": "每回合结束时，随机夺取{TargetCount}次增益：每次随机选择一名队友，夺取其1个随机增益。",
-  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.description": "每回合开始时，将一张[gold]买黄金[/gold]和一张[gold]卖黄金[/gold]加入手牌。",
-  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.smartDescription": "每回合开始时，将一张[gold]买黄金[/gold]和一张[gold]卖黄金[/gold]加入手牌。\n当前金价：[blue]{GoldPrice}[/blue]。",
-  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.title": "HiBiKi银行"
+  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.title": "HiBiKi银行",
+  "HBK_BANK_POWER.chooseToken": "选择一种黄金交易",
+  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.description": "每回合开始时，选择一种黄金交易。",
+  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.smartDescription": "每回合开始时，选择一种黄金交易。\n当前金价：[blue]{GoldPrice}[/blue]。"
+
 }

@@ -5,9 +5,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
-public class HbkBank() : CuteSakikoModEggCard(0, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class HbkBank() : CuteSakikoModEggCard(0, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Innate];
 
@@ -18,6 +18,7 @@ public class HbkBank() : CuteSakikoModEggCard(0, CardType.Power, CardRarity.Unco
             // 根据升级状态显示对应的卡牌悬停提示
             yield return HoverTipFactory.FromCard<BuyGold>(IsUpgraded);
             yield return HoverTipFactory.FromCard<SellGold>(IsUpgraded);
+            yield return HoverTipFactory.FromCard<GoldBrick>(IsUpgraded);
         }
     }
 
