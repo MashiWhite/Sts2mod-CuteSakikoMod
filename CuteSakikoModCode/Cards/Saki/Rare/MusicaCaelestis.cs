@@ -8,13 +8,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class MusicaCaelestis : CuteSakikoModCard
+public class MusicaCaelestis() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public MusicaCaelestis() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
-    {
-    }
-
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get

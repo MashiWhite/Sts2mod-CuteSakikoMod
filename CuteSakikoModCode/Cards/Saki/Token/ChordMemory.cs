@@ -10,6 +10,8 @@ public class ChordMemory() : ModTokenCard(1, CardType.Attack, CardRarity.Token, 
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
+    public override bool GainsBlock => true;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(IsUpgraded ? 3m : 2m, ValueProp.Move),

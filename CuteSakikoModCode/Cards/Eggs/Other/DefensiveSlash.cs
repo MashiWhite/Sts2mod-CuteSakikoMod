@@ -11,10 +11,14 @@ public class DefensiveSlash() : ModStatusCard(0, CardType.Status, CardRarity.Sta
 {
     private bool _effectTriggered;
 
+    public override bool GainsBlock => true;
+    
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new BlockVar(14m, ValueProp.Move)
+    ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Unplayable];
-
-    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 
     // 抽到此牌时触发
     public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
@@ -43,8 +47,7 @@ public class DefensiveSlash() : ModStatusCard(0, CardType.Status, CardRarity.Sta
         }
 
         // 获得格挡
-        var block = IsUpgraded ? 20 : 14;
-        await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(block, ValueProp.Move), null);
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, null);
 
         // 结束此回合
         PlayerCmd.EndTurn(Owner, false);
@@ -55,6 +58,6 @@ public class DefensiveSlash() : ModStatusCard(0, CardType.Status, CardRarity.Sta
 
     protected override void OnUpgrade()
     {
-        // 升级效果在逻辑中通过 IsUpgraded 处理
+        DynamicVars.Block.UpgradeValueBy(6m);
     }
 }

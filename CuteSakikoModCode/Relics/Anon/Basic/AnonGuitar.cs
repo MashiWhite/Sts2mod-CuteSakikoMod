@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
@@ -20,9 +20,9 @@ using CuteSakikoMod.CuteSakikoModCode.Events;
 using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
-using MegaCrit.Sts2.Core.Multiplayer.Game;
-using MegaCrit.Sts2.Core.Runs;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 
@@ -30,25 +30,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 [RegisterTouchOfOrobasRefinement(typeof(FlashAnonGuitar))]
 public class AnonGuitar : CuteAnonRelic
 {
-    // ===== 持久化数据（使用字符串保存） =====
+    // ===== 持久化数据 =====
     [SavedProperty]
-    private string SavedChordsData
-    {
-        get => _savedChordsData;
-        set => _savedChordsData = value;
-    }
+    private string SavedChordsData { get => _savedChordsData; set => _savedChordsData = value; }
     [SavedProperty]
-    private string SavedBonusChordsData
-    {
-        get => _savedBonusChordsData;
-        set => _savedBonusChordsData = value;
-    }
+    private string SavedBonusChordsData { get => _savedBonusChordsData; set => _savedBonusChordsData = value; }
     [SavedProperty]
-    private string SavedTemporaryChordsData
-    {
-        get => _savedTemporaryChordsData;
-        set => _savedTemporaryChordsData = value;
-    }
+    private string SavedTemporaryChordsData { get => _savedTemporaryChordsData; set => _savedTemporaryChordsData = value; }
 
     private string _savedChordsData = "";
     private string _savedBonusChordsData = "";
@@ -60,22 +48,18 @@ public class AnonGuitar : CuteAnonRelic
     private List<string> _temporaryChords = new();
     private bool _initialized;
 
-    // 用于子类继承 Bonus 的临时缓存
     protected static Dictionary<Player, List<string>> _pendingBonusTransfer = new();
-
     private NoteDisplay _noteDisplay;
     private Dictionary<ChordCategory, string>? _preTempChords;
     private StoredChordDisplay _storedChordDisplay;
 
     // 休息站控制
-    private bool _normalOptionUsed;
-    private bool _practiceUsedThisVisit;
-    private readonly List<WrappedRestSiteOption> _wrappedOptions = new();
+    internal bool NormalOptionUsed;
+    internal bool PracticeUsedThisVisit;
 
     public override RelicRarity Rarity => RelicRarity.Starter;
     protected virtual int MaxLearnedChordsPerCategory => 1;
     protected virtual int EffectMultiplier => 1;
-
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.RememberChord];
 
     private void EnsureInitialized()
@@ -83,7 +67,6 @@ public class AnonGuitar : CuteAnonRelic
         if (_initialized) return;
         _initialized = true;
 
-        // 从持久化字符串恢复和弦字典
         _currentChords = new Dictionary<ChordCategory, string>();
         if (!string.IsNullOrEmpty(_savedChordsData))
         {
@@ -93,22 +76,16 @@ public class AnonGuitar : CuteAnonRelic
                 var parts = pair.Split(':');
                 if (parts.Length == 2 && int.TryParse(parts[0], out int catInt) &&
                     Enum.IsDefined(typeof(ChordCategory), catInt))
-                {
                     _currentChords[(ChordCategory)catInt] = parts[1];
-                }
             }
         }
-
-        // 恢复 Bonus 和临时和弦
         _bonusChords = string.IsNullOrEmpty(_savedBonusChordsData)
             ? new List<string>()
             : _savedBonusChordsData.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
-
         _temporaryChords = string.IsNullOrEmpty(_savedTemporaryChordsData)
             ? new List<string>()
             : _savedTemporaryChordsData.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
 
-        // 如果没有和弦数据，设默认值
         if (_currentChords.Count == 0)
         {
             _currentChords[ChordCategory.Major] = ChordManager.GetBaseChordId(ChordCategory.Major);
@@ -120,8 +97,7 @@ public class AnonGuitar : CuteAnonRelic
 
     private void SyncToSaved()
     {
-        _savedChordsData = string.Join(";",
-            _currentChords.Select(kv => $"{(int)kv.Key}:{kv.Value}"));
+        _savedChordsData = string.Join(";", _currentChords.Select(kv => $"{(int)kv.Key}:{kv.Value}"));
         _savedBonusChordsData = string.Join(";", _bonusChords);
         _savedTemporaryChordsData = string.Join(";", _temporaryChords);
     }
@@ -133,133 +109,22 @@ public class AnonGuitar : CuteAnonRelic
     }
 
     // ========== 公共接口 ==========
-    public IReadOnlyList<string> GetTemporaryChords()
-    {
-        EnsureInitialized();
-        return _temporaryChords.AsReadOnly();
-    }
-
+    public IReadOnlyList<string> GetTemporaryChords() { EnsureInitialized(); return _temporaryChords.AsReadOnly(); }
     public int GetEffectMultiplier() => EffectMultiplier;
+    public IReadOnlyList<string> GetBonusChords() { EnsureInitialized(); return _bonusChords.AsReadOnly(); }
 
-    public IReadOnlyList<string> GetBonusChords()
-    {
-        EnsureInitialized();
-        return _bonusChords.AsReadOnly();
-    }
-
-    public void AddBonusChord(string chordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(chordId)) return;
-        _bonusChords.Add(chordId);
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public bool RemoveBonusChord(string chordId)
-    {
-        EnsureInitialized();
-        if (_bonusChords.Remove(chordId))
-        {
-            if (Owner != null) Flash();
-            SyncToSaved();
-            return true;
-        }
-        return false;
-    }
-
-    public bool HasBonusChord()
-    {
-        EnsureInitialized();
-        return _bonusChords.Count > 0;
-    }
-
-    public string GetBonusChord()
-    {
-        EnsureInitialized();
-        return _bonusChords.FirstOrDefault();
-    }
-
-    public void SetBonusChord(string chordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(chordId)) return;
-        _bonusChords.Clear();
-        _bonusChords.Add(chordId);
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public void TempReplaceChord(ChordCategory category, string tempChordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(tempChordId)) return;
-        if (!ChordManager.AllChords.TryGetValue(tempChordId, out var def) || !def.IsTemporaryOnly) return;
-        if (!_currentChords.ContainsKey(category)) return;
-        _preTempChords ??= new Dictionary<ChordCategory, string>();
-        if (!_preTempChords.ContainsKey(category))
-            _preTempChords[category] = _currentChords[category];
-        _currentChords[category] = tempChordId;
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public void RestoreTempChords()
-    {
-        EnsureInitialized();
-        if (_preTempChords == null) return;
-        foreach (var kv in _preTempChords)
-            if (_currentChords.ContainsKey(kv.Key))
-                _currentChords[kv.Key] = kv.Value;
-        _preTempChords = null;
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public void ReplaceChord(ChordCategory category, string newChordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(newChordId)) return;
-        _currentChords[category] = newChordId;
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public void AddTemporaryChord(string chordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(chordId)) return;
-        _temporaryChords.Add(chordId);
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public bool RemoveTemporaryChord(string chordId)
-    {
-        EnsureInitialized();
-        if (_temporaryChords.Remove(chordId))
-        {
-            if (Owner != null) Flash();
-            SyncToSaved();
-            return true;
-        }
-        return false;
-    }
-
-    public void ClearTemporaryChords()
-    {
-        EnsureInitialized();
-        if (_temporaryChords.Count == 0) return;
-        _temporaryChords.Clear();
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public IReadOnlyDictionary<ChordCategory, string> GetCurrentChords()
-    {
-        EnsureInitialized();
-        return _currentChords;
-    }
+    public void AddBonusChord(string chordId) { EnsureInitialized(); if (string.IsNullOrEmpty(chordId)) return; _bonusChords.Add(chordId); if (Owner != null) Flash(); SyncToSaved(); }
+    public bool RemoveBonusChord(string chordId) { EnsureInitialized(); if (_bonusChords.Remove(chordId)) { if (Owner != null) Flash(); SyncToSaved(); return true; } return false; }
+    public bool HasBonusChord() { EnsureInitialized(); return _bonusChords.Count > 0; }
+    public string GetBonusChord() { EnsureInitialized(); return _bonusChords.FirstOrDefault(); }
+    public void SetBonusChord(string chordId) { EnsureInitialized(); if (string.IsNullOrEmpty(chordId)) return; _bonusChords.Clear(); _bonusChords.Add(chordId); if (Owner != null) Flash(); SyncToSaved(); }
+    public void TempReplaceChord(ChordCategory category, string tempChordId) { EnsureInitialized(); if (string.IsNullOrEmpty(tempChordId)) return; if (!ChordManager.AllChords.TryGetValue(tempChordId, out var def) || !def.IsTemporaryOnly) return; if (!_currentChords.ContainsKey(category)) return; _preTempChords ??= new Dictionary<ChordCategory, string>(); if (!_preTempChords.ContainsKey(category)) _preTempChords[category] = _currentChords[category]; _currentChords[category] = tempChordId; if (Owner != null) Flash(); SyncToSaved(); }
+    public void RestoreTempChords() { EnsureInitialized(); if (_preTempChords == null) return; foreach (var kv in _preTempChords) if (_currentChords.ContainsKey(kv.Key)) _currentChords[kv.Key] = kv.Value; _preTempChords = null; if (Owner != null) Flash(); SyncToSaved(); }
+    public void ReplaceChord(ChordCategory category, string newChordId) { EnsureInitialized(); if (string.IsNullOrEmpty(newChordId)) return; _currentChords[category] = newChordId; if (Owner != null) Flash(); SyncToSaved(); }
+    public void AddTemporaryChord(string chordId) { EnsureInitialized(); if (string.IsNullOrEmpty(chordId)) return; _temporaryChords.Add(chordId); if (Owner != null) Flash(); SyncToSaved(); }
+    public bool RemoveTemporaryChord(string chordId) { EnsureInitialized(); if (_temporaryChords.Remove(chordId)) { if (Owner != null) Flash(); SyncToSaved(); return true; } return false; }
+    public void ClearTemporaryChords() { EnsureInitialized(); if (_temporaryChords.Count == 0) return; _temporaryChords.Clear(); if (Owner != null) Flash(); SyncToSaved(); }
+    public IReadOnlyDictionary<ChordCategory, string> GetCurrentChords() { EnsureInitialized(); return _currentChords; }
 
     public List<string> GetLearnedChordIds(params ChordCategory[] categories)
     {
@@ -284,8 +149,7 @@ public class AnonGuitar : CuteAnonRelic
         _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
         if (ChordManager.AllChords.TryGetValue(chordId, out var def))
             await def.Effect(ctx, Owner.Creature, EffectMultiplier);
-        if (removeStored)
-            MusicNoteManager.RemoveChord(Owner, chordId);
+        if (removeStored) MusicNoteManager.RemoveChord(Owner, chordId);
         await NotifyChordPlayed(ctx);
     }
 
@@ -570,93 +434,35 @@ public class AnonGuitar : CuteAnonRelic
         _storedChordDisplay = null;
     }
 
-    // ========== 休息站控制 ==========
+  // ========== 休息站控制（全新，已集成单例管理器） ==========
     public override bool ShouldDisableRemainingRestSiteOptions(Player player)
     {
-        if (player != Owner) return true;
-        return _normalOptionUsed && _practiceUsedThisVisit;
+        if (player != Owner) return true;   // 不干预其他玩家
+        return NormalOptionUsed && PracticeUsedThisVisit;
     }
 
     public override bool TryModifyRestSiteOptions(Player player, ICollection<RestSiteOption> options)
     {
         if (player != Owner) return false;
-        _normalOptionUsed = false;
-        _practiceUsedThisVisit = false;
-        _wrappedOptions.Clear();
 
+        NormalOptionUsed = false;
+        PracticeUsedThisVisit = false;
+
+        // 绑定事件管理器（每次休息站重进都会重新调用此方法，正好重新绑定）
+        ModelDb.Singleton<RestSiteOptionsManager>().BindToSynchronizer(this);
+
+        // 删除旧的 PracticeGuitarOption（如果有）
+        var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);
+        if (existingPractice != null) options.Remove(existingPractice);
+
+        // 添加练习选项（如果可学习）
         var canLearn = ChordManager.GetLearnableChordIds(ChordCategory.Major).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Minor).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Dominant).Count > 0;
-        var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);
-        if (existingPractice != null) options.Remove(existingPractice);
-        if (canLearn) options.Add(new PracticeGuitarOption(player, this));
+        if (canLearn)
+            options.Add(new PracticeGuitarOption(player, this));
+
         return true;
-    }
-
-    public override async Task AfterRoomEntered(AbstractRoom room)
-    {
-        await base.AfterRoomEntered(room);
-        if (room is RestSiteRoom)
-        {
-            WrapAllNonPracticeOptions();
-        }
-    }
-
-    private void WrapAllNonPracticeOptions()
-    {
-        var sync = RunManager.Instance.RestSiteSynchronizer;
-        if (sync == null) return;
-        var restSitesField = typeof(RestSiteSynchronizer).GetField("_restSites", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (restSitesField == null) return;
-        var restSites = restSitesField.GetValue(sync) as System.Collections.IList;
-        if (restSites == null) return;
-        int localSlot = Owner.RunState.GetPlayerSlotIndex(Owner);
-        if (localSlot < 0 || localSlot >= restSites.Count) return;
-        var playerRestSite = restSites[localSlot];
-        var optionsField = playerRestSite.GetType().GetField("options", BindingFlags.Public | BindingFlags.Instance);
-        if (optionsField == null) return;
-        var options = optionsField.GetValue(playerRestSite) as List<RestSiteOption>;
-        if (options == null) return;
-
-        for (int i = 0; i < options.Count; i++)
-        {
-            var opt = options[i];
-            if (opt is PracticeGuitarOption || opt is WrappedRestSiteOption) continue;
-            var wrapped = new WrappedRestSiteOption(opt, this);
-            options[i] = wrapped;
-            _wrappedOptions.Add(wrapped);
-        }
-    }
-
-    public void MarkPracticeUsed() => _practiceUsedThisVisit = true;
-
-    private class WrappedRestSiteOption : RestSiteOption
-    {
-        private readonly RestSiteOption _original;
-        private readonly AnonGuitar _guitar;
-        public WrappedRestSiteOption(RestSiteOption original, AnonGuitar guitar) : base(guitar.Owner)
-        {
-            _original = original;
-            _guitar = guitar;
-            IsEnabled = original.IsEnabled;
-        }
-        public override string OptionId => _original.OptionId;
-        public override LocString Description => _original.Description;
-
-        public override async Task<bool> OnSelect()
-        {
-            if (!IsEnabled) return false;
-            bool result = await _original.OnSelect();
-            if (result)
-            {
-                _guitar._normalOptionUsed = true;
-                foreach (var wrapped in _guitar._wrappedOptions)
-                {
-                    if (wrapped != this) wrapped.IsEnabled = false;
-                }
-            }
-            return result;
-        }
     }
 
     // ========== 遗物移除/战斗结束 ==========

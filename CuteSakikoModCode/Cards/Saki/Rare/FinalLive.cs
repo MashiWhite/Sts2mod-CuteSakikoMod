@@ -10,13 +10,8 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class FinalLive : CuteSakikoModCard
+public class FinalLive() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare, TargetType.Self)
 {
-    public FinalLive() : base(3, CardType.Attack, CardRarity.Rare, TargetType.Self)
-    {
-    }
-
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

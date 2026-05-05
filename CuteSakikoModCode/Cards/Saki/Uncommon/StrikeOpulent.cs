@@ -13,12 +13,8 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class StrikeOpulent : CuteSakikoModCard
+public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    public StrikeOpulent() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
-    {
-    }
-
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];

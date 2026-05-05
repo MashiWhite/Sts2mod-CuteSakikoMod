@@ -10,7 +10,7 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class Chord : CuteSakikoModCard
+public class Chord() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     // 定义琴奏牌的类型列表（用于随机生成）
     private static readonly Type[] QinPlayTypes = new[]
@@ -19,10 +19,6 @@ public class Chord : CuteSakikoModCard
         typeof(StrikeSlow),
         typeof(StrikeOpulent)
     };
-
-    public Chord() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
-    {
-    }
 
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
 

@@ -7,6 +7,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
 
 public class NotNeeded() : ModStatusCard(1, CardType.Status, CardRarity.Status, TargetType.Self)
 {
+    public override bool GainsBlock => true;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {

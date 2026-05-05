@@ -11,6 +11,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
 public class SlowerBeat() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    public override bool GainsBlock => true;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

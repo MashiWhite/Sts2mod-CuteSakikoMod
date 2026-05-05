@@ -8,12 +8,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class GoodCry : CuteSakikoModCard
+public class GoodCry() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public GoodCry() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
-    {
-    }
-
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new CardsVar(2); }

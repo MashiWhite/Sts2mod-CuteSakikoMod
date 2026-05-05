@@ -8,12 +8,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class WeakMeDead : CuteSakikoModCard
+public class WeakMeDead() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    public WeakMeDead() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
-    {
-    }
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<BreakDownPower>(); }

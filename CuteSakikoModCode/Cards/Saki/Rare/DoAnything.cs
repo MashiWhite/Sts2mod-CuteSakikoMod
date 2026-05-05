@@ -10,16 +10,10 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public sealed class DoAnything : CuteSakikoModCard
+public sealed class DoAnything() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    private decimal _nextPressure;
-
-    public DoAnything() : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
-    {
-        _nextPressure = 8m;
-    }
-
-
+    private decimal _nextPressure = 8m;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

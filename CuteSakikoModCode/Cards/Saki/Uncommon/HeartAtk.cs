@@ -10,12 +10,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 // 改为 Uncommon 命名空间
 
-public class HeartAtk : CuteSakikoModCard
+public class HeartAtk() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    public HeartAtk() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) // 稀有度改为 Uncommon
-    {
-    }
-
     // 基础版本有消耗关键词
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

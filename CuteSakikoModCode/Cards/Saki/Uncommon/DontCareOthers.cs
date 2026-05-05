@@ -9,12 +9,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class DontCareOthers : CuteSakikoModCard
+public class DontCareOthers() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public DontCareOthers() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
-    {
-    }
-
+    public override bool GainsBlock => true;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

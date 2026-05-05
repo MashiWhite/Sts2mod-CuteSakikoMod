@@ -6,14 +6,10 @@ using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class SugarOverload : CuteAnonCard
+public class SugarOverload() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     [SavedProperty] private int _timesPlayedThisCombat;
-
-    public SugarOverload() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
-    {
-    }
-
+    
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
         get { yield return CardKeyword.Ethereal; }

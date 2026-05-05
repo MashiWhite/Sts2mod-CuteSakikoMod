@@ -7,12 +7,8 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class Parry : CuteSakikoModCard
+public class Parry() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
-    public Parry() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
-    {
-    }
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get

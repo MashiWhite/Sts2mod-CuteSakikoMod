@@ -37,7 +37,7 @@ public class LittleMoments() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, 
                 copy.FinalizeUpgradeInternal();
             }
 
-            await CardPileCmd.Add(copy, PileType.Draw, CardPilePosition.Top);
+            await CardPileCmd.Add(copy, PileType.Discard, CardPilePosition.Top);
         }
 
         await Cmd.CustomScaledWait(0.1f, 0.15f);

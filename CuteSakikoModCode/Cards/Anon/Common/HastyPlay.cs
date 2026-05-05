@@ -18,7 +18,7 @@ public class HastyPlay : CuteAnonCard
     {
         get
         {
-            yield return new DamageVar(6m, ValueProp.Move);
+            yield return new DamageVar(7m, ValueProp.Move);
             yield return new CardsVar(1);
         }
     }
@@ -71,7 +71,6 @@ public class HastyPlay : CuteAnonCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 6 → 9
-        DynamicVars.Cards.UpgradeValueBy(1m); // 1 → 2
+        DynamicVars.Damage.UpgradeValueBy(4m); // 7 → 11
     }
 }

@@ -12,11 +12,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
+    public override bool GainsBlock => true;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            yield return new DynamicVar("BaseBlock", 5m); // 基础倍数
+            yield return new BlockVar(5m,ValueProp.Move); // 基础倍数
             yield return new SuccessRecitalBlockVar(); // 实时总格挡
         }
     }
@@ -28,7 +30,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        var perBlock = (int)DynamicVars["BaseBlock"].BaseValue;
+        var perBlock = (int)DynamicVars.Block.BaseValue;
 
         // 演奏前获取当前储存的和弦数量（实际将被演奏的数量）
         var chordCount = MusicNoteManager.GetStoredChords(Owner).Count;

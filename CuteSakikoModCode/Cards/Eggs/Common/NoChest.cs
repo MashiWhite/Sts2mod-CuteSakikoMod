@@ -10,14 +10,10 @@ using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Common;
 
-public class NoChest : CuteSakikoModEggCard
+public class NoChest() : CuteSakikoModEggCard(12, CardType.Power, CardRarity.Common, TargetType.Self)
 {
     private int _totalReduction;
-
-    public NoChest() : base(12, CardType.Power, CardRarity.Common, TargetType.Self)
-    {
-    }
-
+    
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
     [SavedProperty]

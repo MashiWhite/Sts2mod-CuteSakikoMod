@@ -1,15 +1,13 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Enchantments;
+﻿using CuteSakikoMod.CuteSakikoModCode.Enchantments;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
-
-public class WhenPerform() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class WhenPerform() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     // 没有动态变量，不重写 CanonicalVars
 
@@ -17,8 +15,9 @@ public class WhenPerform() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, Ta
     {
         get
         {
-            HoverTipFactory.FromEnchantment<PlayEnchantment>();
-                yield return HoverTipFactory.FromPower<WhenPerformPower>();
+            var tips = new List<IHoverTip>(HoverTipFactory.FromEnchantment<PlayEnchantment>());
+            tips.Add(HoverTipFactory.FromPower<WhenPerformPower>());
+            return tips;
         }
     }
     

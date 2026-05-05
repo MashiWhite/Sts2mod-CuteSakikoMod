@@ -11,13 +11,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class SakiBathe : CuteSakikoModCard
+public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     private static bool _isTransforming;
-
-    public SakiBathe() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
-    {
-    }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => new CardKeyword[] { };
 

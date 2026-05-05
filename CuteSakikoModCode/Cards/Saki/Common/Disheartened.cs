@@ -8,12 +8,8 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-public class Disheartened : CuteSakikoModCard
+public class Disheartened() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    public Disheartened() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
-    {
-    }
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
 

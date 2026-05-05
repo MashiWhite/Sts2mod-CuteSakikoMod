@@ -12,6 +12,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    public override bool GainsBlock => true;
+    
     // 动态变量：格挡值（基础13，升级17）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

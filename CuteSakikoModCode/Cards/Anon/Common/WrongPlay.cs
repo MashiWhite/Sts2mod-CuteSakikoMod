@@ -7,11 +7,9 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class WrongPlay : CuteAnonCard
+public class WrongPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public WrongPlay() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
-    {
-    }
+    public override bool GainsBlock => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

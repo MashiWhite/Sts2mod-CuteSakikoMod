@@ -15,7 +15,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
 [RegisterCharacterStarterCard(typeof(CuteSaki), 4)]
 public class DefendSaki() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
-
 {
     public override bool GainsBlock => true;
 
