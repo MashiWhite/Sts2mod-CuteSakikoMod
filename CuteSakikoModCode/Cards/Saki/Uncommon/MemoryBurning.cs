@@ -9,7 +9,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class MemoryBurning() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class MemoryBurning() : CuteSakikoModCard(3, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -37,7 +37,7 @@ public class MemoryBurning() : CuteSakikoModCard(2, CardType.Power, CardRarity.U
 
     protected override void OnUpgrade()
     {
-        // 升级：费用从 2 变为 1
+        // 升级：费用从 3 变为 2
         EnergyCost.UpgradeBy(-1);
     }
 }

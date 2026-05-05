@@ -2,6 +2,7 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
@@ -10,7 +11,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class PowerOfMemory() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Memorysaki];
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory); }
+    }
+
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

@@ -188,10 +188,22 @@ public class AnonGuitar : CuteAnonRelic
         if (newChords.Count == 0)
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
                 await power.OnNoteWithoutChord();
+        
+        await HandleMessyPlay(choiceContext);   // 放在 UpdateNoteDisplay 之前
 
+        UpdateNoteDisplay();
+        UpdateStoredChordDisplay();
+    }
+    
+    // 放在 AnonGuitar 类里任意位置，建议靠近其他核心方法
+    private async Task HandleMessyPlay(PlayerChoiceContext choiceContext)
+    {
         var messyPlay = Owner.Creature?.GetPower<MessyPlayPower>();
-        if (messyPlay != null && messyPlay.Amount > 0)
+        if (messyPlay == null || messyPlay.Amount <= 0) return;
+
+        if (messyPlay.OnNoteObtained())
         {
+            messyPlay.StartGeneratingNotes();
             var combat = Owner.Creature!.CombatState;
             if (combat != null)
             {
@@ -203,10 +215,9 @@ public class AnonGuitar : CuteAnonRelic
                     await OnNoteGenerated(choiceContext, randomType);
                 }
             }
+            messyPlay.ResetNoteCount();
+            messyPlay.EndGeneratingNotes();
         }
-
-        UpdateNoteDisplay();
-        UpdateStoredChordDisplay();
     }
 
     public async Task OnNoteGenerated(PlayerChoiceContext choiceContext, CardType noteType)
@@ -237,6 +248,8 @@ public class AnonGuitar : CuteAnonRelic
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
                 await power.OnNoteWithoutChord();
 
+        await HandleMessyPlay(choiceContext);
+        
         UpdateNoteDisplay();
         UpdateStoredChordDisplay();
     }

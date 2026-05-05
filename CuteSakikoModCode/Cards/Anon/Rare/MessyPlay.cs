@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -6,28 +7,37 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class MessyPlay() : CuteAnonCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class MessyPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
+    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote];
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get
-        {
-            // 基础 1 层 MessyPlayPower，升级在 OnUpgrade 中 +1
-            yield return new PowerVar<MessyPlayPower>(1m);
-        }
+        get { yield return new PowerVar<MessyPlayPower>(1m); } // 未升级每次额外1个音符
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         TriggerBanter();
-        var amount = DynamicVars["MessyPlayPower"].IntValue;
-        await PowerCmd.Apply<MessyPlayPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+
+        var existing = Owner.Creature.GetPower<MessyPlayPower>();
+        int amount = DynamicVars["MessyPlayPower"].IntValue;
+
+        if (existing != null)
+        {
+            // 已存在能力：增加层数（额外音符数），并更新阈值（如果升级版则缩短间隔）
+            existing.UpdateThreshold(IsUpgraded ? 2 : 3);
+            await PowerCmd.ModifyAmount(choiceContext, existing, amount, Owner.Creature, this);
+        }
+        else
+        {
+            // 首次施加
+            await PowerCmd.Apply<MessyPlayPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade()
     {
-        // 升级：能力层数 +1 （1 → 2），本地化描述自动更新
-        DynamicVars["MessyPlayPower"].UpgradeValueBy(1m);
-        EnergyCost.UpgradeBy(-1); // 3 → 2
+        // 升级效果由 UpdateThreshold 内部处理
     }
 }
