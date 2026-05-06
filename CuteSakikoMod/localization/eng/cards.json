@@ -13,6 +13,8 @@
   "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.selectionScreenPrompt": "选择最多 {Cards} 张牌获得[gold]回忆[/gold]",
   "CUTE_SAKIKO_MOD_CARD_DEFEND_SAKI.title": "防御",
   "CUTE_SAKIKO_MOD_CARD_DEFEND_SAKI.description": "获得{Block:diff()}点格挡。\n获得{IfUpgraded:show:2|1}层[gold]压力[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_PRACTICE_PRACTICE.title": "练习...练习...",
+  "CUTE_SAKIKO_MOD_CARD_PRACTICE_PRACTICE.description": "获得{Notes}个随机[pink]音符[/pink]。\n可被多次升级。",
   "CUTE_SAKIKO_MOD_CARD_PLAY_IMMEDIATELY.title": "即刻演奏",
   "CUTE_SAKIKO_MOD_CARD_PLAY_IMMEDIATELY.description": "每当获得[pink]和弦[/pink]时，立即将其[gold]演奏[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_PREP_SUPPLY.title": "演出前的补给",
@@ -409,5 +411,7 @@
   "CUTE_SAKIKO_MOD_CARD_GOLD_BRICK.title": "金砖也是砖",
   "CUTE_SAKIKO_MOD_CARD_GOLD_BRICK.description": "打出需要30层[gold]黄金[/gold]。\n造成{InCombat:{TotalDamage:diff()}|[gold]黄金[/gold]层数*{IfUpgraded:show:2|1}}点伤害并[gold]眩晕[/gold]敌人。",
   "CUTE_SAKIKO_MOD_CARD_METEOR_HEPHAESTUS.title": "陨星赫波",
-  "CUTE_SAKIKO_MOD_CARD_METEOR_HEPHAESTUS.description": "每回合结束时，随机夺取队友的{IfUpgraded:show:2|1}个[gold]能力[/gold]{IfUpgraded:show:并翻倍层数|}。\n当场上其他人已经有该能力时，改为获得{energyPrefix:energyIcons(2)}，抽1张牌。"
+  "CUTE_SAKIKO_MOD_CARD_METEOR_HEPHAESTUS.description": "每回合结束时，随机夺取队友的{IfUpgraded:show:2|1}个[gold]能力[/gold]{IfUpgraded:show:并翻倍层数|}。\n当场上其他人已经有该能力时，改为获得{energyPrefix:energyIcons(2)}，抽1张牌。",
+  "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.title": "东京塔",
+  "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.description": "用[red]东京塔[/red]撞击敌人，造成{Damage:diff()}点伤害。"
 }
