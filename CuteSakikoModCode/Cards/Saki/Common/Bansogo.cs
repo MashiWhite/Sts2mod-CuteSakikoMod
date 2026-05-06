@@ -54,6 +54,5 @@ public class Bansogo() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
     protected override void OnUpgrade()
     {
         EnergyCost.UpgradeBy(-1);
-        RemoveKeyword(CardKeyword.Exhaust);
     }
 }

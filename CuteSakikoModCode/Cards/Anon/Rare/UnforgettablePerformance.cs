@@ -5,9 +5,9 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class UnforgettablePerformance() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class UnforgettablePerformance() : CuteAnonCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
