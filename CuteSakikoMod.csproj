@@ -98,6 +98,8 @@
 
     <ItemGroup>
       <Folder Include="CuteSakikoModCode\CardPiles\" />
+      <Folder Include="CuteSakikoModCode\Relics\AnotherSelf\" />
+      <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -125,7 +127,7 @@
         <MakeDir Directories="$(RitsuLibModDest)" Condition="!Exists('$(RitsuLibModDest)')"/>
 
         <!-- 只复制 mod_manifest.json 和 DLL -->
-        <Copy SourceFiles="$(RitsuLibPackageBase)contentFiles\any\net9.0\mod_manifest.json"
+        <Copy SourceFiles="$(RitsuLibPackageBase)contentFiles\any\any\mod_manifest.json"
               DestinationFolder="$(RitsuLibModDest)"/>
         <Copy SourceFiles="$(RitsuLibPackageBase)lib\net9.0\STS2-RitsuLib.dll"
               DestinationFolder="$(RitsuLibModDest)"/>

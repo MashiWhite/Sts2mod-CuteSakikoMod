@@ -6,11 +6,11 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Ancient;
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Uncommon;
 
 public sealed class Mask : CuteSakikoModRelic
 {
-    public override RelicRarity Rarity => RelicRarity.Ancient;
+    public override RelicRarity Rarity => RelicRarity.Uncommon;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

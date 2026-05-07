@@ -5,7 +5,10 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Nodes.Rooms;          // 新增：用于 NCombatRoom
+using MegaCrit.Sts2.Core.Nodes.Vfx;            // 新增：用于 NGroundFireVfx
 using MegaCrit.Sts2.Core.ValueProps;
+using MegaCrit.Sts2.Core.Helpers; // 建议加上，虽然可能已有隐式 using
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -52,6 +55,18 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
             _permanentBonus += increase;
             DynamicVars["TotalDamage"].BaseValue = baseDamage + _permanentBonus;
         }
+
+        // ================= 新增火焰特效 =================
+        // 为每个可攻击的敌人添加地面火焰特效（参考 FirePotion）
+        var room = NCombatRoom.Instance;
+        if (room != null)
+        {
+            foreach (var enemy in CombatState.HittableEnemies)
+            {
+                room.CombatVfxContainer.AddChildSafely( NGroundFireVfx.Create(enemy));
+            }
+        }
+        // =================================================
 
         await DamageCmd.Attack(totalDamage)
             .FromCard(this)

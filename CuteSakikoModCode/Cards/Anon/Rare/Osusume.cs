@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.Localization;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class Osusume() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class Osusume() : CuteAnonCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override string ChordId => "AnonDChord";
 

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Ancient;
+﻿
 using Godot;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Models.Relics;
@@ -28,7 +28,7 @@ public class AnotherSelf : ModAncientEventTemplate
     // 定义三个池子
     private IReadOnlyList<EventOption> Pool1 => new[]
     {
-        CreateModRelicOption<Mask>(),
+        CreateModRelicOption<SandCastle>(),
         CreateModRelicOption<Anchor>()
     };
 

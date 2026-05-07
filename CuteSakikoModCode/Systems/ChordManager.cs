@@ -431,9 +431,9 @@ public static class ChordManager
                 
             });
 
-        // 爱音G和弦【技 技 攻】所有友方抽1牌，获1能量
+        // 爱音G和弦【技 技 攻 攻】所有友方抽1牌，获1能量
         AddTemporaryChord("AnonGChord", ChordCategory.Anon,
-            new[] { CardType.Skill, CardType.Skill, CardType.Attack },
+            new[] { CardType.Skill, CardType.Skill, CardType.Attack,CardType.Attack },
             "CUTESAKIKOMOD-ANONGCHORD.title", "CUTESAKIKOMOD-ANONGCHORD.description", "anon_g_chord",
             new[] { 1, 1 },
             async (ctx, owner, mult) =>

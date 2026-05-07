@@ -14,6 +14,7 @@ using STS2RitsuLib;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.Settings;
 using STS2RitsuLib.Utils.Persistence;
+using Godot; // 新增：用于 GD.Load
 using Logger = MegaCrit.Sts2.Core.Logging.Logger;
 
 namespace CuteSakikoMod;
@@ -26,7 +27,6 @@ public class Entry
 
     public static void Init()
     {
-        
         var assembly = Assembly.GetExecutingAssembly();
         RitsuLibFramework.EnsureGodotScriptsRegistered(assembly, Logger);
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
@@ -80,7 +80,9 @@ public class Entry
         
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
-        
+
+        // ===== 预加载自定义特效 =====
+        GD.Load<PackedScene>("res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn");
     }
 
     private static void OnRunStarted(RunState state)
@@ -98,18 +100,15 @@ public class Entry
         });
     }
 
-    // 工具方法：PascalCase → snake_case
     private static string GetSnakeCaseName(Type type)
     {
         var name = type.Name;
         var snake = Regex.Replace(name, "([a-z0-9])([A-Z])", "$1_$2").ToLower();
         return snake;
     }
-    
-   
 }
 
-// 配置数据类（如果还没有单独文件，可以放在这里，但建议独立文件）
+// 以下两个辅助类保持不变（如果独立文件已存在可不复制）
 public class CuteSakikoModConfigData
 {
     public bool 彩蛋卡 { get; set; }
@@ -117,7 +116,6 @@ public class CuteSakikoModConfigData
     public bool Config3 { get; set; } = false;
 }
 
-// 静态配置访问器（如果还没有单独文件，可以放在这里）
 public static class ModConfig
 {
     private static CuteSakikoModConfigData? _cached;
