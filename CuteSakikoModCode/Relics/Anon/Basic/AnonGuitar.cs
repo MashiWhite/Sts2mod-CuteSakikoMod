@@ -163,7 +163,7 @@ public class AnonGuitar : CuteAnonRelic
 
         // 播放随机扫弦音效
         var sfx = Path.Combine(AudioDir, StrumFiles[_rand.Next(StrumFiles.Length)]);
-        FmodStudioStreamingFiles.TryPlaySoundFile(sfx, volume: 1f);
+        FmodStudioStreamingFiles.TryPlaySoundFile(sfx, volume: 0.6f);
     }
 
     // ========== 核心方法 ==========
