@@ -106,6 +106,24 @@ public class FlybackManager : SingletonModel
             Log.Warn("FlybackManager: Cannot increment play count because no player found.");
     }
 
+    // 在 FlybackManager 类中添加
+    public static void DoubleAllPlayerCounts()
+    {
+        var runState = RunManager.Instance.DebugOnlyGetState();
+        if (runState == null) return;
+
+        foreach (var player in runState.Players)
+        {
+            var timeWatch = player.Relics.OfType<TimeWatch>().FirstOrDefault();
+            if (timeWatch != null)
+            {
+                timeWatch.FlybackPlayCount *= 2;
+            }
+            // 清除该玩家的缓存，确保 TotalPlayCount 实时更新
+            _tempPlayCounts.Remove(player);
+        }
+    }
+    
     private Player? GetCurrentPlayer()
     {
         var runState = RunManager.Instance.DebugOnlyGetState();

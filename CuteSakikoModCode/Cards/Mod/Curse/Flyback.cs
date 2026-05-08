@@ -1,17 +1,17 @@
-﻿using System.Reflection;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
+using System.Reflection;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Curse;
 
 public class Flyback : ModTokenCard
 {
-    // 升级提升的数值（在 OnUpgrade 中赋值）
+    // 记录升级加成的总量（不受 reloads 影响）
     private int _upgradeDamageBonus = 0;
     private int _upgradeDrawBonus = 0;
 
@@ -26,20 +26,20 @@ public class Flyback : ModTokenCard
         get
         {
             int reloads = GetReloadCount();
-            int baseDamage = Math.Max(1, 8 - reloads);
+            // 基础值最低 3 伤害，1 抽牌，升级部分后续单独加上
+            int baseDamage = Math.Max(3, 8 - reloads);
             int baseDraw = Math.Max(1, 2 - (reloads / 3));
-
-            // 加上升级提升的数值
-            baseDamage += _upgradeDamageBonus;
-            baseDraw += _upgradeDrawBonus;
-
+            
             yield return new DamageVar(baseDamage, ValueProp.Move);
             yield return new CardsVar(baseDraw);
         }
     }
 
+    // 每次 play 前刷新动态变量，让数值跟上最新的 reloads
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        RefreshDynamicVars(); // 保证伤害 / 抽牌计算正确
+
         FlybackManager.Instance.IncrementPlayCountForPlayer(cardPlay.Card.Owner);
 
         if (cardPlay.Target != null)
@@ -56,10 +56,27 @@ public class Flyback : ModTokenCard
 
     protected override void OnUpgrade()
     {
-        // 设置升级数值（例如伤害+3，抽牌+1，可以根据需求调整）
-        _upgradeDamageBonus = 3;
-        _upgradeDrawBonus = 1;
-        // 如果需要，可以在这里更新动态变量，但文本描述会自动读取新的值
+        _upgradeDamageBonus += 3;
+        _upgradeDrawBonus   += 1;
+
+        // 升级时直接增加 BaseValue，同时触发绿色高亮
+        if (DynamicVars.TryGetValue("Damage", out var dmgVar))
+            dmgVar.UpgradeValueBy(3);
+        if (DynamicVars.TryGetValue("Cards", out var cardsVar))
+            cardsVar.UpgradeValueBy(1);
+    }
+
+    // 根据 reloads 和升级加成重新计算当前数值
+    private void RefreshDynamicVars()
+    {
+        int reloads = GetReloadCount();
+        int finalDamage = Math.Max(3, 8 - reloads) + _upgradeDamageBonus;
+        int finalDraw   = Math.Max(1, 2 - (reloads / 3)) + _upgradeDrawBonus;
+
+        if (DynamicVars.TryGetValue("Damage", out var dmgVar))
+            dmgVar.BaseValue = finalDamage;
+        if (DynamicVars.TryGetValue("Cards", out var cardsVar))
+            cardsVar.BaseValue = finalDraw;
     }
 
     private static int GetReloadCount()

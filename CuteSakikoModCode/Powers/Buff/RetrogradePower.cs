@@ -1,6 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -30,7 +31,6 @@ public sealed class RetrogradePower : CuteSakikoModPower
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
-
         var manager = FlybackManager.Instance;
         if (manager != null)
         {
@@ -38,9 +38,8 @@ public sealed class RetrogradePower : CuteSakikoModPower
             manager.OnFlybackDataChanged += OnFlybackDataChanged;
             _subscribed = true;
         }
-
         UpdateDynamicInfo();
-        ApplyMaxHpBoost();   // 初始加成
+        await ApplyMaxHpBoost();
     }
 
     public override async Task AfterRemoved(Creature oldOwner)
@@ -51,20 +50,15 @@ public sealed class RetrogradePower : CuteSakikoModPower
             if (manager != null) manager.OnFlybackDataChanged -= OnFlybackDataChanged;
             _subscribed = false;
         }
-
-        // 恢复之前增加的最大生命值
         if (_hpBoostApplied > 0 && oldOwner != null)
-        {
-            // 注意：使用内部方法或官方API，根据你的框架选择
             oldOwner.SetMaxHpInternal(oldOwner.MaxHp - _hpBoostApplied);
-        }
         await base.AfterRemoved(oldOwner);
     }
 
     private void OnFlybackDataChanged(int playCount, int reloadCount)
     {
         UpdateDynamicInfo(playCount, reloadCount);
-        ApplyMaxHpBoost();   // 重新计算并更新最大生命值
+        _ = ApplyMaxHpBoost();
     }
 
     private void UpdateDynamicInfo(int? playCount = null, int? reloadCount = null)
@@ -73,18 +67,16 @@ public sealed class RetrogradePower : CuteSakikoModPower
         DynamicVars["ReloadCount"].BaseValue = reloadCount ?? FlybackManager.GetReloadCount();
     }
 
-    private void ApplyMaxHpBoost()
+    private async Task ApplyMaxHpBoost()
     {
         int newBoost = CalculateHpBoost();
-        if (newBoost == _hpBoostApplied) return;
+        int oldBoost = _hpBoostApplied;
+        if (newBoost == oldBoost) return;
+        if (oldBoost > 0) Owner.SetMaxHpInternal(Owner.MaxHp - oldBoost);
+        if (newBoost > 0) Owner.SetMaxHpInternal(Owner.MaxHp + newBoost);
 
-        // 先移除旧的加成
-        if (_hpBoostApplied > 0)
-            Owner.SetMaxHpInternal(Owner.MaxHp - _hpBoostApplied);
-        // 再应用新的加成
-        if (newBoost > 0)
-            Owner.SetMaxHpInternal(Owner.MaxHp + newBoost);
-
+        int increase = newBoost - oldBoost;
+        if (increase > 0 && Owner != null) await CreatureCmd.Heal(Owner, increase);
         _hpBoostApplied = newBoost;
         DynamicVars["ExtraMaxHp"].BaseValue = newBoost;
     }
@@ -94,5 +86,24 @@ public sealed class RetrogradePower : CuteSakikoModPower
         int playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
         int reloads = FlybackManager.GetReloadCount();
         return (int)((playCount / 100f) * reloads);
+    }
+
+    public async Task RefreshHpBoost() => await ApplyMaxHpBoost();
+
+    // ========== 复活逻辑 ==========
+    public override bool ShouldPowerBeRemovedAfterOwnerDeath() => false;
+    public override bool ShouldCreatureBeRemovedFromCombatAfterDeath(Creature creature) => creature != Owner;
+    public override bool ShouldStopCombatFromEnding() => true; // 永远阻止战斗结束
+
+    public override async Task AfterDeath(
+        PlayerChoiceContext choiceContext,
+        Creature creature,
+        bool wasRemovalPrevented,
+        float deathAnimLength)
+    {
+        if (wasRemovalPrevented || creature != Owner) return;
+
+        if (creature.Monster is StarAnon starAnon)
+            await starAnon.TriggerDeadState();
     }
 }
