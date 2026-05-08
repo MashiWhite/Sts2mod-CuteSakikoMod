@@ -132,7 +132,7 @@ public class StarAnon : ModMonsterTemplate
             await DamageCmd.Attack(10).FromMonster(this).Execute(null);
         var player = targets.FirstOrDefault()?.Player;
         if (player != null)
-            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Draw, 10, null);
+            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Draw, 5, null);
     }
 
     private async Task HeavyAttackMove(IReadOnlyList<Creature> targets)

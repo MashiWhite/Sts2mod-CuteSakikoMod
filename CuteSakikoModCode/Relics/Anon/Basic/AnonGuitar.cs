@@ -23,6 +23,7 @@ using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.Saves;
 using STS2RitsuLib.Audio;
 
 
@@ -161,9 +162,16 @@ public class AnonGuitar : CuteAnonRelic
             MusicNoteManager.RemoveChord(Owner, chordId);
         await NotifyChordPlayed(ctx);
 
-        // 播放随机扫弦音效
+        // 获取游戏音量设置
+        var saveManager = MegaCrit.Sts2.Core.Saves.SaveManager.Instance;
+        var s = saveManager.SettingsSave;
+
+        float masterVol = SaveManager.Instance?.SettingsSave.VolumeMaster ?? 0.5f;
+        float sfxVol    = SaveManager.Instance?.SettingsSave.VolumeSfx   ?? 0.5f;
+        float finalVol  = 0.6f * masterVol * sfxVol;
+        
         var sfx = Path.Combine(AudioDir, StrumFiles[_rand.Next(StrumFiles.Length)]);
-        FmodStudioStreamingFiles.TryPlaySoundFile(sfx, volume: 0.6f);
+        FmodStudioStreamingFiles.TryPlaySoundFile(sfx, volume: finalVol);
     }
 
     // ========== 核心方法 ==========

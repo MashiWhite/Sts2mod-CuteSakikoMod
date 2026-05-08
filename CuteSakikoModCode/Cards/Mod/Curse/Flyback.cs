@@ -27,7 +27,7 @@ public class Flyback : ModTokenCard
         {
             int reloads = GetReloadCount();
             // 基础值最低 3 伤害，1 抽牌，升级部分后续单独加上
-            int baseDamage = Math.Max(3, 8 - reloads);
+            int baseDamage = Math.Max(3, 10 - reloads);
             int baseDraw = Math.Max(1, 2 - (reloads / 3));
             
             yield return new DamageVar(baseDamage, ValueProp.Move);
@@ -56,12 +56,12 @@ public class Flyback : ModTokenCard
 
     protected override void OnUpgrade()
     {
-        _upgradeDamageBonus += 3;
+        _upgradeDamageBonus += 6;
         _upgradeDrawBonus   += 1;
 
         // 升级时直接增加 BaseValue，同时触发绿色高亮
         if (DynamicVars.TryGetValue("Damage", out var dmgVar))
-            dmgVar.UpgradeValueBy(3);
+            dmgVar.UpgradeValueBy(6);
         if (DynamicVars.TryGetValue("Cards", out var cardsVar))
             cardsVar.UpgradeValueBy(1);
     }
