@@ -19,15 +19,13 @@ public class MasteredAll() : CuteAnonCard(4, CardType.Attack, CardRarity.Uncommo
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         TriggerBanter();
 
-        // 执行攻击并检查是否击杀
-        var damageResults = await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+        var command = await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(choiceContext);
 
-        // 如果击杀了敌人，演奏所有已记忆的和弦
-        if (damageResults.Results.Any(r => r.WasTargetKilled))
+        if (command.Results.Any(hitList => hitList.Any(r => r.WasTargetKilled)))
         {
             var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
             if (guitar != null)

@@ -11,12 +11,8 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
 [RegisterCharacterStarterCard(typeof(CuteAnon), 4)]
-public class AnonStrike : CuteAnonCard
+public class AnonStrike (): CuteAnonCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    public AnonStrike() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
-    {
-    }
-
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playguitar];
 

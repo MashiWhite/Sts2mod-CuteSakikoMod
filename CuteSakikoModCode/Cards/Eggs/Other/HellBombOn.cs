@@ -43,7 +43,7 @@ public class HellBombOn() : ModTokenCard(1, CardType.Skill, CardRarity.Token, Ta
     }
 
     // 回合结束在手牌中：爆炸
-    public override async Task OnTurnEndInHand(PlayerChoiceContext choiceContext)
+    protected override async Task OnTurnEndInHand(PlayerChoiceContext choiceContext)
     {
         // 先对敌人造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)

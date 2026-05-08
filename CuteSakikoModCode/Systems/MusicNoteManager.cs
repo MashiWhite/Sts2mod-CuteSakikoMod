@@ -21,75 +21,98 @@ public static class MusicNoteManager
         return data;
     }
 
-public static (List<string> newChords, string? overflowChordId) AddNote(
-    Player player, CardType type,
-    IReadOnlyDictionary<ChordCategory, string> learnedChords,
-    IEnumerable<string> bonusChordIds)
-{
-    if (player == null) return (new List<string>(), null);
-
-    var data = GetData(player);
-
-    var combat = player.Creature?.CombatState;
-    var currentRound = combat?.RoundNumber ?? 0;
-    if (data.LastRoundNumber != currentRound)
+    // ========== 新增结果结构体 ==========
+    public struct NoteProcessResult
     {
-        data.NotesGainedThisTurn = 0;
-        data.LastRoundNumber = currentRound;
+        public List<string> NewChords;      // 新匹配到的和弦
+        public string? OverflowChord;       // 因储存满而被挤出的最旧和弦
+        public int TotalStoredCount;        // 添加后储存和弦的总数
     }
 
-    data.NotesGainedThisTurn++;
-    data.Notes.Enqueue(type);
-    while (data.Notes.Count > 4)
-        data.Notes.Dequeue();
-
-    var sequence = data.Notes.ToList();
-    var newChords = new List<string>();
-
-    // 已学习和弦
-    if (learnedChords != null)
-        foreach (var kv in learnedChords)
+    // ========== 修改后的 AddNote ==========
+    public static NoteProcessResult AddNote(
+        Player player, CardType type,
+        IReadOnlyDictionary<ChordCategory, string> learnedChords,
+        IEnumerable<string> bonusChordIds)
+    {
+        var result = new NoteProcessResult
         {
-            var chordId = kv.Value;
-            if (string.IsNullOrEmpty(chordId)) continue;
-            if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
-                ChordManager.MatchesChord(def, sequence))
+            NewChords = new List<string>(),
+            OverflowChord = null,
+            TotalStoredCount = 0
+        };
+
+        if (player == null) return result;
+
+        var data = GetData(player);
+
+        // 回合重置
+        var combat = player.Creature?.CombatState;
+        var currentRound = combat?.RoundNumber ?? 0;
+        if (data.LastRoundNumber != currentRound)
+        {
+            data.NotesGainedThisTurn = 0;
+            data.LastRoundNumber = currentRound;
+        }
+
+        data.NotesGainedThisTurn++;
+        data.Notes.Enqueue(type);
+        while (data.Notes.Count > 4)
+            data.Notes.Dequeue();
+
+        var sequence = data.Notes.ToList();
+
+        // 学习和弦匹配
+        if (learnedChords != null)
+        {
+            foreach (var kv in learnedChords)
             {
-                data.StoredChords.Add(chordId);
-                newChords.Add(chordId);
+                var chordId = kv.Value;
+                if (string.IsNullOrEmpty(chordId)) continue;
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
+                    ChordManager.MatchesChord(def, sequence))
+                {
+                    data.StoredChords.Add(chordId);
+                    result.NewChords.Add(chordId);
+                }
             }
         }
 
-    // 奖励和弦
-    if (bonusChordIds != null)
-        foreach (var chordId in bonusChordIds)
+        // 奖励和弦匹配
+        if (bonusChordIds != null)
         {
-            if (string.IsNullOrEmpty(chordId)) continue;
-            if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
-                ChordManager.MatchesChord(def, sequence))
+            foreach (var chordId in bonusChordIds)
             {
-                data.StoredChords.Add(chordId);
-                newChords.Add(chordId);
+                if (string.IsNullOrEmpty(chordId)) continue;
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
+                    ChordManager.MatchesChord(def, sequence))
+                {
+                    data.StoredChords.Add(chordId);
+                    result.NewChords.Add(chordId);
+                }
             }
         }
 
-    // 溢出处理
-    string? overflowChordId = null;
-    while (data.StoredChords.Count > MaxStoredChords)
-    {
-        overflowChordId = data.StoredChords[0];
-        data.StoredChords.RemoveAt(0);
+        // 溢出处理
+        while (data.StoredChords.Count > MaxStoredChords)
+        {
+            result.OverflowChord = data.StoredChords[0];
+            data.StoredChords.RemoveAt(0);
+        }
+
+        result.TotalStoredCount = data.StoredChords.Count;
+
+        // 触发 GuitarVocalPower
+        if (player?.Creature != null)
+        {
+            var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
+            if (vocalPower != null) _ = vocalPower.OnNoteGained(1);
+        }
+
+        return result;
     }
 
-    if (player?.Creature != null)
-    {
-        var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
-        if (vocalPower != null) _ = vocalPower.OnNoteGained(1);
-    }
-
-    return (newChords, overflowChordId);
-}
-
+    // ========== 以下所有原方法保持不变 ==========
     public static int GetNotesGainedThisTurn(Player player)
     {
         if (player == null) return 0;
@@ -106,7 +129,6 @@ public static (List<string> newChords, string? overflowChordId) AddNote(
 
     public static bool RemoveRandomNote(Player player, Rng rng)
     {
-        // 两端都执行，依靠同步 Rng 保证结果相同
         if (player == null) return false;
         var data = GetData(player);
         if (data.Notes.Count == 0) return false;

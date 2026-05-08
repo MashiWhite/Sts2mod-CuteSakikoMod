@@ -15,7 +15,7 @@ using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
 
-public sealed class Eggs : CuteSakikoModRelic
+public sealed class Eggs : CuteSakiRelic
 {
     [SavedProperty] private readonly List<ModelId> _gainedEggCards = new();
 

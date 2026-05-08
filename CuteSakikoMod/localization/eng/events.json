@@ -18,5 +18,14 @@
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_GIFT.description": "素世为你付了钱，还把找零塞给了你，然后化为一阵凉爽的风离开了。\n\n[sine]就像从未存在过一样。[/sine]",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.SOYO_REFUND.description": "你把效果器退了回去，素世瞪了你一眼，然后化为一阵幽怨的风消失了。\n[sine]你[red]不好意思[/red]的拿着[gold]钱[/gold]离开了。[/sine]",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.SELECT_CARD_TITLE": "选择[purple]附魔[/purple]的牌",
-  "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.SELECT_CARD_TITLE.description": "选择[purple]附魔[/purple]的牌"
+  "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.SELECT_CARD_TITLE.description": "选择[purple]附魔[/purple]的牌",
+
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.title": "星遗物",
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.description": "你走在路上，看到一个东西在[gold]闪闪发光[/gold]\n[pink]哇这是什么！[/pink]\n你走近一看，是一个神秘的银色腕表。",
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.PICK_UP.title": "捡起来带上",
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.PICK_UP.description": "获得遗物[gold]时光注视[/gold]。",
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.PICK_UP_SUCCESS.description": "[pink]为什么感觉...那么熟悉？[/pink]\n[pink]不管了！这么漂亮，先带上再说！[/pink]",
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.KICK_AWAY.title": "踢一脚离开",
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.KICK_AWAY.description": "选择移除一张牌。",
+  "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.KICK_AWAY_FAIL.description": "你不以为然，一脚把它踢飞出去。\n[pink]啊啊啊！等一下！[/pink]\n你不小心把自己的东西摔坏了。\n[pink]真倒霉...呜呜[/pink]"
 }

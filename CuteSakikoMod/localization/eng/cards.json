@@ -29,6 +29,8 @@
   "CUTE_SAKIKO_MOD_CARD_STAGE_JITTERS.description": "造成{CalculatedDamage:diff()}点伤害。\n每个储存的[pink]音符[/pink]与[pink]和弦[/pink]都会降低此牌2点伤害。",
   "CUTE_SAKIKO_MOD_CARD_FANTASY_STAGE.title": "幻想中的Live",
   "CUTE_SAKIKO_MOD_CARD_FANTASY_STAGE.description": "演奏[gold]所有[/gold]储存[pink]和弦[/pink]。\n对所有敌人造成{Damage:diff()}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_FLYBACK.title": "飞返",
+  "CUTE_SAKIKO_MOD_CARD_FLYBACK.description": "造成{Damage:diff()}点伤害。\n抽{Cards:diff()}张牌。",
   "CUTE_SAKIKO_MOD_CARD_KEEP_CENTER.title": "绝对不能让出C位！",
   "CUTE_SAKIKO_MOD_CARD_KEEP_CENTER.description": "造成{Damage:diff()}点伤害。\n额外获得3个[red]攻击[/red][pink]音符[/pink]。",
   "CUTE_SAKIKO_MOD_CARD_LINGERING_TASTE.title": "意犹未尽",

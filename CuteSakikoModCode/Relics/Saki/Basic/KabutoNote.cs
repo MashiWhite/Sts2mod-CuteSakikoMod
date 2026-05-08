@@ -18,7 +18,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 
 [RegisterCharacterStarterRelic(typeof(CuteSaki))]
 [RegisterTouchOfOrobasRefinement(typeof(PostItNote))]
-public class KabutoNote : CuteSakikoModRelic  // ← 去掉 sealed
+public class KabutoNote : CuteSakiRelic  // ← 去掉 sealed
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
 

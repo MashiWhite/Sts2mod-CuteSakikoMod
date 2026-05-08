@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c4ptv81txs5em"]
+
+[node name="StarAnonEncounter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="first" type="Marker2D" parent="."]
+position = Vector2(1535.3546, 726.9241)

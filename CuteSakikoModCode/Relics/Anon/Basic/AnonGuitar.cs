@@ -181,28 +181,27 @@ public class AnonGuitar : CuteAnonRelic
             return;
         }
 
-        var storedBefore = MusicNoteManager.GetStoredChords(Owner);
-        string? overflowChordId = null;
-        var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
-        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
-            overflowChordId = storedBefore[0];
-
-        var (newChords, actualOverflow) = MusicNoteManager.AddNote(
+        // 使用新版 AddNote 返回的结果
+        var result = MusicNoteManager.AddNote(
             Owner, cardPlay.Card.Type, _currentChords, _bonusChords.Concat(_temporaryChords));
 
-        if (newChords.Count > 0 && overflowChordId != null && actualOverflow == overflowChordId)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
+        // 处理溢出的和弦（LingeringTastePower）
+        if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
+            await PlaySingleChord(choiceContext, result.OverflowChord, removeStored: true);
 
-        var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
-        if (hasAutoPlay && newChords.Count > 0)
-            foreach (var chordId in newChords)
-                await PlaySingleChord(choiceContext, chordId, removeStored: false);
-
-        if (newChords.Count == 0)
+        // 处理即刻演奏（PlayImmediatelyPower）
+        if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
+        {
+            foreach (var chordId in result.NewChords)
+                await PlaySingleChord(choiceContext, chordId, removeStored: true); // 立即演奏并移除
+        }
+        else if (result.NewChords.Count == 0)
+        {
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
                 await power.OnNoteWithoutChord();
-        
-        await HandleMessyPlay(choiceContext);   // 放在 UpdateNoteDisplay 之前
+        }
+
+        await HandleMessyPlay(choiceContext);
 
         UpdateNoteDisplay();
         UpdateStoredChordDisplay();
@@ -237,32 +236,27 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (Owner.Creature.CombatState == null) return;
 
-        // 获取当前存储的和弦，用于溢出判断
-        var storedBefore = MusicNoteManager.GetStoredChords(Owner);
-        string? overflowChordId = null;
-        var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
-        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
-            overflowChordId = storedBefore[0];
-
-        // 添加音符，但不再直接使用 AddNote 返回的 overflowChordId
-        var (newChords, _) = MusicNoteManager.AddNote(
+        var result = MusicNoteManager.AddNote(
             Owner, noteType, _currentChords, _bonusChords.Concat(_temporaryChords));
 
-        // 只有拥有 LingeringTastePower 且确实生成了新和弦时，才演奏溢出的和弦
-        if (newChords.Count > 0 && overflowChordId != null)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
+        // 溢出演奏
+        if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
+            await PlaySingleChord(choiceContext, result.OverflowChord, removeStored: true);
 
-        var hasAutoPlay = Owner.Creature.HasPower<PlayImmediatelyPower>();
-        if (hasAutoPlay && newChords.Count > 0)
-            foreach (var chordId in newChords)
-                await PlaySingleChord(choiceContext, chordId, removeStored: false);
-
-        if (newChords.Count == 0)
+        // 即刻演奏
+        if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
+        {
+            foreach (var chordId in result.NewChords)
+                await PlaySingleChord(choiceContext, chordId, removeStored: true);
+        }
+        else if (result.NewChords.Count == 0)
+        {
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
                 await power.OnNoteWithoutChord();
+        }
 
         await HandleMessyPlay(choiceContext);
-        
+
         UpdateNoteDisplay();
         UpdateStoredChordDisplay();
     }
@@ -296,19 +290,23 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (!ChordManager.AllChords.ContainsKey(chordId)) return;
 
+        // 记录溢出前的储存列表（用于判断溢出）
         var storedBefore = MusicNoteManager.GetStoredChords(Owner);
         string? overflowChordId = null;
         var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
         if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
             overflowChordId = storedBefore[0];
 
+        // 直接添加和弦（内部会处理容量，移除最旧的）
         MusicNoteManager.AddChordDirectly(Owner, chordId);
 
+        // 处理溢出（如果发生了）
         if (overflowChordId != null)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
+            await PlaySingleChord(choiceContext, overflowChordId, removeStored: true);
 
+        // 如果拥有即刻演奏，则演奏刚添加的和弦，并移除（不储存）
         if (Owner.Creature.HasPower<PlayImmediatelyPower>())
-            await PlaySingleChord(choiceContext, chordId, removeStored: false);
+            await PlaySingleChord(choiceContext, chordId, removeStored: true);
 
         UpdateStoredChordDisplay();
         SyncToSaved();

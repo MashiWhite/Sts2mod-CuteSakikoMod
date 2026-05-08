@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Uncommon;
 
-public sealed class Mask : CuteSakikoModRelic
+public sealed class Mask : CuteSakiRelic
 {
     public override RelicRarity Rarity => RelicRarity.Uncommon;
 

@@ -3,11 +3,12 @@
   "name": "可爱小祥mod",
   "author": "MashiWhite",
   "description": "一个核心是可爱小祥的mod。",
-  "version": "v0.0.3.5",
+  "version": "v0.0.3",
+  "min_game_version": "0.105.0",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [
-    "STS2-RitsuLib"
+    { "id": "STS2-RitsuLib", "min_version": "0.2.27" }
   ],
   "affects_gameplay": true
 }

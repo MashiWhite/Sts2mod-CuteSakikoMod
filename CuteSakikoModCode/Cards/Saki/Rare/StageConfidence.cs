@@ -27,7 +27,7 @@ public class StageConfidence() : CuteSakikoModCard(0, CardType.Skill, CardRarity
         }
     }
 
-    protected override PileType GetResultPileType()
+    protected override PileType GetResultPileTypeForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount >= 5)

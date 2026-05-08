@@ -35,7 +35,7 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
         }
     }
 
-    protected override PileType GetResultPileType()
+    protected override PileType GetResultPileTypeForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
         var required = IsUpgraded ? 10 : 15;
