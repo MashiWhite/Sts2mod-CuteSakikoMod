@@ -21,7 +21,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
 
         private DynamicVar _blockVar;
         private bool _flybackAdded;
-
+        
         public override RelicRarity Rarity => RelicRarity.Ancient;
     
         protected override IEnumerable<DynamicVar> CanonicalVars
