@@ -29,7 +29,7 @@ public sealed class MemoryComingPower : CuteSakikoModPower
                 .Where(card => card.HasModKeyword(CutesakiKeywords.Memory))
                 .ToList();
 
-        var exhaustedMemoryIds = SakiMemoryManager.Instance.ExhaustedMemoryIds.ToHashSet(); // 修改这一行
+        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(player).ToHashSet();
 
         var availableMemoryCards = _allMemoryCards
             .Where(card => !exhaustedMemoryIds.Contains(card.Id))

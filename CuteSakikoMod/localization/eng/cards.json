@@ -185,6 +185,7 @@
   "CUTE_SAKIKO_MOD_CARD_WISH_HAPPINESS.description": "使一名其他玩家获得{Energy:energyIcons()}并抽{Cards:diff()}张牌。\n双方获得2层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.title": "再度鼓励",
   "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.description": "造成{Damage:diff()}点伤害。\n目标若有则消耗{IfUpgraded:show:2|3}层[gold]压力[/gold]选择获得一张{IfUpgraded:show:[gold]回忆卡牌+[/gold]|[gold]回忆卡牌[/gold]}。",
+  "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.selectionScreenPrompt": "再度鼓励",
   "CUTE_SAKIKO_MOD_CARD_FORGET.title": "遗忘",
   "CUTE_SAKIKO_MOD_CARD_FORGET.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n降低{IfUpgraded:show:3|2}层[gold]压力[/gold]。\n从手牌中选择一张牌[gold]消耗[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_NEED_PRACTICE.title": "需要练习",

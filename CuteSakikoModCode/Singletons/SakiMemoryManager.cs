@@ -1,13 +1,15 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 
@@ -15,12 +17,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 public sealed class SakiMemoryManager : SingletonModel
 {
     private static readonly CardKeyword MemoryKeyword = ModKeywordRegistry.GetCardKeyword(CutesakiKeywords.Memory);
-    private readonly HashSet<ModelId> _exhaustedMemoryIds = new();
+
+    // 改为按玩家隔离的存储结构
+    private readonly Dictionary<Player, HashSet<ModelId>> _exhaustedMemoryIdsByPlayer = new();
 
     public SakiMemoryManager()
     {
-        _exhaustedMemoryIds.Clear();
-        // 只需要订阅战斗钩子
         ModHelper.SubscribeForCombatStateHooks(Id.Entry, _ => [this]);
     }
 
@@ -28,43 +30,62 @@ public sealed class SakiMemoryManager : SingletonModel
 
     public static SakiMemoryManager Instance => ModelDb.Singleton<SakiMemoryManager>();
 
-    // 公开只读集合
-    public IReadOnlyCollection<ModelId> ExhaustedMemoryIds => _exhaustedMemoryIds;
-
-    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    /// <summary>
+    /// 获取指定玩家已消耗的记忆卡 ID 集合（只读）
+    /// </summary>
+    public IReadOnlyCollection<ModelId> GetExhaustedMemoryIds(Player player)
     {
-        // 直接用枚举 Contains，不用 HasModKeyword
+        if (player == null)
+            return System.Array.Empty<ModelId>();
+
+        if (!_exhaustedMemoryIdsByPlayer.TryGetValue(player, out var set))
+            return System.Array.Empty<ModelId>();
+
+        return set;
+    }
+
+    public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
         if (cardPlay.Card.Keywords.Contains(MemoryKeyword))
         {
-            // 每次打出后，本场战斗永久增加 1 点能量消耗（不是升级基础费用）
             cardPlay.Card.EnergyCost.AddThisCombat(1);
         }
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public override async Task AfterCardExhausted(PlayerChoiceContext choiceContext, CardModel card, bool causedByEthereal)
     {
-        if (card.Keywords.Contains(MemoryKeyword))
-        {
-            _exhaustedMemoryIds.Add(card.Id);
+        if (!card.Keywords.Contains(MemoryKeyword))
+            return;
 
-            // 需要重放两次？循环两次即可
-            for (int i = 0; i < 2; i++)
-            {
-                var clone = card.CreateClone();
-                clone.RemoveKeyword(MemoryKeyword);          // 关键：防止再次触发钩子
-                clone.ExhaustOnNextPlay = false;             // 不要让克隆再消耗
-                await CardCmd.AutoPlay(choiceContext, clone, null, AutoPlayType.Default);
-                // 立即清除这张克隆牌（参考 Chord 的做法）
-                if (clone.Pile != null && clone.Pile.IsCombatPile)
-                    await CardPileCmd.RemoveFromCombat(clone);
-            }
+        var player = card.Owner;
+        if (player == null)
+            return;
+
+        // 记录到该玩家的已消耗列表
+        if (!_exhaustedMemoryIdsByPlayer.TryGetValue(player, out var set))
+        {
+            set = new HashSet<ModelId>();
+            _exhaustedMemoryIdsByPlayer[player] = set;
+        }
+        set.Add(card.Id);
+
+        // 重放两次（原逻辑）
+        for (int i = 0; i < 2; i++)
+        {
+            var clone = card.CreateClone();
+            clone.RemoveKeyword(MemoryKeyword);      // 防止递归触发
+            clone.ExhaustOnNextPlay = false;         // 克隆牌不再消耗
+            await CardCmd.AutoPlay(choiceContext, clone, null, AutoPlayType.Default);
+
+            if (clone.Pile?.IsCombatPile == true)
+                await CardPileCmd.RemoveFromCombat(clone);
         }
     }
 
-    public override async Task AfterCombatEnd(CombatRoom room)
+    public override Task AfterCombatEnd(CombatRoom room)
     {
-        _exhaustedMemoryIds.Clear();
-        await Task.CompletedTask;
+        _exhaustedMemoryIdsByPlayer.Clear();
+        return Task.CompletedTask;
     }
 }

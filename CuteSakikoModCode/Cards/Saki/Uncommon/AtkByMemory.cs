@@ -46,7 +46,7 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
         var needed = maxHandSize - currentSize;
         if (needed <= 0) return;
 
-        var exhaustedMemoryIds = SakiMemoryManager.Instance.ExhaustedMemoryIds.ToHashSet();
+        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(Owner).ToHashSet();
 
         var memoryCardModels = ModelDb.AllCards
             .Where(card => card.HasModKeyword(CutesakiKeywords.Memory) &&

@@ -30,11 +30,11 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
         {
             await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, 3, Owner.Creature, this);
 
-            var exhaustedMemoryIds = SakiMemoryManager.Instance.ExhaustedMemoryIds.ToHashSet();
+            var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(Owner).ToHashSet();
 
             var availableMemoryCards = ModelDb.AllCards
                 .Where(card =>
-                    card.HasModKeyword(CutesakiKeywords.Memory) && // 修改这里
+                    card.HasModKeyword(CutesakiKeywords.Memory) && 
                     !exhaustedMemoryIds.Contains(card.Id))
                 .ToList();
 

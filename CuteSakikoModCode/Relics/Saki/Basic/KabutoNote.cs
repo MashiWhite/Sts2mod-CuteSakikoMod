@@ -53,14 +53,14 @@ public class KabutoNote : CuteSakiRelic  // ← 去掉 sealed
         var combatState = player.PlayerCombatState;
         if (combatState == null) return;
 
-        var exhaustedIds = SakiMemoryManager.Instance.ExhaustedMemoryIds;
+        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(Owner).ToHashSet();
         var seenIds = new HashSet<ModelId>();
         var cardsToShow = new List<CardModel>();
 
         bool ShouldShow(CardModel card)
         {
             if (card == null) return false;
-            if (exhaustedIds.Contains(card.Id)) return false;
+            if (exhaustedMemoryIds.Contains(card.Id)) return false;
             if (seenIds.Contains(card.Id)) return false;
             return true;
         }

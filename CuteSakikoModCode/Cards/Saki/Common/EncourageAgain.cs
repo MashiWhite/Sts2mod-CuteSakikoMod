@@ -5,7 +5,6 @@ using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
@@ -13,8 +12,6 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
-
-// 新增
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
@@ -24,7 +21,6 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
     [
         new DamageVar(6m, ValueProp.Move)
     ];
-
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -69,57 +65,49 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
         // 3. 消耗压力
         await PowerCmd.ModifyAmount(choiceContext, targetPressure, -requiredPressure, Owner.Creature, this);
 
-        // 4. 获取可选回忆卡牌（排除已消耗的）
-        var exhaustedMemoryIds = SakiMemoryManager.Instance.ExhaustedMemoryIds.ToHashSet();
+        // 4. 获取可选回忆卡牌模板（排除已消耗的）
+        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(Owner).ToHashSet();
 
-        var availableMemoryCards = ModelDb.AllCards
+        var memoryCardTemplates = ModelDb.AllCards
             .Where(card =>
-                card.HasModKeyword(CutesakiKeywords.Memory) && // 修改这里
+                card.HasModKeyword(CutesakiKeywords.Memory) &&
                 !exhaustedMemoryIds.Contains(card.Id))
             .ToList();
 
-        if (availableMemoryCards.Count == 0)
+        if (memoryCardTemplates.Count == 0)
             return;
 
-        // 5. 弹出选择界面（点击卡片即确认）
+        // 5. 使用 CombatState.CreateCard 生成完全正确的战斗实例（不会过滤远古稀有度）
+        var combatReadyCards = memoryCardTemplates
+            .Select(template => Owner.Creature.CombatState.CreateCard(template, Owner))
+            .ToList();
+
+        // 6. 弹出选择界面
         var prefs = new CardSelectorPrefs(
-            new LocString("gameplay_ui", "CHOOSE_CARD"),
+            new LocString("cards", "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.selectionScreenPrompt"),
             1,
             1
         );
-        // 不设置 RequireManualConfirmation，使用默认行为
 
         var selectedCards = await CardSelectCmd.FromSimpleGrid(
             choiceContext,
-            availableMemoryCards,
+            combatReadyCards,
             Owner,
             prefs
         );
 
-        var selectedCardModel = selectedCards.FirstOrDefault();
+        var selectedCard = selectedCards.FirstOrDefault();
+        if (selectedCard == null) return;
 
-
-        if (selectedCardModel == null) return;
-
-        // 6. 通过 CardFactory 生成可用的卡牌实例
-        var generatedCard = CardFactory.GetDistinctForCombat(
-            Owner,
-            new List<CardModel> { selectedCardModel },
-            1,
-            Owner.RunState.Rng.CombatCardGeneration
-        ).FirstOrDefault();
-
-        if (generatedCard == null) return;
-
-        // 7. 如果需要升级（本卡升级后获得的回忆卡牌也升级？根据设计可选）
+        // 7. 如需升级
         if (IsUpgraded)
         {
-            generatedCard.UpgradeInternal();
-            generatedCard.FinalizeUpgradeInternal();
+            selectedCard.UpgradeInternal();
+            selectedCard.FinalizeUpgradeInternal();
         }
 
         // 8. 加入手牌
-        await CardPileCmd.AddGeneratedCardToCombat(generatedCard, PileType.Hand, Owner);
+        await CardPileCmd.AddGeneratedCardToCombat(selectedCard, PileType.Hand, Owner);
     }
 
     protected override void OnUpgrade()
