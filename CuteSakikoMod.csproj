@@ -91,7 +91,7 @@
     <ItemGroup>
         <None Include=".gitignore"/>
         <None Include=".godotignore"/>
-        <None Include="mod_manifest.json" />
+        <None Include="CuteSakikoMod.json" />
         <None Include="project.godot"/>
         <None Include="CuteSakikoMod/**"/>
     </ItemGroup>
@@ -116,7 +116,7 @@
         <Message Text="Copying mod files to game mods folder." Importance="high"/>
         <MakeDir Directories="$(ModsPath)$(MSBuildProjectName)" Condition="!Exists('$(ModsPath)$(MSBuildProjectName)')"/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
-        <Copy SourceFiles="mod_manifest.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
+        <Copy SourceFiles="CuteSakikoMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
     </Target>
 
     <!-- 硬编码复制 RitsuLib 文件（稳定可靠） -->
