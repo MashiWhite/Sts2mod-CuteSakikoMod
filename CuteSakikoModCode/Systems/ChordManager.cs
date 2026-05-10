@@ -316,9 +316,12 @@ public static class ChordManager
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
-                var player = owner.Player;
-                if (player != null)
-                    await PlayerCmd.GainEnergy(1 * mult, player);
+                var combat = owner.CombatState;
+                if (combat != null)
+                {
+                    foreach (var player in combat.Players)
+                        await PlayerCmd.GainEnergy(1 * mult, player);
+                }
             });
 
         // #D7【技 攻】所有友方抽1张牌
@@ -328,9 +331,12 @@ public static class ChordManager
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
-                var player = owner.Player;
-                if (player != null)
+                var combat = owner.CombatState;
+                if (combat != null)
+                {
+                    foreach (var player in combat.Players)
                     await CardPileCmd.Draw(ctx, 1 * mult, player);
+                }
             });
 
         //爱音C和弦
@@ -343,24 +349,17 @@ public static class ChordManager
                 var combat = owner.CombatState;
                 if (combat == null) return;
 
-                var upgradeCount = 1 * mult;
-                var allUpgradable = new List<CardModel>();
-
-                foreach (var player in combat.Players)
-                {
-                    var hand = player.PlayerCombatState?.Hand;
-                    if (hand == null) continue;
-                    allUpgradable.AddRange(hand.Cards.Where(c => c.IsUpgradable));
-                }
+                int upgradeCount = 1 * mult;
+                var allUpgradable = combat.Players
+                    .SelectMany(p => p.PlayerCombatState?.Hand?.Cards ?? Enumerable.Empty<CardModel>())
+                    .Where(c => c.IsUpgradable)
+                    .ToList();
 
                 if (allUpgradable.Count == 0) return;
 
                 var rng = combat.RunState.Rng.CombatCardSelection;
-
-                // 先按 Id 排序，保证两端输入一致，然后随机打乱
                 var selected = allUpgradable
-                    .OrderBy(c => c.Id.Entry)               // 确定性排序
-                    .OrderBy(x => rng.NextInt())            // 用同步随机数打乱
+                    .OrderBy(x => rng.NextInt())
                     .Take(upgradeCount)
                     .ToList();
 
@@ -371,7 +370,7 @@ public static class ChordManager
                 }
             });
 
-        // 在 RegisterChords 方法中添加，建议放在其他爱音临时和弦附近
+        // AnonDChord,Osusume,喝到晕碳
         AddTemporaryChord("AnonDChord", ChordCategory.Anon,
             new[] { CardType.Skill, CardType.Attack, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-ANONDCHORD.title", "CUTESAKIKOMOD-ANONDCHORD.description", "anon_d_chord",
