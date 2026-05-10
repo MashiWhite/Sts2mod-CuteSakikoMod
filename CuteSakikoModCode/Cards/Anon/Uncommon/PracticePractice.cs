@@ -40,6 +40,6 @@ public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Unc
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Notes"].UpgradeValueBy(1);
+        DynamicVars["Notes"].UpgradeValueBy(2);
     }
 }

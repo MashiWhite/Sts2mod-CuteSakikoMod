@@ -18,6 +18,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Events;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
@@ -161,17 +162,10 @@ public class AnonGuitar : CuteAnonRelic
         if (removeStored)
             MusicNoteManager.RemoveChord(Owner, chordId);
         await NotifyChordPlayed(ctx);
-
-        // 获取游戏音量设置
-        var saveManager = MegaCrit.Sts2.Core.Saves.SaveManager.Instance;
-        var s = saveManager.SettingsSave;
-
-        float masterVol = SaveManager.Instance?.SettingsSave.VolumeMaster ?? 0.5f;
-        float sfxVol    = SaveManager.Instance?.SettingsSave.VolumeSfx   ?? 0.5f;
-        float finalVol  = 0.6f * masterVol * sfxVol;
         
+        // 播放和弦扫弦音效
         var sfx = Path.Combine(AudioDir, StrumFiles[_rand.Next(StrumFiles.Length)]);
-        FmodStudioStreamingFiles.TryPlaySoundFile(sfx, volume: finalVol);
+        AssetHelper.AudioManager.PlaySound(sfx, 0.6f); // 指定基础音量为 0.6
     }
 
     // ========== 核心方法 ==========
@@ -298,21 +292,22 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (!ChordManager.AllChords.ContainsKey(chordId)) return;
 
-        // 记录溢出前的储存列表（用于判断溢出）
-        var storedBefore = MusicNoteManager.GetStoredChords(Owner);
-        string? overflowChordId = null;
         var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
-        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords && storedBefore.Count > 0)
-            overflowChordId = storedBefore[0];
+        var storedBefore = MusicNoteManager.GetStoredChords(Owner); // 添加前的列表
 
-        // 直接添加和弦（内部会处理容量，移除最旧的）
+        // 1. 先添加和弦（内部会处理容量，移除最旧的）
         MusicNoteManager.AddChordDirectly(Owner, chordId);
 
-        // 处理溢出（如果发生了）
-        if (overflowChordId != null)
-            await PlaySingleChord(choiceContext, overflowChordId, removeStored: true);
+        // 2. 再检查是否发生了溢出：添加前的数量已达到上限，且有 Linger 能力
+        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords)
+        {
+            // 此时 storedBefore[0] 就是已被 AddChordDirectly 内部移除的旧和弦
+            var overflowChordId = storedBefore[0];
+            await PlaySingleChord(choiceContext, overflowChordId, removeStored: false);
+            // 注意：这里 removeStored 应为 false，因为该和弦已不在列表中
+        }
 
-        // 如果拥有即刻演奏，则演奏刚添加的和弦，并移除（不储存）
+        // 3. 处理即刻演奏
         if (Owner.Creature.HasPower<PlayImmediatelyPower>())
             await PlaySingleChord(choiceContext, chordId, removeStored: true);
 

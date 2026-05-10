@@ -137,7 +137,7 @@ public class StarAnon : ModMonsterTemplate
 
     private async Task HeavyAttackMove(IReadOnlyList<Creature> targets)
     {
-        await DamageCmd.Attack(30).FromMonster(this).Execute(null);
+        await DamageCmd.Attack(20).FromMonster(this).Execute(null);
     }
 
     private async Task BuffStrengthMove(IReadOnlyList<Creature> targets)

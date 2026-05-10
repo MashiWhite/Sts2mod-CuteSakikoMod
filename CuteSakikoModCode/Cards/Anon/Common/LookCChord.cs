@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
@@ -6,6 +7,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Saves;
 using STS2RitsuLib.Audio;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
@@ -46,8 +48,9 @@ public class LookCchord() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, T
         else
             guitar.TempReplaceChord(ChordCategory.Dominant, "AnonCChord");
         
+        // 播放特定和弦音效
         var sfxPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio", "look_cchord.mp3");
-        FmodStudioStreamingFiles.TryPlaySoundFile(sfxPath, volume: 0.9f);
+        AssetHelper.AudioManager.PlaySound(sfxPath, 1.0f); // 1.0 是基础音量
     }
 
     protected override void OnUpgrade()

@@ -1,5 +1,8 @@
 ﻿using System.Text.RegularExpressions;
+using Godot;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Saves;
+using STS2RitsuLib.Audio;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Extensions;
@@ -111,5 +114,23 @@ public static class AssetHelper
         );
     }
     
-
+    public static class AudioManager
+    {
+        /// <summary>
+        /// 根据游戏主音量和音效音量，自动计算最终音量并播放指定的音频文件。
+        /// </summary>
+        /// <param name="filePath">音频文件的完整路径</param>
+        /// <param name="baseVolume">基础音量 (通常在 0.0 到 1.0 之间)</param>
+        public static void PlaySound(string filePath, float baseVolume = 1.0f)
+        {
+            // 安全获取音量设置，如果存档系统还没初始化则使用默认值
+            var settings = SaveManager.Instance?.SettingsSave;
+            float masterVol = settings?.VolumeMaster ?? 1.0f;
+            float sfxVol    = settings?.VolumeSfx    ?? 1.0f;
+            float finalVol  = Mathf.Clamp(baseVolume * masterVol * sfxVol, 0.0f, 1.0f);
+        
+            FmodStudioStreamingFiles.TryPlaySoundFile(filePath, volume: finalVol);
+        }
+    }
+    
 }
