@@ -29,5 +29,7 @@
   "ANON_GUITAR_SEQUENCE_DESC": "{Sequence}",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。\n可在休息处练习随机你的和弦组。\n额外记忆一个和弦，且演奏和弦的数值翻倍。\n\n右键遗物查看所有[gold]和弦[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]哼哼，怎么样，我练习的成果。[/pink]",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "爱音练习后的吉他"
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "爱音练习后的吉他",
+  "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "章鱼玻璃",
+  "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "粉粉玻璃"
 }
