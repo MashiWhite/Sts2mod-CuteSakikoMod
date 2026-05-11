@@ -1,13 +1,13 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
-using System.Reflection;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Curse;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 
 public class Flyback : ModTokenCard
 {
@@ -70,7 +70,7 @@ public class Flyback : ModTokenCard
     private void RefreshDynamicVars()
     {
         int reloads = GetReloadCount();
-        int finalDamage = Math.Max(3, 8 - reloads) + _upgradeDamageBonus;
+        int finalDamage = Math.Max(3, 10 - reloads) + _upgradeDamageBonus;
         int finalDraw   = Math.Max(1, 2 - (reloads / 3)) + _upgradeDrawBonus;
 
         if (DynamicVars.TryGetValue("Damage", out var dmgVar))
