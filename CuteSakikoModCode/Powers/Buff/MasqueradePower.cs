@@ -5,12 +5,16 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class MasqueradePower : CuteSakikoModPower
 {
-    private readonly List<(Creature creature, ModelId powerId, int amount)> _removedPowers = new();
+    // 保存被移除的能力的原始实例，确保动态变量（如计数器）不丢失
+    private readonly List<(Creature creature, PowerModel power, int amount)> _removedPowers = new();
 
     /// <summary>假面舞会是否正在生效</summary>
     public static bool IsActive { get; private set; }
@@ -37,13 +41,13 @@ public sealed class MasqueradePower : CuteSakikoModPower
         {
             if (creature.IsDead) continue;
 
-            // 记录所有非假面、非沙坑的能力
+            // 保存所有需要被移除的能力的原始实例
             foreach (var power in creature.Powers)
             {
                 if (power is MasqueradePower || power is SandpitPower)
                     continue;
 
-                _removedPowers.Add((creature, power.Id, power.Amount));
+                _removedPowers.Add((creature, power, power.Amount));
             }
 
             // 批量移除：只保留 Masquerade 和 Sandpit
@@ -59,21 +63,17 @@ public sealed class MasqueradePower : CuteSakikoModPower
     {
         if (player.Creature != Owner) return;
 
-        // 并行恢复所有被移除的能力 —— 大幅加快
         var tasks = new List<Task>();
-        foreach (var (creature, powerId, amount) in _removedPowers)
+        foreach (var (creature, power, amount) in _removedPowers)
         {
             if (creature.IsDead) continue;
 
-            var canonical = ModelDb.GetById<PowerModel>(powerId);
-            if (canonical == null) continue;
-
-            var newPower = canonical.ToMutable();
-            tasks.Add(PowerCmd.Apply(choiceContext, newPower, creature, amount, Owner, null));
+            // 直接复用保存的原始实例，恢复全部内部状态
+            tasks.Add(PowerCmd.Apply(choiceContext, power, creature, amount, Owner, null));
         }
         _removedPowers.Clear();
 
-        await Task.WhenAll(tasks);   // 并行执行，无依赖能力可安全并行
+        await Task.WhenAll(tasks);
 
         await PowerCmd.Remove(this);
         IsActive = false;

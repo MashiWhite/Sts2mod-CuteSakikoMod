@@ -24,6 +24,7 @@ using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Saves;
 using STS2RitsuLib.Audio;
 
@@ -36,23 +37,23 @@ public class AnonGuitar : CuteAnonRelic
 {
     // ===== 持久化数据 =====
     [SavedProperty]
-    private string SavedChordsData { get => _savedChordsData; set => _savedChordsData = value; }
+    protected string SavedChordsData { get => _savedChordsData; set => _savedChordsData = value; }
     [SavedProperty]
-    private string SavedBonusChordsData { get => _savedBonusChordsData; set => _savedBonusChordsData = value; }
+    protected string SavedBonusChordsData { get => _savedBonusChordsData; set => _savedBonusChordsData = value; }
     [SavedProperty]
-    private string SavedTemporaryChordsData { get => _savedTemporaryChordsData; set => _savedTemporaryChordsData = value; }
+    protected string SavedTemporaryChordsData { get => _savedTemporaryChordsData; set => _savedTemporaryChordsData = value; }
 
-    private string _savedChordsData = "";
-    private string _savedBonusChordsData = "";
-    private string _savedTemporaryChordsData = "";
+    protected string _savedChordsData = "";
+    protected string _savedBonusChordsData = "";
+    protected string _savedTemporaryChordsData = "";
     
     protected static Dictionary<Player, (string chords, string bonus, string temp)> _pendingChordTransfer = new();
 
     // ===== 运行时状态 =====
     private Dictionary<ChordCategory, string> _currentChords = new();
-    private List<string> _bonusChords = new();
+    protected List<string> _bonusChords = new();
     private List<string> _temporaryChords = new();
-    private bool _initialized;
+    protected bool _initialized;
 
     protected static Dictionary<Player, List<string>> _pendingBonusTransfer = new();
     private NoteDisplay _noteDisplay;
@@ -68,7 +69,7 @@ public class AnonGuitar : CuteAnonRelic
     protected virtual int EffectMultiplier => 1;
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.RememberChord];
 
-    private void EnsureInitialized()
+    protected void EnsureInitialized()
     {
         if (_initialized) return;
         _initialized = true;
@@ -462,35 +463,68 @@ public class AnonGuitar : CuteAnonRelic
     }
 
   // ========== 休息站控制（全新，已集成单例管理器） ==========
-    public override bool ShouldDisableRemainingRestSiteOptions(Player player)
-    {
-        if (player != Owner) return true;   // 不干预其他玩家
-        return NormalOptionUsed && PracticeUsedThisVisit;
-    }
+  public override bool ShouldDisableRemainingRestSiteOptions(Player player)
+  {
+      // 不干预其他玩家
+      if (player != Owner)
+          return true;
 
-    public override bool TryModifyRestSiteOptions(Player player, ICollection<RestSiteOption> options)
-    {
-        if (player != Owner) return false;
+      // 🔑 如果拥有者同时拥有帐篷，则使用帐篷的规则：不限制选择次数
+      if (Owner.Relics.OfType<MiniatureTent>().Any())
+      {
+          Flash();
+          return false;
+      }
 
-        NormalOptionUsed = false;
-        PracticeUsedThisVisit = false;
+      // 否则，使用吉他自己的规则：
+      // 只有在【普通选项已用】且【练习UI已触发】时，才禁用剩余选项
+      return NormalOptionUsed && PracticeUsedThisVisit;
+  }
 
-        // 绑定事件管理器（每次休息站重进都会重新调用此方法，正好重新绑定）
-        ModelDb.Singleton<RestSiteOptionsManager>().BindToSynchronizer(this);
+  // 在 AnonGuitar 类中
+  public override bool TryModifyRestSiteOptions(Player player, ICollection<RestSiteOption> options)
+  {
+      if (player != Owner) return false;
 
-        // 删除旧的 PracticeGuitarOption（如果有）
-        var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);
-        if (existingPractice != null) options.Remove(existingPractice);
+      NormalOptionUsed = false;
+      PracticeUsedThisVisit = false;
 
-        // 添加练习选项（如果可学习）
-        var canLearn = ChordManager.GetLearnableChordIds(ChordCategory.Major).Count > 0 ||
-                       ChordManager.GetLearnableChordIds(ChordCategory.Minor).Count > 0 ||
-                       ChordManager.GetLearnableChordIds(ChordCategory.Dominant).Count > 0;
-        if (canLearn)
-            options.Add(new PracticeGuitarOption(player, this));
+      // 检查是否同时拥有帐篷 (MiniatureTent)
+      bool hasTent = Owner.Relics.Any(r => r is MiniatureTent);
 
-        return true;
-    }
+      // 绑定事件管理器
+      ModelDb.Singleton<RestSiteOptionsManager>().BindToSynchronizer(this);
+
+      // 删除旧的 PracticeGuitarOption（如果有）
+      var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);
+      if (existingPractice != null) options.Remove(existingPractice);
+
+      // 添加练习选项（如果可学习）
+      var canLearn = ChordManager.GetLearnableChordIds(ChordCategory.Major).Count > 0 ||
+                     ChordManager.GetLearnableChordIds(ChordCategory.Minor).Count > 0 ||
+                     ChordManager.GetLearnableChordIds(ChordCategory.Dominant).Count > 0;
+      if (canLearn)
+      {
+          var practiceOption = new PracticeGuitarOption(player, this);
+          // 如果拥有帐篷，练习选项也不消耗行动次数
+          if (hasTent)
+          {
+              // 假设你的 RestSiteOption 有类似属性，如果没有，可能需要通过其他方式实现
+              // 这里提供一个概念性的设置，具体取决于你的 PracticeGuitarOption 实现
+              // practiceOption.ConsumesAction = false; 
+          }
+          options.Add(practiceOption);
+      }
+
+      // 关键：如果拥有帐篷，直接返回 false，表示不干预其他选项的可用性
+      if (hasTent)
+      {
+          Flash();
+          return false; // 等同于帐篷的效果：所有选项都可用，且不限制次数
+      }
+
+      return true; // 否则，继续使用吉他自定义的休息站逻辑
+  }
 
     // ========== 遗物移除/战斗结束 ==========
     public override async Task AfterRemoved()
