@@ -27,7 +27,7 @@ public class Provoke() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, Targ
 
         // 1. 自身获得格挡
         var blockAmount = DynamicVars.Block.IntValue;
-        await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, cardPlay);
 
         // 2. 使目标敌人获得力量
         var strengthAmount = DynamicVars["StrengthPower"].IntValue;

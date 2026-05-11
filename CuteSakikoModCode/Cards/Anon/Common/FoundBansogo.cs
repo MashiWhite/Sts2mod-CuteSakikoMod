@@ -24,7 +24,7 @@ public class FoundBansogo() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
         TriggerBanter();
 
         var block = DynamicVars.Block.IntValue;
-        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
         var drawCount = DynamicVars["Cards"].IntValue;
         await CardPileCmd.Draw(choiceContext, drawCount, Owner);

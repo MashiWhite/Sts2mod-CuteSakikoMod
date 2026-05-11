@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+using CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -8,6 +9,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Scaffolding.Content;
@@ -17,13 +20,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
     public class TimeWatch : CuteSakikoModRelic
     {
         [SavedProperty]
-        public int FlybackPlayCount { get; set; }  // 改为属性！
+        public int FlybackPlayCount { get; set; }
 
         private DynamicVar _blockVar;
         private bool _flybackAdded;
-        
+
         public override RelicRarity Rarity => RelicRarity.Ancient;
-    
+
         protected override IEnumerable<DynamicVar> CanonicalVars
         {
             get
@@ -32,10 +35,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
                 yield return new DynamicVar("PlayCount", FlybackPlayCount);
             }
         }
-        
+
         private void UpdateBlockDynamicVar()
         {
-            // DynamicVarSet 是一个 IReadOnlyDictionary<string, DynamicVar>
             if (this.DynamicVars.TryGetValue("Block", out var blockVar))
                 blockVar.BaseValue = GetBlockAmount();
         }
@@ -44,7 +46,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
         {
             FlybackPlayCount++;
             FlybackManager.InvalidatePlayerCache(Owner);
-            UpdateBlockDynamicVar();   // 更新动态变量
+            UpdateBlockDynamicVar();
             Flash();
         }
 
@@ -68,13 +70,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
                 await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, null);
             }
 
-            UpdateBlockDynamicVar();   // 回合开始也更新，确保同步
+            UpdateBlockDynamicVar();
             Flash();
         }
 
-
-
-// 悬浮提示中的计数也从 FlybackManager 读取（可选）
         protected override IEnumerable<IHoverTip> AdditionalHoverTips
         {
             get
@@ -98,14 +97,34 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
 
             if (!_flybackAdded && Owner != null)
             {
-                // 将飞返加入牌组
                 var flyback = Owner.RunState.CreateCard<Flyback>(Owner);
                 await CardPileCmd.Add(flyback, PileType.Deck);
                 _flybackAdded = true;
                 Flash();
             }
+
+            // ★ 固定第三幕 Boss 为星爱音
+            SetGloryBossEncounter();
         }
 
-       
+        /// <summary>
+        /// 将 Glory（第三幕）的 Boss 遭遇战设置为 StarAnonEncounter。
+        /// 在进阶十时，SecondBoss 会由系统自动从 AllBossEncounters 中选取，
+        /// 且会跳过 BossEncounter（即星爱音），因此不会有双星爱音。
+        /// </summary>
+        private void SetGloryBossEncounter()
+        {
+            if (Owner?.RunState == null) return;
+
+            var gloryAct = Owner.RunState.Acts
+                .FirstOrDefault(act => act is Glory);
+
+            if (gloryAct == null) return;
+
+            var starAnonEncounter = ModelDb.GetById<EncounterModel>(
+                ModelDb.GetId<StarAnonEncounter>()).ToMutable();
+
+            gloryAct.SetBossEncounter(starAnonEncounter);
+        }
     }
 }

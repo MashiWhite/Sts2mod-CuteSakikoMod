@@ -37,7 +37,7 @@ public class SoCute() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, Targe
         TriggerBanter();
 
         var block = DynamicVars.Block.IntValue;
-        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
         var shrink = DynamicVars["ShrinkPower"].IntValue;
         await PowerCmd.Apply<ShrinkPower>(choiceContext, cardPlay.Target, shrink, Owner.Creature, this);

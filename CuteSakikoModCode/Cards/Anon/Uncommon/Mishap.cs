@@ -39,7 +39,7 @@ public class Mishap() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, Tar
 
         // 获得格挡
         var blockAmount = DynamicVars.Block.IntValue;
-        await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, cardPlay);
     }
 
     protected override void OnUpgrade()

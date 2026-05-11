@@ -67,7 +67,7 @@ public class StarAnon : ModMonsterTemplate
         // 普通动作
         var buffStr = new MoveState("BUFF_STRENGTH", BuffStrengthMove, new BuffIntent());
         var attack2 = new MoveState("DOUBLE_ATTACK", DoubleAttackMove,
-            new MultiAttackIntent(10, 2), new StatusIntent(10));
+            new MultiAttackIntent(10, 2), new StatusIntent(3));
         var heavyAttack = new MoveState("HEAVY_ATTACK", HeavyAttackMove,
             new SingleAttackIntent(30));
         var buffStr2 = new MoveState("BUFF_STRENGTH2", BuffStrengthMove2, new BuffIntent());
@@ -132,7 +132,7 @@ public class StarAnon : ModMonsterTemplate
             await DamageCmd.Attack(10).FromMonster(this).Execute(null);
         var player = targets.FirstOrDefault()?.Player;
         if (player != null)
-            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Draw, 5, null);
+            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Draw, 3, null);
     }
 
     private async Task HeavyAttackMove(IReadOnlyList<Creature> targets)

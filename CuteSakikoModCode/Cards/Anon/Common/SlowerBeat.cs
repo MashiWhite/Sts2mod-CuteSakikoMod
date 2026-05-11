@@ -28,7 +28,7 @@ public class SlowerBeat() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, T
 
         // 获得格挡
         var block = DynamicVars.Block.IntValue;
-        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
         // 下回合获得格挡
         var nextTurnBlock = (int)DynamicVars["BlockNextTurn"].BaseValue;

@@ -41,7 +41,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
         // 获得格挡 = 实际演奏数量 × 倍数
         var totalBlock = perBlock * chordCount;
         if (totalBlock > 0)
-            await CreatureCmd.GainBlock(Owner.Creature, totalBlock, ValueProp.Move, null);
+            await CreatureCmd.GainBlock(Owner.Creature, totalBlock, ValueProp.Move, cardPlay);
     }
 
     protected override void OnUpgrade()

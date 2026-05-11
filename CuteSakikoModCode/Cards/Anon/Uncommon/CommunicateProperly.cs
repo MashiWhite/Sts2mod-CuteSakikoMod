@@ -2,6 +2,7 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -13,6 +14,14 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
         get { yield return CardKeyword.Exhaust; }
+    }
+    
+    protected override IEnumerable<DynamicVar> CanonicalVars
+    {
+        get
+        {
+            yield return new BlockVar(15m, ValueProp.Move);
+        }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -34,8 +43,9 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
             "COMMUNICATE_PROPERLY_BLOCK",
             async targets =>
             {
+                var block = DynamicVars.Block.IntValue;
                 if (!targetCreature.IsAlive) return;
-                await CreatureCmd.GainBlock(targetCreature, 15, ValueProp.Move, null);
+                await CreatureCmd.GainBlock(targetCreature, block, ValueProp.Move,cardPlay);
             },
             defendIntent
         )

@@ -27,7 +27,7 @@ public class SecretPractice() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncom
 
         // 获得格挡
         var blockAmount = DynamicVars.Block.IntValue;
-        await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, cardPlay);
     }
 
     protected override void OnUpgrade()

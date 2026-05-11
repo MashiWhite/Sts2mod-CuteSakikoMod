@@ -39,7 +39,7 @@ public class StageConfidence() : CuteSakikoModCard(0, CardType.Skill, CardRarity
     {
         // 获得格挡
         var block = DynamicVars.Block.IntValue;
-        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
         // 若压力足够，消耗5层压力（返回手牌已在GetResultPileType中处理）
         var pressure = Owner.Creature.GetPower<PressurePower>();
