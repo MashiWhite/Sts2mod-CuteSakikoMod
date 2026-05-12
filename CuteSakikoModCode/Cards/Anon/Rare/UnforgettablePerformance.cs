@@ -24,6 +24,7 @@ public class UnforgettablePerformance : CuteAnonCard
         {
             // 描述中的阈值变量（升级后 3→2）
             yield return new DynamicVar("Threshold", 3m);
+            yield return new EnergyVar(1);
         }
     }
 
