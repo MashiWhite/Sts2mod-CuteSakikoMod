@@ -2,7 +2,9 @@
 using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Logging;
@@ -14,7 +16,8 @@ using STS2RitsuLib;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.Settings;
 using STS2RitsuLib.Utils.Persistence;
-using Godot; // 新增：用于 GD.Load
+using Godot;
+using MegaCrit.Sts2.Core.Multiplayer; // 新增：用于 GD.Load
 using Logger = MegaCrit.Sts2.Core.Logging.Logger;
 
 namespace CuteSakikoMod;
@@ -78,11 +81,13 @@ public class Entry
         else
             Logger.Warn("RunManager.Instance is null, RunStarted event not subscribed.");
         
+        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(TimeWatch));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
 
         // ===== 预加载自定义特效 =====
         GD.Load<PackedScene>("res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn");
+        
     }
 
     private static void OnRunStarted(RunState state)

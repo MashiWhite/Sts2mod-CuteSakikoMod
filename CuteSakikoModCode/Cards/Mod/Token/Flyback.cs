@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -53,6 +54,36 @@ public class Flyback : ModTokenCard
 
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner);
     }
+    
+    public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
+    {
+        RefreshDynamicVars();
+        await base.AfterCardDrawn(choiceContext, card, fromHandDraw);
+    }
+    
+    // 进入战斗时订阅数据变化（卡牌会被放到抽牌堆，随后可能进入手牌）
+    public override async Task AfterCardEnteredCombat(CardModel card)
+    {
+        if (FlybackManager.Instance != null)
+        {
+            FlybackManager.Instance.OnFlybackDataChanged += OnFlybackDataChanged;
+            RefreshDynamicVars(); // 立刻刷新，保证此时显示的数值已经正确
+        }
+        await base.AfterCardEnteredCombat(card);
+    }
+
+    // 卡牌被移除时取消订阅（包括被消耗、战斗结束）
+    public override async Task BeforeCardRemoved(CardModel card)
+    {
+        if (FlybackManager.Instance != null)
+            FlybackManager.Instance.OnFlybackDataChanged -= OnFlybackDataChanged;
+        await base.BeforeCardRemoved(card);
+    }
+
+    private void OnFlybackDataChanged(int playCount, int reloadCount)
+    {
+        RefreshDynamicVars();
+    }
 
     protected override void OnUpgrade()
     {
@@ -81,7 +112,6 @@ public class Flyback : ModTokenCard
 
     private static int GetReloadCount()
     {
-        var field = typeof(RunManager).GetField("_numReloads", BindingFlags.NonPublic | BindingFlags.Instance);
-        return field != null ? (int)field.GetValue(RunManager.Instance) : 0;
+        return FlybackManager.GetReloadCount();
     }
 }

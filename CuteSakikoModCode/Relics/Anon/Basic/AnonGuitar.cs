@@ -496,7 +496,7 @@ public class AnonGuitar : CuteAnonRelic
       bool hasTent = Owner.Relics.Any(r => r is MiniatureTent);
 
       // 绑定事件管理器
-      ModelDb.Singleton<RestSiteOptionsManager>().BindToSynchronizer(this);
+      ModelDb.Singleton<RestSiteOptionsManager>().BindToSynchronizer(); // 不再需要传 guitar
 
       // 删除旧的 PracticeGuitarOption（如果有）
       var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);

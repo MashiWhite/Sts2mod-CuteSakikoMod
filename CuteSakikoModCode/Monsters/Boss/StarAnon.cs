@@ -158,7 +158,6 @@ public class StarAnon : ModMonsterTemplate
 
     private static int GetReloadCount()
     {
-        var field = typeof(RunManager).GetField("_numReloads", BindingFlags.NonPublic | BindingFlags.Instance);
-        return field != null ? (int)field.GetValue(RunManager.Instance) : 0;
+        return FlybackManager.GetReloadCount();
     }
 }

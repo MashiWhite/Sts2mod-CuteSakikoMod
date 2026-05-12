@@ -132,8 +132,17 @@ public class FlybackManager : SingletonModel
 
     public static int GetReloadCount()
     {
+        // 直接从 RunState 获取第一个玩家（单人/多人适用）
+        var player = RunManager.Instance.DebugOnlyGetState()?.Players.FirstOrDefault();
+        var timeWatch = player?.Relics.OfType<TimeWatch>().FirstOrDefault();
+        return timeWatch?.ReloadCount ?? 0;
+    }
+    
+    public static int GetRawNumReloads()
+    {
         var field = typeof(RunManager).GetField("_numReloads", BindingFlags.NonPublic | BindingFlags.Instance);
-        return field != null ? (int)field.GetValue(RunManager.Instance) : 0;
+        if (field == null) return 0;
+        return (int)field.GetValue(RunManager.Instance);
     }
 
     private void NotifyDataChanged()

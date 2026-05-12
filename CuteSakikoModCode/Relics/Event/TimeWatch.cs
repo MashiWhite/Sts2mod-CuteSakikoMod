@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
+using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Scaffolding.Content;
@@ -19,6 +20,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
 {
     public class TimeWatch : CuteSakikoModRelic
     {
+        // ★ 新增：同步的 reload 计数
+        [SavedProperty]
+        public int ReloadCount { get; set; }
+        
         [SavedProperty]
         public int FlybackPlayCount { get; set; }
 
@@ -92,7 +97,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
         public override async Task AfterObtained()
         {
             await base.AfterObtained();
-            // 将临时计数迁移到此遗物
+            // 用本地 _numReloads 作为初始值（刚加载存档时主客机相同）
+            ReloadCount = RunManager.Instance.DebugOnlyGetState() != null 
+                ? FlybackManager.GetRawNumReloads()  // 现在有了
+                : 0;
             FlybackManager.TransferTempCountToTimeWatch(Owner, this);
 
             if (!_flybackAdded && Owner != null)
@@ -103,7 +111,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
                 Flash();
             }
 
-            // ★ 固定第三幕 Boss 为星爱音
             SetGloryBossEncounter();
         }
 

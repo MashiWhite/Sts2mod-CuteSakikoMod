@@ -17,12 +17,11 @@ public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<PressurePower>(IsUpgraded ? 8m : 5m),
-        new PowerVar<StrengthPower>(IsUpgraded ? 5m : 3m),
-        new("Gold", IsUpgraded ? 45m : 35m)
+        new PowerVar<PressurePower>(5m),   // 基础 5
+        new PowerVar<StrengthPower>(3m),   // 基础 3
+        new("Gold", 35m)                   // 基础 35
     ];
 
-    // 悬停提示
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -35,11 +34,10 @@ public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 创建两个选项牌（规范实例，未加入任何牌堆）
         var pressureToken = ModelDb.Card<PressureOption>().ToMutable();
         var goldToken = ModelDb.Card<GoldOption>().ToMutable();
 
-        // 根据主卡升级状态，升级对应的 token
+        // 根据主卡是否升级来升级 token
         if (IsUpgraded)
         {
             pressureToken.UpgradeInternal();
@@ -48,38 +46,35 @@ public class DifficultChoice() : CuteSakikoModCard(1, CardType.Skill, CardRarity
             goldToken.FinalizeUpgradeInternal();
         }
 
-        // 设置 token 的所有者为当前玩家（确保后续效果正确）
         pressureToken.Owner = Owner;
         goldToken.Owner = Owner;
 
-        // 准备选择列表
         var options = new List<CardModel> { pressureToken, goldToken };
-
-        // 弹出选择界面，让玩家选择一张
-        var selected = await CardSelectCmd.FromChooseACardScreen(
-            choiceContext,
-            options,
-            Owner // 不允许跳过
-        );
+        var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, Owner);
 
         if (selected == null) return;
 
-        // 根据选择执行对应效果
         if (selected is PressureOption)
         {
-            var pressureAmt = selected.DynamicVars["PressurePower"].IntValue;
-            var strengthAmt = selected.DynamicVars["StrengthPower"].IntValue;
-            await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmt, Owner.Creature, this);
-            await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, strengthAmt, Owner.Creature, this);
+            await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature,
+                selected.DynamicVars["PressurePower"].IntValue, Owner.Creature, this);
+            await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature,
+                selected.DynamicVars["StrengthPower"].IntValue, Owner.Creature, this);
         }
         else if (selected is GoldOption)
         {
-            var goldAmt = selected.DynamicVars["Gold"].IntValue;
-            await PlayerCmd.GainGold(goldAmt, Owner);
+            await PlayerCmd.GainGold(selected.DynamicVars["Gold"].IntValue, Owner);
         }
     }
 
     protected override void OnUpgrade()
     {
+        // 升级时增加数值
+        if (DynamicVars.TryGetValue("PressurePower", out var pv))
+            pv.UpgradeValueBy(3);   // 5→8
+        if (DynamicVars.TryGetValue("StrengthPower", out var sv))
+            sv.UpgradeValueBy(2);   // 3→5
+        if (DynamicVars.TryGetValue("Gold", out var gv))
+            gv.UpgradeValueBy(10);  // 35→45
     }
 }
