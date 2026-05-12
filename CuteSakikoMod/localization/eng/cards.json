@@ -239,7 +239,7 @@
   "CUTE_SAKIKO_MOD_CARD_BROKEN_PICK.title": "拨片坏了！？",
   "CUTE_SAKIKO_MOD_CARD_BROKEN_PICK.description": "清除[gold]所有[/gold][pink]音符[/pink]，每清除1个[pink]音符[/pink]获得{Block:diff()}点格挡。",
   "CUTE_SAKIKO_MOD_CARD_UNFORGETTABLE_PERFORMANCE.title": "难忘的演奏",
-  "CUTE_SAKIKO_MOD_CARD_UNFORGETTABLE_PERFORMANCE.description": "每次[gold]演奏[/gold][pink]和弦[/pink]后获得{Energy:energyIcons()}。",
+  "CUTE_SAKIKO_MOD_CARD_UNFORGETTABLE_PERFORMANCE.description": "每演奏{IfUpgraded:show:2|3}个[pink]和弦[/pink]，获得{Energy:energyIcons()}。",
   "CUTE_SAKIKO_MOD_CARD_LOOK_CCHORD.description": "在本场战斗中将你的[pink]属七和弦[/pink]替换为[pink]爱音C和弦[/pink]。",
   "CUTE_SAKIKO_MOD_CARD_LOOK_CCHORD.title": "如何？C和弦",
   "CUTE_SAKIKO_MOD_CARD_ATK_NOTE.title": "攻击音符",

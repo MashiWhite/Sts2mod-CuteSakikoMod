@@ -346,7 +346,10 @@ public class AnonGuitar : CuteAnonRelic
     public async Task NotifyChordPlayed(PlayerChoiceContext choiceContext)
     {
         foreach (var power in Owner.Creature.Powers.OfType<UnforgettablePerformancePower>())
-            await power.OnChordPlayed(choiceContext);
+        {
+            if (power.OnChordPlayed() && power.Amount > 0)
+                await PlayerCmd.GainEnergy(power.Amount, Owner);
+        }
 
         // 每回合只召回一次
         if (_curtainCallRecalledThisTurn) return;

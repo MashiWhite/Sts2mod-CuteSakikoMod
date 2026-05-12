@@ -7,8 +7,12 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class UnforgettablePerformance() : CuteAnonCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class UnforgettablePerformance : CuteAnonCard
 {
+    public UnforgettablePerformance() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    {
+    }
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<UnforgettablePerformancePower>(); }
@@ -18,10 +22,8 @@ public class UnforgettablePerformance() : CuteAnonCard(3, CardType.Power, CardRa
     {
         get
         {
-            // 能力层数固定为 1 层
-            yield return new PowerVar<UnforgettablePerformancePower>(1m);
-            // 描述中使用的能量数值变量
-            yield return new EnergyVar(1);
+            // 描述中的阈值变量（升级后 3→2）
+            yield return new DynamicVar("Threshold", 3m);
         }
     }
 
@@ -29,13 +31,24 @@ public class UnforgettablePerformance() : CuteAnonCard(3, CardType.Power, CardRa
     {
         TriggerBanter();
 
-        // 给予 1 层能力
-        await PowerCmd.Apply<UnforgettablePerformancePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        var existing = Owner.Creature.GetPower<UnforgettablePerformancePower>();
+        if (existing != null)
+        {
+            // 如果能力已存在，更新阈值并叠加层数
+            existing.UpdateThreshold(IsUpgraded ? 2 : 3);
+            await PowerCmd.ModifyAmount(choiceContext, existing, 1, Owner.Creature, this);
+        }
+        else
+        {
+            // 首次施加能力（AfterApplied 中会自动设置阈值）
+            await PowerCmd.Apply<UnforgettablePerformancePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade()
     {
-        // 能力层数不变（仍为 1 层），但描述中的能量数值升级
-        DynamicVars.Energy.UpgradeValueBy(1); // 1 → 2
+        AddKeyword(CardKeyword.Innate);
+        // 描述中阈值显示更新
+        DynamicVars["Threshold"].BaseValue = 2m;
     }
 }
