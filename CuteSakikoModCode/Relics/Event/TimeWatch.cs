@@ -122,16 +122,24 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
         private void SetGloryBossEncounter()
         {
             if (Owner?.RunState == null) return;
-
-            var gloryAct = Owner.RunState.Acts
-                .FirstOrDefault(act => act is Glory);
-
+            var gloryAct = Owner.RunState.Acts.FirstOrDefault(act => act is Glory);
             if (gloryAct == null) return;
 
             var starAnonEncounter = ModelDb.GetById<EncounterModel>(
-                ModelDb.GetId<StarAnonEncounter>()).ToMutable();
+                ModelDb.GetId<StarAnonEncounter>());
+
+            // 如果已经是星爱音，不用再改
+            if (gloryAct.BossEncounter.Id == starAnonEncounter.Id) return;
 
             gloryAct.SetBossEncounter(starAnonEncounter);
+
+            // 如果第二 Boss 也是星爱音，随机换一个别的 Boss
+            if (gloryAct.HasSecondBoss && gloryAct.SecondBossEncounter?.Id == starAnonEncounter.Id)
+            {
+                var otherBoss = Owner.RunState.Rng.UpFront.NextItem<EncounterModel>(
+                    gloryAct.AllBossEncounters.Where(e => e.Id != starAnonEncounter.Id));
+                gloryAct.SetSecondBossEncounter(otherBoss);
+            }
         }
     }
 }

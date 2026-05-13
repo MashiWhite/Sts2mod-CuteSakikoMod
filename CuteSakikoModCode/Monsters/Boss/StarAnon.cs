@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
+using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -107,8 +108,35 @@ public class StarAnon : ModMonsterTemplate
                 new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
         }
 
-        // 5. 强制播放闲置动画（修复卡在死亡动画的问题）
-        await CreatureCmd.TriggerAnim(Creature, "idle_loop", 0.0f);
+        // 5.在 RespawnMove 内，替换原来的 TriggerAnim 调用
+        var creatureNode = Creature.GetCreatureNode();
+        if (creatureNode?.Visuals is NCreatureVisuals visuals)
+        {
+            // 尝试获取 AnimationPlayer
+            var animPlayer = visuals.GetNodeOrNull<AnimationPlayer>("Visuals/AnimationPlayer");
+            if (animPlayer != null && animPlayer.HasAnimation("RESET"))
+            {
+                animPlayer.Stop();
+                animPlayer.Play("RESET");
+                // 如果需要等 RESET 播完再 idle，可以用 await
+                await animPlayer.ToSignal(animPlayer, "animation_finished");
+                animPlayer.Play("idle_loop");
+            }
+            else
+            {
+                // 手动重置关键属性
+                var sprite = visuals.GetNodeOrNull<Sprite2D>("Visuals/Non");
+                if (sprite != null)
+                {
+                    sprite.Texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/char/staranon/Anon1.png");
+                    sprite.Modulate = new Color(1, 1, 1, 1);
+                    sprite.Scale = Vector2.One;
+                    sprite.Position = new Vector2(0.7077637f, -2.664978f);
+                }
+                // 然后播放 idle
+                await CreatureCmd.TriggerAnim(Creature, "idle_loop", 0.0f);
+            }
+        }
 
         // 6. 移除复活能力，确保第二次死亡正常结束战斗
         if (retro != null)
