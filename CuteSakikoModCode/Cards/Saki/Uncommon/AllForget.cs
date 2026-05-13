@@ -1,11 +1,12 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-
-// 添加 LINQ 支持
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -15,6 +16,8 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
     {
         get
         {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
@@ -27,19 +30,10 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
 
         var cardCount = handCards.Count;
 
-        foreach (var card in handCards)
-            await CardCmd.Exhaust(choiceContext, card);
+        // 一次性遗忘所有手牌（会触发遗忘相关的全局效果，如减压力、记忆堆清理等）MemoryCmd.Forget(choiceContext, handCards, this);
 
+        // 抽等量牌
         await CardPileCmd.Draw(choiceContext, cardCount, Owner);
-
-        var pressure = Owner.Creature.GetPower<PressurePower>();
-        if (pressure != null)
-        {
-            var reducePerCard = IsUpgraded ? 2 : 1;
-            var totalReduce = cardCount * reducePerCard;
-            // 使用 PowerCmd.ModifyAmount 安全减少压力层数
-            await PowerCmd.ModifyAmount(choiceContext, pressure, -totalReduce, Owner.Creature, this);
-        }
     }
 
     protected override void OnUpgrade()

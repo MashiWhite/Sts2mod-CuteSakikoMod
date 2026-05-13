@@ -27,37 +27,5 @@ public static class RelicRightClickPatch
                 }
             };
         }
-
-        // 新增：KabutoNote 的处理
-        if (__instance.Relic.Model is KabutoNote kabuto)
-        {
-            __instance.MouseFilter = Control.MouseFilterEnum.Stop;
-            __instance.GuiInput += e =>
-            {
-                if (e is InputEventMouseButton mb
-                    && mb.ButtonIndex == MouseButton.Right
-                    && mb.Pressed)
-                {
-                    kabuto.OpenMemoryLibrary();
-                    __instance.AcceptEvent();
-                }
-            };
-        }
-
-        // 新增：PostItNote 的处理
-        if (__instance.Relic.Model is PostItNote postIt)
-        {
-            __instance.MouseFilter = Control.MouseFilterEnum.Stop;
-            __instance.GuiInput += e =>
-            {
-                if (e is InputEventMouseButton mb
-                    && mb.ButtonIndex == MouseButton.Right
-                    && mb.Pressed)
-                {
-                    postIt.OpenMemoryLibrary();
-                    __instance.AcceptEvent();
-                }
-            };
-        }
     }
 }

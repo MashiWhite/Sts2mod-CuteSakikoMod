@@ -1,5 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -22,8 +24,10 @@ public class MemoryComing() : CuteSakikoModCard(1, CardType.Power, CardRarity.Un
     {
         get
         {
-            yield return HoverTipFactory.FromPower<MemoryComingPower>();
             yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
 

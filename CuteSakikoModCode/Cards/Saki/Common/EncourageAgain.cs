@@ -1,7 +1,7 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -26,6 +26,7 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
     {
         get
         {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
             yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
@@ -65,23 +66,15 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
         // 3. 消耗压力
         await PowerCmd.ModifyAmount(choiceContext, targetPressure, -requiredPressure, Owner.Creature, this);
 
-        // 4. 获取可选回忆卡牌模板（排除已消耗的）
-        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(Owner).ToHashSet();
-
-        var memoryCardTemplates = ModelDb.AllCards
-            .Where(card =>
-                card.HasModKeyword(CutesakiKeywords.Memory) &&
-                !exhaustedMemoryIds.Contains(card.Id))
-            .ToList();
-
-        if (memoryCardTemplates.Count == 0)
-            return;
-
-        // 5. 使用 CombatState.CreateCard 生成完全正确的战斗实例（不会过滤远古稀有度）
-        var combatReadyCards = memoryCardTemplates
+        // 4. 获取可选回忆卡牌规范模板
+        var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
+        if (canonicalCards.Count == 0) return;
+        
+        // 5. 使用 CombatState.CreateCard 生成完全正确的战斗实例
+        var combatReadyCards = canonicalCards
             .Select(template => Owner.Creature.CombatState.CreateCard(template, Owner))
             .ToList();
-
+        
         // 6. 弹出选择界面
         var prefs = new CardSelectorPrefs(
             new LocString("cards", "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.selectionScreenPrompt"),

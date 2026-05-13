@@ -1,11 +1,16 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Keywords;
 
@@ -13,34 +18,33 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class MemoryComingPower : CuteSakikoModPower
 {
-    private List<CardModel>? _allMemoryCards; // 缓存所有回忆卡牌
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
 
-    // 钩子，在玩家回合开始时
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+        }
+    }
+    
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player.Creature != Owner) return;
 
-        // 延迟初始化：第一次使用时获取所有回忆卡牌
-        if (_allMemoryCards == null)
-            _allMemoryCards = ModelDb.AllCards
-                .Where(card => card.HasModKeyword(CutesakiKeywords.Memory))
-                .ToList();
-
-        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(player).ToHashSet();
-
-        var availableMemoryCards = _allMemoryCards
-            .Where(card => !exhaustedMemoryIds.Contains(card.Id))
-            .ToList();
-
-        if (availableMemoryCards.Count == 0) return;
+        // 使用规范模板列表，而不是可变实例
+        var canonicalCards = MemoryCardPile.GetCanonicalCards(player);
+        if (canonicalCards.Count == 0) return;
 
         var count = Amount;
         var randomCards = CardFactory.GetDistinctForCombat(
             Owner.Player,
-            availableMemoryCards,
+            canonicalCards,
             count,
             Owner.Player.RunState.Rng.CombatCardGeneration
         ).ToList();

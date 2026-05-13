@@ -1,5 +1,7 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Factories;
@@ -23,9 +25,14 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory); }
+        get
+        {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+        }
     }
-
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -46,21 +53,16 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
         var needed = maxHandSize - currentSize;
         if (needed <= 0) return;
 
-        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(Owner).ToHashSet();
-
-        var memoryCardModels = ModelDb.AllCards
-            .Where(card => card.HasModKeyword(CutesakiKeywords.Memory) &&
-                           !exhaustedMemoryIds.Contains(card.Id))
-            .ToList();
-
-        if (memoryCardModels.Count == 0) return;
+        // 使用规范模板
+        var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
+        if (canonicalCards.Count == 0) return;
 
         var newCards = new List<CardModel>();
         for (var i = 0; i < needed; i++)
         {
             var newCard = CardFactory.GetDistinctForCombat(
                 Owner,
-                memoryCardModels,
+                canonicalCards,
                 1,
                 Owner.RunState.Rng.CombatCardGeneration
             ).FirstOrDefault();

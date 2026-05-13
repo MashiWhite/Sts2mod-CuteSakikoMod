@@ -1,14 +1,16 @@
-﻿using MegaCrit.Sts2.Core.CardSelection;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
-
-// 需要这个来创建 LocString
-
-// 【新增】需要这个命名空间来使用 CardSelectorPrefs
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
@@ -21,6 +23,16 @@ public class MyBad() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, T
         new BlockVar(8m, ValueProp.Move)
     ];
 
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+        }
+    }
+    
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获得格挡
@@ -31,7 +43,7 @@ public class MyBad() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, T
         if (discardPile == null || discardPile.Cards.Count == 0)
             return;
 
-        // 自定义选择提示（使用本地化键）
+        // 自定义选择提示
         var prefs = new CardSelectorPrefs(
             new LocString("cards", "CUTE_SAKIKO_MOD_CARD_MY_BAD.selectionScreenPrompt"),
             1,
@@ -47,7 +59,9 @@ public class MyBad() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, T
         );
 
         var selected = selectedCards.FirstOrDefault();
-        if (selected != null) await CardCmd.Exhaust(choiceContext, selected);
+        // 将选中的牌遗忘（而非消耗）
+        if (selected != null)
+             MemoryCmd.Forget(choiceContext, new[] { selected }, this);
     }
 
     protected override void OnUpgrade()

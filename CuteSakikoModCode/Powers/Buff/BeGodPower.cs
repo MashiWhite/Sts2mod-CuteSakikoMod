@@ -1,29 +1,31 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+﻿using System.Linq;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class BeGodPower : CuteSakikoModPower
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter; // 可叠层
+    public override PowerStackType StackType => PowerStackType.Counter;
 
     public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
     {
         if (side != Owner.Side) return;
         if (Amount <= 0) return;
 
-        var exhaustPile = PileType.Exhaust.GetPile(Owner.Player);
-        if (exhaustPile == null || exhaustPile.Cards.Count == 0) return;
+        var forgetPile = ForgetCardPile.Get(Owner.Player);
+        if (forgetPile == null || forgetPile.Cards.Count == 0) return;
 
-        var toPlay = Math.Min(Amount, exhaustPile.Cards.Count);
+        var toPlay = System.Math.Min(Amount, forgetPile.Cards.Count);
         var rng = Owner.CombatState.RunState.Rng.CombatCardSelection;
 
-        // 复制列表并洗牌（Fisher-Yates）
-        var cardsToPlay = exhaustPile.Cards.ToList();
+        // 复制并洗牌
+        var cardsToPlay = forgetPile.Cards.ToList();
         for (var i = cardsToPlay.Count - 1; i > 0; i--)
         {
             var j = rng.NextInt(i + 1);
@@ -34,15 +36,24 @@ public sealed class BeGodPower : CuteSakikoModPower
 
         foreach (var card in selected)
         {
-            if (card.Pile?.Type != PileType.Hand)
-            {
+            // 从遗忘堆正常移出（会触发事件，不残留节点）
+            if (card.Pile == forgetPile)
+                forgetPile.RemoveInternal(card);
+            else
                 card.RemoveFromCurrentPile();
-                await CardPileCmd.Add(card, PileType.Hand);
-            }
 
-            card.ExhaustOnNextPlay = true;
+            // 飞入手牌（有动画）
+            await CardPileCmd.Add(card, PileType.Hand);
+
+            // 自动打出
             await CardCmd.AutoPlay(choiceContext, card, null);
-            if (card.Pile != null && card.Pile.Type != PileType.Exhaust) await CardPileCmd.RemoveFromCombat(card);
+
+            // 打出后再飞回遗忘堆（有动画）
+            if (card.Pile != null)
+                await CardPileCmd.Add(card, forgetPile);
         }
+
+        // 最后统一更新一次按钮数字
+        forgetPile.InvokeContentsChanged();
     }
 }

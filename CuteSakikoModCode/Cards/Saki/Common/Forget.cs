@@ -1,5 +1,7 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -7,6 +9,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
@@ -23,6 +26,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
     {
         get
         {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
@@ -30,7 +34,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 从手牌中选择一张牌消耗（不能选择自身）
+        // 从手牌中选择一张牌遗忘（不能选择自身）
         var selectedCards = await CardSelectCmd.FromHand(
             choiceContext,
             Owner,
@@ -39,21 +43,14 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
             this
         );
         var selected = selectedCards.FirstOrDefault();
-        if (selected != null) await CardCmd.Exhaust(choiceContext, selected);
 
+        // ★ 改为遗忘：将卡牌移入遗忘牌堆，并清除它的记忆快照
+        if (selected != null)
+             MemoryCmd.Forget(choiceContext, new[] { selected }, this);
 
         // 获得格挡
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-
-
-        // 降低压力
-        var pressure = Owner.Creature.GetPower<PressurePower>();
-        if (pressure != null)
-        {
-            var reduceAmount = IsUpgraded ? 3 : 2;
-            // 使用 PowerCmd.ModifyAmount 安全减少压力层数
-            await PowerCmd.ModifyAmount(choiceContext, pressure, -reduceAmount, Owner.Creature, this);
-        }
+        
     }
 
     protected override void OnUpgrade()

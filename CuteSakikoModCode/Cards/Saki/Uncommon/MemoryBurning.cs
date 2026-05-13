@@ -1,5 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -9,7 +11,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class MemoryBurning() : CuteSakikoModCard(3, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class MemoryBurning() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -21,8 +23,10 @@ public class MemoryBurning() : CuteSakikoModCard(3, CardType.Power, CardRarity.U
     {
         get
         {
-            yield return HoverTipFactory.FromKeyword(CardKeyword.Exhaust);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
             yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
 
@@ -37,7 +41,6 @@ public class MemoryBurning() : CuteSakikoModCard(3, CardType.Power, CardRarity.U
 
     protected override void OnUpgrade()
     {
-        // 升级：费用从 3 变为 2
-        EnergyCost.UpgradeBy(-1);
+        AddKeyword(CardKeyword.Retain);
     }
 }

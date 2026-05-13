@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
@@ -87,6 +88,10 @@ public class Entry
 
         // ===== 预加载自定义特效 =====
         GD.Load<PackedScene>("res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn");
+        
+        // 放在 Init() 末尾，其他代码不变
+        MemoryCardPile.Register(ModId);
+        ForgetCardPile.Register(ModId);
         
     }
 
