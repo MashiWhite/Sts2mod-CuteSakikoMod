@@ -18,7 +18,7 @@ public class Intermission : CuteSakikoModCard
         get
         {
             yield return new DamageVar(1, ValueProp.Move);
-            yield return new RepeatVar(IsUpgraded ? 6 : 3);
+            yield return new RepeatVar(3);
         }
     }
 
@@ -40,6 +40,6 @@ public class Intermission : CuteSakikoModCard
 
     protected override void OnUpgrade()
     {
-        // 升级效果在 CanonicalVars 中通过 IsUpgraded 处理
+        DynamicVars.Repeat.UpgradeValueBy(3);
     }
 }

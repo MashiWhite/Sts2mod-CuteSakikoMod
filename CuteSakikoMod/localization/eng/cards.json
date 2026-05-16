@@ -366,7 +366,7 @@
   "CUTE_SAKIKO_MOD_CARD_EMPTY_LURE.title": "空利诱人",
   "CUTE_SAKIKO_MOD_CARD_EMPTY_LURE.description": "获得{Energy:energyIcons()}。\n抽{Cards:diff()}张牌。\n将一张[gold]欺诈[/gold]加入弃牌堆。",
   "CUTE_SAKIKO_MOD_CARD_INTERMISSION.title": "幕间会议",
-  "CUTE_SAKIKO_MOD_CARD_INTERMISSION.description": "造成{Damage:diff()}点伤害{IfUpgraded:show:6|3}次。\n抽1张牌。",
+  "CUTE_SAKIKO_MOD_CARD_INTERMISSION.description": "造成{Damage:diff()}点伤害{Repeat:diff()}次。\n抽1张牌。",
   "CUTE_SAKIKO_MOD_CARD_FRAUD.title": "欺诈",
   "CUTE_SAKIKO_MOD_CARD_FRAUD.description": "抽到这张牌时，失去{Energy:energyIcons()}。",
   "CUTE_SAKIKO_MOD_CARD_MUSICA_CAELESTIS.title": "天球のMúsica",
