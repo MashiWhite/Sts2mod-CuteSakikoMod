@@ -1,12 +1,13 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using Godot;
+using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 
-public class CuteAnonCardPool : TypeListCardPoolModel
+public class CuteAnonCardPool : TypeListCardPoolModel,IModColorfulPhilosophersCardPool
 {
     private static readonly Material? _poolFrameMaterial = MaterialUtils.CreateRgbShaderMaterial(0.635f, 0.772f, 0.82f);
     public override string Title => CuteAnon.CharacterId; //This is not a display name.

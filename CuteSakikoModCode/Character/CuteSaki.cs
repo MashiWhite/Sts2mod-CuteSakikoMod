@@ -11,8 +11,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Character;
 [RegisterCharacter]
 public class CuteSaki : ModCharacterTemplate<CuteSakiCardPool, CuteSakiRelicPool, CuteSakiPotionPool>
 {
-    public const string CharacterId = "丰川祥子";
-    public const string CharacterEggId = "小祥彩蛋";
+    public const string CharacterId = "CUTESAKI";
+    public const string CharacterEggId = "SAKIEGGS";
     public static readonly Color Color = new("#7799cc");
     public override Color EnergyLabelOutlineColor => new(1f, 0f, 0f);
 
