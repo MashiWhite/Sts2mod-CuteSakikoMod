@@ -16,9 +16,9 @@ public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Unco
         get
         {
             // 当前累积的总压力值（初始4，升级后变8）
-            yield return new BlockVar("TotalPressure", 4m, ValueProp.Move);
+            yield return new DynamicVar("TotalPressure", 4m);
             // 每次打出增加的压力值（未升级2，升级后4），使用 BlockVar 以享受格挡预览
-            yield return new BlockVar("ExtraPressure", 2m, ValueProp.Move);
+            yield return new DynamicVar("ExtraPressure", 2m);
         }
     }
 
@@ -51,7 +51,7 @@ public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Unco
         if (cardPlay.Target == null) return;
 
         var target = cardPlay.Target;
-        var totalPressureVar = (BlockVar)DynamicVars["TotalPressure"];
+        var totalPressureVar = DynamicVars["TotalPressure"];
         var extraPressureVar = DynamicVars["ExtraPressure"];
         var currentTotal = totalPressureVar.BaseValue;
 
@@ -61,15 +61,15 @@ public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Unco
         // 获得等量格挡（此处作为 BlockVar 传入 GainBlock，会自动享受格挡加成）
         await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(currentTotal, ValueProp.Move), cardPlay);
 
-        // 累加基础增量，避免双重加成（累积值 TotalPressure 下次打出时会被完整加成）
+        // 累加基础增量，避免双重加成
         totalPressureVar.UpgradeValueBy(extraPressureVar.BaseValue);
     }
 
     protected override void OnUpgrade()
     {
         // 基础总压力 4 → 8
-        ((BlockVar)DynamicVars["TotalPressure"]).UpgradeValueBy(4m);
+        DynamicVars["TotalPressure"].UpgradeValueBy(4m);
         // 每次增量 2 → 4
-        ((BlockVar)DynamicVars["ExtraPressure"]).UpgradeValueBy(2m);
+        DynamicVars["ExtraPressure"].UpgradeValueBy(2m);
     }
 }

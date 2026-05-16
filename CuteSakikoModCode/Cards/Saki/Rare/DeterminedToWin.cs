@@ -18,7 +18,7 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
         {
             yield return new DamageVar(5m, ValueProp.Move);                   // 基础伤害
             yield return new PowerVar<PressurePower>(2m);                    // 基础压力
-            yield return new DamageVar("ExtraDamage", 2m, ValueProp.Move);   // 每次递增的伤害与压力量
+            yield return new DynamicVar("ExtraDamage", 2m);   // 每次递增的伤害与压力量
         }
     }
 
@@ -37,21 +37,22 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
 
         var baseDamage = DynamicVars.Damage.BaseValue;
         var basePressure = 2; // 基础压力固定为2，未升级不变
-        var step = (int)((DamageVar)DynamicVars["ExtraDamage"]).BaseValue;
+        var step = (int)DynamicVars["ExtraDamage"].BaseValue;
 
         for (var i = 0; i < hits; i++)
         {
             var damage = baseDamage + i * step;
             var pressure = basePressure + i * step;
 
-            // 造成伤害
             await DamageCmd.Attack(damage)
                 .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);
 
-            // 给予压力
+            // 重要：检查目标是否还活着，若已死亡则不再继续
+            if (cardPlay.Target.IsDead) break;
+
             if (pressure > 0)
                 await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, pressure, Owner.Creature, this);
         }
@@ -60,6 +61,6 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
     protected override void OnUpgrade()
     {
         // 步长从 2 提升至 4
-        ((DamageVar)DynamicVars["ExtraDamage"]).UpgradeValueBy(2m);
+        DynamicVars["ExtraDamage"].UpgradeValueBy(2m);
     }
 }

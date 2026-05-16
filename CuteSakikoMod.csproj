@@ -102,6 +102,7 @@
       <Folder Include="CuteSakikoModCode\Cards\Mod\Event\" />
       <Folder Include="CuteSakikoModCode\Encounters\Common\" />
       <Folder Include="CuteSakikoModCode\Monsters\Normal\" />
+      <Folder Include="CuteSakikoModCode\NetMessage\" />
       <Folder Include="CuteSakikoModCode\Relics\AnotherSelf\" />
       <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\" />
       <Folder Include="CuteSakikoMod\images\ui\run_history\" />

@@ -19,7 +19,7 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(IsUpgraded ? 8m : 6m, ValueProp.Move),
-        new DamageVar("TotalDamage", IsUpgraded ? 8m : 6m, ValueProp.Move)
+        new DynamicVar("TotalDamage", IsUpgraded ? 8m : 6m)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
