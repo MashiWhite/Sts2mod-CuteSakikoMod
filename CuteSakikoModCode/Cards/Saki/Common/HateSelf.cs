@@ -42,5 +42,6 @@ public class HateSelf() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common
     {
         // 升级：压力增加5层（5->10）
         DynamicVars["PressurePower"].UpgradeValueBy(5m);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

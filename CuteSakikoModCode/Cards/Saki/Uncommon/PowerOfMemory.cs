@@ -9,45 +9,38 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class PowerOfMemory() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class PowerOfMemory() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory); }
     }
 
-
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            // 未升级基础伤害6，升级后9
-            var baseDamage = IsUpgraded ? 9m : 6m;
-            // 未升级每张回忆加成3，升级后加成5
-            var extraPerMemory = IsUpgraded ? 5m : 3m;
-
-            return new DynamicVar[]
+            // 基础伤害（未升级6）
+            yield return new CalculationBaseVar(6m);
+            // 每张回忆额外伤害（未升级3）
+            yield return new ExtraDamageVar(3m);
+            // 动态计算最终伤害
+            yield return new CalculatedDamageVar(ValueProp.Move).WithMultiplier((card, target) =>
             {
-                new CalculationBaseVar(baseDamage),
-                new ExtraDamageVar(extraPerMemory),
-                new CalculatedDamageVar(ValueProp.Move).WithMultiplier((card, target) =>
+                var owner = card.Owner;
+                if (owner == null) return 0m;
+
+                var memoryCount = 0;
+                var piles = new[] { PileType.Hand, PileType.Draw, PileType.Discard };
+                foreach (var pileType in piles)
                 {
-                    var owner = card.Owner;
-                    if (owner == null) return 0m;
+                    var pile = pileType.GetPile(owner);
+                    if (pile == null) continue;
+                    memoryCount += pile.Cards.Count(c => c.HasModKeyword(CutesakiKeywords.Memory));
+                }
 
-                    // 统计手牌、抽牌堆、弃牌堆中带有 Memory 关键词的卡牌数量
-                    var memoryCount = 0;
-                    var piles = new[] { PileType.Hand, PileType.Draw, PileType.Discard };
-                    foreach (var pileType in piles)
-                    {
-                        var pile = pileType.GetPile(owner);
-                        if (pile == null) continue;
-                        memoryCount += pile.Cards.Count(c => c.HasModKeyword(CutesakiKeywords.Memory));
-                    }
-
-                    return memoryCount;
-                })
-            };
+                return memoryCount;
+            });
         }
     }
 
@@ -62,6 +55,9 @@ public class PowerOfMemory() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
 
     protected override void OnUpgrade()
     {
-        // 升级效果在 CanonicalVars 中已通过 IsUpgraded 处理，无需额外操作
+        // 基础伤害 6 → 9
+        DynamicVars.CalculationBase.UpgradeValueBy(3m);
+        // 每张回忆加成 3 → 5
+        DynamicVars.ExtraDamage.UpgradeValueBy(2m);
     }
 }

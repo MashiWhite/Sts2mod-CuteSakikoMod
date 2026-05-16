@@ -48,6 +48,6 @@ public class Glare() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon
     {
         // 升级：伤害 7 → 10，压力 10 → 12
         DynamicVars["Damage"].UpgradeValueBy(3m);
-        DynamicVars["PressurePower"].UpgradeValueBy(2m);
+        DynamicVars["PressurePower"].UpgradeValueBy(5m);
     }
 }

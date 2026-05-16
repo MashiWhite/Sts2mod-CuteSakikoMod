@@ -14,7 +14,7 @@ public class SymbolTwo() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Unco
     // 动态变量：伤害值（基础1，升级2）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(1m, ValueProp.Move)
+        new DamageVar(2m, ValueProp.Move)
     ];
 
     // 悬停提示：显示压力能力
@@ -69,6 +69,6 @@ public class SymbolTwo() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Unco
     protected override void OnUpgrade()
     {
         // 升级：伤害增加1点（1→2）
-        DynamicVars.Damage.UpgradeValueBy(2m);
+        DynamicVars.Damage.UpgradeValueBy(1m);
     }
 }

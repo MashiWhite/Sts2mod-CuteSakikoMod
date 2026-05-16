@@ -13,7 +13,7 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(8m, ValueProp.Move)
+        new DamageVar(10m, ValueProp.Move)
     ];
 
     // 当存在至少一个敌人意图不是攻击时，卡牌高亮金色
@@ -67,6 +67,6 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

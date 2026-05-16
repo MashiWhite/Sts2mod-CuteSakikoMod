@@ -15,7 +15,7 @@ public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity
     
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(8m, ValueProp.Move)
+        new BlockVar(10m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -54,6 +54,6 @@ public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(5m);
+        DynamicVars.Block.UpgradeValueBy(3m);
     }
 }

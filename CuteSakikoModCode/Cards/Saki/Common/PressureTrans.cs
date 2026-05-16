@@ -13,7 +13,7 @@ public class PressureTrans() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(7m, ValueProp.Move)
+        new DamageVar(6m, ValueProp.Move)
     ];
 
     protected override bool ShouldGlowGoldInternal
@@ -46,7 +46,7 @@ public class PressureTrans() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
             // 消耗2层压力
             await PowerCmd.ModifyAmount(choiceContext, selfPressure, -1, Owner.Creature, this);
 
-            var pressureToGive = IsUpgraded ? 4 : 3;
+            var pressureToGive = IsUpgraded ? 8 : 5;
             await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, pressureToGive, Owner.Creature, this);
         }
 
@@ -59,6 +59,6 @@ public class PressureTrans() : CuteSakikoModCard(1, CardType.Attack, CardRarity.
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

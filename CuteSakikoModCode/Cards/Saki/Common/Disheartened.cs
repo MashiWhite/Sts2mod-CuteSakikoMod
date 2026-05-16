@@ -15,7 +15,7 @@ public class Disheartened() : CuteSakikoModCard(0, CardType.Attack, CardRarity.C
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(IsUpgraded ? 8m : 5m, ValueProp.Move)
+        new DamageVar(5m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -41,7 +41,6 @@ public class Disheartened() : CuteSakikoModCard(0, CardType.Attack, CardRarity.C
 
     protected override void OnUpgrade()
     {
-        // 升级效果已在 CanonicalVars 中通过 IsUpgraded 处理伤害
-        // 易伤层数在 OnPlay 中通过 IsUpgraded 判断
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
