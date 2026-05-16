@@ -12,7 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Character;
 [RegisterCharacter]
 public class CuteAnon : ModCharacterTemplate<CuteAnonCardPool, CuteAnonRelicPool, CuteAnonPotionPool>
 {
-	public const string CharacterId = "千早爱音";
+	public const string CharacterId = "CUTEANON";
 	public static readonly Color Color = new("#ff8899");
 	public override Color EnergyLabelOutlineColor => new(0f, 0.2f, 0.4f);
 
