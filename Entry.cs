@@ -1,12 +1,9 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
-using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Logging;
@@ -20,6 +17,7 @@ using STS2RitsuLib.RunData;
 using STS2RitsuLib.Settings;
 using STS2RitsuLib.Utils.Persistence;
 using Godot;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Multiplayer;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using Logger = MegaCrit.Sts2.Core.Logging.Logger;
@@ -93,6 +91,14 @@ public class Entry
                 WritePolicy = RunSavedDataWritePolicy.WhenNonDefault,
                 SyncLobbyOnChange = true
             });
+        // 注册 Eggs 首次选择标记（每个玩家独立）
+        Eggs.PlayerEggsSlot = runDataStore.RegisterPerPlayer<PlayerEggsData>(
+            "EggsSelected",
+            options: new RunSavedDataOptions
+            {
+                WritePolicy = RunSavedDataWritePolicy.WhenNonDefault,
+                SyncLobbyOnChange = true
+            });
 
         Log.Debug("Mod initialized!");
 
@@ -133,20 +139,41 @@ public class Entry
                 }
             }
         };
+        RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
+        {
+            if (!ModConfig.彩蛋卡) return;
+
+            var netService = RunManager.Instance.NetService;
+            bool isHostOrSingle = netService?.Type == NetGameType.Singleplayer ||
+                                  netService?.Type == NetGameType.Host;
+            if (!isHostOrSingle) return;
+
+            // 为所有玩家补发 Eggs 遗物（如果尚未拥有）
+            foreach (var player in evt.RunState.Players)
+            {
+                if (player.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id))
+                    continue;
+
+                var eggs = ModelDb.Relic<Eggs>().ToMutable();
+                // 注意：不 await，避免阻塞事件；可异步执行
+                _ = RelicCmd.Obtain(eggs, player);
+            }
+        });
     }
 
     private static void OnRunStarted(RunState state)
     {
         if (!ModConfig.彩蛋卡) return;
 
-        var player = state.Players.FirstOrDefault(p => p.Creature.IsPlayer);
-        if (player == null) return;
-        if (player.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id)) return;
+        // 只为本地玩家自己添加遗物
+        var me = LocalContext.GetMe(state);
+        if (me == null) return;
+        if (me.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id)) return;
 
         _ = Task.Run(async () =>
         {
             var eggs = ModelDb.Relic<Eggs>().ToMutable();
-            await RelicCmd.Obtain(eggs, player);
+            await RelicCmd.Obtain(eggs, me);
         });
     }
 

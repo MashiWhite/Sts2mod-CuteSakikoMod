@@ -104,6 +104,7 @@
       <Folder Include="CuteSakikoModCode\Monsters\Normal\" />
       <Folder Include="CuteSakikoModCode\Relics\AnotherSelf\" />
       <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\" />
+      <Folder Include="CuteSakikoModCode\Relics\Saki\Event\" />
       <Folder Include="CuteSakikoMod\images\ui\run_history\" />
     </ItemGroup>
 
