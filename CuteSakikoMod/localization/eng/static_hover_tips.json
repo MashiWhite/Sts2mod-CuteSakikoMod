@@ -6,5 +6,7 @@
   "CUTESAKIKOMOD_NOTE_POWER.title": "能力音符",
   "CUTESAKIKOMOD_NOTE_POWER.description": "打出的能力牌会累积能力音符。",
   "CUTESAKIKOMOD_NOTE_SPECIAL.title": "特殊音符",
-  "CUTESAKIKOMOD_NOTE_SPECIAL.description": "打出的其他牌会累积特殊音符。"
+  "CUTESAKIKOMOD_NOTE_SPECIAL.description": "打出的其他牌会累积特殊音符。",
+  "CHORD_DESC_WITH_CONDITION.title": "",
+  "CHORD_DESC_WITH_CONDITION.description": "{effect}\n条件：{condition}"
 }

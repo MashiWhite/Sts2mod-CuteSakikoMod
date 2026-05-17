@@ -24,7 +24,7 @@ public class GuitarVocalPower : CuteSakikoModPower
             var target = rng.NextItem(enemies);
             // 最后一个参数修正为 null
             await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target,
-                damagePerLayer, ValueProp.Move, Owner, null);
+                damagePerLayer, ValueProp.Unpowered, Owner, null);
         }
     }
 }

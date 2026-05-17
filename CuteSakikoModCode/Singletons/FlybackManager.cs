@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
@@ -46,10 +48,17 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons
 
         public void IncrementPlayCountForPlayer(Player player)
         {
-            if (player == null || PlayerDataSlot == null)
-                return;
+            if (player == null || PlayerDataSlot == null) return;
 
             PlayerDataSlot.Modify(player, data => data.PlayCount++);
+
+            // 刷新玩家所有牌堆中的Flyback卡牌（除图鉴外）
+            foreach (var pile in player.Piles)
+            {
+                foreach (var card in pile.Cards.OfType<Flyback>())
+                    card.RefreshDynamicVars();
+            }
+
             NotifyDataChanged();
         }
 

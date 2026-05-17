@@ -1,13 +1,12 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Runs;
-using MegaCrit.Sts2.Core.Multiplayer;
-using MegaCrit.Sts2.Core.Multiplayer.Game;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Models;
 
@@ -18,43 +17,63 @@ public class LittleMomentsManager : HookedSingletonModel
 {
     public LittleMomentsManager() : base(true, false) { }
 
-    public override async Task AfterCardChangedPiles(
-        CardModel card,
-        PileType oldPileType,
-        AbstractModel? source)
+    public override bool ShouldReceiveCombatHooks => true;
+
+    // 玩家回合开始时：将消耗堆中的所有 LittleMoments 和 Lifetime 移到弃牌堆
+    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        if (card is not LittleMoments || card.Pile?.Type != PileType.Hand)
+        var exhaustPile = PileType.Exhaust.GetPile(player);
+        if (exhaustPile == null) return;
+
+        // 收集所有的 LittleMoments 和 Lifetime
+        var cardsToMove = exhaustPile.Cards
+            .Where(c => c is LittleMoments || c is Lifetime)
+            .ToList();
+
+        if (cardsToMove.Count > 0)
+            await CardPileCmd.Add(cardsToMove, PileType.Discard);
+    }
+
+    // 玩家回合结束时：检查弃牌堆、消耗堆和抽牌堆，合成“一辈子”
+    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    {
+        if (side != CombatSide.Player)
             return;
 
-        var owner = card.Owner;
-        if (owner == null) return;
+        var players = RunManager.Instance.DebugOnlyGetState()?.Players;
+        if (players == null) return;
 
-        var hand = PileType.Hand.GetPile(owner);
-        if (hand == null) return;
+        foreach (var player in players)
+        {
+            if (player.Creature?.CombatState == null) continue;
 
-        // 收集所有手牌中的“小小的瞬间”
-        var littleMoments = hand.Cards.OfType<LittleMoments>().ToList();
+            // 检查弃牌堆、抽牌堆和消耗堆
+            await TryMergeInPile(player, PileType.Discard);
+            await TryMergeInPile(player, PileType.Draw);
+            await TryMergeInPile(player, PileType.Exhaust);
+        }
+    }
+
+    private async Task TryMergeInPile(Player player, PileType pileType)
+    {
+        var pile = pileType.GetPile(player);
+        if (pile == null) return;
+
+        var littleMoments = pile.Cards.OfType<LittleMoments>().ToList();
         if (littleMoments.Count < 5) return;
-
-        // 再次确认它们都还在手牌（防止当前正在打出的牌导致状态变化）
-        if (littleMoments.Any(c => c.Pile?.Type != PileType.Hand))
-            return;
 
         bool anyUpgraded = littleMoments.Any(c => c.IsUpgraded);
 
-        // 像你的示例那样，一次性批量移除（不跳过任何特效）
         await CardPileCmd.RemoveFromCombat(littleMoments);
 
-        // 生成合并后的“一辈子”
-        var combatState = owner.Creature.CombatState;
-        var lifetime = combatState.CreateCard<Lifetime>(owner);
+        var combatState = player.Creature.CombatState;
+        var lifetime = combatState.CreateCard<Lifetime>(player);
         if (anyUpgraded)
         {
             lifetime.UpgradeInternal();
             lifetime.FinalizeUpgradeInternal();
         }
 
-        // 正常加入手牌（带特效）
-        await CardPileCmd.AddGeneratedCardToCombat(lifetime, PileType.Hand, owner);
+        await CardPileCmd.Add(lifetime, pile, CardPilePosition.Top);
     }
 }

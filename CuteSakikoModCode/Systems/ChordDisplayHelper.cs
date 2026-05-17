@@ -1,5 +1,6 @@
 ﻿using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 
@@ -108,5 +109,23 @@ public static class ChordDisplayHelper
         var title = new LocString("static_hover_tips", $"{key}.title");
         var desc = new LocString("static_hover_tips", $"{key}.description");
         return new HoverTip(title, desc);
+    }
+    
+    public static HoverTip GetDynamicChordHoverTip(string chordId, Creature owner, int multiplier = 1)
+    {
+        if (ChordManager.AllChords.TryGetValue(chordId, out var def))
+        {
+            var title = new LocString("card_keywords", def.TitleKey);
+            var effectDesc = GetFormattedDescription(def, multiplier);
+            var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, owner);
+        
+            // 组合：效果 + 条件
+            var fullDesc = new LocString("static_hover_tips", "CHORD_DESC_WITH_CONDITION");
+            fullDesc.Add("effect", effectDesc);
+            fullDesc.Add("condition", condition);
+        
+            return new HoverTip(title, fullDesc);
+        }
+        return new HoverTip(new LocString("card_keywords", "UNKNOWN"), "未知和弦");
     }
 }

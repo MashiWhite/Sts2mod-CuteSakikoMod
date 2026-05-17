@@ -98,7 +98,7 @@ public class Flyback : ModTokenCard
     }
 
     // 根据 reloads 和升级加成重新计算当前数值
-    private void RefreshDynamicVars()
+    internal void RefreshDynamicVars()
     {
         int reloads = GetReloadCount();
         int finalDamage = Math.Max(3, 10 - reloads) + _upgradeDamageBonus;

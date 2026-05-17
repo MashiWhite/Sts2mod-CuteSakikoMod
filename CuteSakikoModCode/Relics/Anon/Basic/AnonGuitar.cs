@@ -382,7 +382,8 @@ public class AnonGuitar : CuteAnonRelic
         if (cardsToMove.Count > 0) Flash();
     }
 
-    // ========== 悬浮提示（不可变） ==========
+    //悬浮提示
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -401,7 +402,9 @@ public class AnonGuitar : CuteAnonRelic
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
                     var text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
-                    lines.Add($"[{title}]({def.GetConditionText()})\n{text}");
+                    // 改为动态条件
+                    var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
+                    lines.Add($"[{title}]({condition})\n{text}");
                 }
 
             foreach (var chordId in bonus)
@@ -409,7 +412,8 @@ public class AnonGuitar : CuteAnonRelic
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
                     var text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
-                    lines.Add($"[{title}]({def.GetConditionText()})\n{text}");
+                    var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
+                    lines.Add($"[{title}]({condition})\n{text}");
                 }
 
             foreach (var chordId in temp)
@@ -417,7 +421,8 @@ public class AnonGuitar : CuteAnonRelic
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
                     var text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
-                    lines.Add($"[临时] [{title}]({def.GetConditionText()})\n{text}");
+                    var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
+                    lines.Add($"[临时] [{title}]({condition})\n{text}");
                 }
 
             desc.Add("Chords", string.Join("\n\n", lines));

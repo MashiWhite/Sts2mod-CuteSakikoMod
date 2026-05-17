@@ -69,11 +69,16 @@ public static class MusicNoteManager
             {
                 var chordId = kv.Value;
                 if (string.IsNullOrEmpty(chordId)) continue;
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
-                    ChordManager.MatchesChord(def, sequence))
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
-                    data.StoredChords.Add(chordId);
-                    result.NewChords.Add(chordId);
+                    // 1. 获得修改后的序列（如果玩家身上有修改器Power）
+                    var modifiedSeq = ChordSequenceModifierHelper.GetModifiedSequence(def, player.Creature);
+                    // 2. 用修改后的序列匹配
+                    if (ChordManager.MatchesChord(modifiedSeq, sequence))
+                    {
+                        data.StoredChords.Add(chordId);
+                        result.NewChords.Add(chordId);
+                    }
                 }
             }
         }
@@ -84,11 +89,16 @@ public static class MusicNoteManager
             foreach (var chordId in bonusChordIds)
             {
                 if (string.IsNullOrEmpty(chordId)) continue;
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def) &&
-                    ChordManager.MatchesChord(def, sequence))
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
-                    data.StoredChords.Add(chordId);
-                    result.NewChords.Add(chordId);
+                    // 1. 获得修改后的序列（如果玩家身上有修改器Power）
+                    var modifiedSeq = ChordSequenceModifierHelper.GetModifiedSequence(def, player.Creature);
+                    // 2. 用修改后的序列匹配
+                    if (ChordManager.MatchesChord(modifiedSeq, sequence))
+                    {
+                        data.StoredChords.Add(chordId);
+                        result.NewChords.Add(chordId);
+                    }
                 }
             }
         }

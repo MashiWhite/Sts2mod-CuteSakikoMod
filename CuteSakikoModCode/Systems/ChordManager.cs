@@ -552,28 +552,22 @@ public static class ChordManager
         };
     }
 
-    public static bool MatchesChord(ChordDefinition chord, IReadOnlyList<CardType> sequence)
+    public static bool MatchesChord(IReadOnlyList<CardType> pattern, IReadOnlyList<CardType> sequence)
     {
-        var pattern = chord.NoteSequence;
-        if (sequence.Count < pattern.Length) return false;
-        for (var i = 0; i < pattern.Length; i++)
+        if (sequence.Count < pattern.Count) return false;
+        for (var i = 0; i < pattern.Count; i++)
         {
             var expected = pattern[i];
-            var actual = sequence[sequence.Count - pattern.Length + i];
+            var actual = sequence[sequence.Count - pattern.Count + i];
 
-            // 如果和弦定义中的类型是 Status，代表“特”（通配非攻/技/能）
-            if (expected == CardType.Status)
+            if (expected == CardType.Status) // 通配符：匹配除攻/技/能之外的所有类型
             {
-                // 匹配除 Attack、Skill、Power 之外的所有类型
                 if (actual == CardType.Attack || actual == CardType.Skill || actual == CardType.Power)
                     return false;
             }
             else if (expected != actual)
-            {
                 return false;
-            }
         }
-
         return true;
     }
 }

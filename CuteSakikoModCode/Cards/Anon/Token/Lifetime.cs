@@ -7,14 +7,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token;
 
 public class Lifetime() : ModTokenCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
-
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
             yield return new CardsVar(2);
-            yield return new EnergyVar(2);
+            yield return new EnergyVar(1);
         }
     }
 
@@ -22,11 +20,12 @@ public class Lifetime() : ModTokenCard(0, CardType.Skill, CardRarity.Token, Targ
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
         await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
+        await CardPileCmd.RemoveFromCombat(this);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Cards.UpgradeValueBy(1m); // 2 → 3
-        DynamicVars.Energy.UpgradeValueBy(1m); // 2 → 3
+        DynamicVars.Energy.UpgradeValueBy(1m); // 1 → 2
     }
 }
