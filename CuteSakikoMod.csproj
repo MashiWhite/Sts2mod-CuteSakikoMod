@@ -48,7 +48,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
         <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
-        <RitsuLibPackageVersion>0.2.32</RitsuLibPackageVersion>
+        <RitsuLibPackageVersion>0.2.33</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <!-- 引用 -->
@@ -73,7 +73,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="STS2.RitsuLib" Version="0.2.32" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.2.33" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -102,7 +102,6 @@
       <Folder Include="CuteSakikoModCode\Cards\Mod\Event\" />
       <Folder Include="CuteSakikoModCode\Encounters\Common\" />
       <Folder Include="CuteSakikoModCode\Monsters\Normal\" />
-      <Folder Include="CuteSakikoModCode\NetMessage\" />
       <Folder Include="CuteSakikoModCode\Relics\AnotherSelf\" />
       <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\" />
       <Folder Include="CuteSakikoMod\images\ui\run_history\" />

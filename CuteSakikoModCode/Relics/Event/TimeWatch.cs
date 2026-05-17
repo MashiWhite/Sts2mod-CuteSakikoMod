@@ -12,7 +12,6 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Runs;
-using MegaCrit.Sts2.Core.Saves.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -20,14 +19,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
 {
     public class TimeWatch : CuteSakikoModRelic
     {
-        // ★ 新增：同步的 reload 计数
-        [SavedProperty]
-        public int ReloadCount { get; set; }
-        
-        [SavedProperty]
-        public int FlybackPlayCount { get; set; }
-
-        private DynamicVar _blockVar;
         private bool _flybackAdded;
 
         public override RelicRarity Rarity => RelicRarity.Ancient;
@@ -37,8 +28,28 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
             get
             {
                 yield return new DynamicVar("Block", GetBlockAmount());
-                yield return new DynamicVar("PlayCount", FlybackPlayCount);
+                yield return new DynamicVar("PlayCount", GetFlybackPlayCount());
             }
+        }
+
+        public void IncrementPlayCount()
+        {
+            FlybackManager.Instance.IncrementPlayCountForPlayer(Owner);
+            UpdateBlockDynamicVar();
+            Flash();
+        }
+
+        public int GetFlybackPlayCount()
+        {
+            // Canonical 实例没有 Owner，直接返回 0
+            if (!IsMutable)
+                return 0;
+
+            if (Owner == null || FlybackManager.PlayerDataSlot == null)
+                return 0;
+            if (Owner.RunState is not RunState runState)
+                return 0;
+            return FlybackManager.PlayerDataSlot.Get(runState, Owner.NetId).PlayCount;
         }
 
         private void UpdateBlockDynamicVar()
@@ -46,16 +57,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
             if (this.DynamicVars.TryGetValue("Block", out var blockVar))
                 blockVar.BaseValue = GetBlockAmount();
         }
-
-        public void IncrementPlayCount()
-        {
-            FlybackPlayCount++;
-            FlybackManager.InvalidatePlayerCache(Owner);
-            UpdateBlockDynamicVar();
-            Flash();
-        }
-
-        public int GetFlybackPlayCount() => FlybackPlayCount;
 
         private int GetBlockAmount()
         {
@@ -71,9 +72,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
 
             int blockAmount = GetBlockAmount();
             if (blockAmount > 0)
-            {
                 await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, null);
-            }
 
             UpdateBlockDynamicVar();
             Flash();
@@ -97,11 +96,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
         public override async Task AfterObtained()
         {
             await base.AfterObtained();
-            // 用本地 _numReloads 作为初始值（刚加载存档时主客机相同）
-            ReloadCount = RunManager.Instance.DebugOnlyGetState() != null 
-                ? FlybackManager.GetRawNumReloads()  // 现在有了
-                : 0;
-            FlybackManager.TransferTempCountToTimeWatch(Owner, this);
 
             if (!_flybackAdded && Owner != null)
             {
@@ -114,11 +108,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
             SetGloryBossEncounter();
         }
 
-        /// <summary>
-        /// 将 Glory（第三幕）的 Boss 遭遇战设置为 StarAnonEncounter。
-        /// 在进阶十时，SecondBoss 会由系统自动从 AllBossEncounters 中选取，
-        /// 且会跳过 BossEncounter（即星爱音），因此不会有双星爱音。
-        /// </summary>
         private void SetGloryBossEncounter()
         {
             if (Owner?.RunState == null) return;
@@ -128,12 +117,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event
             var starAnonEncounter = ModelDb.GetById<EncounterModel>(
                 ModelDb.GetId<StarAnonEncounter>());
 
-            // 如果已经是星爱音，不用再改
             if (gloryAct.BossEncounter.Id == starAnonEncounter.Id) return;
 
             gloryAct.SetBossEncounter(starAnonEncounter);
 
-            // 如果第二 Boss 也是星爱音，随机换一个别的 Boss
             if (gloryAct.HasSecondBoss && gloryAct.SecondBossEncounter?.Id == starAnonEncounter.Id)
             {
                 var otherBoss = Owner.RunState.Rng.UpFront.NextItem<EncounterModel>(

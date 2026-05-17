@@ -1,8 +1,12 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using CuteSakikoMod.CuteSakikoModCode.NetMessage;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Event;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Logging;
@@ -12,9 +16,12 @@ using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib;
 using STS2RitsuLib.Interop;
+using STS2RitsuLib.RunData;
 using STS2RitsuLib.Settings;
 using STS2RitsuLib.Utils.Persistence;
 using Godot;
+using MegaCrit.Sts2.Core.Multiplayer;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
 using Logger = MegaCrit.Sts2.Core.Logging.Logger;
 
 namespace CuteSakikoMod;
@@ -70,21 +77,62 @@ public class Entry
         var harmony = new Harmony("White.CuteSakikoMod");
         harmony.PatchAll();
 
+        // 5. 注册 RunSavedData 槽位 —— 飞返次数 & 读档次数持久化
+        var runDataStore = RunSavedDataStore.For(ModId);
+        FlybackManager.RunDataSlot = runDataStore.Register<RunFlybackData>(
+            "FlybackRunData",
+            options: new RunSavedDataOptions
+            {
+                WritePolicy = RunSavedDataWritePolicy.WhenNonDefault,
+                SyncLobbyOnChange = false
+            });
+        FlybackManager.PlayerDataSlot = runDataStore.RegisterPerPlayer<PlayerFlybackData>(
+            "FlybackPlayerData",
+            options: new RunSavedDataOptions
+            {
+                WritePolicy = RunSavedDataWritePolicy.WhenNonDefault,
+                SyncLobbyOnChange = true
+            });
+
         Log.Debug("Mod initialized!");
 
-        // 5. 事件订阅
+        // 6. 事件订阅
         if (RunManager.Instance != null)
             RunManager.Instance.RunStarted += OnRunStarted;
         else
             Logger.Warn("RunManager.Instance is null, RunStarted event not subscribed.");
-        
+
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(TimeWatch));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
 
-        // ===== 预加载自定义特效 =====
+        // 预加载自定义特效
         GD.Load<PackedScene>("res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn");
-        
+
+        // 7. 注册网络消息处理器 + 监听客户端重连
+        RunManager.Instance.RunStarted += _ =>
+        {
+            var netService = RunManager.Instance.NetService;
+            if (netService != null)
+            {
+                // 注册 ReloadCountSyncMessage 接收器（主机和客户端都需要）
+                netService.RegisterMessageHandler<ReloadCountSyncMessage>(
+                    new MessageHandlerDelegate<ReloadCountSyncMessage>((msg, senderId) =>
+                    {
+                        FlybackManager.OnReloadCountReceived(msg.ReloadCount);
+                    })
+                );
+
+                // 如果是主机，监听客户端连接，主动同步 ReloadCount
+                if (netService is NetHostGameService hostService)
+                {
+                    hostService.ClientConnected += peerId =>
+                    {
+                        FlybackManager.SyncReloadCountIfHost();
+                    };
+                }
+            }
+        };
     }
 
     private static void OnRunStarted(RunState state)
@@ -110,7 +158,7 @@ public class Entry
     }
 }
 
-// 以下两个辅助类保持不变（如果独立文件已存在可不复制）
+// 配置数据类保持不变
 public class CuteSakikoModConfigData
 {
     public bool 彩蛋卡 { get; set; }

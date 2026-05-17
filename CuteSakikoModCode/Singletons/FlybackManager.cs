@@ -1,152 +1,207 @@
-﻿using System.Reflection;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Multiplayer;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Utils;
+using STS2RitsuLib.RunData;
 
-// 引入 TimeWatch
-
-namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
-
-[RegisterSingleton]
-public class FlybackManager : SingletonModel
+namespace CuteSakikoMod.CuteSakikoModCode.Singletons
 {
-
-    public event Action<int, int>? OnFlybackDataChanged;
-    public override bool ShouldReceiveCombatHooks => false;
-    public static FlybackManager Instance => ModelDb.Singleton<FlybackManager>();
-    
-    public static void InvalidatePlayerCache(Player player)
+    [RegisterSingleton]
+    public class FlybackManager : SingletonModel
     {
-        _tempPlayCounts.Remove(player);
-    }
+        public static PlayerRunSavedData<PlayerFlybackData>? PlayerDataSlot { get; set; }
+        public static RunSavedData<RunFlybackData>? RunDataSlot { get; set; }
 
-    // 全局总次数（所有玩家之和）
-    public int TotalPlayCount
-    {
-        get
+        public event Action<int, int>? OnFlybackDataChanged;
+        public override bool ShouldReceiveCombatHooks => false;
+        public static FlybackManager Instance => ModelDb.Singleton<FlybackManager>();
+
+        // 缓存上次同步的 ReloadCount，避免重复广播
+        private static int _lastSyncedReloadCount = -1;
+
+        /// <summary>全局总飞返次数</summary>
+        public int TotalPlayCount
         {
-            int total = 0;
-            var runState = RunManager.Instance.DebugOnlyGetState();
-            if (runState != null)
+            get
             {
+                var runState = RunManager.Instance.DebugOnlyGetState();
+                if (runState == null || PlayerDataSlot == null)
+                    return 0;
+
+                int total = 0;
                 foreach (var player in runState.Players)
-                    total += GetPlayerPlayCount(player);
+                    total += PlayerDataSlot.Get(runState, player.NetId).PlayCount;
+                return total;
             }
-            return total;
         }
-    }
 
-    // 兼容旧代码的属性（返回总和）
-    public int PlayCount => TotalPlayCount;
+        public int PlayCount => TotalPlayCount;
 
-    // 获取单个玩家的计数（优先遗物，其次临时）
-    private static readonly Dictionary<Player, int> _tempPlayCounts = new();
-
-// 获取单个玩家的计数（优先遗物，其次临时）
-    private int GetPlayerPlayCount(Player player)
-    {
-        // 先检查临时字典
-        if (_tempPlayCounts.TryGetValue(player, out var count))
-            return count;
-
-        // 如果没有临时记录，就从玩家身上找遗物
-        var timeWatch = player.Relics.OfType<TimeWatch>().FirstOrDefault();
-        if (timeWatch != null)
+        public void IncrementPlayCountForPlayer(Player player)
         {
-            // 关键：直接从字段上读，并且缓存到字典里，避免循环调用
-            int c = timeWatch.GetFlybackPlayCount();
-            _tempPlayCounts[player] = c;  // 缓存住
-            return c;
+            if (player == null || PlayerDataSlot == null)
+                return;
+
+            PlayerDataSlot.Modify(player, data => data.PlayCount++);
+            NotifyDataChanged();
         }
-        return 0;
-    }
 
-    // 增加指定玩家的计数
-    public void IncrementPlayCountForPlayer(Player player)
-    {
-        if (player == null) return;
-
-        var timeWatch = player.Relics.OfType<TimeWatch>().FirstOrDefault();
-        if (timeWatch != null)
+        public void IncrementPlayCount()
         {
-            timeWatch.IncrementPlayCount();      // 直接增加遗物上的计数
+            var player = GetCurrentPlayer();
+            if (player != null)
+                IncrementPlayCountForPlayer(player);
+            else
+                Log.Warn("FlybackManager: Cannot increment play count, no player found.");
         }
-        else
+
+        public static void DoubleAllPlayerCounts()
         {
-            // 没有遗物，暂存到内存
-            _tempPlayCounts[player] = GetPlayerPlayCount(player) + 1;
+            var runState = RunManager.Instance.DebugOnlyGetState();
+            if (runState == null || PlayerDataSlot == null)
+                return;
+
+            foreach (var player in runState.Players)
+                PlayerDataSlot.Modify(player, data => data.PlayCount *= 2);
+
+            Instance.NotifyDataChanged();
+            
+            // 翻倍后同步主机数据
+            SyncReloadCountIfHost();
         }
-        NotifyDataChanged();
-    }
 
-    // 当玩家获得 TimeWatch 遗物时，将临时计数迁移到遗物中
-    public static void TransferTempCountToTimeWatch(Player player, TimeWatch timeWatch)
-    {
-        if (player == null || timeWatch == null) return;
-        if (_tempPlayCounts.TryGetValue(player, out int tempCount) && tempCount > 0)
+        /// <summary>获取读档次数（多人时强制同步）</summary>
+        public static int GetReloadCount()
         {
-            // 把临时计数加到遗物已有计数上
-            for (int i = 0; i < tempCount; i++)
-                timeWatch.IncrementPlayCount();
-            _tempPlayCounts.Remove(player);
-        }
-    }
+            int raw = GetRawNumReloads();
 
-    // 兼容旧代码的无参方法（单人模式取第一个玩家）
-    public void IncrementPlayCount()
-    {
-        var player = GetCurrentPlayer();
-        if (player != null)
-            IncrementPlayCountForPlayer(player);
-        else
-            Log.Warn("FlybackManager: Cannot increment play count because no player found.");
-    }
-
-    // 在 FlybackManager 类中添加
-    public static void DoubleAllPlayerCounts()
-    {
-        var runState = RunManager.Instance.DebugOnlyGetState();
-        if (runState == null) return;
-
-        foreach (var player in runState.Players)
-        {
-            var timeWatch = player.Relics.OfType<TimeWatch>().FirstOrDefault();
-            if (timeWatch != null)
+            // 多人模式
+            if (IsMultiplayer())
             {
-                timeWatch.FlybackPlayCount *= 2;
+                if (IsHost())
+                {
+                    // 主机：检测变化并广播
+                    if (_lastSyncedReloadCount != raw)
+                    {
+                        _lastSyncedReloadCount = raw;
+                        BroadcastReloadCount(raw);
+                        
+                        // 同时更新 RunSavedData（用于存档）
+                        UpdateRunSavedData(raw);
+                    }
+                    return raw;
+                }
+                else
+                {
+                    // 客户端：从 RunSavedData 读取主机同步的值
+                    if (RunDataSlot != null)
+                    {
+                        var runState = RunManager.Instance.DebugOnlyGetState();
+                        if (runState != null)
+                            return RunDataSlot.Get(runState).ReloadCount;
+                    }
+                    return 0; // 兜底
+                }
             }
-            // 清除该玩家的缓存，确保 TotalPlayCount 实时更新
-            _tempPlayCounts.Remove(player);
+            else // 单人模式
+            {
+                UpdateRunSavedData(raw);
+                return raw;
+            }
         }
-    }
-    
-    private Player? GetCurrentPlayer()
-    {
-        var runState = RunManager.Instance.DebugOnlyGetState();
-        return runState?.Players.FirstOrDefault();
-    }
 
-    public static int GetReloadCount()
-    {
-        // 直接从 RunState 获取第一个玩家（单人/多人适用）
-        var player = RunManager.Instance.DebugOnlyGetState()?.Players.FirstOrDefault();
-        var timeWatch = player?.Relics.OfType<TimeWatch>().FirstOrDefault();
-        return timeWatch?.ReloadCount ?? 0;
-    }
-    
-    public static int GetRawNumReloads()
-    {
-        var field = typeof(RunManager).GetField("_numReloads", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (field == null) return 0;
-        return (int)field.GetValue(RunManager.Instance);
-    }
+        public static int GetRawNumReloads()
+        {
+            var field = typeof(RunManager).GetField("_numReloads",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            return field != null ? (int)field.GetValue(RunManager.Instance) : 0;
+        }
 
-    private void NotifyDataChanged()
-    {
-        OnFlybackDataChanged?.Invoke(TotalPlayCount, GetReloadCount());
+        /// <summary>广播读档次数给所有客户端</summary>
+        private static void BroadcastReloadCount(int count)
+        {
+            if (!IsHost()) return; // 仅主机广播
+
+            var netService = RunManager.Instance.NetService;
+            if (netService is NetHostGameService hostService)  // 安全转换
+            {
+                var msg = new ReloadCountSyncMessage { ReloadCount = count };
+                hostService.SendMessage(msg); // 广播给所有客户端
+            }
+        }
+
+        /// <summary>主机主动同步当前读档次数（用于客户端重连等场景）</summary>
+        public static void SyncReloadCountIfHost()
+        {
+            if (!IsHost()) return;
+            
+            int raw = GetRawNumReloads();
+            _lastSyncedReloadCount = raw;
+            UpdateRunSavedData(raw);
+            BroadcastReloadCount(raw);
+        }
+
+        /// <summary>客户端接收同步数据</summary>
+        public static void OnReloadCountReceived(int count)
+        {
+            if (IsHost()) return; // 主机不处理
+
+            var runState = RunManager.Instance.DebugOnlyGetState();
+            if (runState == null || RunDataSlot == null) return;
+
+            var runData = RunDataSlot.Get(runState);
+            if (runData.ReloadCount != count)
+            {
+                runData.ReloadCount = count;
+                RunDataSlot.Set(runState, runData);
+                Instance.NotifyDataChanged();
+            }
+        }
+
+        private static void UpdateRunSavedData(int count)
+        {
+            if (RunDataSlot == null) return;
+            var runState = RunManager.Instance.DebugOnlyGetState();
+            if (runState == null) return;
+
+            var runData = RunDataSlot.Get(runState);
+            if (runData.ReloadCount != count)
+            {
+                runData.ReloadCount = count;
+                RunDataSlot.Set(runState, runData);
+            }
+        }
+
+        private static INetGameService? GetNetService()
+        {
+            return RunManager.Instance.NetService;
+        }
+
+        private static bool IsMultiplayer()
+        {
+            return GetNetService()?.Type.IsMultiplayer() == true;
+        }
+
+        private static bool IsHost()
+        {
+            return GetNetService()?.Type == NetGameType.Host;
+        }
+
+        private Player? GetCurrentPlayer()
+        {
+            return RunManager.Instance.DebugOnlyGetState()?.Players.FirstOrDefault();
+        }
+
+        private void NotifyDataChanged()
+        {
+            OnFlybackDataChanged?.Invoke(TotalPlayCount, GetReloadCount());
+        }
     }
 }
