@@ -11,7 +11,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 public class Apathetic() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new BlockVar(10m, ValueProp.Move); }
@@ -35,6 +35,5 @@ public class Apathetic() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare,
     {
         // 升级：格挡 10 → 13
         DynamicVars.Block.UpgradeValueBy(3m);
-
     }
 }

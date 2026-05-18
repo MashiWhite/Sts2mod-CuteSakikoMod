@@ -1,11 +1,9 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
-using MegaCrit.Sts2.Core.Models.Monsters;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
-
 
 namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 
@@ -21,15 +19,19 @@ public class StarAnonEncounter : ModEncounterTemplate
 
     // 是否属于弱怪池（Boss 通常不是）
     public override bool IsWeak => false;
-    
+
     public override EncounterAssetProfile AssetProfile => new(
         RunHistoryIconPath: "res://CuteSakikoMod/images/ui/run_history/star_anon_encounter.png",
         RunHistoryIconOutlinePath: "res://CuteSakikoMod/images/ui/run_history/star_anon_encounter_outline.png"
     );
-    
-    
+
+
     // 生成怪物：一个星爱音，槽位由系统自动分配
-    protected override IReadOnlyList<(MonsterModel, string?)> GenerateMonsters() => [
-        (ModelDb.Monster<StarAnon>().ToMutable(), null)
-    ];
+    protected override IReadOnlyList<(MonsterModel, string?)> GenerateMonsters()
+    {
+        return
+        [
+            (ModelDb.Monster<StarAnon>().ToMutable(), null)
+        ];
+    }
 }

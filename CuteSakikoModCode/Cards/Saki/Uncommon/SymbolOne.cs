@@ -3,12 +3,16 @@ using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Nodes.Rooms;          // 新增：用于 NCombatRoom
-using MegaCrit.Sts2.Core.Nodes.Vfx;            // 新增：用于 NGroundFireVfx
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
-using MegaCrit.Sts2.Core.Helpers; // 建议加上，虽然可能已有隐式 using
+// 新增：用于 NCombatRoom
+// 新增：用于 NGroundFireVfx
+
+// 建议加上，虽然可能已有隐式 using
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -19,7 +23,7 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(IsUpgraded ? 8m : 6m, ValueProp.Move),
-        new DynamicVar("TotalDamage", IsUpgraded ? 8m : 6m)
+        new("TotalDamage", IsUpgraded ? 8m : 6m)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -60,12 +64,8 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
         // 为每个可攻击的敌人添加地面火焰特效（参考 FirePotion）
         var room = NCombatRoom.Instance;
         if (room != null)
-        {
             foreach (var enemy in CombatState.HittableEnemies)
-            {
-                room.CombatVfxContainer.AddChildSafely( NGroundFireVfx.Create(enemy));
-            }
-        }
+                room.CombatVfxContainer.AddChildSafely(NGroundFireVfx.Create(enemy));
         // =================================================
 
         await DamageCmd.Attack(totalDamage)

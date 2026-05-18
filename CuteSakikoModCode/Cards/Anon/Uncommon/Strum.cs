@@ -33,10 +33,8 @@ public class Strum() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, Targ
 
             var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, Owner);
             if (selected != null)
-            {
                 // ★ 完全复用打牌逻辑，包括溢出和自动播放
                 await guitar.OnNoteGenerated(choiceContext, selected.Type);
-            }
 
             foreach (var option in options)
                 combatState.RemoveCard(option);

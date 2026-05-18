@@ -11,7 +11,7 @@ public class PowerNote() : ModTokenCard(0, CardType.Power, CardRarity.Token, Tar
     {
         // 空效果，仅获得音符
     }
-    
+
     public async Task OnChosen()
     {
     }

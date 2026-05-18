@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Combat;
@@ -126,27 +127,27 @@ public sealed class ObCardPower : CuteSakikoModPower
                     if (_originalCosts.TryGetValue(card, out var originalCost))
                     {
                         var energyCost = card.EnergyCost;
-                    
+
                         // 反射获取私有字段 _localModifiers 并清空
                         var modifiersField = energyCost.GetType()
                             .GetField("_localModifiers", BindingFlags.NonPublic | BindingFlags.Instance);
-                        if (modifiersField?.GetValue(energyCost) is System.Collections.IList list)
+                        if (modifiersField?.GetValue(energyCost) is IList list)
                             list.Clear();
-                    
+
                         // 反射获取私有字段 _base 并设置为原始费用
                         var baseField = energyCost.GetType()
                             .GetField("_base", BindingFlags.NonPublic | BindingFlags.Instance);
                         if (baseField != null)
                             baseField.SetValue(energyCost, originalCost);
-                    
+
                         // 触发费用变化事件，刷新 UI
                         card.InvokeEnergyCostChanged();
                     }
-                
+
                     // 恢复重播次数
                     if (_modifiedCards.Contains(card))
                         card.BaseReplayCount -= ExtraReplay;
-                
+
                     // 恢复消耗关键字
                     if (_hadExhaustKeyword.TryGetValue(card, out var hadExhaust) && !hadExhaust)
                         card.RemoveKeyword(CardKeyword.Exhaust);

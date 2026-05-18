@@ -23,22 +23,17 @@ public class PercussiveFingerstyle : ModStatusCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get
-        {
-            yield return new DamageVar(2m, ValueProp.Move);
-        }
+        get { yield return new DamageVar(2m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Target != null)
-        {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);
-        }
     }
 
     protected override void OnUpgrade()

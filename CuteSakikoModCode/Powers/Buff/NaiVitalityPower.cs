@@ -33,7 +33,7 @@ public class NaiVitalityPower : CuteSakikoModPower
     {
         // 只在能力拥有者自己的回合触发
         if (player != Owner.Player) return;
-        
+
         if (!_willTriggerNextTurn) return;
         _willTriggerNextTurn = false;
 

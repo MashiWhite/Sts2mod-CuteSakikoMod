@@ -11,7 +11,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 public class SoCute() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

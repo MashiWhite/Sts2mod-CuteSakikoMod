@@ -1,8 +1,8 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Enchantments;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 
@@ -10,11 +10,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class WhenPerformPower : CuteSakikoModPower
 {
+    private bool _triggeredThisTurn;
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
 
-    private bool _triggeredThisTurn;
-    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get

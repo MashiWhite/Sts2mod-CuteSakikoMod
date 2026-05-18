@@ -1,17 +1,15 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
+﻿using System.Runtime.Serialization;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 
 public class FlashAnonGuitar : AnonGuitar
 {
+    private bool _bonusAdded;
     public override RelicRarity Rarity => RelicRarity.Starter;
     protected override int MaxLearnedChordsPerCategory => 2;
     protected override int EffectMultiplier => 2;
-
-    private bool _bonusAdded;
 
     [OnDeserialized]
     private void OnDeserialized(StreamingContext context)
@@ -33,10 +31,7 @@ public class FlashAnonGuitar : AnonGuitar
             // 静态字典没有，尝试从可能还存在的旧吉他复制
             var oldGuitar = Owner.Relics.OfType<AnonGuitar>()
                 .FirstOrDefault(r => r is not FlashAnonGuitar && r != this);
-            if (oldGuitar != null)
-            {
-                oldGuitar.CopyChordsTo(this);
-            }
+            if (oldGuitar != null) oldGuitar.CopyChordsTo(this);
         }
 
         // 调用基类 AfterObtained，确保 EnsureInitialized 执行

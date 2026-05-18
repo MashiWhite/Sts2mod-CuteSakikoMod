@@ -18,9 +18,9 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(10m, ValueProp.Move),
+        new BlockVar(10m, ValueProp.Move)
     ];
-    
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -41,7 +41,7 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
 
             var availableMemoryCards = ModelDb.AllCards
                 .Where(card =>
-                    card.HasModKeyword(CutesakiKeywords.Memory) && 
+                    card.HasModKeyword(CutesakiKeywords.Memory) &&
                     !exhaustedMemoryIds.Contains(card.Id))
                 .ToList();
 

@@ -20,8 +20,6 @@ public static class CharacterBanterHelper
         var randomLine = LocString.GetRandomWithPrefix(LocTable, keyPrefix, rng);
 
         if (randomLine != null && !randomLine.IsEmpty)
-        {
             TalkCmd.Play(randomLine, speaker, VfxColor.White, VfxDuration.Short);
-        }
     }
 }

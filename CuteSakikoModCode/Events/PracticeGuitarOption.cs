@@ -47,15 +47,12 @@ public class PracticeGuitarOption : RestSiteOption
                 var bonusCount = bonusChords.Count;
                 var oldIds = bonusChords.ToList();
                 foreach (var oldId in oldIds) _relic.RemoveBonusChord(oldId);
-                for (int i = 0; i < bonusCount; i++) _relic.AddBonusChord(rng.NextItem(allPools));
+                for (var i = 0; i < bonusCount; i++) _relic.AddBonusChord(rng.NextItem(allPools));
             }
         }
 
-        if (LocalContext.IsMe(_player))
-        {
-            _relic.PracticeUsedThisVisit = true;
-            // 不需要手动设置 IsEnabled，框架会通过 ShouldDisable 清空列表
-        }
+        if (LocalContext.IsMe(_player)) _relic.PracticeUsedThisVisit = true;
+        // 不需要手动设置 IsEnabled，框架会通过 ShouldDisable 清空列表
         return true;
     }
 }

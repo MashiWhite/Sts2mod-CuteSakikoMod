@@ -18,7 +18,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 
 [RegisterCharacterStarterRelic(typeof(CuteSaki))]
 [RegisterTouchOfOrobasRefinement(typeof(PostItNote))]
-public class KabutoNote : CuteSakiRelic  // ← 去掉 sealed
+public class KabutoNote : CuteSakiRelic // ← 去掉 sealed
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
 
@@ -37,7 +37,8 @@ public class KabutoNote : CuteSakiRelic  // ← 去掉 sealed
     {
         if (side == Owner.Creature.Side && combatState.RoundNumber == 1)
         {
-            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 3, Owner.Creature, null);
+            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 3, Owner.Creature,
+                null);
             Flash();
         }
     }
@@ -67,7 +68,6 @@ public class KabutoNote : CuteSakiRelic  // ← 去掉 sealed
 
         // 1. 原始模板库中的回忆卡（基础版）
         foreach (var template in ModelDb.AllCards)
-        {
             // 直接检查模板是否带有关键字（模拟 HasModKeyword）
             if (template.HasModKeyword(CutesakiKeywords.Memory))
             {
@@ -78,31 +78,26 @@ public class KabutoNote : CuteSakiRelic  // ← 去掉 sealed
                     cardsToShow.Add(instance);
                 }
             }
-        }
 
         // 2. 战斗中所有牌堆里的实际卡牌（包含临时添加关键字的）
-        var piles = new[] 
-        { 
-            combatState.Hand, 
-            combatState.DrawPile, 
-            combatState.DiscardPile, 
-            combatState.ExhaustPile 
+        var piles = new[]
+        {
+            combatState.Hand,
+            combatState.DrawPile,
+            combatState.DiscardPile,
+            combatState.ExhaustPile
         };
 
         foreach (var pile in piles)
         {
             if (pile == null) continue;
             foreach (var card in pile.Cards)
-            {
                 if (card.HasModKeyword(CutesakiKeywords.Memory))
-                {
                     if (ShouldShow(card))
                     {
                         seenIds.Add(card.Id);
                         cardsToShow.Add(card);
                     }
-                }
-            }
         }
 
         if (cardsToShow.Count == 0) return;

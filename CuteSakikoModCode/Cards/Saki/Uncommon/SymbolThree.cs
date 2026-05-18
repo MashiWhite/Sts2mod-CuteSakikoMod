@@ -13,7 +13,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 public class SymbolThree() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(14m, ValueProp.Move)

@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://dbn6b0gtwo6y5"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_aacwx"]
-[ext_resource type="Texture2D" uid="uid://lvuymhw57bjd" path="res://CuteSakikoMod/images/char/staranon/Anon2.png" id="23_54fec"]
-[ext_resource type="Texture2D" uid="uid://dtgqpsfvf3xc6" path="res://CuteSakikoMod/images/char/staranon/Anon1.png" id="36_xawy1"]
+[ext_resource type="Texture2D" uid="uid://lvuymhw57bjd" path="res://CuteSakikoMod/images/char/staranon/StarAnon2.png" id="23_54fec"]
+[ext_resource type="Texture2D" uid="uid://dtgqpsfvf3xc6" path="res://CuteSakikoMod/images/char/staranon/StarAnon1.png" id="36_xawy1"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

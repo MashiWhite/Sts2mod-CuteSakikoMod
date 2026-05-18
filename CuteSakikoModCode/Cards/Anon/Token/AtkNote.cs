@@ -11,7 +11,7 @@ public class AtkNote() : ModTokenCard(0, CardType.Attack, CardRarity.Token, Targ
     {
         // 空效果，仅获得音符（由遗物自动处理）
     }
-    
+
     public async Task OnChosen()
     {
     }

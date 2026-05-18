@@ -4,11 +4,15 @@ using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
+using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Multiplayer;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib;
@@ -16,10 +20,6 @@ using STS2RitsuLib.Interop;
 using STS2RitsuLib.RunData;
 using STS2RitsuLib.Settings;
 using STS2RitsuLib.Utils.Persistence;
-using Godot;
-using MegaCrit.Sts2.Core.Context;
-using MegaCrit.Sts2.Core.Multiplayer;
-using MegaCrit.Sts2.Core.Multiplayer.Game;
 using Logger = MegaCrit.Sts2.Core.Logging.Logger;
 
 namespace CuteSakikoMod;
@@ -40,7 +40,7 @@ public class Entry
         using (RitsuLibFramework.BeginModDataRegistration(ModId))
         {
             var store = RitsuLibFramework.GetDataStore(ModId);
-            store.Register<CuteSakikoModConfigData>(
+            store.Register(
                 "config",
                 "config.json",
                 SaveScope.Global,
@@ -122,7 +122,7 @@ public class Entry
             if (netService != null)
             {
                 // 注册 ReloadCountSyncMessage 接收器（主机和客户端都需要）
-                netService.RegisterMessageHandler<ReloadCountSyncMessage>(
+                netService.RegisterMessageHandler(
                     new MessageHandlerDelegate<ReloadCountSyncMessage>((msg, senderId) =>
                     {
                         FlybackManager.OnReloadCountReceived(msg.ReloadCount);
@@ -131,12 +131,7 @@ public class Entry
 
                 // 如果是主机，监听客户端连接，主动同步 ReloadCount
                 if (netService is NetHostGameService hostService)
-                {
-                    hostService.ClientConnected += peerId =>
-                    {
-                        FlybackManager.SyncReloadCountIfHost();
-                    };
-                }
+                    hostService.ClientConnected += peerId => { FlybackManager.SyncReloadCountIfHost(); };
             }
         };
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
@@ -144,8 +139,8 @@ public class Entry
             if (!ModConfig.彩蛋卡) return;
 
             var netService = RunManager.Instance.NetService;
-            bool isHostOrSingle = netService?.Type == NetGameType.Singleplayer ||
-                                  netService?.Type == NetGameType.Host;
+            var isHostOrSingle = netService?.Type == NetGameType.Singleplayer ||
+                                 netService?.Type == NetGameType.Host;
             if (!isHostOrSingle) return;
 
             // 为所有玩家补发 Eggs 遗物（如果尚未拥有）

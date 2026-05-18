@@ -7,7 +7,7 @@ using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 
-public class CuteAnonCardPool : TypeListCardPoolModel,IModColorfulPhilosophersCardPool
+public class CuteAnonCardPool : TypeListCardPoolModel, IModColorfulPhilosophersCardPool
 {
     private static readonly Material? _poolFrameMaterial = MaterialUtils.CreateRgbShaderMaterial(0.635f, 0.772f, 0.82f);
     public override string Title => CuteAnon.CharacterId; //This is not a display name.

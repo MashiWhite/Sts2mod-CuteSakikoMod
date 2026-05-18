@@ -4,5 +4,4 @@ namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
 public partial class SakiCardTrail : NCardTrail
 {
-    
 }

@@ -16,9 +16,9 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
     {
         get
         {
-            yield return new DamageVar(5m, ValueProp.Move);                   // 基础伤害
-            yield return new PowerVar<PressurePower>(2m);                    // 基础压力
-            yield return new DynamicVar("ExtraDamage", 2m);   // 每次递增的伤害与压力量
+            yield return new DamageVar(5m, ValueProp.Move); // 基础伤害
+            yield return new PowerVar<PressurePower>(2m); // 基础压力
+            yield return new DynamicVar("ExtraDamage", 2m); // 每次递增的伤害与压力量
         }
     }
 

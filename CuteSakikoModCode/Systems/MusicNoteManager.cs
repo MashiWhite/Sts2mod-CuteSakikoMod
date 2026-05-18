@@ -18,15 +18,8 @@ public static class MusicNoteManager
             data = new PlayerData();
             _data[player] = data;
         }
-        return data;
-    }
 
-    // ========== 新增结果结构体 ==========
-    public struct NoteProcessResult
-    {
-        public List<string> NewChords;      // 新匹配到的和弦
-        public string? OverflowChord;       // 因储存满而被挤出的最旧和弦
-        public int TotalStoredCount;        // 添加后储存和弦的总数
+        return data;
     }
 
     // ========== 修改后的 AddNote ==========
@@ -64,7 +57,6 @@ public static class MusicNoteManager
 
         // 学习和弦匹配
         if (learnedChords != null)
-        {
             foreach (var kv in learnedChords)
             {
                 var chordId = kv.Value;
@@ -81,11 +73,9 @@ public static class MusicNoteManager
                     }
                 }
             }
-        }
 
         // 奖励和弦匹配
         if (bonusChordIds != null)
-        {
             foreach (var chordId in bonusChordIds)
             {
                 if (string.IsNullOrEmpty(chordId)) continue;
@@ -101,7 +91,6 @@ public static class MusicNoteManager
                     }
                 }
             }
-        }
 
         // 溢出处理
         while (data.StoredChords.Count > MaxStoredChords)
@@ -134,6 +123,7 @@ public static class MusicNoteManager
             data.NotesGainedThisTurn = 0;
             data.LastRoundNumber = currentRound;
         }
+
         return data.NotesGainedThisTurn;
     }
 
@@ -204,6 +194,7 @@ public static class MusicNoteManager
             list.RemoveAt(index);
             return true;
         }
+
         return false;
     }
 
@@ -244,6 +235,14 @@ public static class MusicNoteManager
         var data = GetData(player);
         if (data.Notes.Count == 0) return null;
         return data.Notes.Last();
+    }
+
+    // ========== 新增结果结构体 ==========
+    public struct NoteProcessResult
+    {
+        public List<string> NewChords; // 新匹配到的和弦
+        public string? OverflowChord; // 因储存满而被挤出的最旧和弦
+        public int TotalStoredCount; // 添加后储存和弦的总数
     }
 
     private class PlayerData

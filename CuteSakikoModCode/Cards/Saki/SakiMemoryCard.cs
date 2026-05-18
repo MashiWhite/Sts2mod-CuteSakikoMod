@@ -1,7 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -14,5 +14,4 @@ public abstract class SakiMemoryCard(int cost, CardType type, CardRarity rarity,
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Memory];
 
     public override CardAssetProfile AssetProfile => this.CardAssetProfile();
-    
 }

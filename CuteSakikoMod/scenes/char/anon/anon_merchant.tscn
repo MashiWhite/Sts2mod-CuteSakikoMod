@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://bjpmya3igv7yh"]
 
 [ext_resource type="Script" uid="uid://rv4wc0qdy764" path="res://CuteSakikoModCode/Nodes/SakiMerchantCharacter.cs" id="1_bdbfh"]
-[ext_resource type="Texture2D" uid="uid://86umhexlclko" path="res://CuteSakikoMod/images/char/anon/loop/Anon1.png" id="2_c761t"]
+[ext_resource type="Texture2D" uid="uid://diylouv5hv6a2" path="res://CuteSakikoMod/images/char/anon/Anonnon.png" id="2_bdbfh"]
 
 [node name="AnonMerchant" type="Node2D"]
 script = ExtResource("1_bdbfh")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(1, -160)
-texture = ExtResource("2_c761t")
+texture = ExtResource("2_bdbfh")

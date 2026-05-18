@@ -42,9 +42,7 @@ public class GoodCry() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommo
         // 若有崩溃，额外减少崩溃层数
         var breakdown = creature.GetPower<BreakDownPower>();
         if (breakdown != null && breakdown.Amount > 0)
-        {
             await PowerCmd.ModifyAmount(choiceContext, breakdown, -1, creature, this);
-        }
     }
 
     protected override void OnUpgrade()

@@ -20,7 +20,7 @@ public static class ChordManager
     }
 
     public static Dictionary<string, ChordDefinition> AllChords { get; } = new();
-    public static List<ChordDefinition> AllChordsList { get; } = new();   // 新增
+    public static List<ChordDefinition> AllChordsList { get; } = new(); // 新增
 
     private static void AddChord(string id, ChordCategory cat, CardType[] seq,
         string titleKey, string descKey, string iconName,
@@ -318,10 +318,8 @@ public static class ChordManager
             {
                 var combat = owner.CombatState;
                 if (combat != null)
-                {
                     foreach (var player in combat.Players)
                         await PlayerCmd.GainEnergy(1 * mult, player);
-                }
             });
 
         // #D7【技 攻】所有友方抽1张牌
@@ -333,10 +331,8 @@ public static class ChordManager
             {
                 var combat = owner.CombatState;
                 if (combat != null)
-                {
                     foreach (var player in combat.Players)
-                    await CardPileCmd.Draw(ctx, 1 * mult, player);
-                }
+                        await CardPileCmd.Draw(ctx, 1 * mult, player);
             });
 
         //爱音C和弦
@@ -349,7 +345,7 @@ public static class ChordManager
                 var combat = owner.CombatState;
                 if (combat == null) return;
 
-                int upgradeCount = 1 * mult;
+                var upgradeCount = 1 * mult;
                 var allUpgradable = combat.Players
                     .SelectMany(p => p.PlayerCombatState?.Hand?.Cards ?? Enumerable.Empty<CardModel>())
                     .Where(c => c.IsUpgradable)
@@ -421,18 +417,17 @@ public static class ChordManager
                 if (combat == null) return;
                 // 对全体敌人造成 12 * mult 点伤害
                 var enemies = combat.Enemies;
-                if (enemies != null && enemies.Any()) 
+                if (enemies != null && enemies.Any())
                     await CreatureCmd.Damage(ctx, enemies, 13 * mult, ValueProp.Move, owner, null);
                 // 对全体友方施加 1 * mult 层虚弱
                 var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
                     await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
-                
             });
 
         // 爱音G和弦【技 技 攻 攻】所有友方抽1牌，获1能量
         AddTemporaryChord("AnonGChord", ChordCategory.Anon,
-            new[] { CardType.Skill, CardType.Skill, CardType.Attack,CardType.Attack },
+            new[] { CardType.Skill, CardType.Skill, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-ANONGCHORD.title", "CUTESAKIKOMOD-ANONGCHORD.description", "anon_g_chord",
             new[] { 1, 1 },
             async (ctx, owner, mult) =>
@@ -508,8 +503,6 @@ public static class ChordManager
     }
 
 
-   
-
     //获得临时和弦
     public static List<string> GetTemporaryChordIds(ChordCategory? category = null)
     {
@@ -566,8 +559,11 @@ public static class ChordManager
                     return false;
             }
             else if (expected != actual)
+            {
                 return false;
+            }
         }
+
         return true;
     }
 }

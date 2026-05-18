@@ -10,7 +10,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 public class SecretPractice() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new BlockVar(10m, ValueProp.Move); }

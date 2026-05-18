@@ -1,4 +1,3 @@
-
 using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
@@ -52,7 +51,7 @@ public class CuteAnon : ModCharacterTemplate<CuteAnonCardPool, CuteAnonRelicPool
 			),
 			new CharacterVfxAssetSet(
 				// 卡牌拖尾场景。
-				TrailPath: "res://CuteSakikoMod/scenes/ui/card_trail_anon.tscn"
+                "res://CuteSakikoMod/scenes/ui/card_trail_anon.tscn"
 			),
 			Audio: new CharacterAudioAssetSet(
 				// 攻击音效
@@ -76,7 +75,7 @@ public class CuteAnon : ModCharacterTemplate<CuteAnonCardPool, CuteAnonRelicPool
 				// 多人模式剪刀石头布-剪刀。
                 "res://CuteSakikoMod/images/others/anon/multiplayer_hand_scissors.png"
 			)));
-	
+
 
 	//一堆有关颜色
 	public override Color DialogueColor => new("#ff8899");

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -23,11 +20,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 
 public sealed class Eggs : CuteSakiRelic
 {
-    public static PlayerRunSavedData<PlayerEggsData>? PlayerEggsSlot { get; set; }
-
     // 整局游戏内查重（持久化，用于BOSS奖励）
-    [SavedProperty]
-    private readonly List<ModelId> _gainedEggCards = new();
+    [SavedProperty] private readonly List<ModelId> _gainedEggCards = new();
+
+    public static PlayerRunSavedData<PlayerEggsData>? PlayerEggsSlot { get; set; }
 
     public override RelicRarity Rarity => RelicRarity.Event;
 
@@ -81,16 +77,17 @@ public sealed class Eggs : CuteSakiRelic
         if (available.Count == 0) return;
 
         var tempCards = available.Select(can => player.RunState.CreateCard(can, player)).ToList();
-        var prompt = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_EGGS.selectPrompt");  // 修复键名
+        var prompt = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_EGGS.selectPrompt"); // 修复键名
         var prefs = new CardSelectorPrefs(prompt, 1);
         var choiceContext = new BlockingPlayerChoiceContext();
-        var selectedCard = (await CardSelectCmd.FromSimpleGrid(choiceContext, tempCards, player, prefs)).FirstOrDefault();
+        var selectedCard =
+            (await CardSelectCmd.FromSimpleGrid(choiceContext, tempCards, player, prefs)).FirstOrDefault();
         if (selectedCard == null) return;
 
         var canonical = ModelDb.GetById<CardModel>(selectedCard.Id);
         var permanentCard = player.RunState.CreateCard(canonical, player);
         await CardPileCmd.Add(permanentCard, PileType.Deck);
-        EggCardGainedEvent.Trigger(permanentCard);   // 加入 _gainedEggCards 用于后续BOSS奖励
+        EggCardGainedEvent.Trigger(permanentCard); // 加入 _gainedEggCards 用于后续BOSS奖励
         CardCmd.Preview(permanentCard);
 
         if (player.Creature.CombatState != null)

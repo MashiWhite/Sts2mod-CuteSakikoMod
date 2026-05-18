@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -15,7 +14,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 [RegisterSingleton]
 public class LittleMomentsManager : HookedSingletonModel
 {
-    public LittleMomentsManager() : base(true, false) { }
+    public LittleMomentsManager() : base(true, false)
+    {
+    }
 
     public override bool ShouldReceiveCombatHooks => true;
 
@@ -62,7 +63,7 @@ public class LittleMomentsManager : HookedSingletonModel
         var littleMoments = pile.Cards.OfType<LittleMoments>().ToList();
         if (littleMoments.Count < 5) return;
 
-        bool anyUpgraded = littleMoments.Any(c => c.IsUpgraded);
+        var anyUpgraded = littleMoments.Any(c => c.IsUpgraded);
 
         await CardPileCmd.RemoveFromCombat(littleMoments);
 

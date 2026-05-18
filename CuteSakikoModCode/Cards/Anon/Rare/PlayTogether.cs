@@ -42,7 +42,6 @@ public class PlayTogether() : CuteAnonCard(-1, CardType.Skill, CardRarity.Rare, 
 
     protected override void OnUpgrade()
     {
-        
         // 效果本身由 IsUpgraded 控制次数
     }
 }

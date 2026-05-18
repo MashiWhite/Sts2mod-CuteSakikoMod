@@ -10,16 +10,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
 public class GoldBrick() : ModTokenCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
 {
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Ethereal];
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            yield return new PowerVar<GoldPower>(0m);      // 显示当前黄金层数
-            yield return new DynamicVar("Multiplier", 1);  // 伤害倍数，升级后改为 2
-            yield return new GoldBrickDamageVar();        // 实时总伤害（战斗内有效）
+            yield return new PowerVar<GoldPower>(0m); // 显示当前黄金层数
+            yield return new DynamicVar("Multiplier", 1); // 伤害倍数，升级后改为 2
+            yield return new GoldBrickDamageVar(); // 实时总伤害（战斗内有效）
         }
     }
 
@@ -48,7 +47,7 @@ public class GoldBrick() : ModTokenCard(1, CardType.Attack, CardRarity.Ancient, 
         await PowerCmd.ModifyAmount(choiceContext, gold, -30, Owner.Creature, this);
 
         // 伤害 = 消耗前的层数 × 倍数
-        int mult = (int)DynamicVars["Multiplier"].BaseValue;
+        var mult = (int)DynamicVars["Multiplier"].BaseValue;
         var damage = goldAmountBefore * mult;
         await DamageCmd.Attack(damage)
             .FromCard(this)
@@ -67,7 +66,7 @@ public class GoldBrick() : ModTokenCard(1, CardType.Attack, CardRarity.Ancient, 
     }
 
     /// <summary>
-    /// 动态变量：战斗内显示实际伤害 = 黄金层数 × 倍数，战斗外显示公式占位符（黄金层数*倍数）
+    ///     动态变量：战斗内显示实际伤害 = 黄金层数 × 倍数，战斗外显示公式占位符（黄金层数*倍数）
     /// </summary>
     private class GoldBrickDamageVar : DynamicVar
     {

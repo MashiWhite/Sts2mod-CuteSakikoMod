@@ -97,7 +97,7 @@
   "CUTE_SAKIKO_MOD_CARD_TGW_GROUP.description": "获得{InCombat:[blue]{TgwGold:diff()}[/blue]|[blue]{BaseGold:diff()}*场上存活生物数[/blue]}金币",
   "CUTE_SAKIKO_MOD_CARD_ABSOLUTE_AUTHORITY.title": "绝对权威",
   "CUTE_SAKIKO_MOD_CARD_ABSOLUTE_AUTHORITY.description": "造成{Damage:diff()}点伤害，\n给予{PressurePower:diff()}层[gold]压力[/gold]。",
-  "CUTE_SAKIKO_MOD_CARD_CLUMSY_PLAY.title": "笨拙演奏", 
+  "CUTE_SAKIKO_MOD_CARD_CLUMSY_PLAY.title": "笨拙演奏",
   "CUTE_SAKIKO_MOD_CARD_CLUMSY_PLAY.description": "演奏[gold]最新[/gold]储存的[pink]和弦[/pink]。\n造成{Damage:diff()}点伤害。\n获得{Block:diff()}点[gold]格挡[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_MISHAP.title": "意外事件",
   "CUTE_SAKIKO_MOD_CARD_MISHAP.description": "[gold]丢弃所有牌[/gold]，\n获得{Block:diff()}点[gold]格挡[/gold]。",

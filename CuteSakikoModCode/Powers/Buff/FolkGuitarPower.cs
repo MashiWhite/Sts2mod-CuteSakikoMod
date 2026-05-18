@@ -7,38 +7,41 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff
+namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+
+public class FolkGuitarPower : CuteSakikoModPower, IChordSequenceModifierProvider
 {
-    public class FolkGuitarPower : CuteSakikoModPower, IChordSequenceModifierProvider
+    private bool _upgraded;
+
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Single;
+
+    // ===== 和弦修改器：所有已学习和弦的第一个音符变为 *（特殊音符） =====
+    public IEnumerable<ChordSequenceModifier> GetModifiers(Creature owner)
     {
-        private bool _upgraded;
+        yield return new ReplaceNoteModifier(0, CardType.Status);
+    }
 
-        public override PowerType Type => PowerType.Buff;
-        public override PowerStackType StackType => PowerStackType.Single;
+    public IEnumerable<ChordCategory>? AffectedCategories => null; // 影响所有类别
 
-        public void SetUpgraded(bool upgraded) => _upgraded = upgraded;
+    public void SetUpgraded(bool upgraded)
+    {
+        _upgraded = upgraded;
+    }
 
-        // ===== 每回合开始时给一张打板 =====
-        public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    // ===== 每回合开始时给一张打板 =====
+    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    {
+        if (player.Creature != Owner)
+            return;
+
+        var card = CombatState.CreateCard<PercussiveFingerstyle>(player);
+        if (_upgraded)
         {
-            if (player.Creature != Owner)
-                return;
-
-            var card = CombatState.CreateCard<PercussiveFingerstyle>(player);
-            if (_upgraded)
-            {
-                card.UpgradeInternal();
-                card.FinalizeUpgradeInternal();
-            }
-            await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, player);
+            card.UpgradeInternal();
+            card.FinalizeUpgradeInternal();
         }
 
-        // ===== 和弦修改器：所有已学习和弦的第一个音符变为 *（特殊音符） =====
-        public IEnumerable<ChordSequenceModifier> GetModifiers(Creature owner)
-        {
-            yield return new ReplaceNoteModifier(0, CardType.Status);
-        }
-
-        public IEnumerable<ChordCategory>? AffectedCategories => null; // 影响所有类别
+        await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, player);
     }
 }

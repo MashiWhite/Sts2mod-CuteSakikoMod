@@ -16,8 +16,8 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
             var baseDamage = 10;
             var extraPerNote = 2;
 
-            yield return new CalculationBaseVar(baseDamage);              // 基础伤害
-            yield return new ExtraDamageVar(extraPerNote);                // 每音符提升值
+            yield return new CalculationBaseVar(baseDamage); // 基础伤害
+            yield return new ExtraDamageVar(extraPerNote); // 每音符提升值
             yield return new CalculatedDamageVar(ValueProp.Move)
                 .WithMultiplier((card, target) =>
                 {

@@ -1,15 +1,15 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Modding;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 
@@ -41,10 +41,8 @@ public sealed class OnTurnEndInHandManager : SingletonModel
             // 复制一份手牌列表以防修改
             var handCards = handPile.Cards.ToList();
             foreach (var card in handCards)
-            {
                 // 跳过卡牌自己的 OnTurnEndInHand 标记，由我们统一处理
                 // if (card.HasTurnEndInHandEffect) continue; // 如果某些牌仍想自助，可保留
-
                 switch (card)
                 {
                     case NotNeeded notNeeded:
@@ -62,13 +60,13 @@ public sealed class OnTurnEndInHandManager : SingletonModel
                     case Noise noise:
                     {
                         var amount = noise.DynamicVars["PressurePower"].IntValue;
-                        await PowerCmd.Apply<PressurePower>(choiceContext, player.Creature, amount, player.Creature, noise);
+                        await PowerCmd.Apply<PressurePower>(choiceContext, player.Creature, amount, player.Creature,
+                            noise);
                         cardsToRemove.Add(noise);
                         break;
                     }
                     // 未来可以在此扩展其他卡牌
                 }
-            }
 
             // 批量移除
             if (cardsToRemove.Count > 0)

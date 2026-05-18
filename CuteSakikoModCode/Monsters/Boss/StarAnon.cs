@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using Godot;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -16,7 +14,6 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Combat;
-using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
@@ -26,20 +23,19 @@ namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 [RegisterMonster]
 public class StarAnon : ModMonsterTemplate
 {
+    private MoveState _deadState;
+    private bool _reviveUsed;
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 420, 400);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 470, 450);
 
-    private MoveState _deadState;
-    private bool _reviveUsed;
+    public override MonsterAssetProfile AssetProfile => new(
+        "res://CuteSakikoMod/scenes/monster/star_anon_boss.tscn"
+    );
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
         return RitsuGodotNodeFactories.CreateFromScenePath<NCreatureVisuals>(AssetProfile.VisualsScenePath!);
     }
-
-    public override MonsterAssetProfile AssetProfile => new(
-        VisualsScenePath: "res://CuteSakikoMod/scenes/monster/star_anon_boss.tscn"
-    );
 
     public override async Task AfterAddedToRoom()
     {
@@ -59,8 +55,7 @@ public class StarAnon : ModMonsterTemplate
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
     {
         // 复活动作：仅执行一次，与实验体一致
-        _deadState = new MoveState("RESPAWN_MOVE", RespawnMove,
-            new AbstractIntent[] { new HealIntent(), new BuffIntent() })
+        _deadState = new MoveState("RESPAWN_MOVE", RespawnMove, new HealIntent(), new BuffIntent())
         {
             MustPerformOnceBeforeTransitioning = true
         };
@@ -103,10 +98,8 @@ public class StarAnon : ModMonsterTemplate
         // 4. 重新添加因死亡丢失的 TimeWatchPower
         var timeWatch = Creature.GetPower<TimeWatchPower>();
         if (timeWatch == null)
-        {
             await PowerCmd.Apply<TimeWatchPower>(
                 new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
-        }
 
         // 5.在 RespawnMove 内，替换原来的 TriggerAnim 调用
         var creatureNode = Creature.GetCreatureNode();
@@ -129,10 +122,11 @@ public class StarAnon : ModMonsterTemplate
                 if (sprite != null)
                 {
                     sprite.Texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/char/staranon/Anon1.png");
-                    sprite.Modulate = new Color(1, 1, 1, 1);
+                    sprite.Modulate = new Color(1, 1, 1);
                     sprite.Scale = Vector2.One;
                     sprite.Position = new Vector2(0.7077637f, -2.664978f);
                 }
+
                 // 然后播放 idle
                 await CreatureCmd.TriggerAnim(Creature, "idle_loop", 0.0f);
             }
@@ -144,19 +138,19 @@ public class StarAnon : ModMonsterTemplate
 
         // 7. 结束当前玩家回合
         var combatState = Creature.CombatState;
-        if (combatState?.CurrentSide == MegaCrit.Sts2.Core.Combat.CombatSide.Player)
+        if (combatState?.CurrentSide == CombatSide.Player)
         {
-            var currentPlayer = MegaCrit.Sts2.Core.Context.LocalContext.GetMe(combatState);
+            var currentPlayer = LocalContext.GetMe(combatState);
             if (currentPlayer != null)
                 PlayerCmd.EndTurn(currentPlayer, false);
         }
     }
-    
+
 
     // 普通移动，保持不变
     private async Task DoubleAttackMove(IReadOnlyList<Creature> targets)
     {
-        for (int i = 0; i < 2; i++)
+        for (var i = 0; i < 2; i++)
             await DamageCmd.Attack(10).FromMonster(this).Execute(null);
         var player = targets.FirstOrDefault()?.Player;
         if (player != null)
@@ -170,17 +164,17 @@ public class StarAnon : ModMonsterTemplate
 
     private async Task BuffStrengthMove(IReadOnlyList<Creature> targets)
     {
-        int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = GetReloadCount();
-        int amount = 1 + (int)((playCount / 100f) * reloads);
+        var playCount = FlybackManager.Instance.TotalPlayCount;
+        var reloads = GetReloadCount();
+        var amount = 1 + (int)(playCount / 100f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
 
     private async Task BuffStrengthMove2(IReadOnlyList<Creature> targets)
     {
-        int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = GetReloadCount();
-        int amount = 2 + (int)((playCount / 100f) * reloads);
+        var playCount = FlybackManager.Instance.TotalPlayCount;
+        var reloads = GetReloadCount();
+        var amount = 2 + (int)(playCount / 100f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
 

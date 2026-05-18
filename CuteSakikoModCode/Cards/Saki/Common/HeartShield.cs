@@ -11,7 +11,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class HeartShield() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    
     // 动态变量：压力层数（基础2层）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

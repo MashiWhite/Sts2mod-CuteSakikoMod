@@ -16,12 +16,9 @@ public class FinalLive() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get
-        {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Playpiano);
-        }
+        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Playpiano); }
     }
-    
+
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

@@ -14,9 +14,8 @@ public class SkillNote() : ModTokenCard(0, CardType.Skill, CardRarity.Token, Tar
 
     public async Task OnChosen()
     {
-    
     }
-    
+
     protected override void OnUpgrade()
     {
     }

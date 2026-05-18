@@ -1,6 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Uncommon;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,14 +11,13 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using STS2RitsuLib.Combat.Ui.ExtraCornerAmountLabels;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class HbkBankPower : CuteSakikoModPower
 {
     private HbkBank _parentCard;
-    
+
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
 
@@ -58,17 +56,13 @@ public sealed class HbkBankPower : CuteSakikoModPower
 
         // 如果 HbkBank 已升级，Token 也跟着升级
         if (_parentCard != null && _parentCard.IsUpgraded)
-        {
             foreach (var token in tokens)
-            {
                 if (token.IsUpgradable)
                     CardCmd.Upgrade(token);
-            }
-        }
 
         // 弹出选择界面，必须选一张
-        var prompt = new LocString("powers", "HBK_BANK_POWER.chooseToken");  // 本地化提示
-        var prefs = new CardSelectorPrefs(prompt, 1, 1);                     // 最少选1，最多选1
+        var prompt = new LocString("powers", "HBK_BANK_POWER.chooseToken"); // 本地化提示
+        var prefs = new CardSelectorPrefs(prompt, 1, 1); // 最少选1，最多选1
 
         var selectedCards = await CardSelectCmd.FromSimpleGrid(choiceContext, tokens, player, prefs);
         var chosen = selectedCards.FirstOrDefault();

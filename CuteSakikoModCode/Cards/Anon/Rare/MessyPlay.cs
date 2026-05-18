@@ -21,7 +21,7 @@ public class MessyPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, Targ
         TriggerBanter();
 
         var existing = Owner.Creature.GetPower<MessyPlayPower>();
-        int amount = DynamicVars["MessyPlayPower"].IntValue;
+        var amount = DynamicVars["MessyPlayPower"].IntValue;
 
         if (existing != null)
         {

@@ -12,18 +12,15 @@ public class LittleMoments() : CuteAnonCard(0, CardType.Skill, CardRarity.Rare, 
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        get
-        {
-            yield return CardKeyword.Exhaust;
-        }
+        get { yield return CardKeyword.Exhaust; }
     }
-    
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
             // 根据是否升级，选择不同的描述 key
-            string descKey = IsUpgraded
+            var descKey = IsUpgraded
                 ? "CUTE_SAKIKO_MOD_CARD_LITTLE_MOMENTS.mergeHint.description_upgraded"
                 : "CUTE_SAKIKO_MOD_CARD_LITTLE_MOMENTS.mergeHint.description";
 
@@ -54,8 +51,8 @@ public class LittleMoments() : CuteAnonCard(0, CardType.Skill, CardRarity.Rare, 
 
         if (CombatState != null && Owner != null)
         {
-            int copyCount = DynamicVars["Copies"].IntValue;
-            for (int i = 0; i < copyCount; i++)
+            var copyCount = DynamicVars["Copies"].IntValue;
+            for (var i = 0; i < copyCount; i++)
             {
                 var copy = CombatState.CreateCard<LittleMoments>(Owner);
                 if (IsUpgraded)
@@ -63,6 +60,7 @@ public class LittleMoments() : CuteAnonCard(0, CardType.Skill, CardRarity.Rare, 
                     copy.UpgradeInternal();
                     copy.FinalizeUpgradeInternal();
                 }
+
                 await CardPileCmd.Add(copy, PileType.Discard, CardPilePosition.Random);
             }
         }

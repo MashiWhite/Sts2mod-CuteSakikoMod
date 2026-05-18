@@ -153,5 +153,4 @@
   "HBK_BANK_POWER.chooseToken": "选择一种黄金交易",
   "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.description": "每回合开始时，选择一种黄金交易。",
   "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.smartDescription": "每回合开始时，选择一种黄金交易。\n当前金价：[blue]{GoldPrice}[/blue]。"
-
 }

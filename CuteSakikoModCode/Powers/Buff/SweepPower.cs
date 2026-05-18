@@ -2,7 +2,6 @@
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
-
 public sealed class SweepPower : CuteSakikoModPower
 {
     public override PowerType Type => PowerType.Buff;

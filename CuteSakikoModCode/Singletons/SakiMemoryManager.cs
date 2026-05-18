@@ -8,8 +8,6 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 
@@ -31,29 +29,27 @@ public sealed class SakiMemoryManager : SingletonModel
     public static SakiMemoryManager Instance => ModelDb.Singleton<SakiMemoryManager>();
 
     /// <summary>
-    /// 获取指定玩家已消耗的记忆卡 ID 集合（只读）
+    ///     获取指定玩家已消耗的记忆卡 ID 集合（只读）
     /// </summary>
     public IReadOnlyCollection<ModelId> GetExhaustedMemoryIds(Player player)
     {
         if (player == null)
-            return System.Array.Empty<ModelId>();
+            return Array.Empty<ModelId>();
 
         if (!_exhaustedMemoryIdsByPlayer.TryGetValue(player, out var set))
-            return System.Array.Empty<ModelId>();
+            return Array.Empty<ModelId>();
 
         return set;
     }
 
     public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card.Keywords.Contains(MemoryKeyword))
-        {
-            cardPlay.Card.EnergyCost.AddThisCombat(1);
-        }
+        if (cardPlay.Card.Keywords.Contains(MemoryKeyword)) cardPlay.Card.EnergyCost.AddThisCombat(1);
         return Task.CompletedTask;
     }
 
-    public override async Task AfterCardExhausted(PlayerChoiceContext choiceContext, CardModel card, bool causedByEthereal)
+    public override async Task AfterCardExhausted(PlayerChoiceContext choiceContext, CardModel card,
+        bool causedByEthereal)
     {
         if (!card.Keywords.Contains(MemoryKeyword))
             return;
@@ -68,15 +64,16 @@ public sealed class SakiMemoryManager : SingletonModel
             set = new HashSet<ModelId>();
             _exhaustedMemoryIdsByPlayer[player] = set;
         }
+
         set.Add(card.Id);
 
         // 重放两次（原逻辑）
-        for (int i = 0; i < 2; i++)
+        for (var i = 0; i < 2; i++)
         {
             var clone = card.CreateClone();
-            clone.RemoveKeyword(MemoryKeyword);      // 防止递归触发
-            clone.ExhaustOnNextPlay = false;         // 克隆牌不再消耗
-            await CardCmd.AutoPlay(choiceContext, clone, null, AutoPlayType.Default);
+            clone.RemoveKeyword(MemoryKeyword); // 防止递归触发
+            clone.ExhaustOnNextPlay = false; // 克隆牌不再消耗
+            await CardCmd.AutoPlay(choiceContext, clone, null);
 
             if (clone.Pile?.IsCombatPile == true)
                 await CardPileCmd.RemoveFromCombat(clone);

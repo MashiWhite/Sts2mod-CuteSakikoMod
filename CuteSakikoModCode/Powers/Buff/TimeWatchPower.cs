@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
-using MegaCrit.Sts2.Core.Commands;
+﻿using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -15,18 +12,17 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class TimeWatchPower : CuteSakikoModPower
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single;
-
     private int _damageTakenThisTurn;
     private bool _subscribed;
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            yield return new DynamicVar("HealPercent", 0);   // 仅额外百分比
-            yield return new DynamicVar("HealAmount", 0);    // 预期恢复量
+            yield return new DynamicVar("HealPercent", 0); // 仅额外百分比
+            yield return new DynamicVar("HealAmount", 0); // 预期恢复量
             yield return new DynamicVar("FlybackPlayCount", 0);
             yield return new DynamicVar("ReloadCount", 0);
         }
@@ -43,6 +39,7 @@ public sealed class TimeWatchPower : CuteSakikoModPower
             manager.OnFlybackDataChanged += OnFlybackDataChanged;
             _subscribed = true;
         }
+
         UpdateStaticInfo();
         UpdateHealPercent();
         UpdateExpectedHeal();
@@ -56,16 +53,19 @@ public sealed class TimeWatchPower : CuteSakikoModPower
             if (manager != null) manager.OnFlybackDataChanged -= OnFlybackDataChanged;
             _subscribed = false;
         }
+
         await base.AfterRemoved(oldOwner);
     }
 
-    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
+    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,
+        DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
         if (target == Owner)
         {
             _damageTakenThisTurn += result.UnblockedDamage;
             UpdateExpectedHeal();
         }
+
         await Task.CompletedTask;
     }
 
@@ -73,7 +73,7 @@ public sealed class TimeWatchPower : CuteSakikoModPower
     {
         if (side != CombatSide.Enemy || combatState == null) return;
 
-        int healAmount = GetExpectedHealAmount();
+        var healAmount = GetExpectedHealAmount();
         if (healAmount > 0)
             await CreatureCmd.Heal(Owner, healAmount);
 
@@ -99,9 +99,9 @@ public sealed class TimeWatchPower : CuteSakikoModPower
     // 仅额外百分比： (飞返打出次数% × 读档次数)
     private float GetExtraHealPercent()
     {
-        int playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
-        int reloads = FlybackManager.GetReloadCount();
-        return ((float)playCount / 100f) * reloads;
+        var playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
+        var reloads = FlybackManager.GetReloadCount();
+        return playCount / 100f * reloads;
     }
 
     // 总治疗百分比 = 基础10% + 额外百分比
@@ -113,20 +113,20 @@ public sealed class TimeWatchPower : CuteSakikoModPower
     // 实际预期恢复量（使用总百分比）
     private int GetExpectedHealAmount()
     {
-        float totalPercent = GetTotalHealPercent();
+        var totalPercent = GetTotalHealPercent();
         return (int)Math.Ceiling(_damageTakenThisTurn * totalPercent / 100f);
     }
 
     // 更新 HealPercent 动态变量（只显示额外部分）
     private void UpdateHealPercent()
     {
-        float extra = GetExtraHealPercent();
+        var extra = GetExtraHealPercent();
         DynamicVars["HealPercent"].BaseValue = (decimal)Math.Round(extra, 1);
     }
 
     private void UpdateExpectedHeal()
     {
-        int expected = GetExpectedHealAmount();
+        var expected = GetExpectedHealAmount();
         DynamicVars["HealAmount"].BaseValue = expected;
     }
 }

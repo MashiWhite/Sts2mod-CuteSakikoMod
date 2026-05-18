@@ -42,6 +42,7 @@ public class SymbolFour() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Unco
                 if (pressure != null && pressure.Amount > 0)
                     return true;
             }
+
             return false;
         }
     }

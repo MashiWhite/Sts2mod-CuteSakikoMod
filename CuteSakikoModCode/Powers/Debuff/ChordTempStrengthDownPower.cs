@@ -28,9 +28,6 @@ public class ChordTempStrengthDownPower : ModTemporaryPowerTemplate
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get
-        {
-            yield return HoverTipFactory.FromPower(InternallyAppliedPower);
-        }
+        get { yield return HoverTipFactory.FromPower(InternallyAppliedPower); }
     }
 }

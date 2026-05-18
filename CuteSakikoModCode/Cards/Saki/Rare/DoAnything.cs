@@ -13,7 +13,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 public sealed class DoAnything() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     private decimal _nextPressure = 8m;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

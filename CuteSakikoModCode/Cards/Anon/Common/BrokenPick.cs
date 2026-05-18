@@ -11,10 +11,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 public class BrokenPick() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(5m,ValueProp.Move); }
+        get { yield return new BlockVar(5m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -12,7 +12,7 @@ public class DefensiveSlash() : ModStatusCard(0, CardType.Status, CardRarity.Sta
     private bool _effectTriggered;
 
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(14m, ValueProp.Move)

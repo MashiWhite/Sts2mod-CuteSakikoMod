@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
+﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -12,11 +11,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class RetrogradePower : CuteSakikoModPower
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single;
-
     private int _hpBoostApplied;
     private bool _subscribed;
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -38,6 +36,7 @@ public sealed class RetrogradePower : CuteSakikoModPower
             manager.OnFlybackDataChanged += OnFlybackDataChanged;
             _subscribed = true;
         }
+
         UpdateDynamicInfo();
         await ApplyMaxHpBoost();
     }
@@ -50,6 +49,7 @@ public sealed class RetrogradePower : CuteSakikoModPower
             if (manager != null) manager.OnFlybackDataChanged -= OnFlybackDataChanged;
             _subscribed = false;
         }
+
         if (_hpBoostApplied > 0 && oldOwner != null)
             oldOwner.SetMaxHpInternal(oldOwner.MaxHp - _hpBoostApplied);
         await base.AfterRemoved(oldOwner);
@@ -69,13 +69,13 @@ public sealed class RetrogradePower : CuteSakikoModPower
 
     private async Task ApplyMaxHpBoost()
     {
-        int newBoost = CalculateHpBoost();
-        int oldBoost = _hpBoostApplied;
+        var newBoost = CalculateHpBoost();
+        var oldBoost = _hpBoostApplied;
         if (newBoost == oldBoost) return;
         if (oldBoost > 0) Owner.SetMaxHpInternal(Owner.MaxHp - oldBoost);
         if (newBoost > 0) Owner.SetMaxHpInternal(Owner.MaxHp + newBoost);
 
-        int increase = newBoost - oldBoost;
+        var increase = newBoost - oldBoost;
         if (increase > 0 && Owner != null) await CreatureCmd.Heal(Owner, increase);
         _hpBoostApplied = newBoost;
         DynamicVars["ExtraMaxHp"].BaseValue = newBoost;
@@ -83,17 +83,32 @@ public sealed class RetrogradePower : CuteSakikoModPower
 
     private int CalculateHpBoost()
     {
-        int playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
-        int reloads = FlybackManager.GetReloadCount();
-        return (int)((playCount / 100f) * reloads);
+        var playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
+        var reloads = FlybackManager.GetReloadCount();
+        return (int)(playCount / 100f * reloads);
     }
 
-    public async Task RefreshHpBoost() => await ApplyMaxHpBoost();
+    public async Task RefreshHpBoost()
+    {
+        await ApplyMaxHpBoost();
+    }
 
     // ========== 复活逻辑 ==========
-    public override bool ShouldPowerBeRemovedAfterOwnerDeath() => false;
-    public override bool ShouldCreatureBeRemovedFromCombatAfterDeath(Creature creature) => creature != Owner;
-    public override bool ShouldStopCombatFromEnding() => true; // 永远阻止战斗结束
+    public override bool ShouldPowerBeRemovedAfterOwnerDeath()
+    {
+        return false;
+    }
+
+    public override bool ShouldCreatureBeRemovedFromCombatAfterDeath(Creature creature)
+    {
+        return creature != Owner;
+    }
+
+    public override bool ShouldStopCombatFromEnding()
+    {
+        return true;
+        // 永远阻止战斗结束
+    }
 
     public override async Task AfterDeath(
         PlayerChoiceContext choiceContext,

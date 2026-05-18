@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class Masquerade () : CuteSakikoModCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class Masquerade() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 

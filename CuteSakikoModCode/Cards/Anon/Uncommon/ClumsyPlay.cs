@@ -10,7 +10,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 public class ClumsyPlay() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get

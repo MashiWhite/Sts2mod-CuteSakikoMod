@@ -7,7 +7,7 @@ using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 
-public class CuteSakiCardPool : TypeListCardPoolModel,IModColorfulPhilosophersCardPool
+public class CuteSakiCardPool : TypeListCardPoolModel, IModColorfulPhilosophersCardPool
 {
     private static readonly Material?
         _poolFrameMaterial = MaterialUtils.CreateRgbShaderMaterial(0.502f, 0f, 0f);

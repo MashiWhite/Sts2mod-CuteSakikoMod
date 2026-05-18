@@ -7,8 +7,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
 public partial class ChordButton : TextureButton
 {
-    public string ChordId { get; private set; }
     private int _multiplier = 1;
+    public string ChordId { get; private set; }
 
     public void Setup(string chordId, int mult = 1)
     {

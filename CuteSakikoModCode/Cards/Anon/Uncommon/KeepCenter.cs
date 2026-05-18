@@ -15,7 +15,7 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
         get
         {
             yield return new DamageVar(30m, ValueProp.Move);
-            yield return new DynamicVar("Notes", 4m);   // 初始获得4个音符
+            yield return new DynamicVar("Notes", 4m); // 初始获得4个音符
         }
     }
 
@@ -41,7 +41,7 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
             var tempChords = guitar.GetTemporaryChords();
             var allBonus = bonusChords.Concat(tempChords);
 
-            int noteCount = (int)(decimal)DynamicVars["Notes"].BaseValue;
+            var noteCount = (int)DynamicVars["Notes"].BaseValue;
             for (var i = 0; i < noteCount; i++)
                 MusicNoteManager.AddNote(Owner, CardType.Attack, mainChords, allBonus);
 
@@ -53,7 +53,7 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(10m);   // 伤害 30 → 40
-        DynamicVars["Notes"].UpgradeValueBy(1m);  // 音符 4 → 5
+        DynamicVars.Damage.UpgradeValueBy(10m); // 伤害 30 → 40
+        DynamicVars["Notes"].UpgradeValueBy(1m); // 音符 4 → 5
     }
 }

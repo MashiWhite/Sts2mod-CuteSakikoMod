@@ -20,7 +20,7 @@ public class WhenPerform() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon
             return tips;
         }
     }
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         TriggerBanter();

@@ -52,9 +52,9 @@ public class MarksOfPracticePower : CuteSakikoModPower
         var guitar = owner.Player.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        int targetCount = Amount;
+        var targetCount = Amount;
         var existing = guitar.GetTemporaryChords().ToList();
-        int currentCount = existing.Count;
+        var currentCount = existing.Count;
 
         if (currentCount < targetCount)
         {
@@ -66,9 +66,9 @@ public class MarksOfPracticePower : CuteSakikoModPower
             if (allPools.Count == 0) return;
 
             var rng = owner.Player.RunState.Rng.UpFront;
-            for (int i = 0; i < targetCount - currentCount; i++)
+            for (var i = 0; i < targetCount - currentCount; i++)
             {
-                string chordId = rng.NextItem(allPools);
+                var chordId = rng.NextItem(allPools);
                 guitar.AddTemporaryChord(chordId);
             }
         }
@@ -77,7 +77,7 @@ public class MarksOfPracticePower : CuteSakikoModPower
             // 需要移除多余的临时和弦（从末尾开始移除）
             while (currentCount > targetCount)
             {
-                string lastChordId = existing.Last();
+                var lastChordId = existing.Last();
                 guitar.RemoveTemporaryChord(lastChordId);
                 existing.RemoveAt(existing.Count - 1);
                 currentCount--;

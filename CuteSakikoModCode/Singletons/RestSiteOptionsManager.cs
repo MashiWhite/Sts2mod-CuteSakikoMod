@@ -45,9 +45,7 @@ public class RestSiteOptionsManager : SingletonModel
         // 否则禁用所有非练习选项
         var allLocalOptions = RunManager.Instance.RestSiteSynchronizer.GetLocalOptions();
         foreach (var opt in allLocalOptions)
-        {
             if (!(opt is PracticeGuitarOption))
                 opt.IsEnabled = false;
-        }
     }
 }

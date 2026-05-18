@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -12,11 +11,10 @@ public sealed class MessyPlayPower : CuteSakikoModPower,
     IPowerExtraIconAmountLabelsProvider,
     IPowerExtraIconAmountLabelsChangeSource
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
-
     private int _noteCount;
     private int _threshold;
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Counter;
     public bool IsGeneratingNotes { get; private set; }
 
     // 暴露给描述系统
@@ -32,8 +30,29 @@ public sealed class MessyPlayPower : CuteSakikoModPower,
         }
     }
 
-    public void StartGeneratingNotes() => IsGeneratingNotes = true;
-    public void EndGeneratingNotes() => IsGeneratingNotes = false;
+    public event Action? PowerExtraIconAmountLabelsInvalidated;
+
+    public IReadOnlyList<ExtraIconAmountLabelSlot> GetPowerExtraIconAmountLabelSlots()
+    {
+        return new[]
+        {
+            new ExtraIconAmountLabelSlot
+            {
+                Corner = ExtraIconAmountLabelCorner.BottomLeft,
+                Text = $"{_noteCount}/{_threshold}"
+            }
+        };
+    }
+
+    public void StartGeneratingNotes()
+    {
+        IsGeneratingNotes = true;
+    }
+
+    public void EndGeneratingNotes()
+    {
+        IsGeneratingNotes = false;
+    }
 
     public void UpdateThreshold(int newThreshold)
     {
@@ -49,7 +68,7 @@ public sealed class MessyPlayPower : CuteSakikoModPower,
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
-        int newThreshold = (cardSource is MessyPlay { IsUpgraded: true }) ? 2 : 3;
+        var newThreshold = cardSource is MessyPlay { IsUpgraded: true } ? 2 : 3;
         UpdateThreshold(newThreshold);
         IsGeneratingNotes = false;
     }
@@ -74,19 +93,5 @@ public sealed class MessyPlayPower : CuteSakikoModPower,
     {
         PowerExtraIconAmountLabelsInvalidated?.Invoke();
         InvokeDisplayAmountChanged();
-    }
-
-    public event Action? PowerExtraIconAmountLabelsInvalidated;
-
-    public IReadOnlyList<ExtraIconAmountLabelSlot> GetPowerExtraIconAmountLabelSlots()
-    {
-        return new[]
-        {
-            new ExtraIconAmountLabelSlot
-            {
-                Corner = ExtraIconAmountLabelCorner.BottomLeft,
-                Text = $"{_noteCount}/{_threshold}"
-            }
-        };
     }
 }

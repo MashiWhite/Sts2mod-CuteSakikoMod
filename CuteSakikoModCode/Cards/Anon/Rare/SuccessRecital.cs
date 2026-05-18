@@ -13,12 +13,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            yield return new BlockVar(5m,ValueProp.Move); // 基础倍数
+            yield return new BlockVar(5m, ValueProp.Move); // 基础倍数
             yield return new SuccessRecitalBlockVar(); // 实时总格挡
         }
     }

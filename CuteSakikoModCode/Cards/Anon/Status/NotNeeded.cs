@@ -20,10 +20,7 @@ public class NotNeeded() : ModStatusCard(1, CardType.Status, CardRarity.Status, 
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get
-        {
-            yield return new BlockVar(2m, ValueProp.Move);
-        }
+        get { yield return new BlockVar(2m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -5,9 +5,6 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -22,7 +19,10 @@ public sealed class MasqueradePower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
 
-    public override bool ShouldDie(Creature creature) => false;
+    public override bool ShouldDie(Creature creature)
+    {
+        return false;
+    }
 
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
@@ -71,6 +71,7 @@ public sealed class MasqueradePower : CuteSakikoModPower
             // 直接复用保存的原始实例，恢复全部内部状态
             tasks.Add(PowerCmd.Apply(choiceContext, power, creature, amount, Owner, null));
         }
+
         _removedPowers.Clear();
 
         await Task.WhenAll(tasks);

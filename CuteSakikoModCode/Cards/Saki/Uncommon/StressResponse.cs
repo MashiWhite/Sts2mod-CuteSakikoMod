@@ -7,7 +7,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -18,7 +17,7 @@ public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity
         get
         {
             yield return new PowerVar<PressurePower>("Pressure", 0m); // 显示当前压力层数
-            yield return new StressPerHitDamageVar();                // 战斗内实时每次伤害
+            yield return new StressPerHitDamageVar(); // 战斗内实时每次伤害
         }
     }
 
@@ -38,7 +37,7 @@ public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity
         if (layers <= 0) return;
 
         // 每次伤害 = ceil(层数*0.25) 
-        var damagePerHit =  layers / 4;
+        var damagePerHit = layers / 4;
 
         // 消耗所有压力
         await PowerCmd.ModifyAmount(choiceContext, pressure, -layers, Owner.Creature, this);
@@ -61,7 +60,7 @@ public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity
     }
 
     /// <summary>
-    /// 动态变量：战斗内显示实际每次伤害 = max(1, 压力层数/4)
+    ///     动态变量：战斗内显示实际每次伤害 = max(1, 压力层数/4)
     /// </summary>
     private class StressPerHitDamageVar : DynamicVar
     {

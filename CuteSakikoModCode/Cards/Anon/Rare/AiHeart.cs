@@ -1,12 +1,15 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Commands;          // 新增，用于 CardPileCmd
-using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status; // 新增，引用 NotNeeded
+// 新增，用于 CardPileCmd
+
+// 新增，引用 NotNeeded
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
@@ -17,7 +20,7 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
 
     protected override IEnumerable<string> RegisteredKeywordIds =>
         [CutesakiKeywords.NoNote, CutesakiKeywords.Chord, CutesakiKeywords.OtherAnon];
-    
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -49,13 +52,14 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
         }
 
         // ----- 新增效果：添加一张费用为 0 的 NotNeeded 到手牌 -----
-        var notNeeded =  CombatState.CreateCard<NotNeeded>(Owner);
-        notNeeded.EnergyCost.SetCustomBaseCost(0);   // 正确的方法名
+        var notNeeded = CombatState.CreateCard<NotNeeded>(Owner);
+        notNeeded.EnergyCost.SetCustomBaseCost(0); // 正确的方法名
         if (IsUpgraded)
         {
             notNeeded.UpgradeInternal();
             notNeeded.FinalizeUpgradeInternal();
         }
+
         await CardPileCmd.AddGeneratedCardToCombat(notNeeded, PileType.Hand, Owner);
         // -------------------------------------------------------
     }

@@ -1,5 +1,4 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;

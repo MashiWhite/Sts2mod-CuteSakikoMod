@@ -73,7 +73,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="STS2.RitsuLib" Version="0.2.33" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.2.33"/>
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -91,29 +91,28 @@
     <ItemGroup>
         <None Include=".gitignore"/>
         <None Include=".godotignore"/>
-        <None Include="CuteSakikoMod.json" />
+        <None Include="CuteSakikoMod.json"/>
         <None Include="project.godot"/>
         <None Include="CuteSakikoMod/**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="CuteSakikoModCode\CardPiles\" />
-      <Folder Include="CuteSakikoModCode\Cards\Mod\Curse\" />
-      <Folder Include="CuteSakikoModCode\Cards\Mod\Event\" />
-      <Folder Include="CuteSakikoModCode\Encounters\Common\" />
-      <Folder Include="CuteSakikoModCode\Monsters\Normal\" />
-      <Folder Include="CuteSakikoModCode\Relics\AnotherSelf\" />
-      <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\" />
-      <Folder Include="CuteSakikoModCode\Relics\Saki\Event\" />
-      <Folder Include="CuteSakikoMod\images\ui\run_history\" />
+        <Folder Include="CuteSakikoModCode\CardPiles\"/>
+        <Folder Include="CuteSakikoModCode\Cards\Mod\Curse\"/>
+        <Folder Include="CuteSakikoModCode\Cards\Mod\Event\"/>
+        <Folder Include="CuteSakikoModCode\Encounters\Common\"/>
+        <Folder Include="CuteSakikoModCode\Monsters\Normal\"/>
+        <Folder Include="CuteSakikoModCode\Relics\AnotherSelf\"/>
+        <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\"/>
+        <Folder Include="CuteSakikoModCode\Relics\Saki\Event\"/>
+        <Folder Include="CuteSakikoMod\images\ui\run_history\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="audio\look_cchord.mp3" />
+        <Content Include="audio\look_cchord.mp3"/>
     </ItemGroup>
 
-  
-    
+
     <!-- 构建后复制你自己的 Mod -->
     <Target Name="CopyToModsFolderOnBuild" AfterTargets="Build">
         <Message Text="Copying mod files to game mods folder." Importance="high"/>
@@ -138,14 +137,14 @@
         <Copy SourceFiles="$(RitsuLibPackageBase)lib\net9.0\STS2-RitsuLib.dll"
               DestinationFolder="$(RitsuLibModDest)"/>
     </Target>
-    
+
     <!-- 把你 audio 目录下的文件原样复制到模组文件夹（保留 audio 根目录） -->
     <Target Name="CopyAudioToModsFolder" AfterTargets="CopyToModsFolderOnBuild">
         <Message Text="Copying audio files to game mods folder." Importance="high"/>
         <ItemGroup>
             <!-- 把 None 组里 audio 目录下的文件筛选出来，重新映射目标路径 -->
             <AudioFilesToCopy Include="@(None)"
-                              Condition="$([System.String]::new('%(Identity)').Contains('audio'))" />
+                              Condition="$([System.String]::new('%(Identity)').Contains('audio'))"/>
             <!-- 构造目标路径：mods/CuteSakikoMod + audio/子路径/文件名.mp3 -->
             <MappedAudioFiles Include="@(AudioFilesToCopy)">
                 <DestPath>$(ModsPath)$(MSBuildProjectName)\%(Identity)</DestPath>
@@ -155,7 +154,7 @@
               DestinationFiles="@(MappedAudioFiles->'%(DestPath)')"
               SkipUnchangedFiles="true"/>
     </Target>
-    
+
     <Target Name="GodotPublishOnBuild" AfterTargets="Build"
             Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
         <Message Text="Exporting Godot .pck to mods folder (from Build)" Importance="high"/>
@@ -163,7 +162,7 @@
               EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
               ContinueOnError="WarnAndContinue"/>
     </Target>
-    
+
     <!-- 发布时自动打包 PCK -->
     <Target Name="GodotPublish" AfterTargets="Publish" Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
         <Message Text="Exporting Godot .pck to mods folder" Importance="high"/>
@@ -179,7 +178,7 @@
         <Error Text=" Godot not found at path '$(GodotPath)'"
                Condition="'$(GodotPath)' == '' or !Exists('$(GodotPath)')"/>
     </Target>
-    
+
     <ItemGroup>
         <!-- 把 audio 目录下的文件作为普通文件包含，但不参与编译 -->
         <None Include="audio\**\*">
@@ -188,6 +187,6 @@
             <GodotResource>false</GodotResource>
         </None>
     </ItemGroup>
-    
-    
+
+
 </Project>

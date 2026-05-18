@@ -1,5 +1,4 @@
-﻿
-using Godot;
+﻿using Godot;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Runs;
@@ -66,4 +65,3 @@ public class AnotherSelf : ModAncientEventTemplate
         return actIndex == 1 || actIndex == 2;
     }
 }
-

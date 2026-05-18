@@ -12,7 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(10m, ValueProp.Move)

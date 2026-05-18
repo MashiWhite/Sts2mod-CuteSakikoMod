@@ -11,7 +11,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
-    
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -22,10 +22,14 @@ public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int pressureAmount = IsUpgraded ? 12 : 7;
+        var pressureAmount = IsUpgraded ? 12 : 7;
         await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmount, Owner.Creature, this);
         await PowerCmd.Apply<SweepPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2费 -> 1费
+    protected override void OnUpgrade()
+    {
+        EnergyCost.UpgradeBy(-1);
+        // 2费 -> 1费
+    }
 }

@@ -27,10 +27,10 @@ public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int maxSelect = DynamicVars.Cards.IntValue;   // 读取当前选择数量（1 或 2）
+        var maxSelect = DynamicVars.Cards.IntValue; // 读取当前选择数量（1 或 2）
 
         var prompt = new LocString("cards", "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.selectionScreenPrompt");
-        prompt.Add("Cards", (decimal)maxSelect);       // 手动注入变量
+        prompt.Add("Cards", maxSelect); // 手动注入变量
 
         var prefs = new CardSelectorPrefs(prompt, 0, maxSelect)
         {
@@ -55,6 +55,6 @@ public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare
     protected override void OnUpgrade()
     {
         AddKeyword(CardKeyword.Retain);
-        DynamicVars.Cards.UpgradeValueBy(1);   // 1 → 2
+        DynamicVars.Cards.UpgradeValueBy(1); // 1 → 2
     }
 }
