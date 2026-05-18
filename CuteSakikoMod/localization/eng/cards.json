@@ -9,7 +9,7 @@
   "CUTE_SAKIKO_MOD_CARD_MY_BAD.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n从弃牌堆中选择一张牌[gold]消耗[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_MY_BAD.selectionScreenPrompt": "选择一张牌消耗",
   "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.title": "什么回忆？",
-  "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.description": "选择最多{Cards}张手牌，获得[gold]回忆[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.description": "选择最多{Cards:diff()}张手牌，获得[gold]回忆[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.selectionScreenPrompt": "选择最多 {Cards} 张牌获得[gold]回忆[/gold]",
   "CUTE_SAKIKO_MOD_CARD_DEFEND_SAKI.title": "防御",
   "CUTE_SAKIKO_MOD_CARD_DEFEND_SAKI.description": "获得{Block:diff()}点格挡。\n获得{IfUpgraded:show:2|1}层[gold]压力[/gold]。",

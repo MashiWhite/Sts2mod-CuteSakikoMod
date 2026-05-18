@@ -44,6 +44,6 @@ public class PercussiveFingerstyle : ModStatusCard
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(2m); // 2 → 4
-        RemoveKeyword(CardKeyword.Eternal);
+        RemoveKeyword(CardKeyword.Ethereal);
     }
 }
