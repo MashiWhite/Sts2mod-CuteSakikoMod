@@ -20,7 +20,7 @@ public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Commo
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(13m, ValueProp.Move)
+        new DamageVar(14m, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -39,5 +39,6 @@ public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Commo
     protected override void OnUpgrade()
     {
         EnergyCost.UpgradeBy(-1);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

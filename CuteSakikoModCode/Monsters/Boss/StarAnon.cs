@@ -1,19 +1,24 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
-using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Multiplayer;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
@@ -24,9 +29,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 public class StarAnon : ModMonsterTemplate
 {
     private MoveState _deadState;
-    private bool _reviveUsed;
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 420, 400);
-    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 470, 450);
+    private string _lastMoveName = "";
+
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 440, 420);
+    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 520, 520);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/star_anon_boss.tscn"
@@ -40,142 +46,164 @@ public class StarAnon : ModMonsterTemplate
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        // 开局仅添加 RetrogradePower（复活逻辑将由该能力调用怪物的 TriggerDeadState）
         await PowerCmd.Apply<RetrogradePower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
         await PowerCmd.Apply<TimeWatchPower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
+
+        // ★ 主机在进入房间时立即广播一次 ReloadCount 和 TotalPlayCount，避免客户端初始值为 0
+        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+        {
+            FlybackManager.SyncReloadCountIfHost();
+            FlybackManager.SyncPlayCountIfHost();
+        }
     }
 
-    // ★ 从外部触发复活状态的入口，由 RetrogradePower 调用
     public async Task TriggerDeadState()
     {
-        // 强制切换到复活状态，执行复活动作
         SetMoveImmediate(_deadState, true);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
     {
-        // 复活动作：仅执行一次，与实验体一致
         _deadState = new MoveState("RESPAWN_MOVE", RespawnMove, new HealIntent(), new BuffIntent())
         {
             MustPerformOnceBeforeTransitioning = true
         };
 
-        // 普通动作
         var buffStr = new MoveState("BUFF_STRENGTH", BuffStrengthMove, new BuffIntent());
-        var attack2 = new MoveState("DOUBLE_ATTACK", DoubleAttackMove,
-            new MultiAttackIntent(10, 2), new StatusIntent(3));
-        var heavyAttack = new MoveState("HEAVY_ATTACK", HeavyAttackMove,
-            new SingleAttackIntent(30));
+        var attack1 = new MoveState("DOUBLE_ATTACK", DoubleAttackMove,
+            new MultiAttackIntent(10, 2), new StatusIntent(2));
+        var heavy1 = new MoveState("HEAVY_ATTACK", HeavyAttackMove,
+            new SingleAttackIntent(20));
         var buffStr2 = new MoveState("BUFF_STRENGTH2", BuffStrengthMove2, new BuffIntent());
 
-        buffStr.FollowUpState = attack2;
-        attack2.FollowUpState = heavyAttack;
-        heavyAttack.FollowUpState = buffStr2;
-        buffStr2.FollowUpState = attack2;
+        buffStr.FollowUpState = attack1;
+        attack1.FollowUpState = heavy1;
+        heavy1.FollowUpState = buffStr2;
+        buffStr2.FollowUpState = attack1;
 
-        // 复活后回到 buffStr
-        _deadState.FollowUpState = buffStr;
+        var buffStr3 = new MoveState("BUFF_STRENGTH3", BuffStrengthMove3, new BuffIntent());
+        var attack3 = new MoveState("DOUBLE_ATTACK3", DoubleAttackMove,
+            new MultiAttackIntent(10, 2), new StatusIntent(2));
+        var heavy3 = new MoveState("HEAVY_ATTACK3", HeavyAttackMove,
+            new SingleAttackIntent(20));
+
+        _deadState.FollowUpState = buffStr3;
+        buffStr3.FollowUpState = attack3;
+        attack3.FollowUpState = heavy3;
+        heavy3.FollowUpState = buffStr3;
 
         return new MonsterMoveStateMachine(
-            new List<MonsterState> { _deadState, buffStr, attack2, heavyAttack, buffStr2 },
+            new List<MonsterState>
+            {
+                _deadState,
+                buffStr, attack1, heavy1, buffStr2,
+                buffStr3, attack3, heavy3
+            },
             buffStr);
     }
 
-    // 复活动作：满血、翻倍飞返次数、结束玩家回合
     private async Task RespawnMove(IReadOnlyList<Creature> targets)
     {
-        // 1. 满血复活
+        _lastMoveName = "RESPAWN_MOVE";
         await CreatureCmd.Heal(Creature, Creature.MaxHp);
-
-        // 2. 翻倍所有玩家的飞返次数
         FlybackManager.DoubleAllPlayerCounts();
 
-        // 3. 刷新 RetrogradePower 的生命值加成
+        // 客户端等待主机广播 TotalPlayCount 后再刷新生命值
+        if (RunManager.Instance.NetService.Type == NetGameType.Client)
+        {
+            await FlybackManager.WaitForPlayCountChange(timeoutMs: 500);
+        }
+
         var retro = Creature.GetPower<RetrogradePower>();
         if (retro != null)
             await retro.RefreshHpBoost();
 
-        // 4. 重新添加因死亡丢失的 TimeWatchPower
         var timeWatch = Creature.GetPower<TimeWatchPower>();
         if (timeWatch == null)
             await PowerCmd.Apply<TimeWatchPower>(
                 new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
 
-        // 5.在 RespawnMove 内，替换原来的 TriggerAnim 调用
-        var creatureNode = Creature.GetCreatureNode();
-        if (creatureNode?.Visuals is NCreatureVisuals visuals)
-        {
-            // 尝试获取 AnimationPlayer
-            var animPlayer = visuals.GetNodeOrNull<AnimationPlayer>("Visuals/AnimationPlayer");
-            if (animPlayer != null && animPlayer.HasAnimation("RESET"))
-            {
-                animPlayer.Stop();
-                animPlayer.Play("RESET");
-                // 如果需要等 RESET 播完再 idle，可以用 await
-                await animPlayer.ToSignal(animPlayer, "animation_finished");
-                animPlayer.Play("idle_loop");
-            }
-            else
-            {
-                // 手动重置关键属性
-                var sprite = visuals.GetNodeOrNull<Sprite2D>("Visuals/Non");
-                if (sprite != null)
-                {
-                    sprite.Texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/char/staranon/Anon1.png");
-                    sprite.Modulate = new Color(1, 1, 1);
-                    sprite.Scale = Vector2.One;
-                    sprite.Position = new Vector2(0.7077637f, -2.664978f);
-                }
+        await CreatureCmd.TriggerAnim(Creature, "idle_loop", 0.0f);
 
-                // 然后播放 idle
-                await CreatureCmd.TriggerAnim(Creature, "idle_loop", 0.0f);
-            }
-        }
-
-        // 6. 移除复活能力，确保第二次死亡正常结束战斗
         if (retro != null)
             await PowerCmd.Remove<RetrogradePower>(Creature);
 
-        // 7. 结束当前玩家回合
-        var combatState = Creature.CombatState;
-        if (combatState?.CurrentSide == CombatSide.Player)
-        {
-            var currentPlayer = LocalContext.GetMe(combatState);
-            if (currentPlayer != null)
-                PlayerCmd.EndTurn(currentPlayer, false);
-        }
-    }
-
-
-    // 普通移动，保持不变
-    private async Task DoubleAttackMove(IReadOnlyList<Creature> targets)
-    {
-        for (var i = 0; i < 2; i++)
-            await DamageCmd.Attack(10).FromMonster(this).Execute(null);
-        var player = targets.FirstOrDefault()?.Player;
-        if (player != null)
-            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Draw, 3, null);
-    }
-
-    private async Task HeavyAttackMove(IReadOnlyList<Creature> targets)
-    {
-        await DamageCmd.Attack(20).FromMonster(this).Execute(null);
+        await PowerCmd.Apply<LastRetrogradePower>(
+            new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
     }
 
     private async Task BuffStrengthMove(IReadOnlyList<Creature> targets)
     {
-        var playCount = FlybackManager.Instance.TotalPlayCount;
-        var reloads = GetReloadCount();
-        var amount = 1 + (int)(playCount / 100f * reloads);
+        _lastMoveName = "BUFF_STRENGTH";
+        await SyncFlybackDataForMove();
+
+        int playCount = FlybackManager.Instance.TotalPlayCount;
+        int reloads = GetReloadCount();
+        int amount = 1 + (int)(playCount / 100f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
+
+        foreach (var player in RunManager.Instance.DebugOnlyGetState()?.Players ?? Enumerable.Empty<Player>())
+        {
+            for (int i = 0; i < 5; i++)
+                FlybackManager.Instance.IncrementPlayCountForPlayer(player);
+        }
     }
 
     private async Task BuffStrengthMove2(IReadOnlyList<Creature> targets)
     {
-        var playCount = FlybackManager.Instance.TotalPlayCount;
-        var reloads = GetReloadCount();
-        var amount = 2 + (int)(playCount / 100f * reloads);
+        _lastMoveName = "BUFF_STRENGTH2";
+        int playCount = FlybackManager.Instance.TotalPlayCount;
+        int reloads = GetReloadCount();
+        int amount = 2 + (int)(playCount / 100f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
+    }
+
+    private async Task BuffStrengthMove3(IReadOnlyList<Creature> targets)
+    {
+        _lastMoveName = "BUFF_STRENGTH3";
+        await SyncFlybackDataForMove();
+
+        int playCount = FlybackManager.Instance.TotalPlayCount;
+        int reloads = GetReloadCount();
+        int amount = 2 + (int)(playCount / 100f * reloads);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
+    }
+
+    private async Task SyncFlybackDataForMove()
+    {
+        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+        {
+            FlybackManager.IncrementReloadCount();
+            FlybackManager.SyncPlayCountIfHost();
+        }
+        else
+        {
+            await FlybackManager.WaitForDataChange(timeoutMs: 500);
+        }
+    }
+
+    private async Task DoubleAttackMove(IReadOnlyList<Creature> targets)
+    {
+        _lastMoveName = "DOUBLE_ATTACK";
+        for (var i = 0; i < 2; i++)
+            await DamageCmd.Attack(10).FromMonster(this).Execute(null);
+        var player = targets.FirstOrDefault()?.Player;
+        if (player != null)
+            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Discard, 2, null, CardPilePosition.Random);
+    }
+
+    private async Task HeavyAttackMove(IReadOnlyList<Creature> targets)
+    {
+        _lastMoveName = "HEAVY_ATTACK";
+        await DamageCmd.Attack(20).FromMonster(this).Execute(null);
+    }
+
+    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    {
+        if (side != CombatSide.Enemy)
+            return;
+
+        _lastMoveName = "";
     }
 
     private static int GetReloadCount()

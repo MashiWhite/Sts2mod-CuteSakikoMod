@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -20,7 +21,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 
 public sealed class Eggs : CuteSakiRelic
 {
-    // 整局游戏内查重（持久化，用于BOSS奖励）
     [SavedProperty] private readonly List<ModelId> _gainedEggCards = new();
 
     public static PlayerRunSavedData<PlayerEggsData>? PlayerEggsSlot { get; set; }
@@ -37,7 +37,6 @@ public sealed class Eggs : CuteSakiRelic
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        // 仅处理自己
         if (player != Owner) return;
 
         // 若本局已选择过，不再弹出
@@ -48,7 +47,7 @@ public sealed class Eggs : CuteSakiRelic
         }
 
         await Cmd.Wait(0.1f);
-        await GiveEggCardChoice();
+        await GiveEggCardChoice(choiceContext, player); // 传入上下文
     }
 
     public override async Task AfterRemoved()
@@ -63,31 +62,28 @@ public sealed class Eggs : CuteSakiRelic
             _gainedEggCards.Add(card.Id);
     }
 
-    private async Task GiveEggCardChoice()
+    private async Task GiveEggCardChoice(PlayerChoiceContext choiceContext, Player player)
     {
-        var player = Owner;
-        if (player == null) return;
-
         var allEggCards = ModelDb.CardPool<CuteSakikoEggCardPool>()
             .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
             .ToList();
 
-        // ★ 首次选择展示所有彩蛋卡，不使用 _gainedEggCards 过滤
-        var available = allEggCards;
-        if (available.Count == 0) return;
+        if (allEggCards.Count == 0) return;
 
-        var tempCards = available.Select(can => player.RunState.CreateCard(can, player)).ToList();
-        var prompt = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_EGGS.selectPrompt"); // 修复键名
+        // 首次选择展示所有彩蛋卡，不使用 _gainedEggCards 过滤
+        var tempCards = allEggCards.Select(can => player.RunState.CreateCard(can, player)).ToList();
+        var prompt = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_EGGS.selectPrompt");
         var prefs = new CardSelectorPrefs(prompt, 1);
-        var choiceContext = new BlockingPlayerChoiceContext();
-        var selectedCard =
-            (await CardSelectCmd.FromSimpleGrid(choiceContext, tempCards, player, prefs)).FirstOrDefault();
+
+        // 关键修改：使用传入的 choiceContext（非阻塞），而不是 new BlockingPlayerChoiceContext
+        var selectedCards = await CardSelectCmd.FromSimpleGrid(choiceContext, tempCards, player, prefs);
+        var selectedCard = selectedCards.FirstOrDefault();
         if (selectedCard == null) return;
 
         var canonical = ModelDb.GetById<CardModel>(selectedCard.Id);
         var permanentCard = player.RunState.CreateCard(canonical, player);
         await CardPileCmd.Add(permanentCard, PileType.Deck);
-        EggCardGainedEvent.Trigger(permanentCard); // 加入 _gainedEggCards 用于后续BOSS奖励
+        EggCardGainedEvent.Trigger(permanentCard);
         CardCmd.Preview(permanentCard);
 
         if (player.Creature.CombatState != null)
@@ -98,7 +94,7 @@ public sealed class Eggs : CuteSakiRelic
             await CardPileCmd.AddGeneratedCardToCombat(tempCard, PileType.Hand, player);
         }
 
-        // 标记本局已选择过（持久化）
+        // 标记本局已选择过
         PlayerEggsSlot?.Modify(player, data => data.HasSelected = true);
     }
 
@@ -107,6 +103,7 @@ public sealed class Eggs : CuteSakiRelic
         List<CardCreationResult> options,
         CardCreationOptions creationOptions)
     {
+        // ... 保持不变 ...
         if (Owner != player) return false;
         if (player.RunState.CurrentRoom is not CombatRoom combatRoom || combatRoom.RoomType != RoomType.Boss)
             return false;
@@ -115,7 +112,6 @@ public sealed class Eggs : CuteSakiRelic
         var allEggCards = ModelDb.CardPool<CuteSakikoEggCardPool>()
             .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
             .ToList();
-        // BOSS奖励使用持久化列表查重
         var available = allEggCards.Where(c => !_gainedEggCards.Contains(c.Id)).ToList();
         if (available.Count == 0) return false;
 

@@ -51,6 +51,8 @@
   "CUTESAKIKOMOD-C#MCHORD.description": "所有友方获得[blue]{0}[/blue]点格挡。",
   "CUTESAKIKOMOD-D#MCHORD.title": "#Dm和弦",
   "CUTESAKIKOMOD-D#MCHORD.description": "所有友方获得[blue]{0}[/blue]层覆甲。",
+  "CUTESAKIKOMOD-E#MCHORD.title": "#Em和弦",
+  "CUTESAKIKOMOD-E#MCHORD.description": "所有友方获得[blue]{0}[/blue]层虚弱和[blue]{1}[/blue]点格挡。",
   "CUTESAKIKOMOD-G7CHORD.title": "G7和弦",
   "CUTESAKIKOMOD-G7CHORD.description": "所有敌人本回合减[blue]{0}[/blue]点力量。",
   "CUTESAKIKOMOD-D7CHORD.title": "D7和弦",

@@ -311,6 +311,7 @@
   "CUTE_SAKIKO_MOD_CARD_ARGUMENT.description": "对所有敌人造成{Damage:diff()}点伤害。\n将一张[gold]逃避[/gold]加入弃牌堆。",
   "CUTE_SAKIKO_MOD_CARD_DO_ANYTHING.title": "可以做任何事",
   "CUTE_SAKIKO_MOD_CARD_DO_ANYTHING.description": "将你抽牌堆中的一张牌放入你的手牌。\n获得{PressureGain:diff()}层[gold]压力[/gold]。\n每次打出时获得的[gold]压力[/gold]翻倍。",
+  "CUTE_SAKIKO_MOD_CARD_DO_ANYTHING.selectionScreenPrompt": "选择一张牌放入手牌",
   "CUTE_SAKIKO_MOD_CARD_DRUM_SUPPORT.title": "鼓声的应援",
   "CUTE_SAKIKO_MOD_CARD_DRUM_SUPPORT.description": "获得{StrengthPower:diff()}点[gold]力量[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_STAR_PLAY.title": "星空下的嬉戏",

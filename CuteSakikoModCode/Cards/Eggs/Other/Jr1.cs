@@ -9,7 +9,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
 public class Jr1() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

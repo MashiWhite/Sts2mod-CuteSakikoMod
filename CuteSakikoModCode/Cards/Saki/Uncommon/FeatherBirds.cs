@@ -14,7 +14,7 @@ public class FeatherBirds() : CuteSakikoModCard(2, CardType.Attack, CardRarity.U
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(16m, ValueProp.Move),
-        new PowerVar<PressurePower>(5m)
+        new PowerVar<PressurePower>(8m)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -55,6 +55,6 @@ public class FeatherBirds() : CuteSakikoModCard(2, CardType.Attack, CardRarity.U
     {
         // 升级：伤害 16 → 20，压力 5 → 8
         DynamicVars["Damage"].UpgradeValueBy(4m);
-        DynamicVars["PressurePower"].UpgradeValueBy(3m);
+        DynamicVars["PressurePower"].UpgradeValueBy(8m);
     }
 }

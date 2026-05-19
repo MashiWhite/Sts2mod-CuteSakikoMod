@@ -129,11 +129,26 @@ public class Entry
                     })
                 );
 
-                // 如果是主机，监听客户端连接，主动同步 ReloadCount
+                // ★ 新增：注册 PlayCountSyncMessage 接收器
+                netService.RegisterMessageHandler(
+                    new MessageHandlerDelegate<PlayCountSyncMessage>((msg, senderId) =>
+                    {
+                        FlybackManager.OnPlayCountReceived(msg.TotalPlayCount);
+                    })
+                );
+
+                // 如果是主机，监听客户端连接，主动同步 ReloadCount 和 PlayCount
                 if (netService is NetHostGameService hostService)
-                    hostService.ClientConnected += peerId => { FlybackManager.SyncReloadCountIfHost(); };
+                {
+                    hostService.ClientConnected += peerId =>
+                    {
+                        FlybackManager.SyncReloadCountIfHost();
+                        FlybackManager.SyncPlayCountIfHost();  // ★ 新增：同步总飞返次数
+                    };
+                }
             }
         };
+
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
         {
             if (!ModConfig.彩蛋卡) return;
@@ -150,7 +165,6 @@ public class Entry
                     continue;
 
                 var eggs = ModelDb.Relic<Eggs>().ToMutable();
-                // 注意：不 await，避免阻塞事件；可异步执行
                 _ = RelicCmd.Obtain(eggs, player);
             }
         });
@@ -160,7 +174,6 @@ public class Entry
     {
         if (!ModConfig.彩蛋卡) return;
 
-        // 只为本地玩家自己添加遗物
         var me = LocalContext.GetMe(state);
         if (me == null) return;
         if (me.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id)) return;

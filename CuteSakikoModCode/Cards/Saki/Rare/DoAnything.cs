@@ -34,7 +34,7 @@ public sealed class DoAnything() : CuteSakikoModCard(0, CardType.Skill, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var prompt = new LocString("CUTESAKIKOMOD-DO_ANYTHING.prompt", "选择一张牌放入手牌");
+        var prompt = new LocString("cards", "CUTE_SAKIKO_MOD_CARD_DO_ANYTHING.selectionScreenPrompt");
         var prefs = new CardSelectorPrefs(prompt, 1);
         var drawPileCards = PileType.Draw.GetPile(Owner).Cards
             .OrderBy(c => c.Rarity)

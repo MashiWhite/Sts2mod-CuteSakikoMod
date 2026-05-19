@@ -256,6 +256,22 @@ public static class ChordManager
                 foreach (var ally in allies)
                     await PowerCmd.Apply<PlatingPower>(ctx, ally, 1 * mult, owner, null);
             });
+        
+        // #Em【技 技 攻 技】所有友方获得1层虚弱，获得8点格挡
+        AddChord("E#m", ChordCategory.Minor,
+            new[] { CardType.Skill, CardType.Skill, CardType.Attack, CardType.Skill },
+            "CUTESAKIKOMOD-E#MCHORD.title", "CUTESAKIKOMOD-E#MCHORD.description", "e_sharp_m_chord",
+            new[] { 1, 8 },
+            async (ctx, owner, mult) =>
+            {
+                var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
+                foreach (var ally in allies)
+                {
+                    await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
+                    await CreatureCmd.GainBlock(ally, 8 * mult, 0, null);
+                }
+            });
+   
 
         // ========== 属七和弦 ==========
         // 初始 G7【攻 技 攻】所有敌人本回合减2力量
