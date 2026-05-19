@@ -423,26 +423,7 @@ position = Vector2(15.851257, -185.95863)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(14.973267, -256.41336)
-
-[node name="Visuals" type="Node2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(0.7077637, -2.664978)
-
-[node name="Non" type="Sprite2D" parent="Visuals"]
-position = Vector2(8, -153)
-texture = ExtResource("36_xawy1")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals"]
-root_node = NodePath("../Non")
-libraries = {
-&"": SubResource("AnimationLibrary_esqhf")
-}
-autoplay = "idle_loop"
-speed_scale = 2.0
-next/attack = &"idle_loop"
-next/cast = &"idle_loop"
-next/hurt = &"idle_loop"
+position = Vector2(-148.81815, -252.72728)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
@@ -452,3 +433,24 @@ offset_left = -97.0
 offset_top = -315.0
 offset_right = 102.0
 offset_bottom = 2.0
+
+[node name="Visuals" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Node2D" type="Node2D" parent="Visuals"]
+position = Vector2(0.7077637, -2.664978)
+
+[node name="Non" type="Sprite2D" parent="Visuals/Node2D"]
+position = Vector2(8, -153)
+texture = ExtResource("36_xawy1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
+root_node = NodePath("../Non")
+libraries = {
+&"": SubResource("AnimationLibrary_esqhf")
+}
+autoplay = "idle_loop"
+speed_scale = 2.0
+next/attack = &"idle_loop"
+next/cast = &"idle_loop"
+next/hurt = &"idle_loop"

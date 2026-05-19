@@ -14,7 +14,7 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(50m, ValueProp.Move)
+        new DamageVar(35m, ValueProp.Move)
     ];
 
 
@@ -75,6 +75,6 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(10m);
+        DynamicVars.Damage.UpgradeValueBy(15m);
     }
 }

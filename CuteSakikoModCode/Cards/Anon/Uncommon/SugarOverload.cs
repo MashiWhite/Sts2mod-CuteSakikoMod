@@ -32,7 +32,8 @@ public class SugarOverload() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncomm
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
 
         _timesPlayedThisCombat++;
-        EnergyCost.UpgradeBy(1); // 每次打出费用永久 +1
+        // 使用 AddThisCombat 增加费用，避免设置 WasJustUpgraded 标记
+        EnergyCost.AddThisCombat(1);
     }
 
     protected override void OnUpgrade()

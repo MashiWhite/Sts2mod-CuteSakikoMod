@@ -16,7 +16,7 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
         get
         {
             yield return new DamageVar(4m, ValueProp.Move);
-            yield return new TotalHitsVar(); // 动态总攻击次数
+            yield return new TotalHitsVar();
         }
     }
 
@@ -30,19 +30,15 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
         var notesGained = MusicNoteManager.GetNotesGainedThisTurn(Owner);
         var totalHits = 1 + notesGained;
         var damage = DynamicVars.Damage.BaseValue;
-        var rng = Owner.RunState.Rng.CombatCardSelection;
 
-        for (var i = 0; i < totalHits; i++)
-        {
-            var hittable = combat.HittableEnemies;
-            if (!hittable.Any()) break;
-            var target = rng.NextItem(hittable);
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .Targeting(target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
-        }
+        // 统一使用一个 AttackCommand，通过 WithHitCount 指定总命中次数
+        // 活力只会消耗 1 层，但会对所有命中生效
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .WithHitCount(totalHits)                     // 关键：合并所有命中
+            .TargetingRandomOpponents(combat)            // 随机选择目标
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
@@ -50,12 +46,9 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
         DynamicVars.Damage.UpgradeValueBy(2m); // 4 → 6
     }
 
-    // 嵌套动态变量：总攻击次数（1 + 本回合已获得音符数）
     private class TotalHitsVar : DynamicVar
     {
-        public TotalHitsVar() : base("TotalHits", 1m)
-        {
-        }
+        public TotalHitsVar() : base("TotalHits", 1m) { }
 
         public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target,
             bool runGlobalHooks)
@@ -64,7 +57,7 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
             if (card.Owner != null)
             {
                 var notesGained = MusicNoteManager.GetNotesGainedThisTurn(card.Owner);
-                BaseValue = 1 + notesGained; // 基础1次 + 额外次数
+                BaseValue = 1 + notesGained;
             }
         }
     }

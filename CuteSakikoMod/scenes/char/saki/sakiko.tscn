@@ -290,4 +290,4 @@ next/hurt = &"idle_loop"
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(179.8822, -351.22147)
+position = Vector2(197.09998, -295.55203)

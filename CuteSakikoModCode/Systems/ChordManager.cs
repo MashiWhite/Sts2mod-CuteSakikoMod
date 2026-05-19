@@ -105,7 +105,7 @@ public static class ChordManager
                     await PowerCmd.Apply<VigorPower>(ctx, ally, 3 * mult, owner, null);
             });
 
-        // D【技 攻 攻 攻】所有友方本回合获得1层易伤和2点力量（数值已调整）
+        // D【技 攻 攻 攻】所有友方获得1层脆弱和2点力量
         AddChord("D", ChordCategory.Major,
             new[] { CardType.Skill, CardType.Attack, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-DCHORD.title", "CUTESAKIKOMOD-DCHORD.description", "d_chord",
@@ -115,7 +115,7 @@ public static class ChordManager
                 var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
                 {
-                    await PowerCmd.Apply<VulnerablePower>(ctx, ally, 1 * mult, owner, null);
+                    await PowerCmd.Apply<FrailPower>(ctx, ally, 1 * mult, owner, null);
                     await PowerCmd.Apply<StrengthPower>(ctx, ally, 2 * mult, owner, null);
                 }
             });

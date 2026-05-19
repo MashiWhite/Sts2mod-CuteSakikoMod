@@ -1,6 +1,5 @@
-[gd_scene load_steps=11 format=3 uid="uid://cf2kdr4y5b7cv"]
+[gd_scene load_steps=10 format=3 uid="uid://cf2kdr4y5b7cv"]
 
-[ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_othl6"]
 [ext_resource type="Texture2D" uid="uid://diylouv5hv6a2" path="res://CuteSakikoMod/images/char/anon/Anonnon.png" id="2_dwatn"]
 [ext_resource type="Texture2D" uid="uid://bwu76d7f6bcul" path="res://CuteSakikoMod/images/char/anon/Anonhurt.png" id="3_36wo8"]
 
@@ -459,7 +458,6 @@ _data = {
 }
 
 [node name="Anon" type="Node2D"]
-script = ExtResource("1_othl6")
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
@@ -471,26 +469,7 @@ position = Vector2(15.851257, -185.95863)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(14.973267, -256.41336)
-
-[node name="Visuals" type="Node2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(0.7077637, -2.664978)
-
-[node name="Non" type="Sprite2D" parent="Visuals"]
-position = Vector2(8, -153)
-texture = ExtResource("2_dwatn")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals"]
-root_node = NodePath("../Non")
-libraries = {
-&"": SubResource("AnimationLibrary_esqhf")
-}
-autoplay = "idle_loop"
-speed_scale = 2.0
-next/attack = &"idle_loop"
-next/cast = &"idle_loop"
-next/hurt = &"idle_loop"
+position = Vector2(185, -259)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
@@ -500,3 +479,24 @@ offset_left = -97.0
 offset_top = -315.0
 offset_right = 82.0
 offset_bottom = 2.0
+
+[node name="Visuals" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Node2D" type="Node2D" parent="Visuals"]
+position = Vector2(0.7077637, -2.664978)
+
+[node name="Non" type="Sprite2D" parent="Visuals/Node2D"]
+position = Vector2(8, -153)
+texture = ExtResource("2_dwatn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
+root_node = NodePath("../Non")
+libraries = {
+&"": SubResource("AnimationLibrary_esqhf")
+}
+autoplay = "idle_loop"
+speed_scale = 3.0
+next/attack = &"idle_loop"
+next/cast = &"idle_loop"
+next/hurt = &"idle_loop"

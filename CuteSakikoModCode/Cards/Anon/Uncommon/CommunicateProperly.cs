@@ -32,8 +32,8 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
         var monster = targetCreature.Monster;
         if (monster == null) return;
 
-        var followUpId = MonsterUtils.GetFallbackFollowUpStateId(monster);
-        if (string.IsNullOrEmpty(followUpId)) return;
+        // ★ 保存怪物原本的意图ID
+        var originalMoveId = monster.NextMove.Id;
 
         var defendIntent = new DefendIntent();
         var customMove = new MoveState(
@@ -47,7 +47,8 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
             defendIntent
         )
         {
-            FollowUpStateId = followUpId
+            // 执行完自定义动作后，回到怪物原本的下一步动作
+            FollowUpStateId = originalMoveId
         };
 
         if (targetCreature.IsAlive && targetCreature.Monster != null)

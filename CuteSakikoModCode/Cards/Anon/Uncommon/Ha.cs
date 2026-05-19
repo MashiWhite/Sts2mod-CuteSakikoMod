@@ -42,8 +42,8 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
         var monster = targetCreature.Monster;
         if (monster == null) return;
 
-        var followUpId = MonsterUtils.GetFallbackFollowUpStateId(monster);
-        if (string.IsNullOrEmpty(followUpId)) return; // 无法获取有效状态，不替换意图
+        // ★ 保存怪物原本的意图ID
+        var originalMoveId = monster.NextMove.Id;
 
         var attackIntent = new SingleAttackIntent(15);
         var customMove = new MoveState(
@@ -57,10 +57,11 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
             attackIntent
         )
         {
-            FollowUpStateId = followUpId
+            // 执行完自定义动作后，回到怪物原本的下一步动作
+            FollowUpStateId = originalMoveId
         };
 
-        // 最后确认怪物未被移除
+        // 强制插入自定义动作
         if (targetCreature.IsAlive && targetCreature.Monster != null)
             monster.SetMoveImmediate(customMove, true);
     }

@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character;
+﻿using System.Collections.Generic;
+using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -21,8 +22,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(6m, ValueProp.Move),
-        new DamageVar("ExtraDamage", 3m, ValueProp.Move)
+        new DamageVar(5m, ValueProp.Move)   // 基础伤害 5，升级后 +3
     ];
 
     protected override bool ShouldGlowGoldInternal
@@ -45,49 +45,29 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var baseDamage = DynamicVars.Damage.BaseValue;
-        var extraDamage = ((DamageVar)DynamicVars["ExtraDamage"]).BaseValue;
+        if (cardPlay.Target == null) return;
 
+        var damage = DynamicVars.Damage.BaseValue;
+        int extraHits = 0;
         var pressure = Owner.Creature.GetPower<PressurePower>();
-        var hasPressure = pressure != null && pressure.Amount > 0;
-
-        if (cardPlay.Target != null)
+        if (pressure != null && pressure.Amount > 0)
         {
-            // 基础攻击
-            await DamageCmd.Attack(baseDamage)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
-
-            // 压力触发额外攻击
-            if (hasPressure)
-            {
-                // 消耗1层压力
-                await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
-
-                if (IsUpgraded)
-                    // 升级后：两次2点伤害
-                    for (var i = 0; i < 2; i++)
-                        await DamageCmd.Attack(extraDamage)
-                            .FromCard(this)
-                            .Targeting(cardPlay.Target)
-                            .WithHitFx("vfx/vfx_attack_slash")
-                            .Execute(choiceContext);
-                else
-                    // 未升级：一次3点伤害
-                    await DamageCmd.Attack(extraDamage)
-                        .FromCard(this)
-                        .Targeting(cardPlay.Target)
-                        .WithHitFx("vfx/vfx_attack_slash")
-                        .Execute(choiceContext);
-            }
+            extraHits = IsUpgraded ? 2 : 1;           // 升级额外 2 次，未升级 1 次
+            await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
         }
+        int totalHits = 1 + extraHits;
+
+        // 所有攻击合并在同一个 AttackCommand 里，活力等 buff 自然覆盖全部命中
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .WithHitCount(totalHits)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);
-        ((DamageVar)DynamicVars["ExtraDamage"]).UpgradeValueBy(-1m);
+        DynamicVars.Damage.UpgradeValueBy(3m);   // 5 → 8
     }
 }

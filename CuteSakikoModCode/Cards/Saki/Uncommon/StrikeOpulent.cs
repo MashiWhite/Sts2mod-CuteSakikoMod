@@ -1,4 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -23,14 +25,11 @@ public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.
     {
         get
         {
-            yield return new DamageVar(IsUpgraded ? 8m : 6m, ValueProp.Move);
-            yield return new DamageVar("ExtraDamage", 2m, ValueProp.Move);
-            // 添加一个动态变量，显示额外攻击次数
+            yield return new DamageVar(4m, ValueProp.Move); // 基础伤害固定 4
             yield return new CalculatedIntVar("TotalExtraHits", (card, target) =>
             {
                 var allCards = card?.Owner?.PlayerCombatState?.AllCards;
                 if (allCards == null) return 0;
-
                 var qinCount = allCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
                 var multiplier = card!.IsUpgraded ? 2 : 1;
                 return qinCount * multiplier;
@@ -51,30 +50,24 @@ public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.
     {
         if (cardPlay.Target == null) return;
 
-        // 基础伤害
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+        var damage = DynamicVars.Damage.BaseValue;
+        var qinCount = Owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+        var multiplier = IsUpgraded ? 2 : 1;
+        int totalExtraHits = qinCount * multiplier;
+        int totalHits = 1 + totalExtraHits;       // 基础 1 次 + 额外次数
+
+        // 所有命中合并在一个 AttackCommand 里，活力等 buff 全部生效
+        await DamageCmd.Attack(damage)
             .FromCard(this)
+            .WithHitCount(totalHits)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-
-        // 计算额外攻击次数
-        var qinCount = Owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
-        var multiplier = IsUpgraded ? 2 : 1;
-        var totalExtraHits = qinCount * multiplier;
-        var extraDamage = ((DamageVar)DynamicVars["ExtraDamage"]).BaseValue;
-
-        for (var i = 0; i < totalExtraHits; i++)
-            await DamageCmd.Attack(extraDamage)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        // 升级效果在 CanonicalVars 中已处理
+        // 升级效果已通过 multiplier 体现，无需额外操作
     }
 }
 
