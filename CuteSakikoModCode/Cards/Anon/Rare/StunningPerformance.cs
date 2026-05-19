@@ -5,9 +5,9 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -16,15 +16,15 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
             var baseDamage = 10;
             var extraPerNote = 2;
 
-            yield return new CalculationBaseVar(baseDamage); // 基础伤害
-            yield return new ExtraDamageVar(extraPerNote); // 每音符提升值
+            yield return new CalculationBaseVar(baseDamage);
+            yield return new ExtraDamageVar(extraPerNote);
             yield return new CalculatedDamageVar(ValueProp.Move)
                 .WithMultiplier((card, target) =>
                 {
                     var owner = card.Owner;
                     if (owner == null) return 0m;
-                    var notes = MusicNoteManager.GetNotesGainedThisTurn(owner);
-                    return notes;
+                    // 改为使用本场战斗累计音符数
+                    return MusicNoteManager.GetTotalNotesGainedThisCombat(owner);
                 });
         }
     }

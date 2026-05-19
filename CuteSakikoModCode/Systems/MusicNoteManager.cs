@@ -49,6 +49,7 @@ public static class MusicNoteManager
         }
 
         data.NotesGainedThisTurn++;
+        data.TotalNotesGainedThisCombat++;   // ★ 累计战斗计数
         data.Notes.Enqueue(type);
         while (data.Notes.Count > 4)
             data.Notes.Dequeue();
@@ -165,6 +166,7 @@ public static class MusicNoteManager
         GetData(player).Notes.Clear();
     }
 
+    // 在 ClearCombatData 方法中清空累计
     public static void ClearCombatData(Player player)
     {
         if (player == null) return;
@@ -173,6 +175,7 @@ public static class MusicNoteManager
             data.Notes.Clear();
             data.StoredChords.Clear();
             data.NotesGainedThisTurn = 0;
+            data.TotalNotesGainedThisCombat = 0;   // ★ 清空
             data.LastRoundNumber = 0;
         }
     }
@@ -205,6 +208,15 @@ public static class MusicNoteManager
         data.StoredChords.Add(chordId);
         while (data.StoredChords.Count > MaxStoredChords)
             data.StoredChords.RemoveAt(0);
+    }
+    
+    // 新增公共方法
+    public static int GetTotalNotesGainedThisCombat(Player player)
+    {
+        if (player == null) return 0;
+        var data = GetData(player);
+        // 无需回合重置，因为 ClearCombatData 负责在战斗结束时清空
+        return data.TotalNotesGainedThisCombat;
     }
 
     public static int ClearNotesAndGetCount(Player player)
@@ -249,6 +261,7 @@ public static class MusicNoteManager
     {
         public int LastRoundNumber;
         public int NotesGainedThisTurn;
+        public int TotalNotesGainedThisCombat;   // ★ 新增
         public Queue<CardType> Notes { get; } = new();
         public List<string> StoredChords { get; } = new();
     }
