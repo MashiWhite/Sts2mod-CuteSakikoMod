@@ -27,12 +27,16 @@ public class FlybackManager : SingletonModel
 
     private static TaskCompletionSource<bool>? _reloadCountWaitTcs;
     private static int _reloadCountWaitExpected;
-    private static int _playCountVersion = 0;          // 用于等待 PlayCount 变化
+    private static TaskCompletionSource<bool>? _playCountWaitTcs;
 
     public int TotalPlayCount
     {
         get
         {
+            // 全面保护：RunManager、NetService 或 PlayerDataSlot 未就绪时，返回缓存值（通常为0）
+            if (RunManager.Instance == null || RunManager.Instance.NetService == null || PlayerDataSlot == null)
+                return _cachedTotalPlayCount;
+
             if (RunManager.Instance.NetService.Type == NetGameType.Host)
             {
                 int real = CalculateRealTotalPlayCount();
@@ -112,17 +116,23 @@ public class FlybackManager : SingletonModel
 
     public static int GetReloadCount()
     {
+        // 全面保护：RunManager 或 RunDataSlot 未就绪时返回 0
+        if (RunManager.Instance == null || RunDataSlot == null)
+            return 0;
+
+        if (RunManager.Instance.NetService == null)
+            return 0;
+
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
         {
             int raw = GetRawNumReloads();
             UpdateRunSavedData(raw);
             return raw;
         }
-        if (RunDataSlot != null)
-        {
-            var runState = RunManager.Instance.DebugOnlyGetState();
-            if (runState != null) return RunDataSlot.Get(runState).ReloadCount;
-        }
+        // 客户端
+        var runState = RunManager.Instance.DebugOnlyGetState();
+        if (runState != null)
+            return RunDataSlot.Get(runState).ReloadCount;
         return 0;
     }
 
@@ -178,8 +188,8 @@ public class FlybackManager : SingletonModel
     {
         if (RunManager.Instance.NetService.Type == NetGameType.Host) return;
         _cachedTotalPlayCount = totalCount;
-        _playCountVersion++;                // 递增版本号
         Instance.NotifyDataChanged();
+        _playCountWaitTcs?.TrySetResult(true);
     }
 
     // ---------- 等待方法 ----------
@@ -196,36 +206,17 @@ public class FlybackManager : SingletonModel
             Log.Warn($"WaitForReloadCountV2 timed out, current: {GetReloadCount()}, expected: {expected}");
     }
 
-    /// <summary>等待一次 PlayCount 更新（版本号变化），无竞态。</summary>
     public static async Task WaitForPlayCountChange(int timeoutMs = 500)
     {
         if (RunManager.Instance.NetService.Type != NetGameType.Client) return;
 
-        int startVersion = _playCountVersion;
-        // 先检查一次，如果在调用前已经更新，直接返回
-        if (_playCountVersion != startVersion) return;
-
+        _playCountWaitTcs?.TrySetResult(false);
         var tcs = new TaskCompletionSource<bool>();
-        Action<int, int>? handler = null;
-        handler = (_, _) =>
-        {
-            if (_playCountVersion != startVersion)
-            {
-                Instance.OnFlybackDataChanged -= handler;
-                tcs.TrySetResult(true);
-            }
-        };
+        _playCountWaitTcs = tcs;
 
-        Instance.OnFlybackDataChanged += handler;
-        // 再次检查，防止在订阅前版本已经变化
-        if (_playCountVersion != startVersion)
-        {
-            Instance.OnFlybackDataChanged -= handler;
-            return;
-        }
         var delayTask = Task.Delay(timeoutMs);
         var completedTask = await Task.WhenAny(tcs.Task, delayTask);
-        Instance.OnFlybackDataChanged -= handler;
+        _playCountWaitTcs = null;
     }
 
     // 兼容旧接口

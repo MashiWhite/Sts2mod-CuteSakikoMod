@@ -43,7 +43,6 @@ public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, Tar
 
     protected override void OnUpgrade()
     {
-        // 升级后移除消耗关键词
-        RemoveKeyword(CardKeyword.Exhaust);
+        DynamicVars["Golds"].UpgradeValueBy(5);
     }
 }

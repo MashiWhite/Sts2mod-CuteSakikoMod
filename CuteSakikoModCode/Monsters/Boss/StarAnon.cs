@@ -174,11 +174,15 @@ public class StarAnon : ModMonsterTemplate
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
         {
             FlybackManager.IncrementReloadCount();
-            FlybackManager.SyncPlayCountIfHost();
+            FlybackManager.SyncPlayCountIfHost(); // 主机广播 PlayCount
         }
-        else
+        else // 客户端
         {
-            await FlybackManager.WaitForDataChange(timeoutMs: 500);
+            // 先等待 ReloadCount 增加
+            int expected = GetReloadCount() + 1;
+            await FlybackManager.WaitForReloadCountV2(expected, timeoutMs: 1000);
+            // 再等待 PlayCount 广播（SyncPlayCountIfHost 一定会发送一次）
+            await FlybackManager.WaitForPlayCountChange(timeoutMs: 500);
         }
     }
 

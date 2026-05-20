@@ -14,7 +14,7 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
 {
     private static bool _isTransforming;
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new CardKeyword[] { };
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -37,7 +37,7 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
     protected override PileType GetResultPileTypeForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
-        var required = IsUpgraded ? 10 : 15;
+        var required = IsUpgraded ? 8 : 12;
         var enough = pressure != null && pressure.Amount >= required;
         return enough ? PileType.Hand : PileType.Discard;
     }
@@ -48,7 +48,7 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
         await PlayerCmd.GainEnergy(DynamicVars.Energy.BaseValue, Owner);
 
         var pressure = Owner.Creature.GetPower<PressurePower>();
-        var required = IsUpgraded ? 10 : 15;
+        var required = IsUpgraded ? 8 : 12;
         if (pressure != null && pressure.Amount >= required)
             await PowerCmd.ModifyAmount(choiceContext, pressure, -required, Owner.Creature, this);
 
