@@ -7,7 +7,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
 public class SellGold() : ModTokenCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust, CardKeyword.Ethereal };
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Ethereal];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

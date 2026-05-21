@@ -1,10 +1,12 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 
@@ -17,8 +19,8 @@ public class Flyback : ModTokenCard
     public Flyback() : base(0, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
     {
     }
-
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Retain };
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [ CardKeyword.Retain,CutesakiKeywords.OtherAnon.GetModKeywordCardKeyword() ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

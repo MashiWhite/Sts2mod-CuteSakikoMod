@@ -7,6 +7,8 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
+using STS2RitsuLib.Keywords;
+
 // 新增，用于 CardPileCmd
 
 // 新增，引用 NotNeeded
@@ -18,9 +20,8 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
 {
     public override string ChordId => "GreyAnonChord";
 
-    protected override IEnumerable<string> RegisteredKeywordIds =>
-        [CutesakiKeywords.NoNote, CutesakiKeywords.Chord, CutesakiKeywords.OtherAnon];
-
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword(),CutesakiKeywords.Chord.GetModKeywordCardKeyword(),CutesakiKeywords.OtherAnon.GetModKeywordCardKeyword()];
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get

@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
@@ -12,8 +13,7 @@ public class TeamSunshine() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, T
 {
     public override string ChordId => "AnonGChord";
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote, CutesakiKeywords.Chord];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.NoNote.GetModKeywordCardKeyword(),CutesakiKeywords.Chord.GetModKeywordCardKeyword()];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

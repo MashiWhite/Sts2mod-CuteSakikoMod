@@ -10,8 +10,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class ImpromptuPlay() : CuteAnonCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote, CutesakiKeywords.Chord];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

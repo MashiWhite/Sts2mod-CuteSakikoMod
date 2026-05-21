@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
@@ -14,8 +15,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 [RegisterCharacterStarterCard(typeof(CuteAnon))]
 public class PlayChord() : CuteAnonCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote];
-    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -26,7 +26,6 @@ public class PlayChord() : CuteAnonCard(0, CardType.Skill, CardRarity.Basic, Tar
 
         await relic.TriggerAllStoredChords(choiceContext);
     }
-
 
     public CardModel GetTranscendenceTransformedCard()
     {

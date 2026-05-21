@@ -10,13 +10,14 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
 [RegisterCharacterStarterCard(typeof(CuteSaki), 2)]
 public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 

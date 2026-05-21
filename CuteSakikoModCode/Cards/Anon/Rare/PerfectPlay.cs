@@ -2,13 +2,13 @@
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class PerfectPlay() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote, CutesakiKeywords.Chord];
-
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

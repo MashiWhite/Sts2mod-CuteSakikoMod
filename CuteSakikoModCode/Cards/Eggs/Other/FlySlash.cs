@@ -11,7 +11,7 @@ public class FlySlash() : ModTokenCard(0, CardType.Attack, CardRarity.Common, Ta
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(IsUpgraded ? 8m : 5m, ValueProp.Move); }
+        get { yield return new DamageVar(5m, ValueProp.Move); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -45,6 +45,6 @@ public class FlySlash() : ModTokenCard(0, CardType.Attack, CardRarity.Common, Ta
 
     protected override void OnUpgrade()
     {
-        // 升级效果已在 DynamicVars 中处理
+        DynamicVars.Damage.UpgradeValueBy(3);
     }
 }

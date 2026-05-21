@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -20,7 +21,7 @@ public class Chord() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon
         typeof(StrikeOpulent)
     };
 
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 

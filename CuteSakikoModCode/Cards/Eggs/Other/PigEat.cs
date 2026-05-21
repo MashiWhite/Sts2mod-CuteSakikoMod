@@ -9,8 +9,6 @@ public class PigEat() : ModTokenCard(0, CardType.Skill, CardRarity.Common, Targe
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal, CardKeyword.Exhaust];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
-
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var handPile = PileType.Hand.GetPile(Owner);

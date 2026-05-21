@@ -5,15 +5,15 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
 public class Hekitenbansou() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override string ChordId => "HekitenbansouChord";
-
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote, CutesakiKeywords.Chord];
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.NoNote.GetModKeywordCardKeyword(), CutesakiKeywords.Chord.GetModKeywordCardKeyword()];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

@@ -9,12 +9,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [];
+
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
             var baseDamage = 10;
-            var extraPerNote = 2;
+            var extraPerNote = 1;
 
             yield return new CalculationBaseVar(baseDamage);
             yield return new ExtraDamageVar(extraPerNote);
@@ -46,8 +49,10 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
         var calcBase = DynamicVars["CalculationBase"];
         calcBase.UpgradeValueBy(3m);
 
-        // 获取额外伤害变量并升级：2 → 3
+        // 获取额外伤害变量并升级：1
         var extra = DynamicVars["ExtraDamage"];
-        extra.UpgradeValueBy(1m);
+        extra.UpgradeValueBy(0m);
+        
+        AddKeyword(CardKeyword.Retain);
     }
 }

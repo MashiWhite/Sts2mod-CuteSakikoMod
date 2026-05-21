@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "id": "STS2-RitsuLib",
-      "min_version": "0.2.35"
+      "min_version": "0.2.40"
     }
   ],
   "affects_gameplay": true

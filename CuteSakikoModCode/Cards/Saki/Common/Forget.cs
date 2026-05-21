@@ -16,7 +16,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(6m, ValueProp.Move)
+        new BlockVar(8m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

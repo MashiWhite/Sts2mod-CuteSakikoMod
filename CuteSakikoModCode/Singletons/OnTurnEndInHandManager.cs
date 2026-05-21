@@ -1,5 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -10,6 +9,9 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 
@@ -35,40 +37,20 @@ public sealed class OnTurnEndInHandManager : SingletonModel
             var handPile = player.Piles.FirstOrDefault(p => p.Type == PileType.Hand);
             if (handPile == null) continue;
 
-            // 收集需要移除的牌（如 Noise）
             var cardsToRemove = new List<CardModel>();
-
-            // 复制一份手牌列表以防修改
             var handCards = handPile.Cards.ToList();
+
             foreach (var card in handCards)
-                // 跳过卡牌自己的 OnTurnEndInHand 标记，由我们统一处理
-                // if (card.HasTurnEndInHandEffect) continue; // 如果某些牌仍想自助，可保留
-                switch (card)
+            {
+                // 只处理 Noise 牌，NotNeeded 已迁移至官方 OnTurnEndInHand
+                if (card is Noise noise)
                 {
-                    case NotNeeded notNeeded:
-                    {
-                        var blockAmount = notNeeded.DynamicVars.Block.IntValue;
-                        await CreatureCmd.GainBlock(player.Creature, blockAmount, ValueProp.Move, null);
-
-                        var copy = notNeeded.CreateClone();
-                        copy.GiveSingleTurnRetain();
-                        await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, player);
-
-                        notNeeded.GiveSingleTurnRetain();
-                        break;
-                    }
-                    case Noise noise:
-                    {
-                        var amount = noise.DynamicVars["PressurePower"].IntValue;
-                        await PowerCmd.Apply<PressurePower>(choiceContext, player.Creature, amount, player.Creature,
-                            noise);
-                        cardsToRemove.Add(noise);
-                        break;
-                    }
-                    // 未来可以在此扩展其他卡牌
+                    var amount = noise.DynamicVars["PressurePower"].IntValue;
+                    await PowerCmd.Apply<PressurePower>(choiceContext, player.Creature, amount, player.Creature, noise);
+                    cardsToRemove.Add(noise);
                 }
+            }
 
-            // 批量移除
             if (cardsToRemove.Count > 0)
                 await CardPileCmd.RemoveFromCombat(cardsToRemove);
         }

@@ -3,17 +3,18 @@ using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
 public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];
 
     // 可无限次在营地强化
     public override int MaxUpgradeLevel => 999;
 
-    // 动态变量：每次升级增加 1 个随机音符
+    // 动态变量：初始 1 个音符，每次升级增加 CurrentUpgradeLevel 个
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new DynamicVar("Notes", 1); }
@@ -28,8 +29,6 @@ public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Unc
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        // 逐个生成音符，每个音符都会经历完整的吉他处理流程：
-        // 添加进队列、匹配和弦、储存、溢出/自动演奏、触发MessyPlay等
         for (var i = 0; i < amount; i++)
         {
             var type = rng.NextItem(noteTypes);
@@ -39,6 +38,6 @@ public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Unc
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Notes"].UpgradeValueBy(2);
+        DynamicVars["Notes"].UpgradeValueBy(CurrentUpgradeLevel);
     }
 }

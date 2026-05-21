@@ -9,20 +9,20 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
+
 // SweepPower
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 
 public class KnightSword() : ModTokenCard(3, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain,CutesakiKeywords.Sword.GetModKeywordCardKeyword()];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(6m, ValueProp.Move)
     ];
-
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Sword];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

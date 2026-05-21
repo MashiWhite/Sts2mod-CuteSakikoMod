@@ -8,8 +8,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class BeGod() : CuteSakikoModCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
-
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

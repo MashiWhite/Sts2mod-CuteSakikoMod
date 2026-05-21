@@ -1,4 +1,8 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -10,19 +14,45 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class MasqueradePower : CuteSakikoModPower
 {
-    // 保存被移除的能力的原始实例，确保动态变量（如计数器）不丢失
     private readonly List<(Creature creature, PowerModel power, int amount)> _removedPowers = new();
 
-    /// <summary>假面舞会是否正在生效</summary>
     public static bool IsActive { get; private set; }
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
 
+    // ========== 死亡阻止逻辑（已统一，替代所有旧版伤害修改） ==========
+    // 1. 禁止敌人因任何原因死亡（伤害、Doom、处决等）
     public override bool ShouldDie(Creature creature)
     {
-        return false;
+        if (creature.Side == CombatSide.Enemy)
+            return false;
+        return base.ShouldDie(creature);
     }
+
+    public override bool ShouldDieLate(Creature creature)
+    {
+        if (creature.Side == CombatSide.Enemy)
+            return false;
+        return base.ShouldDieLate(creature);
+    }
+
+    // 2. 阻止战斗提前结束（因为敌人永远不会真正死亡）
+    public override bool ShouldStopCombatFromEnding()
+    {
+        return true;
+    }
+
+    // 3. 死亡被阻止时立即锁血到 1 点，同时避免递归崩溃
+    public override async Task AfterPreventingDeath(Creature creature)
+    {
+        if (creature.Side == CombatSide.Enemy)
+        {
+            if (creature.CurrentHp < 1)
+                await CreatureCmd.SetCurrentHp(creature, 1);
+        }
+    }
+    // =================================================================
 
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
@@ -30,6 +60,15 @@ public sealed class MasqueradePower : CuteSakikoModPower
         IsActive = true;
     }
 
+    public override async Task AfterRemoved(Creature oldOwner)
+    {
+        IsActive = false;
+        await base.AfterRemoved(oldOwner);
+    }
+
+    /// <summary>
+    /// 移除场上所有其他能力（保留 MasqueradePower 和 SandpitPower）
+    /// </summary>
     public Task RemoveAllPowers(PlayerChoiceContext choiceContext)
     {
         if (Owner.CombatState == null)
@@ -41,7 +80,6 @@ public sealed class MasqueradePower : CuteSakikoModPower
         {
             if (creature.IsDead) continue;
 
-            // 保存所有需要被移除的能力的原始实例
             foreach (var power in creature.Powers)
             {
                 if (power is MasqueradePower || power is SandpitPower)
@@ -50,7 +88,6 @@ public sealed class MasqueradePower : CuteSakikoModPower
                 _removedPowers.Add((creature, power, power.Amount));
             }
 
-            // 批量移除：只保留 Masquerade 和 Sandpit
             creature.RemoveAllPowersInternalExcept(
                 creature.Powers.Where(p => p is MasqueradePower || p is SandpitPower)
             );
@@ -59,23 +96,23 @@ public sealed class MasqueradePower : CuteSakikoModPower
         return Task.CompletedTask;
     }
 
+    // 回合开始时：归还所有被移除的能力，然后移除假面舞会（结束）
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player.Creature != Owner) return;
 
+        // 归还所有被移除的能力
         var tasks = new List<Task>();
         foreach (var (creature, power, amount) in _removedPowers)
         {
             if (creature.IsDead) continue;
-
-            // 直接复用保存的原始实例，恢复全部内部状态
             tasks.Add(PowerCmd.Apply(choiceContext, power, creature, amount, Owner, null));
         }
-
         _removedPowers.Clear();
 
         await Task.WhenAll(tasks);
 
+        // 假面舞会结束
         await PowerCmd.Remove(this);
         IsActive = false;
     }

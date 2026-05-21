@@ -11,9 +11,6 @@ public class MeteorHephaestus() : CuteSakikoModEggCard(2, CardType.Power, CardRa
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
-
-    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<MeteorHephaestusPower>(); }

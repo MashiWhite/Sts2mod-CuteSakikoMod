@@ -23,8 +23,9 @@ public class Jr1() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetT
     {
         get
         {
-            yield return new DamageVar(IsUpgraded ? 13m : 10m, ValueProp.Move); // 单次高伤
-            yield return new RepeatVar(IsUpgraded ? 2 : 2); // 两次低伤次数
+            yield return new DamageVar("lowdamage",8m, ValueProp.Move); // 单次高伤
+            yield return new DamageVar(10m, ValueProp.Move); // 单次高伤
+            yield return new RepeatVar( 2); // 两次低伤次数
         }
     }
 
@@ -33,7 +34,7 @@ public class Jr1() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetT
         if (cardPlay.Target == null) return;
 
         // 两次低伤害（基础8，升级10）
-        var lowDamage = IsUpgraded ? 10 : 8;
+        var lowDamage = DynamicVars["lowdamage"].IntValue;
         for (var i = 0; i < 2; i++)
             await DamageCmd.Attack(lowDamage)
                 .FromCard(this)
@@ -59,6 +60,7 @@ public class Jr1() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetT
 
     protected override void OnUpgrade()
     {
-        // 升级效果在 DynamicVars 和逻辑中处理
+        DynamicVars["lowdamage"].UpgradeValueBy(2);
+        DynamicVars.Damage.UpgradeValueBy(3);
     }
 }

@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
@@ -13,8 +14,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 public class AnonStrike() : CuteAnonCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playguitar];
-
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playguitar.GetModKeywordCardKeyword()];
+ 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(6m, ValueProp.Move)

@@ -29,24 +29,33 @@ public class FlybackManager : SingletonModel
     private static int _reloadCountWaitExpected;
     private static TaskCompletionSource<bool>? _playCountWaitTcs;
 
+    // 辅助判断：是否为主机或单人
+    private static bool IsHostOrSingle =>
+        RunManager.Instance.NetService.Type == NetGameType.Host ||
+        RunManager.Instance.NetService.Type == NetGameType.Singleplayer;
+
+    private static bool IsClient =>
+        RunManager.Instance.NetService.Type == NetGameType.Client;
+
     public int TotalPlayCount
     {
         get
         {
-            // 全面保护：RunManager、NetService 或 PlayerDataSlot 未就绪时，返回缓存值（通常为0）
             if (RunManager.Instance == null || RunManager.Instance.NetService == null || PlayerDataSlot == null)
                 return _cachedTotalPlayCount;
 
-            if (RunManager.Instance.NetService.Type == NetGameType.Host)
+            if (IsHostOrSingle)
             {
                 int real = CalculateRealTotalPlayCount();
                 if (_cachedTotalPlayCount != real)
                 {
                     _cachedTotalPlayCount = real;
-                    BroadcastPlayCount(real);
+                    if (RunManager.Instance.NetService.Type == NetGameType.Host)
+                        BroadcastPlayCount(real);
                 }
                 return _cachedTotalPlayCount;
             }
+            // 客户端
             return _cachedTotalPlayCount;
         }
     }
@@ -65,13 +74,14 @@ public class FlybackManager : SingletonModel
         foreach (var card in pile.Cards.OfType<Flyback>())
             card.RefreshDynamicVars();
 
-        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+        if (IsHostOrSingle)
         {
             int newTotal = CalculateRealTotalPlayCount();
             if (_cachedTotalPlayCount != newTotal)
             {
                 _cachedTotalPlayCount = newTotal;
-                BroadcastPlayCount(newTotal);
+                if (RunManager.Instance.NetService.Type == NetGameType.Host)
+                    BroadcastPlayCount(newTotal);
                 NotifyDataChanged();
             }
         }
@@ -85,11 +95,12 @@ public class FlybackManager : SingletonModel
         foreach (var player in runState.Players)
             PlayerDataSlot.Modify(player, data => data.PlayCount *= 2);
 
-        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+        if (IsHostOrSingle)
         {
             int newTotal = Instance.CalculateRealTotalPlayCount();
             _cachedTotalPlayCount = newTotal;
-            BroadcastPlayCount(newTotal);
+            if (RunManager.Instance.NetService.Type == NetGameType.Host)
+                BroadcastPlayCount(newTotal);
             Instance.NotifyDataChanged();
         }
     }
@@ -97,7 +108,7 @@ public class FlybackManager : SingletonModel
     // ---------- ReloadCount 相关 ----------
     public static void IncrementReloadCount()
     {
-        if (RunManager.Instance.NetService.Type != NetGameType.Host) return;
+        if (!IsHostOrSingle) return;
 
         var field = typeof(RunManager).GetField("_numReloads", BindingFlags.NonPublic | BindingFlags.Instance);
         if (field == null) return;
@@ -110,20 +121,17 @@ public class FlybackManager : SingletonModel
                 RunDataSlot.Modify(runState, data => data.ReloadCount = current + 1);
         }
         _lastSyncedReloadCount = current + 1;
-        BroadcastReloadCount(current + 1);
+        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+            BroadcastReloadCount(current + 1);
         Instance.NotifyDataChanged();
     }
 
     public static int GetReloadCount()
     {
-        // 全面保护：RunManager 或 RunDataSlot 未就绪时返回 0
-        if (RunManager.Instance == null || RunDataSlot == null)
-            return 0;
+        if (RunManager.Instance == null || RunDataSlot == null) return 0;
+        if (RunManager.Instance.NetService == null) return 0;
 
-        if (RunManager.Instance.NetService == null)
-            return 0;
-
-        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+        if (IsHostOrSingle)
         {
             int raw = GetRawNumReloads();
             UpdateRunSavedData(raw);
@@ -163,7 +171,7 @@ public class FlybackManager : SingletonModel
 
     public static void OnReloadCountReceived(int count)
     {
-        if (RunManager.Instance.NetService.Type == NetGameType.Host) return;
+        if (!IsClient) return;
         var runState = RunManager.Instance.DebugOnlyGetState();
         if (runState == null || RunDataSlot == null) return;
         var runData = RunDataSlot.Get(runState);
@@ -186,7 +194,7 @@ public class FlybackManager : SingletonModel
 
     public static void OnPlayCountReceived(int totalCount)
     {
-        if (RunManager.Instance.NetService.Type == NetGameType.Host) return;
+        if (!IsClient) return;
         _cachedTotalPlayCount = totalCount;
         Instance.NotifyDataChanged();
         _playCountWaitTcs?.TrySetResult(true);
@@ -195,7 +203,7 @@ public class FlybackManager : SingletonModel
     // ---------- 等待方法 ----------
     public static async Task WaitForReloadCountV2(int expected, int timeoutMs = 1000)
     {
-        if (RunManager.Instance.NetService.Type != NetGameType.Client || GetReloadCount() >= expected) return;
+        if (!IsClient || GetReloadCount() >= expected) return;
         var tcs = new TaskCompletionSource<bool>();
         _reloadCountWaitTcs = tcs;
         _reloadCountWaitExpected = expected;
@@ -208,7 +216,7 @@ public class FlybackManager : SingletonModel
 
     public static async Task WaitForPlayCountChange(int timeoutMs = 500)
     {
-        if (RunManager.Instance.NetService.Type != NetGameType.Client) return;
+        if (!IsClient) return;
 
         _playCountWaitTcs?.TrySetResult(false);
         var tcs = new TaskCompletionSource<bool>();
@@ -257,10 +265,11 @@ public class FlybackManager : SingletonModel
 
     public static void SyncPlayCountIfHost()
     {
-        if (RunManager.Instance.NetService.Type != NetGameType.Host) return;
+        if (!IsHostOrSingle) return;
         int real = Instance.CalculateRealTotalPlayCount();
         _cachedTotalPlayCount = real;
-        BroadcastPlayCount(real);
+        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+            BroadcastPlayCount(real);
         Instance.NotifyDataChanged();
     }
 }

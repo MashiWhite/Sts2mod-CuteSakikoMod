@@ -43,6 +43,6 @@ public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, Tar
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Golds"].UpgradeValueBy(5);
+        DynamicVars["Gold"].UpgradeValueBy(5);
     }
 }

@@ -4,13 +4,15 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class MessyPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.NoNote];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];
 
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new PowerVar<MessyPlayPower>(1m); } // 未升级每次额外1个音符

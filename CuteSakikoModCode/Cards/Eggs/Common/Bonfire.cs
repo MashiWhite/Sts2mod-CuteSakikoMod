@@ -11,7 +11,7 @@ public class Bonfire : CuteSakikoModEggCard
     {
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 

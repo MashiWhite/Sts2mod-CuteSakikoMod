@@ -39,7 +39,7 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
         var pressure = Owner.Creature.GetPower<PressurePower>();
         var required = IsUpgraded ? 8 : 12;
         var enough = pressure != null && pressure.Amount >= required;
-        return enough ? PileType.Hand : PileType.Discard;
+        return enough ? PileType.Hand : PileType.Exhaust;
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

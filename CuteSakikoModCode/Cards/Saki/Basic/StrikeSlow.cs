@@ -9,13 +9,14 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
 [RegisterCharacterStarterCard(typeof(CuteSaki), 2)]
 public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
 
     public override bool GainsBlock => true;
 
@@ -23,8 +24,8 @@ public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(4m, ValueProp.Move),
-        new BlockVar(2m, ValueProp.Move) // 仅用于描述，实际动态使用
+        new DamageVar(5m, ValueProp.Move),
+        new BlockVar(3m, ValueProp.Move) // 仅用于描述，实际动态使用
     ];
 
     protected override bool ShouldGlowGoldInternal
@@ -54,24 +55,22 @@ public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
         var hasPressure = pressure != null && pressure.Amount > 0;
 
         if (hasPressure)
-            // 消耗1层压力
+        {
             await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
+            if (extraBlock > 0)
+                await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(extraBlock, ValueProp.Move), cardPlay);
+        }
 
-        // 造成伤害
         await DamageCmd.Attack(baseDamage)
             .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-
-        // 获得格挡（如果有）
-        if (extraBlock > 0)
-            await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(extraBlock, ValueProp.Move), cardPlay);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars.Block.UpgradeValueBy(3m);
+        DynamicVars.Block.UpgradeValueBy(2m);
     }
 }

@@ -18,13 +18,10 @@ public static class MusicNoteManager
             data = new PlayerData();
             _data[player] = data;
         }
-
         return data;
     }
 
-    // ========== 修改后的 AddNote ==========
-    public static NoteProcessResult AddNote(
-        Player player, CardType type,
+    public static NoteProcessResult AddNote(Player player, CardType type,
         IReadOnlyDictionary<ChordCategory, string> learnedChords,
         IEnumerable<string> bonusChordIds)
     {
@@ -34,12 +31,9 @@ public static class MusicNoteManager
             OverflowChord = null,
             TotalStoredCount = 0
         };
-
         if (player == null) return result;
 
         var data = GetData(player);
-
-        // 回合重置
         var combat = player.Creature?.CombatState;
         var currentRound = combat?.RoundNumber ?? 0;
         if (data.LastRoundNumber != currentRound)
@@ -49,14 +43,14 @@ public static class MusicNoteManager
         }
 
         data.NotesGainedThisTurn++;
-        data.TotalNotesGainedThisCombat++;   // ★ 累计战斗计数
+        data.TotalNotesGainedThisCombat++;
         data.Notes.Enqueue(type);
         while (data.Notes.Count > 4)
             data.Notes.Dequeue();
 
         var sequence = data.Notes.ToList();
+        var matchedChords = new List<string>();
 
-        // 学习和弦匹配
         if (learnedChords != null)
             foreach (var kv in learnedChords)
             {
@@ -64,45 +58,40 @@ public static class MusicNoteManager
                 if (string.IsNullOrEmpty(chordId)) continue;
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
-                    // 1. 获得修改后的序列（如果玩家身上有修改器Power）
                     var modifiedSeq = ChordSequenceModifierHelper.GetModifiedSequence(def, player.Creature);
-                    // 2. 用修改后的序列匹配
                     if (ChordManager.MatchesChord(modifiedSeq, sequence))
-                    {
-                        data.StoredChords.Add(chordId);
-                        result.NewChords.Add(chordId);
-                    }
+                        matchedChords.Add(chordId);
                 }
             }
 
-        // 奖励和弦匹配
         if (bonusChordIds != null)
             foreach (var chordId in bonusChordIds)
             {
                 if (string.IsNullOrEmpty(chordId)) continue;
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
-                    // 1. 获得修改后的序列（如果玩家身上有修改器Power）
                     var modifiedSeq = ChordSequenceModifierHelper.GetModifiedSequence(def, player.Creature);
-                    // 2. 用修改后的序列匹配
                     if (ChordManager.MatchesChord(modifiedSeq, sequence))
-                    {
-                        data.StoredChords.Add(chordId);
-                        result.NewChords.Add(chordId);
-                    }
+                        matchedChords.Add(chordId);
                 }
             }
 
-        // 溢出处理
+        result.NewChords = matchedChords;
+
+        // 批量添加到存储中
+        foreach (var chordId in matchedChords)
+            data.StoredChords.Add(chordId);
+
+        // 统一处理溢出
         while (data.StoredChords.Count > MaxStoredChords)
         {
-            result.OverflowChord = data.StoredChords[0];
+            var overflow = data.StoredChords[0];
             data.StoredChords.RemoveAt(0);
+            result.OverflowChord ??= overflow;
         }
 
         result.TotalStoredCount = data.StoredChords.Count;
 
-        // 触发 GuitarVocalPower
         if (player?.Creature != null)
         {
             var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
@@ -112,7 +101,6 @@ public static class MusicNoteManager
         return result;
     }
 
-    // ========== 以下所有原方法保持不变 ==========
     public static int GetNotesGainedThisTurn(Player player)
     {
         if (player == null) return 0;
@@ -124,7 +112,6 @@ public static class MusicNoteManager
             data.NotesGainedThisTurn = 0;
             data.LastRoundNumber = currentRound;
         }
-
         return data.NotesGainedThisTurn;
     }
 
@@ -136,7 +123,7 @@ public static class MusicNoteManager
         var notesArray = data.Notes.ToArray();
         var removeIndex = rng.NextInt(notesArray.Length);
         data.Notes.Clear();
-        for (var i = 0; i < notesArray.Length; i++)
+        for (int i = 0; i < notesArray.Length; i++)
             if (i != removeIndex)
                 data.Notes.Enqueue(notesArray[i]);
         return true;
@@ -166,7 +153,6 @@ public static class MusicNoteManager
         GetData(player).Notes.Clear();
     }
 
-    // 在 ClearCombatData 方法中清空累计
     public static void ClearCombatData(Player player)
     {
         if (player == null) return;
@@ -175,7 +161,7 @@ public static class MusicNoteManager
             data.Notes.Clear();
             data.StoredChords.Clear();
             data.NotesGainedThisTurn = 0;
-            data.TotalNotesGainedThisCombat = 0;   // ★ 清空
+            data.TotalNotesGainedThisCombat = 0;
             data.LastRoundNumber = 0;
         }
     }
@@ -197,7 +183,6 @@ public static class MusicNoteManager
             list.RemoveAt(index);
             return true;
         }
-
         return false;
     }
 
@@ -209,13 +194,11 @@ public static class MusicNoteManager
         while (data.StoredChords.Count > MaxStoredChords)
             data.StoredChords.RemoveAt(0);
     }
-    
-    // 新增公共方法
+
     public static int GetTotalNotesGainedThisCombat(Player player)
     {
         if (player == null) return 0;
         var data = GetData(player);
-        // 无需回合重置，因为 ClearCombatData 负责在战斗结束时清空
         return data.TotalNotesGainedThisCombat;
     }
 
@@ -223,7 +206,7 @@ public static class MusicNoteManager
     {
         if (player == null) return 0;
         var data = GetData(player);
-        var count = data.Notes.Count;
+        int count = data.Notes.Count;
         data.Notes.Clear();
         return count;
     }
@@ -249,19 +232,18 @@ public static class MusicNoteManager
         return data.Notes.Last();
     }
 
-    // ========== 新增结果结构体 ==========
     public struct NoteProcessResult
     {
-        public List<string> NewChords; // 新匹配到的和弦
-        public string? OverflowChord; // 因储存满而被挤出的最旧和弦
-        public int TotalStoredCount; // 添加后储存和弦的总数
+        public List<string> NewChords;
+        public string? OverflowChord;
+        public int TotalStoredCount;
     }
 
     private class PlayerData
     {
         public int LastRoundNumber;
         public int NotesGainedThisTurn;
-        public int TotalNotesGainedThisCombat;   // ★ 新增
+        public int TotalNotesGainedThisCombat;
         public Queue<CardType> Notes { get; } = new();
         public List<string> StoredChords { get; } = new();
     }

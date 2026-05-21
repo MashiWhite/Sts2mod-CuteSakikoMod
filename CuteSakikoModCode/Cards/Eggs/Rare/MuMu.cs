@@ -12,7 +12,7 @@ public class MuMu() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.Rare, 
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(IsUpgraded ? 9m : 6m, ValueProp.Move); }
+        get { yield return new DamageVar(6m, ValueProp.Move); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -36,7 +36,7 @@ public class MuMu() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.Rare, 
             .Execute(choiceContext);
 
         // 根据概率选择生成的卡牌
-        var isDefensive = Owner.RunState.Rng.UpFront.NextDouble() < (IsUpgraded ? 0.25 : 0.5);
+        var isDefensive = Owner.RunState.Rng.UpFront.NextDouble() < (IsUpgraded ? 0.1 : 0.25);
         if (isDefensive)
         {
             // 生成防御斩

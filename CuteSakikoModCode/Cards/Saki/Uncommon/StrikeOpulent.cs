@@ -17,7 +17,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.Playpiano];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 

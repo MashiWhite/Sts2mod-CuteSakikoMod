@@ -10,7 +10,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Common;
 
 public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
