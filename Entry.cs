@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -112,8 +113,12 @@ public class Entry
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
 
-        // 预加载自定义特效
-        GD.Load<PackedScene>("res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn");
+        // Entry.cs 的 Init 或类似初始化方法里添加：
+        VFXUtil.PreloadScenes(new List<string>
+        {
+            "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn",
+            // 其他 Mod 特效路径...
+        });
 
         // 7. 注册网络消息处理器 + 监听客户端重连
         RunManager.Instance.RunStarted += _ =>

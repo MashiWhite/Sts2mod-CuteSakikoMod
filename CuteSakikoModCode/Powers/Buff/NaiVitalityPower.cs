@@ -13,15 +13,15 @@ public class NaiVitalityPower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
 
-    // 在回合结束之前（手牌和能量尚未重置）检查条件
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    // ★ 改为 BeforeSideTurnEnd，在手牌被弃掉前检测
+    public override async Task BeforeSideTurnEnd(
+        PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
         if (side != CombatSide.Player) return;
 
         var combatState = Owner?.Player?.PlayerCombatState;
         if (combatState == null) return;
 
-        // OR 逻辑：能量 > 0 或手牌数 > 0
         var hasEnergy = combatState.Energy > 0;
         var handCount = combatState.Hand?.Cards.Count ?? 0;
         _willTriggerNextTurn = hasEnergy || handCount > 0;
@@ -29,16 +29,13 @@ public class NaiVitalityPower : CuteSakikoModPower
         await Task.CompletedTask;
     }
 
-    // 下回合开始时触发
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        // 只在能力拥有者自己的回合触发
         if (player != Owner.Player) return;
 
         if (!_willTriggerNextTurn) return;
         _willTriggerNextTurn = false;
 
-        // 这里 player 已经确保是拥有者，不需要再判断 null
         await PlayerCmd.GainEnergy(1, player);
         await CardPileCmd.Draw(choiceContext, 1, player);
     }

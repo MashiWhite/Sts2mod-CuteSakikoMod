@@ -323,7 +323,7 @@
   "CUTE_SAKIKO_MOD_CARD_TRUE_HARUHIKAGE.title": "真·春日影",
   "CUTE_SAKIKO_MOD_CARD_TRUE_HARUHIKAGE.description": "对所有敌人造成{Damage:diff()}点伤害，并[gold]击晕[/gold]所有敌人。",
   "CUTE_SAKIKO_MOD_CARD_SYMBOL_ONE.title": "Symbol I : △",
-  "CUTE_SAKIKO_MOD_CARD_SYMBOL_ONE.description": "对全体敌人造成{TotalDamage:diff()}点伤害。\n若有则消耗2层[gold]压力[/gold]，使这张牌在本场战斗中永久增加{IfUpgraded:show:8|6}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_SYMBOL_ONE.description": "若有则消耗2层[gold]压力[/gold]，使这张牌在本场战斗中永久增加{Increase:diff()}点伤害。\n对全体敌人造成{Damage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_SYMBOL_TWO.title": "Symbol II : Air",
   "CUTE_SAKIKO_MOD_CARD_SYMBOL_TWO.description": "造成等同于目标[gold]压力[/gold]层数[blue]次数[/blue]的{Damage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_SYMBOL_THREE.title": "Symbol III : ▽",
