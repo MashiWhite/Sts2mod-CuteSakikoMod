@@ -18,6 +18,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
 [RegisterOwnedCardKeyword(nameof(Chord))]
 [RegisterOwnedCardKeyword(nameof(RememberChord))]
 [RegisterOwnedCardKeyword(nameof(Memorysaki))]
+[RegisterOwnedCardKeyword(nameof(Sakiforget))]
 public class CutesakiKeywords
 {
     public static readonly string Pressure = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Pressure));
@@ -39,4 +40,6 @@ public class CutesakiKeywords
 
     public static readonly string
         Memorysaki = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Memorysaki));
+    public static readonly string
+        Sakiforget = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Sakiforget));
 }

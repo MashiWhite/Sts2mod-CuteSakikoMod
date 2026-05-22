@@ -1,11 +1,16 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Keywords;
 
@@ -18,36 +23,31 @@ public sealed class MemoryComingPower : CuteSakikoModPower
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
 
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
+        }
+    }
+    
     // 钩子，在玩家回合开始时
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player.Creature != Owner) return;
 
-        // 延迟初始化：第一次使用时获取所有回忆卡牌
-        if (_allMemoryCards == null)
-            _allMemoryCards = ModelDb.AllCards
-                .Where(card => card.HasModKeyword(CutesakiKeywords.Memory))
-                .ToList();
+        var canonicalCards = MemoryCardPile.GetCanonicalCards(player);
+        if (canonicalCards.Count == 0) return;
 
-        var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(player).ToHashSet();
+        var count = Math.Min(Amount, canonicalCards.Count);
+        var shuffled = canonicalCards.UnstableShuffle(Owner.Player.RunState.Rng.Shuffle);
+        var selectedTemplates = shuffled.Take(count).ToList();
+        if (selectedTemplates.Count == 0) return;
 
-        var availableMemoryCards = _allMemoryCards
-            .Where(card => !exhaustedMemoryIds.Contains(card.Id))
-            .ToList();
-
-        if (availableMemoryCards.Count == 0) return;
-
-        var count = Amount;
-        var randomCards = CardFactory.GetDistinctForCombat(
-            Owner.Player,
-            availableMemoryCards,
-            count,
-            Owner.Player.RunState.Rng.CombatCardGeneration
-        ).ToList();
-
-        if (randomCards.Count == 0) return;
-
-        var mutableCards = randomCards.Select(card => card.IsMutable ? card : card.ToMutable()).ToList();
+        var mutableCards = selectedTemplates.Select(template => Owner.Player.Creature.CombatState.CreateCard(template, Owner.Player)).ToList();
         await CardPileCmd.AddGeneratedCardsToCombat(mutableCards, PileType.Hand, player);
         Flash();
     }

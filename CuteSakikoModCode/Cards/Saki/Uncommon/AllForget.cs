@@ -1,9 +1,12 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using STS2RitsuLib.Keywords;
 
 // 添加 LINQ 支持
 
@@ -15,6 +18,8 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
     {
         get
         {
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
@@ -28,18 +33,10 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
         var cardCount = handCards.Count;
 
         foreach (var card in handCards)
-            await CardCmd.Exhaust(choiceContext, card);
+            MemoryCmd.Forget(choiceContext, handCards, this);
 
         await CardPileCmd.Draw(choiceContext, cardCount, Owner);
-
-        var pressure = Owner.Creature.GetPower<PressurePower>();
-        if (pressure != null)
-        {
-            var reducePerCard = IsUpgraded ? 2 : 1;
-            var totalReduce = cardCount * reducePerCard;
-            // 使用 PowerCmd.ModifyAmount 安全减少压力层数
-            await PowerCmd.ModifyAmount(choiceContext, pressure, -totalReduce, Owner.Creature, this);
-        }
+        
     }
 
     protected override void OnUpgrade()

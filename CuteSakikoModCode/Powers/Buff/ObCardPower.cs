@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,6 +12,7 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -25,8 +28,10 @@ public sealed class ObCardPower : CuteSakikoModPower
     {
         get
         {
-            yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
             yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
 
@@ -40,7 +45,7 @@ public sealed class ObCardPower : CuteSakikoModPower
         await ModifyExistingCards();
     }
 
-    // 只遍历一次现有卡牌
+    // 立即修改玩家当前所有卡牌
     private async Task ModifyExistingCards()
     {
         if (Owner?.Player == null) return;
@@ -72,12 +77,15 @@ public sealed class ObCardPower : CuteSakikoModPower
         var card = cardPlay.Card;
         if (card.Owner?.Creature != Owner) return;
 
-        // 减少压力
-        var pressure = Owner.GetPower<PressurePower>();
-        if (pressure != null && pressure.Amount > 0)
-            await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner, card);
+        if (_modifiedCards.Contains(card))
+        {
+            // 遗忘该卡牌（会触发记忆堆清理等后续效果）
+            MemoryCmd.Forget(choiceContext, new[] { card }, null);
 
-        // 新打出的卡牌已在手牌中，且已被修改过，无需再全量遍历
+            // 从修改记录中移除，避免后续恢复时找不到
+            _modifiedCards.Remove(card);
+            _originalCosts.Remove(card);
+        }
     }
 
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
@@ -93,19 +101,18 @@ public sealed class ObCardPower : CuteSakikoModPower
 
     private void ApplyModificationsToCard(CardModel card)
     {
+        // 记录原始费用
         if (!_originalCosts.ContainsKey(card))
         {
             var originalCost = card.EnergyCost.GetWithModifiers(CostModifiers.None);
             _originalCosts[card] = originalCost;
         }
-
-        if (!_hadExhaustKeyword.ContainsKey(card))
-            _hadExhaustKeyword[card] = card.Keywords.Contains(CardKeyword.Exhaust);
-
+        
+        // 设置费用为 1
         card.EnergyCost.SetThisCombat(1, true);
+
+        // 重放次数 +1
         card.BaseReplayCount += ExtraReplay;
-        if (!card.Keywords.Contains(CardKeyword.Exhaust))
-            card.AddKeyword(CardKeyword.Exhaust);
         _modifiedCards.Add(card);
     }
 
@@ -123,41 +130,43 @@ public sealed class ObCardPower : CuteSakikoModPower
                 if (pile == null) continue;
                 foreach (var card in pile.Cards)
                 {
-                    // 恢复费用：清除所有本地修饰器并重置 _base
+                    if (!_modifiedCards.Contains(card)) continue;
+
+                    // 恢复费用
                     if (_originalCosts.TryGetValue(card, out var originalCost))
                     {
                         var energyCost = card.EnergyCost;
 
-                        // 反射获取私有字段 _localModifiers 并清空
+                        // 清空本地修改器
                         var modifiersField = energyCost.GetType()
                             .GetField("_localModifiers", BindingFlags.NonPublic | BindingFlags.Instance);
-                        if (modifiersField?.GetValue(energyCost) is IList list)
+                        if (modifiersField?.GetValue(energyCost) is System.Collections.IList list)
                             list.Clear();
 
-                        // 反射获取私有字段 _base 并设置为原始费用
+                        // 重置基础费用
                         var baseField = energyCost.GetType()
                             .GetField("_base", BindingFlags.NonPublic | BindingFlags.Instance);
                         if (baseField != null)
                             baseField.SetValue(energyCost, originalCost);
 
-                        // 触发费用变化事件，刷新 UI
+                        // 通知 UI 刷新
                         card.InvokeEnergyCostChanged();
                     }
 
-                    // 恢复重播次数
-                    if (_modifiedCards.Contains(card))
-                        card.BaseReplayCount -= ExtraReplay;
+                    // 恢复重放次数
+                    card.BaseReplayCount -= ExtraReplay;
 
-                    // 恢复消耗关键字
-                    if (_hadExhaustKeyword.TryGetValue(card, out var hadExhaust) && !hadExhaust)
-                        card.RemoveKeyword(CardKeyword.Exhaust);
+                    _modifiedCards.Remove(card);
+                    _originalCosts.Remove(card);
+
+
                 }
             }
         }
 
         _modifiedCards.Clear();
         _originalCosts.Clear();
-        _hadExhaustKeyword.Clear();
+
         await PowerCmd.Remove(this);
     }
 }

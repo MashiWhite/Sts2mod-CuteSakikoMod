@@ -97,7 +97,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="CuteSakikoModCode\CardPiles\"/>
         <Folder Include="CuteSakikoModCode\Cards\Mod\Curse\"/>
         <Folder Include="CuteSakikoModCode\Cards\Mod\Event\"/>
         <Folder Include="CuteSakikoModCode\Encounters\Common\"/>

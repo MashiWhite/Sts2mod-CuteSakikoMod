@@ -1,8 +1,11 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -12,18 +15,51 @@ public sealed class OblivionisPower : CuteSakikoModPower
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
 
-    // 每当有牌被消耗时（包括自己？为了避免无限循环，排除自身）
-    public override async Task AfterCardExhausted(PlayerChoiceContext choiceContext, CardModel card,
-        bool causedByEthereal)
+   
+    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
-        // 忽略能力牌自身被消耗的情况（避免无限循环）
-        if (card is Oblivionis) return;
+        await base.AfterApplied(applier, cardSource);
+        // 能力被施加到生物上时才订阅（此时 this 是可变实例，Owner 可访问）
+        MemoryCardPileManager.OnForgottenCards += HandleForgottenCards;
+    }
 
-        // 对敌方全体造成8点伤害
-        await DamageCmd.Attack(8m)
-            .FromCard(card) // 伤害来源为被消耗的牌
-            .TargetingAllOpponents(Owner.CombatState)
-            .WithHitFx("vfx/vfx_attack_slash")
-            .Execute(choiceContext);
+    public override async Task AfterRemoved(Creature oldOwner)
+    {
+        // 能力被移除时取消订阅，防止内存泄漏
+        MemoryCardPileManager.OnForgottenCards -= HandleForgottenCards;
+        await base.AfterRemoved(oldOwner);
+    }
+
+    private async Task HandleForgottenCards(
+        PlayerChoiceContext choiceContext,
+        IReadOnlyList<CardModel> forgottenCards,
+        CardModel? source)
+    {
+        // 只有持有者是玩家时才生效
+        if (Owner?.IsPlayer != true) return;
+        if (forgottenCards.Count == 0) return;
+
+        var enemies = Owner.CombatState?.Enemies
+            .Where(e => e.IsHittable)
+            .ToList();
+
+        if (enemies == null || enemies.Count == 0) return;
+
+        int damagePerCard = Amount;
+
+        // 每张被遗忘的牌，对所有可攻击的敌人造成一次伤害
+        foreach (var card in forgottenCards)
+        {
+            foreach (var enemy in enemies)
+            {
+                await CreatureCmd.Damage(
+                    choiceContext,
+                    enemy,
+                    damagePerCard,
+                    ValueProp.Move,
+                    Owner,       // 伤害来源：能力的持有者
+                    null);       // 没有卡牌来源
+            }
+        }
     }
 }

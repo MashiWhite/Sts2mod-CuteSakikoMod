@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
@@ -41,16 +42,10 @@ public class Entry
         using (RitsuLibFramework.BeginModDataRegistration(ModId))
         {
             var store = RitsuLibFramework.GetDataStore(ModId);
-            store.Register(
-                "config",
-                "config.json",
-                SaveScope.Global,
-                () => new CuteSakikoModConfigData(),
-                true
-            );
+            store.Register("config", "config.json", SaveScope.Global, () => new CuteSakikoModConfigData(), true);
         }
 
-        // 2. 创建绑定（用于设置界面）
+        // 2. 创建绑定
         var eggBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
             ModId, "config",
             model => model.彩蛋卡,
@@ -63,12 +58,7 @@ public class Entry
             .WithTitle(ModSettingsText.Literal("Cute Sakiko Mod 设置"))
             .AddSection("general", section => section
                 .WithTitle(ModSettingsText.Literal("通用"))
-                .AddToggle(
-                    "egg_toggle",
-                    ModSettingsText.Literal("彩蛋卡"),
-                    eggBinding,
-                    ModSettingsText.Literal("启用后游戏开始时自动获得彩蛋遗物")
-                )
+                .AddToggle("egg_toggle", ModSettingsText.Literal("彩蛋卡"), eggBinding, ModSettingsText.Literal("启用后游戏开始时自动获得彩蛋遗物"))
             )
         );
 
@@ -76,34 +66,22 @@ public class Entry
         var harmony = new Harmony("White.CuteSakikoMod");
         harmony.PatchAll();
 
-        // 5. 注册 RunSavedData 槽位 —— 飞返次数 & 读档次数持久化
+        // ★ 5. 提前注册自定义牌堆（必须在牌堆注册表冻结前完成）
+        MemoryCardPile.Register(ModId);
+        ForgetCardPile.Register(ModId);
+
+        // 6. 注册 RunSavedData 槽位
         var runDataStore = RunSavedDataStore.For(ModId);
-        FlybackManager.RunDataSlot = runDataStore.Register<RunFlybackData>(
-            "FlybackRunData",
-            options: new RunSavedDataOptions
-            {
-                WritePolicy = RunSavedDataWritePolicy.WhenNonDefault,
-                SyncLobbyOnChange = false
-            });
-        FlybackManager.PlayerDataSlot = runDataStore.RegisterPerPlayer<PlayerFlybackData>(
-            "FlybackPlayerData",
-            options: new RunSavedDataOptions
-            {
-                WritePolicy = RunSavedDataWritePolicy.WhenNonDefault,
-                SyncLobbyOnChange = true
-            });
-        // 注册 Eggs 首次选择标记（每个玩家独立）
-        Eggs.PlayerEggsSlot = runDataStore.RegisterPerPlayer<PlayerEggsData>(
-            "EggsSelected",
-            options: new RunSavedDataOptions
-            {
-                WritePolicy = RunSavedDataWritePolicy.WhenNonDefault,
-                SyncLobbyOnChange = true
-            });
+        FlybackManager.RunDataSlot = runDataStore.Register<RunFlybackData>("FlybackRunData",
+            options: new RunSavedDataOptions { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = false });
+        FlybackManager.PlayerDataSlot = runDataStore.RegisterPerPlayer<PlayerFlybackData>("FlybackPlayerData",
+            options: new RunSavedDataOptions { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
+        Eggs.PlayerEggsSlot = runDataStore.RegisterPerPlayer<PlayerEggsData>("EggsSelected",
+            options: new RunSavedDataOptions { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
 
         Log.Debug("Mod initialized!");
 
-        // 6. 事件订阅
+        // 7. 事件订阅
         if (RunManager.Instance != null)
             RunManager.Instance.RunStarted += OnRunStarted;
         else
@@ -113,42 +91,25 @@ public class Entry
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
 
-        // Entry.cs 的 Init 或类似初始化方法里添加：
-        VFXUtil.PreloadScenes(new List<string>
-        {
-            "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn",
-            // 其他 Mod 特效路径...
-        });
+        // 8. 预加载 VFX
+        VFXUtil.PreloadScenes(new List<string> { "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
 
-        // 7. 注册网络消息处理器 + 监听客户端重连
+        // 9. 注册网络消息处理器 + 监听客户端重连
         RunManager.Instance.RunStarted += _ =>
         {
             var netService = RunManager.Instance.NetService;
             if (netService != null)
             {
-                // 注册 ReloadCountSyncMessage 接收器（主机和客户端都需要）
-                netService.RegisterMessageHandler(
-                    new MessageHandlerDelegate<ReloadCountSyncMessage>((msg, senderId) =>
-                    {
-                        FlybackManager.OnReloadCountReceived(msg.ReloadCount);
-                    })
-                );
-
-                // ★ 新增：注册 PlayCountSyncMessage 接收器
-                netService.RegisterMessageHandler(
-                    new MessageHandlerDelegate<PlayCountSyncMessage>((msg, senderId) =>
-                    {
-                        FlybackManager.OnPlayCountReceived(msg.TotalPlayCount);
-                    })
-                );
-
-                // 如果是主机，监听客户端连接，主动同步 ReloadCount 和 PlayCount
+                netService.RegisterMessageHandler(new MessageHandlerDelegate<ReloadCountSyncMessage>(
+                    (msg, senderId) => FlybackManager.OnReloadCountReceived(msg.ReloadCount)));
+                netService.RegisterMessageHandler(new MessageHandlerDelegate<PlayCountSyncMessage>(
+                    (msg, senderId) => FlybackManager.OnPlayCountReceived(msg.TotalPlayCount)));
                 if (netService is NetHostGameService hostService)
                 {
                     hostService.ClientConnected += peerId =>
                     {
                         FlybackManager.SyncReloadCountIfHost();
-                        FlybackManager.SyncPlayCountIfHost();  // ★ 新增：同步总飞返次数
+                        FlybackManager.SyncPlayCountIfHost();
                     };
                 }
             }
@@ -157,18 +118,12 @@ public class Entry
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
         {
             if (!ModConfig.彩蛋卡) return;
-
             var netService = RunManager.Instance.NetService;
-            var isHostOrSingle = netService?.Type == NetGameType.Singleplayer ||
-                                 netService?.Type == NetGameType.Host;
+            var isHostOrSingle = netService?.Type == NetGameType.Singleplayer || netService?.Type == NetGameType.Host;
             if (!isHostOrSingle) return;
-
-            // 为所有玩家补发 Eggs 遗物（如果尚未拥有）
             foreach (var player in evt.RunState.Players)
             {
-                if (player.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id))
-                    continue;
-
+                if (player.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id)) continue;
                 var eggs = ModelDb.Relic<Eggs>().ToMutable();
                 _ = RelicCmd.Obtain(eggs, player);
             }

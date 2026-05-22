@@ -1,9 +1,11 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -29,48 +31,29 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
-    }
+    } 
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        try
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
+
+        var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
+        if (canonicalCards.Count == 0) return;
+
+        // 打乱而不消耗 CombatCardGeneration
+        var shuffled = canonicalCards.UnstableShuffle(Owner.RunState.Rng.Shuffle);
+        var cardTemplate = shuffled.FirstOrDefault();
+        if (cardTemplate == null) return;
+
+        var randomCard = Owner.Creature.CombatState.CreateCard(cardTemplate, Owner);
+        if (randomCard != null)
         {
-            await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-
-            var exhaustedMemoryIds = SakiMemoryManager.Instance.GetExhaustedMemoryIds(Owner).ToHashSet();
-
-            var availableMemoryCards = ModelDb.AllCards
-                .Where(card =>
-                    card.HasModKeyword(CutesakiKeywords.Memory) &&
-                    !exhaustedMemoryIds.Contains(card.Id))
-                .ToList();
-
-            if (availableMemoryCards.Count > 0)
+            if (IsUpgraded)
             {
-                var randomCard = CardFactory.GetDistinctForCombat(
-                    Owner,
-                    availableMemoryCards,
-                    1,
-                    Owner.RunState.Rng.CombatCardGeneration
-                ).FirstOrDefault();
-
-                if (randomCard != null)
-                {
-                    var newCard = randomCard.IsMutable ? randomCard : randomCard.ToMutable();
-
-                    if (IsUpgraded)
-                    {
-                        newCard.UpgradeInternal();
-                        newCard.FinalizeUpgradeInternal();
-                    }
-
-                    await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Hand, Owner);
-                }
+                randomCard.UpgradeInternal();
+                randomCard.FinalizeUpgradeInternal();
             }
-        }
-        finally
-        {
-            await CardCmd.Discard(choiceContext, this);
+            await CardPileCmd.AddGeneratedCardToCombat(randomCard, PileType.Hand, Owner);
         }
     }
 

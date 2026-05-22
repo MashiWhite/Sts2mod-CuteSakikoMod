@@ -12,7 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki;
 public abstract class SakiMemoryCard(int cost, CardType type, CardRarity rarity, TargetType target) :
     ModCardTemplate(cost, type, rarity, target)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Memory.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Memory.GetModKeywordCardKeyword(),CutesakiKeywords.Sakiforget.GetModKeywordCardKeyword()];
 
     public override CardAssetProfile AssetProfile => this.CardAssetProfile();
 }
