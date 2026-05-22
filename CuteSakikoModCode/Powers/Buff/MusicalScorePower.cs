@@ -1,6 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
@@ -33,7 +34,7 @@ public sealed class MusicalScorePower : CuteSakikoModPower
     }
 
     // 回合结束时移除该能力
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
         if (side == Owner.Side) await PowerCmd.Remove(this);
     }

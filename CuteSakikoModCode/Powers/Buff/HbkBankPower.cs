@@ -70,7 +70,7 @@ public sealed class HbkBankPower : CuteSakikoModPower
             await CardPileCmd.AddGeneratedCardToCombat(chosen, PileType.Hand, player);
     }
 
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
         if (CombatState == null) return;

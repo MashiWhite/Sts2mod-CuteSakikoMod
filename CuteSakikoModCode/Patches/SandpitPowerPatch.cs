@@ -39,8 +39,8 @@ public static class SandpitPowerPatch
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(SandpitPower.BeforeTurnEnd))]
-    public static bool Prefix_BeforeTurnEnd(ref Task __result)
+    [HarmonyPatch(nameof(SandpitPower.BeforeSideTurnEnd))]
+    public static bool Prefix_BeforeSideTurnEnd(ref Task __result)
     {
         if (ShouldSkip())
         {

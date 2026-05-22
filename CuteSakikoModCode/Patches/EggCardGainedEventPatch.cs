@@ -9,15 +9,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 
 public class EggCardGainedEventPatch
 {
-    // 精确指定要修补的方法签名，避免歧义
     [HarmonyPatch(typeof(CardPileCmd), nameof(CardPileCmd.Add), typeof(CardModel), typeof(PileType),
         typeof(CardPilePosition), typeof(AbstractModel), typeof(bool))]
     public static class CardAddPatch
     {
         public static void Postfix(CardModel card, PileType newPileType, CardPilePosition position,
-            AbstractModel source, bool skipVisuals)
+            AbstractModel clonedBy, bool skipVisuals)   // ← 这里改名为 clonedBy
         {
-            // 使用 newPileType 而不是 newPile
             if (newPileType == PileType.Deck && IsEggCard(card))
                 EggCardGainedEvent.Trigger(card);
         }

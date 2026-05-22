@@ -52,7 +52,7 @@
   "CUTE_SAKIKO_MOD_CARD_LEAD_MEETING.title": "主导会议",
   "CUTE_SAKIKO_MOD_CARD_LEAD_MEETING.description": "对所有敌人造成{Damage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_SMOOTH_PLAY.title": "流畅演奏",
-  "CUTE_SAKIKO_MOD_CARD_SMOOTH_PLAY.description": "演奏[gold]最新[/gold]储存的[pink]和弦[/pink]。\n清除[gold]所有[/gold][pink]音符[/pink]，每有1个[red]攻击[/red][pink]音符[/pink]造成1次{Damage:diff()}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_SMOOTH_PLAY.description": "演奏[gold]最新[/gold]储存的[pink]和弦[/pink]。\n清除[gold]所有[/gold][pink]音符[/pink]，每有1个[red]攻击[/red][pink]音符[/pink]随机造成1次{Damage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_FINGER_EXERCISE.title": "手指操",
   "CUTE_SAKIKO_MOD_CARD_FINGER_EXERCISE.description": "造成{Damage:diff()}点伤害3次。",
   "CUTE_SAKIKO_MOD_CARD_HA.title": "哈？",

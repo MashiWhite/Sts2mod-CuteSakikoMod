@@ -57,9 +57,9 @@ public sealed class PigPower : CuteSakikoModPower
         await base.AfterRemoved(oldOwner);
     }
 
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
-        await base.AfterTurnEnd(choiceContext, side);
+        await base.AfterSideTurnEnd(choiceContext, side,participants);
         if (side == Owner.Side && Owner != null && Owner.IsAlive) await CreatureCmd.Heal(Owner, 1);
     }
 

@@ -11,7 +11,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Status;
 public class NotNeeded() : ModStatusCard(1, CardType.Status, CardRarity.Status, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    public override bool HasTurnEndInHandEffect => true;  // 启用官方回合结束在手牌钩子
+    public override bool HasTurnEndInHandEffect => true;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
@@ -32,25 +32,22 @@ public class NotNeeded() : ModStatusCard(1, CardType.Status, CardRarity.Status, 
         await Task.CompletedTask;
     }
 
-    // 回合结束在手牌时触发
     protected override async Task OnTurnEndInHand(PlayerChoiceContext choiceContext)
     {
         var blockAmount = DynamicVars.Block.IntValue;
-        // 获得格挡（使用 decimal 重载，参数顺序：Creature, decimal, ValueProp, CardPlay?, bool）
         if (blockAmount > 0)
             await CreatureCmd.GainBlock(Owner.Creature, (decimal)blockAmount, ValueProp.Move, null, false);
 
-        // 创建自身复制并加入手牌（保留一回合）
         var copy = CreateClone();
-        copy.GiveSingleTurnRetain();
         await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, Owner);
-
-        // 自身获得保留
-        GiveSingleTurnRetain();
     }
+
+    // 有保留关键词 → 留在手牌；否则进入弃牌堆
+    protected override PileType GetResultPileTypeForOnTurnEndInHandEffect() =>
+        Keywords.Contains(CardKeyword.Retain) ? PileType.Hand : PileType.Discard;
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2m); // 2 → 4
+        DynamicVars.Block.UpgradeValueBy(2m);
     }
 }

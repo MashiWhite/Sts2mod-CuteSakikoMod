@@ -80,7 +80,7 @@ public sealed class ObCardPower : CuteSakikoModPower
         // 新打出的卡牌已在手牌中，且已被修改过，无需再全量遍历
     }
 
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
         if (_isRemoving) return;
         if (side != Owner.Side) return;

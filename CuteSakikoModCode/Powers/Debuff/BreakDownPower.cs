@@ -49,7 +49,7 @@ public sealed class BreakDownPower : CuteSakikoModPower
     }
 
     // 在自己的回合结束时，如果期间受到过伤害，则减少1层并重置标记
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
         if (_hasTakenDamageSinceLastOwnTurnEnd && Amount > 0)

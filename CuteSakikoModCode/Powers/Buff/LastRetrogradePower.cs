@@ -78,7 +78,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         await base.AfterRemoved(oldOwner);
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, ICombatState combatState)
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
     {
         if (side == CombatSide.Player)
         {

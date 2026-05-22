@@ -49,7 +49,6 @@ public class StarAnon : ModMonsterTemplate
         await PowerCmd.Apply<RetrogradePower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
         await PowerCmd.Apply<TimeWatchPower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
 
-        // ★ 主机在进入房间时立即广播一次 ReloadCount 和 TotalPlayCount，避免客户端初始值为 0
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
         {
             FlybackManager.SyncReloadCountIfHost();
@@ -108,7 +107,6 @@ public class StarAnon : ModMonsterTemplate
         await CreatureCmd.Heal(Creature, Creature.MaxHp);
         FlybackManager.DoubleAllPlayerCounts();
 
-        // 客户端等待主机广播 TotalPlayCount 后再刷新生命值
         if (RunManager.Instance.NetService.Type == NetGameType.Client)
         {
             await FlybackManager.WaitForPlayCountChange(timeoutMs: 500);
@@ -174,14 +172,12 @@ public class StarAnon : ModMonsterTemplate
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
         {
             FlybackManager.IncrementReloadCount();
-            FlybackManager.SyncPlayCountIfHost(); // 主机广播 PlayCount
+            FlybackManager.SyncPlayCountIfHost();
         }
-        else // 客户端
+        else
         {
-            // 先等待 ReloadCount 增加
             int expected = GetReloadCount() + 1;
             await FlybackManager.WaitForReloadCountV2(expected, timeoutMs: 1000);
-            // 再等待 PlayCount 广播（SyncPlayCountIfHost 一定会发送一次）
             await FlybackManager.WaitForPlayCountChange(timeoutMs: 500);
         }
     }
@@ -202,7 +198,11 @@ public class StarAnon : ModMonsterTemplate
         await DamageCmd.Attack(20).FromMonster(this).Execute(null);
     }
 
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    // ★ 修改为 AfterSideTurnEnd，匹配新版 AbstractModel
+    public override async Task AfterSideTurnEnd(
+        PlayerChoiceContext choiceContext,
+        CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != CombatSide.Enemy)
             return;

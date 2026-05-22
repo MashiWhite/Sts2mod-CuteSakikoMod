@@ -32,9 +32,9 @@ public class MarksOfPracticePower : CuteSakikoModPower
     }
 
     // 回合结束不再移除自身，整场战斗持续
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
-        await base.AfterTurnEnd(choiceContext, side);
+        await base.AfterSideTurnEnd(choiceContext, side,participants);
     }
 
     public override async Task AfterRemoved(Creature oldOwner)

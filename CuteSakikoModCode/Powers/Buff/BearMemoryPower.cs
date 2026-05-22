@@ -62,7 +62,7 @@ public sealed class BearMemoryPower : CuteSakikoModPower
     }
 
     // 回合结束时清理所有未消耗的记录（防止内存泄漏）
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
         if (side == Owner.Side)
             lock (_pendingPressure)

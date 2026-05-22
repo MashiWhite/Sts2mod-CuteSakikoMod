@@ -12,6 +12,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 
@@ -25,7 +26,7 @@ public sealed class OnTurnEndInHandManager : SingletonModel
 
     public override bool ShouldReceiveCombatHooks => true;
 
-    public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
         if (side != CombatSide.Player) return;
 
