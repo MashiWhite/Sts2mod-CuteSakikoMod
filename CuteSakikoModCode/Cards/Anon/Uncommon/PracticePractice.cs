@@ -38,6 +38,9 @@ public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Unc
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Notes"].UpgradeValueBy(CurrentUpgradeLevel);
+        // 每次升级增加的音符数 = 2 ^ CurrentUpgradeLevel
+        // 首次升级时 CurrentUpgradeLevel = 1 → +2, 第二次 = 2 → +4, 第三次 = 3 → +8 ...
+        int additionalNotes = 1 << CurrentUpgradeLevel; // 等价于 (int)Math.Pow(2, CurrentUpgradeLevel)
+        DynamicVars["Notes"].UpgradeValueBy(additionalNotes);
     }
 }
