@@ -116,15 +116,25 @@ public class TimeWatch : CuteSakikoModRelic
         var starAnonEncounter = ModelDb.GetById<EncounterModel>(
             ModelDb.GetId<StarAnonEncounter>());
 
-        if (gloryAct.BossEncounter.Id == starAnonEncounter.Id) return;
-
-        gloryAct.SetBossEncounter(starAnonEncounter);
-
-        if (gloryAct.HasSecondBoss && gloryAct.SecondBossEncounter?.Id == starAnonEncounter.Id)
+        if (gloryAct.HasSecondBoss)
         {
-            var otherBoss = Owner.RunState.Rng.UpFront.NextItem(
-                gloryAct.AllBossEncounters.Where(e => e.Id != starAnonEncounter.Id));
-            gloryAct.SetSecondBossEncounter(otherBoss);
+            // 将第二个 Boss 固定为星爱音
+            if (gloryAct.SecondBossEncounter?.Id != starAnonEncounter.Id)
+                gloryAct.SetSecondBossEncounter(starAnonEncounter);
+
+            // 如果第一个 Boss 也变成了星爱音，则随机替换为其他 Boss，避免重复
+            if (gloryAct.BossEncounter.Id == starAnonEncounter.Id)
+            {
+                var otherBoss = Owner.RunState.Rng.UpFront.NextItem(
+                    gloryAct.AllBossEncounters.Where(e => e.Id != starAnonEncounter.Id));
+                gloryAct.SetBossEncounter(otherBoss);
+            }
+        }
+        else
+        {
+            // 只有一个 Boss，固定为星爱音
+            if (gloryAct.BossEncounter.Id != starAnonEncounter.Id)
+                gloryAct.SetBossEncounter(starAnonEncounter);
         }
     }
 }
