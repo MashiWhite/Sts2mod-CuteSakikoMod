@@ -1,4 +1,7 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -45,22 +48,27 @@ public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.U
 
         if (memoryCards.Count == 0) return;
 
+        // 打出数量：基础为 X，升级后 +2
+        int count = x + (IsUpgraded ? 2 : 0);
+
         var rng = Owner.RunState.Rng.CombatCardSelection;
         var played = 0;
-        while (played < x && memoryCards.Count > 0)
+        while (played < count && memoryCards.Count > 0)
         {
             var idx = rng.NextInt(memoryCards.Count);
             var selected = memoryCards[idx];
             memoryCards.RemoveAt(idx);
             await CardCmd.AutoPlay(choiceContext, selected, null);
-            if (IsUpgraded)
-                MemoryCmd.Forget(choiceContext, new[] { selected }, null);
+
+            // 初始自带遗忘，每张自动打出的牌都会被遗忘
+            MemoryCmd.Forget(choiceContext, new[] { selected }, null);
+
             played++;
         }
     }
 
     protected override void OnUpgrade()
     {
-        // 升级效果在逻辑中已处理
+        // 升级仅增加打出数量，逻辑已在 OnPlay 中处理
     }
 }

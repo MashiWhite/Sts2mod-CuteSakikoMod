@@ -1,7 +1,9 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+﻿
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -10,7 +12,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
 public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
 {
-    // 攻击次数，升级后由4变为5
     private int _hitCount = 4;
 
     protected override IEnumerable<DynamicVar> CanonicalVars
@@ -26,13 +27,14 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
         if (combat == null) return;
 
         var damage = DynamicVars.Damage.BaseValue;
-        var rng = Owner.RunState.Rng.CombatCardSelection;
+        var shuffleRng = Owner.RunState.Rng.Shuffle; // 用于 UnstableShuffle 的随机源
 
+        // 攻击循环：不消耗 CombatCardSelection
+        var hittable = combat.HittableEnemies.ToList();
         for (var i = 0; i < _hitCount; i++)
         {
-            var hittable = combat.HittableEnemies;
-            if (!hittable.Any()) break;
-            var target = rng.NextItem(hittable);
+            if (hittable.Count == 0) break;
+            var target = hittable.UnstableShuffle(shuffleRng).First();
             await DamageCmd.Attack(damage)
                 .FromCard(this)
                 .Targeting(target)
@@ -40,14 +42,15 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
                 .Execute(choiceContext);
         }
 
-        // 额外获得一个随机音符（排除Status）
+        // 额外获得一个随机音符（不消耗 CombatCardSelection）
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
         {
             var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
-            var randomType = noteTypes[rng.NextInt(noteTypes.Length)];
+            // 使用洗牌随机源生成索引（不消耗 CombatCardSelection）
+            int index = shuffleRng.NextInt(noteTypes.Length);
+            var randomType = noteTypes[index];
 
-            // 使用真实和弦列表
             var mainChords = guitar.GetCurrentChords();
             var bonusChords = guitar.GetBonusChords();
             var tempChords = guitar.GetTemporaryChords();
@@ -55,7 +58,6 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
             MusicNoteManager.AddNote(Owner, randomType, mainChords,
                 bonusChords.Concat(tempChords));
 
-            // 刷新 UI
             guitar.UpdateNoteDisplay();
             guitar.UpdateStoredChordDisplay();
         }
@@ -63,6 +65,6 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
 
     protected override void OnUpgrade()
     {
-        _hitCount = 5; // 攻击次数提升为5
+        _hitCount = 5;
     }
 }

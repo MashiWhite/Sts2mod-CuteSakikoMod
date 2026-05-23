@@ -1,4 +1,8 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -7,7 +11,9 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
@@ -19,7 +25,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 
 [RegisterCharacterStarterRelic(typeof(CuteSaki))]
 [RegisterTouchOfOrobasRefinement(typeof(PostItNote))]
-public class KabutoNote : CuteSakiRelic // ← 去掉 sealed
+public class KabutoNote : CuteSakiRelic
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
 
@@ -34,14 +40,33 @@ public class KabutoNote : CuteSakiRelic // ← 去掉 sealed
         }
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState )
+    public override async Task AfterSideTurnStart(
+        CombatSide side,
+        IReadOnlyList<Creature> participants,
+        ICombatState combatState)
     {
-        if (side == Owner.Creature.Side && combatState.RoundNumber == 1)
-        {
-            await PowerCmd.Apply<PressurePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 3, Owner.Creature,
-                null);
-            Flash();
-        }
+        if (side != Owner.Creature.Side || combatState.RoundNumber != 1)
+            return;
+
+        // 1. 开局给压力（原有效果）
+        await PowerCmd.Apply<PressurePower>(
+            new ThrowingPlayerChoiceContext(),
+            Owner.Creature, 3, Owner.Creature, null);
+
+        // 2. 确保记忆牌堆已初始化（防止读档时牌堆为空）
+        await MemoryCardPile.EnsureInitializedAsync(Owner);
+
+        // 3. 随机获取一张回忆卡牌
+        var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
+        if (canonicalCards.Count == 0) return;
+
+        var shuffled = canonicalCards.UnstableShuffle(Owner.RunState.Rng.Shuffle);
+        var template = shuffled.FirstOrDefault();
+        if (template == null) return;
+
+        var mutableCard = Owner.Creature.CombatState.CreateCard(template, Owner);
+        await CardPileCmd.AddGeneratedCardToCombat(mutableCard, PileType.Hand, Owner);
+
+        Flash();
     }
-    
 }

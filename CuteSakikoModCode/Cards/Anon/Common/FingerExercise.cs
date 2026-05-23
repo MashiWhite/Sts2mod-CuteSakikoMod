@@ -8,14 +8,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
 public class FingerExercise() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars
-    {
-        get
-        {
-            // 未升级时的基础伤害为3
-            yield return new DamageVar(3m, ValueProp.Move);
-        }
-    }
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(3m, ValueProp.Move)
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -37,6 +33,6 @@ public class FingerExercise() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
     protected override void OnUpgrade()
     {
         // 升级后基础伤害提升至4
-        DynamicVars.Damage.UpgradeValueBy(1m);
+        DynamicVars.Damage.UpgradeValueBy(2m);
     }
 }

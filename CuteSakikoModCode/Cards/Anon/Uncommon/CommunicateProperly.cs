@@ -18,7 +18,7 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(15m, ValueProp.Move); }
+        get { yield return new BlockVar(15m, ValueProp.Unpowered); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -42,7 +42,7 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
             {
                 var block = DynamicVars.Block.IntValue;
                 if (!targetCreature.IsAlive) return;
-                await CreatureCmd.GainBlock(targetCreature, block, ValueProp.Move, cardPlay);
+                await CreatureCmd.GainBlock(targetCreature, block, ValueProp.Unpowered, cardPlay);
             },
             defendIntent
         )

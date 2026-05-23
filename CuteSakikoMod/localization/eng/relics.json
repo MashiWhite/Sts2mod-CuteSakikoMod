@@ -1,8 +1,8 @@
 {
-  "CUTE_SAKIKO_MOD_RELIC_KABUTO_NOTE.description": "每场战斗的第一回合，获得3层[gold]压力[/gold]",
+  "CUTE_SAKIKO_MOD_RELIC_KABUTO_NOTE.description": "每场战斗的第一回合，获得3层[gold]压力[/gold]和一张随机[gold]回忆[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_KABUTO_NOTE.flavor": "[blue]祥子[/blue]最珍视的笔记本，收藏着[blue]灯[/blue]的便利贴与自己的[gold]回忆[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_KABUTO_NOTE.title": "独角仙笔记本",
-  "CUTE_SAKIKO_MOD_RELIC_POST_IT_NOTE.description": "每场战斗的第一回合，获得5层[gold]压力[/gold]。\n每回合开始时，给予敌人3层[gold]压力[/gold]。",
+  "CUTE_SAKIKO_MOD_RELIC_POST_IT_NOTE.description": "每场战斗的第一回合，获得5层[gold]压力[/gold]和一张随机[gold]回忆+[/gold]。\n每回合开始时，给予敌人5层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_POST_IT_NOTE.flavor": "[blue]祥子[/blue]笔记本里收藏的便利贴，那些珍贵的回忆不断激励着[blue]祥子[/blue]前进。",
   "CUTE_SAKIKO_MOD_RELIC_POST_IT_NOTE.title": "笔记本里的便利贴",
   "CUTE_SAKIKO_MOD_RELIC_EGGS.title": "彩蛋",

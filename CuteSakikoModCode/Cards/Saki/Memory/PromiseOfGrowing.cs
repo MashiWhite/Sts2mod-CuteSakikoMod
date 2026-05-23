@@ -3,24 +3,33 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Memory;
 
-public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<VigorPower>(3m)
+        new DamageVar(3m, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var amount = DynamicVars["VigorPower"].IntValue;
-        await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        if (cardPlay.Target == null) return;
+
+        var extraHits = IsUpgraded ? 4 : 3;; // 攻击3次，升级4次
+        var damage = DynamicVars.Damage.BaseValue;
+
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .WithHitCount(extraHits)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["VigorPower"].UpgradeValueBy(3m);
     }
 }
