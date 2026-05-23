@@ -34,17 +34,15 @@ public class NotNeeded() : ModStatusCard(1, CardType.Status, CardRarity.Status, 
 
     protected override async Task OnTurnEndInHand(PlayerChoiceContext choiceContext)
     {
+        // 1. 获得格挡
         var blockAmount = DynamicVars.Block.IntValue;
         if (blockAmount > 0)
             await CreatureCmd.GainBlock(Owner.Creature, (decimal)blockAmount, ValueProp.Move, null, false);
 
+        // 2. 创建一张自己的复制并加入手牌
         var copy = CreateClone();
         await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, Owner);
     }
-
-    // 有保留关键词 → 留在手牌；否则进入弃牌堆
-    protected override PileType GetResultPileTypeForOnTurnEndInHandEffect() =>
-        Keywords.Contains(CardKeyword.Retain) ? PileType.Hand : PileType.Discard;
 
     protected override void OnUpgrade()
     {

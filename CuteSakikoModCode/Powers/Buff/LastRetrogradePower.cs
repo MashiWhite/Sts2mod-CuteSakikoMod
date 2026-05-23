@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -21,7 +22,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
 {
     private int _hpBoostApplied;
     private bool _subscribed;
-    private int _totalFlybackCount;
+    private int _totalCardWeight;   // 当前回合累计打出的卡牌权重（用于UI显示）
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -35,7 +36,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
             new ExtraIconAmountLabelSlot
             {
                 Corner = ExtraIconAmountLabelCorner.BottomLeft,
-                Text = $"{_totalFlybackCount}/8"
+                Text = $"{_totalCardWeight}/{GetTotalLimit()}"  // 显示 当前权重/上限
             }
         };
     }
@@ -47,7 +48,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
             yield return new DynamicVar("ExtraMaxHp", 0);
             yield return new DynamicVar("FlybackPlayCount", 0);
             yield return new DynamicVar("ReloadCount", 0);
-            yield return new DynamicVar("Countdown", 8);
+            yield return new DynamicVar("Countdown", 0); // ★ 加回 Countdown 变量
         }
     }
 
@@ -82,31 +83,31 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
     {
         if (side == CombatSide.Player)
         {
-            _totalFlybackCount = 0;
-            UpdateCountdownDisplay();
+            _totalCardWeight = 0;
+            // ★ 初始化 Countdown 为当前上限
+            DynamicVars["Countdown"].BaseValue = GetTotalLimit();
             InvalidateLabels();
         }
         else if (side == CombatSide.Enemy)
         {
-            // 敌人回合开始时，数据已在招式内同步，直接刷新
             await ApplyMaxHpBoost();
         }
     }
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card is not Flyback) return;
-        var player = cardPlay.Card.Owner;
-        if (player == null) return;
+        int weight = cardPlay.Card is Flyback ? 5 : 1;
+        _totalCardWeight += weight;
 
-        _totalFlybackCount++;
-        UpdateCountdownDisplay();
+        // ★ 更新 Countdown（剩余可打出权重）
+        int countdown = Math.Max(0, (int)DynamicVars["Countdown"].BaseValue - weight);
+        DynamicVars["Countdown"].BaseValue = countdown;
         InvalidateLabels();
 
-        if (_totalFlybackCount >= 8)
+        if (_totalCardWeight >= GetTotalLimit())
         {
-            _totalFlybackCount = 0;
-            UpdateCountdownDisplay();
+            _totalCardWeight = 0;
+            DynamicVars["Countdown"].BaseValue = GetTotalLimit(); // 重置
             InvalidateLabels();
 
             if (Owner?.CombatState != null)
@@ -117,10 +118,12 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         }
     }
 
-    private void UpdateCountdownDisplay()
+    private int GetTotalLimit()
     {
-        int remaining = Math.Max(8 - _totalFlybackCount, 0);
-        DynamicVars["Countdown"].BaseValue = remaining;
+        int reloads = FlybackManager.GetReloadCount();
+        int basePerPlayer = Math.Max(10, 49 - reloads * 3);
+        int playerCount = Owner?.CombatState?.Players.Count ?? 1;
+        return basePerPlayer * playerCount;
     }
 
     private void InvalidateLabels()
@@ -129,6 +132,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         InvokeDisplayAmountChanged();
     }
 
+    // 以下方法保持不变
     private void OnFlybackDataChanged(int playCount, int reloadCount)
     {
         UpdateDynamicInfo(playCount, reloadCount);
