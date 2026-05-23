@@ -247,8 +247,13 @@ public class AnonGuitar : CuteAnonRelic
         if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
             await PlaySingleChord(choiceContext, result.OverflowChord, false);
         if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
+        {
             foreach (var chordId in result.NewChords)
+            {
                 await PlaySingleChord(choiceContext, chordId, false);
+                MusicNoteManager.RemoveChord(Owner, chordId); // ★ 立即演奏后移除存储
+            }
+        }
         else if (result.NewChords.Count == 0)
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
                 await power.OnNoteWithoutChord();
@@ -284,8 +289,13 @@ public class AnonGuitar : CuteAnonRelic
         if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
             await PlaySingleChord(choiceContext, result.OverflowChord, false);
         if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
+        {
             foreach (var chordId in result.NewChords)
+            {
                 await PlaySingleChord(choiceContext, chordId, false);
+                MusicNoteManager.RemoveChord(Owner, chordId); // ★ 立即演奏后移除存储
+            }
+        }
         else if (result.NewChords.Count == 0)
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
                 await power.OnNoteWithoutChord();
@@ -321,13 +331,21 @@ public class AnonGuitar : CuteAnonRelic
     public async Task AddChordToStored(PlayerChoiceContext choiceContext, string chordId)
     {
         if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+
+        // 如果拥有立即演奏，直接演奏后返回，不存入存储
+        if (Owner.Creature.HasPower<PlayImmediatelyPower>())
+        {
+            await PlaySingleChord(choiceContext, chordId, false);
+            return;
+        }
+
         var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
         var storedBefore = MusicNoteManager.GetStoredChords(Owner);
         MusicNoteManager.AddChordDirectly(Owner, chordId);
+
         if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords)
             await PlaySingleChord(choiceContext, storedBefore[0], false);
-        if (Owner.Creature.HasPower<PlayImmediatelyPower>())
-            await PlaySingleChord(choiceContext, chordId, false);
+
         UpdateStoredChordDisplay();
         SyncToSaved();
     }

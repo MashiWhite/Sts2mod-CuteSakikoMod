@@ -13,6 +13,8 @@ using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Rooms;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Hooks;
+using MegaCrit.Sts2.Core.Runs;
 
 
 namespace CuteSakikoMod.CuteSakikoModCode.Singletons
@@ -76,15 +78,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons
             }
         }
     }
-    [HarmonyPatch(typeof(CombatManager), nameof(CombatManager.StartCombatInternal))]
-    public static class CombatManager_StartCombatInternal_Patch
+    [HarmonyPatch(typeof(Hook), nameof(Hook.AfterRoomEntered))]
+    public static class Hook_AfterRoomEntered_Patch
     {
-        public static async void Postfix()
+        public static async void Postfix(IRunState runState, AbstractRoom room)
         {
-            var state = CombatManager.Instance.DebugOnlyGetState();
-            if (state == null) return;
+            // 只在战斗房间时执行初始化
+            if (room is not CombatRoom) return;
 
-            foreach (var player in state.Players)
+            // 为拥有 KabutoNote 遗物的玩家初始化记忆牌堆
+            foreach (var player in runState.Players)
             {
                 if (player.Relics.Any(r => r is KabutoNote))
                     await MemoryCardPile.EnsureInitializedAsync(player);

@@ -1,5 +1,8 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -19,11 +22,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.CardPiles
     {
         private static readonly Dictionary<Player, ModCardPile> _cachedByPlayer = new();
         private static readonly HashSet<ModCardPile> _populatingPiles = new();
-        private static readonly HashSet<ulong> _initializedPlayerIds = new();
+        // 仅用于 UI 按钮补丁的初始化标记，战斗初始化补丁已不再依赖它
+        private static readonly HashSet<ulong> _uiInitializedPlayerIds = new();
 
         internal static bool _isAddingSnapshot;
 
-        // 反射调用 ModCardPileStorage.Resolve 的委托缓存
+        // 反射调用 ModCardPileStorage.Resolve 的委托缓存，确保即使 UI 未初始化也能拿到牌堆实例
         private static readonly Lazy<Func<PileType, Player?, ModCardPile?>> _resolveFunc = new(() =>
         {
             var storageType = typeof(ModCardPileRegistry).Assembly.GetType("STS2RitsuLib.CardPiles.ModCardPileStorage");
@@ -54,7 +58,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.CardPiles
         }
 
         /// <summary>
-        /// 获取或创建记忆牌堆实例。如果 UI 未初始化导致实例不存在，则通过反射强制创建。
+        /// 获取或创建记忆牌堆实例。优先使用缓存，否则通过反射强制创建。
         /// </summary>
         public static ModCardPile? Get(Player player)
         {
@@ -86,6 +90,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.CardPiles
             return pile;
         }
 
+        /// <summary>
+        /// 填充牌堆，内部有锁防止并发填充。
+        /// </summary>
         public static async Task PopulateAsync(Player player, ModCardPile pile)
         {
             lock (_populatingPiles)
@@ -122,6 +129,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.CardPiles
             }
         }
 
+        /// <summary>
+        /// 动态添加单张卡牌到记忆牌堆（当卡牌被赋予记忆关键词时触发）。
+        /// </summary>
         public static void AddSingleCard(Player player, CardModel card)
         {
             if (card.Owner != player) return;
@@ -151,13 +161,19 @@ namespace CuteSakikoMod.CuteSakikoModCode.CardPiles
             snapshot.EnergyCost.SetThisCombat(0, true);
         }
 
+        /// <summary>
+        /// 清理所有缓存和状态，通常在战斗结束时调用。
+        /// </summary>
         public static void Clear()
         {
             _cachedByPlayer.Clear();
             lock (_populatingPiles) { _populatingPiles.Clear(); }
-            lock (_initializedPlayerIds) { _initializedPlayerIds.Clear(); }
+            lock (_uiInitializedPlayerIds) { _uiInitializedPlayerIds.Clear(); }
         }
 
+        /// <summary>
+        /// 获取记忆牌堆中所有卡牌的规范模板列表，用于随机抽取等操作。
+        /// </summary>
         public static List<CardModel> GetCanonicalCards(Player player)
         {
             var pile = Get(player);
@@ -171,28 +187,32 @@ namespace CuteSakikoMod.CuteSakikoModCode.CardPiles
             return result;
         }
 
+        /// <summary>
+        /// 安全初始化：如果牌堆为空，则填充；否则直接返回。
+        /// 战斗开始时（通过 AfterRoomEntered 补丁）调用，确保记忆牌堆有数据。
+        /// </summary>
         public static async Task EnsureInitializedAsync(Player player)
         {
             var pile = Get(player);
             if (pile == null) return;
+
+            // 只要牌堆为空，就填充。这符合 CombatOnly 设计：每场战斗开始时填充。
             if (pile.Cards.Count > 0) return;
 
-            lock (_initializedPlayerIds)
-            {
-                if (!_initializedPlayerIds.Add(player.NetId)) return;
-            }
             await PopulateAsync(player, pile);
         }
 
+        // UI 按钮初始化补丁：当记忆牌堆按钮首次创建时，若牌堆为空则填充。
+        // 使用独立的 _uiInitializedPlayerIds 避免与战斗初始化补丁冲突。
         [HarmonyPatch(typeof(NModCardPileButton), nameof(NModCardPileButton.Initialize))]
         private static class NModCardPileButton_Initialize_Patch
         {
             public static async void Postfix(NModCardPileButton __instance, Player player)
             {
                 if (__instance.Definition?.Id.EndsWith("_CARDPILE_MEMORY") != true) return;
-                lock (_initializedPlayerIds)
+                lock (_uiInitializedPlayerIds)
                 {
-                    if (!_initializedPlayerIds.Add(player.NetId)) return;
+                    if (!_uiInitializedPlayerIds.Add(player.NetId)) return;
                 }
                 var pile = Get(player);
                 if (pile == null || pile.Cards.Count > 0) return;
@@ -200,6 +220,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.CardPiles
             }
         }
 
+        // 关键词补丁：当卡牌被赋予记忆关键词时，自动添加到记忆牌堆。
         [HarmonyPatch(typeof(CardModel), nameof(CardModel.AddKeyword))]
         private static class CardModel_AddKeyword_Patch
         {
