@@ -16,6 +16,7 @@ public partial class TogawaLoanButton : NButton
 {
     private Player? _player;
     private bool _canClick = true;
+    private bool _usedThisVisit;
     private HoverTip _hoverTip;
 
     public override void _Ready()
@@ -25,11 +26,9 @@ public partial class TogawaLoanButton : NButton
         var room = NMerchantRoom.Instance;
         _player = room?.Room.GetLocalInventory()?.Player;
 
-        // 按钮固定尺寸
         float buttonWidth = 180f;
         float buttonHeight = 180f;
 
-        // 锚点：右边缘 + 顶部
         AnchorLeft = 1.0f;
         AnchorRight = 1.0f;
         AnchorTop = 0.0f;
@@ -37,10 +36,9 @@ public partial class TogawaLoanButton : NButton
 
         OffsetRight = 0;
         OffsetLeft = -buttonWidth;
-        OffsetTop = 750;                     // ★ 你的 Y 轴位置
+        OffsetTop = 750;
         OffsetBottom = OffsetTop + buttonHeight;
 
-        // 创建头像
         var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/togawa_group_icon.png");
         var img = new TextureRect();
         img.Texture = texture;
@@ -56,16 +54,40 @@ public partial class TogawaLoanButton : NButton
         img.OffsetBottom = 0;
         AddChild(img);
 
-        // 悬停提示文本
         var title = new LocString("events", "TOGAWA_GROUP.title");
         var desc = new LocString("events", "TOGAWA_GROUP.description");
         _hoverTip = new HoverTip(title, desc);
 
-        // 初始隐藏
         Visible = false;
     }
 
-    public void ShowButton() => Visible = true;
+    /// <summary> 每次进入商店房间时调用，重置贷款状态 </summary>
+    public void ResetForNewVisit()
+    {
+        _usedThisVisit = false;
+        _canClick = true;
+        if (!IsEnabled)
+            Enable();
+        Modulate = Colors.White;
+        // 注意：不设置 Visible，由 ShowButton 控制
+    }
+
+    public void ShowButton()
+    {
+        // 如果本次已贷款，直接隐藏不显示
+        if (_usedThisVisit)
+        {
+            Visible = false;
+            return;
+        }
+
+        Visible = true;
+        if (!IsEnabled)
+            Enable();
+        Modulate = Colors.White;
+        _canClick = true;
+    }
+
     public void HideButton() => Visible = false;
 
     protected override void OnFocus()
@@ -86,7 +108,6 @@ public partial class TogawaLoanButton : NButton
             : HoverTipAlignment.Right;
         tipSet.SetAlignment(this, alignment);
 
-        // 边界修正
         var viewportRect = GetViewportRect();
         Vector2 pos = tipSet.GlobalPosition;
         if (pos.X < 0) pos.X = 10;
@@ -107,26 +128,24 @@ public partial class TogawaLoanButton : NButton
     protected override void OnRelease()
     {
         base.OnRelease();
-        if (_player == null || !_canClick) return;
-        PlayClickAnimation();
+        if (_player == null || _usedThisVisit || !_canClick) return;
         DoLoan();
-    }
-
-    private void PlayClickAnimation()
-    {
-        var originalModulate = Modulate;
-        var pressedColor = new Color(originalModulate.R * 0.6f, originalModulate.G * 0.6f, originalModulate.B * 0.6f);
-        Modulate = pressedColor;
-
-        var tween = CreateTween();
-        tween.TweenProperty(this, "modulate", originalModulate, 0.15f)
-             .SetEase(Tween.EaseType.Out)
-             .SetTrans(Tween.TransitionType.Back);
     }
 
     private async void DoLoan()
     {
         _canClick = false;
+        _usedThisVisit = true;
+        Disable();
+
+        // ★ 点击反馈：立即变灰，不再弹回
+        var originalModulate = Modulate;
+        var greyColor = new Color(0.1f, 0.1f, 0.1f);
+        var tween = CreateTween();
+        tween.TweenProperty(this, "modulate", greyColor, 0.2f)
+             .SetEase(Tween.EaseType.Out);
+        await ToSignal(tween, Tween.SignalName.Finished);
+
         try
         {
             await PlayerCmd.GainGold(50, _player);
@@ -140,7 +159,8 @@ public partial class TogawaLoanButton : NButton
         }
         finally
         {
-            _canClick = true;
+            // 操作完成后直接隐藏按钮（本商店不再出现）
+            Visible = false;
         }
     }
 }
