@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
@@ -375,11 +376,15 @@ public static class ChordManager
                     .Take(upgradeCount)
                     .ToList();
 
+                // 1. 全部升级（同步，会各自播放升级特效）
                 foreach (var card in selected)
-                {
                     CardCmd.Upgrade(card);
-                    await Cmd.CustomScaledWait(0.15f, 0.2f);
-                }
+
+                // 2. 一次性展示所有升级后的卡牌预览（不阻塞）
+                CardCmd.Preview(selected, time: 0.5f, style: CardPreviewStyle.HorizontalLayout);
+
+                // 3. 给一个极短的停顿，让特效和预览有时间呼吸
+                await Cmd.CustomScaledWait(0.1f, 0.2f);
             });
 
         // AnonDChord,Osusume,喝到晕碳
@@ -459,31 +464,29 @@ public static class ChordManager
                 }
             });
 
-        //灰爱音和弦【特 攻 攻】 减少1生命，抽1获得1能量
+        //灰爱音和弦【特 攻 攻】 对自己造成2点伤害，所有友方抽1获得1能量
         AddTemporaryChord("GreyAnonChord", ChordCategory.Anon,
             new[] { CardType.Status, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-GREYANONCHORD.title", "CUTESAKIKOMOD-GREYANONCHORD.description", "grey_anon_chord",
-            new[] { 1, 1, 1 }, // 生命减少、抽牌、能量
+            new[] { 2, 1, 1 }, // 伤害值, 抽牌数, 能量数
             async (ctx, owner, mult) =>
             {
                 var combat = owner.CombatState;
                 if (combat == null) return;
 
-                // 失去 1*mult 点生命值（不可格挡，不受力量影响）
-                await CreatureCmd.Damage(ctx, owner, 1 * mult,
-                    ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move,
+                // 对自己造成伤害（不可格挡，不受力量影响）
+                await CreatureCmd.Damage(ctx, owner, 2 * mult,
+                    ValueProp.Unblockable | ValueProp.Unpowered ,
                     owner, null);
 
-                // 抽牌
-                var player = owner.Player;
-                if (player != null)
+                // 所有友方（包括自己）抽牌并获得能量
+                foreach (var player in combat.Players)
+                {
+                    if (player == null) continue;
                     await CardPileCmd.Draw(ctx, 1 * mult, player);
-
-                // 获得能量
-                if (player != null)
                     await PlayerCmd.GainEnergy(1 * mult, player);
+                }
             });
-
         //碧天伴走
         AddTemporaryChord("HekitenbansouChord", ChordCategory.Anon,
             new[] { CardType.Attack, CardType.Skill, CardType.Attack, CardType.Skill },

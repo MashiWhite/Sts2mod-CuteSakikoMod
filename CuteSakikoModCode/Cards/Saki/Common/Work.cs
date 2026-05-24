@@ -8,18 +8,18 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[RegisterCharacterStarterCard(typeof(CuteSaki))]
-public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
+
+public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     // 始终添加消耗关键词（基础版本）
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new("Gold", 5m),
-        new PowerVar<PressurePower>(1m)
+        new("Gold", 10m),
+        new PowerVar<PressurePower>(2m)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -44,5 +44,6 @@ public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Basic, Tar
     protected override void OnUpgrade()
     {
         DynamicVars["Gold"].UpgradeValueBy(5);
+        DynamicVars["PressurePower"].UpgradeValueBy(2);
     }
 }

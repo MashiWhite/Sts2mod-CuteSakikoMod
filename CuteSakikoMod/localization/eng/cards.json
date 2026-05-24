@@ -390,7 +390,7 @@
   "CUTE_SAKIKO_MOD_CARD_VENT_ANGRY.title": "迁怒",
   "CUTE_SAKIKO_MOD_CARD_VENT_ANGRY.description": "造成{Damage:diff()}点伤害。\n若敌人意图不是攻击，则抽{IfUpgraded:show:2|1}张牌并给予{IfUpgraded:show:8|5}层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_BE_GOD.title": "我来成神",
-  "CUTE_SAKIKO_MOD_CARD_BE_GOD.description": "回合结束时，从[red]遗忘牌堆[/red]中打出并[red]遗忘[/red]{IfUpgraded:show:2|1}张牌。",
+  "CUTE_SAKIKO_MOD_CARD_BE_GOD.description": "回合结束时，从[red]遗忘牌堆[/red]中选择{IfUpgraded:show:2|1}张牌打出并[red]遗忘[/red]。",
   "CUTE_SAKIKO_MOD_CARD_HEART_SHIELD.title": "心之壁",
   "CUTE_SAKIKO_MOD_CARD_HEART_SHIELD.description": "获得{IfUpgraded:show:4|2}层[gold]压力[/gold]。\n获得压力层数等量[gold]格挡[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_NO_WORK.description": "造成{Damage:diff()}点伤害。\n给予{PressurePower:diff()}层[gold]压力[/gold]。",

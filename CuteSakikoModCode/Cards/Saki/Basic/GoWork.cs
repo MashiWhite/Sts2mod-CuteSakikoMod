@@ -15,7 +15,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
 [RegisterCharacterStarterCard(typeof(CuteSaki))]
 [RegisterArchaicToothTranscendence(typeof(NoWork))]
-public class GoWork() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+public class GoWork() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     // 始终带有消耗关键词（升级后仍保留）
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

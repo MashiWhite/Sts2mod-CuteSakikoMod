@@ -19,7 +19,7 @@ public class StarAnonEncounter : ModEncounterTemplate
 
     // 是否属于弱怪池（Boss 通常不是）
     public override bool IsWeak => false;
-
+    
     public override EncounterAssetProfile AssetProfile => new(
         RunHistoryIconPath: "res://CuteSakikoMod/images/ui/run_history/star_anon_encounter.png",
         RunHistoryIconOutlinePath: "res://CuteSakikoMod/images/ui/run_history/star_anon_encounter_outline.png"
