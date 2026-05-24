@@ -10,17 +10,17 @@ public class BansogoMemory() : SakiMemoryCard(0, CardType.Skill, CardRarity.Comm
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<RegenPower>(1m)
+        new EnergyVar(2)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var amount = DynamicVars["RegenPower"].IntValue;
-        await PowerCmd.Apply<RegenPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        // 获得2点能量
+        await PlayerCmd.GainEnergy(DynamicVars.Energy.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["RegenPower"].UpgradeValueBy(1m);
+        DynamicVars.Energy.UpgradeValueBy(1);
     }
 }
