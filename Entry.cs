@@ -128,6 +128,7 @@ public class Entry
                 _ = RelicCmd.Obtain(eggs, player);
             }
         });
+        
     }
 
     private static void OnRunStarted(RunState state)

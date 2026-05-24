@@ -6,7 +6,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Utils;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Ancient;
+namespace CuteSakikoMod.CuteSakikoModCode.Events.Ancient;
 
 [RegisterSharedAncient] // 使用共享，在IsAllowed中控制出现章节
 public class AnotherSelf : ModAncientEventTemplate
