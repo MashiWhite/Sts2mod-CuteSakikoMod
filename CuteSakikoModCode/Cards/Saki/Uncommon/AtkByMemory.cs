@@ -1,28 +1,22 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using MegaCrit.Sts2.Core.Factories;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class AtkByMemory : CuteSakikoModCard
 {
-    public override bool GainsBlock => true;
-
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(8m, ValueProp.Move)
-    ];
+    public AtkByMemory() : base(3, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -30,18 +24,23 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
         {
             yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
             yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return HoverTipFactory.FromPower<AtkByMemoryPower>();
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
 
-
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 获得格挡
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
+        await PowerCmd.Apply<AtkByMemoryPower>(
+            choiceContext,
+            Owner.Creature,
+            1,
+            Owner.Creature,
+            cardPlay.Card
+        );
 
-        // 用回忆卡牌填满手牌
+        // 用回忆卡牌填满手牌（原有逻辑保持不变）
         await FillHandWithMemoryCards();
     }
 
@@ -50,16 +49,16 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
         var handPile = PileType.Hand.GetPile(Owner);
         if (handPile == null) return;
 
-        var maxHandSize = 10;
-        var currentSize = handPile.Cards.Count;
-        var needed = maxHandSize - currentSize;
+        int maxHandSize = 10;
+        int currentSize = handPile.Cards.Count;
+        int needed = maxHandSize - currentSize;
         if (needed <= 0) return;
 
-        // 使用规范模板
         var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
         if (canonicalCards.Count == 0) return;
+
         var newCards = new List<CardModel>();
-        for (var i = 0; i < needed; i++)
+        for (int i = 0; i < needed; i++)
         {
             var newCard = CardFactory.GetDistinctForCombat(
                 Owner,
@@ -76,7 +75,6 @@ public class AtkByMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unc
 
     protected override void OnUpgrade()
     {
-        // 升级：格挡 8 -> 15
-        DynamicVars.Block.UpgradeValueBy(7m);
+        EnergyCost.UpgradeBy(-1);
     }
 }

@@ -11,7 +11,7 @@
   "CUTE_SAKIKO_MOD_RELIC_EGGS.selectPrompt": "选择一张彩蛋牌",
   "CUTE_SAKIKO_MOD_RELIC_MASK.title": "人偶面具",
   "CUTE_SAKIKO_MOD_RELIC_MASK.flavor": "戴上面具，就能成为另一个自己。",
-  "CUTE_SAKIKO_MOD_RELIC_MASK.description": "每回合开始时，减少自身一半[gold]压力[/gold]，并对所有敌人造成等量伤害。",
+  "CUTE_SAKIKO_MOD_RELIC_MASK.description": "每当你获得[gold]崩溃[/gold]时，将其移除。",
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH.title": "银色腕表",
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH.description": "获得时，将一张[gold]飞返[/gold]加入牌组。\n每回合开始时，获得[gold]{Block}[/gold]点格挡（基于已打出飞返次数，最多20点）。",
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH.flavor": "[pink]不知道为什么，感觉对这个东西好熟悉....[/pink]",

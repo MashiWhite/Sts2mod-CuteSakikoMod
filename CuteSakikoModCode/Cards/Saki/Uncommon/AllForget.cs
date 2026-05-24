@@ -8,7 +8,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Keywords;
 
-// 添加 LINQ 支持
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -27,20 +26,33 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var handCards = PileType.Hand.GetPile(Owner)?.Cards.ToList();
-        if (handCards == null || handCards.Count == 0) return;
+        var handPile = PileType.Hand.GetPile(Owner);
+        if (handPile == null) return;
+        var handCards = handPile.Cards.ToList();
+        if (handCards.Count == 0) return;
 
-        var cardCount = handCards.Count;
+        // 统计记忆牌数量（在遗忘前）
+        int memoryCount = handCards.Count(card => card.HasModKeyword(CutesakiKeywords.Memory));
 
-        foreach (var card in handCards)
-            MemoryCmd.Forget(choiceContext, handCards, this);
+        // 遗忘所有手牌
+        await MemoryCmd.Forget(choiceContext, handCards, this);
 
-        await CardPileCmd.Draw(choiceContext, cardCount, Owner);
-        
+        // 若遗忘的记忆牌 ≥5 张，给所有敌人施加崩溃
+        if (memoryCount >= 5)
+        {
+            var combatState = Owner.Creature.CombatState;
+            if (combatState != null)
+            {
+                foreach (var enemy in combatState.Enemies.Where(e => e.IsAlive))
+                {
+                    await PowerCmd.Apply<BreakDownPower>(choiceContext, enemy, 1, Owner.Creature, this);
+                }
+            }
+        }
     }
 
     protected override void OnUpgrade()
     {
-        // 升级效果已在逻辑中处理
+        EnergyCost.UpgradeBy(-1);
     }
 }

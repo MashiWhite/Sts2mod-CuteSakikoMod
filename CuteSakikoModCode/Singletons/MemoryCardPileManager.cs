@@ -8,6 +8,7 @@ using STS2RitsuLib.Keywords;
 using STS2RitsuLib.Models;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Rooms;
@@ -60,12 +61,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons
             if (side != CombatSide.Player) return;
             if (CombatManager.Instance.IsOverOrEnding) return;
 
-            // 不再判断网络类型，让所有端都执行
             var combatState = CombatManager.Instance.DebugOnlyGetState();
             if (combatState == null) return;
 
             foreach (var player in combatState.Players)
             {
+                // 如果玩家拥有 AtkByMemoryPower，则本回合不遗忘记忆卡牌
+                if (player.Creature.HasPower<AtkByMemoryPower>())
+                    continue;
+
                 var hand = player.PlayerCombatState?.Hand;
                 if (hand == null) continue;
 
