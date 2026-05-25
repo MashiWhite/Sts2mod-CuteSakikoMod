@@ -6,18 +6,16 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
-            // 返回压力能力的悬停提示
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
-            // 如果有其他提示，继续 yield return
         }
     }
 
@@ -25,7 +23,7 @@ public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
     {
         if (cardPlay.Target == null) return;
 
-        var selfPressureGain = IsUpgraded ? 5 : 10;
+        var selfPressureGain = IsUpgraded ? 10 : 5;
         var enemyPressureGain = IsUpgraded ? 15 : 10;
 
         // 自身增加压力
@@ -34,13 +32,18 @@ public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common,
         // 给选中的敌人增加压力
         await PowerCmd.Apply<PressurePower>(choiceContext, cardPlay.Target, enemyPressureGain, Owner.Creature, this);
 
-        // 临时能力：下回合扣除等量压力
+        // 下回合自身扣除等量压力（无论是否升级都生效）
         await PowerCmd.Apply<QuarrelSelfPower>(choiceContext, Owner.Creature, selfPressureGain, Owner.Creature, this);
-        await PowerCmd.Apply<QuarrelEnemyPower>(choiceContext, cardPlay.Target, enemyPressureGain, Owner.Creature,
-            this);
+
+        // 只有未升级时，敌人才会在下回合扣除压力
+        if (!IsUpgraded)
+        {
+            await PowerCmd.Apply<QuarrelEnemyPower>(choiceContext, cardPlay.Target, enemyPressureGain, Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade()
     {
+        // 升级效果已在 OnPlay 中通过 IsUpgraded 处理
     }
 }
