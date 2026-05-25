@@ -116,7 +116,8 @@ public static class ChordManager
                 var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
                 {
-                    await PowerCmd.Apply<FrailPower>(ctx, ally, 1 * mult, owner, null);
+                    var frail = await PowerCmd.Apply<FrailPower>(ctx, ally, 1 * mult, owner, null);
+                    if (frail != null) frail.SkipNextDurationTick = false;
                     await PowerCmd.Apply<StrengthPower>(ctx, ally, 2 * mult, owner, null);
                 }
             });
@@ -268,7 +269,8 @@ public static class ChordManager
                 var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
                 {
-                    await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
+                    var weak = await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
+                    if (weak != null) weak.SkipNextDurationTick = false;
                     await CreatureCmd.GainBlock(ally, 8 * mult, 0, null);
                 }
             });
@@ -443,7 +445,10 @@ public static class ChordManager
                 // 对全体友方施加 1 * mult 层虚弱
                 var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
-                    await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
+                {
+                    var weak2 = await PowerCmd.Apply<WeakPower>(ctx, ally, 1 * mult, owner, null);
+                    if (weak2 != null) weak2.SkipNextDurationTick = false;
+                }
             });
 
         // 爱音G和弦【技 技 攻 攻】所有友方抽1牌，获1能量

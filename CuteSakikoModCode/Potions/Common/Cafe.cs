@@ -16,7 +16,7 @@ public sealed class Cafe : CuteSakikoModPotion
 {
     public override PotionRarity Rarity => PotionRarity.Common;
     public override PotionUsage Usage => PotionUsage.CombatOnly;
-    public override TargetType TargetType => CutesakiTargets.Anyone;
+    public override TargetType TargetType => TargetType.AnyPlayer;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         [new PowerVar<PressurePower>(5m)];

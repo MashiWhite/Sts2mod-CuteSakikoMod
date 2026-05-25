@@ -491,6 +491,7 @@ public class AnonGuitar : CuteAnonRelic
         RestoreTempChords();
         _temporaryChords.Clear();
         MusicNoteManager.ClearCombatData(Owner);
+        ChordSequenceModifierHelper.ClearCardModifiers(Owner);
         CleanupUI();
         SyncToSaved();
         await base.AfterCombatEnd(room);
