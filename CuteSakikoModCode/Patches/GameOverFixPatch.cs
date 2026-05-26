@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Screens.GameOverScreen;
 using MegaCrit.Sts2.Core.Runs;
@@ -9,9 +10,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 [HarmonyPatch(typeof(NGameOverScreen))]
 public static class GameOverFixPatch
 {
-    // 缓存 ModCharacterTemplate<,,> 的泛型类型定义
-    private static readonly Type ModCharacterTemplateGeneric =
-        typeof(ModCharacterTemplate<,,>).GetGenericTypeDefinition();
+    // 缓存 CuteSakikoCharacter<,,> 的泛型类型定义
+    private static readonly Type CuteSakikoCharacterGeneric =
+        typeof(CuteSakikoCharacter<,,>).GetGenericTypeDefinition();
 
     [HarmonyPrefix]
     [HarmonyPatch("MoveCreaturesToDifferentLayerAndDisableUi")]
@@ -29,9 +30,9 @@ public static class GameOverFixPatch
                 if (character != null)
                 {
                     var type = character.GetType();
-                    // 检查类型是否为 ModCharacterTemplate<,,> 或它的派生类
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == ModCharacterTemplateGeneric)
-                        return false; // 如果是 ModCharacterTemplate 的任何泛型实例，跳过原方法
+                    // 检查类型是否为 CuteSakikoCharacter<,,> 或它的派生类
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == CuteSakikoCharacterGeneric)
+                        return false; // 如果是 CuteSakikoCharacter 的任何泛型实例，跳过原方法
                 }
             }
         }

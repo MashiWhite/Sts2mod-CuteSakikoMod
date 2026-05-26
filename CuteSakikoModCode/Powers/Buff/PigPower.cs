@@ -24,8 +24,8 @@ public sealed class PigPower : CuteSakikoModPower
 
     public PigPower()
     {
-        _pigScene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/others/pig.tscn");
-    }
+        _pigScene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/char/Pig/pig.tscn");
+    } 
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -38,9 +38,7 @@ public sealed class PigPower : CuteSakikoModPower
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player.Creature != Owner) return;
-        // 每回合开始将一张猪进食加入手牌
         var pigEat = CombatState.CreateCard<PigEat>(player);
-
         await CardPileCmd.AddGeneratedCardToCombat(pigEat, PileType.Hand, player);
     }
 
@@ -59,30 +57,24 @@ public sealed class PigPower : CuteSakikoModPower
 
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
-        await base.AfterSideTurnEnd(choiceContext, side,participants);
+        await base.AfterSideTurnEnd(choiceContext, side, participants);
         if (side == Owner.Side && Owner != null && Owner.IsAlive) await CreatureCmd.Heal(Owner, 1);
     }
 
-    // 当拥有者将要死亡时，阻止死亡
     public override bool ShouldDie(Creature creature)
     {
         if (creature != Owner) return base.ShouldDie(creature);
-        // 拥有此能力，阻止死亡
         return false;
     }
 
-    // 阻止死亡后，回复30%最大生命值，然后移除本能力
     public override async Task AfterPreventingDeath(Creature creature)
     {
         if (creature != Owner) return;
-        // 回复10%最大生命值（至少1点）
         var healAmount = Mathf.Max(1, (int)(creature.MaxHp * 0.1f));
         await CreatureCmd.Heal(creature, healAmount);
-        // 移除本能力
         await PowerCmd.Remove(this);
     }
 
-    // 生命值变化时更新缩放
     public override async Task AfterCurrentHpChanged(Creature creature, decimal delta)
     {
         if (creature != Owner) return;
@@ -93,13 +85,13 @@ public sealed class PigPower : CuteSakikoModPower
     private void ScalePig()
     {
         if (_pigVisual == null) return;
-        // 根据当前生命值缩放：当前生命值低时缩小，高时放大
-        const float minHp = 1f; // 最小生命值（缩放最小值）
-        const float maxHp = 1000f; // 最大生命值（缩放最大值）
-        const float minScale = 0.01f; // 最小缩放倍数
-        const float maxScale = 10.0f; // 最大缩放倍数
-        var t = Mathf.Clamp((Owner.CurrentHp - minHp) / (maxHp - minHp), 0f, 1f);
-        var targetScale = Mathf.Lerp(minScale, maxScale, t);
+        // 根据当前生命值缩放根节点（外层 Node2D 已经隔离了偏移）
+        const float minHp = 1f;
+        const float maxHp = 1000f;
+        const float minScale = 0.01f;
+        const float maxScale = 10.0f;
+        float t = Mathf.Clamp((Owner.CurrentHp - minHp) / (maxHp - minHp), 0f, 1f);
+        float targetScale = Mathf.Lerp(minScale, maxScale, t);
         _pigVisual.Scale = Vector2.One * targetScale;
     }
 
@@ -112,18 +104,25 @@ public sealed class PigPower : CuteSakikoModPower
         var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
         if (originalVisual != null) originalVisual.Visible = false;
 
-        // 实例化猪的视觉
+        // 实例化猪场景
         _pigVisual = _pigScene.Instantiate<Node2D>();
         creatureNode.AddChild(_pigVisual);
-        _pigVisual.Position = Vector2.Zero;
+        // 位置使用场景内部预设偏移，不额外重置
+
+        // 直接通过固定路径获取 AnimationPlayer（场景结构已知）
+        var animPlayer = _pigVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
+        if (animPlayer != null)
+        {
+            PigAnimPlayers[Owner] = animPlayer;
+        }
+        else
+        {
+            GD.PushError("PigPower: 未找到 AnimationPlayer，请检查 pig.tscn 路径是否正确");
+        }
 
         // 设置初始缩放
         ScalePig();
-
-        // 查找猪的 AnimationPlayer 并存储
-        var animPlayer = FindAnimationPlayer(_pigVisual);
-        if (animPlayer != null)
-            PigAnimPlayers[Owner] = animPlayer;
+        await Task.CompletedTask;
     }
 
     private async Task RestoreVisual()
@@ -134,7 +133,6 @@ public sealed class PigPower : CuteSakikoModPower
             _pigVisual = null;
         }
 
-        // 恢复原有视觉（假设只有一个子节点被隐藏）
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode != null)
         {
@@ -143,17 +141,5 @@ public sealed class PigPower : CuteSakikoModPower
         }
 
         await Task.CompletedTask;
-    }
-
-    private AnimationPlayer FindAnimationPlayer(Node node)
-    {
-        if (node is AnimationPlayer ap) return ap;
-        foreach (var child in node.GetChildren())
-        {
-            var found = FindAnimationPlayer(child);
-            if (found != null) return found;
-        }
-
-        return null;
     }
 }

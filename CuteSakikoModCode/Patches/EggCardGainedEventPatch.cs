@@ -22,7 +22,7 @@ public class EggCardGainedEventPatch
 
         private static bool IsEggCard(CardModel card)
         {
-            var eggPool = ModelDb.CardPool<CuteSakikoEggCardPool>();
+            var eggPool = ModelDb.CardPool<CuteSakikoModCardPool>();
             return eggPool.AllCardIds.Contains(card.Id);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using CuteSakikoMod.CuteSakikoModCode.Character;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Runs;
@@ -15,8 +16,8 @@ public static class RichPresencePatch
     private static readonly MethodInfo? _setRichPresenceMethod;
     private static readonly PropertyInfo? _stateProp;
 
-    private static readonly Type ModCharacterTemplateGeneric =
-        typeof(ModCharacterTemplate<,,>).GetGenericTypeDefinition();
+    private static readonly Type CuteSakikoCharacterGeneric =
+        typeof(CuteSakikoCharacter<,,>).GetGenericTypeDefinition();
 
     static RichPresencePatch()
     {
@@ -44,8 +45,8 @@ public static class RichPresencePatch
 
         var character = me.Character;
 
-        // 检查是否为 ModCharacterTemplate<,,> 的派生类
-        if (IsModCharacterTemplate(character.GetType()))
+        // 检查是否为 CuteSakikoCharacter<,,> 的派生类
+        if (IsCuteSakikoCharacter(character.GetType()))
         {
             var charName = StripBBCode(character.Title.GetFormattedText());
             var actName = StripBBCode(state.Act.Title.GetFormattedText());
@@ -64,11 +65,11 @@ public static class RichPresencePatch
         }
     }
 
-    private static bool IsModCharacterTemplate(Type type)
+    private static bool IsCuteSakikoCharacter(Type type)
     {
         while (type != null && type != typeof(object))
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == ModCharacterTemplateGeneric)
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == CuteSakikoCharacterGeneric)
                 return true;
             type = type.BaseType;
         }

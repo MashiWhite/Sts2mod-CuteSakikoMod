@@ -108,6 +108,7 @@
         <Folder Include="CuteSakikoModCode\Relics\Saki\Event\"/>
         <Folder Include="CuteSakikoModCode\Relics\Saki\Uncommon\" />
         <Folder Include="CuteSakikoMod\images\ui\run_history\"/>
+        <Folder Include="CuteSakikoMod\scenes\others\" />
     </ItemGroup>
 
     <ItemGroup>

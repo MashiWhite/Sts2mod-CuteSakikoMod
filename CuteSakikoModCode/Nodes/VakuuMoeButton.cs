@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Character;
 using Godot;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
@@ -70,7 +71,7 @@ public partial class VakuuMoeButton : NButton
     {
         if (character == null) return false;
         var type = character.GetType();
-        var target = typeof(ModCharacterTemplate<,,>);
+        var target = typeof(CuteSakikoCharacter<,,>);
         while (type != null && type != typeof(CharacterModel))
         {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == target)

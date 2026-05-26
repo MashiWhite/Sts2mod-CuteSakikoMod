@@ -64,7 +64,7 @@ public sealed class Eggs : CuteSakiRelic
 
     private async Task GiveEggCardChoice(PlayerChoiceContext choiceContext, Player player)
     {
-        var allEggCards = ModelDb.CardPool<CuteSakikoEggCardPool>()
+        var allEggCards = ModelDb.CardPool<CuteSakikoModCardPool>()
             .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
             .ToList();
 
@@ -109,7 +109,7 @@ public sealed class Eggs : CuteSakiRelic
             return false;
         if (creationOptions.Source != CardCreationSource.Encounter) return false;
 
-        var allEggCards = ModelDb.CardPool<CuteSakikoEggCardPool>()
+        var allEggCards = ModelDb.CardPool<CuteSakikoModCardPool>()
             .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
             .ToList();
         var available = allEggCards.Where(c => !_gainedEggCards.Contains(c.Id)).ToList();

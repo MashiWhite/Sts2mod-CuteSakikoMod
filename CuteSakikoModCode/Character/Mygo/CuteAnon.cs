@@ -6,10 +6,10 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Godot;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Character;
+namespace CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 
 [RegisterCharacter]
-public class CuteAnon : ModCharacterTemplate<CuteAnonCardPool, CuteAnonRelicPool, CuteAnonPotionPool>
+public class CuteAnon :CuteSakikoCharacter<CuteAnonCardPool, CuteAnonRelicPool, CuteAnonPotionPool>
 {
 	public const string CharacterId = "CUTEANON";
 	public static readonly Color Color = new("#ff8899");

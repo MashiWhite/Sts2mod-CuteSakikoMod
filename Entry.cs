@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -18,6 +19,7 @@ using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib;
+using STS2RitsuLib.Content;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.RunData;
 using STS2RitsuLib.Settings;
@@ -114,6 +116,13 @@ public class Entry
                 }
             }
         };
+        
+        ModContentRegistry.For(ModId)
+            .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoModCardPool>(
+                "cute_sakiko_mod_card_pool", // ID
+                "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png" // 图标位置
+                // null // 放置顺序（可选）
+            );
 
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
         {

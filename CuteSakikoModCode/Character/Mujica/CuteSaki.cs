@@ -6,10 +6,10 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Godot;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Character;
+namespace CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 
 [RegisterCharacter]
-public class CuteSaki : ModCharacterTemplate<CuteSakiCardPool, CuteSakiRelicPool, CuteSakiPotionPool>
+public class CuteSaki : CuteSakikoCharacter<CuteSakiCardPool, CuteSakiRelicPool, CuteSakiPotionPool>
 {
     public const string CharacterId = "CUTESAKI";
     public const string CharacterEggId = "SAKIEGGS";

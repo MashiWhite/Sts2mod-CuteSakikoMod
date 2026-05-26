@@ -11,7 +11,7 @@ public static class ModelDbAllCardPoolsPatch
     {
         // 将你的自定义卡池添加到结果中
         __result = __result
-            .Append(ModelDb.CardPool<CuteSakikoEggCardPool>())
+            .Append(ModelDb.CardPool<CuteSakikoModCardPool>())
             .Distinct();
     }
 }

@@ -6,7 +6,7 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
 
-[RegisterCard(typeof(CuteSakikoEggCardPool), Inherit = true)]
+[RegisterCard(typeof(CuteSakikoModCardPool), Inherit = true)]
 public abstract class CuteSakikoModEggCard(int cost, CardType type, CardRarity rarity, TargetType target) :
     ModCardTemplate(cost, type, rarity, target)
 {

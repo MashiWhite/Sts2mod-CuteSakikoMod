@@ -17,21 +17,22 @@ public static class PigAnimationPatch
         if (!PigPower.PigAnimPlayers.TryGetValue(creature, out var animPlayer))
             return;
 
-        // 检查动画播放器是否有效
         if (animPlayer == null || !GodotObject.IsInstanceValid(animPlayer))
         {
             PigPower.PigAnimPlayers.Remove(creature);
             return;
         }
-
+        
         var animName = triggerName switch
         {
+            "Idle" => "idle_loop",
             "Attack" => "attack",
             "Cast" => "cast",
             "Hit" => "hurt",
             _ => null
         };
-        if (!string.IsNullOrEmpty(animName) && animPlayer.HasAnimation(animName)) animPlayer.Play(animName);
+        if (!string.IsNullOrEmpty(animName) && animPlayer.HasAnimation(animName))
+            animPlayer.Play(animName);
     }
 
     [HarmonyPrefix]
@@ -48,6 +49,7 @@ public static class PigAnimationPatch
             return;
         }
 
-        if (animPlayer.HasAnimation("die")) animPlayer.Play("die");
+        if (animPlayer.HasAnimation("die"))
+            animPlayer.Play("die");
     }
 }
