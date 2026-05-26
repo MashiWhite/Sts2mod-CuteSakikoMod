@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
@@ -42,33 +40,28 @@ public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.U
         var forgetPile = ForgetCardPile.Get(Owner);
         if (forgetPile == null) return;
 
-        var memoryCards = forgetPile.Cards
-            .Where(c => c.HasModKeyword(CutesakiKeywords.Memory))
-            .ToList();
-
-        if (memoryCards.Count == 0) return;
-
-        // 打出数量：基础为 X，升级后 +2
         int count = x + (IsUpgraded ? 2 : 0);
-
         var rng = Owner.RunState.Rng.CombatCardSelection;
-        var played = 0;
-        while (played < count && memoryCards.Count > 0)
+
+        for (int i = 0; i < count; i++)
         {
-            var idx = rng.NextInt(memoryCards.Count);
-            var selected = memoryCards[idx];
-            memoryCards.RemoveAt(idx);
+            // 每次循环重新从遗忘牌堆获取最新的记忆牌列表
+            var memoryCards = forgetPile.Cards
+                .Where(c => c.HasModKeyword(CutesakiKeywords.Memory))
+                .ToList();
+
+            if (memoryCards.Count == 0) break;
+
+            var selected = rng.NextItem(memoryCards);
+            if (selected == null) break;
+
             await CardCmd.AutoPlay(choiceContext, selected, null);
-
-            // 初始自带遗忘，每张自动打出的牌都会被遗忘
-            MemoryCmd.Forget(choiceContext, new[] { selected }, null);
-
-            played++;
+            await MemoryCmd.Forget(choiceContext, new[] { selected }, null);
         }
     }
 
     protected override void OnUpgrade()
     {
-        // 升级仅增加打出数量，逻辑已在 OnPlay 中处理
+        // 升级仅增加打出数量（X+2），逻辑已在 OnPlay 中处理
     }
 }

@@ -123,6 +123,7 @@ public class Entry
                 "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png" // 图标位置
                 // null // 放置顺序（可选）
             );
+        
 
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
         {

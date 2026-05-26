@@ -1,6 +1,7 @@
 {
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "测试卡牌",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "测试卡牌。",
+  
   "CUTE_SAKIKO_MOD_CARD_STRIKE_FAST.title": "琴奏：急",
   "CUTE_SAKIKO_MOD_CARD_STRIKE_FAST.description": "造成{Damage:diff()}点伤害。\n若有则消耗1层[gold]压力[/gold]，额外造成{IfUpgraded:show:2|1}次伤害。",
   "CUTE_SAKIKO_MOD_CARD_STRIKE_SLOW.title": "琴奏：缓",
@@ -13,6 +14,8 @@
   "CUTE_SAKIKO_MOD_CARD_WHAT_MEMORY.selectionScreenPrompt": "选择最多 {Cards} 张牌获得[gold]回忆[/gold]",
   "CUTE_SAKIKO_MOD_CARD_BITE_GUITAR.title": "咬吉他",
   "CUTE_SAKIKO_MOD_CARD_BITE_GUITAR.description": "造成{Damage:diff()}点伤害。\n本场战斗中随机化所有[pink]已记忆和弦[/pink]的[pink]音符[/pink]。",
+  "CUTE_SAKIKO_MOD_CARD_ANGRY_SAKI.title": "生气了",
+  "CUTE_SAKIKO_MOD_CARD_ANGRY_SAKI.description": "造成{Damage:diff()}点伤害。\n若目标有则消耗10层[gold]压力[/gold]，额外造成1次伤害。",
   "CUTE_SAKIKO_MOD_CARD_DEFEND_SAKI.title": "防御",
   "CUTE_SAKIKO_MOD_CARD_DEFEND_SAKI.description": "获得{Block:diff()}点格挡。\n获得{IfUpgraded:show:2|1}层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_PRACTICE_PRACTICE.title": "练习...练习...",
@@ -132,7 +135,7 @@
   "CUTE_SAKIKO_MOD_CARD_PROVOKE.title": "挑衅",
   "CUTE_SAKIKO_MOD_CARD_PROVOKE.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n使目标敌人获得{StrengthPower:diff()}点[gold]力量[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_NOT_NEEDED.title": "不需要我了吧...",
-  "CUTE_SAKIKO_MOD_CARD_NOT_NEEDED.description": "回合结束时若在手牌中，获得{Block:diff()}点格挡并复制一张此牌放入手牌。",
+  "CUTE_SAKIKO_MOD_CARD_NOT_NEEDED.description": "回合结束时若在手牌中，获得{block:diff()}点格挡并复制一张此牌放入手牌。",
   "CUTE_SAKIKO_MOD_CARD_FEATHER_BIRDS.title": "一丘之貉",
   "CUTE_SAKIKO_MOD_CARD_FEATHER_BIRDS.description": "对所有敌人造成{Damage:diff()}点伤害并给予{PressurePower:diff()}层[gold]压力[/gold]，自身获得{PressurePower:diff()}层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_LOFT_MOON.title": "阁楼之月",

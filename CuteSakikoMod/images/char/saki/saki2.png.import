@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://75fr101qno7a"
-path="res://.godot/imported/saki2.png-7e19527b0eec896fe579e9f49be5136b.ctex"
+uid="uid://d2roxcrbcs1fh"
+path="res://.godot/imported/Saki2.png-64a07c20a189d830fa36bbfe5cf0fbb9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/char/saki/saki2.png"
-dest_files=["res://.godot/imported/saki2.png-7e19527b0eec896fe579e9f49be5136b.ctex"]
+source_file="res://CuteSakikoMod/images/char/saki/Saki2.png"
+dest_files=["res://.godot/imported/Saki2.png-64a07c20a189d830fa36bbfe5cf0fbb9.ctex"]
 
 [params]
 
