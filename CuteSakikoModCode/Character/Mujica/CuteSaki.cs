@@ -68,13 +68,13 @@ public class CuteSaki : CuteSakikoCharacter<CuteSakiCardPool, CuteSakiRelicPool,
             ),
             Multiplayer: new CharacterMultiplayerAssetSet(
                 // 多人模式-手指。
-                "res://CuteSakikoMod/images/others/saki/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_point.png",
                 // 多人模式剪刀石头布-石头。
-                "res://CuteSakikoMod/images/others/saki/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_rock.png",
                 // 多人模式剪刀石头布-布。
-                "res://CuteSakikoMod/images/others/saki/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_paper.png",
                 // 多人模式剪刀石头布-剪刀。
-                "res://CuteSakikoMod/images/others/saki/multiplayer_hand_scissors.png"
+                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_scissors.png"
             )));
 
 

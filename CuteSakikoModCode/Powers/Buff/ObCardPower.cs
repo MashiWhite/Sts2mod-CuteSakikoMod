@@ -1,5 +1,9 @@
 ﻿using System.Collections;
 using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,25 +16,21 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using STS2RitsuLib.Keywords;
-using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class ObCardPower : CuteSakikoModPower
 {
     private const int ExtraReplay = 1;
+
+    // ────────── 视觉替换相关字段 ──────────
+    internal static readonly Dictionary<Creature, AnimationPlayer> ObAnimPlayers = new();
+    private static readonly string ObScenePath = "res://CuteSakikoMod/scenes/char/saki/ob.tscn";
     private readonly Dictionary<CardModel, bool> _hadExhaustKeyword = new();
     private readonly HashSet<CardModel> _modifiedCards = new();
     private readonly Dictionary<CardModel, int> _originalCosts = new();
     private bool _isRemoving;
-
-    // ────────── 视觉替换相关字段 ──────────
-    internal static readonly Dictionary<Creature, AnimationPlayer> ObAnimPlayers = new();
     private Node2D? _obVisual;
-    private static readonly string ObScenePath = "res://CuteSakikoMod/scenes/char/saki/ob.tscn";
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -76,6 +76,7 @@ public sealed class ObCardPower : CuteSakikoModPower
                 if (!_modifiedCards.Contains(card))
                     ApplyModificationsToCard(card);
         }
+
         await Task.CompletedTask;
     }
 
@@ -95,13 +96,14 @@ public sealed class ObCardPower : CuteSakikoModPower
 
         if (_modifiedCards.Contains(card))
         {
-            MemoryCmd.Forget(choiceContext, new[] { card }, null);
+            MemoryCmd.Forget(choiceContext, new[] { card });
             _modifiedCards.Remove(card);
             _originalCosts.Remove(card);
         }
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (_isRemoving) return;
         if (side != Owner.Side) return;
@@ -118,6 +120,7 @@ public sealed class ObCardPower : CuteSakikoModPower
             var originalCost = card.EnergyCost.GetWithModifiers(CostModifiers.None);
             _originalCosts[card] = originalCost;
         }
+
         card.EnergyCost.SetThisCombat(1, true);
         card.BaseReplayCount += ExtraReplay;
         _modifiedCards.Add(card);
@@ -153,6 +156,7 @@ public sealed class ObCardPower : CuteSakikoModPower
 
                         card.InvokeEnergyCostChanged();
                     }
+
                     card.BaseReplayCount -= ExtraReplay;
                     _modifiedCards.Remove(card);
                     _originalCosts.Remove(card);
@@ -168,20 +172,32 @@ public sealed class ObCardPower : CuteSakikoModPower
     // ────────── 视觉替换方法 ──────────
     private async Task ReplaceVisual()
     {
+        // 1. 清理旧 Ob 节点（如果有）
+        if (_obVisual != null)
+        {
+            _obVisual.QueueFree();
+            _obVisual = null;
+        }
+
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode == null) return;
 
-        // 隐藏原模型
+        // 2. 隐藏原始模型
         var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
-        if (originalVisual != null) originalVisual.Visible = false;
+        if (originalVisual != null)
+        {
+            originalVisual.Visible = false;
+            originalVisual.Modulate = new Color(1, 1, 1, 0);
+        }
 
-        // 加载 OB 场景
+        // 3. 加载 OB 场景并添加
         var scene = GD.Load<PackedScene>(ObScenePath);
         if (scene == null) return;
         _obVisual = scene.Instantiate<Node2D>();
+        _obVisual.Name = "ObVisual"; // 起个名字，方便识别
         creatureNode.AddChild(_obVisual);
 
-        // 获取 AnimationPlayer
+        // 4. 获取 AnimationPlayer
         var animPlayer = _obVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
         if (animPlayer != null)
         {
@@ -197,17 +213,26 @@ public sealed class ObCardPower : CuteSakikoModPower
 
     private async Task RestoreVisual()
     {
+        // 销毁 Ob 节点
         if (_obVisual != null)
         {
             _obVisual.QueueFree();
             _obVisual = null;
         }
 
+        // 清理映射
+        ObAnimPlayers.Remove(Owner);
+
+        // 恢复原始模型
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode != null)
         {
             var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
-            if (originalVisual != null) originalVisual.Visible = true;
+            if (originalVisual != null)
+            {
+                originalVisual.Visible = true;
+                originalVisual.Modulate = new Color(1, 1, 1);
+            }
         }
 
         await Task.CompletedTask;

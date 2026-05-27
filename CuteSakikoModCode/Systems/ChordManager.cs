@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -186,8 +187,8 @@ public static class ChordManager
                 foreach (var ally in allies)
                     await CreatureCmd.GainBlock(ally, 4 * mult, 0, null);
             });
-
-        // Gm【技 技 技 技】所有友方恢复3点血量
+        
+        // Gm【技 技 技 技】所有友方恢复3点血量，复活时恢复抽牌堆并播放待机动画
         AddChord("Gm", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill, CardType.Skill, CardType.Skill },
             "CUTESAKIKOMOD-GMCHORD.title", "CUTESAKIKOMOD-GMCHORD.description", "gm_chord",
@@ -195,8 +196,34 @@ public static class ChordManager
             async (ctx, owner, mult) =>
             {
                 var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
+                var combatState = owner.CombatState as CombatState;
                 foreach (var ally in allies)
+                {
+                    bool wasDead = ally.IsDead;
                     await CreatureCmd.Heal(ally, 3 * mult);
+
+                    // 复活后恢复抽牌堆
+                    if (wasDead && ally.IsAlive && ally.Player != null && combatState != null)
+                    {
+                        var player = ally.Player;
+                        var drawPile = PileType.Draw.GetPile(player);
+                        if (drawPile != null && drawPile.Cards.Count == 0)
+                        {
+                            var rng = combatState.RunState.Rng.Shuffle;
+                            foreach (var deckCard in player.Deck.Cards)
+                            {
+                                var canonical = ModelDb.GetById<CardModel>(deckCard.Id);
+                                if (canonical == null) continue;
+                                var combatCard = combatState.CreateCard(canonical, player);
+                                drawPile.AddInternal(combatCard);
+                            }
+                            drawPile.RandomizeOrderInternal(player, rng, combatState);
+                        }
+
+                        // ★ 复活后自动播放待机动画（避免卡在死亡动画）
+                        await CreatureCmd.TriggerAnim(ally, "idle_loop", 0f);
+                    }
+                }
             });
 
         // Em【技 技 攻 技】所有友方本回合获得1点倒映

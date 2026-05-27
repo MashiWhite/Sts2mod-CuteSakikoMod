@@ -50,7 +50,7 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
         if (targetPressure != null && targetPressure.Amount >= 10)
         {
             extraHits = 1;
-            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -5, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -10, Owner.Creature, this);
         }
 
         int totalHits = 1 + extraHits;

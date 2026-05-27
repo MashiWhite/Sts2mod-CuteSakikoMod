@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb31c7s6ojha1"]
 
 [ext_resource type="Script" uid="uid://jf6sgq0tgliu" path="res://CuteSakikoModCode/Nodes/SakiRestSiteCharacter.cs" id="1_letbo"]
-[ext_resource type="Texture2D" uid="uid://1hu8s0dkcwcq" path="res://CuteSakikoMod/images/others/anon/anon_sitting.png" id="2_yr1er"]
+[ext_resource type="Texture2D" uid="uid://1hu8s0dkcwcq" path="res://CuteSakikoMod/images/charui/anon/anon_sitting.png" id="2_yr1er"]
 [ext_resource type="PackedScene" uid="uid://bgy88bk44xxvk" path="res://CuteSakikoMod/scenes/ui/Sakiselection_reticle.tscn" id="3_s5l6r"]
 
 [node name="AnonRestSite" type="Node2D"]

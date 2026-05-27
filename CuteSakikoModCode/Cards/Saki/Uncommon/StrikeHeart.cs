@@ -41,7 +41,7 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
                 this);
 
         // 造成多次1点伤害（使用动态伤害值，受力量加成）
-        var hitCount = IsUpgraded ? 10 : 6;
+        var hitCount = IsUpgraded ? 8 : 6;
         var damage = DynamicVars.Damage.BaseValue;
         for (var i = 0; i < hitCount; i++)
             await DamageCmd.Attack(damage)

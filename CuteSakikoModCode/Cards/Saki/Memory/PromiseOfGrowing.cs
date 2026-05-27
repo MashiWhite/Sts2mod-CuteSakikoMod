@@ -18,7 +18,7 @@ public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.
     {
         if (cardPlay.Target == null) return;
 
-        var extraHits = IsUpgraded ? 4 : 3;; // 攻击3次，升级4次
+        var extraHits = IsUpgraded ? 3 : 2;; // 攻击2次，升级3次
         var damage = DynamicVars.Damage.BaseValue;
 
         await DamageCmd.Attack(damage)

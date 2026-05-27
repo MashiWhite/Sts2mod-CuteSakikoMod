@@ -22,7 +22,7 @@ public static class PigAnimationPatch
             PigPower.PigAnimPlayers.Remove(creature);
             return;
         }
-        
+    
         var animName = triggerName switch
         {
             "Idle" => "idle_loop",
@@ -31,8 +31,17 @@ public static class PigAnimationPatch
             "Hit" => "hurt",
             _ => null
         };
-        if (!string.IsNullOrEmpty(animName) && animPlayer.HasAnimation(animName))
-            animPlayer.Play(animName);
+
+        if (string.IsNullOrEmpty(animName) || !animPlayer.HasAnimation(animName))
+            return;
+
+        animPlayer.Play(animName);
+
+        // ✅ 确保非 idle 动画结束后回到 idle_loop
+        if (animName != "idle_loop" && animName != "die" && animPlayer.HasAnimation("idle_loop"))
+        {
+            animPlayer.Queue("idle_loop");
+        }
     }
 
     [HarmonyPrefix]
