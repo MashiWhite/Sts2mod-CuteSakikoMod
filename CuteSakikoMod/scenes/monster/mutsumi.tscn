@@ -28,8 +28,8 @@ mouse_filter = 2
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(40.14737, -85.99751)
+position = Vector2(39.78647, -58.024323)
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(40.14737, -97.60875)
+position = Vector2(39.78647, -284.78476)

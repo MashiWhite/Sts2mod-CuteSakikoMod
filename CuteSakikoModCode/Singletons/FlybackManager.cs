@@ -18,25 +18,31 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 [RegisterSingleton]
 public class FlybackManager : SingletonModel
 {
-    private static int _lastSyncedReloadCount = -1;
-    private static int _cachedTotalPlayCount = 0;
     public static PlayerRunSavedData<PlayerFlybackData>? PlayerDataSlot { get; set; }
     public static RunSavedData<RunFlybackData>? RunDataSlot { get; set; }
     public override bool ShouldReceiveCombatHooks => false;
     public static FlybackManager Instance => ModelDb.Singleton<FlybackManager>();
 
-    private static TaskCompletionSource<bool>? _reloadCountWaitTcs;
-    private static int _reloadCountWaitExpected;
+    // ---------- PlayCount 相关字段 ----------
+    private static int _cachedTotalPlayCount = 0;
     private static TaskCompletionSource<bool>? _playCountWaitTcs;
 
-    // 辅助判断：是否为主机或单人
+    // ---------- ReloadCount 新架构 ----------
+    private static int _extraReloadNum = 0;                // 额外重载次数，所有端本地递增
+    private static int _baseReloadCount = 0;               // 基础重载次数，客机由主机消息设置
+    private static int _lastBroadcastedBaseReload = -1;    // 主机上次广播的基础值，用于去重
+
+    // ---------- 网络环境判断 ----------
     private static bool IsHostOrSingle =>
-        RunManager.Instance.NetService.Type == NetGameType.Host ||
-        RunManager.Instance.NetService.Type == NetGameType.Singleplayer;
-
+        RunManager.Instance.NetService?.Type == NetGameType.Host ||
+        RunManager.Instance.NetService?.Type == NetGameType.Singleplayer;
     private static bool IsClient =>
-        RunManager.Instance.NetService.Type == NetGameType.Client;
+        RunManager.Instance.NetService?.Type == NetGameType.Client;
 
+    // ---------- 事件 ----------
+    public event Action<int, int>? OnFlybackDataChanged;
+
+    // ---------- TotalPlayCount（保持不变）----------
     public int TotalPlayCount
     {
         get
@@ -55,19 +61,47 @@ public class FlybackManager : SingletonModel
                 }
                 return _cachedTotalPlayCount;
             }
-            // 客户端
             return _cachedTotalPlayCount;
         }
     }
 
-    public int PlayCount => TotalPlayCount;
+    // ---------- ReloadCount 新实现 ----------
+    public static int GetReloadCount()
+    {
+        int baseCount = IsHostOrSingle ? GetRawNumReloads() : _baseReloadCount;
+        return baseCount + _extraReloadNum;
+    }
 
-    public event Action<int, int>? OnFlybackDataChanged;
+    // 所有端直接递增额外值（星爱音技能调用）
+    public static void IncrementReloadCount()
+    {
+        Interlocked.Increment(ref _extraReloadNum);
+        Instance.NotifyDataChanged();
+    }
 
+    // 主机同步基础值给客机（进入房间/重连/回合开始时调用）
+    public static void SyncReloadCountIfHost()
+    {
+        if (!IsHostOrSingle || RunManager.Instance == null || !RunManager.Instance.IsInProgress) return;
+        int raw = GetRawNumReloads();
+        if (raw == _lastBroadcastedBaseReload) return;
+        _lastBroadcastedBaseReload = raw;
+        BroadcastReloadCount(raw);
+        Instance.NotifyDataChanged();
+    }
+
+    // 客机收到基础重载次数
+    public static void OnReloadCountReceived(int baseCount)
+    {
+        if (!IsClient) return;
+        _baseReloadCount = baseCount;
+        Instance.NotifyDataChanged();
+    }
+
+    // ---------- PlayCount 相关方法（保持不变）----------
     public void IncrementPlayCountForPlayer(Player player)
     {
         if (player == null || PlayerDataSlot == null) return;
-
         PlayerDataSlot.Modify(player, data => data.PlayCount++);
 
         foreach (var pile in player.Piles)
@@ -91,7 +125,6 @@ public class FlybackManager : SingletonModel
     {
         var runState = RunManager.Instance.DebugOnlyGetState();
         if (runState == null || PlayerDataSlot == null) return;
-
         foreach (var player in runState.Players)
             PlayerDataSlot.Modify(player, data => data.PlayCount *= 2);
 
@@ -105,91 +138,15 @@ public class FlybackManager : SingletonModel
         }
     }
 
-    // ---------- ReloadCount 相关 ----------
-    public static void IncrementReloadCount()
-    {
-        if (!IsHostOrSingle) return;
-
-        var field = typeof(RunManager).GetField("_numReloads", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (field == null) return;
-        int current = (int)field.GetValue(RunManager.Instance);
-        field.SetValue(RunManager.Instance, current + 1);
-        if (RunDataSlot != null)
-        {
-            var runState = RunManager.Instance.DebugOnlyGetState();
-            if (runState != null)
-                RunDataSlot.Modify(runState, data => data.ReloadCount = current + 1);
-        }
-        _lastSyncedReloadCount = current + 1;
-        if (RunManager.Instance.NetService.Type == NetGameType.Host)
-            BroadcastReloadCount(current + 1);
-        Instance.NotifyDataChanged();
-    }
-
-    public static int GetReloadCount()
-    {
-        if (RunManager.Instance == null || RunDataSlot == null) return 0;
-        if (RunManager.Instance.NetService == null) return 0;
-
-        if (IsHostOrSingle)
-        {
-            int raw = GetRawNumReloads();
-            UpdateRunSavedData(raw);
-            return raw;
-        }
-        // 客户端
-        var runState = RunManager.Instance.DebugOnlyGetState();
-        if (runState != null)
-            return RunDataSlot.Get(runState).ReloadCount;
-        return 0;
-    }
-
-    public static int GetRawNumReloads()
-    {
-        var field = typeof(RunManager).GetField("_numReloads", BindingFlags.NonPublic | BindingFlags.Instance);
-        return field != null ? (int)field.GetValue(RunManager.Instance) : 0;
-    }
-
-    private static void BroadcastReloadCount(int count)
-    {
-        if (RunManager.Instance.NetService is NetHostGameService hostService)
-            hostService.SendMessage(new ReloadCountSyncMessage { ReloadCount = count });
-    }
-
-    public static void SyncReloadCountIfHost()
-    {
-        if (Instance == null || RunManager.Instance == null || !RunManager.Instance.IsInProgress) return;
-        if (RunManager.Instance.NetService.Type != NetGameType.Host) return;
-        if (RunManager.Instance.NetService is not NetHostGameService hostService || !hostService.IsConnected) return;
-        int raw = GetRawNumReloads();
-        if (_lastSyncedReloadCount == raw) return;
-        _lastSyncedReloadCount = raw;
-        UpdateRunSavedData(raw);
-        BroadcastReloadCount(raw);
-        Instance.NotifyDataChanged();
-    }
-
-    public static void OnReloadCountReceived(int count)
+    public static async Task WaitForPlayCountChange(int timeoutMs = 500)
     {
         if (!IsClient) return;
-        var runState = RunManager.Instance.DebugOnlyGetState();
-        if (runState == null || RunDataSlot == null) return;
-        var runData = RunDataSlot.Get(runState);
-        if (runData.ReloadCount != count)
-        {
-            runData.ReloadCount = count;
-            RunDataSlot.Set(runState, runData);
-            Instance.NotifyDataChanged();
-            if (_reloadCountWaitTcs != null && GetReloadCount() >= _reloadCountWaitExpected)
-                _reloadCountWaitTcs.TrySetResult(true);
-        }
-    }
-
-    // ---------- PlayCount 广播与接收 ----------
-    private static void BroadcastPlayCount(int totalCount)
-    {
-        if (RunManager.Instance.NetService is NetHostGameService hostService)
-            hostService.SendMessage(new PlayCountSyncMessage { TotalPlayCount = totalCount });
+        _playCountWaitTcs?.TrySetResult(false);
+        var tcs = new TaskCompletionSource<bool>();
+        _playCountWaitTcs = tcs;
+        var delayTask = Task.Delay(timeoutMs);
+        await Task.WhenAny(tcs.Task, delayTask);
+        _playCountWaitTcs = null;
     }
 
     public static void OnPlayCountReceived(int totalCount)
@@ -200,40 +157,14 @@ public class FlybackManager : SingletonModel
         _playCountWaitTcs?.TrySetResult(true);
     }
 
-    // ---------- 等待方法 ----------
-    public static async Task WaitForReloadCountV2(int expected, int timeoutMs = 1000)
+    // ---------- 内部工具 ----------
+    private static int GetRawNumReloads()
     {
-        if (!IsClient || GetReloadCount() >= expected) return;
-        var tcs = new TaskCompletionSource<bool>();
-        _reloadCountWaitTcs = tcs;
-        _reloadCountWaitExpected = expected;
-        var delayTask = Task.Delay(timeoutMs);
-        var completedTask = await Task.WhenAny(tcs.Task, delayTask);
-        _reloadCountWaitTcs = null;
-        if (completedTask == delayTask)
-            Log.Warn($"WaitForReloadCountV2 timed out, current: {GetReloadCount()}, expected: {expected}");
+        var field = typeof(RunManager).GetField("_numReloads",
+            BindingFlags.NonPublic | BindingFlags.Instance);
+        return field != null ? (int)field.GetValue(RunManager.Instance) : 0;
     }
 
-    public static async Task WaitForPlayCountChange(int timeoutMs = 500)
-    {
-        if (!IsClient) return;
-
-        _playCountWaitTcs?.TrySetResult(false);
-        var tcs = new TaskCompletionSource<bool>();
-        _playCountWaitTcs = tcs;
-
-        var delayTask = Task.Delay(timeoutMs);
-        var completedTask = await Task.WhenAny(tcs.Task, delayTask);
-        _playCountWaitTcs = null;
-    }
-
-    // 兼容旧接口
-    public static async Task WaitForReloadCount(int expected, int timeoutMs = 1000) =>
-        await WaitForReloadCountV2(expected, timeoutMs);
-    public static async Task WaitForDataChange(int timeoutMs = 500) =>
-        await WaitForPlayCountChange(timeoutMs);
-
-    // ---------- 辅助方法 ----------
     private int CalculateRealTotalPlayCount()
     {
         var runState = RunManager.Instance.DebugOnlyGetState();
@@ -244,21 +175,17 @@ public class FlybackManager : SingletonModel
         return total;
     }
 
-    private static void UpdateRunSavedData(int count)
+    private static void BroadcastReloadCount(int count)
     {
-        if (RunDataSlot == null) return;
-        var runState = RunManager.Instance.DebugOnlyGetState();
-        if (runState == null) return;
-        var runData = RunDataSlot.Get(runState);
-        if (runData.ReloadCount != count)
-        {
-            runData.ReloadCount = count;
-            RunDataSlot.Set(runState, runData);
-        }
+        if (RunManager.Instance.NetService is NetHostGameService hostService)
+            hostService.SendMessage(new ReloadCountSyncMessage { ReloadCount = count });
     }
 
-    private Player? GetCurrentPlayer() =>
-        RunManager.Instance.DebugOnlyGetState()?.Players.FirstOrDefault();
+    private static void BroadcastPlayCount(int totalCount)
+    {
+        if (RunManager.Instance.NetService is NetHostGameService hostService)
+            hostService.SendMessage(new PlayCountSyncMessage { TotalPlayCount = totalCount });
+    }
 
     private void NotifyDataChanged() =>
         OnFlybackDataChanged?.Invoke(TotalPlayCount, GetReloadCount());

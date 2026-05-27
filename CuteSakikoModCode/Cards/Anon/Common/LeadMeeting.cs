@@ -10,7 +10,7 @@ public class LeadMeeting() : CuteAnonCard(1, CardType.Attack, CardRarity.Common,
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(13m, ValueProp.Move); }
+        get { yield return new DamageVar(10m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -27,6 +27,6 @@ public class LeadMeeting() : CuteAnonCard(1, CardType.Attack, CardRarity.Common,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 13 → 16
+        DynamicVars.Damage.UpgradeValueBy(3m); // 10 → 13
     }
 }

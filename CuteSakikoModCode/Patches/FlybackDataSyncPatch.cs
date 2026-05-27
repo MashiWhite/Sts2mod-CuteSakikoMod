@@ -31,7 +31,6 @@ public static class AfterRoomEnteredSyncPatch
 {
     private static void Postfix(IRunState runState, AbstractRoom room)
     {
-        // 只让主机广播，客户端不等待（避免在战斗中干扰招式内同步）
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
         {
             FlybackManager.SyncReloadCountIfHost();
@@ -46,7 +45,6 @@ public static class AfterSideTurnStartSyncPatch
 {
     private static async void Postfix(ICombatState combatState, CombatSide side)
     {
-        // 单机模式不执行
         if (RunManager.Instance.NetService.Type == NetGameType.Singleplayer)
             return;
 
@@ -57,7 +55,8 @@ public static class AfterSideTurnStartSyncPatch
         }
         else
         {
-            await FlybackManager.WaitForDataChange(timeoutMs: 200);
+            // 客机等待 PlayCount 同步（基础 ReloadCount 已由主机广播更新，不需要等待）
+            await FlybackManager.WaitForPlayCountChange(timeoutMs: 200);
         }
     }
 }

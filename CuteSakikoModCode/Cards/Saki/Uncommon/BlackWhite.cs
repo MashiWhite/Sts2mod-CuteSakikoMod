@@ -47,7 +47,6 @@ public class BlackWhite() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unc
             {
                 var healAmount = DynamicVars["Heal"].BaseValue;
                 await CreatureCmd.Heal(Owner.Creature, healAmount);
-                VfxCmd.PlayOnCreatureCenter(Owner.Creature, "vfx/vfx_heal");
                 await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
             }
         }

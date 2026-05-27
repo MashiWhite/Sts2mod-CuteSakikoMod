@@ -136,7 +136,7 @@ public class StarAnon : ModMonsterTemplate
         await SyncFlybackDataForMove();
 
         int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = GetReloadCount();
+        int reloads = FlybackManager.GetReloadCount();
         int amount = 1 + (int)(playCount / 100f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
 
@@ -151,7 +151,7 @@ public class StarAnon : ModMonsterTemplate
     {
         _lastMoveName = "BUFF_STRENGTH2";
         int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = GetReloadCount();
+        int reloads = FlybackManager.GetReloadCount();
         int amount = 2 + (int)(playCount / 100f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
@@ -162,22 +162,18 @@ public class StarAnon : ModMonsterTemplate
         await SyncFlybackDataForMove();
 
         int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = GetReloadCount();
+        int reloads = FlybackManager.GetReloadCount();
         int amount = 2 + (int)(playCount / 100f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
 
+    // ★ 关键修改：不再区分主客机，不再等待 ReloadCount
     private async Task SyncFlybackDataForMove()
     {
-        if (RunManager.Instance.NetService.Type == NetGameType.Host)
+        FlybackManager.IncrementReloadCount();
+        // PlayCount 等待仍然保留（如果 DoubleAllPlayerCounts 已经处理同步，可以视情况保留）
+        if (RunManager.Instance.NetService.Type == NetGameType.Client)
         {
-            FlybackManager.IncrementReloadCount();
-            FlybackManager.SyncPlayCountIfHost();
-        }
-        else
-        {
-            int expected = GetReloadCount() + 1;
-            await FlybackManager.WaitForReloadCountV2(expected, timeoutMs: 1000);
             await FlybackManager.WaitForPlayCountChange(timeoutMs: 500);
         }
     }
@@ -198,7 +194,6 @@ public class StarAnon : ModMonsterTemplate
         await DamageCmd.Attack(20).FromMonster(this).Execute(null);
     }
 
-    // ★ 修改为 AfterSideTurnEnd，匹配新版 AbstractModel
     public override async Task AfterSideTurnEnd(
         PlayerChoiceContext choiceContext,
         CombatSide side,
@@ -206,12 +201,6 @@ public class StarAnon : ModMonsterTemplate
     {
         if (side != CombatSide.Enemy)
             return;
-
         _lastMoveName = "";
-    }
-
-    private static int GetReloadCount()
-    {
-        return FlybackManager.GetReloadCount();
     }
 }
