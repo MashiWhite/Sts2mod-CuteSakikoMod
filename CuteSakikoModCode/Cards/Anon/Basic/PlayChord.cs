@@ -13,7 +13,7 @@ using STS2RitsuLib.Keywords;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
 [RegisterArchaicToothTranscendence(typeof(PlayImmediately))]
-[RegisterCharacterStarterCard(typeof(CuteAnon))]
+[RegisterCharacterStarterCard(typeof(CuteAnon),Order = 2)]
 public class PlayChord() : CuteAnonCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];

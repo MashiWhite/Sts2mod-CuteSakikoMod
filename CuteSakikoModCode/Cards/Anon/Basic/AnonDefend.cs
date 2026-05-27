@@ -9,7 +9,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteAnon), 4)]
+[RegisterCharacterStarterCard(typeof(CuteAnon), 4,Order = 1)]
 public class AnonDefend() : CuteAnonCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     public override bool GainsBlock => true;

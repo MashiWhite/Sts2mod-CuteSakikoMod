@@ -11,6 +11,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Ancient;
 
 public class ObCard() : CuteSakikoModCard(3, CardType.Power, CardRarity.Ancient, TargetType.Self)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Innate];
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new("Power", 1m)

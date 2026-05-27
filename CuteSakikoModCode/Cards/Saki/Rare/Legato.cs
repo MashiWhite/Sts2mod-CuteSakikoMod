@@ -21,11 +21,8 @@ public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, T
     {
         get
         {
-            var baseDamage = 7; // 基础伤害固定7，升级不变
-            var extraPerQin = IsUpgraded ? 6 : 4;
-
-            yield return new CalculationBaseVar(baseDamage);
-            yield return new ExtraDamageVar(extraPerQin);
+            yield return new CalculationBaseVar(7);
+            yield return new ExtraDamageVar(4);
             yield return new CalculatedDamageVar(ValueProp.Move).WithMultiplier((card, target) =>
             {
                 var owner = card.Owner;
@@ -81,6 +78,6 @@ public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, T
 
     protected override void OnUpgrade()
     {
-        // 升级效果已在 CanonicalVars 中通过 IsUpgraded 处理
+        DynamicVars.ExtraDamage.UpgradeValueBy(2);
     }
 }

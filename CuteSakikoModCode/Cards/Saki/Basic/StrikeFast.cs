@@ -15,7 +15,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteSaki), 2)]
+[RegisterCharacterStarterCard(typeof(CuteSaki), 2,Order = 0)]
 public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];

@@ -11,7 +11,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteAnon), 4)]
+[RegisterCharacterStarterCard(typeof(CuteAnon), 4,Order = 0)]
 public class AnonStrike() : CuteAnonCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };

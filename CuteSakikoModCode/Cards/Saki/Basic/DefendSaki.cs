@@ -14,7 +14,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteSaki), 4)]
+[RegisterCharacterStarterCard(typeof(CuteSaki), 4,Order = 2)]
 public class DefendSaki() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     public override bool GainsBlock => true;
