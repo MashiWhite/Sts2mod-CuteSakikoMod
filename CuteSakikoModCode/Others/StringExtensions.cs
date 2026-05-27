@@ -99,7 +99,7 @@ public static class AssetHelper
         var snake = GetSnakeCaseName(relic.GetType());
         return new RelicAssetProfile(
             $"res://{Entry.ModId}/images/relics/{snake}.png",
-            $"res://{Entry.ModId}/images/relics/{snake}_outline.png",
+            $"res://{Entry.ModId}/images/relics/{snake}.png",
             $"res://{Entry.ModId}/images/relics/big/{snake}.png"
         );
     }
@@ -110,7 +110,7 @@ public static class AssetHelper
         var snake = GetSnakeCaseName(potion.GetType());
         return new PotionAssetProfile(
             $"res://{Entry.ModId}/images/potions/{snake}.png",
-            $"res://{Entry.ModId}/images/potions/{snake}_outline.png"
+            $"res://{Entry.ModId}/images/potions/{snake}.png"
         );
     }
 

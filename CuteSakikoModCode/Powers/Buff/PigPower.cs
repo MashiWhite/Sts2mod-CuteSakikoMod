@@ -97,19 +97,29 @@ public sealed class PigPower : CuteSakikoModPower
 
     private async Task ReplaceVisual()
     {
+        // ✅ 防止重复创建：先清理任何残留的旧视觉节点
+        if (_pigVisual != null)
+        {
+            _pigVisual.QueueFree();
+            _pigVisual = null;
+        }
+
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode == null) return;
 
-        // 隐藏原有视觉
+        // ✅ 彻底隐藏原有模型（Visible + 全透明双保险）
         var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
-        if (originalVisual != null) originalVisual.Visible = false;
+        if (originalVisual != null)
+        {
+            originalVisual.Visible = false;
+            originalVisual.Modulate = new Color(1, 1, 1, 0);
+        }
 
         // 实例化猪场景
         _pigVisual = _pigScene.Instantiate<Node2D>();
         creatureNode.AddChild(_pigVisual);
-        // 位置使用场景内部预设偏移，不额外重置
 
-        // 直接通过固定路径获取 AnimationPlayer（场景结构已知）
+        // 获取 AnimationPlayer
         var animPlayer = _pigVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
         if (animPlayer != null)
         {
@@ -127,17 +137,23 @@ public sealed class PigPower : CuteSakikoModPower
 
     private async Task RestoreVisual()
     {
+        // ✅ 移除猪场景
         if (_pigVisual != null)
         {
             _pigVisual.QueueFree();
             _pigVisual = null;
         }
 
+        // ✅ 恢复原模型（Visible + 不透明双恢复）
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode != null)
         {
             var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
-            if (originalVisual != null) originalVisual.Visible = true;
+            if (originalVisual != null)
+            {
+                originalVisual.Visible = true;
+                originalVisual.Modulate = new Color(1, 1, 1, 1);
+            }
         }
 
         await Task.CompletedTask;

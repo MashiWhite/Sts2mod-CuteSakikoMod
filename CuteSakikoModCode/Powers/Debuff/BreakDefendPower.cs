@@ -1,4 +1,6 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,17 +15,11 @@ public sealed class BreakDefendPower : CuteSakikoModPower
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
 
-    public override decimal ModifyDamageAdditive(
-        Creature? target,
-        decimal amount,
-        ValueProp props,
-        Creature? dealer,
-        CardModel? cardSource)
-    {
-        if (Owner != target) return 0m;
-        return Amount > 0 ? 1m : 0m;
-    }
+    private int _pendingHits;
 
+    /// <summary>
+    /// 每次受到攻击伤害时，直接流失 2 点生命（无视格挡/无形/任何减伤）
+    /// </summary>
     public override async Task AfterDamageReceived(
         PlayerChoiceContext choiceContext,
         Creature target,
@@ -32,13 +28,29 @@ public sealed class BreakDefendPower : CuteSakikoModPower
         Creature? dealer,
         CardModel? cardSource)
     {
-        if (target != Owner) return;
+        if (target != Owner || Amount <= 0) return;
+
+        _pendingHits++;
+
+        // 直接扣减生命值，不触发额外伤害/动画
+        int newHp = Math.Max(0, Owner.CurrentHp - 2);
+        await CreatureCmd.SetCurrentHp(Owner, newHp);
+    }
+
+    /// <summary>
+    /// 攻击结束后一次性扣除所有命中对应的层数
+    /// </summary>
+    public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
+    {
+        if (_pendingHits <= 0) return;
+
+        int hits = _pendingHits;
+        _pendingHits = 0;
+
         if (Amount <= 0) return;
 
-        // 减少1层压力
-        await PowerCmd.ModifyAmount(choiceContext, this, -1, dealer, cardSource);
+        await PowerCmd.ModifyAmount(choiceContext, this, -hits, command.Attacker, null);
 
-        // 如果层数归零，移除能力
         if (Amount <= 0)
             await PowerCmd.Remove(this);
     }

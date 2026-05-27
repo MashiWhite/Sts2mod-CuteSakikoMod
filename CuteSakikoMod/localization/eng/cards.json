@@ -244,7 +244,7 @@
   "CUTE_SAKIKO_MOD_CARD_APATHETIC.title": "麻木",
   "CUTE_SAKIKO_MOD_CARD_APATHETIC.description": "获得{Block:diff()}点格挡。\n获得1层[gold]人工制品[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_SWEEP.title": "横扫",
-  "CUTE_SAKIKO_MOD_CARD_SWEEP.description": "获得{IfUpgraded:show:12|7}层[gold]压力[/gold]。\n现在[gold]骑士之剑[/gold]可以对所有敌人造成伤害。",
+  "CUTE_SAKIKO_MOD_CARD_SWEEP.description": "获得{PressurePower:diff()}层[gold]压力[/gold]。\n现在[gold]骑士之剑[/gold]可以对所有敌人造成伤害。\n若无[gold]骑士之剑[/gold]则将其加入手牌。",
   "CUTE_SAKIKO_MOD_CARD_BROKEN_PICK.title": "拨片坏了！？",
   "CUTE_SAKIKO_MOD_CARD_BROKEN_PICK.description": "清除[gold]所有[/gold][pink]音符[/pink]，每清除1个[pink]音符[/pink]获得{Block:diff()}点格挡。",
   "CUTE_SAKIKO_MOD_CARD_UNFORGETTABLE_PERFORMANCE.title": "难忘的演奏",

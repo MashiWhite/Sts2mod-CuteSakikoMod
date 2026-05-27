@@ -11,7 +11,7 @@ public class DrumSupport() : SakiMemoryCard(0, CardType.Attack, CardRarity.Commo
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(13m, ValueProp.Move)
+        new DamageVar(8m, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
