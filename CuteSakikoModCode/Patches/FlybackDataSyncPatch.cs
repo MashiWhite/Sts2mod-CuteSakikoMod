@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
@@ -11,7 +11,7 @@ using MegaCrit.Sts2.Core.Saves.Managers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 
-// 1. 加载存档时广播一次（此时不在战斗中，绝对安全）
+// 1. 加载存档时广播一次基础 ReloadCount（主机）
 [HarmonyPatch(typeof(RunSaveManager), nameof(RunSaveManager.LoadRunSave))]
 public static class LoadRunSaveSyncPatch
 {
@@ -20,12 +20,11 @@ public static class LoadRunSaveSyncPatch
         if (__result.Success && RunManager.Instance != null && RunManager.Instance.IsInProgress)
         {
             FlybackManager.SyncReloadCountIfHost();
-            FlybackManager.SyncPlayCountIfHost();
         }
     }
 }
 
-// 2. 进入任何房间时广播一次（仅主机，不等待）
+// 2. 进入任何房间时广播一次基础 ReloadCount（主机）
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterRoomEntered))]
 public static class AfterRoomEnteredSyncPatch
 {
@@ -34,16 +33,15 @@ public static class AfterRoomEnteredSyncPatch
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
         {
             FlybackManager.SyncReloadCountIfHost();
-            FlybackManager.SyncPlayCountIfHost();
         }
     }
 }
 
-// 3. 每个回合开始时同步一次（所有端参与，保证数据对齐）
+// 3. 每个回合开始时，主机广播基础 ReloadCount（客机无需等待）
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterSideTurnStart))]
 public static class AfterSideTurnStartSyncPatch
 {
-    private static async void Postfix(ICombatState combatState, CombatSide side)
+    private static void Postfix(ICombatState combatState, CombatSide side)
     {
         if (RunManager.Instance.NetService.Type == NetGameType.Singleplayer)
             return;
@@ -51,12 +49,6 @@ public static class AfterSideTurnStartSyncPatch
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
         {
             FlybackManager.SyncReloadCountIfHost();
-            FlybackManager.SyncPlayCountIfHost();
-        }
-        else
-        {
-            // 客机等待 PlayCount 同步（基础 ReloadCount 已由主机广播更新，不需要等待）
-            await FlybackManager.WaitForPlayCountChange(timeoutMs: 200);
         }
     }
 }

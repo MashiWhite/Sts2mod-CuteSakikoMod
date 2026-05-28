@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -15,7 +13,6 @@ using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
-using MegaCrit.Sts2.Core.Multiplayer;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Runs;
@@ -49,11 +46,9 @@ public class StarAnon : ModMonsterTemplate
         await PowerCmd.Apply<RetrogradePower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
         await PowerCmd.Apply<TimeWatchPower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
 
+        // 主机同步基础 ReloadCount（广播）
         if (RunManager.Instance.NetService.Type == NetGameType.Host)
-        {
             FlybackManager.SyncReloadCountIfHost();
-            FlybackManager.SyncPlayCountIfHost();
-        }
     }
 
     public async Task TriggerDeadState()
@@ -106,11 +101,6 @@ public class StarAnon : ModMonsterTemplate
         _lastMoveName = "RESPAWN_MOVE";
         await CreatureCmd.Heal(Creature, Creature.MaxHp);
         FlybackManager.DoubleAllPlayerCounts();
-
-        if (RunManager.Instance.NetService.Type == NetGameType.Client)
-        {
-            await FlybackManager.WaitForPlayCountChange(timeoutMs: 500);
-        }
 
         var retro = Creature.GetPower<RetrogradePower>();
         if (retro != null)
@@ -167,15 +157,10 @@ public class StarAnon : ModMonsterTemplate
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
 
-    // ★ 关键修改：不再区分主客机，不再等待 ReloadCount
+    // ★ 关键：不再区分主客机，不再有任何等待
     private async Task SyncFlybackDataForMove()
     {
         FlybackManager.IncrementReloadCount();
-        // PlayCount 等待仍然保留（如果 DoubleAllPlayerCounts 已经处理同步，可以视情况保留）
-        if (RunManager.Instance.NetService.Type == NetGameType.Client)
-        {
-            await FlybackManager.WaitForPlayCountChange(timeoutMs: 500);
-        }
     }
 
     private async Task DoubleAttackMove(IReadOnlyList<Creature> targets)
