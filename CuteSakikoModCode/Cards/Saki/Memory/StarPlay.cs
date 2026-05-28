@@ -20,7 +20,7 @@ public class StarPlay() : SakiMemoryCard(0, CardType.Skill, CardRarity.Common, T
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获得格挡，并捕获实际获得的格挡值（已受敏捷等加成）
-        Decimal actualBlock = await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
+        var actualBlock = await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
 
         // 将实际获得的格挡值作为 Power 的层数
         await PowerCmd.Apply<BlockNextTurnPower>(choiceContext, Owner.Creature, actualBlock, Owner.Creature, this);

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
@@ -14,8 +13,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 public class LookCchord() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override string ChordId => "AnonCChord";
-    
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.NoNote.GetModKeywordCardKeyword(),CutesakiKeywords.Chord.GetModKeywordCardKeyword()];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Exhaust, CutesakiKeywords.NoNote.GetModCardKeyword(), CutesakiKeywords.Chord.GetModCardKeyword()
+    ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

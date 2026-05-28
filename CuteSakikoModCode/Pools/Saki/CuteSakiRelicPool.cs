@@ -1,6 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using STS2RitsuLib.Scaffolding.Content;
 

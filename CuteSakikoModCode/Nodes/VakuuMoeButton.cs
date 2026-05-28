@@ -8,14 +8,13 @@ using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Screens.Map;
-using STS2RitsuLib.Scaffolding.Characters;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
 public partial class VakuuMoeButton : NButton
 {
-    private AncientEventModel? _eventModel;
     private bool _alreadyUsed;
+    private AncientEventModel? _eventModel;
 
     public override void _Ready()
     {
@@ -37,15 +36,15 @@ public partial class VakuuMoeButton : NButton
         }
 
         // 按钮尺寸和位置
-        float buttonWidth = 180f;
-        float buttonHeight = 180f;
+        var buttonWidth = 180f;
+        var buttonHeight = 180f;
         AnchorLeft = 1.0f;
         AnchorRight = 1.0f;
         AnchorTop = 0.0f;
         AnchorBottom = 0.0f;
         OffsetRight = 0;
         OffsetLeft = -buttonWidth;
-        OffsetTop = 750;                     // 可微调 Y 轴
+        OffsetTop = 750; // 可微调 Y 轴
         OffsetBottom = OffsetTop + buttonHeight;
 
         // 加载图标
@@ -78,6 +77,7 @@ public partial class VakuuMoeButton : NButton
                 return true;
             type = type.BaseType;
         }
+
         return false;
     }
 
@@ -89,10 +89,12 @@ public partial class VakuuMoeButton : NButton
         var tip = new HoverTip(title, desc);
         var tipSet = NHoverTipSet.CreateAndShow(this, tip);
         if (tipSet == null) return;
-        var alignment = GlobalPosition.X > GetViewportRect().Size.X * 0.6f ? HoverTipAlignment.Left : HoverTipAlignment.Right;
+        var alignment = GlobalPosition.X > GetViewportRect().Size.X * 0.6f
+            ? HoverTipAlignment.Left
+            : HoverTipAlignment.Right;
         tipSet.SetAlignment(this, alignment);
         var viewportRect = GetViewportRect();
-        Vector2 pos = tipSet.GlobalPosition;
+        var pos = tipSet.GlobalPosition;
         if (pos.X < 0) pos.X = 10;
         if (pos.X + tipSet.Size.X > viewportRect.Size.X) pos.X = viewportRect.Size.X - tipSet.Size.X - 10;
         if (pos.Y < 0) pos.Y = 10;
@@ -125,7 +127,8 @@ public partial class VakuuMoeButton : NButton
             }
 
             // 正常结束事件
-            var doneMethod = typeof(AncientEventModel).GetMethod("Done", BindingFlags.NonPublic | BindingFlags.Instance);
+            var doneMethod =
+                typeof(AncientEventModel).GetMethod("Done", BindingFlags.NonPublic | BindingFlags.Instance);
             doneMethod?.Invoke(_eventModel, null);
         }
 

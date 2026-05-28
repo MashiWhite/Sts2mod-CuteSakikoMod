@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -48,7 +47,7 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
         {
             var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
             // 使用洗牌随机源生成索引（不消耗 CombatCardSelection）
-            int index = shuffleRng.NextInt(noteTypes.Length);
+            var index = shuffleRng.NextInt(noteTypes.Length);
             var randomType = noteTypes[index];
 
             var mainChords = guitar.GetCurrentChords();

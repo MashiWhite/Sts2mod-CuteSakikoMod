@@ -45,7 +45,7 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
         // 卡牌当前拥有消耗关键词 → 正常消耗
         if (Keywords.Contains(CardKeyword.Exhaust))
             return PileType.Exhaust;
-    
+
         // 消耗关键词被移除 → 进入弃牌堆
         return PileType.Discard;
     }

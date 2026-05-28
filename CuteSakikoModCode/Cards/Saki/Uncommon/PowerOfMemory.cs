@@ -36,7 +36,8 @@ public class PowerOfMemory() : CuteSakikoModCard(0, CardType.Attack, CardRarity.
                 {
                     var pile = pileType.GetPile(owner);
                     if (pile == null) continue;
-                    memoryCount += pile.Cards.Count(c => c.HasModKeyword(CutesakiKeywords.Memory));
+                    memoryCount +=
+                        pile.Cards.Count(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()));
                 }
 
                 return memoryCount;

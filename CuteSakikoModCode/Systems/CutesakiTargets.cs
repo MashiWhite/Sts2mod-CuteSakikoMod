@@ -5,10 +5,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 public static class CutesakiTargets
 {
-    public static readonly TargetType Anyone = 
+    public static readonly TargetType Anyone =
         CustomTargetType.RegisterSingleTargetType(
-            "CuteSakikoMod", 
-            "anyone", 
+            "CuteSakikoMod",
+            "anyone",
             creature => creature.IsAlive
         );
 }

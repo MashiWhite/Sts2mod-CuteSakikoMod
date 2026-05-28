@@ -1,9 +1,9 @@
-﻿using Godot;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Nodes.Combat;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 
@@ -40,9 +40,7 @@ public static class ObAnimationPatch
 
         // 确保攻击、施法、受伤动画结束后自动回到 idle_loop
         if (animName != "idle_loop" && animName != "die" && animPlayer.HasAnimation("idle_loop"))
-        {
             animPlayer.Queue("idle_loop");
-        }
     }
 
     [HarmonyPrefix]

@@ -11,9 +11,10 @@ public sealed class WalkHandingPower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
-        await base.AfterSideTurnEnd(choiceContext, side,participants);
+        await base.AfterSideTurnEnd(choiceContext, side, participants);
         if (side == Owner.Side) await CreatureCmd.GainBlock(Owner, Amount, 0, null);
     }
 }

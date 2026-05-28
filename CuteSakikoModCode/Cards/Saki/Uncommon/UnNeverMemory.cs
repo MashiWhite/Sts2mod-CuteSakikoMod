@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -40,14 +39,14 @@ public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.U
         var forgetPile = ForgetCardPile.Get(Owner);
         if (forgetPile == null) return;
 
-        int count = x + (IsUpgraded ? 2 : 0);
+        var count = x + (IsUpgraded ? 2 : 0);
         var rng = Owner.RunState.Rng.CombatCardSelection;
 
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             // 每次循环重新从遗忘牌堆获取最新的记忆牌列表
             var memoryCards = forgetPile.Cards
-                .Where(c => c.HasModKeyword(CutesakiKeywords.Memory))
+                .Where(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
                 .ToList();
 
             if (memoryCards.Count == 0) break;
@@ -56,7 +55,7 @@ public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.U
             if (selected == null) break;
 
             await CardCmd.AutoPlay(choiceContext, selected, null);
-            await MemoryCmd.Forget(choiceContext, new[] { selected }, null);
+            await MemoryCmd.Forget(choiceContext, new[] { selected });
         }
     }
 

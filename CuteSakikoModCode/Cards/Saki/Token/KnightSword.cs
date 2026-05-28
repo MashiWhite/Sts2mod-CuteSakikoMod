@@ -17,7 +17,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 
 public class KnightSword() : ModTokenCard(3, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain,CutesakiKeywords.Sword.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+        [CardKeyword.Retain, CutesakiKeywords.Sword.GetModCardKeyword()];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

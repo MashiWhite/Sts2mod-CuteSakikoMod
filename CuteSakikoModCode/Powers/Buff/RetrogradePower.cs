@@ -56,12 +56,10 @@ public sealed class RetrogradePower : CuteSakikoModPower
         await base.AfterRemoved(oldOwner);
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState )
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
+        ICombatState combatState)
     {
-        if (side == CombatSide.Enemy)
-        {
-            await ApplyMaxHpBoost();
-        }
+        if (side == CombatSide.Enemy) await ApplyMaxHpBoost();
     }
 
     private void OnFlybackDataChanged(int playCount, int reloadCount)
@@ -94,7 +92,7 @@ public sealed class RetrogradePower : CuteSakikoModPower
     {
         var playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
         var reloads = FlybackManager.GetReloadCount();
-        return (int)(playCount / 100f * reloads);
+        return (int)(playCount / 50f * reloads);
     }
 
     public async Task RefreshHpBoost()

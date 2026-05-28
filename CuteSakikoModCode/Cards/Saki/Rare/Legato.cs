@@ -28,7 +28,8 @@ public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, T
                 var owner = card.Owner;
                 if (owner == null) return 0m;
                 var qinCount =
-                    owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+                    owner.PlayerCombatState.AllCards.Count(c =>
+                        c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
                 return qinCount;
             });
         }
@@ -65,15 +66,16 @@ public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, T
     {
         var player = Owner;
         var discard = PileType.Discard.GetPile(player);
-        var qin = discard?.Cards.FirstOrDefault(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+        var qin =
+            discard?.Cards.FirstOrDefault(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
         if (qin != null) return qin;
 
         var draw = PileType.Draw.GetPile(player);
-        qin = draw?.Cards.FirstOrDefault(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+        qin = draw?.Cards.FirstOrDefault(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
         if (qin != null) return qin;
 
         var hand = PileType.Hand.GetPile(player);
-        return hand?.Cards.FirstOrDefault(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+        return hand?.Cards.FirstOrDefault(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
     }
 
     protected override void OnUpgrade()

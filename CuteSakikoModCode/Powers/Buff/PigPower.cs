@@ -25,7 +25,7 @@ public sealed class PigPower : CuteSakikoModPower
     public PigPower()
     {
         _pigScene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/char/Pig/pig.tscn");
-    } 
+    }
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -55,7 +55,8 @@ public sealed class PigPower : CuteSakikoModPower
         await base.AfterRemoved(oldOwner);
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         await base.AfterSideTurnEnd(choiceContext, side, participants);
         if (side == Owner.Side && Owner != null && Owner.IsAlive) await CreatureCmd.Heal(Owner, 1);
@@ -90,8 +91,8 @@ public sealed class PigPower : CuteSakikoModPower
         const float maxHp = 1000f;
         const float minScale = 0.01f;
         const float maxScale = 10.0f;
-        float t = Mathf.Clamp((Owner.CurrentHp - minHp) / (maxHp - minHp), 0f, 1f);
-        float targetScale = Mathf.Lerp(minScale, maxScale, t);
+        var t = Mathf.Clamp((Owner.CurrentHp - minHp) / (maxHp - minHp), 0f, 1f);
+        var targetScale = Mathf.Lerp(minScale, maxScale, t);
         _pigVisual.Scale = Vector2.One * targetScale;
     }
 
@@ -122,13 +123,9 @@ public sealed class PigPower : CuteSakikoModPower
         // 获取 AnimationPlayer
         var animPlayer = _pigVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
         if (animPlayer != null)
-        {
             PigAnimPlayers[Owner] = animPlayer;
-        }
         else
-        {
             GD.PushError("PigPower: 未找到 AnimationPlayer，请检查 pig.tscn 路径是否正确");
-        }
 
         // 设置初始缩放
         ScalePig();
@@ -152,7 +149,7 @@ public sealed class PigPower : CuteSakikoModPower
             if (originalVisual != null)
             {
                 originalVisual.Visible = true;
-                originalVisual.Modulate = new Color(1, 1, 1, 1);
+                originalVisual.Modulate = new Color(1, 1, 1);
             }
         }
 

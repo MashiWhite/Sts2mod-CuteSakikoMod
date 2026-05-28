@@ -2,7 +2,6 @@
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
@@ -10,7 +9,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 public class LookNoChest() : ModTokenCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     // 虚无、消耗
-    public override IEnumerable<CardKeyword> CanonicalKeywords =>  [CardKeyword.Ethereal, CardKeyword.Exhaust,CutesakiKeywords.Nochest.GetModKeywordCardKeyword() ];
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Ethereal, CardKeyword.Exhaust, CutesakiKeywords.Nochest.GetModCardKeyword()
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

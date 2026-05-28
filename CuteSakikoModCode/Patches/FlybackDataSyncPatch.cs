@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Hooks;
@@ -18,9 +17,7 @@ public static class LoadRunSaveSyncPatch
     private static void Postfix(ReadSaveResult<SerializableRun> __result)
     {
         if (__result.Success && RunManager.Instance != null && RunManager.Instance.IsInProgress)
-        {
             FlybackManager.SyncReloadCountIfHost();
-        }
     }
 }
 
@@ -30,10 +27,7 @@ public static class AfterRoomEnteredSyncPatch
 {
     private static void Postfix(IRunState runState, AbstractRoom room)
     {
-        if (RunManager.Instance.NetService.Type == NetGameType.Host)
-        {
-            FlybackManager.SyncReloadCountIfHost();
-        }
+        if (RunManager.Instance.NetService.Type == NetGameType.Host) FlybackManager.SyncReloadCountIfHost();
     }
 }
 
@@ -46,9 +40,6 @@ public static class AfterSideTurnStartSyncPatch
         if (RunManager.Instance.NetService.Type == NetGameType.Singleplayer)
             return;
 
-        if (RunManager.Instance.NetService.Type == NetGameType.Host)
-        {
-            FlybackManager.SyncReloadCountIfHost();
-        }
+        if (RunManager.Instance.NetService.Type == NetGameType.Host) FlybackManager.SyncReloadCountIfHost();
     }
 }

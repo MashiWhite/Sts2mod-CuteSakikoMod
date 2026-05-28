@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MegaCrit.Sts2.Core.Combat;
+﻿using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -47,10 +44,8 @@ public sealed class MasqueradePower : CuteSakikoModPower
     public override async Task AfterPreventingDeath(Creature creature)
     {
         if (creature.Side == CombatSide.Enemy)
-        {
             if (creature.CurrentHp < 1)
                 await CreatureCmd.SetCurrentHp(creature, 1);
-        }
     }
     // =================================================================
 
@@ -67,7 +62,7 @@ public sealed class MasqueradePower : CuteSakikoModPower
     }
 
     /// <summary>
-    /// 移除场上所有其他能力（保留 MasqueradePower 和 SandpitPower）
+    ///     移除场上所有其他能力（保留 MasqueradePower 和 SandpitPower）
     /// </summary>
     public Task RemoveAllPowers(PlayerChoiceContext choiceContext)
     {
@@ -108,6 +103,7 @@ public sealed class MasqueradePower : CuteSakikoModPower
             if (creature.IsDead) continue;
             tasks.Add(PowerCmd.Apply(choiceContext, power, creature, amount, Owner, null));
         }
+
         _removedPowers.Clear();
 
         await Task.WhenAll(tasks);

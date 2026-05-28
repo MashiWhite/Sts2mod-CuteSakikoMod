@@ -33,14 +33,14 @@ public class RemoveLastNoteModifier : ChordSequenceModifier
     public override IReadOnlyList<CardType> Apply(IReadOnlyList<CardType> original)
     {
         var list = original.ToList();
-        if (list.Count > 1)               // 保留至少一个音符
+        if (list.Count > 1) // 保留至少一个音符
             list.RemoveAt(list.Count - 1);
         return list;
     }
 }
 
 /// <summary>
-/// 将一个和弦的音符序列替换为预先生成的随机序列（长度不变，只打乱类型）
+///     将一个和弦的音符序列替换为预先生成的随机序列（长度不变，只打乱类型）
 /// </summary>
 public class ShuffleNotesModifier : ChordSequenceModifier
 {
@@ -51,9 +51,11 @@ public class ShuffleNotesModifier : ChordSequenceModifier
         _shuffled = shuffled;
     }
 
-    public override IReadOnlyList<CardType> Apply(IReadOnlyList<CardType> original) => _shuffled;
+    public override IReadOnlyList<CardType> Apply(IReadOnlyList<CardType> original)
+    {
+        return _shuffled;
+    }
 }
-
 
 // 删除某个位置的音符
 public class RemoveNoteModifier : ChordSequenceModifier

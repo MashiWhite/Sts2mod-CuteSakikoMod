@@ -37,7 +37,8 @@ public class LittleMomentsManager : HookedSingletonModel
     }
 
     // 玩家回合结束时：检查弃牌堆、消耗堆和抽牌堆，合成“一辈子”
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != CombatSide.Player)
             return;

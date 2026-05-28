@@ -21,7 +21,7 @@ public class Chord() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon
         typeof(StrikeOpulent)
     };
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 

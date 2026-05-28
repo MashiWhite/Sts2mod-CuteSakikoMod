@@ -69,7 +69,8 @@ public sealed class TimeWatchPower : CuteSakikoModPower
         await Task.CompletedTask;
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState )
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
+        ICombatState combatState)
     {
         if (side != CombatSide.Enemy || combatState == null) return;
 
@@ -101,20 +102,20 @@ public sealed class TimeWatchPower : CuteSakikoModPower
     {
         var playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
         var reloads = FlybackManager.GetReloadCount();
-        return playCount / 100f * reloads;
+        return playCount / 50f * reloads;
     }
 
     // 总治疗百分比 = 基础10% + 额外百分比
     private float GetTotalHealPercent()
     {
-        return 10f + GetExtraHealPercent();
+        return 20f + GetExtraHealPercent();
     }
 
     // 实际预期恢复量（使用总百分比）
     private int GetExpectedHealAmount()
     {
         var totalPercent = GetTotalHealPercent();
-        return (int)Math.Ceiling(_damageTakenThisTurn * totalPercent / 100f);
+        return (int)Math.Ceiling(_damageTakenThisTurn * totalPercent / 50f);
     }
 
     // 更新 HealPercent 动态变量（只显示额外部分）

@@ -35,8 +35,8 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
         // 活力只会消耗 1 层，但会对所有命中生效
         await DamageCmd.Attack(damage)
             .FromCard(this)
-            .WithHitCount(totalHits)                     // 关键：合并所有命中
-            .TargetingRandomOpponents(combat)            // 随机选择目标
+            .WithHitCount(totalHits) // 关键：合并所有命中
+            .TargetingRandomOpponents(combat) // 随机选择目标
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
     }
@@ -48,7 +48,9 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
 
     private class TotalHitsVar : DynamicVar
     {
-        public TotalHitsVar() : base("TotalHits", 1m) { }
+        public TotalHitsVar() : base("TotalHits", 1m)
+        {
+        }
 
         public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target,
             bool runGlobalHooks)

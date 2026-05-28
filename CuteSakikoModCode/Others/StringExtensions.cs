@@ -5,7 +5,7 @@ using MegaCrit.Sts2.Core.Saves;
 using STS2RitsuLib.Audio;
 using STS2RitsuLib.Scaffolding.Content;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Extensions;
+namespace CuteSakikoMod.CuteSakikoModCode.Others;
 
 //Mostly utilities to get asset paths.
 

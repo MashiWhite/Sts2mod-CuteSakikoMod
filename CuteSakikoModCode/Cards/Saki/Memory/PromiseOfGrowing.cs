@@ -2,7 +2,6 @@
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Memory;
@@ -18,7 +17,8 @@ public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.
     {
         if (cardPlay.Target == null) return;
 
-        var extraHits = IsUpgraded ? 3 : 2;; // 攻击2次，升级3次
+        var extraHits = IsUpgraded ? 3 : 2;
+        ; // 攻击2次，升级3次
         var damage = DynamicVars.Damage.BaseValue;
 
         await DamageCmd.Attack(damage)

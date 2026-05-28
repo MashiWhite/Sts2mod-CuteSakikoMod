@@ -3,7 +3,6 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Screens.GameOverScreen;
 using MegaCrit.Sts2.Core.Runs;
-using STS2RitsuLib.Scaffolding.Characters;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 

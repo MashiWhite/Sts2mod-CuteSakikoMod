@@ -37,9 +37,8 @@ public class Quarrel() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommo
 
         // 只有未升级时，敌人才会在下回合扣除压力
         if (!IsUpgraded)
-        {
-            await PowerCmd.Apply<QuarrelEnemyPower>(choiceContext, cardPlay.Target, enemyPressureGain, Owner.Creature, this);
-        }
+            await PowerCmd.Apply<QuarrelEnemyPower>(choiceContext, cardPlay.Target, enemyPressureGain, Owner.Creature,
+                this);
     }
 
     protected override void OnUpgrade()

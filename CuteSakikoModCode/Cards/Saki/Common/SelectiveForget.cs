@@ -36,12 +36,12 @@ public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获得格挡
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay); 
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         // 获取弃牌堆中的回忆卡牌
         var discardPile = PileType.Discard.GetPile(Owner);
 
         var memoryCards = discardPile.Cards
-            .Where(card => card.HasModKeyword(CutesakiKeywords.Memory))
+            .Where(card => card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
             .ToList();
 
         if (memoryCards.Count == 0) return;

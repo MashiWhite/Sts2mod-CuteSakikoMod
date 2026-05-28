@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Reflection;
-using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using Godot;
 using HarmonyLib;

@@ -16,8 +16,8 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(6m, ValueProp.Move),   // 实际伤害，吃力量等修正
-        new DynamicVar("Increase", 6m)        // 每次消耗压力后永久提升的数值
+        new DamageVar(6m, ValueProp.Move), // 实际伤害，吃力量等修正
+        new("Increase", 6m) // 每次消耗压力后永久提升的数值
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -58,13 +58,13 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .TargetingAllOpponents(CombatState)
-            .WithHitFx("vfx/vfx_attack_slash")   // 可替换为你自己的武器轨迹特效
+            .WithHitFx("vfx/vfx_attack_slash") // 可替换为你自己的武器轨迹特效
             .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars["Increase"].UpgradeValueBy(2m);   // 6→8
+        DynamicVars["Increase"].UpgradeValueBy(2m); // 6→8
     }
 }

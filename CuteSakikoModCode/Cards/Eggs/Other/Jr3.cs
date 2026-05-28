@@ -12,7 +12,7 @@ public class Jr3() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetT
     {
         get
         {
-            yield return new DamageVar("lowDamage",11m, ValueProp.Move); // 伤
+            yield return new DamageVar("lowDamage", 11m, ValueProp.Move); // 伤
             yield return new DamageVar(12m, ValueProp.Move); // 高伤
             yield return new RepeatVar(1); // 次数
         }

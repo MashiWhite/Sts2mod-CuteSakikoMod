@@ -1,11 +1,10 @@
-﻿using Godot;
+﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Screens.Shops;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
-using CuteSakikoMod.CuteSakikoModCode.Nodes;
-using MegaCrit.Sts2.Core.Hooks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 
@@ -13,7 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 [HarmonyPatch(typeof(NMerchantRoom), "_Ready")]
 public static class NMerchantRoomAddTogawaButtonPatch
 {
-    static void Postfix(NMerchantRoom __instance)
+    private static void Postfix(NMerchantRoom __instance)
     {
         if (__instance.HasNode("TogawaLoanButton")) return;
 
@@ -27,7 +26,7 @@ public static class NMerchantRoomAddTogawaButtonPatch
 [HarmonyPatch(typeof(NMerchantRoom), "OpenInventory")]
 public static class NMerchantRoom_OpenInventory_Patch
 {
-    static void Postfix(NMerchantRoom __instance)
+    private static void Postfix(NMerchantRoom __instance)
     {
         var button = __instance.GetNodeOrNull<TogawaLoanButton>("TogawaLoanButton");
         button?.ShowButton();
@@ -38,7 +37,7 @@ public static class NMerchantRoom_OpenInventory_Patch
 [HarmonyPatch(typeof(NMerchantInventory), "Close")]
 public static class NMerchantInventory_Close_Patch
 {
-    static void Postfix()
+    private static void Postfix()
     {
         var room = NMerchantRoom.Instance;
         if (room == null) return;
@@ -51,7 +50,7 @@ public static class NMerchantInventory_Close_Patch
 [HarmonyPatch(typeof(Hook), nameof(Hook.AfterRoomEntered))]
 public static class Hook_AfterRoomEntered_Patch
 {
-    static void Postfix(IRunState runState, AbstractRoom room)
+    private static void Postfix(IRunState runState, AbstractRoom room)
     {
         if (room is not MerchantRoom) return;
         var nMerchantRoom = NMerchantRoom.Instance;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -22,24 +18,10 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
 {
     private int _hpBoostApplied;
     private bool _subscribed;
-    private int _totalCardWeight;   // 当前回合累计打出的卡牌权重（用于UI显示）
+    private int _totalCardWeight; // 当前回合累计打出的卡牌权重（用于UI显示）
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
-
-    public event Action? PowerExtraIconAmountLabelsInvalidated;
-
-    public IReadOnlyList<ExtraIconAmountLabelSlot> GetPowerExtraIconAmountLabelSlots()
-    {
-        return new[]
-        {
-            new ExtraIconAmountLabelSlot
-            {
-                Corner = ExtraIconAmountLabelCorner.BottomLeft,
-                Text = $"{_totalCardWeight}/{GetTotalLimit()}"  // 显示 当前权重/上限
-            }
-        };
-    }
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -52,6 +34,20 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         }
     }
 
+    public event Action? PowerExtraIconAmountLabelsInvalidated;
+
+    public IReadOnlyList<ExtraIconAmountLabelSlot> GetPowerExtraIconAmountLabelSlots()
+    {
+        return new[]
+        {
+            new ExtraIconAmountLabelSlot
+            {
+                Corner = ExtraIconAmountLabelCorner.BottomLeft,
+                Text = $"{_totalCardWeight}/{GetTotalLimit()}" // 显示 当前权重/上限
+            }
+        };
+    }
+
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
@@ -62,6 +58,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
             manager.OnFlybackDataChanged += OnFlybackDataChanged;
             _subscribed = true;
         }
+
         UpdateDynamicInfo();
         await ApplyMaxHpBoost();
     }
@@ -74,12 +71,14 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
             if (manager != null) manager.OnFlybackDataChanged -= OnFlybackDataChanged;
             _subscribed = false;
         }
+
         if (_hpBoostApplied > 0 && oldOwner != null)
             oldOwner.SetMaxHpInternal(oldOwner.MaxHp - _hpBoostApplied);
         await base.AfterRemoved(oldOwner);
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
+        ICombatState combatState)
     {
         if (side == CombatSide.Player)
         {
@@ -96,11 +95,11 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int weight = cardPlay.Card is Flyback ? 5 : 1;
+        var weight = cardPlay.Card is Flyback ? 5 : 1;
         _totalCardWeight += weight;
 
         // ★ 更新 Countdown（剩余可打出权重）
-        int countdown = Math.Max(0, (int)DynamicVars["Countdown"].BaseValue - weight);
+        var countdown = Math.Max(0, (int)DynamicVars["Countdown"].BaseValue - weight);
         DynamicVars["Countdown"].BaseValue = countdown;
         InvalidateLabels();
 
@@ -111,18 +110,16 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
             InvalidateLabels();
 
             if (Owner?.CombatState != null)
-            {
                 foreach (var p in Owner.CombatState.Players)
                     PlayerCmd.EndTurn(p, false);
-            }
         }
     }
 
     private int GetTotalLimit()
     {
-        int reloads = FlybackManager.GetReloadCount();
-        int basePerPlayer = Math.Max(10, 49 - reloads * 3);
-        int playerCount = Owner?.CombatState?.Players.Count ?? 1;
+        var reloads = FlybackManager.GetReloadCount();
+        var basePerPlayer = Math.Max(5, 44 - reloads * 3);
+        var playerCount = Owner?.CombatState?.Players.Count ?? 1;
         return basePerPlayer * playerCount;
     }
 
@@ -162,7 +159,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
     {
         var playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
         var reloads = FlybackManager.GetReloadCount();
-        return (int)(playCount / 100f * reloads);
+        return (int)(playCount / 50f * reloads);
     }
 
     public async Task RefreshHpBoost()

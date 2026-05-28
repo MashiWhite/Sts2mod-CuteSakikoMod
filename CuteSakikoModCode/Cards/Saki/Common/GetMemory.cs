@@ -2,15 +2,12 @@
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Extensions;
-using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
@@ -31,7 +28,7 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
-    } 
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -53,6 +50,7 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
                 randomCard.UpgradeInternal();
                 randomCard.FinalizeUpgradeInternal();
             }
+
             await CardPileCmd.AddGeneratedCardToCombat(randomCard, PileType.Hand, Owner);
         }
     }

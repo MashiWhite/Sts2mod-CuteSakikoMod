@@ -51,8 +51,8 @@ public class LittleMoments() : CuteAnonCard(0, CardType.Skill, CardRarity.Rare, 
 
         if (CombatState != null && Owner != null)
         {
-            int copyCount = DynamicVars["Copies"].IntValue;
-            for (int i = 0; i < copyCount; i++)
+            var copyCount = DynamicVars["Copies"].IntValue;
+            for (var i = 0; i < copyCount; i++)
             {
                 // 完美克隆：保留升级、附魔、临时费用改动等一切状态
                 var copy = CreateClone();

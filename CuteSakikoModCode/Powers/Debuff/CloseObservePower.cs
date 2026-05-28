@@ -51,7 +51,8 @@ public class CloseObservePower : CuteSakikoModPower
         return multiplier;
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != CombatSide.Enemy) return;
         await PowerCmd.TickDownDuration(this);

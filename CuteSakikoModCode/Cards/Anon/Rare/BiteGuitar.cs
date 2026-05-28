@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -69,14 +68,15 @@ public class BiteGuitar : CuteAnonCard
     /// <summary> 根据权重随机选取一个 CardType </summary>
     private static CardType PickRandomWeighted(Rng rng, (CardType type, double weight)[] pool)
     {
-        double totalWeight = pool.Sum(w => w.weight);
-        double roll = rng.NextFloat() * totalWeight;
+        var totalWeight = pool.Sum(w => w.weight);
+        var roll = rng.NextFloat() * totalWeight;
         double cumulative = 0;
         foreach (var item in pool)
         {
             cumulative += item.weight;
             if (roll <= cumulative) return item.type;
         }
+
         return pool.Last().type;
     }
 }

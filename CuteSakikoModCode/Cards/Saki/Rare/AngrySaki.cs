@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -43,7 +42,7 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
         if (cardPlay.Target == null) return;
 
         var damage = DynamicVars.Damage.BaseValue;
-        int extraHits = 0;
+        var extraHits = 0;
 
         // 检查目标身上的压力是否足够 10 层
         var targetPressure = cardPlay.Target.GetPower<PressurePower>();
@@ -53,7 +52,7 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
             await PowerCmd.ModifyAmount(choiceContext, targetPressure, -10, Owner.Creature, this);
         }
 
-        int totalHits = 1 + extraHits;
+        var totalHits = 1 + extraHits;
 
         await DamageCmd.Attack(damage)
             .FromCard(this)

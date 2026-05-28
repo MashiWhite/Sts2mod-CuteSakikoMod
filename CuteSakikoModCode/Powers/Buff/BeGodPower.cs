@@ -15,7 +15,8 @@ public sealed class BeGodPower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter; // 可叠层
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
         if (Amount <= 0) return;
@@ -23,7 +24,7 @@ public sealed class BeGodPower : CuteSakikoModPower
         var forgetPile = ForgetCardPile.Get(Owner.Player);
         if (forgetPile == null || forgetPile.Cards.Count == 0) return;
 
-        int toSelect = Math.Min(Amount, forgetPile.Cards.Count);
+        var toSelect = Math.Min(Amount, forgetPile.Cards.Count);
         if (toSelect <= 0) return;
 
         // 自定义提示 LocString

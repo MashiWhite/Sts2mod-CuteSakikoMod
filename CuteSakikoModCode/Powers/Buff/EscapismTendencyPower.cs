@@ -29,9 +29,10 @@ public sealed class EscapismTendencyPower : CuteSakikoModPower
         await CardCmd.Discard(choiceContext, cardToDiscard);
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
-        await base.AfterSideTurnEnd(choiceContext, side,participants);
+        await base.AfterSideTurnEnd(choiceContext, side, participants);
         if (side == Owner.Side) await CreatureCmd.GainBlock(Owner, Amount, 0, null);
     }
 }

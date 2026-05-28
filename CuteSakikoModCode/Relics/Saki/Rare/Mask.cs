@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -19,12 +18,12 @@ public sealed class Mask : CuteSakiRelic
     }
 
     /// <summary>
-    /// 监听任何 Power 数量变化。如果 BreakDownPower 被施加到拥有者，立即移除。
+    ///     监听任何 Power 数量变化。如果 BreakDownPower 被施加到拥有者，立即移除。
     /// </summary>
     public override async Task AfterPowerAmountChanged(
         PlayerChoiceContext choiceContext,
         PowerModel power,
-        Decimal amount,
+        decimal amount,
         Creature? applier,
         CardModel? cardSource)
     {

@@ -1,7 +1,5 @@
-﻿using STS2RitsuLib.Scaffolding.Characters;
-using MegaCrit.Sts2.Core.Entities.Characters;
-using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Characters;
+﻿using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Scaffolding.Characters;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Character;
 
