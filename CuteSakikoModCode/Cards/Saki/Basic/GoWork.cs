@@ -14,8 +14,8 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteSaki))]
-[RegisterArchaicToothTranscendence(typeof(NoWork),Order = 3)]
+[RegisterArchaicToothTranscendence(typeof(NoWork))]
+[RegisterCharacterStarterCard(typeof(CuteSaki),Order = 3)]
 public class GoWork() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     // 始终带有消耗关键词（升级后仍保留）

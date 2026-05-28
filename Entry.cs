@@ -96,7 +96,7 @@ public class Entry
         // 8. 预加载 VFX
         VFXUtil.PreloadScenes(new List<string> { "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
 
-        // 9. 注册网络消息处理器 + 监听客户端重连
+        // 9. 注册网络消息处理器（仅 ReloadCount）+ 监听客户端重连
         RunManager.Instance.RunStarted += _ =>
         {
             var netService = RunManager.Instance.NetService;
@@ -104,14 +104,11 @@ public class Entry
             {
                 netService.RegisterMessageHandler(new MessageHandlerDelegate<ReloadCountSyncMessage>(
                     (msg, senderId) => FlybackManager.OnReloadCountReceived(msg.ReloadCount)));
-                netService.RegisterMessageHandler(new MessageHandlerDelegate<PlayCountSyncMessage>(
-                    (msg, senderId) => FlybackManager.OnPlayCountReceived(msg.TotalPlayCount)));
                 if (netService is NetHostGameService hostService)
                 {
                     hostService.ClientConnected += peerId =>
                     {
                         FlybackManager.SyncReloadCountIfHost();
-                        FlybackManager.SyncPlayCountIfHost();
                     };
                 }
             }
@@ -119,11 +116,9 @@ public class Entry
         
         ModContentRegistry.For(ModId)
             .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoModCardPool>(
-                "cute_sakiko_mod_card_pool", // ID
-                "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png" // 图标位置
-                // null // 放置顺序（可选）
+                "cute_sakiko_mod_card_pool",
+                "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png"
             );
-        
 
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
         {
@@ -138,7 +133,6 @@ public class Entry
                 _ = RelicCmd.Obtain(eggs, player);
             }
         });
-        
     }
 
     private static void OnRunStarted(RunState state)
