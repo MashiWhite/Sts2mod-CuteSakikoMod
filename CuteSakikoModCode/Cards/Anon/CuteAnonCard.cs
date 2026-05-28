@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools.Anon;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Cards;

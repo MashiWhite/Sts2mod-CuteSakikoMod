@@ -200,13 +200,9 @@ public sealed class ObCardPower : CuteSakikoModPower
         // 4. 获取 AnimationPlayer
         var animPlayer = _obVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
         if (animPlayer != null)
-        {
             ObAnimPlayers[Owner] = animPlayer;
-        }
         else
-        {
             GD.PushError("ObCardPower: 未找到 AnimationPlayer，请检查 ob.tscn 路径是否正确");
-        }
 
         await Task.CompletedTask;
     }

@@ -1,14 +1,14 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Keywords;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using MegaCrit.Sts2.Core.Factories;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -49,16 +49,16 @@ public class AtkByMemory : CuteSakikoModCard
         var handPile = PileType.Hand.GetPile(Owner);
         if (handPile == null) return;
 
-        int maxHandSize = 10;
-        int currentSize = handPile.Cards.Count;
-        int needed = maxHandSize - currentSize;
+        var maxHandSize = 10;
+        var currentSize = handPile.Cards.Count;
+        var needed = maxHandSize - currentSize;
         if (needed <= 0) return;
 
         var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
         if (canonicalCards.Count == 0) return;
 
         var newCards = new List<CardModel>();
-        for (int i = 0; i < needed; i++)
+        for (var i = 0; i < needed; i++)
         {
             var newCard = CardFactory.GetDistinctForCombat(
                 Owner,

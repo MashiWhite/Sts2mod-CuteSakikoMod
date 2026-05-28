@@ -14,7 +14,7 @@ public class EggCardGainedEventPatch
     public static class CardAddPatch
     {
         public static void Postfix(CardModel card, PileType newPileType, CardPilePosition position,
-            AbstractModel clonedBy, bool skipVisuals)   // ← 这里改名为 clonedBy
+            AbstractModel clonedBy, bool skipVisuals) // ← 这里改名为 clonedBy
         {
             if (newPileType == PileType.Deck && IsEggCard(card))
                 EggCardGainedEvent.Trigger(card);

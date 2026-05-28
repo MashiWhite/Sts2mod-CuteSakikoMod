@@ -7,7 +7,6 @@ using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
-using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
@@ -187,7 +186,7 @@ public static class ChordManager
                 foreach (var ally in allies)
                     await CreatureCmd.GainBlock(ally, 4 * mult, 0, null);
             });
-        
+
         // Gm【技 技 技 技】所有友方恢复3点血量，复活时恢复抽牌堆并播放待机动画
         AddChord("Gm", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill, CardType.Skill, CardType.Skill },
@@ -199,7 +198,7 @@ public static class ChordManager
                 var combatState = owner.CombatState as CombatState;
                 foreach (var ally in allies)
                 {
-                    bool wasDead = ally.IsDead;
+                    var wasDead = ally.IsDead;
                     await CreatureCmd.Heal(ally, 3 * mult);
 
                     // 复活后恢复抽牌堆
@@ -217,6 +216,7 @@ public static class ChordManager
                                 var combatCard = combatState.CreateCard(canonical, player);
                                 drawPile.AddInternal(combatCard);
                             }
+
                             drawPile.RandomizeOrderInternal(player, rng, combatState);
                         }
 
@@ -285,7 +285,7 @@ public static class ChordManager
                 foreach (var ally in allies)
                     await PowerCmd.Apply<PlatingPower>(ctx, ally, 1 * mult, owner, null);
             });
-        
+
         // #Em【技 技 攻 技】所有友方获得1层虚弱，获得8点格挡
         AddChord("E#m", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill, CardType.Attack, CardType.Skill },
@@ -301,7 +301,7 @@ public static class ChordManager
                     await CreatureCmd.GainBlock(ally, 8 * mult, 0, null);
                 }
             });
-   
+
 
         // ========== 属七和弦 ==========
         // 初始 G7【攻 技 攻】所有敌人本回合减2力量
@@ -410,7 +410,7 @@ public static class ChordManager
                     CardCmd.Upgrade(card);
 
                 // 2. 一次性展示所有升级后的卡牌预览（不阻塞）
-                CardCmd.Preview(selected, time: 0.5f, style: CardPreviewStyle.HorizontalLayout);
+                CardCmd.Preview(selected, 0.5f);
 
                 // 3. 给一个极短的停顿，让特效和预览有时间呼吸
                 await Cmd.CustomScaledWait(0.1f, 0.2f);
@@ -508,7 +508,7 @@ public static class ChordManager
 
                 // 对自己造成伤害（不可格挡，不受力量影响）
                 await CreatureCmd.Damage(ctx, owner, 2 * mult,
-                    ValueProp.Unblockable | ValueProp.Unpowered ,
+                    ValueProp.Unblockable | ValueProp.Unpowered,
                     owner, null);
 
                 // 所有友方（包括自己）抽牌并获得能量

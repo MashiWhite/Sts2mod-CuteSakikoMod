@@ -19,7 +19,7 @@ public class Oblivionis() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare
     [
         new PowerVar<OblivionisPower>(10m)
     ];
-    
+
     // 悬停提示
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

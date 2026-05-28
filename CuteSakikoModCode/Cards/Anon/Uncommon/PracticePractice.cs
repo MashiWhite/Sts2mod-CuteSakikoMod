@@ -9,7 +9,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
 public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword()];
 
     // 可无限次在营地强化
     public override int MaxUpgradeLevel => 999;
@@ -40,7 +40,7 @@ public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Unc
     {
         // 每次升级增加的音符数 = 2 ^ CurrentUpgradeLevel
         // 首次升级时 CurrentUpgradeLevel = 1 → +2, 第二次 = 2 → +4, 第三次 = 3 → +8 ...
-        int additionalNotes = 1 << CurrentUpgradeLevel; // 等价于 (int)Math.Pow(2, CurrentUpgradeLevel)
+        var additionalNotes = 1 << CurrentUpgradeLevel; // 等价于 (int)Math.Pow(2, CurrentUpgradeLevel)
         DynamicVars["Notes"].UpgradeValueBy(additionalNotes);
     }
 }

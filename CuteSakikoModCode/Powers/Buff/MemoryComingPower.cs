@@ -2,13 +2,11 @@
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Extensions;
-using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
@@ -33,7 +31,7 @@ public sealed class MemoryComingPower : CuteSakikoModPower
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
-    
+
     // 钩子，在玩家回合开始时
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
@@ -47,7 +45,8 @@ public sealed class MemoryComingPower : CuteSakikoModPower
         var selectedTemplates = shuffled.Take(count).ToList();
         if (selectedTemplates.Count == 0) return;
 
-        var mutableCards = selectedTemplates.Select(template => Owner.Player.Creature.CombatState.CreateCard(template, Owner.Player)).ToList();
+        var mutableCards = selectedTemplates
+            .Select(template => Owner.Player.Creature.CombatState.CreateCard(template, Owner.Player)).ToList();
         await CardPileCmd.AddGeneratedCardsToCombat(mutableCards, PileType.Hand, player);
         Flash();
     }

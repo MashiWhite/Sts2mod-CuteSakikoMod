@@ -17,7 +17,7 @@ public static class VFXUtil
         foreach (var path in scenePaths)
         {
             if (ModSceneCache.ContainsKey(path)) continue;
-            var scene = ResourceLoader.Load<PackedScene>(path, null, ResourceLoader.CacheMode.Reuse);
+            var scene = ResourceLoader.Load<PackedScene>(path);
             if (scene != null)
                 ModSceneCache[path] = scene;
         }

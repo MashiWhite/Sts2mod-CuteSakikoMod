@@ -8,7 +8,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Keywords;
 
-
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
@@ -32,7 +31,7 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
         if (handCards.Count == 0) return;
 
         // 统计记忆牌数量（在遗忘前）
-        int memoryCount = handCards.Count(card => card.HasModKeyword(CutesakiKeywords.Memory));
+        var memoryCount = handCards.Count(card => card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()));
 
         // 遗忘所有手牌
         await MemoryCmd.Forget(choiceContext, handCards, this);
@@ -42,12 +41,8 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
         {
             var combatState = Owner.Creature.CombatState;
             if (combatState != null)
-            {
                 foreach (var enemy in combatState.Enemies.Where(e => e.IsAlive))
-                {
                     await PowerCmd.Apply<BreakDownPower>(choiceContext, enemy, 1, Owner.Creature, this);
-                }
-            }
         }
     }
 

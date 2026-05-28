@@ -12,8 +12,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 public class ThisHard() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override string ChordId => "AnonFChord";
-    
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.NoNote.GetModKeywordCardKeyword(), CutesakiKeywords.Chord.GetModKeywordCardKeyword()];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Exhaust, CutesakiKeywords.NoNote.GetModCardKeyword(), CutesakiKeywords.Chord.GetModCardKeyword()
+    ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

@@ -13,7 +13,10 @@ public class TeamSunshine() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, T
 {
     public override string ChordId => "AnonGChord";
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.NoNote.GetModKeywordCardKeyword(),CutesakiKeywords.Chord.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Exhaust, CutesakiKeywords.NoNote.GetModCardKeyword(), CutesakiKeywords.Chord.GetModCardKeyword()
+    ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

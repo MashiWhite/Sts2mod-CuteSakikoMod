@@ -15,7 +15,7 @@ public class DefensiveSlash() : ModStatusCard(0, CardType.Status, CardRarity.Sta
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(2m,ValueProp.Move),
+        new DamageVar(2m, ValueProp.Move),
         new BlockVar(14m, ValueProp.Move)
     ];
 

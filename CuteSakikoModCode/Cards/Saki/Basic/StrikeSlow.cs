@@ -1,5 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -14,10 +13,10 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteSaki), 2,Order = 1)]
+[RegisterCharacterStarterCard(typeof(CuteSaki), 2, Order = 1)]
 public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
     public override bool GainsBlock => true;
 

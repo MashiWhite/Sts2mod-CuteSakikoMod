@@ -11,7 +11,7 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [];
 
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
@@ -48,7 +48,7 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
         // 获取计算基础变量并升级：10 → 13
         var calcBase = DynamicVars["CalculationBase"];
         calcBase.UpgradeValueBy(3m);
-        
+
         AddKeyword(CardKeyword.Retain);
     }
 }

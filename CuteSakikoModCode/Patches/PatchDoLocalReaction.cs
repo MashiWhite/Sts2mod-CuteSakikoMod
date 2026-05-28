@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Nodes.Reaction;
-using System.Collections.Generic;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 
@@ -15,17 +14,17 @@ public static class PatchDoLocalReaction
     // 原版文件名 → 你的自定义文件名
     private static readonly Dictionary<string, string> FileMap = new()
     {
-        ["exclaim.png"]        = "tomorin_exclaim.png",
-        ["skull.png"]          = "mutsumi_skull.png",
-        ["thumb_down.png"]     = "soyo_thumb_down.png",
-        ["slime_sad.png"]      = "nyamu_slime_sad.png",
-        ["question.png"]       = "tomorin_question.png",
-        ["heart.png"]          = "uika_heart.png",
-        ["thumb_up.png"]       = "saki_thumb_up.png",
-        ["happy_cultist.png"]  = "anon_happy_cultist.png",
+        ["exclaim.png"] = "tomorin_exclaim.png",
+        ["skull.png"] = "mutsumi_skull.png",
+        ["thumb_down.png"] = "soyo_thumb_down.png",
+        ["slime_sad.png"] = "nyamu_slime_sad.png",
+        ["question.png"] = "tomorin_question.png",
+        ["heart.png"] = "uika_heart.png",
+        ["thumb_up.png"] = "saki_thumb_up.png",
+        ["happy_cultist.png"] = "anon_happy_cultist.png"
     };
 
-    static bool Prefix(NReactionContainer __instance, Texture2D tex, Vector2 position,
+    private static bool Prefix(NReactionContainer __instance, Texture2D tex, Vector2 position,
         ReactionSynchronizer? ____synchronizer)
     {
         if (tex == null || tex.ResourcePath == null) return true;
@@ -33,13 +32,12 @@ public static class PatchDoLocalReaction
         // 从原版文件名映射到自定义路径
         string? customPath = null;
         foreach (var kv in FileMap)
-        {
             if (tex.ResourcePath.EndsWith(kv.Key))
             {
                 customPath = $"res://CuteSakikoMod/images/reactions/{kv.Value}";
                 break;
             }
-        }
+
         if (customPath == null) return true;
 
         var newTex = GD.Load<Texture2D>(customPath);
@@ -63,17 +61,17 @@ public static class Patch_DoRemoteReaction
 {
     private static readonly Dictionary<ReactionType, string> TypeMap = new()
     {
-        { ReactionType.Exclamation,  "res://CuteSakikoMod/images/reactions/tomorin_exclaim.png" },
-        { ReactionType.Skull,        "res://CuteSakikoMod/images/reactions/mutsumi_skull.png" },
-        { ReactionType.ThumbDown,    "res://CuteSakikoMod/images/reactions/soyo_thumb_down.png" },
-        { ReactionType.SadSlime,     "res://CuteSakikoMod/images/reactions/nyamu_slime_sad.png" },
+        { ReactionType.Exclamation, "res://CuteSakikoMod/images/reactions/tomorin_exclaim.png" },
+        { ReactionType.Skull, "res://CuteSakikoMod/images/reactions/mutsumi_skull.png" },
+        { ReactionType.ThumbDown, "res://CuteSakikoMod/images/reactions/soyo_thumb_down.png" },
+        { ReactionType.SadSlime, "res://CuteSakikoMod/images/reactions/nyamu_slime_sad.png" },
         { ReactionType.QuestionMark, "res://CuteSakikoMod/images/reactions/tomorin_question.png" },
-        { ReactionType.Heart,        "res://CuteSakikoMod/images/reactions/uika_heart.png" },
-        { ReactionType.ThumbUp,      "res://CuteSakikoMod/images/reactions/saki_thumb_up.png" },
-        { ReactionType.HappyCultist, "res://CuteSakikoMod/images/reactions/anon_happy_cultist.png" },
+        { ReactionType.Heart, "res://CuteSakikoMod/images/reactions/uika_heart.png" },
+        { ReactionType.ThumbUp, "res://CuteSakikoMod/images/reactions/saki_thumb_up.png" },
+        { ReactionType.HappyCultist, "res://CuteSakikoMod/images/reactions/anon_happy_cultist.png" }
     };
 
-    static bool Prefix(NReactionContainer __instance, ReactionType type, Vector2 position)
+    private static bool Prefix(NReactionContainer __instance, ReactionType type, Vector2 position)
     {
         if (!TypeMap.TryGetValue(type, out var path)) return true;
 
@@ -86,7 +84,7 @@ public static class Patch_DoRemoteReaction
         child.BeginAnim();
         return false;
     }
-    
+
     [HarmonyPatch(typeof(NReactionWheel), "_Ready")]
     public static class Patch_NReactionWheel_Ready
     {
@@ -116,9 +114,9 @@ public static class Patch_DoRemoteReaction
             "res://CuteSakikoMod/images/reactions/anon_happy_cultist.png"
         };
 
-        static void Postfix(NReactionWheel __instance)
+        private static void Postfix(NReactionWheel __instance)
         {
-            for (int i = 0; i < WedgeNames.Length; i++)
+            for (var i = 0; i < WedgeNames.Length; i++)
             {
                 var wedge = __instance.GetNodeOrNull<NReactionWheelWedge>(WedgeNames[i]);
                 if (wedge == null) continue;
@@ -138,5 +136,4 @@ public static class Patch_DoRemoteReaction
             }
         }
     }
-    
 }

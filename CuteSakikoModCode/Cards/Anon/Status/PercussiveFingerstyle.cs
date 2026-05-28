@@ -14,10 +14,7 @@ public class PercussiveFingerstyle : ModStatusCard
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        get
-        {
-            yield return CardKeyword.Exhaust;
-        }
+        get { yield return CardKeyword.Exhaust; }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -15,16 +13,16 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteSaki), 2,Order = 0)]
+[RegisterCharacterStarterCard(typeof(CuteSaki), 2, Order = 0)]
 public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(5m, ValueProp.Move)   // 基础伤害 5，升级后 +3
+        new DamageVar(5m, ValueProp.Move) // 基础伤害 5，升级后 +3
     ];
 
     protected override bool ShouldGlowGoldInternal
@@ -50,14 +48,15 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
         if (cardPlay.Target == null) return;
 
         var damage = DynamicVars.Damage.BaseValue;
-        int extraHits = 0;
+        var extraHits = 0;
         var pressure = Owner.Creature.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount > 0)
         {
-            extraHits = IsUpgraded ? 2 : 1;           // 升级额外 2 次，未升级 1 次
+            extraHits = IsUpgraded ? 2 : 1; // 升级额外 2 次，未升级 1 次
             await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
         }
-        int totalHits = 1 + extraHits;
+
+        var totalHits = 1 + extraHits;
 
         // 所有攻击合并在同一个 AttackCommand 里，活力等 buff 自然覆盖全部命中
         await DamageCmd.Attack(damage)

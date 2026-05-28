@@ -13,7 +13,10 @@ public class Osusume() : CuteAnonCard(3, CardType.Skill, CardRarity.Rare, Target
 {
     public override string ChordId => "AnonDChord";
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.NoNote.GetModKeywordCardKeyword(), CutesakiKeywords.Chord.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Exhaust, CutesakiKeywords.NoNote.GetModCardKeyword(), CutesakiKeywords.Chord.GetModCardKeyword()
+    ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

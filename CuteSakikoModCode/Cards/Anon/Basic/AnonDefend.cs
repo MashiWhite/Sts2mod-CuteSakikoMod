@@ -1,5 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -9,7 +8,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteAnon), 4,Order = 1)]
+[RegisterCharacterStarterCard(typeof(CuteAnon), 4, Order = 1)]
 public class AnonDefend() : CuteAnonCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     public override bool GainsBlock => true;

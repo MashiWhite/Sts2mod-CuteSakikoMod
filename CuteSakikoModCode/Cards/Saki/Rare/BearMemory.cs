@@ -6,8 +6,8 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using STS2RitsuLib.Keywords;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
@@ -19,7 +19,7 @@ public class BearMemory : CuteSakikoModCard
 
     // 重放层数基础 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-       [new IntVar("Replay", 1)];
+        [new IntVar("Replay", 1)];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -42,7 +42,8 @@ public class BearMemory : CuteSakikoModCard
         {
             var pile = pileType.GetPile(Owner);
             if (pile != null)
-                memoryCards.AddRange(pile.Cards.Where(c => c.HasModKeyword(CutesakiKeywords.Memory)));
+                memoryCards.AddRange(pile.Cards.Where(c =>
+                    c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword())));
         }
 
         if (memoryCards.Count == 0) return;
@@ -52,7 +53,7 @@ public class BearMemory : CuteSakikoModCard
         if (randomCard == null) return;
 
         // 增加重放次数
-        int replayAmount = DynamicVars["Replay"].IntValue;
+        var replayAmount = DynamicVars["Replay"].IntValue;
         randomCard.BaseReplayCount += replayAmount;
 
         // 视觉预览选中的牌

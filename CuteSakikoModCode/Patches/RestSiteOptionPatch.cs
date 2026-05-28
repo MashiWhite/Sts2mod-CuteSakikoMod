@@ -1,5 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Events;
-using CuteSakikoMod.CuteSakikoModCode.Extensions;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Assets;

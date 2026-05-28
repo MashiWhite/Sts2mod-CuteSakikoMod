@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -17,7 +15,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
@@ -30,7 +28,7 @@ public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.
             {
                 var allCards = card?.Owner?.PlayerCombatState?.AllCards;
                 if (allCards == null) return 0;
-                var qinCount = allCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+                var qinCount = allCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
                 var multiplier = card!.IsUpgraded ? 2 : 1;
                 return qinCount * multiplier;
             });
@@ -51,10 +49,12 @@ public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.
         if (cardPlay.Target == null) return;
 
         var damage = DynamicVars.Damage.BaseValue;
-        var qinCount = Owner.PlayerCombatState.AllCards.Count(c => c.HasModKeyword(CutesakiKeywords.Playpiano));
+        var qinCount =
+            Owner.PlayerCombatState.AllCards.Count(c =>
+                c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
         var multiplier = IsUpgraded ? 2 : 1;
-        int totalExtraHits = qinCount * multiplier;
-        int totalHits = 1 + totalExtraHits;       // 基础 1 次 + 额外次数
+        var totalExtraHits = qinCount * multiplier;
+        var totalHits = 1 + totalExtraHits; // 基础 1 次 + 额外次数
 
         // 所有命中合并在一个 AttackCommand 里，活力等 buff 全部生效
         await DamageCmd.Attack(damage)

@@ -4,16 +4,16 @@ using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Combat.HealthBars;
-
-// 新增：提供 ThrowingPlayerChoiceContext
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 
@@ -32,7 +32,6 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromPower<BreakDownPower>()];
 
-    // 生命条覆盖：从左向右增长
     public IEnumerable<HealthBarForecastSegment> GetHealthBarForecastSegments(HealthBarForecastContext context)
     {
         if (Owner == null || Owner.MaxHp <= 0 || Amount <= 0)
@@ -47,16 +46,15 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
         return new[] { segment };
     }
 
-
     private void OnDisplayAmountChanged()
     {
         if (Amount <= 0 && IsMutable)
             TaskHelper.RunSafely(PowerCmd.Remove(this));
     }
 
-    // ********** 修复签名：添加 PlayerChoiceContext 参数 **********
+    // 压力增加时，提升骑士之剑伤害（已有合法上下文）
     public override async Task AfterPowerAmountChanged(
-        PlayerChoiceContext choiceContext, // 新参数
+        PlayerChoiceContext choiceContext,
         PowerModel power,
         decimal amount,
         Creature? applier,
@@ -64,7 +62,6 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
     {
         if (power != this) return;
 
-        // 压力增加时，提升自己手牌中骑士之剑的伤害
         if (amount > 0 && Owner != null && Owner.IsPlayer && CombatState != null)
         {
             var delta = (int)amount;
@@ -81,32 +78,34 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
             }
         }
 
-        await CheckAndTriggerCollapse(choiceContext); // 传入上下文
+        await CheckAndTriggerCollapse(choiceContext);
     }
 
-    // 生命值减少时检测
+    // 受伤时检查崩溃（兼容玩家与敌人）
     public override async Task AfterCurrentHpChanged(Creature creature, decimal delta)
     {
         if (creature != Owner) return;
-        if (delta >= 0) return; // 只关心生命值减少
-        // 没有 PlayerChoiceContext，使用 ThrowingPlayerChoiceContext
-        await CheckAndTriggerCollapse(new ThrowingPlayerChoiceContext());
+        if (delta >= 0) return;          // 只关心受伤
+        if (Owner == null || CombatState == null) return;
+
+        // 使用 CombatState 的第一个玩家作为 Owner 构造合法上下文
+        var ownerPlayer = CombatState.Players[0];
+        var ctx = new HookPlayerChoiceContext(ownerPlayer, ownerPlayer.NetId, GameActionType.Combat);
+
+        Task task = CheckAndTriggerCollapse(ctx);
+        await ctx.AssignTaskAndWaitForPauseOrCompletion(task);
     }
 
-    // 更新该方法，添加 PlayerChoiceContext 参数
     private async Task CheckAndTriggerCollapse(PlayerChoiceContext ctx)
     {
         if (Owner == null || !Owner.IsAlive) return;
         if (Amount >= Owner.CurrentHp)
         {
-            // 清除所有压力
             await PowerCmd.ModifyAmount(ctx, this, -Amount, Owner, null);
-            // 获得一层崩溃
             await PowerCmd.Apply<BreakDownPower>(ctx, Owner, 1, Owner, null);
         }
     }
 
-    // 伤害加成（这个方法是正确的，无需修改）
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer,
         CardModel? cardSource)
     {

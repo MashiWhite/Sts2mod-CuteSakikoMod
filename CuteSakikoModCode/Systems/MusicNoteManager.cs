@@ -18,6 +18,7 @@ public static class MusicNoteManager
             data = new PlayerData();
             _data[player] = data;
         }
+
         return data;
     }
 
@@ -112,6 +113,7 @@ public static class MusicNoteManager
             data.NotesGainedThisTurn = 0;
             data.LastRoundNumber = currentRound;
         }
+
         return data.NotesGainedThisTurn;
     }
 
@@ -123,7 +125,7 @@ public static class MusicNoteManager
         var notesArray = data.Notes.ToArray();
         var removeIndex = rng.NextInt(notesArray.Length);
         data.Notes.Clear();
-        for (int i = 0; i < notesArray.Length; i++)
+        for (var i = 0; i < notesArray.Length; i++)
             if (i != removeIndex)
                 data.Notes.Enqueue(notesArray[i]);
         return true;
@@ -183,6 +185,7 @@ public static class MusicNoteManager
             list.RemoveAt(index);
             return true;
         }
+
         return false;
     }
 
@@ -206,7 +209,7 @@ public static class MusicNoteManager
     {
         if (player == null) return 0;
         var data = GetData(player);
-        int count = data.Notes.Count;
+        var count = data.Notes.Count;
         data.Notes.Clear();
         return count;
     }

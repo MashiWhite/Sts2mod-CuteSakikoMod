@@ -6,14 +6,12 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class BeGod() : CuteSakikoModCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -23,7 +21,7 @@ public class BeGod() : CuteSakikoModCard(3, CardType.Power, CardRarity.Rare, Tar
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var layers = IsUpgraded ? 2 : 1;

@@ -29,7 +29,7 @@ public sealed class MemoryBurningPower : CuteSakikoModPower
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
-    
+
     // 修改回忆卡牌的费用为 0
     public override bool TryModifyEnergyCostInCombat(
         CardModel card,
@@ -42,7 +42,7 @@ public sealed class MemoryBurningPower : CuteSakikoModPower
         if (card.Owner?.Creature != Owner) return false;
 
         // 只对回忆卡牌生效
-        if (!card.HasModKeyword(CutesakiKeywords.Memory)) return false;
+        if (!card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword())) return false;
 
         // 将费用改为 0
         modifiedCost = 0;
@@ -53,12 +53,13 @@ public sealed class MemoryBurningPower : CuteSakikoModPower
     public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var card = cardPlay.Card;
-        if (card.Owner?.Creature == Owner && card.HasModKeyword(CutesakiKeywords.Memory))
-            MemoryCmd.Forget(choiceContext, new[] { card }, null);
+        if (card.Owner?.Creature == Owner && card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
+            MemoryCmd.Forget(choiceContext, new[] { card });
         return Task.CompletedTask;
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
         await PowerCmd.Remove(this);

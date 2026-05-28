@@ -32,7 +32,8 @@ public sealed class PressureDmgPower : CuteSakikoModPower
         }
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
         if (_strengthGained > 0)

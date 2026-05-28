@@ -1,7 +1,6 @@
 {
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "测试卡牌",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "测试卡牌。",
-  
   "CUTE_SAKIKO_MOD_CARD_STRIKE_FAST.title": "琴奏：急",
   "CUTE_SAKIKO_MOD_CARD_STRIKE_FAST.description": "造成{Damage:diff()}点伤害。\n若有则消耗1层[gold]压力[/gold]，额外造成{IfUpgraded:show:2|1}次伤害。",
   "CUTE_SAKIKO_MOD_CARD_STRIKE_SLOW.title": "琴奏：缓",
@@ -369,7 +368,7 @@
   "CUTE_SAKIKO_MOD_CARD_CALMNESS_LADY.title": "大小姐的从容",
   "CUTE_SAKIKO_MOD_CARD_CALMNESS_LADY.description": "[gold]免疫[/gold]下{IfUpgraded:show:2|1}次伤害并返还给攻击者。",
   "CUTE_SAKIKO_MOD_CARD_LEGATO.title": "连奏",
-  "CUTE_SAKIKO_MOD_CARD_LEGATO.description": "造成{CalculatedDamage:diff()}点伤害。\n每拥有一张[gold]琴奏[/gold]牌，伤害增加{ExtraDamage:diff()}。\n从牌组中打出{IfUpgraded:show:2|1}张[gold]琴奏[/gold]牌。",
+  "CUTE_SAKIKO_MOD_CARD_LEGATO.description": "造成{CalculatedDamage:diff()}点伤害。\n每拥有一张[gold]琴奏[/gold]牌，伤害增加{ExtraDamage:diff()}。\n从你的牌堆中打出{IfUpgraded:show:2|1}张[gold]琴奏[/gold]牌。",
   "CUTE_SAKIKO_MOD_CARD_MASQUERADE.title": "假面舞会",
   "CUTE_SAKIKO_MOD_CARD_MASQUERADE.description": "暂时移除场上所有能力，下回合开始时归还。",
   "CUTE_SAKIKO_MOD_CARD_DETERMINED_TO_WIN.title": "志在必得",

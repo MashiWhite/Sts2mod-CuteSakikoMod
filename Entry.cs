@@ -7,7 +7,6 @@ using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
-using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
@@ -60,7 +59,8 @@ public class Entry
             .WithTitle(ModSettingsText.Literal("Cute Sakiko Mod 设置"))
             .AddSection("general", section => section
                 .WithTitle(ModSettingsText.Literal("通用"))
-                .AddToggle("egg_toggle", ModSettingsText.Literal("彩蛋卡"), eggBinding, ModSettingsText.Literal("启用后游戏开始时自动获得彩蛋遗物"))
+                .AddToggle("egg_toggle", ModSettingsText.Literal("彩蛋卡"), eggBinding,
+                    ModSettingsText.Literal("启用后游戏开始时自动获得彩蛋遗物"))
             )
         );
 
@@ -75,11 +75,14 @@ public class Entry
         // 6. 注册 RunSavedData 槽位
         var runDataStore = RunSavedDataStore.For(ModId);
         FlybackManager.RunDataSlot = runDataStore.Register<RunFlybackData>("FlybackRunData",
-            options: new RunSavedDataOptions { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = false });
+            options: new RunSavedDataOptions
+                { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = false });
         FlybackManager.PlayerDataSlot = runDataStore.RegisterPerPlayer<PlayerFlybackData>("FlybackPlayerData",
-            options: new RunSavedDataOptions { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
+            options: new RunSavedDataOptions
+                { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
         Eggs.PlayerEggsSlot = runDataStore.RegisterPerPlayer<PlayerEggsData>("EggsSelected",
-            options: new RunSavedDataOptions { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
+            options: new RunSavedDataOptions
+                { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
 
         Log.Debug("Mod initialized!");
 
@@ -102,18 +105,13 @@ public class Entry
             var netService = RunManager.Instance.NetService;
             if (netService != null)
             {
-                netService.RegisterMessageHandler(new MessageHandlerDelegate<ReloadCountSyncMessage>(
-                    (msg, senderId) => FlybackManager.OnReloadCountReceived(msg.ReloadCount)));
+                netService.RegisterMessageHandler(new MessageHandlerDelegate<ReloadCountSyncMessage>((msg, senderId) =>
+                    FlybackManager.OnReloadCountReceived(msg.ReloadCount)));
                 if (netService is NetHostGameService hostService)
-                {
-                    hostService.ClientConnected += peerId =>
-                    {
-                        FlybackManager.SyncReloadCountIfHost();
-                    };
-                }
+                    hostService.ClientConnected += peerId => { FlybackManager.SyncReloadCountIfHost(); };
             }
         };
-        
+
         ModContentRegistry.For(ModId)
             .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoModCardPool>(
                 "cute_sakiko_mod_card_pool",

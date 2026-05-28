@@ -14,7 +14,8 @@ public sealed class DebtPower : CuteSakikoModPower
     public override bool AllowNegative => false;
 
     // 回合结束时造成等量伤害并移除
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
         if (Amount <= 0) return;

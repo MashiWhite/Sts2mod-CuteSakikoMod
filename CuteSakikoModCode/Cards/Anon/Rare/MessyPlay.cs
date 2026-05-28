@@ -10,9 +10,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class MessyPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword()];
 
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new PowerVar<MessyPlayPower>(1m); } // 未升级每次额外1个音符

@@ -1,5 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character;
-using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
+﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -11,13 +10,13 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteAnon), 4,Order = 0)]
+[RegisterCharacterStarterCard(typeof(CuteAnon), 4, Order = 0)]
 public class AnonStrike() : CuteAnonCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
-    
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playguitar.GetModKeywordCardKeyword()];
- 
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playguitar.GetModCardKeyword()];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(6m, ValueProp.Move)

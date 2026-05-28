@@ -1,12 +1,12 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.Models; // 提供 ModelDb.AllCards
+using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Keywords;
+// 提供 ModelDb.AllCards
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Common;
 
@@ -25,7 +25,7 @@ public class RoughSketch : CuteAnonRelic
 
         // 从整个游戏的所有和弦牌中随机选择一张（规范模板）
         var allChordCards = ModelDb.AllCards
-            .Where(c => c.HasModKeyword(CutesakiKeywords.Chord))
+            .Where(c => c.Keywords.Contains(CutesakiKeywords.Chord.GetModCardKeyword()))
             .ToList();
 
         if (allChordCards.Count == 0) return;

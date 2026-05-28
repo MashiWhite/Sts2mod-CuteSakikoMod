@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Extensions;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Combat;
@@ -28,8 +27,8 @@ public class StarAnon : ModMonsterTemplate
     private MoveState _deadState;
     private string _lastMoveName = "";
 
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 440, 420);
-    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 520, 520);
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 540, 520);
+    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 650, 620);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/star_anon_boss.tscn"
@@ -65,9 +64,9 @@ public class StarAnon : ModMonsterTemplate
 
         var buffStr = new MoveState("BUFF_STRENGTH", BuffStrengthMove, new BuffIntent());
         var attack1 = new MoveState("DOUBLE_ATTACK", DoubleAttackMove,
-            new MultiAttackIntent(10, 2), new StatusIntent(2));
+            new MultiAttackIntent(15, 2), new StatusIntent(2));
         var heavy1 = new MoveState("HEAVY_ATTACK", HeavyAttackMove,
-            new SingleAttackIntent(20));
+            new SingleAttackIntent(32));
         var buffStr2 = new MoveState("BUFF_STRENGTH2", BuffStrengthMove2, new BuffIntent());
 
         buffStr.FollowUpState = attack1;
@@ -77,9 +76,9 @@ public class StarAnon : ModMonsterTemplate
 
         var buffStr3 = new MoveState("BUFF_STRENGTH3", BuffStrengthMove3, new BuffIntent());
         var attack3 = new MoveState("DOUBLE_ATTACK3", DoubleAttackMove,
-            new MultiAttackIntent(10, 2), new StatusIntent(2));
+            new MultiAttackIntent(15, 2), new StatusIntent(2));
         var heavy3 = new MoveState("HEAVY_ATTACK3", HeavyAttackMove,
-            new SingleAttackIntent(20));
+            new SingleAttackIntent(25));
 
         _deadState.FollowUpState = buffStr3;
         buffStr3.FollowUpState = attack3;
@@ -100,6 +99,9 @@ public class StarAnon : ModMonsterTemplate
     {
         _lastMoveName = "RESPAWN_MOVE";
         await CreatureCmd.Heal(Creature, Creature.MaxHp);
+        foreach (var player in RunManager.Instance.DebugOnlyGetState()?.Players ?? Enumerable.Empty<Player>())
+            for (var i = 0; i < 15; i++)
+                FlybackManager.Instance.IncrementPlayCountForPlayer(player);
         FlybackManager.DoubleAllPlayerCounts();
 
         var retro = Creature.GetPower<RetrogradePower>();
@@ -123,37 +125,37 @@ public class StarAnon : ModMonsterTemplate
     private async Task BuffStrengthMove(IReadOnlyList<Creature> targets)
     {
         _lastMoveName = "BUFF_STRENGTH";
-        await SyncFlybackDataForMove();
+        for (var i = 0; i < 2; i++) await SyncFlybackDataForMove();
 
-        int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = FlybackManager.GetReloadCount();
-        int amount = 1 + (int)(playCount / 100f * reloads);
+        var playCount = FlybackManager.Instance.TotalPlayCount;
+        var reloads = FlybackManager.GetReloadCount();
+        var amount = 2 + (int)(playCount / 50f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
 
         foreach (var player in RunManager.Instance.DebugOnlyGetState()?.Players ?? Enumerable.Empty<Player>())
-        {
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 15; i++)
                 FlybackManager.Instance.IncrementPlayCountForPlayer(player);
-        }
     }
 
     private async Task BuffStrengthMove2(IReadOnlyList<Creature> targets)
     {
         _lastMoveName = "BUFF_STRENGTH2";
-        int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = FlybackManager.GetReloadCount();
-        int amount = 2 + (int)(playCount / 100f * reloads);
+        for (var i = 0; i < 1; i++) await SyncFlybackDataForMove();
+        
+        var playCount = FlybackManager.Instance.TotalPlayCount;
+        var reloads = FlybackManager.GetReloadCount();
+        var amount = 2 + (int)(playCount / 50f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
 
     private async Task BuffStrengthMove3(IReadOnlyList<Creature> targets)
     {
         _lastMoveName = "BUFF_STRENGTH3";
-        await SyncFlybackDataForMove();
+        for (var i = 0; i < 2; i++) await SyncFlybackDataForMove();
 
-        int playCount = FlybackManager.Instance.TotalPlayCount;
-        int reloads = FlybackManager.GetReloadCount();
-        int amount = 2 + (int)(playCount / 100f * reloads);
+        var playCount = FlybackManager.Instance.TotalPlayCount;
+        var reloads = FlybackManager.GetReloadCount();
+        var amount = 2 + (int)(playCount / 50f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
 
@@ -167,16 +169,17 @@ public class StarAnon : ModMonsterTemplate
     {
         _lastMoveName = "DOUBLE_ATTACK";
         for (var i = 0; i < 2; i++)
-            await DamageCmd.Attack(10).FromMonster(this).Execute(null);
+            await DamageCmd.Attack(15).FromMonster(this).Execute(null);
         var player = targets.FirstOrDefault()?.Player;
         if (player != null)
-            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Discard, 2, null, CardPilePosition.Random);
+            await CardPileCmd.AddToCombatAndPreview<Flyback>(targets, PileType.Discard, 2, null,
+                CardPilePosition.Random);
     }
 
     private async Task HeavyAttackMove(IReadOnlyList<Creature> targets)
     {
         _lastMoveName = "HEAVY_ATTACK";
-        await DamageCmd.Attack(20).FromMonster(this).Execute(null);
+        await DamageCmd.Attack(32).FromMonster(this).Execute(null);
     }
 
     public override async Task AfterSideTurnEnd(

@@ -12,13 +12,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class FinalLive() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare, TargetType.Self)
 {
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Playpiano); }
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust,CutesakiKeywords.Playpiano.GetModKeywordCardKeyword()];
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+        [CardKeyword.Exhaust, CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -36,7 +36,8 @@ public class FinalLive() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
         {
             var pile = pileType.GetPile(owner);
             if (pile != null)
-                allCards.AddRange(pile.Cards.Where(c => c.HasModKeyword(CutesakiKeywords.Playpiano)));
+                allCards.AddRange(pile.Cards.Where(c =>
+                    Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword())));
         }
 
         allCards = allCards.Distinct().ToList();

@@ -1,14 +1,15 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Systems;       // MemoryCmd
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using STS2RitsuLib.Keywords;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Keywords;
+// MemoryCmd
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -17,7 +18,7 @@ public class MemoryBurning : CuteSakikoModCard
     public MemoryBurning() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
-    
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -38,16 +39,14 @@ public class MemoryBurning : CuteSakikoModCard
 
         // 收集手牌、抽牌堆、弃牌堆中的所有回忆牌（按顺序避免重复）
         var memoryCards = new List<CardModel>();
-        foreach (var pileType in new[] { PileType.Hand, PileType.Draw, PileType.Discard,PileType.Exhaust })
+        foreach (var pileType in new[] { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust })
         {
             var pile = pileType.GetPile(Owner);
             if (pile != null)
-            {
                 // 只添加尚未收集的牌（防止同一张牌在多个牌堆）
                 memoryCards.AddRange(pile.Cards
-                    .Where(c => c.HasModKeyword(CutesakiKeywords.Memory))
+                    .Where(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
                     .Where(c => !memoryCards.Contains(c)));
-            }
         }
 
         if (memoryCards.Count == 0)

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;

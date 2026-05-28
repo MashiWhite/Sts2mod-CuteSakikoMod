@@ -1,4 +1,3 @@
-using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -14,7 +13,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
-[RegisterCharacterStarterCard(typeof(CuteSaki), 4,Order = 2)]
+[RegisterCharacterStarterCard(typeof(CuteSaki), 4, Order = 2)]
 public class DefendSaki() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     public override bool GainsBlock => true;

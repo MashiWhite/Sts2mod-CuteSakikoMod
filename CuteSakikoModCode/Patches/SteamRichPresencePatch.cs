@@ -4,7 +4,6 @@ using CuteSakikoMod.CuteSakikoModCode.Character;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Runs;
-using STS2RitsuLib.Scaffolding.Characters;
 
 // 新增
 

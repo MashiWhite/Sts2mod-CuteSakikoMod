@@ -36,7 +36,7 @@ public class MyBad() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, T
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获得格挡

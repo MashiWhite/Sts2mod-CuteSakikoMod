@@ -19,8 +19,8 @@ public static class StrikeDummyPatch
         if (__result != 0m) return;
         if (!props.IsPoweredAttack()) return;
         if (cardSource == null) return;
-        if (cardSource.HasModKeyword(CutesakiKeywords.Playpiano) ||
-            cardSource.HasModKeyword(CutesakiKeywords.Playguitar))
+        if (cardSource.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()) ||
+            cardSource.Keywords.Contains(CutesakiKeywords.Playguitar.GetModCardKeyword()))
             __result = __instance.DynamicVars["ExtraDamage"].BaseValue;
     }
 
@@ -32,8 +32,8 @@ public static class StrikeDummyPatch
         if (__result != 0m) return;
         if (!props.IsPoweredAttack()) return;
         if (cardSource == null) return;
-        if (cardSource.HasModKeyword(CutesakiKeywords.Playpiano) ||
-            cardSource.HasModKeyword(CutesakiKeywords.Playguitar))
+        if (cardSource.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()) ||
+            cardSource.Keywords.Contains(CutesakiKeywords.Playguitar.GetModCardKeyword()))
             __result = __instance.DynamicVars["ExtraDamage"].BaseValue;
     }
 }

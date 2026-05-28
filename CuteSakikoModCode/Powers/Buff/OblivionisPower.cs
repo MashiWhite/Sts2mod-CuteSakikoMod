@@ -1,5 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -15,7 +14,7 @@ public sealed class OblivionisPower : CuteSakikoModPower
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
 
-   
+
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
@@ -45,21 +44,17 @@ public sealed class OblivionisPower : CuteSakikoModPower
 
         if (enemies == null || enemies.Count == 0) return;
 
-        int damagePerCard = Amount;
+        var damagePerCard = Amount;
 
         // 每张被遗忘的牌，对所有可攻击的敌人造成一次伤害
         foreach (var card in forgottenCards)
-        {
-            foreach (var enemy in enemies)
-            {
-                await CreatureCmd.Damage(
-                    choiceContext,
-                    enemy,
-                    damagePerCard,
-                    ValueProp.Move,
-                    Owner,       // 伤害来源：能力的持有者
-                    null);       // 没有卡牌来源
-            }
-        }
+        foreach (var enemy in enemies)
+            await CreatureCmd.Damage(
+                choiceContext,
+                enemy,
+                damagePerCard,
+                ValueProp.Move,
+                Owner, // 伤害来源：能力的持有者
+                null); // 没有卡牌来源
     }
 }

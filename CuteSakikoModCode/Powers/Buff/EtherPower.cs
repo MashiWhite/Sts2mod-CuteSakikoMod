@@ -14,7 +14,8 @@ public sealed class EtherPower : CuteSakikoModPower
     public override bool AllowNegative => false;
 
     // 回合结束时，打出抽牌堆顶部的牌
-    public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,IEnumerable<Creature>participants)
+    public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
 

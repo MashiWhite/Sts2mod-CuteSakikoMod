@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using MegaCrit.Sts2.Core.Entities.Cards;
+﻿using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 
@@ -12,7 +10,7 @@ public static class ChordSequenceModifierHelper
     private static readonly Dictionary<Player, Dictionary<string, ChordSequenceModifier>> _cardModifiers = new();
 
     /// <summary>
-    /// 为某个玩家的特定和弦设置临时修改器（由卡牌直接调用）
+    ///     为某个玩家的特定和弦设置临时修改器（由卡牌直接调用）
     /// </summary>
     public static void SetCardModifier(Player player, string chordId, ChordSequenceModifier modifier)
     {
@@ -23,7 +21,7 @@ public static class ChordSequenceModifierHelper
     }
 
     /// <summary>
-    /// 清除某个玩家的所有卡牌临时修改器（可在战斗结束时调用）
+    ///     清除某个玩家的所有卡牌临时修改器（可在战斗结束时调用）
     /// </summary>
     public static void ClearCardModifiers(Player player)
     {
@@ -31,7 +29,7 @@ public static class ChordSequenceModifierHelper
     }
 
     /// <summary>
-    /// 收集生物身上所有活跃的修改器（Power、Relic、卡牌）
+    ///     收集生物身上所有活跃的修改器（Power、Relic、卡牌）
     /// </summary>
     public static List<ChordSequenceModifier> CollectModifiers(Creature creature, ChordDefinition chordDef)
     {
@@ -41,11 +39,9 @@ public static class ChordSequenceModifierHelper
         // 1. ★ 来自卡牌直接提供的临时修改器（按和弦ID精准匹配）
         var player = creature.Player;
         if (player != null && _cardModifiers.TryGetValue(player, out var dict))
-        {
             if (dict.TryGetValue(chordDef.Id, out var mod))
                 result.Add(mod);
-        }
-        
+
         // 2. 来自 Power 的修改器
         foreach (var provider in creature.Powers.OfType<IChordSequenceModifierProvider>())
         {
@@ -56,22 +52,19 @@ public static class ChordSequenceModifierHelper
 
         // 3. 来自遗物的修改器
         if (player != null)
-        {
             foreach (var provider in player.Relics.OfType<IChordSequenceModifierProvider>())
             {
                 var cats = provider.AffectedCategories;
                 if (cats == null || !cats.Any() || cats.Contains(chordDef.Category))
                     result.AddRange(provider.GetModifiers(creature));
             }
-        }
 
-       
 
         return result;
     }
 
     /// <summary>
-    /// 依次应用所有修改器，获得修改后的音符序列
+    ///     依次应用所有修改器，获得修改后的音符序列
     /// </summary>
     public static IReadOnlyList<CardType> GetModifiedSequence(ChordDefinition chordDef, Creature owner)
     {
@@ -83,7 +76,7 @@ public static class ChordSequenceModifierHelper
     }
 
     /// <summary>
-    /// 生成修改后的条件文本（用于 UI）
+    ///     生成修改后的条件文本（用于 UI）
     /// </summary>
     public static string GetModifiedConditionText(ChordDefinition chordDef, Creature owner)
     {

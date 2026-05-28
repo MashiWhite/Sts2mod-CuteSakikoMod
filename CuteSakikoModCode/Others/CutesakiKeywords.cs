@@ -40,6 +40,7 @@ public class CutesakiKeywords
 
     public static readonly string
         Memorysaki = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Memorysaki));
+
     public static readonly string
         Sakiforget = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Sakiforget));
 }

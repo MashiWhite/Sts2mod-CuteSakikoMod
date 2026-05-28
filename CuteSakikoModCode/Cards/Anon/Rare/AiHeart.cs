@@ -20,8 +20,12 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
 {
     public override string ChordId => "GreyAnonChord";
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModKeywordCardKeyword(),CutesakiKeywords.Chord.GetModKeywordCardKeyword(),CutesakiKeywords.OtherAnon.GetModKeywordCardKeyword()];
-    
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CutesakiKeywords.NoNote.GetModCardKeyword(), CutesakiKeywords.Chord.GetModCardKeyword(),
+        CutesakiKeywords.OtherAnon.GetModCardKeyword()
+    ];
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get

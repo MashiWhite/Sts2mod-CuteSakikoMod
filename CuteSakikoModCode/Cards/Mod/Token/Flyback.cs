@@ -19,8 +19,9 @@ public class Flyback : ModTokenCard
     public Flyback() : base(0, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
     {
     }
-    
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [ CardKeyword.Retain,CutesakiKeywords.OtherAnon.GetModKeywordCardKeyword() ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+        [CardKeyword.Retain, CutesakiKeywords.OtherAnon.GetModCardKeyword()];
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
