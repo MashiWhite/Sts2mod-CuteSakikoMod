@@ -78,7 +78,7 @@ public class StarAnon : ModMonsterTemplate
         var attack3 = new MoveState("DOUBLE_ATTACK3", DoubleAttackMove,
             new MultiAttackIntent(15, 2), new StatusIntent(2));
         var heavy3 = new MoveState("HEAVY_ATTACK3", HeavyAttackMove,
-            new SingleAttackIntent(25));
+            new SingleAttackIntent(32));
 
         _deadState.FollowUpState = buffStr3;
         buffStr3.FollowUpState = attack3;
@@ -125,25 +125,22 @@ public class StarAnon : ModMonsterTemplate
     private async Task BuffStrengthMove(IReadOnlyList<Creature> targets)
     {
         _lastMoveName = "BUFF_STRENGTH";
-        for (var i = 0; i < 2; i++) await SyncFlybackDataForMove();
-
-        var playCount = FlybackManager.Instance.TotalPlayCount;
         var reloads = FlybackManager.GetReloadCount();
-        var amount = 2 + (int)(playCount / 50f * reloads);
-        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
-
+        for (var i = 0; i < 2; i++) await SyncFlybackDataForMove();
+        var playCount = FlybackManager.Instance.TotalPlayCount;
         foreach (var player in RunManager.Instance.DebugOnlyGetState()?.Players ?? Enumerable.Empty<Player>())
             for (var i = 0; i < 15; i++)
                 FlybackManager.Instance.IncrementPlayCountForPlayer(player);
+        var amount = 2 + (int)(playCount / 50f * reloads);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
 
     private async Task BuffStrengthMove2(IReadOnlyList<Creature> targets)
     {
         _lastMoveName = "BUFF_STRENGTH2";
-        for (var i = 0; i < 1; i++) await SyncFlybackDataForMove();
-        
-        var playCount = FlybackManager.Instance.TotalPlayCount;
         var reloads = FlybackManager.GetReloadCount();
+        for (var i = 0; i < 1; i++) await SyncFlybackDataForMove();
+        var playCount = FlybackManager.Instance.TotalPlayCount;
         var amount = 2 + (int)(playCount / 50f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
@@ -151,10 +148,9 @@ public class StarAnon : ModMonsterTemplate
     private async Task BuffStrengthMove3(IReadOnlyList<Creature> targets)
     {
         _lastMoveName = "BUFF_STRENGTH3";
-        for (var i = 0; i < 2; i++) await SyncFlybackDataForMove();
-
-        var playCount = FlybackManager.Instance.TotalPlayCount;
         var reloads = FlybackManager.GetReloadCount();
+        for (var i = 0; i < 2; i++) await SyncFlybackDataForMove();
+        var playCount = FlybackManager.Instance.TotalPlayCount;
         var amount = 2 + (int)(playCount / 50f * reloads);
         await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, amount, Creature, null);
     }
