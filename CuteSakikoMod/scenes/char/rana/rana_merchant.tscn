@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cie68sjyw7gux"]
+
+[ext_resource type="Script" uid="uid://rv4wc0qdy764" path="res://CuteSakikoModCode/Nodes/SakiMerchantCharacter.cs" id="1_26kga"]
+[ext_resource type="Texture2D" uid="uid://8mv712p2btax" path="res://CuteSakikoMod/images/char/rana/rana.png" id="2_d8xbd"]
+
+[node name="RanaMerchant" type="Node2D"]
+script = ExtResource("1_26kga")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1, -160)
+texture = ExtResource("2_d8xbd")

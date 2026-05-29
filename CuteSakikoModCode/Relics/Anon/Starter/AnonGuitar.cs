@@ -27,8 +27,8 @@ using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
-
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+[RegisterCharacterStarterRelic(typeof(CuteRana),Order = 1)]
 [RegisterCharacterStarterRelic(typeof(CuteAnon))]
 [RegisterTouchOfOrobasRefinement(typeof(FlashAnonGuitar))]
 public class AnonGuitar : CuteAnonRelic

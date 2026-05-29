@@ -40,5 +40,12 @@
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]哼哼，怎么样，我练习的成果。[/pink]",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "爱音练习后的吉他",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "章鱼玻璃",
-  "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "粉粉玻璃"
+  "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "粉粉玻璃",
+  "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "抹茶玻璃",
+  "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.title": "抹茶芭菲",
+  "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.description": "初始拥有6杯，右键食用抽{Cards:diff()}张牌，获得{Energy:energyIcons()}点能量。\n在休息处获得5杯。",
+  "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.flavor": "[green][b]抹茶芭菲，好吃。[/b][/green]",
+  "CUTE_SAKIKO_MOD_RELIC_BIG_MATCHA_PARFAIT.title": "大份抹茶芭菲",
+  "CUTE_SAKIKO_MOD_RELIC_BIG_MATCHA_PARFAIT.description": "获得时增加6杯。\n右键食用抽{Cards:diff()}张牌，获得{Energy:energyIcons()}点能量。\n在休息处获得6杯。",
+  "CUTE_SAKIKO_MOD_RELIC_BIG_MATCHA_PARFAIT.flavor": "[green][b]大份抹茶芭菲！[/b][/green]"
 }

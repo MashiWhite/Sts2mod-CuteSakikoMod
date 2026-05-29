@@ -13,7 +13,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Interop.AutoRegistration;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 
 [RegisterCharacterStarterRelic(typeof(CuteSaki))]
 [RegisterTouchOfOrobasRefinement(typeof(PostItNote))]

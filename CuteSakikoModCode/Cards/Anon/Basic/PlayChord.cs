@@ -1,7 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
@@ -9,7 +9,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
-
+[RegisterCharacterStarterCard(typeof(CuteRana), Order = 4)]
 [RegisterArchaicToothTranscendence(typeof(PlayImmediately))]
 [RegisterCharacterStarterCard(typeof(CuteAnon), Order = 2)]
 public class PlayChord() : CuteAnonCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)

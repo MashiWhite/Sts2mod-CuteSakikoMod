@@ -1,4 +1,14 @@
 {
+  "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.title": "打击",
+  "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.description": "造成{Damage:diff()}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_RANA_DEFEND.title": "防御",
+  "CUTE_SAKIKO_MOD_CARD_RANA_DEFEND.description": "获得{Block:diff()}点格挡。",
+  "CUTE_SAKIKO_MOD_CARD_BUY_PARFAIT.title": "买芭菲",
+  "CUTE_SAKIKO_MOD_CARD_BUY_PARFAIT.description": "花费{Gold:diff()}金币，购买1杯[green]抹茶芭菲[/green]。",
+  "CUTE_SAKIKO_MOD_CARD_EAT_PARFAIT.title": "大口朵颐",
+  "CUTE_SAKIKO_MOD_CARD_EAT_PARFAIT.description": "食用2杯[green]抹茶芭菲[/green]，回复{Heal:diff()}点生命。",
+  
+  
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "测试卡牌",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "测试卡牌。",
   "CUTE_SAKIKO_MOD_CARD_STRIKE_FAST.title": "琴奏：急",

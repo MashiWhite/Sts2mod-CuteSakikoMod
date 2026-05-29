@@ -1,5 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Relics;

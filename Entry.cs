@@ -4,8 +4,9 @@ using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
@@ -131,6 +132,15 @@ public class Entry
                 _ = RelicCmd.Obtain(eggs, player);
             }
         });
+        
+        // 注册抹茶芭菲右键交互（先古升级版自动继承，因为它在 MatchaParfait 类型层级中）
+        RitsuLibFramework.RegisterRightClick<MatchaParfait>(
+            modId: ModId,
+            localStem: "matcha_parfait_right_click",
+            canHandle: MatchaParfait.CanRightClick,
+            execute: MatchaParfait.OnRightClick,
+            priority: 0
+        );
     }
 
     private static void OnRunStarted(RunState state)

@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 
 public sealed class PostItNote : KabutoNote
 {

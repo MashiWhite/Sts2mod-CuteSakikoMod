@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Potions.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Potions.Saki.Common;
 
 public sealed class Cafe : CuteSakikoModPotion
 {

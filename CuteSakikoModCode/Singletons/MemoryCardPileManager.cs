@@ -1,7 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;

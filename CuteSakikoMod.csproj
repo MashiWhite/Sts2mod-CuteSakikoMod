@@ -99,6 +99,12 @@
     <ItemGroup>
         <Folder Include="CuteSakikoModCode\Cards\Mod\Curse\"/>
         <Folder Include="CuteSakikoModCode\Cards\Mod\Event\"/>
+        <Folder Include="CuteSakikoModCode\Cards\Rana\Ancient\" />
+        <Folder Include="CuteSakikoModCode\Cards\Rana\Common\" />
+        <Folder Include="CuteSakikoModCode\Cards\Rana\Rare\" />
+        <Folder Include="CuteSakikoModCode\Cards\Rana\Status\" />
+        <Folder Include="CuteSakikoModCode\Cards\Rana\Token\" />
+        <Folder Include="CuteSakikoModCode\Cards\Rana\Uncommon\" />
         <Folder Include="CuteSakikoModCode\Encounters\Monster\"/>
         <Folder Include="CuteSakikoModCode\Encounters\Elite\"/>
         <Folder Include="CuteSakikoModCode\Monsters\Normal\"/>

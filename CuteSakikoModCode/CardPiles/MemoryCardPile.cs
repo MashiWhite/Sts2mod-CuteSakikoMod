@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Cards;

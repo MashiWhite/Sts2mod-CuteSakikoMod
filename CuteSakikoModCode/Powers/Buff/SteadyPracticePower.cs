@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;

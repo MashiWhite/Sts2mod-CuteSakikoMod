@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://coomquisdon5q"]
 
-[ext_resource type="Texture2D" uid="uid://bdxlu6ahcconl" path="res://CuteSakikoMod/images/charui/anon/anon_bg.png" id="1_af4q3"]
+[ext_resource type="Texture2D" uid="uid://icq43i8df3tm" path="res://CuteSakikoMod/images/charui/anon/anon_bg.png" id="1_af4q3"]
 
-[node name="WatcherBg" type="Control"]
+[node name="AnonBg" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 4

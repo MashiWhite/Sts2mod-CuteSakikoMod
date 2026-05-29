@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://jrtxwrp2fxah"]
+
+[ext_resource type="Texture2D" uid="uid://b1w14speygj2t" path="res://CuteSakikoMod/images/charui/rana/rana_bg.png" id="1_0l8b6"]
+
+[node name="RanaBg" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 377.0
+offset_top = 102.0
+offset_right = 2378.7778
+offset_bottom = 1228.0
+texture = ExtResource("1_0l8b6")

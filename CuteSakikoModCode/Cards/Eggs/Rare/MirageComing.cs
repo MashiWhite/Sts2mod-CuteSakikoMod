@@ -9,8 +9,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
 public class MirageComing() : CuteSakikoModEggCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get

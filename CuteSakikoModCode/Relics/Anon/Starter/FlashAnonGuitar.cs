@@ -2,7 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Relics;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Basic;
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 
 public class FlashAnonGuitar : AnonGuitar
 {

@@ -38,5 +38,19 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.skill.3": "[pink]要讲究策略！[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.1": "[pink]这才是我的实力！[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.2": "[pink]我还能更强！[/pink]",
-  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.3": "[pink]看好了，这就是我的力量！[/pink]"
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.3": "[pink]看好了，这就是我的力量！[/pink]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.aromaPrinciple": "[sine][blue]...Desuwa!?[/sine][/blue]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.banter.alive.endTurnPing": "[green]抹茶芭菲[/green]....\n要融化了",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.banter.dead.endTurnPing": "[green]芭菲[/green]...",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.cardsModifierDescription": "乐奈卡牌现在会出现在奖励池和商店里。",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.cardsModifierTitle": "乐奈卡牌",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.description": "一个喜欢吃[green]抹茶芭菲[/green]的女初中生。\n像只自由的猫咪。",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.eventDeathPrevention": "那样就吃不了[green]抹茶芭菲[/green]了",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.goldMonologue": "可以用来买[green]抹茶芭菲[/green]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.possessiveAdjective": "她的",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounObject": "她",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounPossessive": "她的",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounSubject": "她",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "要乐奈",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.titleObject": "可爱乐奈"
 }
