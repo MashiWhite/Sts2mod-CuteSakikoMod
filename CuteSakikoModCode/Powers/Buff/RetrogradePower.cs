@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
+using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -7,6 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -100,21 +102,12 @@ public sealed class RetrogradePower : CuteSakikoModPower
         await ApplyMaxHpBoost();
     }
 
-    // ========== 复活逻辑 ==========
-    public override bool ShouldPowerBeRemovedAfterOwnerDeath()
-    {
-        return false;
-    }
+    // ========== 复活逻辑（修改后） ==========
+    public override bool ShouldPowerBeRemovedAfterOwnerDeath() => false;
 
-    public override bool ShouldCreatureBeRemovedFromCombatAfterDeath(Creature creature)
-    {
-        return creature != Owner;
-    }
+    public override bool ShouldCreatureBeRemovedFromCombatAfterDeath(Creature creature) => creature != Owner;
 
-    public override bool ShouldStopCombatFromEnding()
-    {
-        return true;
-    }
+    public override bool ShouldStopCombatFromEnding() => true;
 
     public override async Task AfterDeath(
         PlayerChoiceContext choiceContext,
@@ -124,6 +117,21 @@ public sealed class RetrogradePower : CuteSakikoModPower
     {
         if (wasRemovalPrevented || creature != Owner) return;
 
+        // ★ 关键修复：确保视觉节点存在（如果已被销毁则重新创建）
+        var combatRoom = NCombatRoom.Instance;
+        if (combatRoom != null)
+        {
+            var existingNode = combatRoom.GetCreatureNode(Owner);
+            if (existingNode == null)
+            {
+                // 节点已被删除，重新添加（会自动创建 NCreature 并放入正确容器）
+                combatRoom.AddCreature(Owner);
+                // 等待一帧让节点初始化完成（可选，确保后续动画正常）
+                await Task.Delay(50);
+            }
+        }
+
+        // 触发复活（此时视觉节点已保证存在）
         if (creature.Monster is StarAnon starAnon)
             await starAnon.TriggerDeadState();
     }

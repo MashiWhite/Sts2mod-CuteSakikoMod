@@ -1,5 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -14,7 +15,7 @@ public class EggCardGainedEventPatch
     public static class CardAddPatch
     {
         public static void Postfix(CardModel card, PileType newPileType, CardPilePosition position,
-            AbstractModel clonedBy, bool skipVisuals) // ← 这里改名为 clonedBy
+            AbstractModel clonedBy, bool skipVisuals)
         {
             if (newPileType == PileType.Deck && IsEggCard(card))
                 EggCardGainedEvent.Trigger(card);
@@ -22,8 +23,8 @@ public class EggCardGainedEventPatch
 
         private static bool IsEggCard(CardModel card)
         {
-            var eggPool = ModelDb.CardPool<CuteSakikoModCardPool>();
-            return eggPool.AllCardIds.Contains(card.Id);
+            // 判断卡牌是否继承自 CuteSakikoModEggCard
+            return card is CuteSakikoModEggCard;
         }
     }
 }

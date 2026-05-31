@@ -31,6 +31,7 @@ public sealed class ObCardPower : CuteSakikoModPower
     private readonly Dictionary<CardModel, int> _originalCosts = new();
     private bool _isRemoving;
     private Node2D? _obVisual;
+    private NCreatureVisuals? _originalVisual;      // 缓存原始视觉节点，避免索引查找
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -169,10 +170,10 @@ public sealed class ObCardPower : CuteSakikoModPower
         await PowerCmd.Remove(this);
     }
 
-    // ────────── 视觉替换方法 ──────────
+    // ────────── 视觉替换方法（修复版）──────────
     private async Task ReplaceVisual()
     {
-        // 1. 清理旧 Ob 节点（如果有）
+        // 清理旧的 Ob 节点
         if (_obVisual != null)
         {
             _obVisual.QueueFree();
@@ -182,22 +183,26 @@ public sealed class ObCardPower : CuteSakikoModPower
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode == null) return;
 
-        // 2. 隐藏原始模型
-        var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
-        if (originalVisual != null)
+        // 查找并缓存原始视觉节点（不依赖固定索引）
+        _originalVisual = creatureNode.FindChildOfType<NCreatureVisuals>();
+        if (_originalVisual != null)
         {
-            originalVisual.Visible = false;
-            originalVisual.Modulate = new Color(1, 1, 1, 0);
+            _originalVisual.Visible = false;
+            _originalVisual.Modulate = new Color(1, 1, 1, 0);
+        }
+        else
+        {
+            GD.PushError("ObCardPower: 未找到原始 NCreatureVisuals 节点");
         }
 
-        // 3. 加载 OB 场景并添加
+        // 加载 OB 场景并添加
         var scene = GD.Load<PackedScene>(ObScenePath);
         if (scene == null) return;
         _obVisual = scene.Instantiate<Node2D>();
-        _obVisual.Name = "ObVisual"; // 起个名字，方便识别
+        _obVisual.Name = "ObVisual";
         creatureNode.AddChild(_obVisual);
 
-        // 4. 获取 AnimationPlayer
+        // 获取 AnimationPlayer
         var animPlayer = _obVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
         if (animPlayer != null)
             ObAnimPlayers[Owner] = animPlayer;
@@ -219,18 +224,46 @@ public sealed class ObCardPower : CuteSakikoModPower
         // 清理映射
         ObAnimPlayers.Remove(Owner);
 
-        // 恢复原始模型
-        var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
-        if (creatureNode != null)
+        // 恢复原始模型（优先使用缓存的引用）
+        if (_originalVisual != null && IsInstanceValid(_originalVisual))
         {
-            var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
-            if (originalVisual != null)
+            _originalVisual.Visible = true;
+            _originalVisual.Modulate = new Color(1, 1, 1);
+        }
+        else
+        {
+            // 降级方案：重新从 creatureNode 查找
+            var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
+            if (creatureNode != null)
             {
-                originalVisual.Visible = true;
-                originalVisual.Modulate = new Color(1, 1, 1);
+                var visual = creatureNode.FindChildOfType<NCreatureVisuals>();
+                if (visual != null)
+                {
+                    visual.Visible = true;
+                    visual.Modulate = new Color(1, 1, 1);
+                }
             }
         }
 
+        _originalVisual = null;
         await Task.CompletedTask;
+    }
+
+    // 辅助方法：检查节点是否有效（未被销毁且仍在场景树中）
+    private static bool IsInstanceValid(Node node) => node != null && !node.IsQueuedForDeletion() && node.IsInsideTree();
+}
+
+// 扩展方法：按类型查找子节点（递归）
+public static class NodeExtensions
+{
+    public static T? FindChildOfType<T>(this Node parent) where T : class
+    {
+        foreach (var child in parent.GetChildren())
+        {
+            if (child is T t) return t;
+            var found = child.FindChildOfType<T>();
+            if (found != null) return found;
+        }
+        return null;
     }
 }

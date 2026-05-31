@@ -1,4 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
@@ -38,7 +40,6 @@ public sealed class Eggs : CuteSakiRelic
     {
         if (player != Owner) return;
 
-        // 若本局已选择过，不再弹出
         if (PlayerEggsSlot != null)
         {
             var data = PlayerEggsSlot.Get(player);
@@ -46,7 +47,7 @@ public sealed class Eggs : CuteSakiRelic
         }
 
         await Cmd.Wait(0.1f);
-        await GiveEggCardChoice(choiceContext, player); // 传入上下文
+        await GiveEggCardChoice(choiceContext, player);
     }
 
     public override async Task AfterRemoved()
@@ -63,18 +64,17 @@ public sealed class Eggs : CuteSakiRelic
 
     private async Task GiveEggCardChoice(PlayerChoiceContext choiceContext, Player player)
     {
-        var allEggCards = ModelDb.CardPool<CuteSakikoModCardPool>()
-            .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
+        // 获取所有继承自 CuteSakikoModEggCard 的卡牌
+        var allEggCards = ModelDb.AllCards
+            .Where(c => typeof(CuteSakikoModEggCard).IsAssignableFrom(c.GetType()))
             .ToList();
 
         if (allEggCards.Count == 0) return;
 
-        // 首次选择展示所有彩蛋卡，不使用 _gainedEggCards 过滤
         var tempCards = allEggCards.Select(can => player.RunState.CreateCard(can, player)).ToList();
         var prompt = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_EGGS.selectPrompt");
         var prefs = new CardSelectorPrefs(prompt, 1);
 
-        // 关键修改：使用传入的 choiceContext（非阻塞），而不是 new BlockingPlayerChoiceContext
         var selectedCards = await CardSelectCmd.FromSimpleGrid(choiceContext, tempCards, player, prefs);
         var selectedCard = selectedCards.FirstOrDefault();
         if (selectedCard == null) return;
@@ -93,7 +93,6 @@ public sealed class Eggs : CuteSakiRelic
             await CardPileCmd.AddGeneratedCardToCombat(tempCard, PileType.Hand, player);
         }
 
-        // 标记本局已选择过
         PlayerEggsSlot?.Modify(player, data => data.HasSelected = true);
     }
 
@@ -102,15 +101,16 @@ public sealed class Eggs : CuteSakiRelic
         List<CardCreationResult> options,
         CardCreationOptions creationOptions)
     {
-        // ... 保持不变 ...
         if (Owner != player) return false;
         if (player.RunState.CurrentRoom is not CombatRoom combatRoom || combatRoom.RoomType != RoomType.Boss)
             return false;
         if (creationOptions.Source != CardCreationSource.Encounter) return false;
 
-        var allEggCards = ModelDb.CardPool<CuteSakikoModCardPool>()
-            .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
+        // 获取所有继承自 CuteSakikoModEggCard 且尚未获得的卡牌
+        var allEggCards = ModelDb.AllCards
+            .Where(c => typeof(CuteSakikoModEggCard).IsAssignableFrom(c.GetType()))
             .ToList();
+
         var available = allEggCards.Where(c => !_gainedEggCards.Contains(c.Id)).ToList();
         if (available.Count == 0) return false;
 

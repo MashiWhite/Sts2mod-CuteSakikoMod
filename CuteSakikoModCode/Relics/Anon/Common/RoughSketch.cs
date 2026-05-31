@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Keywords;
+
 // 提供 ModelDb.AllCards
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Common;

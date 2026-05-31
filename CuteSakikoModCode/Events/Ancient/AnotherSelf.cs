@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Event.AnotherSelf;
+using Godot;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Runs;
@@ -27,8 +28,8 @@ public class AnotherSelf : ModAncientEventTemplate
     // 定义三个池子
     private IReadOnlyList<EventOption> Pool1 => new[]
     {
-        CreateModRelicOption<SandCastle>(),
-        CreateModRelicOption<Anchor>()
+        CreateModRelicOption<AvemujicaSakiko>(),
+        CreateModRelicOption<CrychicSakiko>()
     };
 
     private IReadOnlyList<EventOption> Pool2 => new[]
@@ -58,10 +59,14 @@ public class AnotherSelf : ModAncientEventTemplate
         };
     }
 
-    // 出现条件：第二幕或第三幕（索引1和2）
+    // 出现条件：第二幕（索引1）
     public override bool IsAllowed(IRunState runState)
     {
-        var actIndex = runState.CurrentActIndex; // 0-based
-        return actIndex == 1 || actIndex == 2;
+        // 图鉴中 runState 为 null，直接允许显示
+        if (runState == null)
+            return true;
+
+        // 正常游戏中，只在第二幕出现
+        return runState.CurrentActIndex == 1;
     }
 }

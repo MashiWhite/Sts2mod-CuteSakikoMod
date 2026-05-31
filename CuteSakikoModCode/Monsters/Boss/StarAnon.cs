@@ -27,6 +27,8 @@ public class StarAnon : ModMonsterTemplate
     private MoveState _deadState;
     private string _lastMoveName = "";
 
+    public override bool ShouldDisappearFromDoom => Creature?.GetPower<RetrogradePower>() == null;
+    
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 540, 520);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 650, 620);
 

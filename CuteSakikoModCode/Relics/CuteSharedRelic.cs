@@ -5,8 +5,8 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics;
 
-[RegisterRelic(typeof(EventRelicPool), Inherit = true)]
-public abstract class CuteSakikoModRelic : ModRelicTemplate
+[RegisterRelic(typeof(SharedRelicPool), Inherit = true)]
+public abstract class CuteSharedRelic : ModRelicTemplate
 {
     public override RelicAssetProfile AssetProfile => this.RelicAssetProfile();
 }

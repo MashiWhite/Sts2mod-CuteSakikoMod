@@ -1,25 +1,28 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
+﻿
+using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Rooms;
-using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.RunData;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 
-[RegisterCharacterStarterRelic(typeof(CuteRana),Order = 0)]
+[RegisterCharacterStarterRelic(typeof(CuteRana), Order = 0)]
 [RegisterTouchOfOrobasRefinement(typeof(BigMatchaParfait))]
 public class MatchaParfait : CuteRanaRelic
 {
-    // -------- 可扩展属性（供其他卡牌/遗物修改）--------
+    private static PlayerRunSavedData<PlayerParfaitData> ParfaitChargesSlot => Entry.ParfaitChargesSlot;
+
     private int _drawAmount = 1;
     private int _energyGain = 1;
 
@@ -43,18 +46,27 @@ public class MatchaParfait : CuteRanaRelic
         }
     }
 
-    // -------- 核心计数器（自动存档，手动属性以刷新UI）--------
-    private int _charges = 6;
-
-    [SavedProperty]
     public int Charges
     {
-        get => _charges;
+        get
+        {
+            if (Owner?.RunState == null) return 6;
+            var data = ParfaitChargesSlot.Get(Owner);
+            return data?.Charges ?? 6;
+        }
         set
         {
-            if (_charges == value) return;
-            _charges = value;
-            InvokeDisplayAmountChanged(); // 刷新遗物图标上的计数器
+            if (Owner?.RunState == null) return;
+            // 使用 Modify 方法安全地修改数据
+            ParfaitChargesSlot.Modify(Owner, data =>
+            {
+                if (data.Charges != value)
+                {
+                    data.Charges = value;
+                    // 注意：Modify 内部会自动标记为脏并保存，但 UI 刷新需要手动调用
+                    InvokeDisplayAmountChanged();
+                }
+            });
         }
     }
 
@@ -62,14 +74,13 @@ public class MatchaParfait : CuteRanaRelic
     public override bool ShowCounter => true;
     public override int DisplayAmount => Charges;
 
-    // 动态变量：使用默认名称 "Cards" 和 "Energy"
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
         new CardsVar(DrawAmount),
-        new EnergyVar(EnergyGain),
+        new EnergyVar(EnergyGain)
     };
 
-    // ========== 右键处理 ==========
+    // 右键交互（保持不变）
     public static bool CanRightClick(ModRightClickContext ctx)
     {
         var relic = ctx.Model as MatchaParfait;
@@ -93,24 +104,31 @@ public class MatchaParfait : CuteRanaRelic
         await hookCtx.AssignTaskAndWaitForPauseOrCompletion(effectTask);
     }
 
-    private static async Task PerformRightClickEffect(PlayerChoiceContext choiceContext, MatchaParfait relic, Player player)
+    private static async Task PerformRightClickEffect(PlayerChoiceContext choiceContext, MatchaParfait relic,
+        Player player)
     {
         await CardPileCmd.Draw(choiceContext, relic.DrawAmount, player);
         await PlayerCmd.GainEnergy(relic.EnergyGain, player);
-        relic.Charges--; // 通过属性 setter 触发 InvokeDisplayAmountChanged
+        relic.Charges--;
         if (relic.Charges <= 0) relic.Charges = 0;
     }
 
-    // ========== 休息处恢复计数 ==========
+    // 休息处恢复计数
     public override Task AfterRoomEntered(AbstractRoom room)
     {
-        if (room is RestSiteRoom) Charges += 5; // 属性赋值，自动刷新UI
+        if (room is RestSiteRoom) Charges += 5;
         return Task.CompletedTask;
     }
 
-    // ========== 扩展接口 ==========
-    public static void AddCharges(MatchaParfait relic, int amount) { if (relic != null) relic.Charges += amount; }
-    public static void RemoveCharges(MatchaParfait relic, int amount) { if (relic != null) relic.Charges = Math.Max(0, relic.Charges - amount); }
-    public static void SetDrawAmount(MatchaParfait relic, int amount) { if (relic != null) relic.DrawAmount = amount; }
-    public static void SetEnergyGain(MatchaParfait relic, int amount) { if (relic != null) relic.EnergyGain = amount; }
+    // 扩展接口
+    public static void AddCharges(MatchaParfait relic, int amount) => relic.Charges += amount;
+    public static void RemoveCharges(MatchaParfait relic, int amount)
+    {
+        if (relic == null) return;
+        if (relic.Owner.Creature.HasPower<ParfaitTreatPower>())
+            return;
+        relic.Charges = Math.Max(0, relic.Charges - amount);
+    }
+    public static void SetDrawAmount(MatchaParfait relic, int amount) => relic.DrawAmount = amount;
+    public static void SetEnergyGain(MatchaParfait relic, int amount) => relic.EnergyGain = amount;
 }

@@ -16,7 +16,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 
-public class TimeWatch : CuteSakikoModRelic
+public class TimeWatch : CuteSakikoEventRelic
 {
     private bool _flybackAdded;
 

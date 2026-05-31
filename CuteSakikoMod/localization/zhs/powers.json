@@ -1,4 +1,8 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_TREAT_POWER.title": "有人请客",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_TREAT_POWER.description": "本场战斗中，用卡牌食用[green]抹茶芭菲[/green]不再减少存量。",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_TREAT_POWER.smartDescription": "本场战斗中，用卡牌食用[green]抹茶芭菲[/green]不再减少存量。",
+  
   "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.title": "压力",
   "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.description": "每层[gold]压力[/gold]使受到的伤害增加1%。\n层数到达当前生命值时，清除所有[gold]压力[/gold]，给予一层[gold]崩溃[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.smartDescription": "使受到的伤害增加{Amount}%。\n层数到达当前生命值时，清除所有[gold]压力[/gold]，给予一层[gold]崩溃[/gold]。",
@@ -62,6 +66,9 @@
   "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_DOWN_POWER.description": "本回合减少力量。",
   "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_DOWN_POWER.title": "和弦之力",
   "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_DOWN_POWER.smartDescription": "本回合减少{Amount}点力量。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TEMP_STRENGTH_DOWN_POWER.description": "本回合减少力量。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TEMP_STRENGTH_DOWN_POWER.title": "猫咪之力",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TEMP_STRENGTH_DOWN_POWER.smartDescription": "本回合减少{Amount}点力量。",
   "CUTE_SAKIKO_MOD_POWER_UNFORGETTABLE_PERFORMANCE_POWER.title": "难忘的演奏",
   "CUTE_SAKIKO_MOD_POWER_UNFORGETTABLE_PERFORMANCE_POWER.description": "每演奏一定数量的[pink]和弦[/pink]后获得能量。",
   "CUTE_SAKIKO_MOD_POWER_UNFORGETTABLE_PERFORMANCE_POWER.smartDescription": "获得{Amount}点能量。\n进度：{Count}/{Threshold}",

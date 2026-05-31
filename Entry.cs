@@ -34,6 +34,9 @@ public class Entry
     public const string ModId = "CuteSakikoMod";
     public static readonly Logger Logger = RitsuLibFramework.CreateLogger(ModId);
 
+    // 芭菲充能数据槽位（静态字段供其他类访问）
+    public static PlayerRunSavedData<PlayerParfaitData> ParfaitChargesSlot = null!;
+
     public static void Init()
     {
         var assembly = Assembly.GetExecutingAssembly();
@@ -69,7 +72,7 @@ public class Entry
         var harmony = new Harmony("White.CuteSakikoMod");
         harmony.PatchAll();
 
-        // ★ 5. 提前注册自定义牌堆（必须在牌堆注册表冻结前完成）
+        // 5. 提前注册自定义牌堆
         MemoryCardPile.Register(ModId);
         ForgetCardPile.Register(ModId);
 
@@ -85,6 +88,16 @@ public class Entry
             options: new RunSavedDataOptions
                 { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
 
+        // ★ 注册芭菲充能数据槽位
+        ParfaitChargesSlot = runDataStore.RegisterPerPlayer(
+            "ParfaitCharges",
+            defaultFactory: () => new PlayerParfaitData(),
+            options: new RunSavedDataOptions
+            {
+                WritePolicy = RunSavedDataWritePolicy.WhenSet,
+                SyncLobbyOnChange = true
+            });
+
         Log.Debug("Mod initialized!");
 
         // 7. 事件订阅
@@ -96,7 +109,9 @@ public class Entry
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(TimeWatch));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
         SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
-
+        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(MatchaParfait));
+        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(BigMatchaParfait));
+        
         // 8. 预加载 VFX
         VFXUtil.PreloadScenes(new List<string> { "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
 
@@ -133,7 +148,7 @@ public class Entry
             }
         });
         
-        // 注册抹茶芭菲右键交互（先古升级版自动继承，因为它在 MatchaParfait 类型层级中）
+        // 注册抹茶芭菲右键交互
         RitsuLibFramework.RegisterRightClick<MatchaParfait>(
             modId: ModId,
             localStem: "matcha_parfait_right_click",
@@ -166,7 +181,7 @@ public class Entry
     }
 }
 
-// 配置数据类保持不变
+// 配置数据类
 public class CuteSakikoModConfigData
 {
     public bool 彩蛋卡 { get; set; }
