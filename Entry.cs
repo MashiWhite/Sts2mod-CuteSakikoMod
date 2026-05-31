@@ -20,6 +20,7 @@ using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib;
 using STS2RitsuLib.Content;
+using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.RunData;
 using STS2RitsuLib.Settings;
@@ -126,6 +127,23 @@ public class Entry
                 if (netService is NetHostGameService hostService)
                     hostService.ClientConnected += peerId => { FlybackManager.SyncReloadCountIfHost(); };
             }
+            
+            //芭菲右键
+            netService.RegisterMessageHandler(new MessageHandlerDelegate<ParfaitRightClickNetMessage>(
+                (msg, senderId) =>
+                {
+                    var player = RunManager.Instance.DebugOnlyGetState()
+                        ?.Players.FirstOrDefault(p => p.NetId == msg.PlayerNetId);
+                    var relic = player?.Relics.OfType<MatchaParfait>().FirstOrDefault();
+                    if (relic != null)
+                    {
+                        relic.ExecuteRightClickAsync(player).ContinueWith(t =>
+                        {
+                            if (t.IsFaulted)
+                                Entry.Logger.Error($"[芭菲] 同步消息异常: {t.Exception}");
+                        });
+                    }
+                }));
         };
 
         ModContentRegistry.For(ModId)
@@ -148,14 +166,8 @@ public class Entry
             }
         });
         
-        // 注册抹茶芭菲右键交互
-        RitsuLibFramework.RegisterRightClick<MatchaParfait>(
-            modId: ModId,
-            localStem: "matcha_parfait_right_click",
-            canHandle: MatchaParfait.CanRightClick,
-            execute: MatchaParfait.OnRightClick,
-            priority: 0
-        );
+        // 注册全局 handler，用于修复读档后模型身份
+        ModRightClickRegistry.Register(new ParfaitRightClickHandler());
     }
 
     private static void OnRunStarted(RunState state)
