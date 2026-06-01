@@ -101,7 +101,10 @@ public class Entry
         var runDataStore = RunSavedDataStore.For(ModId);
         FlybackManager.RunDataSlot = runDataStore.Register<RunFlybackData>("FlybackRunData",
             options: new RunSavedDataOptions
-                { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = false });
+            {
+                WritePolicy = RunSavedDataWritePolicy.WhenSet,  // 只要修改就保存
+                SyncLobbyOnChange = false  // 大厅阶段不需要同步
+            });
         FlybackManager.PlayerDataSlot = runDataStore.RegisterPerPlayer<PlayerFlybackData>("FlybackPlayerData",
             options: new RunSavedDataOptions
                 { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
@@ -172,8 +175,10 @@ public class Entry
 
     private static void OnRunStarted(RunState state)
     {
-        if (!ModConfig.彩蛋卡) return;
+        // 不再需要手动重置，因为 ReloadCount 已经保存在 RunFlybackData 中
+        // 新游戏会自动创建新实例，计数从0开始
 
+        if (!ModConfig.彩蛋卡) return;
         var me = LocalContext.GetMe(state);
         if (me == null) return;
         if (me.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id)) return;

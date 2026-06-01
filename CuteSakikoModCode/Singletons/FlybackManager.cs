@@ -7,21 +7,19 @@ using MegaCrit.Sts2.Core.Multiplayer;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Models;
 using STS2RitsuLib.RunData;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 
 [RegisterSingleton]
-public class FlybackManager : SingletonModel
+public class FlybackManager : HookedSingletonModel
 {
-    // ---------- ReloadCount 字段 ----------
-    private static int _extraReloadNum;
-    private static int _baseReloadCount;
-    private static int _lastBroadcastedBaseReload = -1;
+    public FlybackManager() : base(HookType.None) { }
+
+    // ---------- 数据槽位 ----------
     public static PlayerRunSavedData<PlayerFlybackData>? PlayerDataSlot { get; set; }
     public static RunSavedData<RunFlybackData>? RunDataSlot { get; set; }
-    public override bool ShouldReceiveCombatHooks => false;
-    public static FlybackManager Instance => ModelDb.Singleton<FlybackManager>();
 
     private static bool IsHostOrSingle =>
         RunManager.Instance.NetService?.Type == NetGameType.Host ||
@@ -30,32 +28,31 @@ public class FlybackManager : SingletonModel
     private static bool IsClient =>
         RunManager.Instance.NetService?.Type == NetGameType.Client;
 
-    // ---------- TotalPlayCount：实时从所有玩家数据计算 ----------
-    public int TotalPlayCount
+    public static FlybackManager Instance => ModelDb.Singleton<FlybackManager>();
+
+    // ---------- 获取当前 RunState ----------
+    private static RunState? GetCurrentRunState()
     {
-        get
-        {
-            var runState = RunManager.Instance?.DebugOnlyGetState();
-            if (runState == null || PlayerDataSlot == null) return 0;
-            var total = 0;
-            foreach (var player in runState.Players)
-                total += PlayerDataSlot.Get(runState, player.NetId).PlayCount;
-            return total;
-        }
+        return RunManager.Instance?.DebugOnlyGetState();
     }
 
-    public event Action<int, int>? OnFlybackDataChanged;
-
-    // ---------- ReloadCount ----------
+    // ---------- ReloadCount 操作（存储到 RunSavedData）----------
     public static int GetReloadCount()
     {
-        var baseCount = IsHostOrSingle ? GetRawNumReloads() : _baseReloadCount;
-        return baseCount + _extraReloadNum;
+        var runState = GetCurrentRunState();
+        if (runState == null || RunDataSlot == null) return 0;
+
+        var data = RunDataSlot.Get(runState);
+        var baseCount = IsHostOrSingle ? GetRawNumReloads() : data.BaseReloadCount;
+        return baseCount + data.ExtraReloadNum;
     }
 
     public static void IncrementReloadCount()
     {
-        Interlocked.Increment(ref _extraReloadNum);
+        var runState = GetCurrentRunState();
+        if (runState == null || RunDataSlot == null) return;
+
+        RunDataSlot.Modify(runState, data => data.ExtraReloadNum++);
         Instance.NotifyDataChanged();
     }
 
@@ -63,8 +60,13 @@ public class FlybackManager : SingletonModel
     {
         if (!IsHostOrSingle || RunManager.Instance == null || !RunManager.Instance.IsInProgress) return;
         var raw = GetRawNumReloads();
-        if (raw == _lastBroadcastedBaseReload) return;
-        _lastBroadcastedBaseReload = raw;
+        var runState = GetCurrentRunState();
+        if (runState == null || RunDataSlot == null) return;
+
+        var currentBase = RunDataSlot.Get(runState).BaseReloadCount;
+        if (raw == currentBase) return;
+
+        RunDataSlot.Modify(runState, data => data.BaseReloadCount = raw);
         if (RunManager.Instance.NetService is NetHostGameService hostService)
             hostService.SendMessage(new ReloadCountSyncMessage { ReloadCount = raw });
         Instance.NotifyDataChanged();
@@ -73,11 +75,14 @@ public class FlybackManager : SingletonModel
     public static void OnReloadCountReceived(int baseCount)
     {
         if (!IsClient) return;
-        _baseReloadCount = baseCount;
+        var runState = GetCurrentRunState();
+        if (runState == null || RunDataSlot == null) return;
+
+        RunDataSlot.Modify(runState, data => data.BaseReloadCount = baseCount);
         Instance.NotifyDataChanged();
     }
 
-    // ---------- PlayCount 修改（完全本地，不再网络广播）----------
+    // ---------- PlayCount 操作 ----------
     public void IncrementPlayCountForPlayer(Player player)
     {
         if (player == null || PlayerDataSlot == null) return;
@@ -92,12 +97,25 @@ public class FlybackManager : SingletonModel
 
     public static void DoubleAllPlayerCounts()
     {
-        var runState = RunManager.Instance.DebugOnlyGetState();
+        var runState = GetCurrentRunState();
         if (runState == null || PlayerDataSlot == null) return;
         foreach (var player in runState.Players)
             PlayerDataSlot.Modify(player, data => data.PlayCount *= 2);
-
         Instance.NotifyDataChanged();
+    }
+
+    // ---------- TotalPlayCount ----------
+    public int TotalPlayCount
+    {
+        get
+        {
+            var runState = GetCurrentRunState();
+            if (runState == null || PlayerDataSlot == null) return 0;
+            var total = 0;
+            foreach (var player in runState.Players)
+                total += PlayerDataSlot.Get(runState, player.NetId).PlayCount;
+            return total;
+        }
     }
 
     // ---------- 内部工具 ----------
@@ -112,4 +130,6 @@ public class FlybackManager : SingletonModel
     {
         OnFlybackDataChanged?.Invoke(TotalPlayCount, GetReloadCount());
     }
+
+    public event Action<int, int>? OnFlybackDataChanged;
 }
