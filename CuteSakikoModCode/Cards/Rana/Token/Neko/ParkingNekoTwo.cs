@@ -14,6 +14,8 @@ public class ParkingNekoTwo : NekoCard
     {
     }
 
+    public override bool GainsBlock => true;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
         new BlockVar(2m, ValueProp.Move)

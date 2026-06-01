@@ -21,6 +21,5 @@ public class ParfaitTreat() : CuteRanaCard(2, CardType.Power, CardRarity.Ancient
     protected override void OnUpgrade()
     {
         AddKeyword(CardKeyword.Innate);
-        EnergyCost.UpgradeBy(-1); // 2费 → 1费
     }
 }

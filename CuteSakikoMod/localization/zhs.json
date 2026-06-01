@@ -1,0 +1,9 @@
+﻿{
+  "MOD_SETTINGS.DISPLAY_NAME": "可爱小祥模组",
+  "MOD_SETTINGS.TITLE": "可爱小祥模组设置",
+  "MOD_SETTINGS.SECTION.GENERAL": "通用",
+  "MOD_SETTINGS.EGG_TOGGLE.LABEL": "彩蛋卡",
+  "MOD_SETTINGS.EGG_TOGGLE.DESC": "启用后游戏开始时自动获得彩蛋遗物",
+  "MOD_SETTINGS.MONSTER_TOGGLE.LABEL": "启用Mod怪物",
+  "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "开启后，Mod的自定义怪物和遭遇会在游戏中自然生成"
+}

@@ -24,6 +24,7 @@ using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.RunData;
 using STS2RitsuLib.Settings;
+using STS2RitsuLib.Utils;
 using STS2RitsuLib.Utils.Persistence;
 using Logger = MegaCrit.Sts2.Core.Logging.Logger;
 
@@ -35,8 +36,15 @@ public class Entry
     public const string ModId = "CuteSakikoMod";
     public static readonly Logger Logger = RitsuLibFramework.CreateLogger(ModId);
 
-    // 芭菲充能数据槽位（静态字段供其他类访问）
+    // 芭菲充能数据槽位
     public static PlayerRunSavedData<PlayerParfaitData> ParfaitChargesSlot = null!;
+
+    // I18N 多语言实例（从文件系统加载 localization 文件夹下的 JSON）
+    private static I18N? _i18n;
+    private static I18N I18n => _i18n ??= new I18N(
+        instanceName: ModId,
+        fsFolders: new[] { $"res://{ModId}/localization" }
+    );
 
     public static void Init()
     {
@@ -57,15 +65,27 @@ public class Entry
             model => model.彩蛋卡,
             (model, value) => model.彩蛋卡 = value
         );
+        var monsterBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+            ModId, "config",
+            model => model.EnableModMonsters,
+            (model, value) => model.EnableModMonsters = value
+        );
 
-        // 3. 注册设置界面
+        // 3. 注册设置界面（多语言支持）
+        var i18n = I18n;
         RitsuLibFramework.RegisterModSettings(ModId, page => page
-            .WithModDisplayName(ModSettingsText.Literal("Cute Sakiko Mod"))
-            .WithTitle(ModSettingsText.Literal("Cute Sakiko Mod 设置"))
+            .WithModDisplayName(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DISPLAY_NAME", "Cute Sakiko Mod"))
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.TITLE", "Cute Sakiko Mod Settings"))
             .AddSection("general", section => section
-                .WithTitle(ModSettingsText.Literal("通用"))
-                .AddToggle("egg_toggle", ModSettingsText.Literal("彩蛋卡"), eggBinding,
-                    ModSettingsText.Literal("启用后游戏开始时自动获得彩蛋遗物"))
+                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.GENERAL", "General"))
+                .AddToggle("egg_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.LABEL", "Egg Card"),
+                    eggBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.DESC", "Automatically obtain the Egg Relic at the start of the game"))
+                .AddToggle("monster_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.LABEL", "Enable Mod Monsters"),
+                    monsterBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.DESC", "If enabled, custom monsters and encounters from the mod will appear naturally"))
             )
         );
 
@@ -89,7 +109,7 @@ public class Entry
             options: new RunSavedDataOptions
                 { WritePolicy = RunSavedDataWritePolicy.WhenNonDefault, SyncLobbyOnChange = true });
 
-        // ★ 注册芭菲充能数据槽位
+        // 注册芭菲充能数据槽位
         ParfaitChargesSlot = runDataStore.RegisterPerPlayer(
             "ParfaitCharges",
             defaultFactory: () => new PlayerParfaitData(),
@@ -127,23 +147,6 @@ public class Entry
                 if (netService is NetHostGameService hostService)
                     hostService.ClientConnected += peerId => { FlybackManager.SyncReloadCountIfHost(); };
             }
-            
-            //芭菲右键
-            netService.RegisterMessageHandler(new MessageHandlerDelegate<ParfaitRightClickNetMessage>(
-                (msg, senderId) =>
-                {
-                    var player = RunManager.Instance.DebugOnlyGetState()
-                        ?.Players.FirstOrDefault(p => p.NetId == msg.PlayerNetId);
-                    var relic = player?.Relics.OfType<MatchaParfait>().FirstOrDefault();
-                    if (relic != null)
-                    {
-                        relic.ExecuteRightClickAsync(player).ContinueWith(t =>
-                        {
-                            if (t.IsFaulted)
-                                Entry.Logger.Error($"[芭菲] 同步消息异常: {t.Exception}");
-                        });
-                    }
-                }));
         };
 
         ModContentRegistry.For(ModId)
@@ -165,9 +168,6 @@ public class Entry
                 _ = RelicCmd.Obtain(eggs, player);
             }
         });
-        
-        // 注册全局 handler，用于修复读档后模型身份
-        ModRightClickRegistry.Register(new ParfaitRightClickHandler());
     }
 
     private static void OnRunStarted(RunState state)
@@ -193,20 +193,23 @@ public class Entry
     }
 }
 
-// 配置数据类
+// 配置数据类（会持久化到 config.json）
 public class CuteSakikoModConfigData
 {
     public bool 彩蛋卡 { get; set; }
+    public bool EnableModMonsters { get; set; } = true;
     public bool Config2 { get; set; } = false;
     public bool Config3 { get; set; } = false;
 }
 
+// 统一配置访问入口（确保只存在一处）
 public static class ModConfig
 {
     private static CuteSakikoModConfigData? _cached;
     private static readonly object _lock = new();
 
     public static bool 彩蛋卡 => Load().彩蛋卡;
+    public static bool EnableModMonsters => Load().EnableModMonsters;
     public static bool Config2 => Load().Config2;
     public static bool Config3 => Load().Config3;
 

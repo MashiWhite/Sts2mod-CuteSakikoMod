@@ -1,0 +1,9 @@
+﻿{
+  "MOD_SETTINGS.DISPLAY_NAME": "Cute Sakiko Mod",
+  "MOD_SETTINGS.TITLE": "Cute Sakiko Mod Settings",
+  "MOD_SETTINGS.SECTION.GENERAL": "General",
+  "MOD_SETTINGS.EGG_TOGGLE.LABEL": "Egg Card",
+  "MOD_SETTINGS.EGG_TOGGLE.DESC": "Automatically obtain the Egg Relic at the start of the game",
+  "MOD_SETTINGS.MONSTER_TOGGLE.LABEL": "Enable Mod Monsters",
+  "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "If enabled, custom monsters and encounters from the mod will appear naturally"
+}

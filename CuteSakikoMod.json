@@ -4,13 +4,13 @@
   "author": "MashiWhite",
   "description": "一个核心是可爱小祥的mod。",
   "version": "v0.3.8",
-  "min_game_version": "0.106.0",
+  "min_game_version": "0.106.1",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [
     {
       "id": "STS2-RitsuLib",
-      "min_version": "0.3.10"
+      "min_version": "0.4.2"
     }
   ],
   "affects_gameplay": true

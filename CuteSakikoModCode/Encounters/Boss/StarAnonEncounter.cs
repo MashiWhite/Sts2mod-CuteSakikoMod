@@ -9,11 +9,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 
 // 注册到第三幕 Glory（可根据需要改为其他 Act）
 [RegisterActEncounter(typeof(Glory))]
-public class StarAnonEncounter : ModEncounterTemplate
+public class StarAnonEncounter : CuteEncounters
 {
     // 可能出现的怪物列表（这里只有一个）
     public override IEnumerable<MonsterModel> AllPossibleMonsters => [ModelDb.Monster<StarAnon>()];
-
+    
     // 房间类型为 Boss
     public override RoomType RoomType => RoomType.Boss;
 

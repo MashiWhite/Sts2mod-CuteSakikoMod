@@ -1,6 +1,5 @@
-[gd_scene load_steps=11 format=3 uid="uid://25gh5j6hntv"]
+[gd_scene load_steps=10 format=3 uid="uid://25gh5j6hntv"]
 
-[ext_resource type="Texture2D" uid="uid://diylouv5hv6a2" path="res://CuteSakikoMod/images/char/anon/Anonnon.png" id="1_8ujcr"]
 [ext_resource type="Texture2D" uid="uid://8mv712p2btax" path="res://CuteSakikoMod/images/char/rana/rana.png" id="2_yskw7"]
 [ext_resource type="Texture2D" uid="uid://dmn83f731trws" path="res://CuteSakikoMod/images/char/rana/ranahurt.png" id="3_7t2as"]
 
@@ -16,7 +15,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_8ujcr")]
+"values": [ExtResource("2_yskw7")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -476,10 +475,10 @@ position = Vector2(185, -259)
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -97.0
+offset_left = -87.0
 offset_top = -315.0
-offset_right = 82.0
-offset_bottom = 2.0
+offset_right = 93.0
+offset_bottom = 1.0
 
 [node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -489,7 +488,7 @@ position = Vector2(0.7077637, -2.664978)
 
 [node name="Rana" type="Sprite2D" parent="Visuals/Node2D"]
 position = Vector2(8, -153)
-texture = ExtResource("1_8ujcr")
+texture = ExtResource("2_yskw7")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
 root_node = NodePath("../Rana")
@@ -497,7 +496,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_esqhf")
 }
 autoplay = "idle_loop"
-speed_scale = 4.8893538
+speed_scale = 2.0
 next/attack = &"idle_loop"
 next/cast = &"idle_loop"
 next/hurt = &"idle_loop"

@@ -12,13 +12,14 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Saves.Runs;
+using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 
 [RegisterCharacterStarterRelic(typeof(CuteRana), Order = 0)]
 [RegisterTouchOfOrobasRefinement(typeof(BigMatchaParfait))]
-public class MatchaParfait : CuteRanaRelic
+public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic
 {
     [SavedProperty]
     private int _charges { get; set; } = 6;
@@ -37,13 +38,25 @@ public class MatchaParfait : CuteRanaRelic
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { new CardsVar(DrawAmount), new EnergyVar(EnergyGain) };
 
-    public async Task ExecuteRightClickAsync(Player player)
+    // ========== 实现 IModRightClickableRelic 接口 ==========
+    public bool CanHandleRightClickLocal(ModRightClickContext context)
     {
+        // 战斗外不能使用
+        if (Owner?.Creature?.CombatState == null) return false;
+        // 必须在玩家回合
+        if (Owner.Creature.CombatState.CurrentSide != CombatSide.Player) return false;
+        // 必须有充能
+        return Charges > 0;
+    }
+
+    public async Task OnRightClick(ModRightClickExecutionContext context)
+    {
+        var player = context.Player;
         try
         {
             Entry.Logger.Info("[芭菲] 效果开始");
-            var ctx = new TrivialPlayerChoiceContext();
-            await CardPileCmd.Draw(ctx, DrawAmount, player);
+            // 使用框架传入的正确 PlayerChoiceContext
+            await CardPileCmd.Draw(context.PlayerChoiceContext, DrawAmount, player);
             Entry.Logger.Info("[芭菲] 抽牌完成");
             await PlayerCmd.GainEnergy(EnergyGain, player);
             Entry.Logger.Info("[芭菲] 加能量完成");
@@ -57,6 +70,7 @@ public class MatchaParfait : CuteRanaRelic
         }
     }
 
+    // ========== 原有其他方法 ==========
     public override Task AfterRoomEntered(AbstractRoom room)
     {
         if (room is RestSiteRoom) Charges += 5;
@@ -72,10 +86,4 @@ public class MatchaParfait : CuteRanaRelic
     }
     public static void SetDrawAmount(MatchaParfait relic, int amount) => relic.DrawAmount = amount;
     public static void SetEnergyGain(MatchaParfait relic, int amount) => relic.EnergyGain = amount;
-
-    private sealed class TrivialPlayerChoiceContext : PlayerChoiceContext
-    {
-        public override Task SignalPlayerChoiceBegun(PlayerChoiceOptions options) => Task.CompletedTask;
-        public override Task SignalPlayerChoiceEnded() => Task.CompletedTask;
-    }
 }
