@@ -477,7 +477,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_left = -102.0
 offset_top = -315.0
-offset_right = 118.0
+offset_right = 127.0
 
 [node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true

@@ -19,7 +19,7 @@ public class ByMyReign() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
         get
         {
             yield return HoverTipFactory.FromCard<KnightSword>();
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sword);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword.GetModCardKeyword());
         }
     }
 

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -36,6 +33,9 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic
     public override bool ShowCounter => true;
     public override int DisplayAmount => Charges;
 
+    // 在 MatchaParfait 类内部添加事件声明
+    public static event Action<Player, int, PlayerChoiceContext?>? OnChargesRemoved;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { new CardsVar(DrawAmount), new EnergyVar(EnergyGain) };
 
     // ========== 实现 IModRightClickableRelic 接口 ==========
@@ -78,12 +78,18 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic
     }
 
     public static void AddCharges(MatchaParfait relic, int amount) => relic.Charges += amount;
-    public static void RemoveCharges(MatchaParfait relic, int amount)
+    // 修改 RemoveCharges 方法，增加 choiceContext 参数
+    public static void RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null)
     {
         if (relic == null) return;
         if (relic.Owner.Creature.HasPower<ParfaitTreatPower>()) return;
+        int old = relic.Charges;
         relic.Charges = Math.Max(0, relic.Charges - amount);
+        int removed = old - relic.Charges;
+        if (removed > 0)
+            OnChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
     }
+
     public static void SetDrawAmount(MatchaParfait relic, int amount) => relic.DrawAmount = amount;
     public static void SetEnergyGain(MatchaParfait relic, int amount) => relic.EnergyGain = amount;
 }

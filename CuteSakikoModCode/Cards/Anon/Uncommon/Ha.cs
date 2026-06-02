@@ -1,7 +1,9 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -41,8 +43,8 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
         var monster = targetCreature.Monster;
         if (monster == null) return;
 
-        // ★ 保存怪物原本的意图ID
-        var originalMoveId = monster.NextMove.Id;
+        // 安全地获取怪物原本的意图 ID，跳过临时状态（如 STUNNED）
+        string? originalMoveId = MonsterMoveHelper.GetEffectiveFollowUpId(monster);
 
         var attackIntent = new SingleAttackIntent(15);
         var customMove = new MoveState(
@@ -56,7 +58,7 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
             attackIntent
         )
         {
-            // 执行完自定义动作后，回到怪物原本的下一步动作
+            // 若 originalMoveId 为 null，怪物会自动寻找下一个有效状态
             FollowUpStateId = originalMoveId
         };
 
@@ -69,4 +71,6 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
     {
         DynamicVars.Damage.UpgradeValueBy(5m);
     }
+
+  
 }

@@ -20,7 +20,7 @@ public class ThenGetSword() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Un
         get
         {
             yield return HoverTipFactory.FromCard<KnightSword>();
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sword);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword.GetModCardKeyword());
         }
     }
 

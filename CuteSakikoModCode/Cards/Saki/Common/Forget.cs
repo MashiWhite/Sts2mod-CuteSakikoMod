@@ -26,7 +26,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
     {
         get
         {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }

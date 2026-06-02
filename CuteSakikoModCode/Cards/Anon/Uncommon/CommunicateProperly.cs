@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -25,14 +26,13 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
         TriggerBanter();
 
         var targetCreature = cardPlay.Target;
-        if (targetCreature == null || !targetCreature.IsAlive || !targetCreature.IsMonster)
-            return;
+        if (targetCreature == null || !targetCreature.IsAlive || !targetCreature.IsMonster) return;
 
         var monster = targetCreature.Monster;
         if (monster == null) return;
 
-        // ★ 保存怪物原本的意图ID
-        var originalMoveId = monster.NextMove.Id;
+        // 获取怪物的真正后续动作，避免将 STUNNED 等临时状态作为 FollowUp
+        string? originalMoveId = MonsterMoveHelper.GetEffectiveFollowUpId(monster);
 
         var defendIntent = new DefendIntent();
         var customMove = new MoveState(
@@ -46,8 +46,7 @@ public class CommunicateProperly() : CuteAnonCard(2, CardType.Skill, CardRarity.
             defendIntent
         )
         {
-            // 执行完自定义动作后，回到怪物原本的下一步动作
-            FollowUpStateId = originalMoveId
+            FollowUpStateId = originalMoveId // 如果为 null，怪物会自行寻找下一个有效状态
         };
 
         if (targetCreature.IsAlive && targetCreature.Monster != null)

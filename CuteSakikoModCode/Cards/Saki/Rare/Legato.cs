@@ -14,7 +14,11 @@ public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, T
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Playpiano); }
+        get
+        {
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Playpiano.GetModCardKeyword());
+        }
+        
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars

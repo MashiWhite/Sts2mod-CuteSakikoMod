@@ -16,7 +16,7 @@ public class BeGod() : CuteSakikoModCard(3, CardType.Power, CardRarity.Rare, Tar
     {
         get
         {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }

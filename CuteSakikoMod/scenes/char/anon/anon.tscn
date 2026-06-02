@@ -475,10 +475,9 @@ position = Vector2(185, -259)
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -97.0
+offset_left = -82.0
 offset_top = -315.0
-offset_right = 82.0
-offset_bottom = 2.0
+offset_right = 97.0
 
 [node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true

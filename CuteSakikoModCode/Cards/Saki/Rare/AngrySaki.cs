@@ -29,11 +29,11 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
     {
         get
         {
-            // 存在任意可命中的敌人拥有至少 10 层压力时，卡牌高亮
+            // 存在任意可命中的敌人拥有至少 5 层压力时，卡牌高亮
             var combat = Owner?.Creature?.CombatState;
             if (combat == null) return false;
             return combat.HittableEnemies.Any(e =>
-                e.GetPower<PressurePower>() is PressurePower p && p.Amount >= 10);
+                e.GetPower<PressurePower>() is PressurePower p && p.Amount >= 5);
         }
     }
 
@@ -44,12 +44,12 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
         var damage = DynamicVars.Damage.BaseValue;
         var extraHits = 0;
 
-        // 检查目标身上的压力是否足够 10 层
+        // 检查目标身上的压力是否足够 5 层
         var targetPressure = cardPlay.Target.GetPower<PressurePower>();
-        if (targetPressure != null && targetPressure.Amount >= 10)
+        if (targetPressure != null && targetPressure.Amount >= 5)
         {
             extraHits = 1;
-            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -10, Owner.Creature, this);
+            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -5, Owner.Creature, this);
         }
 
         var totalHits = 1 + extraHits;

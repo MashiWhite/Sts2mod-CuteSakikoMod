@@ -62,10 +62,6 @@ public class AnotherSelf : ModAncientEventTemplate
     // 出现条件：第二幕（索引1）
     public override bool IsAllowed(IRunState runState)
     {
-        // 图鉴中 runState 为 null，直接允许显示
-        if (runState == null)
-            return true;
-
         // 正常游戏中，只在第二幕出现
         return runState.CurrentActIndex == 1;
     }

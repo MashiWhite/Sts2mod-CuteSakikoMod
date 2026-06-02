@@ -24,7 +24,7 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
     {
         get
         {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }

@@ -25,12 +25,12 @@ public class BearMemory : CuteSakikoModCard
     {
         get
         {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
             // 显示一个静态的重放图标（无需动态数字，数字已在描述中体现）
             yield return HoverTipFactory.Static(StaticHoverTip.ReplayStatic);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
         }
     }
 

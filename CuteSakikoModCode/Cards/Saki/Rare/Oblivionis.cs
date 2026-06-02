@@ -26,7 +26,7 @@ public class Oblivionis() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare
         get
         {
             yield return HoverTipFactory.FromPower<OblivionisPower>();
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }

@@ -13,7 +13,7 @@ public class PowerOfMemory() : CuteSakikoModCard(0, CardType.Attack, CardRarity.
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory); }
+        get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory.GetModCardKeyword()); }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars

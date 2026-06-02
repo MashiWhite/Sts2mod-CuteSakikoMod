@@ -1,6 +1,7 @@
 ﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 
@@ -17,6 +18,15 @@ public class InterestingWoman : CuteRanaCard
         new PowerVar<WeakPower>(1m),    // 虚弱层数
         new PowerVar<VulnerablePower>(1m) // 易伤层数
     };
+    
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromPower<WeakPower>();
+            yield return HoverTipFactory.FromPower<VulnerablePower>();
+        }
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

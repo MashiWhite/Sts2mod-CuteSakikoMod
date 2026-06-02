@@ -24,8 +24,8 @@ public class UnNeverMemory() : CuteSakikoModCard(0, CardType.Skill, CardRarity.U
     {
         get
         {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Memory);
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sakiforget);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }

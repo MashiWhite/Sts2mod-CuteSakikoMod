@@ -1,6 +1,4 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,12 +7,13 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-
-public class BuyParfait() : CuteRanaCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class PrayParfait : CuteRanaCard
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    public PrayParfait() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -24,24 +23,20 @@ public class BuyParfait() : CuteRanaCard(0, CardType.Skill, CardRarity.Common, T
         }
     }
     
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new GoldVar(10)
-    ];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("ParfaitCount",1)]; // 获得杯数，默认1
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int cost = DynamicVars.Gold.IntValue;
-        await PlayerCmd.LoseGold(cost, Owner);
-
+        int amount = DynamicVars["ParfaitCount"].IntValue; // 获得杯数
         var parfait = Owner.Relics.OfType<MatchaParfait>().FirstOrDefault();
         if (parfait != null)
-            MatchaParfait.AddCharges(parfait, 1);
+            MatchaParfait.AddCharges(parfait, amount);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Gold.UpgradeValueBy(-5m);  // 10 -> 5
-        RemoveKeyword(CardKeyword.Exhaust);
+        DynamicVars["ParfaitCount"].UpgradeValueBy(1); // 从1变为2
     }
 }

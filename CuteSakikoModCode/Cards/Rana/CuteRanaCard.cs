@@ -23,11 +23,15 @@ public abstract class CuteRanaCard(int cost, CardType type, CardRarity rarity, T
                 var parfait = Owner?.Relics.OfType<MatchaParfait>().FirstOrDefault();
                 if (parfait != null)
                 {
-                    // 如果有"有人请客"能力，无条件允许打出
+                    // 如果有人请客，无条件可打出
                     if (Owner.Creature.HasPower<ParfaitTreatPower>())
                         return true;
 
-                    // 否则检查计数是否足够
+                    // 特殊处理：消耗所有杯数（ConsumeAll = true）
+                    if (eater.ConsumeAll)
+                        return parfait.Charges > 0;
+
+                    // 否则检查杯数是否足够
                     if (parfait.Charges < eater.GetParfaitConsumeCount())
                         return false;
                 }
@@ -38,6 +42,14 @@ public abstract class CuteRanaCard(int cost, CardType type, CardRarity rarity, T
 
     public interface IEatParfaitCard
     {
+        /// <summary>
+        /// 需要消耗的芭菲杯数（仅在 ConsumeAll = false 时有效）
+        /// </summary>
         int GetParfaitConsumeCount();
+
+        /// <summary>
+        /// 是否消耗所有杯数（优先级高于 GetParfaitConsumeCount）
+        /// </summary>
+        bool ConsumeAll => false; // 默认 false，只有消耗所有的卡牌才需要重写为 true
     }
 }

@@ -94,7 +94,7 @@ public sealed class RetrogradePower : CuteSakikoModPower
     {
         var playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
         var reloads = FlybackManager.GetReloadCount();
-        return (int)(playCount / 50f * reloads);
+        return (int)(playCount * (float)reloads / 5);  // 整数除法，向下取整
     }
 
     public async Task RefreshHpBoost()

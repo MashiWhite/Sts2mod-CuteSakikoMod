@@ -24,7 +24,7 @@ public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
     {
         get
         {
-            yield return ModKeywordRegistry.CreateHoverTip(CutesakiKeywords.Sword);
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword.GetModCardKeyword());
             yield return HoverTipFactory.FromCard<KnightSword>(IsUpgraded);
             yield return HoverTipFactory.FromPower<BreakDownPower>();
             yield return HoverTipFactory.FromPower<PressurePower>();

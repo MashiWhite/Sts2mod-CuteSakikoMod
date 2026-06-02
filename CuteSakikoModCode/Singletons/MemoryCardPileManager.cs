@@ -21,7 +21,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 [RegisterSingleton]
 public sealed class MemoryCardPileManager : HookedSingletonModel
 {
-    private static readonly CardKeyword MemoryKeyword = ModKeywordRegistry.GetCardKeyword(CutesakiKeywords.Memory);
+    private static readonly CardKeyword MemoryKeyword = CutesakiKeywords.Memory.GetModCardKeyword();
 
     public MemoryCardPileManager() : base(true, false)
     {
