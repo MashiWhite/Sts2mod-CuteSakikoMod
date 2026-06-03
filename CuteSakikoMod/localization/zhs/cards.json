@@ -55,8 +55,10 @@
   "CUTE_SAKIKO_MOD_CARD_WAIT_IT_COOL.description": "获得{Energy:energyIcons()}，抽{Cards:diff()}张牌。\n每保留在手牌一次就减少1点花费。",
   "CUTE_SAKIKO_MOD_CARD_OSOBA.title": "荞麦面",
   "CUTE_SAKIKO_MOD_CARD_OSOBA.description": "获得{Energy:energyIcons()}。",
-  
-  
+  "CUTE_SAKIKO_MOD_CARD_BRAIN_FREEZE.title": "吃到头疼",
+  "CUTE_SAKIKO_MOD_CARD_BRAIN_FREEZE.description": "抽到时对自己造成{Damage:diff()}点伤害。\n同一回合吃[blue]4[/blue]杯[green]抹茶芭菲[/green]将其加入[gold]抽牌堆[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_MANY_CATS.title": "好多猫咪",
+  "CUTE_SAKIKO_MOD_CARD_MANY_CATS.description": "在抽牌堆、手牌和弃牌堆各添加1张[green]猫咪{IfUpgraded:show:+|}[/green]。",
   
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "测试卡牌",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "测试卡牌。",
@@ -363,7 +365,7 @@
   "CUTE_SAKIKO_MOD_CARD_OBSESSION.title": "偏执",
   "CUTE_SAKIKO_MOD_CARD_OBSESSION.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n使全体敌人获得{PressurePower:diff()}层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_STRIKE_HEART.title": "直击内心",
-  "CUTE_SAKIKO_MOD_CARD_STRIKE_HEART.description": "使目标获得等同于其[gold]压力[/gold]层数的[gold]破防[/gold]。\n造成{IfUpgraded:show:10|6}次{Damage:diff()}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_STRIKE_HEART.description": "使目标获得等同于其[gold]压力[/gold]层数的[gold]破防[/gold]。\n造成{Repeat:diff()}次{Damage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_BANSOGO_MEMORY.title": "创可贴的关心",
   "CUTE_SAKIKO_MOD_CARD_BANSOGO_MEMORY.description": "获得{Energy:energyIcons()}。",
   "CUTE_SAKIKO_MOD_CARD_WORK.title": "客服工作",

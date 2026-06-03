@@ -4,6 +4,7 @@ using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Token.Neko;
@@ -12,6 +13,14 @@ public class ParkingNekoFour : NekoCard
 {
     public ParkingNekoFour() : base(0, CardType.Skill, CardRarity.Token, TargetType.AnyEnemy)
     {
+    }
+    
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromPower<NekoTempStrengthDownPower>();
+        }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]

@@ -14,7 +14,8 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
     // 添加动态变量：伤害（基础1点）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(1m, ValueProp.Move)
+        new DamageVar(1m, ValueProp.Move),
+        new RepeatVar(6)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -41,18 +42,18 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
                 this);
 
         // 造成多次1点伤害（使用动态伤害值，受力量加成）
-        var hitCount = IsUpgraded ? 8 : 6;
+        var hitCount = DynamicVars.Repeat.IntValue;
         var damage = DynamicVars.Damage.BaseValue;
-        for (var i = 0; i < hitCount; i++)
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .WithHitCount(hitCount)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        // 升级仅增加攻击次数，伤害数值不变
+        DynamicVars.Repeat.UpgradeValueBy(2);
     }
 }
