@@ -13,8 +13,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class Oblivionis() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    // 动态变量：能力层数（基础1层，升级后无变化，但保留用于描述）
-    // 动态变量：能力层数（基础1层，升级后无变化，但保留用于描述）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new PowerVar<OblivionisPower>(10m)
@@ -35,7 +33,6 @@ public class Oblivionis() : CuteSakikoModCard(2, CardType.Power, CardRarity.Rare
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = (int)DynamicVars["OblivionisPower"].BaseValue;
-        // 施加能力，固定1层（无层数变化，仅用于触发）
         await PowerCmd.Apply<OblivionisPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 

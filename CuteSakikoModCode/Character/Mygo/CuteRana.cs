@@ -37,6 +37,7 @@ public class CuteRana : CuteSakikoCharacter<CuteRanaCardPool, CuteRanaRelicPool,
             new CharacterUiAssetSet(
                 // 人物头像路径。
                 "res://CuteSakikoMod/images/charui/rana/character_icon_rana.png",
+                IconOutlineTexturePath:"res://CuteSakikoMod/images/charui/rana/character_icon_rana_outline.png",
                 // 人物头像2号。
                 IconPath: "res://CuteSakikoMod/scenes/char/rana/rana_icon.tscn",
                 // 人物选择背景。

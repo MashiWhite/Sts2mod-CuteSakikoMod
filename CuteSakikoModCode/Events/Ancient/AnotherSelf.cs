@@ -1,15 +1,15 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Event.AnotherSelf;
 using Godot;
 using MegaCrit.Sts2.Core.Events;
+using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Models.Relics;
-using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Events.Ancient;
 
-[RegisterSharedAncient] // 使用共享，在IsAllowed中控制出现章节
+[RegisterActAncient(typeof(Hive))] // 使用共享，在IsAllowed中控制出现章节
 public class AnotherSelf : ModAncientEventTemplate
 {
     public override Color ButtonColor => new(0f, 0.09f, 0.2f, 0.75f);
@@ -46,7 +46,7 @@ public class AnotherSelf : ModAncientEventTemplate
 
     // 所有可能的选项（用于调试/历史）
     public override IEnumerable<EventOption> AllPossibleOptions =>
-        Pool1.Concat(Pool2).Concat(Pool3);
+        [.. Pool1, .. Pool2, .. Pool3];
 
     // 生成初始选项（从每个池子中随机选一个）
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
@@ -57,12 +57,5 @@ public class AnotherSelf : ModAncientEventTemplate
             Rng.NextItem(Pool2)!,
             Pool3.GetRandom(Rng)
         };
-    }
-
-    // 出现条件：第二幕（索引1）
-    public override bool IsAllowed(IRunState runState)
-    {
-        // 正常游戏中，只在第二幕出现
-        return runState.CurrentActIndex == 1;
     }
 }

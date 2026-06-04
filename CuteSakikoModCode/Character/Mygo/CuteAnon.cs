@@ -36,6 +36,7 @@ public class CuteAnon : CuteSakikoCharacter<CuteAnonCardPool, CuteAnonRelicPool,
             new CharacterUiAssetSet(
                 // 人物头像路径。
                 "res://CuteSakikoMod/images/charui/anon/character_icon_anon.png",
+                IconOutlineTexturePath:"res://CuteSakikoMod/images/charui/anon/character_icon_anon_outline.png",
                 // 人物头像2号。
                 IconPath: "res://CuteSakikoMod/scenes/char/anon/anon_icon.tscn",
                 // 人物选择背景。

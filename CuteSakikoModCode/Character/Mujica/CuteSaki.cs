@@ -37,6 +37,7 @@ public class CuteSaki : CuteSakikoCharacter<CuteSakiCardPool, CuteSakiRelicPool,
             new CharacterUiAssetSet(
                 // 人物头像路径。
                 "res://CuteSakikoMod/images/charui/saki/character_icon_saki.png",
+                IconOutlineTexturePath:"res://CuteSakikoMod/images/charui/saki/character_icon_saki_outline.png",
                 // 人物头像2号。
                 IconPath: "res://CuteSakikoMod/scenes/char/saki/saki_icon.tscn",
                 // 人物选择背景。

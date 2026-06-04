@@ -276,7 +276,7 @@
   "CUTE_SAKIKO_MOD_CARD_BLACK_WHITE.title": "黑白分明",
   "CUTE_SAKIKO_MOD_CARD_BLACK_WHITE.description": "对全体敌人造成{Damage:diff()}点伤害。\n若自身无[gold]压力[/gold]，则改为回复{Heal:diff()}点生命。",
   "CUTE_SAKIKO_MOD_CARD_OBLIVIONIS.title": "遗忘之力",
-  "CUTE_SAKIKO_MOD_CARD_OBLIVIONIS.description": "每当有牌被[red]遗忘[/red]时，对所有敌人造成8点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_OBLIVIONIS.description": "每当有牌被[red]遗忘[/red]时，对所有敌人造成{OblivionisPower:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_PRESSURE_DMG.title": "压力化动力",
   "CUTE_SAKIKO_MOD_CARD_PRESSURE_DMG.description": "回合开始时，每拥有5层[gold]压力[/gold]，获得{IfUpgraded:show:2|1}点[gold]力量[/gold]。回合结束时失去等量力量。",
   "CUTE_SAKIKO_MOD_CARD_MEMORY_COMING.title": "回忆涌来",
