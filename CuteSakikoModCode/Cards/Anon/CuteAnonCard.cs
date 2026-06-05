@@ -8,7 +8,7 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon;
 
-[RegisterCard(typeof(CuteRanaCardPool), Inherit = true)]
+//[RegisterCard(typeof(CuteRanaCardPool), Inherit = true)]
 [RegisterCard(typeof(CuteAnonCardPool), Inherit = true)]
 public abstract class CuteAnonCard(int energyCost, CardType type, CardRarity rarity, TargetType targetType)
     : ModCardTemplate(energyCost, type, rarity, targetType)
