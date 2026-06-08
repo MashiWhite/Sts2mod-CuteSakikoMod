@@ -22,6 +22,7 @@ public class ObCard() : CuteSakikoModCard(3, CardType.Power, CardRarity.Ancient,
     {
         get
         {
+            yield return HoverTipFactory.FromPower<ObCardPower>();
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
             yield return HoverTipFactory.FromKeyword(CardKeyword.Exhaust);

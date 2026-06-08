@@ -12,12 +12,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 public class WantBoth : CuteRanaCard
 {
     public WantBoth() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self) { }
-
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Parfait.GetModCardKeyword());
+            yield return HoverTipFactory.FromPower<WantBothPower>();
         }
     }
     

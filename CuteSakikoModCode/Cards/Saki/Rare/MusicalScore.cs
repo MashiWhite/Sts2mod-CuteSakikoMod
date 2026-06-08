@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -25,10 +26,12 @@ public class MusicalScore() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Ra
                 upgradedChord.UpgradeInternal();
                 upgradedChord.FinalizeUpgradeInternal();
                 yield return HoverTipFactory.FromCard(upgradedChord);
+                yield return HoverTipFactory.FromPower<MusicalScorePower>();
             }
             else
             {
                 yield return HoverTipFactory.FromCard<ChordMemory>();
+                yield return HoverTipFactory.FromPower<MusicalScorePower>();
             }
         }
     }

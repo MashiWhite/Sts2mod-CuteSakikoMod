@@ -28,6 +28,7 @@ public class MemoryComing() : CuteSakikoModCard(1, CardType.Power, CardRarity.Un
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromPower<MemoryComingPower>();
         }
     }
 

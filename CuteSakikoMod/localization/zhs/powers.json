@@ -16,8 +16,8 @@
   "CUTE_SAKIKO_MOD_POWER_BECOME_ASHES_POWER.description": "回合结束时，对自己造成[red]最大生命[/red]5%的伤害。回合开始时，获得[red]损失生命百分比[/red]/5点力量。\n若生命低于一半，力量翻倍。",
   "CUTE_SAKIKO_MOD_POWER_BECOME_ASHES_POWER.smartDescription": "回合结束时，对自己造成[red]{SelfDamage}[/red]点伤害。\n回合开始时，获得[red]{StrengthGain}[/red]点力量。",
   "CUTE_SAKIKO_MOD_POWER_AI_HEART_POWER.title": "機械心",
-  "CUTE_SAKIKO_MOD_POWER_AI_HEART_POWER.description": "每回合第一次受到伤害时，向攻击者抽牌堆添加1张[purple]悔恨当初[/purple]。",
-  "CUTE_SAKIKO_MOD_POWER_AI_HEART_POWER.smartDescription": "每回合第一次受到伤害时，向攻击者抽牌堆添加1张[purple]悔恨当初[/purple]。",
+  "CUTE_SAKIKO_MOD_POWER_AI_HEART_POWER.description": "受到伤害时，向攻击者抽牌堆添加1张[purple]悔恨当初[/purple]。",
+  "CUTE_SAKIKO_MOD_POWER_AI_HEART_POWER.smartDescription": "受到伤害时，向攻击者抽牌堆添加1张[purple]悔恨当初[/purple]。",
   
   "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.title": "压力",
   "CUTE_SAKIKO_MOD_POWER_PRESSURE_POWER.description": "每层[gold]压力[/gold]使受到的伤害增加1%。\n层数到达当前生命值时，清除所有[gold]压力[/gold]，给予一层[gold]崩溃[/gold]。",
