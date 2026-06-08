@@ -2,31 +2,36 @@
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.Localization;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Events;
 
-public class PracticeGuitarOption : RestSiteOption
+public class PracticeGuitarOption : ModRestSiteOptionTemplate
 {
-    private readonly Player _player;
     private readonly AnonGuitar _relic;
 
     public PracticeGuitarOption(Player player, AnonGuitar relic) : base(player)
     {
-        _player = player;
         _relic = relic;
     }
 
     public override string OptionId => "PracticeGuitar";
+
     public override LocString Description => new("rest_site_ui", "PRACTICE_GUITAR_DESC");
+
+    public override RestSiteOptionAssetProfile AssetProfile => new(
+        IconPath: "res://CuteSakikoMod/images/ui/rest_site/practice_guitar.png"
+    );
+
+    public override LocString? CustomTitle => new LocString("rest_site_ui", "OPTION_PRACTICE_GUITAR.name");
 
     public override async Task<bool> OnSelect()
     {
         if (_relic.PracticeUsedThisVisit) return false;
         if (!IsEnabled) return false;
 
-        var rng = _player.RunState.Rng.UpFront;
+        var rng = Owner.RunState.Rng.UpFront;
         foreach (var cat in Enum.GetValues<ChordCategory>())
         {
             if (cat == ChordCategory.Bonus) continue;
@@ -51,8 +56,7 @@ public class PracticeGuitarOption : RestSiteOption
             }
         }
 
-        if (LocalContext.IsMe(_player)) _relic.PracticeUsedThisVisit = true;
-        // 不需要手动设置 IsEnabled，框架会通过 ShouldDisable 清空列表
+        if (LocalContext.IsMe(Owner)) _relic.PracticeUsedThisVisit = true;
         return true;
     }
 }

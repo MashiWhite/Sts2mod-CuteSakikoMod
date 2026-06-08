@@ -498,7 +498,7 @@ libraries = {
 }
 autoplay = "idle_loop"
 speed_scale = 5.0
+next/RESET = &"idle_loop"
 next/attack = &"idle_loop"
 next/cast = &"idle_loop"
 next/hurt = &"idle_loop"
-next/RESET = &"idle_loop"

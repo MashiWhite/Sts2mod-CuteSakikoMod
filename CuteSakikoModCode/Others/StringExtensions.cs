@@ -1,8 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Godot;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Saves;
-using STS2RitsuLib.Audio;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Others;
@@ -89,7 +86,7 @@ public static class AssetHelper
         var snake = GetSnakeCaseName(power.GetType());
         return new PowerAssetProfile(
             $"res://{Entry.ModId}/images/powers/{snake}.png",
-            $"res://{Entry.ModId}/images/powers/big/{snake}.png"
+            $"res://{Entry.ModId}/images/powers/{snake}.png"
         );
     }
 
@@ -112,24 +109,5 @@ public static class AssetHelper
             $"res://{Entry.ModId}/images/potions/{snake}.png",
             $"res://{Entry.ModId}/images/potions/{snake}.png"
         );
-    }
-
-    public static class AudioManager
-    {
-        /// <summary>
-        ///     根据游戏主音量和音效音量，自动计算最终音量并播放指定的音频文件。
-        /// </summary>
-        /// <param name="filePath">音频文件的完整路径</param>
-        /// <param name="baseVolume">基础音量 (通常在 0.0 到 1.0 之间)</param>
-        public static void PlaySound(string filePath, float baseVolume = 1.0f)
-        {
-            // 安全获取音量设置，如果存档系统还没初始化则使用默认值
-            var settings = SaveManager.Instance?.SettingsSave;
-            var masterVol = settings?.VolumeMaster ?? 1.0f;
-            var sfxVol = settings?.VolumeSfx ?? 1.0f;
-            var finalVol = Mathf.Clamp(baseVolume * masterVol * sfxVol, 0.0f, 1.0f);
-
-            FmodStudioStreamingFiles.TryPlaySoundFile(filePath, finalVol);
-        }
     }
 }

@@ -5,5 +5,7 @@
   "MOD_SETTINGS.EGG_TOGGLE.LABEL": "Egg Card",
   "MOD_SETTINGS.EGG_TOGGLE.DESC": "Automatically obtain the Egg Relic at the start of the game",
   "MOD_SETTINGS.MONSTER_TOGGLE.LABEL": "Enable Mod Monsters",
-  "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "If enabled, custom monsters and encounters from the mod will appear naturally"
+  "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "If enabled, custom monsters and encounters from the mod will appear naturally",
+  "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL": "Mod's Bgm Volume",
+  "MOD_SETTINGS.MOD_BGM_VOLUME.DESC": "Control the volume of mod's Bgm。"
 }

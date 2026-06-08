@@ -59,6 +59,16 @@
   "CUTE_SAKIKO_MOD_CARD_BRAIN_FREEZE.description": "抽到时对自己造成{Damage:diff()}点伤害。\n同一回合吃[blue]4[/blue]杯[green]抹茶芭菲[/green]将其加入[gold]抽牌堆[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_MANY_CATS.title": "好多猫咪",
   "CUTE_SAKIKO_MOD_CARD_MANY_CATS.description": "在抽牌堆、手牌和弃牌堆各添加1张[green]猫咪{IfUpgraded:show:+|}[/green]。",
+  "CUTE_SAKIKO_MOD_CARD_ALL_ARE_CATS.title": "大家都是猫咪",
+  "CUTE_SAKIKO_MOD_CARD_ALL_ARE_CATS.description": "添加{InCombat:[blue]{Cats:diff()}[/blue]|[blue]等于场上生物数[/blue]}张[green]猫咪[/green]加入抽牌堆。",
+  "CUTE_SAKIKO_MOD_CARD_CAT_PET.title": "撸猫",
+  "CUTE_SAKIKO_MOD_CARD_CAT_PET.description": "升级战斗中所有[green]猫咪[/green]。",
+  "CUTE_SAKIKO_MOD_CARD_HUMMING_PARFAIT.title": "哼歌芭菲",
+  "CUTE_SAKIKO_MOD_CARD_HUMMING_PARFAIT.description": "食用1杯[green]抹茶芭菲[/green]。\n对所有敌人造成{Damage:diff()}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_GOT_CAUGHT.title": "被抓住了",
+  "CUTE_SAKIKO_MOD_CARD_GOT_CAUGHT.description": "获得{BaseBlock:diff()}点格挡。\n若敌人意图是攻击，额外获得{ExtraBlock:diff()}点格挡。",
+  "CUTE_SAKIKO_MOD_CARD_RAINFALL_OMEN.title": "雨前征兆",
+  "CUTE_SAKIKO_MOD_CARD_RAINFALL_OMEN.description": "回合结束时，若敌人意图为攻击，则获得5点格挡。",
   
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "测试卡牌",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "测试卡牌。",
@@ -489,5 +499,7 @@
   "CUTE_SAKIKO_MOD_CARD_METEOR_HEPHAESTUS.title": "陨星赫波",
   "CUTE_SAKIKO_MOD_CARD_METEOR_HEPHAESTUS.description": "每回合结束时，随机夺取队友的{IfUpgraded:show:2|1}个[gold]能力[/gold]{IfUpgraded:show:并翻倍层数|}。\n当场上其他人已经有该能力时，改为获得{energyPrefix:energyIcons(2)}，抽1张牌。",
   "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.title": "东京塔",
-  "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.description": "用[red]东京塔[/red]撞击敌人，造成{Damage:diff()}点伤害。"
+  "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.description": "用[red]东京塔[/red]撞击敌人，造成{Damage:diff()}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_REGRETED.title": "悔恨当初",
+  "CUTE_SAKIKO_MOD_CARD_REGRETED.description": "失去{HpLoss:diff()}点生命。\n抽1张牌。"
 }

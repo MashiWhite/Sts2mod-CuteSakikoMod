@@ -14,6 +14,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
 [RegisterCharacterStarterCard(typeof(CuteAnon), Order = 2)]
 public class PlayChord() : CuteAnonCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
+    
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword()];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

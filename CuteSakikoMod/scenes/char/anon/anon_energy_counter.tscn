@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dq55arqt2a1yp"]
 
-[ext_resource type="Texture2D" uid="uid://cynpjq77hjg8i" path="res://CuteSakikoMod/images/charui/anon/anon_big_energy.png" id="2_vov5c"]
+[ext_resource type="Texture2D" uid="uid://cd728mi8iveea" path="res://CuteSakikoMod/images/charui/anon/anon_big_energy.png" id="2_vov5c"]
 
 [sub_resource type="FontVariation" id="FontVariation_kreon_bold_shared_font"]
 spacing_glyph = 2

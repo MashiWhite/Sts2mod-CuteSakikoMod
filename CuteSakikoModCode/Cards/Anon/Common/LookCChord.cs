@@ -50,7 +50,7 @@ public class LookCchord() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, T
         // 播放特定和弦音效
         var sfxPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio",
             "look_cchord.mp3");
-        AssetHelper.AudioManager.PlaySound(sfxPath); // 1.0 是基础音量
+        AudioManager.PlaySound(sfxPath); // 1.0 是基础音量
     }
 
     protected override void OnUpgrade()

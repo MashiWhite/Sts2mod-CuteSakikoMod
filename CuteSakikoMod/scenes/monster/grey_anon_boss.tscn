@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://3uoejpugektr"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_mw1fb"]
-[ext_resource type="Texture2D" uid="uid://dtgqpsfvf3xc6" path="res://CuteSakikoMod/images/char/staranon/StarAnon1.png" id="2_0kqni"]
-[ext_resource type="Texture2D" uid="uid://lvuymhw57bjd" path="res://CuteSakikoMod/images/char/staranon/StarAnon2.png" id="3_qn4fc"]
+[ext_resource type="Texture2D" uid="uid://csgxryoh08ur6" path="res://CuteSakikoMod/images/char/greyanon/greyanon1.png" id="2_mw1fb"]
+[ext_resource type="Texture2D" uid="uid://d0eln7khcujcv" path="res://CuteSakikoMod/images/char/greyanon/greyanon2.png" id="3_0kqni"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001
@@ -16,7 +16,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_0kqni")]
+"values": [ExtResource("2_mw1fb")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -80,7 +80,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_0kqni")]
+"values": [ExtResource("2_mw1fb")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -156,7 +156,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_0kqni")]
+"values": [ExtResource("2_mw1fb")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -232,7 +232,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.6666667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("2_0kqni"), ExtResource("3_qn4fc")]
+"values": [ExtResource("2_mw1fb"), ExtResource("3_0kqni")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -308,7 +308,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.6666667, 1.6333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_0kqni"), ExtResource("3_qn4fc"), ExtResource("2_0kqni")]
+"values": [ExtResource("2_mw1fb"), ExtResource("3_0kqni"), ExtResource("2_mw1fb")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -385,7 +385,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_0kqni")]
+"values": [ExtResource("2_mw1fb")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -463,24 +463,23 @@ script = ExtResource("1_mw1fb")
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(18.330566, -345.46277)
+position = Vector2(-1, -376)
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(15.851257, -185.95863)
+position = Vector2(-2.7651062, -130.8566)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-148.81815, -252.72728)
+position = Vector2(-167, -293)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -97.0
-offset_top = -315.0
-offset_right = 102.0
-offset_bottom = 2.0
+offset_left = -104.0
+offset_top = -335.0
+offset_right = 97.0
 
 [node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -490,7 +489,7 @@ position = Vector2(0.7077637, -2.664978)
 
 [node name="GreyNon" type="Sprite2D" parent="Visuals/Node2D"]
 position = Vector2(8, -153)
-texture = ExtResource("2_0kqni")
+texture = ExtResource("2_mw1fb")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
 root_node = NodePath("../GreyNon")

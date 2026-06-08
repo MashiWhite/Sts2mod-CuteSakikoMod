@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -29,6 +30,7 @@ public class BearMemory : CuteSakikoModCard
             yield return HoverTipFactory.Static(StaticHoverTip.ReplayStatic);
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromPower<BearMemoryPower>();
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
         }

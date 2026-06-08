@@ -23,6 +23,7 @@ public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Un
             // 只显示压力能力的说明（卡牌描述会解释全局效果）
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromPower<DaggersDrawnPower>();
         }
     }
 

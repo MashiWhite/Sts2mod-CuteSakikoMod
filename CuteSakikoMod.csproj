@@ -48,7 +48,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
         <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
-        <RitsuLibPackageVersion>0.4.9</RitsuLibPackageVersion>
+        <RitsuLibPackageVersion>0.4.13</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <!-- 引用 -->
@@ -69,11 +69,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.ModAnalyzers.RitsuLib" Version="0.1.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="STS2.RitsuLib" Version="0.4.9" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.4.13" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -97,7 +93,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="CuteSakikoModCode\Cards\Mod\Curse\"/>
         <Folder Include="CuteSakikoModCode\Cards\Mod\Event\"/>
         <Folder Include="CuteSakikoModCode\Cards\Rana\Ancient\" />
         <Folder Include="CuteSakikoModCode\Cards\Rana\Token\" />
@@ -131,16 +126,27 @@
         <PropertyGroup>
             <RitsuLibModDest>$(ModsPath)STS2-RitsuLib</RitsuLibModDest>
             <RitsuLibPackageBase>$(MSBuildProjectDirectory)\packages\sts2.ritsulib\$(RitsuLibPackageVersion)\</RitsuLibPackageBase>
+            <RitsuLibContentSource>$(RitsuLibPackageBase)contentFiles\any\any\</RitsuLibContentSource>
         </PropertyGroup>
 
         <Message Importance="high" Text="Copying RitsuLib mod files (v$(RitsuLibPackageVersion)) to $(RitsuLibModDest)"/>
         <MakeDir Directories="$(RitsuLibModDest)" Condition="!Exists('$(RitsuLibModDest)')"/>
 
-        <!-- 只复制 mod_manifest.json 和 DLL -->
-        <Copy SourceFiles="$(RitsuLibPackageBase)contentFiles\any\any\mod_manifest.json"
-              DestinationFolder="$(RitsuLibModDest)"/>
+        <!-- 一次收集 contentFiles\any\any\ 下的所有文件（含子目录） -->
+        <ItemGroup>
+            <RitsuContentFiles Include="$(RitsuLibContentSource)**\*" />
+        </ItemGroup>
+
+        <!-- 一次复制所有内容，保留子目录结构（包括 viewer 和 mod_manifest.json） -->
+        <Copy SourceFiles="@(RitsuContentFiles)"
+              DestinationFolder="$(RitsuLibModDest)\%(RecursiveDir)"
+              SkipUnchangedFiles="true"
+              Condition="Exists('$(RitsuLibContentSource)')"/>
+
+        <!-- 最后复制 DLL -->
         <Copy SourceFiles="$(RitsuLibPackageBase)lib\net9.0\STS2-RitsuLib.dll"
-              DestinationFolder="$(RitsuLibModDest)"/>
+              DestinationFolder="$(RitsuLibModDest)"
+              SkipUnchangedFiles="true"/>
     </Target>
 
     <!-- 把你 audio 目录下的文件原样复制到模组文件夹（保留 audio 根目录） -->

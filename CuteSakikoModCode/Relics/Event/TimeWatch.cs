@@ -20,7 +20,7 @@ public class TimeWatch : CuteSakikoEventRelic
 {
     private bool _flybackAdded;
 
-    public override RelicRarity Rarity => RelicRarity.Ancient;
+    public override RelicRarity Rarity => RelicRarity.Event;
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

@@ -113,7 +113,8 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     }
 
     // ★ 实例方法：处理自身计数和添加头疼卡牌
-    private void OnParfaitConsumedInstance(int amount, PlayerChoiceContext? choiceContext)
+    // 改为异步版本
+    private async Task OnParfaitConsumedInstanceAsync(int amount, PlayerChoiceContext? choiceContext)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -128,8 +129,11 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
                     if (combatState != null)
                     {
                         var brainFreeze = combatState.CreateCard<BrainFreeze>(Owner);
-                        _ = CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner);
-                        Entry.Logger.Info("[芭菲] 添加吃到头疼");
+                        // 等待添加完成，拿到结果
+                        var result = await CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner);
+                        // 触发抽牌堆闪光和卡牌预览（和 CatTreasure 一样）
+                        CardCmd.PreviewCardPileAdd(result);
+                        Entry.Logger.Info("[芭菲] 添加吃到头疼并预览");
                     }
                     else
                     {
@@ -158,7 +162,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             // 触发静态事件（供其他监听者，如 WantBothPower）
             OnChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
             // 同时更新自身计数
-            relic.OnParfaitConsumedInstance(amount, choiceContext);
+            _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
             return;
         }
 
@@ -168,7 +172,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         if (removed > 0)
         {
             OnChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
-            relic.OnParfaitConsumedInstance(removed, choiceContext);
+            _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
         }
     }
 

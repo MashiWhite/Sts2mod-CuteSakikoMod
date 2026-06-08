@@ -19,28 +19,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 [HarmonyPatch(typeof(RestSiteOption))]
 public static class RestSiteOptionPatch
 {
-    [HarmonyPatch(typeof(RestSiteOption), "Icon", MethodType.Getter)]
-    [HarmonyPrefix]
-    public static bool IconPrefix(RestSiteOption __instance, ref Texture2D __result)
-    {
-        if (__instance is PracticeGuitarOption)
-        {
-            var iconPath = "practice_guitar.png".RestSiteIconPath();
-            __result = PreloadManager.Cache.GetTexture2D(iconPath);
-            if (__result == null)
-                __result = new Texture2D();
-            return false;
-        }
-        return true;
-    }
-
-    [HarmonyPatch(nameof(RestSiteOption.Title), MethodType.Getter)]
-    [HarmonyPostfix]
-    public static void TitlePostfix(RestSiteOption __instance, ref LocString __result)
-    {
-        if (__instance is PracticeGuitarOption)
-            __result = new LocString("rest_site_ui", "OPTION_PRACTICE_GUITAR.name");
-    }
     
     [HarmonyPatch(typeof(RestSiteOption))]
     public static class RestSiteOption_IsEnabled_Patch

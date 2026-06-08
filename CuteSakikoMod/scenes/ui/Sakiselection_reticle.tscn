@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgy88bk44xxvk"]
 
-[ext_resource type="Script" path="res://CuteSakikoModCode/Nodes/SakiSelectionReticle.cs" id="1_jfo3v"]
+[ext_resource type="Script" uid="uid://db4o7e1kr2awx" path="res://CuteSakikoModCode/Nodes/SakiSelectionReticle.cs" id="1_jfo3v"]
 [ext_resource type="Texture2D" uid="uid://f6swpxpg7mg6" path="res://CuteSakikoMod/images/ui/combat_reticle.png" id="2_75ikg"]
 
 [node name="SelectionReticle" type="Control"]

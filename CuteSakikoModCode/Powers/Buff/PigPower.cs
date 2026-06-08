@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -98,7 +99,6 @@ public sealed class PigPower : CuteSakikoModPower
 
     private async Task ReplaceVisual()
     {
-        // ✅ 防止重复创建：先清理任何残留的旧视觉节点
         if (_pigVisual != null)
         {
             _pigVisual.QueueFree();
@@ -108,7 +108,6 @@ public sealed class PigPower : CuteSakikoModPower
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode == null) return;
 
-        // ✅ 彻底隐藏原有模型（Visible + 全透明双保险）
         var originalVisual = creatureNode.GetChild<NCreatureVisuals>(0);
         if (originalVisual != null)
         {
@@ -116,18 +115,21 @@ public sealed class PigPower : CuteSakikoModPower
             originalVisual.Modulate = new Color(1, 1, 1, 0);
         }
 
-        // 实例化猪场景
         _pigVisual = _pigScene.Instantiate<Node2D>();
+        // ★ 禁用新视觉中所有 Control 的鼠标交互
+        foreach (var control in _pigVisual.FindChildrenOfType<Control>())
+        {
+            control.MouseFilter = Control.MouseFilterEnum.Ignore;
+        }
+
         creatureNode.AddChild(_pigVisual);
 
-        // 获取 AnimationPlayer
         var animPlayer = _pigVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
         if (animPlayer != null)
             PigAnimPlayers[Owner] = animPlayer;
         else
             GD.PushError("PigPower: 未找到 AnimationPlayer，请检查 pig.tscn 路径是否正确");
 
-        // 设置初始缩放
         ScalePig();
         await Task.CompletedTask;
     }

@@ -29,7 +29,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 
-[RegisterCharacterStarterRelic(typeof(CuteRana),Order = 1)]
+//[RegisterCharacterStarterRelic(typeof(CuteRana),Order = 1)]
 [RegisterCharacterStarterRelic(typeof(CuteAnon))]
 [RegisterTouchOfOrobasRefinement(typeof(FlashAnonGuitar))]
 public class AnonGuitar : CuteAnonRelic
@@ -349,7 +349,7 @@ public class AnonGuitar : CuteAnonRelic
             MusicNoteManager.RemoveChord(Owner, chordId);
         await NotifyChordPlayed(ctx);
         var sfx = Path.Combine(AudioDir, StrumFiles[_rand.Next(StrumFiles.Length)]);
-        AssetHelper.AudioManager.PlaySound(sfx, 0.6f);
+        AudioManager.PlaySound(sfx, 0.6f);
     }
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)

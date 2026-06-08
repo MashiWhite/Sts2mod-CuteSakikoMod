@@ -5,5 +5,7 @@
   "MOD_SETTINGS.EGG_TOGGLE.LABEL": "彩蛋卡",
   "MOD_SETTINGS.EGG_TOGGLE.DESC": "启用后游戏开始时自动获得彩蛋遗物",
   "MOD_SETTINGS.MONSTER_TOGGLE.LABEL": "启用Mod怪物",
-  "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "开启后，Mod的自定义怪物和遭遇会在游戏中自然生成"
+  "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "开启后，Mod的自定义怪物和遭遇会在游戏中自然生成",
+  "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL": "Mod 背景音乐音量",
+  "MOD_SETTINGS.MOD_BGM_VOLUME.DESC": "控制本模组专属背景音乐的音量大小，最终音量 = 主音量 × 此值。"
 }

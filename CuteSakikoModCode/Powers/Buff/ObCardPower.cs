@@ -183,7 +183,6 @@ public sealed class ObCardPower : CuteSakikoModPower
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Owner);
         if (creatureNode == null) return;
 
-        // 查找并缓存原始视觉节点（不依赖固定索引）
         _originalVisual = creatureNode.FindChildOfType<NCreatureVisuals>();
         if (_originalVisual != null)
         {
@@ -195,14 +194,19 @@ public sealed class ObCardPower : CuteSakikoModPower
             GD.PushError("ObCardPower: 未找到原始 NCreatureVisuals 节点");
         }
 
-        // 加载 OB 场景并添加
         var scene = GD.Load<PackedScene>(ObScenePath);
         if (scene == null) return;
         _obVisual = scene.Instantiate<Node2D>();
         _obVisual.Name = "ObVisual";
+
+        // ★ 禁用新视觉中所有 Control 的鼠标交互，避免阻挡旧 Bounds
+        foreach (var control in _obVisual.FindChildrenOfType<Control>())
+        {
+            control.MouseFilter = Control.MouseFilterEnum.Ignore;
+        }
+
         creatureNode.AddChild(_obVisual);
 
-        // 获取 AnimationPlayer
         var animPlayer = _obVisual.GetNode<AnimationPlayer>("Visuals/Node2D/AnimationPlayer");
         if (animPlayer != null)
             ObAnimPlayers[Owner] = animPlayer;
@@ -253,17 +257,3 @@ public sealed class ObCardPower : CuteSakikoModPower
     private static bool IsInstanceValid(Node node) => node != null && !node.IsQueuedForDeletion() && node.IsInsideTree();
 }
 
-// 扩展方法：按类型查找子节点（递归）
-public static class NodeExtensions
-{
-    public static T? FindChildOfType<T>(this Node parent) where T : class
-    {
-        foreach (var child in parent.GetChildren())
-        {
-            if (child is T t) return t;
-            var found = child.FindChildOfType<T>();
-            if (found != null) return found;
-        }
-        return null;
-    }
-}

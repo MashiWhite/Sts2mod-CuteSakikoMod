@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -44,7 +45,7 @@ public class TgwGroup() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, T
         // 播放特定和弦音效
         var sfxPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio",
             "tgw_group.mp3");
-        AssetHelper.AudioManager.PlaySound(sfxPath); // 1.0 是基础音量
+        AudioManager.PlaySound(sfxPath); // 1.0 是基础音量
     }
 
     protected override void OnUpgrade()
