@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-public class Jr1() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class Jr1() : OtherModTokenCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -35,12 +35,12 @@ public class Jr1() : ModTokenCard(0, CardType.Attack, CardRarity.Common, TargetT
 
         // 两次低伤害（基础8，升级10）
         var lowDamage = DynamicVars["lowdamage"].IntValue;
-        for (var i = 0; i < 2; i++)
-            await DamageCmd.Attack(lowDamage)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
+        await DamageCmd.Attack(lowDamage)
+            .FromCard(this)
+            .WithHitCount(2)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
 
         // 一次高伤害（基础10，升级13）
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)

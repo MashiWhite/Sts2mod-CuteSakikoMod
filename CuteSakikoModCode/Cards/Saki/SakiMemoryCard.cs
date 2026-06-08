@@ -7,7 +7,7 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki;
 
-[RegisterCard(typeof(CuteSakikoModCardPool), Inherit = true)]
+[RegisterCard(typeof(CuteSakikoTokenCardPool), Inherit = true)]
 public abstract class SakiMemoryCard(int cost, CardType type, CardRarity rarity, TargetType target) :
     ModCardTemplate(cost, type, rarity, target)
 {

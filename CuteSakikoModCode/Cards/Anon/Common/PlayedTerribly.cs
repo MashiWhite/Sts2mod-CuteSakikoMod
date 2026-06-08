@@ -30,37 +30,30 @@ public class PlayedTerribly() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
 
         var hitCount = IsUpgraded ? 2 : 1;
         var damage = DynamicVars.Damage.BaseValue;
-        var rng = Owner.RunState.Rng.CombatCardSelection;
 
-        // 多次随机攻击
-        for (var i = 0; i < hitCount; i++)
-        {
-            var hittable = combat.HittableEnemies;
-            if (!hittable.Any()) break;
-            var target = rng.NextItem(hittable);
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .Targeting(target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
-        }
+        // 一次多段随机攻击
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .TargetingRandomOpponents(combat)
+            .WithHitCount(hitCount)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
 
         // 随机清除一个音符
-        MusicNoteManager.RemoveRandomNote(Owner, rng);
+        MusicNoteManager.RemoveRandomNote(Owner, Owner.RunState.Rng.CombatCardSelection);
 
-        // 添加躺平到手上
+        // 添加躺平到手牌
         var layFlatCard = CombatState.CreateCard<LayFlat>(Owner);
         if (IsUpgraded)
         {
             layFlatCard.UpgradeInternal();
             layFlatCard.FinalizeUpgradeInternal();
         }
-
         await CardPileCmd.AddGeneratedCardToCombat(layFlatCard, PileType.Hand, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        // 升级效果：攻击次数在 OnPlay 中通过 IsUpgraded 处理
+        // 升级效果已在 OnPlay 中通过 IsUpgraded 处理
     }
 }

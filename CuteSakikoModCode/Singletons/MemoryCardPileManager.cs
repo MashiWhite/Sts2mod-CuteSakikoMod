@@ -91,12 +91,11 @@ public static class Hook_AfterRoomEntered_Patch
 {
     public static async void Postfix(IRunState runState, AbstractRoom room)
     {
-        // 只在战斗房间时执行初始化
         if (room is not CombatRoom) return;
-
-        // 为拥有 KabutoNote 遗物的玩家初始化记忆牌堆
+        // 关键：为所有玩家初始化记忆牌堆（不再依赖是否拥有 KabutoNote）
         foreach (var player in runState.Players)
-            if (player.Relics.Any(r => r is KabutoNote))
-                await MemoryCardPile.EnsureInitializedAsync(player);
+        {
+            await MemoryCardPile.EnsureInitializedAsync(player);
+        }
     }
 }

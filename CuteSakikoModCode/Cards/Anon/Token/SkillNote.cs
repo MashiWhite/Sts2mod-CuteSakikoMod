@@ -4,7 +4,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token;
 
-public class SkillNote() : ModTokenCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
+public class SkillNote() : OtherModTokenCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 

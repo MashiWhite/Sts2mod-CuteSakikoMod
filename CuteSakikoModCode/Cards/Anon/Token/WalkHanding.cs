@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token;
 
-public class WalkHanding() : ModTokenCard(0, CardType.Power, CardRarity.Token, TargetType.AnyAlly)
+public class WalkHanding() : OtherModTokenCard(0, CardType.Power, CardRarity.Token, TargetType.AnyAlly)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

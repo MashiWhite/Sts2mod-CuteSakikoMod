@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using System.Linq;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
@@ -26,29 +27,22 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
         if (combat == null) return;
 
         var damage = DynamicVars.Damage.BaseValue;
-        var shuffleRng = Owner.RunState.Rng.Shuffle; // 用于 UnstableShuffle 的随机源
 
-        // 攻击循环：不消耗 CombatCardSelection
-        var hittable = combat.HittableEnemies.ToList();
-        for (var i = 0; i < _hitCount; i++)
-        {
-            if (hittable.Count == 0) break;
-            var target = hittable.UnstableShuffle(shuffleRng).First();
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .Targeting(target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
-        }
+        // 一次多段随机攻击
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .TargetingRandomOpponents(combat)
+            .WithHitCount(_hitCount)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
 
         // 额外获得一个随机音符（不消耗 CombatCardSelection）
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
         {
+            var shuffleRng = Owner.RunState.Rng.Shuffle;
             var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
-            // 使用洗牌随机源生成索引（不消耗 CombatCardSelection）
-            var index = shuffleRng.NextInt(noteTypes.Length);
-            var randomType = noteTypes[index];
+            var randomType = noteTypes[shuffleRng.NextInt(noteTypes.Length)];
 
             var mainChords = guitar.GetCurrentChords();
             var bonusChords = guitar.GetBonusChords();

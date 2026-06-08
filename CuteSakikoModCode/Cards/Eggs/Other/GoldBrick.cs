@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-public class GoldBrick() : ModTokenCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
+public class GoldBrick() : OtherModTokenCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Ethereal];
 

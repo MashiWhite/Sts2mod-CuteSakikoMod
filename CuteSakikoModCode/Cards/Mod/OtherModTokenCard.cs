@@ -6,8 +6,8 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
 
-[RegisterCard(typeof(CuteSakikoTokenCardPool), Inherit = true)]
-public abstract class ModTokenCard(int cost, CardType type, CardRarity rarity, TargetType target) :
+[RegisterCard(typeof(CuteSakikoModCardPool), Inherit = true)]
+public abstract class OtherModTokenCard(int cost, CardType type, CardRarity rarity, TargetType target) :
     ModCardTemplate(cost, type, rarity, target)
 {
     public override CardAssetProfile AssetProfile => this.CardAssetProfile();

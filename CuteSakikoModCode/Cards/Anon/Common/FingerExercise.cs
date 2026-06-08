@@ -21,13 +21,13 @@ public class FingerExercise() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
 
         var hitCount = 3; // 固定攻击3次
         var damage = DynamicVars.Damage.BaseValue;
-
-        for (var i = 0; i < hitCount; i++)
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
+        
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .WithHitCount(hitCount)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

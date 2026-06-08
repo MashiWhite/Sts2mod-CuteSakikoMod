@@ -64,7 +64,7 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
         if (side != Owner.Side) return;
 
         float lostPercent = (float)(Owner.MaxHp - Owner.CurrentHp) / Owner.MaxHp * 100f;
-        int strength = Math.Max(2, (int)Math.Floor(lostPercent / 15f));
+        int strength = Math.Max(1, (int)Math.Floor(lostPercent / 20f));
 
         if (Owner.CurrentHp < Owner.MaxHp * 0.5)
         {

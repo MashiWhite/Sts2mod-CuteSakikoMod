@@ -28,14 +28,13 @@ public class ColdStare() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon,
 
         var damage = DynamicVars.Damage.BaseValue;
         var hits = GetHitCount();
-
-        // 进行多次攻击
-        for (var i = 0; i < hits; i++)
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
+        
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .WithHitCount(hits)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
 
         // 额外获得一个技能音符，使用已记忆和弦进行匹配
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();

@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
+
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
 public class SmoothPlay() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
@@ -29,17 +30,14 @@ public class SmoothPlay() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, 
         // 清除所有音符
         MusicNoteManager.ClearNotes(Owner);
 
-        // 根据攻击音符数量造成多次随机伤害
-        var damage = DynamicVars.Damage.IntValue;
-        var rng = Owner.RunState.Rng.CombatCardSelection;
-        for (var i = 0; i < attackCount; i++)
+        // 根据攻击音符数量执行一次随机多段攻击
+        if (attackCount > 0)
         {
-            var hittable = combat.HittableEnemies;
-            if (!hittable.Any()) break;
-            var target = rng.NextItem(hittable);
+            var damage = DynamicVars.Damage.IntValue;
             await DamageCmd.Attack(damage)
                 .FromCard(this)
-                .Targeting(target)
+                .TargetingRandomOpponents(combat)        // 每段随机选取敌人
+                .WithHitCount(attackCount)               // 段数 = 音符数
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);
         }
@@ -49,7 +47,6 @@ public class SmoothPlay() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, 
         if (guitar != null)
             await guitar.TriggerLastStoredChord(choiceContext);
 
-        // 刷新音符UI
         guitar?.UpdateNoteDisplay();
     }
 

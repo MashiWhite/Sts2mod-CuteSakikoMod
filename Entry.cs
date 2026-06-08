@@ -95,7 +95,7 @@ public class Entry
                 .AddSlider("mod_bgm_volume_slider",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL", "Mod BGM Volume"),
                     volumeBinding,
-                    0.0f, 1.0f, 0.1f,
+                    0.0f, 1.0f, 0.01f,
                     valueFormatter: value => $"{value:P0}",
                     description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.DESC", "Controls the volume of mod-specific background music."))
             )
@@ -166,6 +166,11 @@ public class Entry
         ModContentRegistry.For(ModId)
             .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoModCardPool>(
                 "cute_sakiko_mod_card_pool",
+                "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png"
+            );
+        ModContentRegistry.For(ModId)
+            .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoTokenCardPool>(
+                "cute_sakiko_token_card_pool",
                 "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png"
             );
 

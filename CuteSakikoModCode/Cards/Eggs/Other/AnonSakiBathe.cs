@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-public class AnonSakiBathe() : ModTokenCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
+public class AnonSakiBathe() : OtherModTokenCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {

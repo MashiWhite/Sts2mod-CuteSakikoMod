@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-public class HellBombOn() : ModTokenCard(1, CardType.Skill, CardRarity.Token, TargetType.AnyAlly)
+public class HellBombOn() : OtherModTokenCard(1, CardType.Skill, CardRarity.Token, TargetType.AnyAlly)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 

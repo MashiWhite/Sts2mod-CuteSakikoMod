@@ -7,7 +7,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-public class LookNoChest() : ModTokenCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class LookNoChest() : OtherModTokenCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     // 虚无、消耗
     public override IEnumerable<CardKeyword> CanonicalKeywords =>

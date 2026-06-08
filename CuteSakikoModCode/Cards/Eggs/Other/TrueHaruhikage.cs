@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
-public class TrueHaruhikage() : ModTokenCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AllEnemies)
+public class TrueHaruhikage() : OtherModTokenCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AllEnemies)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

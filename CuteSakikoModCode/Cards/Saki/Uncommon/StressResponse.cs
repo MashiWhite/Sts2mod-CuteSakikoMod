@@ -43,15 +43,13 @@ public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity
         await PowerCmd.ModifyAmount(choiceContext, pressure, -layers, Owner.Creature, this);
 
         var hitCount = IsUpgraded ? 7 : 5;
-
-        // 造成固定次数的随机伤害
-        for (var i = 0; i < hitCount; i++)
-            await DamageCmd.Attack(damagePerHit)
-                .FromCard(this)
-                .TargetingRandomOpponents(CombatState)
-                .WithHitCount(1)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
+        
+        await DamageCmd.Attack(damagePerHit)
+            .FromCard(this)
+            .TargetingRandomOpponents(CombatState)
+            .WithHitCount(hitCount)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

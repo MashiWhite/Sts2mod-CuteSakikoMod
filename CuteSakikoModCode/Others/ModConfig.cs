@@ -6,7 +6,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
 // 配置数据类（持久化到 config.json）
 public class CuteSakikoModConfigData
 {
-    private float _modBgmVolume = 0.8f;
+    private float _modBgmVolume = 0.40f;
 
     public bool EggsCard { get; set; }
     public bool EnableModMonsters { get; set; } = true;

@@ -23,15 +23,26 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     IRelicExtraIconAmountLabelSpecsProvider, IRelicExtraIconAmountLabelsChangeSource
 {
-    [SavedProperty]
-    private int _charges = 6;
-
-    [SavedProperty]
+    // 私有字段，序列化器会通过属性访问
+    private int _charges;
     private int _currentTurnCount;
-
     private int _drawAmount = 1;
     private int _energyGain = 1;
 
+    // 公共属性，标记 [SavedProperty] 确保序列化
+    [SavedProperty]
+    public int Charges
+    {
+        get => _charges;
+        set
+        {
+            if (_charges == value) return;
+            _charges = value;
+            InvokeDisplayAmountChanged();
+        }
+    }
+
+    [SavedProperty]
     public int CurrentTurnCount
     {
         get => _currentTurnCount;
@@ -44,18 +55,34 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         }
     }
 
-    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    public int DrawAmount
     {
-        get
+        get => _drawAmount;
+        set
         {
-            yield return HoverTipFactory.FromCard<BrainFreeze>();
+            _drawAmount = value;
+            if (DynamicVars.TryGetValue("Cards", out var dv)) dv.BaseValue = value;
         }
     }
-    
-    public int DrawAmount { get => _drawAmount; set { _drawAmount = value; if (DynamicVars.TryGetValue("Cards", out var dv)) dv.BaseValue = value; } }
-    public int EnergyGain { get => _energyGain; set { _energyGain = value; if (DynamicVars.TryGetValue("Energy", out var dv)) dv.BaseValue = value; } }
 
-    public int Charges { get => _charges; set { if (_charges == value) return; _charges = value; InvokeDisplayAmountChanged(); } }
+    public int EnergyGain
+    {
+        get => _energyGain;
+        set
+        {
+            _energyGain = value;
+            if (DynamicVars.TryGetValue("Energy", out var dv)) dv.BaseValue = value;
+        }
+    }
+
+    // 虚方法，子类可覆盖以修改初始杯数
+    protected virtual int GetInitialCharges() => 6;
+
+    public MatchaParfait()
+    {
+        // 初始化杯数（仅用于新获得的遗物，加载存档时会被覆盖）
+        Charges = GetInitialCharges();
+    }
 
     public event Action? RelicExtraIconAmountLabelsInvalidated;
 
@@ -63,7 +90,6 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     public override bool ShowCounter => true;
     public override int DisplayAmount => Charges;
 
-    // ★ 恢复静态事件，供其他模组（如 WantBothPower）监听
     public static event Action<Player, int, PlayerChoiceContext?>? OnChargesRemoved;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { new CardsVar(DrawAmount), new EnergyVar(EnergyGain) };
@@ -106,14 +132,11 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         {
             CurrentTurnCount = 0;
         }
-        // 读档后强制刷新角标
         RelicExtraIconAmountLabelsInvalidated?.Invoke();
         InvokeDisplayAmountChanged();
         await Task.CompletedTask;
     }
 
-    // ★ 实例方法：处理自身计数和添加头疼卡牌
-    // 改为异步版本
     private async Task OnParfaitConsumedInstanceAsync(int amount, PlayerChoiceContext? choiceContext)
     {
         for (int i = 0; i < amount; i++)
@@ -129,9 +152,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
                     if (combatState != null)
                     {
                         var brainFreeze = combatState.CreateCard<BrainFreeze>(Owner);
-                        // 等待添加完成，拿到结果
                         var result = await CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner);
-                        // 触发抽牌堆闪光和卡牌预览（和 CatTreasure 一样）
                         CardCmd.PreviewCardPileAdd(result);
                         Entry.Logger.Info("[芭菲] 添加吃到头疼并预览");
                     }
@@ -149,8 +170,14 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             }
         }
     }
+    
+    // 在 MatchaParfait 类中添加（与 RemoveCharges 放在一起）
+    public static void AddCharges(MatchaParfait relic, int amount)
+    {
+        if (relic == null) return;
+        relic.Charges += amount;
+    }
 
-    // ★ 静态方法：供卡牌调用，同时触发静态事件和实例方法
     public static void RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null)
     {
         if (relic == null) return;
@@ -159,9 +186,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         if (hasTreat)
         {
             Entry.Logger.Info($"[芭菲] 有人请客，不扣除杯数，但计数{amount}次");
-            // 触发静态事件（供其他监听者，如 WantBothPower）
             OnChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
-            // 同时更新自身计数
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
             return;
         }
@@ -181,8 +206,4 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         if (room is RestSiteRoom) Charges += 5;
         return Task.CompletedTask;
     }
-
-    public static void AddCharges(MatchaParfait relic, int amount) => relic.Charges += amount;
-    public static void SetDrawAmount(MatchaParfait relic, int amount) => relic.DrawAmount = amount;
-    public static void SetEnergyGain(MatchaParfait relic, int amount) => relic.EnergyGain = amount;
 }

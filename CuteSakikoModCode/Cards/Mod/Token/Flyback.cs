@@ -10,7 +10,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
 
-public class Flyback : ModTokenCard
+public class Flyback : OtherModTokenCard
 {
     // 记录升级加成的总量（不受 reloads 影响）
     private int _upgradeDamageBonus;

@@ -24,8 +24,8 @@ public class GreyAnon : ModMonsterTemplate
     private bool _isPhaseTwo;
     private MoveState _performState;
 
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 630, 600);
-    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 730, 700);
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 730, 700);
+    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 830, 800);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/grey_anon_boss.tscn"
@@ -80,13 +80,13 @@ public class GreyAnon : ModMonsterTemplate
     {
         // -- 第一阶段 --
         var monologue = new MoveState("MONOLOGUE", MonologueMove,
-            new SingleAttackIntent(10));
+            new SingleAttackIntent(8));
         var heavy1 = new MoveState("HEAVY_ATTACK_1", HeavyAttack1Move,
-            new SingleAttackIntent(15), new DefendIntent());
+            new SingleAttackIntent(12), new DefendIntent());
         var devote1 = new MoveState("DEVOTE_1", Devote1Move,
             new DebuffIntent(), new HealIntent());
         var buff1 = new MoveState("BUFF_1", Buff1Move,
-            new SingleAttackIntent(8), new DebuffIntent());
+            new SingleAttackIntent(6), new DebuffIntent());
 
         monologue.FollowUpState = heavy1;
         heavy1.FollowUpState = devote1;
@@ -118,12 +118,12 @@ public class GreyAnon : ModMonsterTemplate
     private async Task MonologueMove(IReadOnlyList<Creature> targets)
     {
         TalkCmd.Play(MonsterModel.L10NMonsterLookup("CUTE_SAKIKO_MOD_MONSTER_GREY_ANON.monologue"), Creature, VfxColor.Blue);
-        await DamageCmd.Attack(10).FromMonster(this).Execute(null);
+        await DamageCmd.Attack(8).FromMonster(this).Execute(null);
     }
 
     private async Task HeavyAttack1Move(IReadOnlyList<Creature> targets)
     {
-        await DamageCmd.Attack(15).FromMonster(this).Execute(null);
+        await DamageCmd.Attack(12).FromMonster(this).Execute(null);
         await CreatureCmd.GainBlock(Creature, 20, ValueProp.Move, null);
     }
 
@@ -143,7 +143,7 @@ public class GreyAnon : ModMonsterTemplate
             await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(),
                 player.Creature, 3, Creature, null);
 
-        await DamageCmd.Attack(8).FromMonster(this).Execute(null);
+        await DamageCmd.Attack(6).FromMonster(this).Execute(null);
     }
 
     private async Task PerformMove(IReadOnlyList<Creature> targets)
