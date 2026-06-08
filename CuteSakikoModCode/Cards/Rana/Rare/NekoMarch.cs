@@ -17,8 +17,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 
 public class NekoMarch : CuteRanaCard
 {
-    public NekoMarch() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies) { }
+    public NekoMarch() : base(3, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies) { }
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
