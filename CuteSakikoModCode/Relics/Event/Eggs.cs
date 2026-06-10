@@ -64,7 +64,6 @@ public sealed class Eggs : CuteSakiRelic
 
     private async Task GiveEggCardChoice(PlayerChoiceContext choiceContext, Player player)
     {
-        // 获取所有继承自 CuteSakikoModEggCard 的卡牌
         var allEggCards = ModelDb.AllCards
             .Where(c => typeof(CuteSakikoModEggCard).IsAssignableFrom(c.GetType()))
             .ToList();
@@ -106,7 +105,6 @@ public sealed class Eggs : CuteSakiRelic
             return false;
         if (creationOptions.Source != CardCreationSource.Encounter) return false;
 
-        // 获取所有继承自 CuteSakikoModEggCard 且尚未获得的卡牌
         var allEggCards = ModelDb.AllCards
             .Where(c => typeof(CuteSakikoModEggCard).IsAssignableFrom(c.GetType()))
             .ToList();
@@ -115,14 +113,11 @@ public sealed class Eggs : CuteSakiRelic
         if (available.Count == 0) return false;
 
         var selected = player.RunState.Rng.UpFront.NextItem(available);
-        var cardResult = CardFactory.CreateForReward(
-            player,
-            1,
-            new CardCreationOptions(new[] { selected }, CardCreationSource.Encounter, CardRarityOddsType.Uniform)
-                .WithFlags(CardCreationFlags.NoModifyHooks | CardCreationFlags.NoCardPoolModifications)
-        ).FirstOrDefault();
-        if (cardResult == null) return false;
+        if (selected == null) return false;
 
+        // 转换为可变副本，避免 CanonicalModelException
+        var mutableCard = player.RunState.CreateCard(selected, player);
+        var cardResult = new CardCreationResult(mutableCard);
         options.Add(cardResult);
         return true;
     }

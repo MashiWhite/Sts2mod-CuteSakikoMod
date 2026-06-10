@@ -9,7 +9,7 @@ using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Events.Ancient;
 
-[RegisterActAncient(typeof(Hive))] // 使用共享，在IsAllowed中控制出现章节
+[RegisterActAncient(typeof(Hive))] 
 public class AnotherSelf : ModAncientEventTemplate
 {
     public override Color ButtonColor => new(0f, 0.09f, 0.2f, 0.75f);

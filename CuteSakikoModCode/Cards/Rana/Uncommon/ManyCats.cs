@@ -11,7 +11,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 public class ManyCats : CuteRanaCard
 {
-    public ManyCats() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public ManyCats() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -68,6 +68,6 @@ public class ManyCats : CuteRanaCard
 
     protected override void OnUpgrade()
     {
-     
+     EnergyCost.UpgradeBy(-1);
     }
 }

@@ -69,6 +69,12 @@
   "CUTE_SAKIKO_MOD_CARD_GOT_CAUGHT.description": "获得{BaseBlock:diff()}点格挡。\n若敌人意图是攻击，额外获得{ExtraBlock:diff()}点格挡。",
   "CUTE_SAKIKO_MOD_CARD_RAINFALL_OMEN.title": "雨前征兆",
   "CUTE_SAKIKO_MOD_CARD_RAINFALL_OMEN.description": "回合结束时，若敌人意图为攻击，则获得5点格挡。",
+  "CUTE_SAKIKO_MOD_CARD_NOBODY_KNOW_PARFAIT.title": "没人懂我的芭菲",
+  "CUTE_SAKIKO_MOD_CARD_NOBODY_KNOW_PARFAIT.description": "食用1杯[green]抹茶芭菲[/green]。\n获得{Block:diff()}点格挡。",
+  "CUTE_SAKIKO_MOD_CARD_WATCH_CATS.title": "看会儿小猫",
+  "CUTE_SAKIKO_MOD_CARD_WATCH_CATS.description": "将{IfUpgraded:show:2|1}只[green]猫咪[/green]加入手牌。\n下回合额外获得{energyPrefix:energyIcons(1)}。",
+  "CUTE_SAKIKO_MOD_CARD_SKIP_CLASS.title": "逃课",
+  "CUTE_SAKIKO_MOD_CARD_SKIP_CLASS.description": "仅在本回合没有打出过任何牌时可以打出。\n结束你的回合。\n获得{Block:diff()}点格挡X次。",
   
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "测试卡牌",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "测试卡牌。",

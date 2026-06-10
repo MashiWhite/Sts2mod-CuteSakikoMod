@@ -82,6 +82,7 @@ public class Entry
         RitsuLibFramework.RegisterModSettings(ModId, page => page
             .WithModDisplayName(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DISPLAY_NAME", "Cute Sakiko Mod"))
             .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.TITLE", "Cute Sakiko Mod Settings"))
+            .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DESCRIPTION", "Cute Sakiko Mod Settings"))
             .AddSection("general", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.GENERAL", "General"))
                 .AddToggle("egg_toggle",
