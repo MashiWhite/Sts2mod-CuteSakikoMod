@@ -7,15 +7,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class Provoke() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+public class Provoke() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            // 未升级：18 格挡，3 力量
+            // 未升级：20 格挡，2 力量
             yield return new BlockVar(18m, ValueProp.Move);
-            yield return new PowerVar<StrengthPower>(3m);
+            yield return new PowerVar<StrengthPower>(2m);
         }
     }
 
@@ -36,9 +36,9 @@ public class Provoke() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, Targ
 
     protected override void OnUpgrade()
     {
-        // 格挡 18 → 22（增加 4）
-        DynamicVars.Block.UpgradeValueBy(4m);
-        // 力量 3 → 2（减少 1）
+        // 格挡 18 → 21（增加 3）
+        DynamicVars.Block.UpgradeValueBy(3m);
+        // 力量 2 → 1（减少 1）
         DynamicVars["StrengthPower"].UpgradeValueBy(-1m);
     }
 }

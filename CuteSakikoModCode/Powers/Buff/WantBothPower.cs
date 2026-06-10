@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Models;
 
@@ -11,44 +12,51 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public class WantBothPower : CuteSakikoModPower
 {
-    private bool _subscribed;
+    private MatchaParfait? _subscribedParfait;
 
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single; // 不可叠层
+    public override PowerStackType StackType => PowerStackType.Single;
 
-    // 能力被施加时订阅事件
+    // 能力被施加时订阅遗物事件
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
-        if (!_subscribed)
-        {
-            MatchaParfait.OnChargesRemoved += OnParfaitConsumed;
-            _subscribed = true;
-        }
+        if (_subscribedParfait != null) return;
+
+        var parfait = Owner.Player?.GetRelic<MatchaParfait>();
+        if (parfait == null) return;
+
+        _subscribedParfait = parfait;
+        parfait.ChargesRemoved += OnParfaitConsumed;
     }
 
     // 能力被移除时取消订阅
     public override async Task AfterRemoved(Creature oldOwner)
     {
-        if (_subscribed)
+        if (_subscribedParfait != null)
         {
-            MatchaParfait.OnChargesRemoved -= OnParfaitConsumed;
-            _subscribed = false;
+            _subscribedParfait.ChargesRemoved -= OnParfaitConsumed;
+            _subscribedParfait = null;
         }
         await base.AfterRemoved(oldOwner);
     }
 
     private async void OnParfaitConsumed(Player player, int amount, PlayerChoiceContext? choiceContext)
     {
-        // 只对拥有本能力的玩家生效
         if (player != Owner.Player) return;
-        // 确保还在战斗中且能力未移除（安全检查）
         if (Amount <= 0) return;
-
-        // 需要有效的 PlayerChoiceContext 来执行抽牌和加能量
         if (choiceContext == null) return;
 
-        await PlayerCmd.GainEnergy(1, player);
-        await CardPileCmd.Draw(choiceContext, 1, player);
+        // 优先检查能力是否还存在（最快速失败）
+        if (!Owner.Player.Creature.HasPower<WantBothPower>()) return;
+
+        if (CombatManager.Instance.IsOverOrEnding) return;
+        if (Owner.Player?.Creature?.CombatState == null) return;
+
+        for (int i = 0; i < amount; i++)
+        {
+            await PlayerCmd.GainEnergy(1, player);
+            await CardPileCmd.Draw(choiceContext, 1, player);
+        }
     }
 }

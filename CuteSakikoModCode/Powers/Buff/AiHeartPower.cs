@@ -67,7 +67,7 @@ public sealed class AiHeartPower : CuteSakikoModPower
         if (combatState == null) return;
 
         var regreted = combatState.CreateCard<Regreted>(dealer.Player);
-        var addResult = await CardPileCmd.AddGeneratedCardToCombat(regreted, PileType.Draw, dealer.Player);
+        var addResult = await CardPileCmd.AddGeneratedCardToCombat(regreted, PileType.Draw, dealer.Player,CardPilePosition.Random);
         CardCmd.PreviewCardPileAdd(addResult);
     }
 

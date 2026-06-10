@@ -23,13 +23,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     IRelicExtraIconAmountLabelSpecsProvider, IRelicExtraIconAmountLabelsChangeSource
 {
-    // 私有字段，序列化器会通过属性访问
     private int _charges;
     private int _currentTurnCount;
     private int _drawAmount = 1;
     private int _energyGain = 1;
 
-    // 公共属性，标记 [SavedProperty] 确保序列化
     [SavedProperty]
     public int Charges
     {
@@ -54,7 +52,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             InvokeDisplayAmountChanged();
         }
     }
-    
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -83,22 +81,21 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         }
     }
 
-    // 虚方法，子类可覆盖以修改初始杯数
     protected virtual int GetInitialCharges() => 6;
 
     public MatchaParfait()
     {
-        // 初始化杯数（仅用于新获得的遗物，加载存档时会被覆盖）
         Charges = GetInitialCharges();
     }
 
     public event Action? RelicExtraIconAmountLabelsInvalidated;
 
+    // 实例事件，不带额外参数
+    public event Action<Player, int, PlayerChoiceContext?>? ChargesRemoved;
+
     public override RelicRarity Rarity => RelicRarity.Starter;
     public override bool ShowCounter => true;
     public override int DisplayAmount => Charges;
-
-    public static event Action<Player, int, PlayerChoiceContext?>? OnChargesRemoved;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { new CardsVar(DrawAmount), new EnergyVar(EnergyGain) };
 
@@ -178,8 +175,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             }
         }
     }
-    
-    // 在 MatchaParfait 类中添加（与 RemoveCharges 放在一起）
+
     public static void AddCharges(MatchaParfait relic, int amount)
     {
         if (relic == null) return;
@@ -194,7 +190,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         if (hasTreat)
         {
             Entry.Logger.Info($"[芭菲] 有人请客，不扣除杯数，但计数{amount}次");
-            OnChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
+            relic.ChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
             return;
         }
@@ -204,7 +200,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         int removed = old - relic.Charges;
         if (removed > 0)
         {
-            OnChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
+            relic.ChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
         }
     }
