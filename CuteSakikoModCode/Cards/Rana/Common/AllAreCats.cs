@@ -45,7 +45,7 @@ public class AllAreCats : CuteRanaCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获取所有猫咪卡牌模板
-        var allNekoCards = ModelDb.CardPool<CuteSakikoModCardPool>()
+        var allNekoCards = ModelDb.CardPool<CuteSakikoTokenCardPool>()
             .GetUnlockedCards(Owner.UnlockState, Owner.RunState.CardMultiplayerConstraint)
             .Where(c => c.Keywords.Contains(CutesakiKeywords.Neko.GetModCardKeyword()))
             .ToList();

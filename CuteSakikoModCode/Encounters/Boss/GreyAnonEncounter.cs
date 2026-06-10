@@ -18,6 +18,8 @@ public class GreyAnonEncounter : CuteEncounters
     public override RoomType RoomType => RoomType.Boss;
     public override bool IsWeak => false;
 
+    public override string BossNodePath => "res://CuteSakikoMod/images/ui/map/GreyAnon";
+    
     public override EncounterAssetProfile AssetProfile => new(
         RunHistoryIconPath: "res://CuteSakikoMod/images/ui/run_history/grey_anon_encounter.png",
         RunHistoryIconOutlinePath: "res://CuteSakikoMod/images/ui/run_history/grey_anon_encounter_outline.png"

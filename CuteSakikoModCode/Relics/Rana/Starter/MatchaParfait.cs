@@ -54,6 +54,14 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             InvokeDisplayAmountChanged();
         }
     }
+    
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromCard<BrainFreeze>();
+        }
+    }
 
     public int DrawAmount
     {

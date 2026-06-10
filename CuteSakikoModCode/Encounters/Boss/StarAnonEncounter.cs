@@ -13,11 +13,14 @@ namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 // 注册到第三幕 Glory（可根据需要改为其他 Act）
 [RegisterActEncounter(typeof(Glory))]
 public class StarAnonEncounter : CuteEncounters
+
 {
     public override IEnumerable<MonsterModel> AllPossibleMonsters => [ModelDb.Monster<StarAnon>()];
     public override RoomType RoomType => RoomType.Boss;
     public override bool IsWeak => false;
 
+    public override string BossNodePath => "res://CuteSakikoMod/images/ui/map/StarAnon";
+    
     public override EncounterAssetProfile AssetProfile => new(
         RunHistoryIconPath: "res://CuteSakikoMod/images/ui/run_history/star_anon_encounter.png",
         RunHistoryIconOutlinePath: "res://CuteSakikoMod/images/ui/run_history/star_anon_encounter_outline.png"

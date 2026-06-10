@@ -80,7 +80,7 @@ public class CuteRana : CuteSakikoCharacter<CuteRanaCardPool, CuteRanaRelicPool,
 
 
     //一堆有关颜色
-    public override Color DialogueColor => new("#77DD77");
+    public override Color DialogueColor => new("#4a704a");
     public override Color MapDrawingColor => new("#77DD77");
     public override Color RemoteTargetingLineColor => new("#77DD77");
     public override Color RemoteTargetingLineOutline => new("#77DD77");
