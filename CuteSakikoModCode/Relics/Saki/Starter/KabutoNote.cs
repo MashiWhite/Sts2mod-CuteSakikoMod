@@ -40,10 +40,14 @@ public class KabutoNote : CuteSakiRelic
         if (side != Owner.Creature.Side || combatState.RoundNumber != 1)
             return;
 
+        
+        
+
         // 1. 开局给压力（原有效果）
+        int powerCount = Math.Min(3, Owner.Creature.CurrentHp-1);
         await PowerCmd.Apply<PressurePower>(
             new ThrowingPlayerChoiceContext(),
-            Owner.Creature, 3, Owner.Creature, null);
+            Owner.Creature, powerCount, Owner.Creature, null);
 
         // 2. 确保记忆牌堆已初始化（防止读档时牌堆为空）
         await MemoryCardPile.EnsureInitializedAsync(Owner);

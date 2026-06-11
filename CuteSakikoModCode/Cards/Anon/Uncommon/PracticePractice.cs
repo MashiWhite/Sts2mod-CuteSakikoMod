@@ -13,11 +13,10 @@ public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Unc
 
     // 可无限次在营地强化
     public override int MaxUpgradeLevel => 999;
-
-    // 动态变量：初始 1 个音符，每次升级增加 CurrentUpgradeLevel 个
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DynamicVar("Notes", 1); }
+        get { yield return new DynamicVar("Notes", 3); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -38,9 +37,8 @@ public class PracticePractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Unc
 
     protected override void OnUpgrade()
     {
-        // 每次升级增加的音符数 = 2 ^ CurrentUpgradeLevel
-        // 首次升级时 CurrentUpgradeLevel = 1 → +2, 第二次 = 2 → +4, 第三次 = 3 → +8 ...
-        var additionalNotes = 1 << CurrentUpgradeLevel; // 等价于 (int)Math.Pow(2, CurrentUpgradeLevel)
+        // 等差增长：每次升级增加 3 * CurrentUpgradeLevel
+        var additionalNotes = 3 * CurrentUpgradeLevel;
         DynamicVars["Notes"].UpgradeValueBy(additionalNotes);
     }
 }

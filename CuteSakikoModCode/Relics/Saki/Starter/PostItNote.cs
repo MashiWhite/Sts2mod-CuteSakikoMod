@@ -23,8 +23,9 @@ public sealed class PostItNote : KabutoNote
         if (combatState.RoundNumber == 1)
         {
             // 给自己施加 5 层压力
+            int powerCount = Math.Min(5, Owner.Creature.CurrentHp-1);
             await PowerCmd.Apply<PressurePower>(
-                new ThrowingPlayerChoiceContext(), Owner.Creature, 5, Owner.Creature, null);
+                new ThrowingPlayerChoiceContext(), Owner.Creature, powerCount, Owner.Creature, null);
 
             // 确保记忆牌堆已初始化（防止读档时牌堆为空）
             await MemoryCardPile.EnsureInitializedAsync(Owner);
