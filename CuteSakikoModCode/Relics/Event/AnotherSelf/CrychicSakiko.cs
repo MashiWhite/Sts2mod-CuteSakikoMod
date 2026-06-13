@@ -46,6 +46,6 @@ public class CrychicSakiko : CuteSakikoEventRelic
         if (map is ScaledActMap)
             return map;
 
-        return new ScaledActMap((RunState)runState, map, 2.0);  // 或 0.5
+        return new ScaledActMap((RunState)runState, map, 0.5);  // 或 0.5
     }
 }
