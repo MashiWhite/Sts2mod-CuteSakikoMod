@@ -71,11 +71,7 @@ public class NeedPractice() : CuteSakikoModCard(1, CardType.Attack, CardRarity.C
                     await PowerCmd.Apply(choiceContext, clonedPressure, enemy, amountToAdd, Owner.Creature, this);
                 }
             }
-
-            // 6. 减少目标自身的压力（减去已分配出去的一半）
-            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -halfPressure, Owner.Creature, this);
         }
-        // 若无其他敌人，则不进行任何压力转移，目标压力保持不变
     }
 
     protected override void OnUpgrade()

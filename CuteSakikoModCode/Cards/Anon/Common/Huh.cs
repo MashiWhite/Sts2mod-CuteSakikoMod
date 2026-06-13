@@ -43,19 +43,25 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
             var shuffleRng = Owner.RunState.Rng.Shuffle;
             var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
             var randomType = noteTypes[shuffleRng.NextInt(noteTypes.Length)];
-
+            
             var mainChords = guitar.GetCurrentChords();
             var bonusChords = guitar.GetBonusChords();
             var tempChords = guitar.GetTemporaryChords();
+            
+            int manualNoteCount = IsUpgraded ? 3 : 2;
+            for (int i = 0; i < manualNoteCount; i++)
+            {
+                MusicNoteManager.AddNote(Owner, randomType,
+                    mainChords,
+                    bonusChords.Concat(tempChords));
+            }
 
-            MusicNoteManager.AddNote(Owner, randomType, mainChords,
-                bonusChords.Concat(tempChords));
-
+            // 刷新 UI
             guitar.UpdateNoteDisplay();
             guitar.UpdateStoredChordDisplay();
         }
     }
-
+   
     protected override void OnUpgrade()
     {
         _hitCount = 5;

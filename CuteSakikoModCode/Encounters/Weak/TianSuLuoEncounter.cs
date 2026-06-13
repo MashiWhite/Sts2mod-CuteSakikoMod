@@ -9,7 +9,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Weak;
 
 [RegisterActEncounter(typeof(Overgrowth))]
 [RegisterActEncounter(typeof(Underdocks))]
-public class TianSuLuoEncounter : ModEncounterTemplate
+public class TianSuLuoEncounter : CuteEncounters
 {
     public override IEnumerable<MonsterModel> AllPossibleMonsters => [ModelDb.Monster<TianSuLuo>()];
     public override RoomType RoomType => RoomType.Monster;

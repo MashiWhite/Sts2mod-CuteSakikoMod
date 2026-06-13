@@ -12,7 +12,7 @@ public class Resentful() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, T
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(8m, ValueProp.Move); }
+        get { yield return new DamageVar(10m, ValueProp.Move); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -47,6 +47,6 @@ public class Resentful() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, T
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 8 → 11
+        DynamicVars.Damage.UpgradeValueBy(3m); // 10 → 13
     }
 }

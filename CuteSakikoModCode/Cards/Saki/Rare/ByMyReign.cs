@@ -9,7 +9,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class ByMyReign() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare, TargetType.Self)
+public class ByMyReign() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     // 设置为多人卡限定
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
@@ -83,6 +83,6 @@ public class ByMyReign() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
 
     protected override void OnUpgrade()
     {
-        // 升级后效果在 OnPlay 中已处理
+        EnergyCost.UpgradeBy(-1);
     }
 }

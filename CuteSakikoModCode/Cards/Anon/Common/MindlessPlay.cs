@@ -13,7 +13,7 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(6m, ValueProp.Move); }
+        get { yield return new BlockVar(8m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -32,6 +32,6 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(4m); // 6 → 10
+        DynamicVars.Block.UpgradeValueBy(2m); 
     }
 }

@@ -2,7 +2,7 @@
 using STS2RitsuLib.Settings;
 using STS2RitsuLib.Telemetry;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Others
+namespace CuteSakikoMod.CuteSakikoModCode.Others.Telemetry
 {
     public static class CuteSakikoModTelemetry
     {

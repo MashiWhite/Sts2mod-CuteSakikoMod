@@ -7,11 +7,11 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class SwollenFingers() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class SwollenFingers() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(8m, ValueProp.Move); }
+        get { yield return new DamageVar(6m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

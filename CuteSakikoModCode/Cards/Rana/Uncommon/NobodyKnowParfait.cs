@@ -1,10 +1,13 @@
 ﻿
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
@@ -14,6 +17,14 @@ public class NobodyKnowParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
     {
     }
 
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Parfait.GetModCardKeyword());
+        }
+    }
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new BlockVar(16m, ValueProp.Move); }
@@ -25,7 +36,7 @@ public class NobodyKnowParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
     {
         // 消耗 1 杯抹茶芭菲
         var parfait = Owner.Relics.OfType<MatchaParfait>().FirstOrDefault();
-        MatchaParfait.RemoveCharges(parfait, 1, choiceContext);
+        await MatchaParfait.RemoveCharges(parfait, 1, choiceContext);
 
         // 获得格挡
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);

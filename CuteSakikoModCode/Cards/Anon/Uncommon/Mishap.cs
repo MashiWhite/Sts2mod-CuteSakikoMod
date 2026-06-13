@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class Mishap() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class Mishap() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override bool GainsBlock => true;
 
@@ -15,8 +15,7 @@ public class Mishap() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, Tar
     {
         get
         {
-            // 基础格挡 30，升级后 35
-            yield return new BlockVar(30m, ValueProp.Move);
+            yield return new BlockVar(35m, ValueProp.Move);
         }
     }
 
@@ -44,6 +43,6 @@ public class Mishap() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, Tar
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(5m); // 30 → 35
+        DynamicVars.Block.UpgradeValueBy(10m); 
     }
 }

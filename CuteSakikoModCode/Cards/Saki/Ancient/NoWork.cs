@@ -15,8 +15,8 @@ public class NoWork() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Ancient
     // 动态变量：伤害和压力
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(16m, ValueProp.Move), // 基础伤害 16
-        new PowerVar<PressurePower>(10m) // 基础压力层数 10
+        new DamageVar(15m, ValueProp.Move), // 基础伤害 15
+        new PowerVar<PressurePower>(15m) // 基础压力层数 15
     ];
 
     // 悬停提示：显示压力能力说明
@@ -48,7 +48,7 @@ public class NoWork() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Ancient
     // 升级效果：伤害 +7 (16→23)，压力 +10 (10→20)
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m);
+        DynamicVars.Damage.UpgradeValueBy(5m);
         DynamicVars["PressurePower"].UpgradeValueBy(10m);
     }
 }

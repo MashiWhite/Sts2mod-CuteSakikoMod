@@ -26,7 +26,7 @@ public class BuyParfait() : CuteRanaCard(0, CardType.Skill, CardRarity.Common, T
     
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new GoldVar(10)
+        new GoldVar(15)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -41,7 +41,6 @@ public class BuyParfait() : CuteRanaCard(0, CardType.Skill, CardRarity.Common, T
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Gold.UpgradeValueBy(-5m);  // 10 -> 5
         RemoveKeyword(CardKeyword.Exhaust);
     }
 }

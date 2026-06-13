@@ -34,7 +34,7 @@ public class SnackView : CuteRanaCard, CuteRanaCard.IEatParfaitCard
         if (parfait != null && parfait.Charges > 0)
         {
             // 食用所有抹茶芭菲
-            MatchaParfait.RemoveCharges(parfait, parfait.Charges, choiceContext);
+            await MatchaParfait.RemoveCharges(parfait, parfait.Charges, choiceContext);
         }
         // 获得1层无实体
         await PowerCmd.Apply<IntangiblePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);

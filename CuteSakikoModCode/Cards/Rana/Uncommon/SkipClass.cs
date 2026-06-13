@@ -5,7 +5,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 public class SkipClass : CuteRanaCard
 {
@@ -13,7 +13,7 @@ public class SkipClass : CuteRanaCard
     
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain,CardKeyword.Exhaust];
 
-    public SkipClass() : base(-1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public SkipClass() : base(-1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -30,7 +30,7 @@ public class SkipClass : CuteRanaCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
-        new BlockVar(13m, ValueProp.Move)
+        new BlockVar(11m, ValueProp.Move)
     };
 
     // 每回合开始时重置标记
@@ -55,12 +55,11 @@ public class SkipClass : CuteRanaCard
 
         for (int i = 0; i < x; i++)
             await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-
-        PlayerCmd.EndTurn(Owner, false);
+        
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3m); // 10 → 13
+        DynamicVars.Block.UpgradeValueBy(3m); 
     }
 }

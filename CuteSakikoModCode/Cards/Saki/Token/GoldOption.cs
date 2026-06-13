@@ -12,7 +12,7 @@ public class GoldOption() : ModTokenCard(0, CardType.Skill, CardRarity.Token, Ta
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new("Gold", 35m)
+        new("Gold", 30m)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

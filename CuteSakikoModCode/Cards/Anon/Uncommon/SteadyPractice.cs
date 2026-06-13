@@ -21,6 +21,6 @@ public class SteadyPractice() : CuteAnonCard(1, CardType.Power, CardRarity.Uncom
 
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Innate);
+        EnergyCost.UpgradeBy(-1);
     }
 }

@@ -48,7 +48,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
         <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
-        <RitsuLibPackageVersion>0.4.18</RitsuLibPackageVersion>
+        <RitsuLibPackageVersion>0.4.20</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <!-- 引用 -->
@@ -69,7 +69,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.4.18" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.4.20" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->

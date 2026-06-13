@@ -8,13 +8,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class BrokenPick() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class BrokenPick() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override bool GainsBlock => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(5m, ValueProp.Move); }
+        get { yield return new BlockVar(4m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -32,7 +32,7 @@ public class BrokenPick() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, T
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 2费 → 1费
-        AddKeyword(CardKeyword.Retain); // 添加保留
+        AddKeyword(CardKeyword.Retain);
+        DynamicVars.Block.UpgradeValueBy(1);
     }
 }

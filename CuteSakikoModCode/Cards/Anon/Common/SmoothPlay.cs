@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class SmoothPlay() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
+public class SmoothPlay() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

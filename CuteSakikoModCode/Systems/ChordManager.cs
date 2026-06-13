@@ -383,7 +383,7 @@ public static class ChordManager
 
         //爱音C和弦
         AddTemporaryChord("AnonCChord", ChordCategory.Anon,
-            new[] { CardType.Skill, CardType.Skill, CardType.Skill },
+            new[] { CardType.Skill, CardType.Skill, CardType.Skill, CardType.Skill },
             "CUTESAKIKOMOD-ANONCCHORD.title", "CUTESAKIKOMOD-ANONCCHORD.description", "anon_c_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>

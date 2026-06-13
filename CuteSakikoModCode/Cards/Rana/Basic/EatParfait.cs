@@ -35,7 +35,7 @@ public class EatParfait() : CuteRanaCard(0, CardType.Skill, CardRarity.Basic, Ta
     {
         var parfait = Owner.Relics.OfType<MatchaParfait>().FirstOrDefault();
         if (parfait != null)
-            MatchaParfait.RemoveCharges(parfait, 2, choiceContext);
+            await MatchaParfait.RemoveCharges(parfait, 2, choiceContext);
 
         int healAmount = DynamicVars["Heal"].IntValue;
         await CreatureCmd.Heal(Owner.Creature, healAmount);

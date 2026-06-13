@@ -38,20 +38,28 @@ public class ScaledActMap : ActMap
         _rng = new Rng(runState.Rng.Seed, $"scaled_{scaleFactor}_{runState.CurrentActIndex + 1}_map");
 
         bool hasSecondBoss = runState.Act.HasSecondBoss;
-        int originalValidRows = originalMap.GetRowCount() - 2;
-        _mapLength = Math.Max(3, (int)Math.Round(originalValidRows * scaleFactor));
-
-        // 获取原版数量，计算缩放后的 Unknown 和 Rest 数量
+    
+        // ---------- 新计算逻辑 ----------
+        // 原地图的房间行数 = originalMap.GetRowCount() - 1
+        int totalRooms = originalMap.GetRowCount() - 2;
+        int fixedRows = 3;                     // 第1行、宝箱行、最后一行
+        int randomRows = totalRooms - fixedRows;
+        int scaledRandom = Math.Max(0, (int)Math.Round(randomRows * scaleFactor));
+        _mapLength = fixedRows + scaledRandom; // 至少保持3行固定行
+    
+        // 获取原图类型数量，按比例缩放（只缩放随机部分对应的数量）
         var baseCounts = runState.Act.GetMapPointTypes(_rng);
-        int scaledUnknowns = Math.Max(0, (int)Math.Round(baseCounts.NumOfUnknowns * scaleFactor));
-        int scaledRests = Math.Max(1, (int)Math.Round(baseCounts.NumOfRests * scaleFactor));
-
-        // 创建新实例，保留精英数量和忽略规则，商店默认为 3
-        _pointTypeCounts = new MapPointTypeCounts(scaledUnknowns, scaledRests)
+    
+        int scaleCount(int original) => Math.Max(0, (int)Math.Round(original * scaleFactor));
+    
+        _pointTypeCounts = new MapPointTypeCounts(
+            scaleCount(baseCounts.NumOfUnknowns),
+            scaleCount(baseCounts.NumOfRests))
         {
-            NumOfElites = baseCounts.NumOfElites,
+            NumOfElites = scaleCount(baseCounts.NumOfElites),   // 精英也按比例缩放（若想保留原数可改为 baseCounts.NumOfElites）
             PointTypesThatIgnoreRules = baseCounts.PointTypesThatIgnoreRules
         };
+        // ---------- 新计算结束 ----------
 
         _grid = new MapPoint[MapWidth, _mapLength + 2];
         StartingMapPoint = new MapPoint(MapWidth / 2, 0);

@@ -12,7 +12,8 @@ public class LikeDream() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        // 无需额外变量，直接操作压力层数
+        new CardsVar(1),
+        new EnergyVar(1)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -30,13 +31,28 @@ public class LikeDream() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
         var pressure = Owner.Creature.GetPower<PressurePower>();
         var currentAmount = pressure?.Amount ?? 0;
         if (currentAmount > 0)
+        {
+            // 记录翻倍前的崩溃层数
+            var breakDown = Owner.Creature.GetPower<BreakDownPower>();
+            var previousBreakDownAmount = breakDown?.Amount ?? 0;
+
             // 翻倍：增加相同数量的层数
             await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, currentAmount, Owner.Creature, this);
+
+            // 检查崩溃层数是否增加（即触发了崩溃）
+            breakDown = Owner.Creature.GetPower<BreakDownPower>();
+            var newBreakDownAmount = breakDown?.Amount ?? 0;
+            if (newBreakDownAmount > previousBreakDownAmount)
+            {
+                await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner);
+                await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
+            }
+        }
     }
 
     protected override void OnUpgrade()
     {
-        // 升级：费用减少1（2 → 1）
-        EnergyCost.UpgradeBy(-1);
+        DynamicVars.Cards.UpgradeValueBy(1);
+        DynamicVars.Energy.UpgradeValueBy(1);
     }
 }

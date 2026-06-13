@@ -36,7 +36,7 @@ public class HummingParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
     {
         // 消耗 1 杯抹茶芭菲
         var parfait = Owner.Relics.OfType<MatchaParfait>().FirstOrDefault();
-        MatchaParfait.RemoveCharges(parfait, 1, choiceContext);
+        await MatchaParfait.RemoveCharges(parfait, 1, choiceContext);
 
         // 对全体敌人造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)

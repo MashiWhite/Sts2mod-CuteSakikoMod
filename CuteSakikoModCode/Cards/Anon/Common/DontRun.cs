@@ -28,17 +28,21 @@ public class DontRun() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, Tar
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 额外获得一个攻击音符（需要传入真实的和弦列表才能触发匹配）
+        // 额外获得攻击音符
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
         {
-            var mainChords = guitar.GetCurrentChords(); // 已学习的主槽位和弦
-            var bonusChords = guitar.GetBonusChords(); // Bonus 和弦
-            var tempChords = guitar.GetTemporaryChords(); // 临时和弦（如碧天伴走）
-
-            MusicNoteManager.AddNote(Owner, CardType.Attack,
-                mainChords,
-                bonusChords.Concat(tempChords));
+            var mainChords = guitar.GetCurrentChords();
+            var bonusChords = guitar.GetBonusChords();
+            var tempChords = guitar.GetTemporaryChords();
+            
+            int manualNoteCount = IsUpgraded ? 3 : 2;
+            for (int i = 0; i < manualNoteCount; i++)
+            {
+                MusicNoteManager.AddNote(Owner, CardType.Attack,
+                    mainChords,
+                    bonusChords.Concat(tempChords));
+            }
 
             // 刷新 UI
             guitar.UpdateNoteDisplay();

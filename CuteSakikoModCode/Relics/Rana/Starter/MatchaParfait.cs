@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Rooms;
@@ -114,7 +115,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             Entry.Logger.Info("[芭菲] 效果开始");
             await CardPileCmd.Draw(context.PlayerChoiceContext, DrawAmount, player);
             await PlayerCmd.GainEnergy(EnergyGain, player);
-            RemoveCharges(this, 1, context.PlayerChoiceContext);
+            await RemoveCharges(this, 1, context.PlayerChoiceContext);
             Entry.Logger.Info("[芭菲] 效果完成");
         }
         catch (Exception ex)
@@ -157,7 +158,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
                     if (combatState != null)
                     {
                         var brainFreeze = combatState.CreateCard<BrainFreeze>(Owner);
-                        var result = await CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner);
+                        var result = await CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner,CardPilePosition.Random);
                         CardCmd.PreviewCardPileAdd(result);
                         Entry.Logger.Info("[芭菲] 添加吃到头疼并预览");
                     }
@@ -182,7 +183,8 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         relic.Charges += amount;
     }
 
-    public static void RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null)
+    // 将 RemoveCharges 改为 async Task
+    public static async Task RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null)
     {
         if (relic == null) return;
 
@@ -202,6 +204,23 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         {
             relic.ChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+
+            // 如果拥有 WantBothPower，则同步执行能量和抽牌
+            if (relic.Owner.Creature.HasPower<WantBothPower>())
+            {
+                await ApplyWantBothEffect(relic.Owner, removed, choiceContext);
+            }
+        }
+    }
+
+// 原 ApplyWantBothEffect 保持不变
+    private static async Task ApplyWantBothEffect(Player player, int amount, PlayerChoiceContext? choiceContext)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            await PlayerCmd.GainEnergy(1, player);
+            if (choiceContext != null)
+                await CardPileCmd.Draw(choiceContext, 1, player);
         }
     }
 

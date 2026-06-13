@@ -13,7 +13,7 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(10m, ValueProp.Move)
+        new DamageVar(5m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -44,12 +44,14 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
         var damage = DynamicVars.Damage.BaseValue;
         var extraHits = 0;
 
-        // 检查目标身上的压力是否足够 5 层
+        // 检查目标身上的压力，计算额外攻击次数
         var targetPressure = cardPlay.Target.GetPower<PressurePower>();
-        if (targetPressure != null && targetPressure.Amount >= 5)
+        var needPressure = IsUpgradable ? 5 : 8;
+        if (targetPressure != null && targetPressure.Amount >= needPressure)
         {
-            extraHits = 1;
-            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -5, Owner.Creature, this);
+            extraHits = targetPressure.Amount / needPressure;          // 每5层一次
+            int consumeAmount = extraHits * needPressure;              // 需要消耗的层数
+            await PowerCmd.ModifyAmount(choiceContext, targetPressure, -consumeAmount, Owner.Creature, this);
         }
 
         var totalHits = 1 + extraHits;
@@ -64,6 +66,6 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m); // 10 → 15
+        DynamicVars.Damage.UpgradeValueBy(5m); 
     }
 }

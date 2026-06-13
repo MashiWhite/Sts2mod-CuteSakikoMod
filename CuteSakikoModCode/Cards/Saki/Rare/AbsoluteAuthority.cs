@@ -7,13 +7,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class AbsoluteAuthority() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+public class AbsoluteAuthority() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            yield return new DamageVar(30m, ValueProp.Move);
+            yield return new DamageVar(16m, ValueProp.Move);
             yield return new PowerVar<PressurePower>(15m);
         }
     }
@@ -35,7 +35,7 @@ public class AbsoluteAuthority() : CuteSakikoModCard(3, CardType.Attack, CardRar
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(10m); // 30 → 40
-        DynamicVars["PressurePower"].UpgradeValueBy(5m); // 15 → 20
+        DynamicVars.Damage.UpgradeValueBy(4m); 
+        DynamicVars["PressurePower"].UpgradeValueBy(10m); 
     }
 }

@@ -31,7 +31,7 @@ public class StormInhale() : CuteRanaCard(0, CardType.Skill, CardRarity.Ancient,
     {
         var parfait = Owner.Relics.OfType<MatchaParfait>().FirstOrDefault();
         if (parfait != null)
-            MatchaParfait.RemoveCharges(parfait, GetParfaitConsumeCount(), choiceContext);
+            await MatchaParfait.RemoveCharges(parfait, GetParfaitConsumeCount(), choiceContext);
 
         int healAmount = DynamicVars["Heal"].IntValue;
         await CreatureCmd.Heal(Owner.Creature, healAmount);

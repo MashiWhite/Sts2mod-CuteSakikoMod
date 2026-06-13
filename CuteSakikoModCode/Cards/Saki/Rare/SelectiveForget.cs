@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -11,11 +12,13 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class SelectiveForget() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override bool GainsBlock => true;
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -35,39 +38,38 @@ public class SelectiveForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 获得格挡
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-        // 获取弃牌堆中的回忆卡牌
-        var discardPile = PileType.Discard.GetPile(Owner);
 
-        var memoryCards = discardPile.Cards
-            .Where(card => card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
-            .ToList();
-
-        if (memoryCards.Count == 0) return;
-
-        // 确定要遗忘的数量
-        var count = IsUpgraded ? 2 : 1;
-        count = Math.Min(count, memoryCards.Count);
-
-        // 使用 UpFront 随机源，确保可重现
-        var rng = Owner.RunState.Rng.UpFront;
-        var cardsToForget = new List<CardModel>();
-        for (var i = 0; i < count; i++)
+        // 收集四个牌堆的所有卡牌
+        var pileTypes = new[] { PileType.Draw, PileType.Hand, PileType.Discard, PileType.Exhaust };
+        var allCards = new List<CardModel>();
+        foreach (var pileType in pileTypes)
         {
-            var index = rng.NextInt(memoryCards.Count);
-            cardsToForget.Add(memoryCards[index]);
-
-            memoryCards.RemoveAt(index);
+            var pile = pileType.GetPile(Owner);
+            if (pile != null)
+                allCards.AddRange(pile.Cards);
         }
 
-        // 一次性遗忘所有选中的牌
+        if (allCards.Count == 0) return;
+
+        // 按ID去重，每种卡牌只显示一次
+        var uniqueCards = allCards.GroupBy(c => c.Id).Select(g => g.First()).ToList();
+
+        // 必须选一张，不可取消
+        var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, 1);
+
+        var chosenCards = await CardSelectCmd.FromSimpleGrid(choiceContext, uniqueCards, Owner, prefs);
+        var chosen = chosenCards.FirstOrDefault();
+        if (chosen == null) return;
+
+        // 遗忘所有同ID的卡牌
+        var cardsToForget = allCards.Where(c => c.Id == chosen.Id).ToList();
         if (cardsToForget.Count > 0)
-            MemoryCmd.Forget(choiceContext, cardsToForget, this);
+            await MemoryCmd.Forget(choiceContext, cardsToForget, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3m);
+        DynamicVars.Block.UpgradeValueBy(5m);
     }
 }

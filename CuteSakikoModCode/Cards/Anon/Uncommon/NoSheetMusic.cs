@@ -7,7 +7,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class NoSheetMusic() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class NoSheetMusic() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword()];
 

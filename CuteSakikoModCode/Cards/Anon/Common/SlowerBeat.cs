@@ -18,7 +18,7 @@ public class SlowerBeat() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, T
         get
         {
             yield return new BlockVar(10m, ValueProp.Move);
-            yield return new DynamicVar("BlockNextTurn", 4m);
+            yield return new DynamicVar("BlockNextTurn", 5m);
         }
     }
 
@@ -41,8 +41,16 @@ public class SlowerBeat() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, T
             var mainChords = guitar.GetCurrentChords();
             var bonusChords = guitar.GetBonusChords();
             var tempChords = guitar.GetTemporaryChords();
-            MusicNoteManager.AddNote(Owner, CardType.Skill, mainChords,
-                bonusChords.Concat(tempChords));
+            
+            int manualNoteCount = IsUpgraded ? 3 : 2;
+            for (int i = 0; i < manualNoteCount; i++)
+            {
+                MusicNoteManager.AddNote(Owner, CardType.Skill,
+                    mainChords,
+                    bonusChords.Concat(tempChords));
+            }
+
+            // 刷新 UI
             guitar.UpdateNoteDisplay();
             guitar.UpdateStoredChordDisplay();
         }
@@ -50,7 +58,7 @@ public class SlowerBeat() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, T
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2m); // 10 → 12
-        DynamicVars["BlockNextTurn"].UpgradeValueBy(2m); // 4 → 6
+        DynamicVars.Block.UpgradeValueBy(3m); // 10 → 13
+        DynamicVars["BlockNextTurn"].UpgradeValueBy(2m); // 5 → 7
     }
 }

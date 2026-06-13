@@ -62,5 +62,6 @@ public class GoWork() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Basic, 
         // 升级：伤害+2（8→10），压力+2（4→6）
         DynamicVars.Damage.UpgradeValueBy(2m);
         DynamicVars["PressurePower"].UpgradeValueBy(2m);
+        RemoveKeyword(CardKeyword.Exhaust);
     }
 }

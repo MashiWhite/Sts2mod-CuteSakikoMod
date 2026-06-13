@@ -16,8 +16,8 @@ public class PressureOption() : ModTokenCard(0, CardType.Skill, CardRarity.Token
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<PressurePower>(5m),
-        new PowerVar<StrengthPower>(3m)
+        new PowerVar<PressurePower>(15m),
+        new PowerVar<StrengthPower>(1m)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -40,8 +40,8 @@ public class PressureOption() : ModTokenCard(0, CardType.Skill, CardRarity.Token
     protected override void OnUpgrade()
     {
         if (DynamicVars.TryGetValue("PressurePower", out var pv))
-            pv.UpgradeValueBy(3);
+            pv.UpgradeValueBy(5);
         if (DynamicVars.TryGetValue("StrengthPower", out var sv))
-            sv.UpgradeValueBy(2);
+            sv.UpgradeValueBy(1);
     }
 }
