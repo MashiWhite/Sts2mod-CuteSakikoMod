@@ -4,9 +4,11 @@ using STS2RitsuLib;
 namespace CuteSakikoMod.CuteSakikoModCode.Others;
 
 // 配置数据类（持久化到 config.json）
+// CuteSakikoModCode/Others/CuteSakikoModConfigData.cs
 public class CuteSakikoModConfigData
 {
     private float _modBgmVolume = 0.40f;
+    private float _modSfxVolume = 0.40f;   // 新增
 
     public bool EggsCard { get; set; }
     public bool EnableModMonsters { get; set; } = true;
@@ -17,9 +19,14 @@ public class CuteSakikoModConfigData
         set
         {
             _modBgmVolume = value;
-            // 实时更新正在播放的音乐音量
             AudioManager.RefreshMusicVolume();
         }
+    }
+
+    public float ModSfxVolume
+    {
+        get => _modSfxVolume;
+        set => _modSfxVolume = value;   // 即时生效，无需额外操作
     }
 }
 
@@ -32,6 +39,7 @@ public static class ModConfig
     public static bool EggsCard => Load().EggsCard;
     public static bool EnableModMonsters => Load().EnableModMonsters;
     public static float ModBgmVolume => Load().ModBgmVolume;
+    public static float ModSfxVolume => Load().ModSfxVolume;   // 新增
 
     private static CuteSakikoModConfigData Load()
     {

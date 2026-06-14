@@ -17,7 +17,10 @@ public static class AudioManager
         var settings = SaveManager.Instance?.SettingsSave;
         var masterVol = settings?.VolumeMaster ?? 1.0f;
         var sfxVol = settings?.VolumeSfx ?? 1.0f;
-        var finalVol = Mathf.Clamp(baseVolume * masterVol * sfxVol, 0.0f, 1.0f);
+        var modSfxVol = ModConfig.ModSfxVolume;                  // 新增
+        var finalVol = Mathf.Clamp(
+            baseVolume * masterVol * sfxVol * modSfxVol,         // 乘入 Mod 音效音量
+            0.0f, 1.0f);
         FmodStudioStreamingFiles.TryPlaySoundFile(filePath, finalVol);
     }
 
@@ -43,8 +46,9 @@ public static class AudioManager
 
         var settings = SaveManager.Instance?.SettingsSave;
         var masterVol = settings?.VolumeMaster ?? 1.0f;
+        var bgmVol = settings?.VolumeBgm ?? 1.0f;
         var modBgmVol = ModConfig.ModBgmVolume;
-        var finalVol = Mathf.Clamp(baseVolume * masterVol * modBgmVol, 0.0f, 1.0f);
+        var finalVol = Mathf.Clamp(baseVolume * masterVol * modBgmVol * bgmVol, 0.0f, 1.0f);
 
         var options = new AudioPlaybackOptions { Scope = AudioLifecycleScope.Combat };
         var handle = FmodStudioStreamingFiles.TryCreateStreamingMusicHandle(filePath, options);
@@ -76,8 +80,9 @@ public static class AudioManager
 
         var settings = SaveManager.Instance?.SettingsSave;
         var masterVol = settings?.VolumeMaster ?? 1.0f;
+        var bgmVol = settings?.VolumeBgm ?? 1.0f;    // 补上这一行
         var modBgmVol = ModConfig.ModBgmVolume;
-        var finalVol = Mathf.Clamp(1.0f * masterVol * modBgmVol, 0.0f, 1.0f);
+        var finalVol = Mathf.Clamp(1.0f * masterVol * bgmVol * modBgmVol, 0.0f, 1.0f);  // 乘上 bgmVol
         _currentMusicHandle.RawInstance.Call("set_volume", finalVol);
     }
 

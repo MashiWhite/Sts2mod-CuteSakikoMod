@@ -32,8 +32,8 @@ public sealed class GuitarEffectsPedalEvent : ModEventTemplate
 
     public override bool IsAllowed(IRunState runState)
     {
-        // 例如：只有拥有 AnonGuitar 遗物的玩家才能遇到
-        return runState.Players.Any(p => p.Relics.OfType<AnonGuitar>().Any());
+        return runState.Players.All(p => p.Relics.OfType<AnonGuitar>().Any()) 
+               && runState.Players.All(p => p.Gold >= DynamicVars.Gold.BaseValue);
     }
 
     // 生成初始选项

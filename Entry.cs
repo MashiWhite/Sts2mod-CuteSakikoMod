@@ -78,6 +78,12 @@ public class Entry
             model => model.ModBgmVolume,
             (model, value) => model.ModBgmVolume = value
         );
+        var sfxVolumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, float>(
+            ModId, "config",
+            model => model.ModSfxVolume,
+            (model, value) => model.ModSfxVolume = value
+        );
+        
 
         // 3. 注册设置界面
         var i18n = I18n;
@@ -101,6 +107,13 @@ public class Entry
                     0.0f, 1.0f, 0.01f,
                     valueFormatter: value => $"{value:P0}",
                     description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.DESC", "Controls the volume of mod-specific background music."))
+                .AddSlider("mod_sfx_volume_slider",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL", "Mod SFX Volume"),
+                    sfxVolumeBinding,
+                    0.0f, 1.0f, 0.01f,
+                    valueFormatter: value => $"{value:P0}",
+                    description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.DESC", "Controls the volume of mod-specific sound effects.")
+                )
             )
         );
 

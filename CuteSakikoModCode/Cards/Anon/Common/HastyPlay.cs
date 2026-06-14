@@ -37,7 +37,11 @@ public class HastyPlay : CuteAnonCard
         TriggerBanter();
 
         if (cardPlay.Target != null)
-            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage, this);
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+                .FromCard(this)
+                .Targeting(cardPlay.Target)
+                .WithHitFx("vfx/vfx_attack_slash")
+                .Execute(choiceContext);
 
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }

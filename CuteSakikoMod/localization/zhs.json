@@ -8,5 +8,7 @@
   "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "开启后，Mod的自定义怪物和遭遇会在游戏中自然生成",
   "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL": "Mod 背景音乐音量",
   "MOD_SETTINGS.MOD_BGM_VOLUME.DESC": "控制本模组专属背景音乐的音量大小，最终音量 = 主音量 × 此值。",
+  "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL": "Mod 音效音量",
+  "MOD_SETTINGS.MOD_SFX_VOLUME.DESC": "控制本模组自定义音效的音量大小，最终音量 = 主音量 × 音效音量 × 此值。",
   "MOD_SETTINGS.DESCRIPTION": "可爱小祥模组的设置"
 }

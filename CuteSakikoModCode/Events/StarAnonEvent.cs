@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
@@ -16,13 +17,10 @@ public sealed class StarAnonEvent : ModEventTemplate
     public override EventAssetProfile AssetProfile => new(
         InitialPortraitPath: "res://CuteSakikoMod/images/events/star_anon.png"
     );
-
-    // 可选：仍然需要防止在地图生成时出现多次补丁控制？但补丁已经强制前三次，IsAllowed 可以始终返回 true
-    // 如果你想额外限制整个 run 只出现一次（与补丁计数器重复），可以保留一个标志，但不是必须。
-    // 为简单起见，IsAllowed 直接返回 true，让补丁完全控制出现次数。
+    
     public override bool IsAllowed(IRunState runState)
     {
-        return true;
+        return ModConfig.EnableModMonsters;
     }
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()

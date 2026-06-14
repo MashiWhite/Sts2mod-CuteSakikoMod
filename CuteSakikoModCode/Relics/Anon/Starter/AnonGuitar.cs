@@ -349,7 +349,7 @@ public class AnonGuitar : CuteAnonRelic
             MusicNoteManager.RemoveChord(Owner, chordId);
         await NotifyChordPlayed(ctx);
         var sfx = Path.Combine(AudioDir, StrumFiles[_rand.Next(StrumFiles.Length)]);
-        AudioManager.PlaySound(sfx, 0.6f);
+        AudioManager.PlaySound(sfx, 1.0f);
     }
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)

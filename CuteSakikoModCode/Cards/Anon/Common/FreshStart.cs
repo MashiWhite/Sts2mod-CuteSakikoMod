@@ -32,7 +32,11 @@ public class FreshStart : CuteAnonCard
     {
         TriggerBanter();
 
-        if (cardPlay.Target != null) await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage, this);
+        if (cardPlay.Target != null)  await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
 
         if (!_hasBeenPlayedThisCombat)
         {

@@ -13,7 +13,6 @@ public class Provoke() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, Targ
     {
         get
         {
-            // 未升级：20 格挡，2 力量
             yield return new BlockVar(18m, ValueProp.Move);
             yield return new PowerVar<StrengthPower>(3m);
         }
@@ -36,7 +35,6 @@ public class Provoke() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, Targ
 
     protected override void OnUpgrade()
     {
-        // 格挡 18 → 21（增加 5）
         DynamicVars.Block.UpgradeValueBy(5m);
     }
 }
