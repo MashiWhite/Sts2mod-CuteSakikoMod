@@ -9,8 +9,9 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class SymbolTwo() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class SymbolTwo() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
+    
     // 动态变量：伤害值（基础1，升级2）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -69,6 +70,6 @@ public class SymbolTwo() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Unco
     protected override void OnUpgrade()
     {
         // 升级：伤害增加1点（1→2）
-        DynamicVars.Damage.UpgradeValueBy(1m);
+        AddKeyword(CardKeyword.Retain);
     }
 }

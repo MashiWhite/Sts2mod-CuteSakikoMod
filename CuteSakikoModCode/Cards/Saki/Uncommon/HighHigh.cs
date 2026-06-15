@@ -14,7 +14,7 @@ public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(8m, ValueProp.Move)
+        new DamageVar(10m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -69,7 +69,7 @@ public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
 
     protected override void OnUpgrade()
     {
-        // 升级：伤害 8 → 13
-        DynamicVars["Damage"].UpgradeValueBy(5m);
+        // 升级：伤害 10 → 13
+        DynamicVars["Damage"].UpgradeValueBy(3m);
     }
 }
