@@ -16,14 +16,14 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 
-public class KnightSword() : ModTokenCard(3, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
+public class KnightSword() : ModTokenCard(2, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         [CardKeyword.Retain, CutesakiKeywords.Sword.GetModCardKeyword()];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(6m, ValueProp.Move)
+        new DamageVar(10m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
