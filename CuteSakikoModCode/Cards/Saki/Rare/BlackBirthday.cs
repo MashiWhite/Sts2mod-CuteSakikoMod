@@ -16,7 +16,6 @@ public sealed class BlackBirthday() : CuteSakikoModCard(1, CardType.Power, CardR
     {
         get
         {
-            // 基础值 = 1（给予1层 BlackRebirthPower），升级后变为2
             yield return new PowerVar<BlackRebirthPower>(2);
         }
     }

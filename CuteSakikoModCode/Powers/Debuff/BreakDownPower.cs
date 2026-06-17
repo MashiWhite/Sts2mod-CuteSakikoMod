@@ -55,7 +55,7 @@ public sealed class BreakDownPower : CuteSakikoModPower
         if (side != Owner.Side) return;
         if (_hasTakenDamageSinceLastOwnTurnEnd && Amount > 0)
         {
-            await PowerCmd.ModifyAmount(choiceContext, this, -1, null, null);
+            await PowerCmd.Remove(this);
             _hasTakenDamageSinceLastOwnTurnEnd = false;
         }
     }
