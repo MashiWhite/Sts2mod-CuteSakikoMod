@@ -4,9 +4,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 
-public class ReplyHelper() : CuteRanaCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
+public class ReplyHelper() : CuteRanaCard(1, CardType.Skill, CardRarity.Rare, TargetType.AnyAlly)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 

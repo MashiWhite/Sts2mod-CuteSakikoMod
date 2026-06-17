@@ -12,9 +12,9 @@ using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class CatTreasure : CuteRanaCard
+public class NekoTreasure : CuteRanaCard
 {
-    public CatTreasure() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+    public NekoTreasure() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

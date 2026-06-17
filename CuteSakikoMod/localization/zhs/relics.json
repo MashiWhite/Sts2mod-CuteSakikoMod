@@ -53,5 +53,8 @@
   "CUTE_SAKIKO_MOD_RELIC_AVEMUJICA_SAKIKO.flavor": "[red][b]那些经历是幸福还是苦难...?[/b][/red]",
   "CUTE_SAKIKO_MOD_RELIC_CRYCHIC_SAKIKO.title": "月光小祥",
   "CUTE_SAKIKO_MOD_RELIC_CRYCHIC_SAKIKO.description": "拾起时，将第2阶段的地图节点数减少为原来的一半，并获得1组普通、1组罕见、2组稀有卡牌奖励。",
-  "CUTE_SAKIKO_MOD_RELIC_CRYCHIC_SAKIKO.flavor": "[blue][b]美好的时光总是短暂[/b][/blue]"
+  "CUTE_SAKIKO_MOD_RELIC_CRYCHIC_SAKIKO.flavor": "[blue][b]美好的时光总是短暂[/b][/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.title": "女神之剑",
+  "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.description": "每场战斗开始时，将[gold]骑士之剑[/gold]添加到手牌。任何人[gold]压力[/gold]增加时，都会提升[gold]骑士之剑[/gold]的伤害。",
+  "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.flavor": "[blue][b]你愿意成为我的骑士吗[/b][/blue]"
 }

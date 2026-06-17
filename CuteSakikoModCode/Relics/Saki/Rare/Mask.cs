@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -16,6 +17,7 @@ public sealed class Mask : CuteSakiRelic
     {
         get { yield return HoverTipFactory.FromPower<BreakDownPower>(); }
     }
+
 
     /// <summary>
     ///     监听任何 Power 数量变化。如果 BreakDownPower 被施加到拥有者，立即移除。

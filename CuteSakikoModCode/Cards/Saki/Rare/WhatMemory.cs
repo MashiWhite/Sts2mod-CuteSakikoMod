@@ -56,8 +56,8 @@ public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare
         foreach (var card in selectedCards)
         {
             card.EnergyCost.SetThisCombat(0, true);
-            card.AddModKeyword(CutesakiKeywords.Memory);
-            card.AddModKeyword(CutesakiKeywords.Sakiforget);
+            card.AddKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
+            card.AddKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
         }
     }
 

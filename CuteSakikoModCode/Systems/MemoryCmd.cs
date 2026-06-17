@@ -22,34 +22,38 @@ public static class MemoryCmd
         if (list.Count == 0) return;
         var player = list[0].Owner;
 
-        var forgetPile = ForgetCardPile.Get(player);
-        if (forgetPile == null)
+        // 获取遗忘牌堆类型（不依赖实例）
+        var forgetPileType = ForgetCardPile.GetPileType(); // 需要在 ForgetCardPile 中添加此方法返回 PileType
+        if (forgetPileType == null)
         {
-            Log.Error($"[MemoryCmd] ForgetCardPile is null for player {player.NetId}");
+            Log.Error("[MemoryCmd] Cannot get ForgetCardPile type");
             return;
         }
 
-        var targetPileType = forgetPile.Type;
         var memoryPile = removeFromMemory ? MemoryCardPile.Get(player) : null;
 
         foreach (var card in list)
         {
-            if (card.Pile?.Type == targetPileType) continue;
+            if (card.Pile?.Type == forgetPileType) continue;
 
-            await CardPileCmd.Add(card, targetPileType);
+            // 官方命令：移动卡牌到遗忘牌堆（自动同步）
+            await CardPileCmd.Add(card, forgetPileType);
 
+            // 消耗压力（使用官方命令）
             var pressure = player.Creature.GetPower<PressurePower>();
             if (pressure != null)
                 await PowerCmd.ModifyAmount(choiceContext, pressure, -2, player.Creature, source);
 
+            // 从记忆牌堆中移除（仅当 memoryPile 可用时）
             if (memoryPile != null && removeFromMemory)
             {
                 var toRemove = memoryPile.Cards.Where(c => c.Id == card.Id).ToList();
                 foreach (var mCard in toRemove)
-                    memoryPile.RemoveInternal(mCard); // 改这里
+                    memoryPile.RemoveInternal(mCard);
             }
         }
 
+        // ★ 关键修复：无论是否获取到 forgetPile 实例，都触发遗忘事件
         await MemoryCardPileManager.FireOnForgottenCards(choiceContext, list, source);
     }
 

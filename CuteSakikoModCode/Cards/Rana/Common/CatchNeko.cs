@@ -15,9 +15,9 @@ using STS2RitsuLib.Utils;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class CatchCat : CuteRanaCard
+public class CatchNeko : CuteRanaCard
 {
-    public CatchCat() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
+    public CatchNeko() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {

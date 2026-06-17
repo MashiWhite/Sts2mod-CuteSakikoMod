@@ -48,7 +48,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
         <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
-        <RitsuLibPackageVersion>0.4.21</RitsuLibPackageVersion>
+        <RitsuLibPackageVersion>0.4.24</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <!-- 引用 -->
@@ -69,7 +69,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.4.21" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.4.24" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -82,6 +82,10 @@
         <EmbeddedResource Remove="materials/**"/>
         <EmbeddedResource Remove="shaders/**"/>
         <EmbeddedResource Remove="images/**"/>
+        <Compile Remove="CuteSakikoModCode\Cards\Rana\Uncommon\ManyCats.cs" />
+        <Compile Remove="CuteSakikoModCode\Cards\Rana\Common\AllAreCats.cs" />
+        <Compile Remove="CuteSakikoModCode\Cards\Rana\Common\WatchCats.cs" />
+        <Compile Remove="CuteSakikoModCode\Cards\Rana\Common\CatPet.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -102,7 +106,6 @@
         <Folder Include="CuteSakikoModCode\Relics\Anon\Uncommon\"/>
         <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\"/>
         <Folder Include="CuteSakikoModCode\Relics\Saki\Event\"/>
-        <Folder Include="CuteSakikoModCode\Relics\Saki\Uncommon\"/>
         <Folder Include="CuteSakikoMod\images\ui\run_history\"/>
         <Folder Include="CuteSakikoMod\localization\eng\" />
         <Folder Include="CuteSakikoMod\scenes\others\"/>

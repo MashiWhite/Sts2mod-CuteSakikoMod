@@ -12,9 +12,9 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class AllAreCats : CuteRanaCard
+public class AllAreNeko : CuteRanaCard
 {
-    public AllAreCats() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public AllAreNeko() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
 

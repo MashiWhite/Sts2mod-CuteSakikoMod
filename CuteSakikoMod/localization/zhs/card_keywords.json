@@ -29,6 +29,8 @@
   "CUTE_SAKIKO_MOD_KEYWORD_PARFAIT.description": "[green]很好吃。[/green]",
   "CUTE_SAKIKO_MOD_KEYWORD_NEKO.title": "猫咪",
   "CUTE_SAKIKO_MOD_KEYWORD_NEKO.description": "[green]喵。[/green]",
+  "CUTE_SAKIKO_MOD_KEYWORD_RANA_LIVE.title": "来莱芜",
+  "CUTE_SAKIKO_MOD_KEYWORD_RANA_LIVE.description": "打出后获得1层[green]莱芜[/green]",
   "CUTESAKIKOMOD-CCHORD.title": "C和弦",
   "CUTESAKIKOMOD-CCHORD.description": "随机造成[blue]{0}[/blue]点伤害，获得[blue]{1}[/blue]点格挡。",
   "CUTESAKIKOMOD-GCHORD.title": "G和弦",

@@ -8,20 +8,16 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-public class ThrillingLive() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
+
+public class SoundCheck() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new DamageVar(20m, ValueProp.Move)
-    ];
-    
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
     [
         CutesakiKeywords.RanaLive.GetModCardKeyword()
     ];
-
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -31,17 +27,34 @@ public class ThrillingLive() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncom
         }
     }
 
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(5m, ValueProp.Move),
+        new CardsVar(2)
+    ];
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int damage = (int)DynamicVars.Damage.BaseValue;
-        await DamageCmd.Attack(damage)
+        if (cardPlay.Target == null) return;
+
+        // 执行攻击
+        var attackCommand = await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
-            .TargetingAllOpponents(CombatState)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
+
+        // 检查是否有未格挡的伤害
+        bool hasUnblockedDamage = attackCommand.Results
+            .SelectMany(hitResults => hitResults)
+            .Any(result => result.UnblockedDamage > 0);
+
+        if (hasUnblockedDamage)
+            await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m); // 20 → 25
+        DynamicVars.Damage.UpgradeValueBy(3m); // 5 → 8
     }
 }

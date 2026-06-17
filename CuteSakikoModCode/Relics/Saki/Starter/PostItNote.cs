@@ -38,7 +38,7 @@ public sealed class PostItNote : KabutoNote
                 var template = shuffled.FirstOrDefault();
                 if (template != null)
                 {
-                    var mutableCard = Owner.Creature.CombatState.CreateCard(template, Owner);
+                    var mutableCard = MemoryCardPile.CreateCardFromMemorySnapshot(Owner, template);
                     mutableCard.UpgradeInternal();
                     mutableCard.FinalizeUpgradeInternal();
                     await CardPileCmd.AddGeneratedCardToCombat(mutableCard, PileType.Hand, Owner);

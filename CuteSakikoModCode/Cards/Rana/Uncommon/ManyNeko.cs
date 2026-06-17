@@ -9,9 +9,9 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-public class ManyCats : CuteRanaCard
+public class ManyNeko : CuteRanaCard
 {
-    public ManyCats() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public ManyNeko() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

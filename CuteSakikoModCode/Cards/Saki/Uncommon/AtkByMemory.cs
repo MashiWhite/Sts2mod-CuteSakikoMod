@@ -57,15 +57,18 @@ public class AtkByMemory : CuteSakikoModCard
         var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
         if (canonicalCards.Count == 0) return;
 
+        // 打乱快照列表（使用 RNG）
+        var shuffled = canonicalCards.OrderBy(_ => Owner.RunState.Rng.Shuffle.NextFloat()).ToList();
+    
         var newCards = new List<CardModel>();
-        for (var i = 0; i < needed; i++)
+        var usedIds = new HashSet<ModelId>();
+        for (var i = 0; i < Math.Min(needed, shuffled.Count); i++)
         {
-            var newCard = CardFactory.GetDistinctForCombat(
-                Owner,
-                canonicalCards,
-                1,
-                Owner.RunState.Rng.CombatCardGeneration
-            ).FirstOrDefault();
+            var template = shuffled[i];
+            if (usedIds.Contains(template.Id)) continue;
+            usedIds.Add(template.Id);
+        
+            var newCard = MemoryCardPile.CreateCardFromMemorySnapshot(Owner, template);
             if (newCard != null) newCards.Add(newCard);
         }
 

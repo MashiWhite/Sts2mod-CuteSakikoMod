@@ -8,20 +8,21 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class ThrillingLive() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public class ImmersedGuitar() : CuteRanaCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(20m, ValueProp.Move)
+        new DamageVar(10m, ValueProp.Move),
+        new CardsVar(1)
     ];
     
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
     [
         CutesakiKeywords.RanaLive.GetModCardKeyword()
     ];
-
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -33,15 +34,20 @@ public class ThrillingLive() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncom
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int damage = (int)DynamicVars.Damage.BaseValue;
-        await DamageCmd.Attack(damage)
-            .FromCard(this)
-            .TargetingAllOpponents(CombatState)
-            .Execute(choiceContext);
+        if (cardPlay.Target != null)
+        {
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+                .FromCard(this)
+                .Targeting(cardPlay.Target)
+                .WithHitFx("vfx/vfx_attack_slash")
+                .Execute(choiceContext);
+        }
+
+        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m); // 20 → 25
+        DynamicVars.Damage.UpgradeValueBy(3m); 
     }
 }

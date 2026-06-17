@@ -61,21 +61,32 @@ public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
             }
         }
 
+        bool isNew = false;
+        CardModel swordToMove;
+
         if (sword != null)
         {
-            // 将找到的骑士之剑移到手牌
             sword.RemoveFromCurrentPile();
-            await CardPileCmd.Add(sword, PileType.Hand);
+            swordToMove = sword;
         }
         else
         {
-            // 没有找到，创建一张新的骑士之剑
-            var newSword = CombatState.CreateCard<KnightSword>(Owner);
-            if (IsUpgraded) CardCmd.Upgrade(newSword);
-            await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, Owner);
+            swordToMove = CombatState.CreateCard<KnightSword>(Owner);
+            isNew = true;
         }
-    }
 
+        // 卡牌已升级时，升级骑士之剑
+        if (IsUpgraded)
+        {
+            swordToMove.UpgradeInternal();
+            swordToMove.FinalizeUpgradeInternal();
+        }
+
+        if (isNew)
+            await CardPileCmd.AddGeneratedCardToCombat(swordToMove, PileType.Hand, Owner);
+        else
+            await CardPileCmd.Add(swordToMove, PileType.Hand);
+    }
     protected override void OnUpgrade()
     {
         // 升级：费用 1 → 0

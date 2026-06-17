@@ -41,6 +41,14 @@ public sealed class ForgetCardPile
             )
         });
     }
+    
+    public static PileType GetPileType()
+    {
+        var id = ModContentRegistry.GetQualifiedCardPileId("CuteSakikoMod", "Forget");
+        if (!ModCardPileRegistry.TryGet(id, out var definition))
+            throw new InvalidOperationException("ForgetCardPile not registered");
+        return definition.PileType;
+    }
 
     /// <summary>
     ///     获取或创建遗忘堆实例。通过反射调用 ModCardPileStorage.Resolve 确保懒创建。

@@ -4,19 +4,14 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-public class ThrillingLive() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public class LiveWithYou() : CuteRanaCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new DamageVar(20m, ValueProp.Move)
-    ];
-    
+    public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
+
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
     [
         CutesakiKeywords.RanaLive.GetModCardKeyword()
@@ -33,15 +28,21 @@ public class ThrillingLive() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncom
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int damage = (int)DynamicVars.Damage.BaseValue;
-        await DamageCmd.Attack(damage)
-            .FromCard(this)
-            .TargetingAllOpponents(CombatState)
-            .Execute(choiceContext);
+        ArgumentNullException.ThrowIfNull(cardPlay.Target);
+        var targetPlayer = cardPlay.Target.Player;
+
+        int teammateAmount = IsUpgraded ? 3 : 2;
+        int selfAmount = IsUpgraded ? 2 : 1;
+
+        // 给队友施加莱芜
+        await PowerCmd.Apply<RanaLivePower>(choiceContext, targetPlayer.Creature, teammateAmount, Owner.Creature, this);
+
+        // 给自己施加莱芜
+        await PowerCmd.Apply<RanaLivePower>(choiceContext, Owner.Creature, selfAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m); // 20 → 25
+        // 升级效果已在 IsUpgraded 中处理
     }
 }

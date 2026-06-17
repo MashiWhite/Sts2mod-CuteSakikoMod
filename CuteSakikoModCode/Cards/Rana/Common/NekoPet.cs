@@ -8,9 +8,9 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class CatPet : CuteRanaCard
+public class NekoPet : CuteRanaCard
 {
-    public CatPet() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public NekoPet() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
 

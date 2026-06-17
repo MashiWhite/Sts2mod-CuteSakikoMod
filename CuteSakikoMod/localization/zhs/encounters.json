@@ -4,5 +4,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.title": "灰爱音",
   "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.loss": "{character}没能阻止[pink]{encounter}[/pink]燃为灰烬。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.title": "天素罗",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "天祥罗",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。"
 }

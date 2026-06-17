@@ -42,15 +42,14 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
         var cardTemplate = shuffled.FirstOrDefault();
         if (cardTemplate == null) return;
 
-        var randomCard = Owner.Creature.CombatState.CreateCard(cardTemplate, Owner);
+        var randomCard = MemoryCardPile.CreateCardFromMemorySnapshot(Owner, cardTemplate);
         if (randomCard != null)
         {
-            if (IsUpgraded)
+            if (IsUpgraded && !randomCard.IsUpgraded)
             {
                 randomCard.UpgradeInternal();
                 randomCard.FinalizeUpgradeInternal();
             }
-
             await CardPileCmd.AddGeneratedCardToCombat(randomCard, PileType.Hand, Owner);
         }
     }

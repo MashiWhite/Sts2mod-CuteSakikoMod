@@ -67,6 +67,7 @@ public class KnightSword() : ModTokenCard(2, CardType.Attack, CardRarity.Token, 
     protected override void OnUpgrade()
     {
         EnergyCost.UpgradeBy(-1);
+        DynamicVars.Damage.UpgradeValueBy(5);
     }
 
     public static void IncreaseDamage(int delta, CombatState combatState)

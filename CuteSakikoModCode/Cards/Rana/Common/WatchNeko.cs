@@ -10,9 +10,9 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class WatchCats : CuteRanaCard
+public class WatchNeko : CuteRanaCard
 {
-    public WatchCats() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+    public WatchNeko() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

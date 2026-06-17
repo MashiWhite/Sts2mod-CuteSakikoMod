@@ -69,9 +69,10 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
         var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
         if (canonicalCards.Count == 0) return;
 
-        // 5. 使用 CombatState.CreateCard 生成完全正确的战斗实例
+        // 5. 使用 MemoryCardPile.CreateCardFromMemorySnapshot 生成完全正确的战斗实例
         var combatReadyCards = canonicalCards
-            .Select(template => Owner.Creature.CombatState.CreateCard(template, Owner))
+            .Select(template => MemoryCardPile.CreateCardFromMemorySnapshot(Owner, template))
+            .Where(c => c != null)
             .ToList();
 
         // 6. 弹出选择界面

@@ -40,9 +40,6 @@ public class KabutoNote : CuteSakiRelic
         if (side != Owner.Creature.Side || combatState.RoundNumber != 1)
             return;
 
-        
-        
-
         // 1. 开局给压力（原有效果）
         int powerCount = Math.Min(3, Owner.Creature.CurrentHp-1);
         await PowerCmd.Apply<PressurePower>(
@@ -60,7 +57,7 @@ public class KabutoNote : CuteSakiRelic
         var template = shuffled.FirstOrDefault();
         if (template == null) return;
 
-        var mutableCard = Owner.Creature.CombatState.CreateCard(template, Owner);
+        var mutableCard = MemoryCardPile.CreateCardFromMemorySnapshot(Owner, template);
         await CardPileCmd.AddGeneratedCardToCombat(mutableCard, PileType.Hand, Owner);
 
         Flash();

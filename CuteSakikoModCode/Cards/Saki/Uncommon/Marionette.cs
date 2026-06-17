@@ -12,7 +12,8 @@ public class Marionette() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new CardsVar(2) // 抽牌数和随机打出数（基础2，升级3）
+        new CardsVar(2), // 抽牌数和随机打出数（基础2，升级3）
+        new CardsVar("PlayCount",3) // 抽牌数和随机打出数（基础2，升级3）
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -28,7 +29,7 @@ public class Marionette() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
         if (handCards.Count == 0) return;
 
         // 3. 随机打出指定数量的手牌（不重复）
-        var playCount = drawCount;
+        var playCount = DynamicVars["PlayCount"].IntValue;
         var toPlay = new List<CardModel>();
         var indices = Enumerable.Range(0, handCards.Count).ToList();
         var rng = Owner.RunState.Rng.UpFront;
@@ -75,6 +76,7 @@ public class Marionette() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Cards.UpgradeValueBy(1m);
+        DynamicVars.Cards.UpgradeValueBy(2m);
+        DynamicVars["PlayCount"].UpgradeValueBy(1m);
     }
 }

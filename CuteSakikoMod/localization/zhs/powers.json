@@ -8,6 +8,12 @@
   "CUTE_SAKIKO_MOD_POWER_RAINFALL_OMEN_POWER.title": "雨前征兆",
   "CUTE_SAKIKO_MOD_POWER_RAINFALL_OMEN_POWER.description": "回合结束时，若敌人意图为攻击，获得等于层数的格挡。",
   "CUTE_SAKIKO_MOD_POWER_RAINFALL_OMEN_POWER.smartDescription": "回合结束时，若敌人意图为攻击，获得{Amount}点格挡。",
+  "CUTE_SAKIKO_MOD_POWER_RANA_LIVE_POWER.title": "莱芜",
+  "CUTE_SAKIKO_MOD_POWER_RANA_LIVE_POWER.description": "达到10层时转化为[gold]莱芜爽[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_RANA_LIVE_POWER.smartDescription": "达到10层时转化为[gold]莱芜爽[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_LIVE_SWEET_POWER.title": "莱芜爽",
+  "CUTE_SAKIKO_MOD_POWER_LIVE_SWEET_POWER.description": "获得时抽3张牌并获得{energyPrefix:energyIcons(3)}。所有[green]来莱芜[/green]费用-1。回合结束时移除。",
+  "CUTE_SAKIKO_MOD_POWER_LIVE_SWEET_POWER.smartDescription": "所有[green]来莱芜[/green]牌费用-1。回合结束时移除。",
 
   "CUTE_SAKIKO_MOD_POWER_HEART_WALL_POWER.title": "心之壁",
   "CUTE_SAKIKO_MOD_POWER_HEART_WALL_POWER.description": "每次受到伤害时，记录其卡牌来源。本回合[red]免疫[/red]来自同一类卡牌的伤害。",

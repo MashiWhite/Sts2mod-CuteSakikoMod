@@ -29,7 +29,13 @@ public class BrainFreeze : ModStatusCard
         await Cmd.Wait(0.25f);
         int damage = DynamicVars.Damage.IntValue;
         // 指定目标为自己
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(Owner.Creature).Execute(choiceContext);
+        await CreatureCmd.Damage(
+            choiceContext,
+            Owner.Creature,
+            damage,
+            ValueProp.Unpowered,
+            Owner.Creature,
+            null);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
