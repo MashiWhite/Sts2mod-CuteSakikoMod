@@ -78,8 +78,12 @@ public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
         // 卡牌已升级时，升级骑士之剑
         if (IsUpgraded)
         {
-            swordToMove.UpgradeInternal();
-            swordToMove.FinalizeUpgradeInternal();
+            // 如果骑士之剑还可以升级，才进行升级
+            if (swordToMove.IsUpgradable)
+            {
+                swordToMove.UpgradeInternal();
+                swordToMove.FinalizeUpgradeInternal();
+            }
         }
 
         if (isNew)
