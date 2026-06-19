@@ -23,7 +23,7 @@ public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 在所有牌堆中搜索骑士之剑
+        // 1. 先检查并处理骑士之剑
         var swordExists = false;
         var searchPiles = new[] { PileType.Hand, PileType.Draw, PileType.Discard };
         foreach (var pileType in searchPiles)
@@ -36,17 +36,16 @@ public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon,
             }
         }
 
-        // 如果已经存在骑士之剑，这张牌不产生任何效果
-        if (swordExists)
-            return;
+        if (!swordExists)
+        {
+            // 没有骑士之剑：创建一张新的并加入手牌
+            var newSword = CombatState.CreateCard<KnightSword>(Owner);
+            if (IsUpgraded)
+                CardCmd.Upgrade(newSword);
+            await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, Owner);
+        }
 
-        // 没有骑士之剑：创建一张新的并加入手牌
-        var newSword = CombatState.CreateCard<KnightSword>(Owner);
-        if (IsUpgraded)
-            CardCmd.Upgrade(newSword);
-        await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, Owner);
-
-        // 施加压力和横扫能力
+        // 2. 然后施加压力和横扫能力（剑已就位，可以吃到压力加成）
         var pressureAmount = DynamicVars["PressurePower"].IntValue;
         await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmount, Owner.Creature, this);
         await PowerCmd.Apply<SweepPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);

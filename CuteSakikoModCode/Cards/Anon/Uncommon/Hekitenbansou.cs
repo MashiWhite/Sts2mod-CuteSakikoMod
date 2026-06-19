@@ -9,7 +9,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class Hekitenbansou() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class Hekitenbansou() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override string ChordId => "HekitenbansouChord";
 
@@ -39,20 +39,19 @@ public class Hekitenbansou() : CuteAnonCard(3, CardType.Skill, CardRarity.Uncomm
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
-
+        
         const string chordId = "HekitenbansouChord";
-
         // 若临时槽中还未拥有该和弦，则添加临时槽位；否则直接储存一个和弦
         var temporaryChords = guitar.GetTemporaryChords(); // 需公开此方法，见下方说明
         if (temporaryChords.Contains(chordId))
             await guitar.AddChordToStored(choiceContext, chordId);
         else
             guitar.AddTemporaryChord(chordId);
+        
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 3 → 2
-        AddKeyword(CardKeyword.Innate);
+        EnergyCost.UpgradeBy(-1); 
     }
 }

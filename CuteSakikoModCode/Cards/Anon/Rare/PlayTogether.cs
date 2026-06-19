@@ -25,7 +25,7 @@ public class PlayTogether() : CuteAnonCard(-1, CardType.Skill, CardRarity.Rare, 
         if (chordIds.Count == 0) return;
 
         var x = ResolveEnergyXValue();
-        var times = IsUpgraded ? x + 2 : x; // 升级后 X+2 次
+        var times = IsUpgraded ? x + 4 : x + 2; 
         if (times <= 0) return;
 
         var rng = Owner.RunState.Rng.CombatCardSelection;

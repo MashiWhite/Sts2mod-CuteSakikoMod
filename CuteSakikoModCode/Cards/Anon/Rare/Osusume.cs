@@ -9,7 +9,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class Osusume() : CuteAnonCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class Osusume() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override string ChordId => "AnonDChord";
 
@@ -39,16 +39,18 @@ public class Osusume() : CuteAnonCard(3, CardType.Skill, CardRarity.Rare, Target
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
-
-        var currentDominant = guitar.GetCurrentChords().GetValueOrDefault(ChordCategory.Dominant);
-        if (currentDominant == "AnonDChord")
-            await guitar.AddChordToStored(choiceContext, "AnonDChord");
+        
+        const string chordId = "AnonDChord";
+        // 若临时槽中还未拥有该和弦，则添加临时槽位；否则直接储存一个和弦
+        var temporaryChords = guitar.GetTemporaryChords(); // 需公开此方法，见下方说明
+        if (temporaryChords.Contains(chordId))
+            await guitar.AddChordToStored(choiceContext, chordId);
         else
-            guitar.TempReplaceChord(ChordCategory.Dominant, "AnonDChord");
+            guitar.AddTemporaryChord(chordId);
     }
 
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Innate);
+        EnergyCost.UpgradeBy(-1);
     }
 }

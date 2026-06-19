@@ -28,7 +28,7 @@ public sealed class LiveSweetPower : CuteSakikoModPower
         if (amount <= 0) return;
 
         var player = Owner!.Player;
-        await PlayerCmd.GainEnergy(3, player);
+        await PlayerCmd.GainEnergy(1, player);
         await CardPileCmd.Draw(choiceContext, 3, player);
     }
 

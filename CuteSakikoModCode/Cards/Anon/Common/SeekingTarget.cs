@@ -14,8 +14,8 @@ public class SeekingTarget() : CuteAnonCard(1, CardType.Attack, CardRarity.Commo
     {
         get
         {
-            yield return new DamageVar(8m, ValueProp.Move);
-            yield return new PowerVar<VulnerablePower>(1m);
+            yield return new DamageVar(4m, ValueProp.Move);
+            yield return new PowerVar<VulnerablePower>(2m);
         }
     }
 
@@ -45,7 +45,6 @@ public class SeekingTarget() : CuteAnonCard(1, CardType.Attack, CardRarity.Commo
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m); // 8 → 12
-        DynamicVars["VulnerablePower"].UpgradeValueBy(1m); // 1 → 2
+        DynamicVars.Damage.UpgradeValueBy(2m); 
     }
 }

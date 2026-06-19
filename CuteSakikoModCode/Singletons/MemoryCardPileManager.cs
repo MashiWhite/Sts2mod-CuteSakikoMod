@@ -1,17 +1,14 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
-using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 using STS2RitsuLib.Models;
@@ -29,12 +26,19 @@ public sealed class MemoryCardPileManager : HookedSingletonModel
 
     public override bool ShouldReceiveCombatHooks => true;
 
-    public static event Func<PlayerChoiceContext, IReadOnlyList<CardModel>, CardModel?, Task>? OnForgottenCards;
+    // ★ 自定义遗忘事件（所有遗忘操作都会触发）
+    public static event Func<PlayerChoiceContext, IReadOnlyList<CardModel>, CardModel?, Task>? CardsForgotten;
 
-    internal static Task FireOnForgottenCards(PlayerChoiceContext choiceContext, IReadOnlyList<CardModel> cards,
+    /// <summary>
+    /// 触发遗忘事件。在任何导致卡牌被遗忘的地方调用此方法。
+    /// </summary>
+    public static async Task FireCardsForgotten(PlayerChoiceContext choiceContext, IReadOnlyList<CardModel> cards,
         CardModel? source)
     {
-        return OnForgottenCards != null ? OnForgottenCards.Invoke(choiceContext, cards, source) : Task.CompletedTask;
+        if (CardsForgotten != null && cards.Count > 0)
+        {
+            await CardsForgotten.Invoke(choiceContext, cards, source);
+        }
     }
 
     public override async Task AfterCombatEnd(CombatRoom room)
@@ -44,10 +48,6 @@ public sealed class MemoryCardPileManager : HookedSingletonModel
         await Task.CompletedTask;
     }
 
-    /// <summary>
-    ///     使用官方钩子 BeforeSideTurnEnd：在玩家回合结束、手牌仍保留时，遗忘所有记忆卡牌。
-    ///     只在主机或单人模式下执行，避免联机重复。
-    /// </summary>
     public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
@@ -59,7 +59,6 @@ public sealed class MemoryCardPileManager : HookedSingletonModel
 
         foreach (var player in combatState.Players)
         {
-            // 如果玩家拥有 AtkByMemoryPower，则本回合不遗忘记忆卡牌
             if (player.Creature.HasPower<AtkByMemoryPower>())
                 continue;
 
@@ -67,7 +66,7 @@ public sealed class MemoryCardPileManager : HookedSingletonModel
             if (hand == null) continue;
 
             var memoryCards = hand.Cards
-                .Where(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
+                .Where(c => c.Keywords.Contains(MemoryKeyword))
                 .ToList();
 
             if (memoryCards.Count > 0)
@@ -80,22 +79,8 @@ public sealed class MemoryCardPileManager : HookedSingletonModel
     {
         public static void Postfix(CardModel __instance)
         {
-            if (__instance.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
+            if (__instance.Keywords.Contains(MemoryKeyword))
                 __instance.EnergyCost.AddThisCombat(1);
-        }
-    }
-}
-
-[HarmonyPatch(typeof(Hook), nameof(Hook.AfterRoomEntered))]
-public static class Hook_AfterRoomEntered_Patch
-{
-    public static async void Postfix(IRunState runState, AbstractRoom room)
-    {
-        if (room is not CombatRoom) return;
-        // 关键：为所有玩家初始化记忆牌堆（不再依赖是否拥有 KabutoNote）
-        foreach (var player in runState.Players)
-        {
-            await MemoryCardPile.EnsureInitializedAsync(player);
         }
     }
 }

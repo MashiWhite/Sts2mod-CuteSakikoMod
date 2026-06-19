@@ -16,10 +16,11 @@ public sealed class OblivionisPower : CuteSakikoModPower
 
     static OblivionisPower()
     {
-        MemoryCardPileManager.OnForgottenCards += OnForgottenCardsGlobal;
+        // ★ 订阅自定义遗忘事件（在类静态构造时注册）
+        MemoryCardPileManager.CardsForgotten += OnCardsForgotten;
     }
 
-    private static async Task OnForgottenCardsGlobal(
+    private static async Task OnCardsForgotten(
         PlayerChoiceContext choiceContext,
         IReadOnlyList<CardModel> forgottenCards,
         CardModel? source)
@@ -27,12 +28,10 @@ public sealed class OblivionisPower : CuteSakikoModPower
         if (forgottenCards == null || forgottenCards.Count == 0)
             return;
 
-        // 获取遗忘卡牌的拥有者（假设所有被遗忘的卡属于同一个玩家）
         var owner = forgottenCards[0].Owner;
         if (owner == null)
             return;
 
-        // 只检查该玩家是否有 OblivionisPower
         var power = owner.Creature?.GetPower<OblivionisPower>();
         if (power == null || power.Amount <= 0)
             return;
@@ -43,14 +42,12 @@ public sealed class OblivionisPower : CuteSakikoModPower
 
         int damagePerCard = power.Amount;
 
-        // 每张被遗忘的卡，对场上所有可攻击的敌人造成一次伤害
         for (int i = 0; i < forgottenCards.Count; i++)
         {
-            // 每次循环重新获取敌人列表，避免因敌人死亡导致集合变化
             var enemies = combatState.HittableEnemies;
             if (enemies.Count == 0)
                 break;
-            
+
             await CreatureCmd.Damage(
                 choiceContext,
                 enemies,

@@ -29,7 +29,7 @@ public class WantHaruhikage() : CuteRanaCard(2, CardType.Attack, CardRarity.Rare
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(15m, ValueProp.Move)
+        new DamageVar(10m, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -52,6 +52,6 @@ public class WantHaruhikage() : CuteRanaCard(2, CardType.Attack, CardRarity.Rare
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m); // 15 → 17
+        DynamicVars.Damage.UpgradeValueBy(3m); 
     }
 }

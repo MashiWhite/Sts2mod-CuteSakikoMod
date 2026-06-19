@@ -1,6 +1,6 @@
 {
   "CUTE_SAKIKO_MOD_KEYWORD_PRESSURE.title": "压力",
-  "CUTE_SAKIKO_MOD_KEYWORD_PRESSURE.description": "每层[gold]压力[/gold]使受到的伤害增加5%。",
+  "CUTE_SAKIKO_MOD_KEYWORD_PRESSURE.description": "每层[gold]压力[/gold]使受到的伤害增加1%。",
   "CUTE_SAKIKO_MOD_KEYWORD_MEMORY.title": "回忆",
   "CUTE_SAKIKO_MOD_KEYWORD_MEMORY.description": "每打出一次增加一点花费。\n回合结束时若在手牌中则[red]遗忘[/red]。",
   "CUTE_SAKIKO_MOD_KEYWORD_SWORD.title": "骑士之剑",
@@ -30,7 +30,7 @@
   "CUTE_SAKIKO_MOD_KEYWORD_NEKO.title": "猫咪",
   "CUTE_SAKIKO_MOD_KEYWORD_NEKO.description": "[green]喵。[/green]",
   "CUTE_SAKIKO_MOD_KEYWORD_RANA_LIVE.title": "来莱芜",
-  "CUTE_SAKIKO_MOD_KEYWORD_RANA_LIVE.description": "打出后获得1层[green]莱芜[/green]",
+  "CUTE_SAKIKO_MOD_KEYWORD_RANA_LIVE.description": "打出后获得1层[gold]莱芜[/gold]",
   "CUTESAKIKOMOD-CCHORD.title": "C和弦",
   "CUTESAKIKOMOD-CCHORD.description": "随机造成[blue]{0}[/blue]点伤害，获得[blue]{1}[/blue]点格挡。",
   "CUTESAKIKOMOD-GCHORD.title": "G和弦",

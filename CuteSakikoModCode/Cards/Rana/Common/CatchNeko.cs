@@ -19,6 +19,8 @@ public class CatchNeko : CuteRanaCard
 {
     public CatchNeko() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
 
+    protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
+    
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
         new DamageVar(8m, ValueProp.Move)

@@ -1,9 +1,10 @@
-﻿
-using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
+using MegaCrit.Sts2.Core.ValueProps;
+using System.Linq;
 using System.Reflection;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
@@ -26,7 +27,7 @@ public class FastStudy : CuteRanaCard
     {
         get
         {
-            yield return new DynamicVar("Damage", 0);
+            yield return new DamageVar(0m, ValueProp.Move);
         }
     }
 
@@ -50,15 +51,16 @@ public class FastStudy : CuteRanaCard
                 if (intent is AttackIntent attackIntent)
                 {
                     // 通过反射获取 DamageCalc 字段并调用，计算伤害
-                    var damageField = typeof(AttackIntent).GetField("DamageCalc", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var damageField = typeof(AttackIntent).GetField("DamageCalc",
+                        BindingFlags.NonPublic | BindingFlags.Instance);
                     if (damageField?.GetValue(attackIntent) is Func<decimal> damageCalc)
                     {
-                        totalDamage += (int)damageCalc()+DynamicVars.Damage.IntValue;
+                        totalDamage += (int)damageCalc();
                     }
                     else
                     {
                         // 降级方案：使用 GetTotalDamage 方法
-                        totalDamage += attackIntent.GetTotalDamage(new[] { enemy }, enemy)+DynamicVars.Damage.IntValue;
+                        totalDamage += attackIntent.GetTotalDamage(new[] { enemy }, enemy);
                     }
                 }
             }
@@ -66,7 +68,10 @@ public class FastStudy : CuteRanaCard
 
         if (totalDamage > 0)
         {
-            await DamageCmd.Attack(totalDamage)
+            // 设置伤害变量为计算出的总伤害
+            DynamicVars.Damage.BaseValue = totalDamage;
+
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this)
                 .TargetingAllOpponents(combatState)
                 .WithHitFx("vfx/vfx_attack_slash")

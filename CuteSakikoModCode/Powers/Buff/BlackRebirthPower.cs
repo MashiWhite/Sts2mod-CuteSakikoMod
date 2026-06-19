@@ -40,6 +40,7 @@ public sealed class BlackRebirthPower : CuteSakikoModPower
         CardModel? cardSource)
     {
         if (amount <= 0) return;
+        if (power.Owner != Owner) return;
         if (power is not PressurePower) return;
 
         var gained = (int)amount;

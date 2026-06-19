@@ -11,7 +11,7 @@ public class NaiVitalityPower : CuteSakikoModPower
 {
     private bool _willTriggerNextTurn;
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single;
+    public override PowerStackType StackType => PowerStackType.Counter;
 
     // ★ 改为 BeforeSideTurnEnd，在手牌被弃掉前检测
     public override async Task BeforeSideTurnEnd(
@@ -36,7 +36,7 @@ public class NaiVitalityPower : CuteSakikoModPower
         if (!_willTriggerNextTurn) return;
         _willTriggerNextTurn = false;
 
-        await PlayerCmd.GainEnergy(1, player);
-        await CardPileCmd.Draw(choiceContext, 1, player);
+        await PlayerCmd.GainEnergy(Amount, player);
+        await CardPileCmd.Draw(choiceContext, Amount, player);
     }
 }

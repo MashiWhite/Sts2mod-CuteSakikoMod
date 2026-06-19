@@ -12,6 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana;
 public abstract class CuteRanaCard(int cost, CardType type, CardRarity rarity, TargetType target)
     : ModCardTemplate(cost, type, rarity, target)
 {
+    
     public override CardAssetProfile AssetProfile => this.CardAssetProfile();
 
     protected override bool IsPlayable

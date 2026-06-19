@@ -1,0 +1,18 @@
+{
+  "CUTESAKIKOMOD_NOTE_ATTACK.title": "Attack Note",
+  "CUTESAKIKOMOD_NOTE_ATTACK.description": "Playing Attack cards accumulates Attack Notes.",
+  "CUTESAKIKOMOD_NOTE_SKILL.title": "Skill Note",
+  "CUTESAKIKOMOD_NOTE_SKILL.description": "Playing Skill cards accumulates Skill Notes.",
+  "CUTESAKIKOMOD_NOTE_POWER.title": "Power Note",
+  "CUTESAKIKOMOD_NOTE_POWER.description": "Playing Power cards accumulates Power Notes.",
+  "CUTESAKIKOMOD_NOTE_SPECIAL.title": "Special Note",
+  "CUTESAKIKOMOD_NOTE_SPECIAL.description": "Playing other types of cards accumulates Special Notes.",
+  "CHORD_DESC_WITH_CONDITION.title": "",
+  "CHORD_DESC_WITH_CONDITION.description": "{effect}\nCondition: {condition}",
+  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.title": "Memory",
+  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.description": "Stores the original state of all Memory cards. When a card is Forgotten, its Memory also disappears.",
+  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.empty": "There is nothing in memory...",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.title": "Forget",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "Forgotten cards permanently leave this combat and clear their associated Memories.",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "No cards have been forgotten yet."
+}

@@ -21,7 +21,7 @@ public class TgwGroup() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, T
     {
         get
         {
-            yield return new DynamicVar("BaseGold", 10m); // 基础倍数
+            yield return new DynamicVar("BaseGold", 5m); // 基础倍数
             yield return new TgwGoldVar(); // 实时总金币
         }
     }
@@ -50,7 +50,7 @@ public class TgwGroup() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, T
 
     protected override void OnUpgrade()
     {
-        DynamicVars["BaseGold"].UpgradeValueBy(5m); // 10 → 15
+        DynamicVars["BaseGold"].UpgradeValueBy(5m); 
     }
 
     /// <summary>嵌套动态变量，实时计算总金币</summary>

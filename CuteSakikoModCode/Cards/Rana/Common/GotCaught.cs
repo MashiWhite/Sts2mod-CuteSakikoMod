@@ -11,8 +11,8 @@ public class GotCaught() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, Ta
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        new BlockVar("BaseBlock", 4m, ValueProp.Move),
-        new BlockVar("ExtraBlock", 5m, ValueProp.Move)
+        new BlockVar("BaseBlock", 2m, ValueProp.Move),
+        new BlockVar("ExtraBlock", 7m, ValueProp.Move)
     };
 
     protected override bool ShouldGlowGoldInternal
@@ -41,7 +41,6 @@ public class GotCaught() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, Ta
 
     protected override void OnUpgrade()
     {
-        DynamicVars["BaseBlock"].UpgradeValueBy(1m);
-        DynamicVars["ExtraBlock"].UpgradeValueBy(2m);
+        DynamicVars["ExtraBlock"].UpgradeValueBy(3m);
     }
 }

@@ -13,6 +13,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
 public class SoundCheck() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
+    protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
+    
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
     [
         CutesakiKeywords.RanaLive.GetModCardKeyword()
@@ -30,7 +32,7 @@ public class SoundCheck() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, T
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(5m, ValueProp.Move),
-        new CardsVar(2)
+        new CardsVar(1)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -55,6 +57,7 @@ public class SoundCheck() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, T
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 5 → 8
+        DynamicVars.Damage.UpgradeValueBy(2); // 5 → 7
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

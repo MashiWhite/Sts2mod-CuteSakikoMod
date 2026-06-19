@@ -9,7 +9,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
-[RegisterCharacterStarterCard(typeof(CuteRana), Order = 3)]
+
 [RegisterArchaicToothTranscendence(typeof(PlayImmediately))]
 [RegisterCharacterStarterCard(typeof(CuteAnon), Order = 2)]
 public class PlayChord() : CuteAnonCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)

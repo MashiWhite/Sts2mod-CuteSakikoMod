@@ -16,7 +16,7 @@ using STS2RitsuLib.Keywords;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 // ReSharper disable once InconsistentNaming
-public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class AiHeart() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override string ChordId => "GreyAnonChord";
 
@@ -47,14 +47,15 @@ public class AiHeart() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Target
         TriggerBanter();
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-        {
-            var currentMinor = guitar.GetCurrentChords().GetValueOrDefault(ChordCategory.Minor);
-            if (currentMinor == "GreyAnonChord")
-                await guitar.AddChordToStored(choiceContext, "GreyAnonChord");
-            else
-                guitar.TempReplaceChord(ChordCategory.Minor, "GreyAnonChord");
-        }
+        if (guitar == null) return;
+        
+        const string chordId = "GreyAnonChord";
+        // 若临时槽中还未拥有该和弦，则添加临时槽位；否则直接储存一个和弦
+        var temporaryChords = guitar.GetTemporaryChords(); // 需公开此方法，见下方说明
+        if (temporaryChords.Contains(chordId))
+            await guitar.AddChordToStored(choiceContext, chordId);
+        else
+            guitar.AddTemporaryChord(chordId);
 
         // ----- 新增效果：添加一张费用为 0 的 NotNeeded 到手牌 -----
         var notNeeded = CombatState.CreateCard<NotNeeded>(Owner);

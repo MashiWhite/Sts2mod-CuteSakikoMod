@@ -12,9 +12,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
 public class ImmersedGuitar() : CuteRanaCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
+    protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(10m, ValueProp.Move),
+        new DamageVar(8m, ValueProp.Move),
         new CardsVar(1)
     ];
     
@@ -48,6 +50,6 @@ public class ImmersedGuitar() : CuteRanaCard(1, CardType.Attack, CardRarity.Comm
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); 
+        DynamicVars.Damage.UpgradeValueBy(2m); 
     }
 }

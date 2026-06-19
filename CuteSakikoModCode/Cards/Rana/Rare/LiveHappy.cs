@@ -20,7 +20,7 @@ public class LiveHappy : CuteRanaCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(10m, ValueProp.Move)
+        new DamageVar(8m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -61,6 +61,6 @@ public class LiveHappy : CuteRanaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 10 → 13
+        DynamicVars.Damage.UpgradeValueBy(3m); 
     }
 }

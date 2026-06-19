@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class WhenPerform() : CuteAnonCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class WhenPerform() : CuteAnonCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     // 没有动态变量，不重写 CanonicalVars
 

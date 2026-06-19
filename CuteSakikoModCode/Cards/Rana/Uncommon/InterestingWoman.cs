@@ -16,7 +16,7 @@ public class InterestingWoman : CuteRanaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
         new PowerVar<WeakPower>(1m),    // 虚弱层数
-        new PowerVar<VulnerablePower>(1m) // 易伤层数
+        new PowerVar<VulnerablePower>(2m) // 易伤层数
     };
     
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

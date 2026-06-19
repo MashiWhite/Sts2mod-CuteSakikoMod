@@ -19,7 +19,7 @@ public class EasyNow() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, Ta
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new PowerVar<StrengthPower>(2m); }
+        get { yield return new PowerVar<StrengthPower>(1m); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

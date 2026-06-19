@@ -1,0 +1,10 @@
+﻿{
+  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.title": "Star Anon",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.loss": "{character} was sent into the cycle once again by [pink]{encounter}[/pink].",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.title": "Grey Anon",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.loss": "{character} failed to stop [pink]{encounter}[/pink] from burning to ashes.",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.title": "Tiansuluo",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character} was overwhelmed by [gold]{encounter}[/gold]'s cuteness.",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "Tianxiangluo",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character} was overwhelmed by [gold]{encounter}[/gold]'s cuteness."
+}
