@@ -43,6 +43,9 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
         var monster = targetCreature.Monster;
         if (monster == null) return;
 
+        // 新增判断：如果怪物当前意图是 DEAD_MOVE，则跳过修改（千足虫死亡状态）
+        if (monster.NextMove?.Id == "DEAD_MOVE") return;
+
         // 安全地获取怪物原本的意图 ID，跳过临时状态（如 STUNNED）
         string? originalMoveId = MonsterMoveHelper.GetEffectiveFollowUpId(monster);
 
@@ -58,7 +61,6 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
             attackIntent
         )
         {
-            // 若 originalMoveId 为 null，怪物会自动寻找下一个有效状态
             FollowUpStateId = originalMoveId
         };
 

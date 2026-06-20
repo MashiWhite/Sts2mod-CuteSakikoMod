@@ -339,8 +339,12 @@ public static class ChordManager
             {
                 var enemies = owner.CombatState?.Enemies;
                 if (enemies != null)
-                    foreach (var enemy in enemies)
+                {
+                    foreach (var enemy in enemies.Where(e => e.IsAlive))
+                    {
                         await CreatureCmd.Stun(enemy);
+                    }
+                }
             });
 
         // E7【技 能 技 能】所有友方获得壁垒(Barricade)

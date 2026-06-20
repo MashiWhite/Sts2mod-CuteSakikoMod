@@ -107,7 +107,7 @@
   "CUTE_SAKIKO_MOD_CARD_FINALLY_HERE.title": "终于来了",
   "CUTE_SAKIKO_MOD_CARD_FINALLY_HERE.description": "每次你的[gold]抽牌堆[/gold]打乱洗牌时，获得{FinallyHerePower:diff()}层[gold]莱芜[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_GUITAR_STRIKE.title": "吉他打击",
-  "CUTE_SAKIKO_MOD_CARD_GUITAR_STRIKE.description": "造成{Damage:diff()}点伤害2次。",
+  "CUTE_SAKIKO_MOD_CARD_GUITAR_STRIKE.description": "造成{Damage:diff()}点伤害{Count:diff()}次。",
   "CUTE_SAKIKO_MOD_CARD_LETS_FORM_BAND.title": "来组乐队吧",
   "CUTE_SAKIKO_MOD_CARD_LETS_FORM_BAND.description": "获得{Block:diff()}点格挡。\n抽{Cards:diff()}张牌。",
   "CUTE_SAKIKO_MOD_CARD_TWO_PEOPLE.title": "有两个人在",

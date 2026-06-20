@@ -107,7 +107,7 @@
   "CUTE_SAKIKO_MOD_CARD_FINALLY_HERE.title": "Finally Here",
   "CUTE_SAKIKO_MOD_CARD_FINALLY_HERE.description": "Every time your [gold]draw pile[/gold] is shuffled, gain {FinallyHerePower:diff()} [gold]Live[/gold].",
   "CUTE_SAKIKO_MOD_CARD_GUITAR_STRIKE.title": "Guitar Strike",
-  "CUTE_SAKIKO_MOD_CARD_GUITAR_STRIKE.description": "Deal {Damage:diff()} damage twice.",
+  "CUTE_SAKIKO_MOD_CARD_GUITAR_STRIKE.description": "Deal {Damage:diff()} damage {Count:diff()} times.",
   "CUTE_SAKIKO_MOD_CARD_LETS_FORM_BAND.title": "Let's Form a Band",
   "CUTE_SAKIKO_MOD_CARD_LETS_FORM_BAND.description": "Gain {Block:diff()} Block.\nDraw {Cards:diff()} cards.",
   "CUTE_SAKIKO_MOD_CARD_TWO_PEOPLE.title": "Two People",

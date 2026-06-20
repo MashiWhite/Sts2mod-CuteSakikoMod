@@ -1,0 +1,10 @@
+﻿{
+  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.title": "スター愛音",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]によって再び輪廻へと送られた。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.title": "灰愛音",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]が灰燼に帰すのを止められなかった。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.title": "天素羅",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "天祥羅",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。"
+}

@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.ValueProps;
 using System.Linq;
-using System.Reflection;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
@@ -17,18 +16,12 @@ public class FastStudy : CuteRanaCard
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        get
-        {
-            yield return CardKeyword.Exhaust;
-        }
+        get { yield return CardKeyword.Exhaust; }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get
-        {
-            yield return new DamageVar(0m, ValueProp.Move);
-        }
+        get { yield return new DamageVar(0m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -48,29 +41,19 @@ public class FastStudy : CuteRanaCard
 
             foreach (var intent in move.Intents)
             {
-                if (intent is AttackIntent attackIntent)
+                if (intent is AttackIntent attackIntent && attackIntent.DamageCalc != null)
                 {
-                    // 通过反射获取 DamageCalc 字段并调用，计算伤害
-                    var damageField = typeof(AttackIntent).GetField("DamageCalc",
-                        BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (damageField?.GetValue(attackIntent) is Func<decimal> damageCalc)
-                    {
-                        totalDamage += (int)damageCalc();
-                    }
-                    else
-                    {
-                        // 降级方案：使用 GetTotalDamage 方法
-                        totalDamage += attackIntent.GetTotalDamage(new[] { enemy }, enemy);
-                    }
+                    // 只取怪物原始伤害，不经玩家能力修饰
+                    decimal rawDamage = attackIntent.DamageCalc();
+                    int repeats = attackIntent.Repeats;
+                    totalDamage += (int)(rawDamage * (repeats + 1));
                 }
             }
         }
 
         if (totalDamage > 0)
         {
-            // 设置伤害变量为计算出的总伤害
             DynamicVars.Damage.BaseValue = totalDamage;
-
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this)
                 .TargetingAllOpponents(combatState)

@@ -1,0 +1,18 @@
+{
+  "CUTESAKIKOMOD_NOTE_ATTACK.title": "攻撃音符",
+  "CUTESAKIKOMOD_NOTE_ATTACK.description": "プレイしたアタックは攻撃音符を蓄積する。",
+  "CUTESAKIKOMOD_NOTE_SKILL.title": "スキル音符",
+  "CUTESAKIKOMOD_NOTE_SKILL.description": "プレイしたスキルはスキル音符を蓄積する。",
+  "CUTESAKIKOMOD_NOTE_POWER.title": "パワー音符",
+  "CUTESAKIKOMOD_NOTE_POWER.description": "プレイしたパワーはパワー音符を蓄積する。",
+  "CUTESAKIKOMOD_NOTE_SPECIAL.title": "特殊音符",
+  "CUTESAKIKOMOD_NOTE_SPECIAL.description": "プレイしたその他のカードは特殊音符を蓄積する。",
+  "CHORD_DESC_WITH_CONDITION.title": "",
+  "CHORD_DESC_WITH_CONDITION.description": "{effect}\n条件：{condition}",
+  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.title": "メモリー",
+  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.description": "すべてのメモリーカードの本来の状態を保存する。カードを忘却すると、そのメモリーも消える。",
+  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.empty": "メモリーは空っぽ……",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.title": "忘却",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "忘却されたカードはこの戦闘から永久に消え、それに関連するメモリーも消去される。",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "まだ忘却されたカードはない。"
+}
