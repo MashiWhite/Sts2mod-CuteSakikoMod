@@ -44,8 +44,8 @@ public class ColdStare() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon,
             var bonusChords = guitar.GetBonusChords();
             var tempChords = guitar.GetTemporaryChords();
 
-            MusicNoteManager.AddNote(Owner, CardType.Skill, mainChords,
-                bonusChords.Concat(tempChords));
+            await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Skill, mainChords,
+                bonusChords.Concat(tempChords),choiceContext);
 
             guitar.UpdateNoteDisplay();
             guitar.UpdateStoredChordDisplay();

@@ -74,7 +74,7 @@
   "CUTESAKIKOMOD-D#7CHORD.title": "D#7コード",
   "CUTESAKIKOMOD-D#7CHORD.description": "すべての味方がカードを[blue]{0}[/blue]枚引く。",
   "CUTESAKIKOMOD-ANONCCHORD.title": "愛音Cコード",
-  "CUTESAKIKOMOD-ANONCCHORD.description": "この戦闘中、すべての味方の手札にあるカードを[blue]{0}[/blue]枚アップグレードする。",
+  "CUTESAKIKOMOD-ANONCCHORD.description": "この戦闘中、すべての味方の山にあるカードを[blue]{0}[/blue]枚アップグレードする。",
   "CUTESAKIKOMOD-ANONDCHORD.title": "愛音Dコード",
   "CUTESAKIKOMOD-ANONDCHORD.description": "すべての味方がランダムなポーションを1つ得る。",
   "CUTESAKIKOMOD-ANONECHORD.title": "愛音Eコード",

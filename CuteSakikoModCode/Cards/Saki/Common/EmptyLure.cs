@@ -15,7 +15,7 @@ public class EmptyLure() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Commo
     // 悬停提示，显示生成的“欺诈”卡牌
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return HoverTipFactory.FromCard<Fraud>(); }
+        get { yield return HoverTipFactory.FromCard<Fraud>(IsUpgraded); }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -30,6 +30,7 @@ public class EmptyLure() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Commo
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
 
         var fraud = CombatState.CreateCard<Fraud>(Owner);
+        if (IsUpgraded) CardCmd.Upgrade(fraud);
         await CardPileCmd.AddGeneratedCardToCombat(fraud, PileType.Discard, Owner);
     }
 

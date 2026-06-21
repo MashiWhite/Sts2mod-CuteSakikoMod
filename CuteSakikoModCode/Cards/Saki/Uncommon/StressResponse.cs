@@ -10,14 +10,18 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
+public class StressResponse : CuteSakikoModCard
 {
+    public StressResponse() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
+    {
+    }
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
             yield return new PowerVar<PressurePower>("Pressure", 0m); // 显示当前压力层数
-            yield return new StressPerHitDamageVar(); // 战斗内实时每次伤害
+            yield return new PressureDamageVar(); // 动态伤害值 = 压力 × 2
         }
     }
 
@@ -36,46 +40,36 @@ public class StressResponse() : CuteSakikoModCard(2, CardType.Attack, CardRarity
         var layers = pressure?.Amount ?? 0;
         if (layers <= 0) return;
 
-        // 每次伤害 = ceil(层数*0.25) 
-        var damagePerHit = layers / 4;
+        int damage = layers * 2;
 
-        // 消耗所有压力
-        await PowerCmd.ModifyAmount(choiceContext, pressure, -layers, Owner.Creature, this);
-
-        var hitCount = IsUpgraded ? 7 : 5;
-        
-        await DamageCmd.Attack(damagePerHit)
+        await DamageCmd.Attack(damage)
             .FromCard(this)
             .TargetingRandomOpponents(CombatState)
-            .WithHitCount(hitCount)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        // 次数变为7，已在描述和 OnPlay 中通过 IsUpgraded 处理
+        EnergyCost.UpgradeBy(-1); // 2c → 1c
     }
 
     /// <summary>
-    ///     动态变量：战斗内显示实际每次伤害 = max(1, 压力层数/4)
+    /// 动态变量：伤害值 = 压力层数 × 2，战斗中实时预览
     /// </summary>
-    private class StressPerHitDamageVar : DynamicVar
+    private class PressureDamageVar : DynamicVar
     {
-        public StressPerHitDamageVar() : base("PerHitDamage", 0m)
+        public PressureDamageVar() : base("PressureDamage", 0m)
         {
         }
 
-        public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target,
-            bool runGlobalHooks)
+        public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target, bool runGlobalHooks)
         {
             base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
             if (card.Owner == null) return;
 
             var pressurePower = card.Owner.Creature?.GetPower<PressurePower>();
-            // 战斗内显示真实值，战斗外保持0（描述由公式接管）
-            if (pressurePower != null && card.CombatState != null)
-                BaseValue = Math.Max(1, pressurePower.Amount / 4);
+            BaseValue = pressurePower != null ? pressurePower.Amount * 2 : 0;
         }
     }
 }

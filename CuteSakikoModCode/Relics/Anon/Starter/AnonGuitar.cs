@@ -339,6 +339,37 @@ public class AnonGuitar : CuteAnonRelic
         return result;
     }
 
+    // ==================== 核心修改：提取公共自动演奏逻辑 ====================
+
+    /// <summary>
+    /// 统一的自动演奏入口：处理溢出、立即演奏、StageNerves。
+    /// 所有通过 AddNote 产生新和弦的地方，都应该调用本方法。
+    /// </summary>
+    public async Task AutoPlayNewChords(PlayerChoiceContext ctx, MusicNoteManager.NoteProcessResult result)
+    {
+        if (Owner.Creature == null) return;
+
+        // 1. 溢出（LingeringTastePower）
+        if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
+            await PlaySingleChord(ctx, result.OverflowChord, false);
+
+        // 2. 立即演奏（PlayImmediatelyPower）
+        if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
+        {
+            foreach (var chordId in result.NewChords)
+            {
+                await PlaySingleChord(ctx, chordId, false);
+                MusicNoteManager.RemoveChord(Owner, chordId);
+            }
+        }
+        // 3. 无新和弦时触发 StageNervesPower
+        else if (result.NewChords.Count == 0)
+        {
+            foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
+                await power.OnNoteWithoutChord();
+        }
+    }
+
     private async Task PlaySingleChord(PlayerChoiceContext ctx, string chordId, bool removeStored = true)
     {
         _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
@@ -351,6 +382,8 @@ public class AnonGuitar : CuteAnonRelic
         AudioManager.PlaySound(sfx, 1.0f);
     }
 
+    // ==================== 修改后的 AfterCardPlayed ====================
+    // AfterCardPlayed
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         EnsureInitialized();
@@ -364,19 +397,11 @@ public class AnonGuitar : CuteAnonRelic
             return;
         }
 
-        var result = MusicNoteManager.AddNote(Owner, cardPlay.Card.Type, _currentChords,
-            _bonusChords.Concat(_temporaryChords));
-        if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
-            await PlaySingleChord(choiceContext, result.OverflowChord, false);
-        if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
-            foreach (var chordId in result.NewChords)
-            {
-                await PlaySingleChord(choiceContext, chordId, false);
-                MusicNoteManager.RemoveChord(Owner, chordId); // ★ 立即演奏后移除存储
-            }
-        else if (result.NewChords.Count == 0)
-            foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
-                await power.OnNoteWithoutChord();
+        // 传入上下文，内部已完成自动演奏
+        await MusicNoteManager.AddNoteAndAutoPlayAsync(
+            Owner, cardPlay.Card.Type, _currentChords,
+            _bonusChords.Concat(_temporaryChords),
+            choiceContext);
 
         await HandleMessyPlay(choiceContext);
         UpdateNoteDisplay();
@@ -404,21 +429,15 @@ public class AnonGuitar : CuteAnonRelic
         }
     }
 
+    // ==================== 修改后的 OnNoteGenerated ====================
+    // OnNoteGenerated
     public async Task OnNoteGenerated(PlayerChoiceContext choiceContext, CardType noteType)
     {
         if (Owner.Creature.CombatState == null) return;
-        var result = MusicNoteManager.AddNote(Owner, noteType, _currentChords, _bonusChords.Concat(_temporaryChords));
-        if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
-            await PlaySingleChord(choiceContext, result.OverflowChord, false);
-        if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
-            foreach (var chordId in result.NewChords)
-            {
-                await PlaySingleChord(choiceContext, chordId, false);
-                MusicNoteManager.RemoveChord(Owner, chordId); // ★ 立即演奏后移除存储
-            }
-        else if (result.NewChords.Count == 0)
-            foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
-                await power.OnNoteWithoutChord();
+        await MusicNoteManager.AddNoteAndAutoPlayAsync(
+            Owner, noteType, _currentChords,
+            _bonusChords.Concat(_temporaryChords),
+            choiceContext);
 
         await HandleMessyPlay(choiceContext);
         UpdateNoteDisplay();

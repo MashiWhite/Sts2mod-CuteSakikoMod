@@ -1,6 +1,8 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Random;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
@@ -10,6 +12,10 @@ public static class MusicNoteManager
     public const int MaxStoredChords = 3;
 
     private static readonly Dictionary<Player, PlayerData> _data = new();
+
+    // ---------- 新增：音符变化事件 ----------
+    public static event Action<Player>? PlayerNotesChanged;
+    // --------------------------------------
 
     private static PlayerData GetData(Player player)
     {
@@ -21,10 +27,27 @@ public static class MusicNoteManager
 
         return data;
     }
-
-    public static NoteProcessResult AddNote(Player player, CardType type,
+    
+    public static async Task AddNoteAndAutoPlayAsync(
+        Player player,
+        CardType type,
         IReadOnlyDictionary<ChordCategory, string> learnedChords,
-        IEnumerable<string> bonusChordIds)
+        IEnumerable<string> bonusChordIds,
+        PlayerChoiceContext context)
+    {
+        var result = AddNote(player, type, learnedChords, bonusChordIds);
+
+        var guitar = player?.Relics?.OfType<AnonGuitar>().FirstOrDefault();
+        if (guitar != null && context != null)
+            await guitar.AutoPlayNewChords(context, result);
+    }
+
+    public static NoteProcessResult AddNote(
+        Player player,
+        CardType type,
+        IReadOnlyDictionary<ChordCategory, string> learnedChords,
+        IEnumerable<string> bonusChordIds,
+        PlayerChoiceContext? context = null)
     {
         var result = new NoteProcessResult
         {
@@ -79,11 +102,9 @@ public static class MusicNoteManager
 
         result.NewChords = matchedChords;
 
-        // 批量添加到存储中
         foreach (var chordId in matchedChords)
             data.StoredChords.Add(chordId);
 
-        // 统一处理溢出
         while (data.StoredChords.Count > MaxStoredChords)
         {
             var overflow = data.StoredChords[0];
@@ -99,6 +120,15 @@ public static class MusicNoteManager
             if (vocalPower != null) _ = vocalPower.OnNoteGained(1);
         }
 
+        if (context != null)
+        {
+            var guitar = player.Relics?.OfType<AnonGuitar>().FirstOrDefault();
+            if (guitar != null)
+                _ = guitar.AutoPlayNewChords(context, result);
+        }
+
+        // ★ 音符变化通知
+        PlayerNotesChanged?.Invoke(player);
         return result;
     }
 
@@ -128,6 +158,9 @@ public static class MusicNoteManager
         for (var i = 0; i < notesArray.Length; i++)
             if (i != removeIndex)
                 data.Notes.Enqueue(notesArray[i]);
+        
+        // ★ 音符变化通知
+        PlayerNotesChanged?.Invoke(player);
         return true;
     }
 
@@ -153,6 +186,9 @@ public static class MusicNoteManager
     {
         if (player == null) return;
         GetData(player).Notes.Clear();
+        
+        // ★ 音符变化通知
+        PlayerNotesChanged?.Invoke(player);
     }
 
     public static void ClearCombatData(Player player)
@@ -166,12 +202,18 @@ public static class MusicNoteManager
             data.TotalNotesGainedThisCombat = 0;
             data.LastRoundNumber = 0;
         }
+        
+        // ★ 音符变化通知
+        PlayerNotesChanged?.Invoke(player);
     }
 
     public static void ClearAll(Player player)
     {
         if (player == null) return;
         _data.Remove(player);
+        
+        // ★ 音符变化通知
+        PlayerNotesChanged?.Invoke(player);
     }
 
     public static bool RemoveChord(Player player, string chordId)
@@ -211,6 +253,9 @@ public static class MusicNoteManager
         var data = GetData(player);
         var count = data.Notes.Count;
         data.Notes.Clear();
+        
+        // ★ 音符变化通知
+        PlayerNotesChanged?.Invoke(player);
         return count;
     }
 
@@ -224,6 +269,9 @@ public static class MusicNoteManager
         data.Notes.Clear();
         foreach (var note in notesArray)
             data.Notes.Enqueue(note);
+        
+        // ★ 音符变化通知
+        PlayerNotesChanged?.Invoke(player);
         return true;
     }
 

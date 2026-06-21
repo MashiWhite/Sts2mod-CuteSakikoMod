@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
@@ -38,6 +39,29 @@ public class HastyPlay : CuteAnonCard
         }
     }
 
+    public override void AfterCreated()
+    {
+        base.AfterCreated();
+        // 订阅音符变化事件，实时更新费用
+        MusicNoteManager.PlayerNotesChanged += OnPlayerNotesChanged;
+    }
+
+    private void OnPlayerNotesChanged(Player changedPlayer)
+    {
+        if (Owner == null || changedPlayer != Owner) return;
+        UpdateCostBasedOnLastNote();
+    }
+
+    private void UpdateCostBasedOnLastNote()
+    {
+        if (Owner?.Creature?.CombatState == null) return;
+        var lastNote = MusicNoteManager.GetLastNote(Owner);
+        if (lastNote == CardType.Attack)
+            EnergyCost.SetThisTurn(0);
+        else
+            EnergyCost.SetThisTurn(1);
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         TriggerBanter();
@@ -52,31 +76,16 @@ public class HastyPlay : CuteAnonCard
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
+    // 不再需要手动刷新费用，事件会自动处理
+    // 但保留 base 调用以维持钩子链
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await base.AfterCardPlayed(choiceContext, cardPlay);
-
-        if (cardPlay.Card.Owner != Owner) return;
-
-        UpdateCostBasedOnLastNote();
     }
 
     public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
     {
         await base.AfterCardDrawn(choiceContext, card, fromHandDraw);
-
-        if (card != this) return;
-
-        UpdateCostBasedOnLastNote();
-    }
-
-    private void UpdateCostBasedOnLastNote()
-    {
-        var lastNote = MusicNoteManager.GetLastNote(Owner);
-        if (lastNote == CardType.Attack)
-            EnergyCost.SetThisTurn(0);
-        else
-            EnergyCost.SetThisTurn(1);
     }
 
     protected override void OnUpgrade()

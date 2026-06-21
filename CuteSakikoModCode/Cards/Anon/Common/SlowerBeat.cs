@@ -45,9 +45,10 @@ public class SlowerBeat() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, T
             int manualNoteCount = IsUpgraded ? 3 : 2;
             for (int i = 0; i < manualNoteCount; i++)
             {
-                MusicNoteManager.AddNote(Owner, CardType.Skill,
+                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Skill,
                     mainChords,
-                    bonusChords.Concat(tempChords));
+                    bonusChords.Concat(tempChords),
+                    choiceContext); // ★ 传入上下文
             }
 
             // 刷新 UI

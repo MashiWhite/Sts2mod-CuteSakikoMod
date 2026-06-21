@@ -2,18 +2,44 @@
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class SmoothPlay() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
+public class SmoothPlay : CuteAnonCard
 {
+    public SmoothPlay() : base(4, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
+    {
+    }
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(3m, ValueProp.Move); }
+        get { yield return new DamageVar(20m, ValueProp.Move); }
+    }
+
+    public override void AfterCreated()
+    {
+        base.AfterCreated();
+        // 订阅音符变化事件，动态更新费用
+        MusicNoteManager.PlayerNotesChanged += OnPlayerNotesChanged;
+    }
+
+    private void OnPlayerNotesChanged(Player changedPlayer)
+    {
+        // 只处理自己的音符变化
+        if (Owner == null || changedPlayer != Owner) return;
+        UpdateCost();
+    }
+
+    private void UpdateCost()
+    {
+        if (Owner?.Creature?.CombatState == null) return;
+        var attackCount = MusicNoteManager.GetCurrentNotes(Owner)
+            .Count(n => n == CardType.Attack);
+        EnergyCost.SetThisTurn(Math.Max(0, 4 - attackCount));
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -23,35 +49,23 @@ public class SmoothPlay() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, 
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        // 统计攻击音符数量
-        var currentNotes = MusicNoteManager.GetCurrentNotes(Owner);
-        var attackCount = currentNotes.Count(n => n == CardType.Attack);
-
         // 清除所有音符
         MusicNoteManager.ClearNotes(Owner);
 
-        // 根据攻击音符数量执行一次随机多段攻击
-        if (attackCount > 0)
-        {
-            var damage = DynamicVars.Damage.IntValue;
-            await DamageCmd.Attack(damage)
-                .FromCard(this)
-                .TargetingRandomOpponents(combat)        // 每段随机选取敌人
-                .WithHitCount(attackCount)               // 段数 = 音符数
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
-        }
+        // 造成伤害
+        var damage = DynamicVars.Damage.IntValue;
+        await DamageCmd.Attack(damage)
+            .FromCard(this)
+            .TargetingRandomOpponents(combat)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
 
-        // 演奏最新储存的和弦
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-            await guitar.TriggerLastStoredChord(choiceContext);
-
-        guitar?.UpdateNoteDisplay();
+        // 刷新 UI
+        Owner.Relics.OfType<AnonGuitar>().FirstOrDefault()?.UpdateNoteDisplay();
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m); // 3 → 5
+        DynamicVars.Damage.UpgradeValueBy(5m); // 20 → 25
     }
 }

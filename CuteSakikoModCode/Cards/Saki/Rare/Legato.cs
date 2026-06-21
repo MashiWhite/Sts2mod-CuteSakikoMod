@@ -12,14 +12,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<IHoverTip> AdditionalHoverTips
-    {
-        get
-        {
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Playpiano.GetModCardKeyword());
-        }
-        
-    }
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
+
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

@@ -10,16 +10,23 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 public sealed class EtherPower : CuteSakikoModPower
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single; // 不可叠层
+    public override PowerStackType StackType => PowerStackType.Counter; // 可叠层
     public override bool AllowNegative => false;
 
-    // 回合结束时，打出抽牌堆顶部的牌
     public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
         if (side != Owner.Side) return;
+        if (Owner?.Player == null) return;
 
-        // 打出抽牌堆顶部的1张牌
-        await CardPileCmd.AutoPlayFromDrawPile(choiceContext, Owner.Player, 1, CardPilePosition.Top, false);
+        int playCount = Amount; // 层数决定打出次数
+        for (int i = 0; i < playCount; i++)
+        {
+            // 通过 PlayerCombatState 获取抽牌堆，防止空引用
+            var drawPile = Owner.Player.PlayerCombatState?.DrawPile;
+            if (drawPile == null || drawPile.Cards.Count == 0)
+                break;
+            await CardPileCmd.AutoPlayFromDrawPile(choiceContext, Owner.Player, 1, CardPilePosition.Top, false);
+        }
     }
 }

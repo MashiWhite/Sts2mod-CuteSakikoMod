@@ -43,7 +43,7 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
 
             var noteCount = (int)DynamicVars["Notes"].BaseValue;
             for (var i = 0; i < noteCount; i++)
-                MusicNoteManager.AddNote(Owner, CardType.Attack, mainChords, allBonus);
+                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Attack, mainChords, allBonus,choiceContext);
 
             // 刷新 UI
             guitar.UpdateNoteDisplay();

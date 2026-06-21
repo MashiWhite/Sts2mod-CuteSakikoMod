@@ -10,7 +10,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class SakiBathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     private static bool _isTransforming;
 
@@ -29,7 +29,7 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
     {
         get
         {
-            yield return new CardsVar(1);
+            yield return new CardsVar(2);
             yield return new EnergyVar(1);
         }
     }
@@ -114,7 +114,6 @@ public class SakiBathe() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncom
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Cards.UpgradeValueBy(1m);
         DynamicVars.Energy.UpgradeValueBy(1m);
     }
 }

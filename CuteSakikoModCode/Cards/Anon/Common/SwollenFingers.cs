@@ -11,7 +11,7 @@ public class SwollenFingers() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(6m, ValueProp.Move); }
+        get { yield return new DamageVar(8m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -9,13 +9,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-public class DontPost() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class DontPost() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override bool GainsBlock => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(8m, ValueProp.Move),
+        new BlockVar(13m, ValueProp.Move),
         new PowerVar<PressurePower>(5m)
     ];
 
@@ -37,7 +37,7 @@ public class DontPost() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2m);
+        DynamicVars.Block.UpgradeValueBy(5m);
         DynamicVars["PressurePower"].UpgradeValueBy(5m);
     }
 }

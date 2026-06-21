@@ -39,9 +39,9 @@ public class DontRun() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, Tar
             int manualNoteCount = IsUpgraded ? 3 : 2;
             for (int i = 0; i < manualNoteCount; i++)
             {
-                MusicNoteManager.AddNote(Owner, CardType.Attack,
+                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Attack,
                     mainChords,
-                    bonusChords.Concat(tempChords));
+                    bonusChords.Concat(tempChords),choiceContext);
             }
 
             // 刷新 UI

@@ -11,14 +11,13 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class Chord() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class Chord() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     // 定义琴奏牌的类型列表（用于随机生成）
     private static readonly Type[] QinPlayTypes = new[]
     {
         typeof(StrikeFast),
         typeof(StrikeSlow),
-        typeof(StrikeOpulent)
     };
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
@@ -42,7 +41,6 @@ public class Chord() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
             yield return HoverTipFactory.FromCard<StrikeSlow>();
-            yield return HoverTipFactory.FromCard<StrikeOpulent>();
             yield return HoverTipFactory.FromCard<StrikeFast>();
         }
     }
@@ -87,8 +85,6 @@ public class Chord() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon
                 tempCard = CombatState.CreateCard<StrikeFast>(Owner);
             else if (type == typeof(StrikeSlow))
                 tempCard = CombatState.CreateCard<StrikeSlow>(Owner);
-            else if (type == typeof(StrikeOpulent))
-                tempCard = CombatState.CreateCard<StrikeOpulent>(Owner);
             else
                 continue;
 

@@ -385,9 +385,8 @@ public static class ChordManager
                         await CardPileCmd.Draw(ctx, 1 * mult, player);
             });
 
-        //爱音C和弦
         AddTemporaryChord("AnonCChord", ChordCategory.Anon,
-            new[] { CardType.Skill, CardType.Skill, CardType.Skill, CardType.Skill },
+            new[] { CardType.Skill, CardType.Skill, CardType.Skill },
             "CUTESAKIKOMOD-ANONCCHORD.title", "CUTESAKIKOMOD-ANONCCHORD.description", "anon_c_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
@@ -395,29 +394,39 @@ public static class ChordManager
                 var combat = owner.CombatState;
                 if (combat == null) return;
 
-                var upgradeCount = 1 * mult;
-                var allUpgradable = combat.Players
-                    .SelectMany(p => p.PlayerCombatState?.Hand?.Cards ?? Enumerable.Empty<CardModel>())
-                    .Where(c => c.IsUpgradable)
-                    .ToList();
-
-                if (allUpgradable.Count == 0) return;
-
                 var rng = combat.RunState.Rng.CombatCardSelection;
-                var selected = allUpgradable
-                    .OrderBy(x => rng.NextInt())
-                    .Take(upgradeCount)
-                    .ToList();
+                var upgradedCards = new List<CardModel>();
 
-                // 1. 全部升级（同步，会各自播放升级特效）
-                foreach (var card in selected)
-                    CardCmd.Upgrade(card);
+                foreach (var player in combat.Players)
+                {
+                    var pcs = player.PlayerCombatState;
+                    if (pcs == null) continue;
 
-                // 2. 一次性展示所有升级后的卡牌预览（不阻塞）
-                CardCmd.Preview(selected, 0.5f);
+                    var allCards = (pcs.Hand?.Cards ?? Enumerable.Empty<CardModel>())
+                        .Concat(pcs.DrawPile?.Cards ?? Enumerable.Empty<CardModel>())
+                        .Concat(pcs.DiscardPile?.Cards ?? Enumerable.Empty<CardModel>());
 
-                // 3. 给一个极短的停顿，让特效和预览有时间呼吸
-                await Cmd.CustomScaledWait(0.1f, 0.2f);
+                    var upgradable = allCards.Where(c => c.IsUpgradable).ToList();
+                    if (upgradable.Count == 0) continue;
+
+                    // 每人升级 mult 张（不够就全升）
+                    var chosen = upgradable
+                        .OrderBy(_ => rng.NextInt())
+                        .Take(mult)
+                        .ToList();
+
+                    foreach (var card in chosen)
+                    {
+                        CardCmd.Upgrade(card);
+                        upgradedCards.Add(card);
+                    }
+                }
+
+                if (upgradedCards.Count > 0)
+                {
+                    CardCmd.Preview(upgradedCards, 0.5f);
+                    await Cmd.CustomScaledWait(0.1f, 0.2f);
+                }
             });
 
         // AnonDChord,Osusume,喝到晕碳

@@ -14,8 +14,9 @@ public class CurtainCall() : CuteAnonCard(0, CardType.Attack, CardRarity.Rare, T
     
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        get { yield return CardKeyword.Exhaust;
-            CutesakiKeywords.Playguitar.GetModCardKeyword();
+        get { 
+            yield return CardKeyword.Exhaust;
+            yield return CutesakiKeywords.Playguitar.GetModCardKeyword();
         }
     }
 

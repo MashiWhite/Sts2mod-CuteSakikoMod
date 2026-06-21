@@ -9,11 +9,14 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
 public class FreshStart : CuteAnonCard
 {
-    [SavedProperty] private bool _hasBeenPlayedThisCombat;
-
     public FreshStart() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Innate,CardKeyword.Exhaust
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -23,11 +26,7 @@ public class FreshStart : CuteAnonCard
             yield return new CardsVar(2);
         }
     }
-
-    protected override bool ShouldGlowGoldInternal =>
-        // 尚未打出时发光，提示玩家首次打出有额外收益
-        !_hasBeenPlayedThisCombat;
-
+    
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         TriggerBanter();
@@ -37,12 +36,9 @@ public class FreshStart : CuteAnonCard
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-
-        if (!_hasBeenPlayedThisCombat)
-        {
+        
             await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
-            _hasBeenPlayedThisCombat = true;
-        }
+        
     }
 
     protected override void OnUpgrade()

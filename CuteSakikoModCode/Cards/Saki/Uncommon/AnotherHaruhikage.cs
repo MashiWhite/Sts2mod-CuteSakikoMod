@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -8,6 +9,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
@@ -18,6 +20,10 @@ public class AnotherHaruhikage() : CuteSakikoModCard(2, CardType.Attack, CardRar
         new DamageVar(13m, ValueProp.Move),
         new PowerVar<PressurePower>(10m)
     ];
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
+
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

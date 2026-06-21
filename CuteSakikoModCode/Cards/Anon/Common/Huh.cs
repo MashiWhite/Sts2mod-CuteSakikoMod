@@ -51,9 +51,9 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
             int manualNoteCount = IsUpgraded ? 3 : 2;
             for (int i = 0; i < manualNoteCount; i++)
             {
-                MusicNoteManager.AddNote(Owner, randomType,
+                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, randomType,
                     mainChords,
-                    bonusChords.Concat(tempChords));
+                    bonusChords.Concat(tempChords),choiceContext);
             }
 
             // 刷新 UI

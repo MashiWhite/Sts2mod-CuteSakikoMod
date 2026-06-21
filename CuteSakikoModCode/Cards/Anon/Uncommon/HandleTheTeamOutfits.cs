@@ -40,7 +40,7 @@ public class HandleTheTeamOutfits() : CuteAnonCard(2, CardType.Skill, CardRarity
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
         
-        const string chordId = "AnonGChord";
+        const string chordId = "AnonEChord";
         // 若临时槽中还未拥有该和弦，则添加临时槽位；否则直接储存一个和弦
         var temporaryChords = guitar.GetTemporaryChords(); // 需公开此方法，见下方说明
         if (temporaryChords.Contains(chordId))

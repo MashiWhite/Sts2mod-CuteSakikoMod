@@ -7,15 +7,11 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 
-public class Fraud() : ModStatusCard(-1, CardType.Status, CardRarity.Status, TargetType.None)
+public class Fraud() : ModStatusCard(1, CardType.Status, CardRarity.Status, TargetType.None)
 {
     // 不能被打出，虚无
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Unplayable, CardKeyword.Ethereal];
-
-
-    // 无法升级
-    public override int MaxUpgradeLevel => 0;
-
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    
     // 动态变量：能量损失值（固定1）
     protected override IEnumerable<DynamicVar> CanonicalVars => [new EnergyVar(1)];
 
@@ -25,5 +21,10 @@ public class Fraud() : ModStatusCard(-1, CardType.Status, CardRarity.Status, Tar
         if (card != this) return;
         await Cmd.Wait(0.25f);
         await PlayerCmd.LoseEnergy(DynamicVars.Energy.IntValue, Owner);
+    }
+    
+    protected override void OnUpgrade()
+    {
+        EnergyCost.UpgradeBy(-1);
     }
 }
