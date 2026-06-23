@@ -97,7 +97,7 @@ public sealed class ObCardPower : CuteSakikoModPower
 
         if (_modifiedCards.Contains(card))
         {
-            MemoryCmd.Forget(choiceContext, new[] { card });
+            await MemoryCmd.Forget(choiceContext, new[] { card });
             _modifiedCards.Remove(card);
             _originalCosts.Remove(card);
         }

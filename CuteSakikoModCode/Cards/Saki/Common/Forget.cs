@@ -46,7 +46,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
 
         // ★ 改为遗忘：将卡牌移入遗忘牌堆，并清除它的记忆快照
         if (selected != null)
-            MemoryCmd.Forget(choiceContext, [selected], this);
+            await MemoryCmd.Forget(choiceContext, [selected], this);
 
 
         // 获得格挡

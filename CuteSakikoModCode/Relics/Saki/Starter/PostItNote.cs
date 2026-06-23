@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -23,7 +24,7 @@ public sealed class PostItNote : KabutoNote
         if (combatState.RoundNumber == 1)
         {
             // 给自己施加 5 层压力
-            int powerCount = Math.Min(5, Owner.Creature.CurrentHp-1);
+            int powerCount = Math.Min(5, Owner.Creature.CurrentHp - 1);
             await PowerCmd.Apply<PressurePower>(
                 new ThrowingPlayerChoiceContext(), Owner.Creature, powerCount, Owner.Creature, null);
 
@@ -31,19 +32,7 @@ public sealed class PostItNote : KabutoNote
             await MemoryCardPile.EnsureInitializedAsync(Owner);
 
             // 随机获取一张记忆卡牌，并升级
-            var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
-            if (canonicalCards.Count > 0)
-            {
-                var shuffled = canonicalCards.UnstableShuffle(Owner.RunState.Rng.Shuffle);
-                var template = shuffled.FirstOrDefault();
-                if (template != null)
-                {
-                    var mutableCard = MemoryCardPile.CreateCardFromMemorySnapshot(Owner, template);
-                    mutableCard.UpgradeInternal();
-                    mutableCard.FinalizeUpgradeInternal();
-                    await CardPileCmd.AddGeneratedCardToCombat(mutableCard, PileType.Hand, Owner);
-                }
-            }
+            await MemoryCmd.Recall(new ThrowingPlayerChoiceContext(), Owner, allowChoose: false, count: 1, upgraded: true, source: null);
 
             Flash();
         }

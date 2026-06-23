@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Extensions;
@@ -34,24 +35,8 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
 
-        var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
-        if (canonicalCards.Count == 0) return;
-
-        // 打乱而不消耗 CombatCardGeneration
-        var shuffled = canonicalCards.UnstableShuffle(Owner.RunState.Rng.Shuffle);
-        var cardTemplate = shuffled.FirstOrDefault();
-        if (cardTemplate == null) return;
-
-        var randomCard = MemoryCardPile.CreateCardFromMemorySnapshot(Owner, cardTemplate);
-        if (randomCard != null)
-        {
-            if (IsUpgraded && !randomCard.IsUpgraded)
-            {
-                randomCard.UpgradeInternal();
-                randomCard.FinalizeUpgradeInternal();
-            }
-            await CardPileCmd.AddGeneratedCardToCombat(randomCard, PileType.Hand, Owner);
-        }
+        // 从记忆牌堆随机取1张牌（不消耗），是否升级取决于本牌是否升级
+        await MemoryCmd.Recall(choiceContext, Owner, allowChoose: false, count: 1, upgraded: IsUpgraded, source: this);
     }
 
     protected override void OnUpgrade()

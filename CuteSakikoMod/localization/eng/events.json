@@ -1,4 +1,12 @@
 ﻿{
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.title": "Black Cat in the Alley",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.description": "As you pass a dim, narrow alley, a [jitter]rustling[/jitter] sound comes from the side. Following the noise, you spot a sleek black cat buried headfirst in a small mountain of garbage cans, rummaging intently.\n\nAs if by [purple][b]telepathy[/b][/purple], the moment your gaze falls upon it, the cat twists its head and fixes you with its [purple]violet eyes[/purple]——",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.APPROACH.title": "Approach it",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.APPROACH.description": "Obtain the relic [gold]Gaze of the Black Cat[/gold].",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.APPROACH_SUCCESS.description": "——A pair of sharp, strangely familiar, [purple]violet eyes[/purple].\nAs you draw near, its body lowers, every hair standing on end, its pupils shrinking with terror as if it has seen something [red][jitter]utterly horrifying[/jitter][/red].\nYou quickly turn to look behind you, but nothing is there.\nWhen you turn back, the black cat has already vanished.",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.LEAVE.title": "Leave",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.LEAVE.description": "[red]Lose[/red] 8 HP, [blue]upgrade[/blue] a card.",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.LEAVE_SUCCESS.description": "The [b]black cat[/b] gives you an odd feeling, so you decide to leave the alley.\n\nAs you walk away, you think you hear a meow. Turning back, you find the black cat has already gone.",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.title": "Buy Effects Pedals",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.description": "You come across a music shop on the roadside...\nInside, many effects pedals are for sale.\n\nThey seem like they could give your [pink]guitar[/pink] some unique sounds.",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.BUY_LOW.title": "Jangly Distortion Pedal (50 Gold)",

@@ -63,9 +63,8 @@ public class MyBad() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, T
         );
 
         var selected = selectedCards.FirstOrDefault();
-        // 将选中的牌遗忘（而非消耗）
         if (selected != null)
-            MemoryCmd.Forget(choiceContext, new[] { selected }, this);
+            await MemoryCmd.Forget(choiceContext, new[] { selected }, this);
     }
 
     protected override void OnUpgrade()

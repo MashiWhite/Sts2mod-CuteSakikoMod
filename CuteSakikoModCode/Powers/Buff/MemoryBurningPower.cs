@@ -17,7 +17,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 public sealed class MemoryBurningPower : CuteSakikoModPower
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single; // 不可叠加
+    public override PowerStackType StackType => PowerStackType.Single;
     public override bool AllowNegative => false;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -30,7 +30,6 @@ public sealed class MemoryBurningPower : CuteSakikoModPower
         }
     }
 
-    // 修改回忆卡牌的费用为 0
     public override bool TryModifyEnergyCostInCombat(
         CardModel card,
         decimal originalCost,
@@ -38,24 +37,18 @@ public sealed class MemoryBurningPower : CuteSakikoModPower
     {
         modifiedCost = originalCost;
 
-        // 只对当前玩家的卡牌生效
         if (card.Owner?.Creature != Owner) return false;
-
-        // 只对回忆卡牌生效
         if (!card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword())) return false;
 
-        // 将费用改为 0
         modifiedCost = 0;
         return true;
     }
-
-    // 改为同步调用 Forget（不再 await）
-    public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var card = cardPlay.Card;
         if (card.Owner?.Creature == Owner && card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
-            MemoryCmd.Forget(choiceContext, new[] { card });
-        return Task.CompletedTask;
+            await MemoryCmd.Forget(choiceContext, new[] { card }); 
     }
 
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,

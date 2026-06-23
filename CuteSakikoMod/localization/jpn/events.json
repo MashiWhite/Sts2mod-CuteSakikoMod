@@ -1,4 +1,12 @@
 ﻿{
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.title": "路地裏の黒猫",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.description": "薄暗く狭い路地を通りかかると、脇から[jitter]ガサゴソ[/jitter]という音が聞こえる。音のする方へ目をやると、一匹の艶やかな黒猫が、ゴミ缶の山に頭を突っ込んで懸命に何かを探している。\n\nまるで[purple][b]テレパシー[/b][/purple]のように、あなたの視線がその猫に届いた瞬間、猫は振り返り、[purple]紫色の瞳[/purple]でじっとあなたを見つめてきた——",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.APPROACH.title": "近づく",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.APPROACH.description": "レリック[gold]黒猫の視線[/gold]を入手する。",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.APPROACH_SUCCESS.description": "——それは鋭く、どこか見覚えのある、[purple]紫色の瞳[/purple]。\n近づいた瞬間、猫は身を低く伏せ、全身の毛を逆立て、瞳孔を恐怖で縦に細めた。まるで[red][jitter]この上なく恐ろしい[/jitter][/red]ものを見たかのように。\nあなたは慌てて背後を振り返るが、そこには何もない。\n再び猫の方に向き直ると、黒猫の姿はもう消えていた。",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.LEAVE.title": "立ち去る",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.LEAVE.description": "HPを[red]8[/red]失い、カードを1枚[blue]アップグレード[/blue]する。",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.LEAVE_SUCCESS.description": "その[b]黒猫[/b]に不気味なものを感じたあなたは、路地を立ち去ることにした。\n\n立ち去り際、一鳴き聞こえた気がして振り返ったが、黒猫の姿はもうなかった。",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.title": "エフェクターを買う",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.description": "道端で楽器屋を見つけた……\n中にはたくさんのエフェクターが売られている。\n\n君の[pink]ギター[/pink]に特別な音をもたらしてくれそうだ。",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.BUY_LOW.title": "ジャリジャリ轟音エフェクター（50ゴールド）",

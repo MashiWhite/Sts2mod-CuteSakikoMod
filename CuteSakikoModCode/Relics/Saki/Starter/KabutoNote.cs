@@ -3,6 +3,7 @@ using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -41,7 +42,7 @@ public class KabutoNote : CuteSakiRelic
             return;
 
         // 1. 开局给压力（原有效果）
-        int powerCount = Math.Min(3, Owner.Creature.CurrentHp-1);
+        int powerCount = Math.Min(3, Owner.Creature.CurrentHp - 1);
         await PowerCmd.Apply<PressurePower>(
             new ThrowingPlayerChoiceContext(),
             Owner.Creature, powerCount, Owner.Creature, null);
@@ -49,16 +50,8 @@ public class KabutoNote : CuteSakiRelic
         // 2. 确保记忆牌堆已初始化（防止读档时牌堆为空）
         await MemoryCardPile.EnsureInitializedAsync(Owner);
 
-        // 3. 随机获取一张回忆卡牌
-        var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
-        if (canonicalCards.Count == 0) return;
-
-        var shuffled = canonicalCards.UnstableShuffle(Owner.RunState.Rng.Shuffle);
-        var template = shuffled.FirstOrDefault();
-        if (template == null) return;
-
-        var mutableCard = MemoryCardPile.CreateCardFromMemorySnapshot(Owner, template);
-        await CardPileCmd.AddGeneratedCardToCombat(mutableCard, PileType.Hand, Owner);
+        // 3. 随机获取一张回忆卡牌（不升级）
+        await MemoryCmd.Recall(new ThrowingPlayerChoiceContext(), Owner, allowChoose: false, count: 1, upgraded: false, source: null);
 
         Flash();
     }

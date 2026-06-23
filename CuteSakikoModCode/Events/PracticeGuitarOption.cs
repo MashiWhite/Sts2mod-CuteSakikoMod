@@ -54,25 +54,28 @@ public class PracticeGuitarOption : ModRestSiteOptionTemplate
         if (allCurrent.Count == 0)
             return false;
 
-        var retainedIds = await ChordSelectCmd.SelectChordsForPractice(
+        // 玩家选择需要变更的和弦
+        var changeIds = await ChordSelectCmd.SelectChordsForPractice(
             Owner,
             allCurrent,
             _promptLoc
         );
 
-        if (retainedIds.Count == 0)
+        // 未选择任何和弦（取消或空选择）则不消耗次数
+        if (changeIds.Count == 0)
             return false;
 
         var rng = Owner.RunState.Rng.UpFront;
-        var keepSet = new HashSet<string>(retainedIds);
+        var changeSet = new HashSet<string>(changeIds);
 
+        // 处理分类和弦：选中的才替换
         foreach (ChordCategory cat in Enum.GetValues<ChordCategory>())
         {
             if (cat == ChordCategory.Bonus || cat == ChordCategory.Anon) continue;
             if (!_relic.GetCurrentChords().TryGetValue(cat, out var currentId) || string.IsNullOrEmpty(currentId))
                 continue;
 
-            if (!keepSet.Contains(currentId))
+            if (changeSet.Contains(currentId))
             {
                 var pool = ChordManager.GetLearnableChordIds(cat);
                 if (pool.Count > 0)
@@ -80,18 +83,15 @@ public class PracticeGuitarOption : ModRestSiteOptionTemplate
             }
         }
 
+        // 处理 bonus 和弦：移除选中的，补充新和弦
         var originalBonus = _relic.GetBonusChords().ToList();
         if (originalBonus.Count > 0)
         {
-            var keptBonus = originalBonus.Where(id => keepSet.Contains(id)).ToList();
-            int removedCount = originalBonus.Count - keptBonus.Count;
-
-            foreach (var id in originalBonus)
+            var toRemove = originalBonus.Where(id => changeSet.Contains(id)).ToList();
+            foreach (var id in toRemove)
                 _relic.RemoveBonusChord(id);
-            foreach (var id in keptBonus)
-                _relic.AddBonusChord(id);
 
-            if (removedCount > 0)
+            if (toRemove.Count > 0)
             {
                 var allPools = new List<string>();
                 allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
@@ -99,7 +99,7 @@ public class PracticeGuitarOption : ModRestSiteOptionTemplate
                 allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
                 if (allPools.Count > 0)
                 {
-                    for (int i = 0; i < removedCount; i++)
+                    for (int i = 0; i < toRemove.Count; i++)
                         _relic.AddBonusChord(rng.NextItem(allPools));
                 }
             }

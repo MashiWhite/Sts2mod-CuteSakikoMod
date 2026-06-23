@@ -1,11 +1,16 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib;
+using System.Linq;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
@@ -18,10 +23,11 @@ public static class MemoryCmd
         if (list.Count == 0) return;
         var player = list[0].Owner;
 
-        // ★ 在牌堆操作之前触发遗忘事件（确保事件一定触发）
+        // ✅ 确保记忆牌堆已初始化
+        await MemoryCardPile.EnsureInitializedAsync(player);
+
         await MemoryCardPileManager.FireCardsForgotten(choiceContext, list, source);
 
-        // 尝试获取遗忘牌堆类型
         var forgetPileType = ForgetCardPile.GetPileType();
         if (forgetPileType == null)
         {
@@ -34,7 +40,14 @@ public static class MemoryCmd
 
         foreach (var card in list)
         {
-            if (card.Pile?.Type == forgetPileType) continue;
+            // 安全检查：仅当卡牌在战斗中且位于某个战斗牌堆时，才执行遗忘操作
+            if (card.Pile == null || !card.Pile.Type.IsCombatPile())
+            {
+                Log.Warn($"[MemoryCmd] Skipping card {card.Id.Entry} because it is not in a combat pile.");
+                continue;
+            }
+
+            if (card.Pile.Type == forgetPileType) continue;
 
             await CardPileCmd.Add(card, forgetPileType);
 
@@ -51,44 +64,121 @@ public static class MemoryCmd
         }
     }
 
-    public static List<CardModel> Recall(PlayerChoiceContext choiceContext, Player player, int count, bool upgraded,
-        CardModel source = null)
+    public static async Task<List<CardModel>> Recall(
+    PlayerChoiceContext choiceContext,
+    Player player,
+    bool allowChoose = false,
+    int count = 1,
+    bool fillHand = false,
+    bool upgraded = false,
+    CardModel? source = null)
+{
+    // 确保记忆牌堆已初始化
+    await MemoryCardPile.EnsureInitializedAsync(player);
+
+    var sourceCards = MemoryCardPile.GetCanonicalCards(player);
+    if (sourceCards.Count == 0)
+        return new List<CardModel>();
+
+    int targetCount = 0;
+
+    if (fillHand)
     {
-        var memoryPile = MemoryCardPile.Get(player);
-        if (memoryPile == null || memoryPile.Cards.Count == 0)
+        var handPile = PileType.Hand.GetPile(player);
+        int currentSize = handPile?.Cards.Count ?? 0;
+        int maxHandSize = RitsuLibFramework.GetMaxHandSize(player);
+        targetCount = Math.Max(0, maxHandSize - currentSize);
+        if (targetCount == 0)
             return new List<CardModel>();
-        var rng = player.RunState.Rng.Shuffle;
-        var available = memoryPile.Cards.ToList();
-        if (count > available.Count) count = available.Count;
-        var chosen = new List<CardModel>();
-        var tempList = available.ToList();
-        for (var i = 0; i < count; i++)
+    }
+    else
+    {
+        targetCount = Math.Max(1, count);
+    }
+
+    if (allowChoose)
+    {
+        // 生成可选择的战斗卡牌实例（已与 CombatState 关联）
+        var selectableCards = sourceCards
+            .Select(template => MemoryCardPile.CreateCardFromMemorySnapshot(player, template))
+            .Where(c => c != null)
+            .Cast<CardModel>()
+            .ToList();
+
+        if (selectableCards.Count == 0)
+            return new List<CardModel>();
+
+        int maxSelect = Math.Min(targetCount, selectableCards.Count);
+        int minSelect = Math.Min(1, maxSelect);
+
+        var prefs = new CardSelectorPrefs(
+            new LocString("cards", "CUTE_SAKIKO_MOD_CARD_RECALL.selectionScreenPrompt"),
+            minSelect,
+            maxSelect
+        );
+
+        var selected = await CardSelectCmd.FromSimpleGrid(
+            choiceContext,
+            selectableCards,
+            player,
+            prefs
+        );
+
+        var selectedList = selected.ToList();
+
+        // 升级处理
+        foreach (var card in selectedList)
         {
-            var index = rng.NextInt(0, tempList.Count);
-            chosen.Add(tempList[index]);
-            tempList.RemoveAt(index);
+            if (upgraded && !card.IsUpgraded)
+            {
+                card.UpgradeInternal();
+                card.FinalizeUpgradeInternal();
+            }
         }
+
+        // ✅ 使用 AddGeneratedCardToCombat 加入手牌
+        if (selectedList.Count > 0)
+        {
+            await CardPileCmd.AddGeneratedCardsToCombat(selectedList, PileType.Hand, player);
+        }
+
+        return selectedList;
+    }
+    else
+    {
+        var rng = player.RunState.Rng.Shuffle;
+        var tempList = sourceCards.ToList();
+        if (targetCount > tempList.Count)
+            targetCount = tempList.Count;
 
         var newCards = new List<CardModel>();
-        foreach (var template in chosen)
+
+        for (int i = 0; i < targetCount; i++)
         {
-            var clone = player.RunState.CloneCard(template);
-            if (upgraded && !clone.IsUpgraded)
-                clone.UpgradeInternal();
-            newCards.Add(clone);
+            int index = rng.NextInt(0, tempList.Count);
+            var template = tempList[index];
+            tempList.RemoveAt(index);
+
+            // ✅ 从规范牌生成战斗实例
+            var newCard = MemoryCardPile.CreateCardFromMemorySnapshot(player, template);
+            if (newCard != null)
+            {
+                if (upgraded && !newCard.IsUpgraded)
+                {
+                    newCard.UpgradeInternal();
+                    newCard.FinalizeUpgradeInternal();
+                }
+                newCards.Add(newCard);
+            }
         }
 
+        // ✅ 使用 AddGeneratedCardsToCombat 加入手牌
         if (newCards.Count > 0)
         {
-            var handPile = player.PlayerCombatState?.Hand;
-            if (handPile != null)
-            {
-                foreach (var c in newCards)
-                    handPile.AddInternal(c, silent: true);
-                handPile.InvokeContentsChanged();
-            }
+            await CardPileCmd.AddGeneratedCardsToCombat(newCards, PileType.Hand, player);
         }
 
         return newCards;
     }
+}
 }

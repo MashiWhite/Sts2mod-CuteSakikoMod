@@ -1,4 +1,7 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.title": "黒猫の視線",
+  "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.description": "各戦闘開始時、最大HPを[blue]1[/blue]失う。\n毎ターン開始時、{energyPrefix:energyIcons(1)}を得て、カードを[blue]{Cards}[/blue]枚引く。",
+  "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.flavor": "黒猫の[b][purple]瞳[/purple][/b]が死神のように私を見つめている。",
   "CUTE_SAKIKO_MOD_RELIC_KABUTO_NOTE.description": "各戦闘の第1ターンに、[gold]重圧[/gold]を3層とランダムな[gold]メモリー[/gold]を1枚得る。",
   "CUTE_SAKIKO_MOD_RELIC_KABUTO_NOTE.flavor": "[blue]祥子[/blue]が最も大切にしているノート。[blue]灯[/blue]の付箋と自身の[gold]メモリー[/gold]が収められている。",
   "CUTE_SAKIKO_MOD_RELIC_KABUTO_NOTE.title": "カブトムシのノート",

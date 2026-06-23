@@ -1,13 +1,12 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using MegaCrit.Sts2.Core.CardSelection;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
@@ -65,42 +64,8 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
         // 3. 消耗压力
         await PowerCmd.ModifyAmount(choiceContext, targetPressure, -requiredPressure, Owner.Creature, this);
 
-        // 4. 获取可选回忆卡牌规范模板
-        var canonicalCards = MemoryCardPile.GetCanonicalCards(Owner);
-        if (canonicalCards.Count == 0) return;
-
-        // 5. 使用 MemoryCardPile.CreateCardFromMemorySnapshot 生成完全正确的战斗实例
-        var combatReadyCards = canonicalCards
-            .Select(template => MemoryCardPile.CreateCardFromMemorySnapshot(Owner, template))
-            .Where(c => c != null)
-            .ToList();
-
-        // 6. 弹出选择界面
-        var prefs = new CardSelectorPrefs(
-            new LocString("cards", "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.selectionScreenPrompt"),
-            1,
-            1
-        );
-
-        var selectedCards = await CardSelectCmd.FromSimpleGrid(
-            choiceContext,
-            combatReadyCards,
-            Owner,
-            prefs
-        );
-
-        var selectedCard = selectedCards.FirstOrDefault();
-        if (selectedCard == null) return;
-
-        // 7. 如需升级
-        if (IsUpgraded)
-        {
-            selectedCard.UpgradeInternal();
-            selectedCard.FinalizeUpgradeInternal();
-        }
-
-        // 8. 加入手牌
-        await CardPileCmd.AddGeneratedCardToCombat(selectedCard, PileType.Hand, Owner);
+        // 4. 从记忆牌堆选择1张牌（允许选择，升级跟随本牌）
+        await MemoryCmd.Recall(choiceContext, Owner, allowChoose: true, count: 1, upgraded: IsUpgraded, source: this);
     }
 
     protected override void OnUpgrade()

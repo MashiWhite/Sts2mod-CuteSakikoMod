@@ -1,4 +1,12 @@
 ﻿{
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.title": "巷子里的黑猫",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.description": "路过一条阴暗狭窄的小巷时，侧边传来[jitter]窸窸窣窣[/jitter]的声响，顺着声源循去，一只毛色亮丽的黑猫正埋头于由垃圾罐头组成的小山里努力翻找。\n\n仿佛是有[purple][b]心灵感应[/b][/purple]一般，在你的目光落到黑猫身上的瞬间，它便扭过头，[purple]紫色的瞳孔[/purple]直勾勾地盯着你——",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.APPROACH.title": "靠近它",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.APPROACH.description": "获得遗物[gold]黑猫的注视[/gold]",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.APPROACH_SUCCESS.description": "——那是一对锐利的，莫名熟悉的，[purple]紫色眸子[/purple]。\n在你靠近的瞬间它的身体低伏，浑身的毛发都炸了起来，瞳孔惊恐地竖起，像是看见了什么[red][jitter]极度骇人[/jitter][/red]的东西。\n你赶紧转身看向身后，但那空无一物。\n你转回身子，黑猫已不见踪影。",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.LEAVE.title": "离开",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.INITIAL.options.LEAVE.description": "[red]失去[/red]8点生命值，[blue]升级[/blue]一张牌。",
+  "CUTE_SAKIKO_MOD_EVENT_ALLEY_SHADOW_CAT.pages.LEAVE_SUCCESS.description": "你觉得这只[b]黑猫[/b]怪怪的，于是决定离开这个小巷。\n\n离开的时候你感觉听见一声猫叫，回过头却发现黑猫已经离开了。",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.title": "购买效果器",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.description": "你在路边发现了一个乐器商店……\n里面有许多效果器售卖。\n\n看上去能给你的[pink]吉他[/pink]带来一些特别的声音。",
   "CUTE_SAKIKO_MOD_EVENT_GUITAR_EFFECTS_PEDAL_EVENT.pages.INITIAL.options.BUY_LOW.title": "锵锵隆隆的效果器（50金币）",
