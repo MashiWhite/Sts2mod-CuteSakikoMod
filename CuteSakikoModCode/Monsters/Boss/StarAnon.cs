@@ -30,8 +30,8 @@ public class StarAnon : ModMonsterTemplate
 
     public override bool ShouldDisappearFromDoom => Creature?.GetPower<RetrogradePower>() == null;
     
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 140, 120);
-    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 180, 160);
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 220, 120);
+    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 260, 160);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/star_anon_boss.tscn"

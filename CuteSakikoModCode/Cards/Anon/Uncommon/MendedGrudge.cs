@@ -10,9 +10,16 @@ public class MendedGrudge() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncomm
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(5m, ValueProp.Move)
+        new DamageVar(8m, ValueProp.Move)
     ];
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords
+    {
+        get 
+        { 
+            yield return CardKeyword.Retain;
+        }
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -22,7 +29,7 @@ public class MendedGrudge() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncomm
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        // 1. 先对所有敌人造成5点伤害
+        // 1. 先对所有敌人造成伤害
         var enemies = combat.Enemies;
         if (enemies != null)
             await CreatureCmd.Damage(choiceContext, enemies, damage, ValueProp.Move, Owner.Creature);
@@ -36,16 +43,10 @@ public class MendedGrudge() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncomm
         if (count == 0) return;
 
         await CardPileCmd.RemoveFromCombat(statusCards);
-
-        // 3. 再次对所有敌人造成等于移除数量的伤害（若敌人仍在）
-        enemies = combat.Enemies;
-        if (enemies != null)
-            await CreatureCmd.Damage(choiceContext, enemies, count, ValueProp.Move, Owner.Creature);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 1 → 0
-        DynamicVars.Damage.UpgradeValueBy(3m);
+        DynamicVars.Damage.UpgradeValueBy(4m);
     }
 }

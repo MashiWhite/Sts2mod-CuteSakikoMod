@@ -1,9 +1,15 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Runs;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using MegaCrit.Sts2.Core.Context;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
@@ -18,12 +24,11 @@ public static class ChordSelectCmd
         var sync = runManager.PlayerChoiceSynchronizer;
         var choiceId = sync.ReserveChoiceId(player);
 
-        // 通知框架开始玩家选择
         await context.SignalPlayerChoiceBegun(PlayerChoiceOptions.CancelPlayCardActions);
 
         List<int> chordIndexes = null;
 
-        if (runManager.NetService.NetId == player.NetId) // 本地玩家负责显示 UI
+        if (runManager.NetService.NetId == player.NetId)
         {
             var screen = new ChordLibraryScreen();
             var selectedIds = await screen.ShowSelection(count);
@@ -32,7 +37,7 @@ public static class ChordSelectCmd
                     .Select(id => ChordManager.AllChordsList.FindIndex(c => c.Id == id))
                     .ToList();
             else
-                chordIndexes = new List<int>(); // 用户取消
+                chordIndexes = new List<int>();
 
             sync.SyncLocalChoice(player, choiceId, PlayerChoiceResult.FromIndexes(chordIndexes));
         }
@@ -48,5 +53,36 @@ public static class ChordSelectCmd
             return new List<string>();
 
         return chordIndexes.Select(i => ChordManager.AllChordsList[i].Id).ToList();
+    }
+
+    /// <summary>
+    /// 用于练习吉他等休息站选项：让玩家从给定的候选和弦中自由选择要保留的和弦。
+    /// 无需 PlayerChoiceContext，内部使用 PlayerChoiceSynchronizer 进行多人同步。
+    /// </summary>
+    public static async Task<List<string>> SelectChordsForPractice(
+        Player player,
+        List<string> candidateIds,
+        LocString prompt)  // 注意：这里是 LocString 类型
+    {
+        var sync = RunManager.Instance.PlayerChoiceSynchronizer;
+        var choiceId = sync.ReserveChoiceId(player);
+
+        if (LocalContext.IsMe(player))
+        {
+            var screen = new ChordLibraryScreen();
+            var selected = await screen.ShowFreeSelection(candidateIds, prompt);
+
+            var indexes = selected
+                .Select(id => ChordManager.AllChordsList.FindIndex(c => c.Id == id))
+                .ToList();
+            sync.SyncLocalChoice(player, choiceId, PlayerChoiceResult.FromIndexes(indexes));
+            return selected;
+        }
+        else
+        {
+            var remoteResult = await sync.WaitForRemoteChoice(player, choiceId);
+            var indexes = remoteResult.AsIndexes();
+            return indexes.Select(i => ChordManager.AllChordsList[i].Id).ToList();
+        }
     }
 }

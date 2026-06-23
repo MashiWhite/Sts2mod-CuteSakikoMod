@@ -469,19 +469,18 @@ public static class ChordManager
                 }
             });
 
-        // 爱音F和弦【攻 攻 攻 攻】对全体敌人造成13点伤害，使所有友方获得1层虚弱
+        // 爱音F和弦【攻 攻 攻 攻】对全体敌人造成20点伤害，使所有友方获得1层虚弱
         AddTemporaryChord("AnonFChord", ChordCategory.Anon,
             new[] { CardType.Attack, CardType.Attack, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-ANONFCHORD.title", "CUTESAKIKOMOD-ANONFCHORD.description", "anon_f_chord",
-            new[] { 13, 1 }, // BaseValues: [伤害值, 虚弱层数]
+            new[] { 20, 1 }, // BaseValues: [伤害值, 虚弱层数]
             async (ctx, owner, mult) =>
             {
                 var combat = owner.CombatState;
                 if (combat == null) return;
-                // 对全体敌人造成 12 * mult 点伤害
                 var enemies = combat.Enemies;
                 if (enemies != null && enemies.Any())
-                    await CreatureCmd.Damage(ctx, enemies, 13 * mult, ValueProp.Move, owner, null);
+                    await CreatureCmd.Damage(ctx, enemies, 20 * mult, ValueProp.Move, owner, null);
                 // 对全体友方施加 1 * mult 层虚弱
                 var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)

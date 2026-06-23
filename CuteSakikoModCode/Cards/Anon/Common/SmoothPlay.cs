@@ -5,13 +5,16 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
 public class SmoothPlay : CuteAnonCard
 {
-    public SmoothPlay() : base(4, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
+    private bool _eventSubscribed;
+
+    public SmoothPlay() : base(4, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
 
@@ -23,13 +26,36 @@ public class SmoothPlay : CuteAnonCard
     public override void AfterCreated()
     {
         base.AfterCreated();
-        // 订阅音符变化事件，动态更新费用
-        MusicNoteManager.PlayerNotesChanged += OnPlayerNotesChanged;
+        SubscribeAndRefresh();
+    }
+
+    public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
+    {
+        await base.AfterCardDrawn(choiceContext, card, fromHandDraw);
+        if (card == this)
+            SubscribeAndRefresh();
+    }
+
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await base.AfterCardPlayed(choiceContext, cardPlay);
+        // 任何卡牌打出后音符都可能改变，兜底刷新一次
+        if (Owner != null)
+            UpdateCost();
+    }
+
+    private void SubscribeAndRefresh()
+    {
+        if (!_eventSubscribed)
+        {
+            MusicNoteManager.PlayerNotesChanged += OnPlayerNotesChanged;
+            _eventSubscribed = true;
+        }
+        UpdateCost();
     }
 
     private void OnPlayerNotesChanged(Player changedPlayer)
     {
-        // 只处理自己的音符变化
         if (Owner == null || changedPlayer != Owner) return;
         UpdateCost();
     }

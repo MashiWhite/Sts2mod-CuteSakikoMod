@@ -9,7 +9,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class ClumsyPlay() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class ClumsyPlay() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
 
@@ -21,8 +21,8 @@ public class ClumsyPlay() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon
     {
         get
         {
-            yield return new DamageVar(8m, ValueProp.Move);
-            yield return new BlockVar(8m, ValueProp.Move);
+            yield return new DamageVar(7m, ValueProp.Move);
+            yield return new BlockVar(7m, ValueProp.Move);
         }
     }
 
@@ -51,7 +51,7 @@ public class ClumsyPlay() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m); // 8 → 12
-        DynamicVars.Block.UpgradeValueBy(4m); // 8 → 12
+        DynamicVars.Damage.UpgradeValueBy(3m); // 8 → 12
+        DynamicVars.Block.UpgradeValueBy(3m); // 8 → 12
     }
 }

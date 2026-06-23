@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class SecretPractice() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class SecretPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override bool GainsBlock => true;
 

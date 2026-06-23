@@ -1,6 +1,10 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
@@ -16,6 +20,17 @@ public partial class ChordLibraryScreen : Control
     private TaskCompletionSource<List<string>> _selectionTcs;
     private int _targetCount;
 
+    private string _titleTable;
+    private string _titleKey;
+    private LocString? _freePromptLoc;
+    private List<string>? _candidateIds;
+
+    private Label _titleLabel = null!;
+    private Button _confirmButton = null!;
+    private Button _cancelButton = null!;
+
+    private const string LocTable = "rest_site_ui";
+
     public static void OpenBrowse()
     {
         if (_browseInstance != null && IsInstanceValid(_browseInstance))
@@ -30,6 +45,28 @@ public partial class ChordLibraryScreen : Control
 
     public async Task<List<string>> ShowSelection(int count)
     {
+        return await ShowSelectionInternal(
+            count,
+            LocTable,
+            "CUTE_SAKIKO_MOD_CHORD_LIBRARY_SELECT_TITLE",
+            null
+        );
+    }
+
+    public async Task<List<string>> ShowFreeSelection(List<string> candidateIds, LocString prompt)
+    {
+        _candidateIds = candidateIds;
+        return await ShowSelectionInternal(
+            int.MaxValue,
+            LocTable,
+            "CUTE_SAKIKO_MOD_CHORD_LIBRARY_FREE_SELECT_TITLE",
+            prompt
+        );
+    }
+
+    private async Task<List<string>> ShowSelectionInternal(
+        int count, string table, string key, LocString? prompt)
+    {
         if (_selectionTcs != null && !_selectionTcs.Task.IsCompleted)
             _selectionTcs.TrySetCanceled();
 
@@ -38,6 +75,9 @@ public partial class ChordLibraryScreen : Control
         _targetCount = count;
         _isSelectMode = true;
         _isCancelled = false;
+        _titleTable = table;
+        _titleKey = key;
+        _freePromptLoc = prompt;
 
         if (!IsInsideTree())
         {
@@ -53,25 +93,21 @@ public partial class ChordLibraryScreen : Control
         var parent = GetParent();
         parent?.MoveChild(this, 0);
 
-        // ===== 背景 =====
+        // 背景
         var bg = new ColorRect
         {
             Color = new Color(0, 0, 0, 0.6f),
             MouseFilter = _isSelectMode ? MouseFilterEnum.Ignore : MouseFilterEnum.Stop
         };
-        // 锚定为全屏
         bg.AnchorLeft = 0;
         bg.AnchorRight = 1;
         bg.AnchorTop = 0;
         bg.AnchorBottom = 1;
-        // 上下留出安全区域（相对于屏幕高度取固定值）
         var topMargin = 80f;
-        float bottomMargin = 0;
         bg.OffsetTop = topMargin;
-        bg.OffsetBottom = -bottomMargin; // 负值表示从底部往上缩进
+        bg.OffsetBottom = 0;
         bg.OffsetLeft = 0;
         bg.OffsetRight = 0;
-        // 非选择模式下点击背景关闭
         if (!_isSelectMode)
             bg.GuiInput += e =>
             {
@@ -80,117 +116,187 @@ public partial class ChordLibraryScreen : Control
             };
         AddChild(bg);
 
-        // ===== 顶部栏 =====
+        // 顶部栏
         var topBar = new ColorRect
         {
             Color = new Color(0.15f, 0.1f, 0.2f),
             MouseFilter = MouseFilterEnum.Ignore
         };
-        // 锚定到顶部，与背景同宽（通过锚点左右拉伸，再偏移）
         topBar.AnchorLeft = 0;
         topBar.AnchorRight = 1;
         topBar.AnchorTop = 0;
-        topBar.AnchorBottom = 0; // 高度由 offset 决定
-        topBar.OffsetTop = topMargin; // 与背景顶部对齐
-        topBar.OffsetBottom = topMargin + 60f; // 固定高度 60
+        topBar.AnchorBottom = 0;
+        topBar.OffsetTop = topMargin;
+        topBar.OffsetBottom = topMargin + 60f;
         AddChild(topBar);
 
-        var titleLabel = new Label
+        _titleLabel = new Label
         {
-            Text = _isSelectMode ? $"选择 {_targetCount} 个和弦 (已选 0)" : "和弦图鉴",
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center
         };
-        titleLabel.AnchorLeft = 0;
-        titleLabel.AnchorRight = 1;
-        titleLabel.AnchorTop = 0;
-        titleLabel.AnchorBottom = 1;
-        titleLabel.AddThemeFontSizeOverride("font_size", 24);
-        titleLabel.AddThemeColorOverride("font_color", new Color(1f, 0.85f, 0.2f));
-        topBar.AddChild(titleLabel);
+        _titleLabel.AnchorLeft = 0;
+        _titleLabel.AnchorRight = 1;
+        _titleLabel.AnchorTop = 0;
+        _titleLabel.AnchorBottom = 1;
+        _titleLabel.AddThemeFontSizeOverride("font_size", 24);
+        _titleLabel.AddThemeColorOverride("font_color", new Color(1f, 0.85f, 0.2f));
+        topBar.AddChild(_titleLabel);
 
-        // ===== 滚动区域 =====
+        // 滚动区域
         var scroll = new ScrollContainer();
-        // 锚定到背景内部
         scroll.AnchorLeft = 0;
         scroll.AnchorRight = 1;
         scroll.AnchorTop = 0;
         scroll.AnchorBottom = 1;
-        // 左右边距：屏幕宽度的 15% 或最小 200px 用来避免边缘太挤
         var leftMargin = Mathf.Max(200f, GetViewportRect().Size.X * 0.15f);
-        var rightMargin = -Mathf.Max(40f, GetViewportRect().Size.X * 0.05f); // 负值
+        var rightMargin = -Mathf.Max(40f, GetViewportRect().Size.X * 0.05f);
         scroll.OffsetLeft = leftMargin;
         scroll.OffsetRight = rightMargin;
-        // 上下边距：位于 topBar 下方、背景底部上方
-        scroll.OffsetTop = topBar.OffsetBottom + 20f; // 与顶栏间隔 20
-        scroll.OffsetBottom = bg.OffsetBottom + 20f; // bg.OffsetBottom 是负值，+20 就是距离底部 20
+        scroll.OffsetTop = topBar.OffsetBottom + 20f;
+        scroll.OffsetBottom = bg.OffsetBottom + 20f;
         AddChild(scroll);
 
-        // ===== 内容容器 =====
+        // 内容容器
         var vbox = new VBoxContainer();
         vbox.AddThemeConstantOverride("separation", 24);
         scroll.AddChild(vbox);
 
-        var categories = new[]
+        // 根据模式确定显示的和弦
+        Dictionary<ChordCategory, List<ChordDefinition>> chordsByCategory;
+        if (_isSelectMode && _candidateIds != null)
         {
-            ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant,
-            ChordCategory.Anon, ChordCategory.Bonus
-        };
-
-        foreach (var cat in categories)
+            chordsByCategory = new();
+            foreach (var id in _candidateIds)
+            {
+                if (ChordManager.AllChords.TryGetValue(id, out var def))
+                {
+                    if (!chordsByCategory.ContainsKey(def.Category))
+                        chordsByCategory[def.Category] = new();
+                    chordsByCategory[def.Category].Add(def);
+                }
+            }
+        }
+        else
         {
-            var chords = ChordManager.AllChordsList.Where(c => c.Category == cat).ToList();
-            if (chords.Count == 0) continue;
+            chordsByCategory = new()
+            {
+                { ChordCategory.Major, ChordManager.AllChordsList.Where(c => c.Category == ChordCategory.Major).ToList() },
+                { ChordCategory.Minor, ChordManager.AllChordsList.Where(c => c.Category == ChordCategory.Minor).ToList() },
+                { ChordCategory.Dominant, ChordManager.AllChordsList.Where(c => c.Category == ChordCategory.Dominant).ToList() },
+                { ChordCategory.Anon, ChordManager.AllChordsList.Where(c => c.Category == ChordCategory.Anon).ToList() },
+                { ChordCategory.Bonus, ChordManager.AllChordsList.Where(c => c.Category == ChordCategory.Bonus).ToList() }
+            };
+        }
 
-            var catLabel = new Label { Text = GetCategoryDisplayName(cat) };
+        foreach (var kv in chordsByCategory)
+        {
+            if (kv.Value.Count == 0) continue;
+
+            var catLoc = GetCategoryLocString(kv.Key);
+            var catLabel = new Label { Text = catLoc.GetFormattedText() };
             catLabel.AddThemeFontSizeOverride("font_size", 20);
             catLabel.AddThemeColorOverride("font_color", new Color(1f, 0.85f, 0.2f));
             vbox.AddChild(catLabel);
 
             var grid = new GridContainer();
-            // 动态列数：根据可用宽度计算
-            var availableWidth = scroll.Size.X - 40f; // 预留内部边距
-            var colWidth = 120f; // 每个按钮最小宽度
-            var columns = Mathf.Max(1, Mathf.FloorToInt(availableWidth / colWidth));
+            float availableWidth = scroll.Size.X - 40f;
+            int columns = Mathf.Max(1, Mathf.FloorToInt(availableWidth / 120f));
             grid.Columns = columns;
-            foreach (var chordDef in chords)
+            foreach (var chordDef in kv.Value)
             {
                 var btn = new ChordButton();
                 btn.Setup(chordDef.Id);
                 btn.Modulate = _isSelectMode && _selectedChords.Contains(chordDef.Id)
-                    ? new Color(1, 1, 0.5f)
-                    : Colors.White;
+                    ? new Color(1, 1, 0.5f) : Colors.White;
 
                 if (_isSelectMode)
                 {
                     var chordId = chordDef.Id;
-                    btn.Pressed += () => OnChordButtonPressed(chordId, titleLabel);
+                    btn.Pressed += () => OnChordButtonPressed(chordId);
                 }
-
                 _chordButtons[chordDef.Id] = btn;
                 grid.AddChild(btn);
             }
-
             vbox.AddChild(grid);
         }
 
-        // 监听窗口大小变化，重新调整布局
+        // 自由选择模式下的确认/取消按钮
+        if (_isSelectMode && _targetCount == int.MaxValue)
+        {
+            var buttonBar = new HBoxContainer();
+            buttonBar.Alignment = BoxContainer.AlignmentMode.Center;
+            buttonBar.AddThemeConstantOverride("separation", 20);
+
+            // 正常状态：白底圆角
+            StyleBoxFlat normalStyle = new()
+            {
+                BgColor = Colors.White,
+                CornerRadiusTopLeft = 10,
+                CornerRadiusTopRight = 10,
+                CornerRadiusBottomLeft = 10,
+                CornerRadiusBottomRight = 10,
+                ContentMarginLeft = 10,
+                ContentMarginRight = 10,
+                ContentMarginTop = 5,
+                ContentMarginBottom = 5
+            };
+
+            // 悬浮/按下状态：灰色背景，圆角保持不变
+            StyleBoxFlat hoverStyle = new()
+            {
+                BgColor = new Color(0.75f, 0.75f, 0.75f), // 浅灰色
+                CornerRadiusTopLeft = 10,
+                CornerRadiusTopRight = 10,
+                CornerRadiusBottomLeft = 10,
+                CornerRadiusBottomRight = 10,
+                ContentMarginLeft = 10,
+                ContentMarginRight = 10,
+                ContentMarginTop = 5,
+                ContentMarginBottom = 5
+            };
+
+            _confirmButton = new Button
+            {
+                Text = new LocString(LocTable, "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CONFIRM").GetFormattedText()
+            };
+            _confirmButton.AddThemeStyleboxOverride("normal", normalStyle);
+            _confirmButton.AddThemeStyleboxOverride("hover", hoverStyle);
+            _confirmButton.AddThemeStyleboxOverride("pressed", hoverStyle);
+            _confirmButton.AddThemeColorOverride("font_color", Colors.Black);
+            _confirmButton.Pressed += () =>
+            {
+                _selectionTcs?.TrySetResult(_selectedChords.ToList());
+                QueueFree();
+            };
+
+            _cancelButton = new Button
+            {
+                Text = new LocString(LocTable, "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CANCEL").GetFormattedText()
+            };
+            _cancelButton.AddThemeStyleboxOverride("normal", normalStyle);
+            _cancelButton.AddThemeStyleboxOverride("hover", hoverStyle);
+            _cancelButton.AddThemeStyleboxOverride("pressed", hoverStyle);
+            _cancelButton.AddThemeColorOverride("font_color", Colors.Black);
+            _cancelButton.Pressed += () =>
+            {
+                _isCancelled = true;
+                _selectionTcs?.TrySetResult(new List<string>());
+                QueueFree();
+            };
+
+            buttonBar.AddChild(_confirmButton);
+            buttonBar.AddChild(_cancelButton);
+            vbox.AddChild(buttonBar);
+        }
+
+        UpdateTitleLabel();
         GetViewport().SizeChanged += OnViewportSizeChanged;
     }
 
-    private void OnViewportSizeChanged()
-    {
-        // 重新计算滚动区域的边距和网格列数
-        var leftMargin = Mathf.Max(200f, GetViewportRect().Size.X * 0.15f);
-        var rightMargin = -Mathf.Max(40f, GetViewportRect().Size.X * 0.05f);
+    private void OnViewportSizeChanged() { }
 
-        var scroll = FindChild("ScrollContainer") as ScrollContainer; // 如果你给 scroll 加了名字可以这样找
-        // 或者直接在 _Ready 中保存引用
-        // 这里简化：遍历子节点找到 ScrollContainer (略)
-        // 更好的做法：在类中保存 scroll 引用
-    }
-
-    private void OnChordButtonPressed(string chordId, Label titleLabel)
+    private void OnChordButtonPressed(string chordId)
     {
         if (!_isSelectMode) return;
 
@@ -202,19 +308,44 @@ public partial class ChordLibraryScreen : Control
         }
         else
         {
-            if (_selectedChords.Count >= _targetCount) return;
+            if (_targetCount != int.MaxValue && _selectedChords.Count >= _targetCount) return;
             _selectedChords.Add(chordId);
             if (_chordButtons.TryGetValue(chordId, out var btn))
                 btn.Modulate = new Color(1, 1, 0.5f);
         }
 
-        titleLabel.Text = $"选择 {_targetCount} 个和弦 (已选 {_selectedChords.Count})";
+        UpdateTitleLabel();
 
-        if (_selectedChords.Count == _targetCount)
+        if (_targetCount != int.MaxValue && _selectedChords.Count == _targetCount)
         {
             _selectionTcs?.TrySetResult(_selectedChords.ToList());
             QueueFree();
         }
+    }
+
+    private void UpdateTitleLabel()
+    {
+        if (_titleLabel == null) return;
+
+        if (!_isSelectMode)
+        {
+            _titleLabel.Text = new LocString(
+                LocTable, "CUTE_SAKIKO_MOD_CHORD_LIBRARY_BROWSE_TITLE"
+            ).GetFormattedText();
+            return;
+        }
+
+        var loc = new LocString(_titleTable, _titleKey);
+        if (_targetCount != int.MaxValue)
+        {
+            loc.Add("Count", (decimal)_targetCount);
+        }
+        if (_freePromptLoc != null)
+        {
+            loc.Add("Prompt", _freePromptLoc.GetFormattedText());
+        }
+        loc.Add("Selected", (decimal)_selectedChords.Count);
+        _titleLabel.Text = loc.GetFormattedText();
     }
 
     public override void _Input(InputEvent @event)
@@ -226,7 +357,6 @@ public partial class ChordLibraryScreen : Control
                 _isCancelled = true;
                 _selectionTcs?.TrySetResult(new List<string>());
             }
-
             QueueFree();
             AcceptEvent();
         }
@@ -245,16 +375,17 @@ public partial class ChordLibraryScreen : Control
             _selectionTcs.TrySetResult(new List<string>());
     }
 
-    private static string GetCategoryDisplayName(ChordCategory cat)
+    private static LocString GetCategoryLocString(ChordCategory cat)
     {
-        return cat switch
+        string key = cat switch
         {
-            ChordCategory.Major => "大三和弦",
-            ChordCategory.Minor => "小三和弦",
-            ChordCategory.Dominant => "属七和弦",
-            ChordCategory.Anon => "爱音和弦",
-            ChordCategory.Bonus => "额外和弦",
-            _ => "其他和弦"
+            ChordCategory.Major => "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_MAJOR",
+            ChordCategory.Minor => "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_MINOR",
+            ChordCategory.Dominant => "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_DOMINANT",
+            ChordCategory.Anon => "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_ANON",
+            ChordCategory.Bonus => "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_BONUS",
+            _ => "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_OTHER"
         };
+        return new LocString(LocTable, key);
     }
 }

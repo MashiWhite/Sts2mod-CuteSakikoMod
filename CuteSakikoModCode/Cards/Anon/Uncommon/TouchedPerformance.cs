@@ -12,8 +12,7 @@ public class TouchedPerformance() : CuteAnonCard(1, CardType.Skill, CardRarity.U
     {
         get
         {
-            // 基础抽牌数 2，升级后变为 3
-            yield return new CardsVar(2);
+            yield return new CardsVar(3);
         }
     }
 
@@ -33,6 +32,6 @@ public class TouchedPerformance() : CuteAnonCard(1, CardType.Skill, CardRarity.U
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Cards"].UpgradeValueBy(1m); // 2 → 3
+        DynamicVars["Cards"].UpgradeValueBy(1m); 
     }
 }

@@ -15,7 +15,7 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
         get
         {
             yield return new DamageVar(30m, ValueProp.Move);
-            yield return new DynamicVar("Notes", 4m); // 初始获得4个音符
+            yield return new DynamicVar("Notes", 4m); // 初始获得5个音符
         }
     }
 
@@ -54,6 +54,6 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(10m); // 伤害 30 → 40
-        DynamicVars["Notes"].UpgradeValueBy(1m); // 音符 4 → 5
+        DynamicVars["Notes"].UpgradeValueBy(3m); 
     }
 }

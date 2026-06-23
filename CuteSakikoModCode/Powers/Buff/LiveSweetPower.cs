@@ -1,4 +1,5 @@
 ﻿
+using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -40,9 +41,22 @@ public sealed class LiveSweetPower : CuteSakikoModPower
     {
         modifiedCost = originalCost;
         if (card.Owner?.Creature != Owner) return false;
-        if (!card.Keywords.Contains(CutesakiKeywords.RanaLive.GetModCardKeyword())) return false;
-        modifiedCost -= 1;
-        return true;
+
+        // 满足（Contented）在莱芜爽期间免费
+        if (card is Contented)
+        {
+            modifiedCost = 0;
+            return true;
+        }
+
+        // 原有：所有带 RanaLive 关键词的卡牌费用 -1
+        if (card.Keywords.Contains(CutesakiKeywords.RanaLive.GetModCardKeyword()))
+        {
+            modifiedCost -= 1;
+            return true;
+        }
+
+        return false;
     }
 
     // 回合结束时移除自身（费用自动恢复）

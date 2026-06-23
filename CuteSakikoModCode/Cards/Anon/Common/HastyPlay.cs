@@ -20,7 +20,7 @@ public class HastyPlay : CuteAnonCard
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playguitar.GetModCardKeyword()];
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
@@ -30,36 +30,42 @@ public class HastyPlay : CuteAnonCard
         }
     }
 
-    protected override bool ShouldGlowGoldInternal
-    {
-        get
-        {
-            var lastNote = MusicNoteManager.GetLastNote(Owner);
-            return lastNote == CardType.Attack;
-        }
-    }
+    // 金色高亮：上一个音符是攻击时发光
+    protected override bool ShouldGlowGoldInternal =>
+        MusicNoteManager.GetLastNote(Owner) == CardType.Attack;
 
     public override void AfterCreated()
     {
         base.AfterCreated();
-        // 订阅音符变化事件，实时更新费用
-        MusicNoteManager.PlayerNotesChanged += OnPlayerNotesChanged;
+        SubscribeAndRefresh();
     }
 
-    private void OnPlayerNotesChanged(Player changedPlayer)
+    public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
     {
-        if (Owner == null || changedPlayer != Owner) return;
-        UpdateCostBasedOnLastNote();
+        await base.AfterCardDrawn(choiceContext, card, fromHandDraw);
+        if (card == this) SubscribeAndRefresh();
     }
 
-    private void UpdateCostBasedOnLastNote()
+    private void SubscribeAndRefresh()
+    {
+        // 避免重复订阅
+        MusicNoteManager.PlayerNotesChanged -= OnNotesChanged;
+        MusicNoteManager.PlayerNotesChanged += OnNotesChanged;
+        RefreshCost();
+    }
+
+    private void OnNotesChanged(Player changedPlayer)
+    {
+        if (Owner != null && changedPlayer == Owner)
+            RefreshCost();
+    }
+
+    private void RefreshCost()
     {
         if (Owner?.Creature?.CombatState == null) return;
         var lastNote = MusicNoteManager.GetLastNote(Owner);
-        if (lastNote == CardType.Attack)
-            EnergyCost.SetThisTurn(0);
-        else
-            EnergyCost.SetThisTurn(1);
+        // 核心：用 SetThisTurn 动态设置费用
+        EnergyCost.SetThisTurn(lastNote == CardType.Attack ? 0 : 1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -74,18 +80,6 @@ public class HastyPlay : CuteAnonCard
                 .Execute(choiceContext);
 
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
-    }
-
-    // 不再需要手动刷新费用，事件会自动处理
-    // 但保留 base 调用以维持钩子链
-    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-    {
-        await base.AfterCardPlayed(choiceContext, cardPlay);
-    }
-
-    public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
-    {
-        await base.AfterCardDrawn(choiceContext, card, fromHandDraw);
     }
 
     protected override void OnUpgrade()

@@ -11,7 +11,7 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(13m, ValueProp.Move); }
+        get { yield return new DamageVar(16m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -38,6 +38,6 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 13 → 16
+        DynamicVars.Damage.UpgradeValueBy(4m); 
     }
 }

@@ -21,7 +21,10 @@ public class Mishap() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncommon, Tar
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        get { yield return CardKeyword.Exhaust; }
+        get { 
+            yield return CardKeyword.Exhaust;
+            yield return CardKeyword.Retain;
+        }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
