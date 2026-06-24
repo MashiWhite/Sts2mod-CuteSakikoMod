@@ -10,9 +10,9 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class WhatMemory() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class WhatMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

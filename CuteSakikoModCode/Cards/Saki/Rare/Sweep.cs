@@ -7,9 +7,9 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -53,7 +53,7 @@ public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon,
 
     protected override void OnUpgrade()
     {
-        DynamicVars["PressurePower"].UpgradeValueBy(5); // 压力 5 → 10
-        EnergyCost.UpgradeBy(-1); // 2 费 → 1 费
+        DynamicVars["PressurePower"].UpgradeValueBy(5); 
+        EnergyCost.UpgradeBy(-1);
     }
 }

@@ -4,37 +4,47 @@ using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.Character;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Map;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 
-/// <summary>
-/// 补丁类：自定义 Steam 富文本状态，显示角色名、HP、进阶数及当前房间/遭遇名。
-/// 仅当玩家使用 CuteSakiko 角色时生效。
-/// </summary>
 [HarmonyPatch(typeof(RunManager))]
 public static class RichPresencePatch
 {
-    // 反射缓存
     private static readonly MethodInfo? _setRichPresenceMethod;
     private static readonly PropertyInfo? _stateProp;
-
-    // CuteSakikoCharacter<,,> 的泛型类型定义，用于检测角色类型
     private static readonly Type CuteSakikoCharacterGeneric =
         typeof(CuteSakikoCharacter<,,>).GetGenericTypeDefinition();
 
+    // RoomType → map.json 本地化键映射
+    private static readonly Dictionary<RoomType, string> RoomTypeLocKeys = new()
+    {
+        { RoomType.Event, "LEGEND_EVENT.title" },
+        { RoomType.RestSite, "LEGEND_REST.title" },
+        { RoomType.Shop, "LEGEND_MERCHANT.title" },
+        { RoomType.Treasure, "LEGEND_TREASURE.title" },
+    };
+
+    // MapPointType → map.json 本地化键映射
+    private static readonly Dictionary<MapPointType, string> MapPointTypeLocKeys = new()
+    {
+        { MapPointType.Unknown, "LEGEND_UNKNOWN.title" },
+        { MapPointType.Shop, "LEGEND_MERCHANT.title" },
+        { MapPointType.Treasure, "LEGEND_TREASURE.title" },
+        { MapPointType.RestSite, "LEGEND_REST.title" },
+    };
+
     static RichPresencePatch()
     {
-        // 获取 SteamFriends.SetRichPresence 方法
         var steamFriendsType = AccessTools.TypeByName("Steamworks.SteamFriends");
         if (steamFriendsType != null)
         {
             _setRichPresenceMethod = AccessTools.Method(steamFriendsType, "SetRichPresence",
                 new[] { typeof(string), typeof(string) });
         }
-
-        // 获取 RunManager.State 属性
         _stateProp = AccessTools.DeclaredProperty(typeof(RunManager), "State");
     }
 
@@ -42,47 +52,47 @@ public static class RichPresencePatch
     [HarmonyPatch("UpdateRichPresence")]
     public static void UpdateRichPresence_Postfix(RunManager __instance)
     {
-        // 安全检查
-        if (__instance == null) return;
-        if (_setRichPresenceMethod == null) return;
-        if (_stateProp == null) return;
-
-        // 获取当前 RunState
         var state = _stateProp.GetValue(__instance) as RunState;
-        if (state == null) return;
+        if (state != null)
+            SetRichPresence(state);
+    }
 
-        // 获取本地玩家
+    [HarmonyPostfix]
+    [HarmonyPatch("EnterRoomInternal", new Type[] { typeof(AbstractRoom), typeof(bool) })]
+    public static void EnterRoomInternal_Postfix(RunManager __instance)
+    {
+        var state = __instance.DebugOnlyGetState();
+        if (state != null)
+            SetRichPresence(state);
+    }
+
+    private static void SetRichPresence(RunState state)
+    {
+        if (state == null || _setRichPresenceMethod == null) return;
+
         var me = LocalContext.GetMe(state);
         if (me == null) return;
 
-        // 检查是否为 CuteSakiko 角色
         var character = me.Character;
         if (!IsCuteSakikoCharacter(character.GetType())) return;
 
-        // 组装富文本数据
         var charName = StripBBCode(character.Title.GetFormattedText());
         var hpDisplay = $"{me.Creature.CurrentHp}/{me.Creature.MaxHp}";
         var ascension = $"A{state.AscensionLevel}";
-        var roomDisplay = GetRoomDisplayName(state);
+        var floor = state.ActFloor + 1;
+        var roomDisplay = GetRoomDisplayName(state) ?? "卖萌中";
 
-        var customStatus = $"[{charName}|HP:{hpDisplay}|{ascension}|{roomDisplay}]";
+        var customStatus = $"[{charName}|HP:{hpDisplay}|{ascension}|第{floor}层|{roomDisplay}]";
 
         try
         {
-            // 设置 Steam 富文本（保留原始的其他键值）
             _setRichPresenceMethod.Invoke(null, new object[] { "Ascension", customStatus });
             _setRichPresenceMethod.Invoke(null, new object[] { "Character", "REGENT" });
             _setRichPresenceMethod.Invoke(null, new object[] { "Act", "OVERGROWTH" });
         }
-        catch
-        {
-            // Steam 未初始化或调用失败时静默忽略
-        }
+        catch { }
     }
 
-    /// <summary>
-    /// 判断类型是否为 CuteSakikoCharacter<,,> 的派生类。
-    /// </summary>
     private static bool IsCuteSakikoCharacter(Type type)
     {
         while (type != null && type != typeof(object))
@@ -94,46 +104,71 @@ public static class RichPresencePatch
         return false;
     }
 
-    /// <summary>
-    /// 移除字符串中的 BBCode 标记（如 [color]...[/color]）。
-    /// </summary>
     private static string StripBBCode(string input)
     {
         return string.IsNullOrEmpty(input) ? "" : Regex.Replace(input, @"\[.*?\]", "");
     }
 
-    /// <summary>
-    /// 获取当前房间的显示名称。
-    /// - 如果是战斗房间，优先显示遭遇标题（如“灰爱音”）；
-    /// - 否则显示房间类型的中文名称（休息、商店等）。
-    /// </summary>
-    private static string GetRoomDisplayName(RunState state)
+    private static string? GetLocalizedText(string table, string key)
+    {
+        var loc = new LocString(table, key);
+        if (loc.Exists())
+            return StripBBCode(loc.GetFormattedText());
+        return null;
+    }
+
+    private static string? GetRoomDisplayName(RunState state)
     {
         var room = state.CurrentRoom;
-        if (room == null) return "卖萌中";
+        if (room != null)
+        {
+            var name = GetRoomNameFromRoom(room);
+            if (name != null)
+                return name;
+        }
 
-        // 战斗房间：显示遭遇名称
+        room = state.BaseRoom;
+        if (room != null)
+        {
+            var name = GetRoomNameFromRoom(room);
+            if (name != null)
+                return name;
+        }
+
+        var point = state.CurrentMapPoint;
+        if (point != null)
+        {
+            // 战斗/精英/首领/先古：没有具体名称，返回 null
+            if (point.PointType == MapPointType.Monster ||
+                point.PointType == MapPointType.Elite ||
+                point.PointType == MapPointType.Boss ||
+                point.PointType == MapPointType.Ancient)
+                return null;
+
+            if (MapPointTypeLocKeys.TryGetValue(point.PointType, out var key))
+                return GetLocalizedText("map", key);
+        }
+
+        return null;
+    }
+
+    private static string? GetRoomNameFromRoom(AbstractRoom room)
+    {
         if (room is CombatRoom combatRoom)
         {
             var encounter = combatRoom.Encounter;
-            if (encounter != null && encounter.Title.Exists())
+            if (encounter != null)
             {
-                return StripBBCode(encounter.Title.GetFormattedText());
+                var title = encounter.Title;
+                if (title.Exists())
+                    return StripBBCode(title.GetFormattedText());
             }
-            // 遭遇标题不存在时，回退到房间类型
+            return null;
         }
 
-        // 非战斗房间：根据 RoomType 返回中文名称
-        return room.RoomType switch
-        {
-            RoomType.Monster => "战斗",
-            RoomType.Elite   => "精英",
-            RoomType.Boss    => "首领",
-            RoomType.Event   => "事件",
-            RoomType.RestSite=> "休息",
-            RoomType.Shop    => "商店",
-            RoomType.Treasure=> "宝箱",
-            _                => room.RoomType.ToString()
-        };
+        if (RoomTypeLocKeys.TryGetValue(room.RoomType, out var key))
+            return GetLocalizedText("map", key);
+
+        return null;
     }
 }

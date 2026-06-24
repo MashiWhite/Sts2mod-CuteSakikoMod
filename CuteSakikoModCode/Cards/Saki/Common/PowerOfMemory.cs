@@ -7,9 +7,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-public class PowerOfMemory() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class PowerOfMemory() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

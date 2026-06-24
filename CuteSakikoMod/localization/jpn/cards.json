@@ -270,7 +270,7 @@
   "CUTE_SAKIKO_MOD_CARD_HATE_SELF.title": "自責",
   "CUTE_SAKIKO_MOD_CARD_HATE_SELF.description": "{PressurePower:diff()}層の[gold]重圧[/gold]を得る。\nカードを{Cards:diff()}枚引く。",
   "CUTE_SAKIKO_MOD_CARD_STRIKE_OPULENT.title": "ピアノ奏：華麗",
-  "CUTE_SAKIKO_MOD_CARD_STRIKE_OPULENT.description": "{Damage:diff()}ダメージを与える。\n[gold]ピアノ奏[/gold]1枚につき、追加で{IfUpgraded:show:2|1}回ダメージを与える。\n（追加攻撃回数：{TotalExtraHits}）",
+  "CUTE_SAKIKO_MOD_CARD_STRIKE_OPULENT.description": "{Damage:diff()}ダメージを与える。\n[gold]ピアノ奏[/gold]1枚につき、追加で1回ダメージを与える。\n（追加攻撃回数：{TotalExtraHits}）",
   "CUTE_SAKIKO_MOD_CARD_GLARE.title": "睨み",
   "CUTE_SAKIKO_MOD_CARD_GLARE.description": "{Damage:diff()}ダメージを与える。\n{PressurePower:diff()}層の[gold]重圧[/gold]を付与する。",
   "CUTE_SAKIKO_MOD_CARD_MENDED_GRUDGE.title": "わだかまりを解く",

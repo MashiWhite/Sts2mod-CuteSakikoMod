@@ -13,7 +13,7 @@ public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Un
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<DaggersDrawnPower>(5m) // 基础层数3，升级后5
+        new PowerVar<DaggersDrawnPower>(6m) 
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -35,7 +35,6 @@ public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Un
 
     protected override void OnUpgrade()
     {
-        // 升级：能力层数 3 → 5
-        DynamicVars["DaggersDrawnPower"].UpgradeValueBy(3m);
+        EnergyCost.UpgradeBy(-1);
     }
 }

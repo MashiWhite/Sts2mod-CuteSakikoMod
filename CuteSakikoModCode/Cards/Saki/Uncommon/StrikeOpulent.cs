@@ -13,8 +13,12 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class StrikeOpulent : CuteSakikoModCard
 {
+    public StrikeOpulent() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+    }
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
@@ -23,14 +27,12 @@ public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.
     {
         get
         {
-            yield return new DamageVar(4m, ValueProp.Move); // 基础伤害固定 4
+            yield return new DamageVar(4m, ValueProp.Move); // 基础伤害 4（升级后 +2 → 6）
             yield return new CalculatedIntVar("TotalExtraHits", (card, target) =>
             {
                 var allCards = card?.Owner?.PlayerCombatState?.AllCards;
                 if (allCards == null) return 0;
-                var qinCount = allCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
-                var multiplier = card!.IsUpgraded ? 2 : 1;
-                return qinCount * multiplier;
+                return allCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
             });
         }
     }
@@ -49,14 +51,9 @@ public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.
         if (cardPlay.Target == null) return;
 
         var damage = DynamicVars.Damage.BaseValue;
-        var qinCount =
-            Owner.PlayerCombatState.AllCards.Count(c =>
-                c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
-        var multiplier = IsUpgraded ? 2 : 1;
-        var totalExtraHits = qinCount * multiplier;
+        var totalExtraHits = DynamicVars["TotalExtraHits"].IntValue;
         var totalHits = 1 + totalExtraHits; // 基础 1 次 + 额外次数
 
-        // 所有命中合并在一个 AttackCommand 里，活力等 buff 全部生效
         await DamageCmd.Attack(damage)
             .FromCard(this)
             .WithHitCount(totalHits)
@@ -67,7 +64,7 @@ public class StrikeOpulent() : CuteSakikoModCard(2, CardType.Attack, CardRarity.
 
     protected override void OnUpgrade()
     {
-        // 升级效果已通过 multiplier 体现，无需额外操作
+        DynamicVars.Damage.UpgradeValueBy(2m); // 4 → 6
     }
 }
 

@@ -11,13 +11,13 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(6m, ValueProp.Move)
+        new DamageVar(8m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -35,7 +35,7 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
     {
         get
         {
-            var requiredPressure = IsUpgraded ? 2 : 3;
+            var requiredPressure = 1;
             return CombatState?.HittableEnemies?.Any(e =>
             {
                 var p = e.GetPower<PressurePower>();
@@ -56,7 +56,7 @@ public class EncourageAgain() : CuteSakikoModCard(1, CardType.Attack, CardRarity
         // 2. 检查目标压力
         var target = cardPlay.Target;
         var targetPressure = target.GetPower<PressurePower>();
-        var requiredPressure = IsUpgraded ? 2 : 3;
+        var requiredPressure = 1;
 
         if (targetPressure == null || targetPressure.Amount < requiredPressure)
             return;

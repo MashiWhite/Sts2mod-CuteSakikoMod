@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -15,10 +16,10 @@ public sealed class Cafe : CuteSakikoModPotion
 {
     public override PotionRarity Rarity => PotionRarity.Common;
     public override PotionUsage Usage => PotionUsage.CombatOnly;
-    public override TargetType TargetType => TargetType.AnyPlayer;
+    public override TargetType TargetType => CutesakiTargets.Anyone;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new PowerVar<PressurePower>(5m)];
+        [new PowerVar<PressurePower>(15m)];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
