@@ -5,7 +5,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient;
 
-public class AnchorConnection() : CuteAnonCard(1, CardType.Skill, CardRarity.Ancient, TargetType.Self)
+public class AnchorConnection() : CuteAnonCard(2, CardType.Skill, CardRarity.Ancient, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {

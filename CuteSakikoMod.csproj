@@ -48,7 +48,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
         <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
-        <RitsuLibPackageVersion>0.4.35</RitsuLibPackageVersion>
+        <RitsuLibPackageVersion>0.4.36</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <!-- 引用 -->
@@ -69,7 +69,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.4.35" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.4.36" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -100,10 +100,13 @@
         <Folder Include="CuteSakikoModCode\Cards\Mod\Event\"/>
         <Folder Include="CuteSakikoModCode\Cards\Rana\Ancient\" />
         <Folder Include="CuteSakikoModCode\Cards\Rana\Token\" />
-        <Folder Include="CuteSakikoModCode\Encounters\NORMAL\" />
         <Folder Include="CuteSakikoModCode\Encounters\Elite\"/>
+        <Folder Include="CuteSakikoModCode\Encounters\Normal\" />
         <Folder Include="CuteSakikoModCode\Monsters\Normal\"/>
         <Folder Include="CuteSakikoModCode\Relics\Anon\Uncommon\"/>
+        <Folder Include="CuteSakikoModCode\Relics\Other\Common\" />
+        <Folder Include="CuteSakikoModCode\Relics\Other\Rare\" />
+        <Folder Include="CuteSakikoModCode\Relics\Other\Uncommon\" />
         <Folder Include="CuteSakikoModCode\Relics\Saki\Ancient\"/>
         <Folder Include="CuteSakikoModCode\Relics\Saki\Event\"/>
         <Folder Include="CuteSakikoMod\images\ui\run_history\"/>

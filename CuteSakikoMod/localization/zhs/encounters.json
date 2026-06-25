@@ -6,5 +6,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.title": "天素罗",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "天祥罗",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.title": "回忆的漩涡",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.loss": "这回忆的漩涡，把{character}吞没……"
 }

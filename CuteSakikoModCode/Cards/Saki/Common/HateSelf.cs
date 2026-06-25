@@ -12,7 +12,7 @@ public class HateSelf() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<PressurePower>(5m),
+        new PowerVar<PressurePower>(6m),
         new CardsVar(2)
     ];
 
@@ -40,7 +40,6 @@ public class HateSelf() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common
 
     protected override void OnUpgrade()
     {
-        // 升级：压力增加5层（5->10）
-        DynamicVars["PressurePower"].UpgradeValueBy(5m);
+        DynamicVars["PressurePower"].UpgradeValueBy(3m);
     }
 }

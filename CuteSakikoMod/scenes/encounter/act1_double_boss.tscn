@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://c87w23rnui10"]
+
+[node name="act1_double_boss" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="first" type="Marker2D" parent="."]
+position = Vector2(1672, 704)
+
+[node name="first2" type="Marker2D" parent="."]
+position = Vector2(1167, 762)

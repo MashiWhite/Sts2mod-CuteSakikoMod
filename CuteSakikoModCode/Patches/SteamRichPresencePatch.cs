@@ -80,9 +80,10 @@ public static class RichPresencePatch
         var hpDisplay = $"{me.Creature.CurrentHp}/{me.Creature.MaxHp}";
         var ascension = $"A{state.AscensionLevel}";
         var floor = state.ActFloor + 1;
+        var actName = StripBBCode(state.Act.Title.GetFormattedText());
         var roomDisplay = GetRoomDisplayName(state) ?? "卖萌中";
 
-        var customStatus = $"[{charName}|HP:{hpDisplay}|{ascension}|第{floor}层|{roomDisplay}]";
+        var customStatus = $"[{charName}|HP:{hpDisplay}|{ascension}|{actName}第{floor}层|{roomDisplay}]";
 
         try
         {

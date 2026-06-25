@@ -1,5 +1,6 @@
 ﻿
 using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -42,8 +43,8 @@ public sealed class LiveSweetPower : CuteSakikoModPower
         modifiedCost = originalCost;
         if (card.Owner?.Creature != Owner) return false;
 
-        // 满足（Contented）在莱芜爽期间免费
-        if (card is Contented)
+        // 满足（Contented）或收工睡觉（StageRest）期间免费
+        if (card is Contented || card is StageRest)
         {
             modifiedCost = 0;
             return true;

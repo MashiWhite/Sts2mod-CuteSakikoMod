@@ -1,4 +1,13 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.title": "百万回死んだ猫",
+  "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.description": "戦闘後のHPが戦闘前より低い場合、戦闘終了後にHPを[blue]{Heal}[/blue]回復する。\n[blue]1[/blue]回の死亡を防ぎ、HPを[blue]30%[/blue]回復できる。その後、この効果は失われる。",
+  "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.flavor": "もし[purple]黒猫[/purple]が一万と一回蘇れるなら、[green]白猫[/green]よ、どうか先に行かないで。",
+  "CUTE_SAKIKO_MOD_RELIC_RING_ANNUAL_PASS.title": "RiNG年間パス",
+  "CUTE_SAKIKO_MOD_RELIC_RING_ANNUAL_PASS.description": "ショップに入る時、[gold]抹茶パフェ[/gold]を3杯得る。",
+  "CUTE_SAKIKO_MOD_RELIC_RING_ANNUAL_PASS.flavor": "[purple]りっきー[/purple]、[green]楽奈[/green]を甘やかしすぎだよ。",
+  "CUTE_SAKIKO_MOD_RELIC_RANA_PICK.title": "楽奈のピック",
+  "CUTE_SAKIKO_MOD_RELIC_RANA_PICK.description": "[gold]ライブ[/gold]を得るたび、追加で1層得る。",
+  "CUTE_SAKIKO_MOD_RELIC_RANA_PICK.flavor": "[gold]SPACE[/gold]、今はもう存在しない。",
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.title": "黒猫の視線",
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.description": "各戦闘開始時、最大HPを[blue]1[/blue]失う。\n毎ターン開始時、{energyPrefix:energyIcons(1)}を得て、カードを[blue]{Cards}[/blue]枚引く。",
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.flavor": "黒猫の[b][purple]瞳[/purple][/b]が死神のように私を見つめている。",

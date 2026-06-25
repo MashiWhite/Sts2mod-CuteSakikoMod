@@ -1,15 +1,23 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient;
 
-public class PlayImmediately() : CuteAnonCard(2, CardType.Power, CardRarity.Ancient, TargetType.Self)
+public class PlayImmediately() : CuteAnonCard(0, CardType.Skill, CardRarity.Ancient, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Innate];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword()];
+    
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new ("Chords",3)
+    ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -20,16 +28,20 @@ public class PlayImmediately() : CuteAnonCard(2, CardType.Power, CardRarity.Anci
     {
         TriggerBanter();
 
-        // 获得“即刻演奏”能力
-        await PowerCmd.Apply<PlayImmediatelyPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
-
-        // 获取吉他遗物并演奏所有储存的和弦（保留音符序列）
+        // 演奏所有储存的和弦
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null) await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+        if (guitar != null)
+        {
+            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+        }
+        var chords = DynamicVars["Chords"].BaseValue;
+
+        // 获得可叠层的“即刻演奏”，层数 = Chords
+        await PowerCmd.Apply<PlayImmediatelyPower>(choiceContext, Owner.Creature, chords, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 升级后1费
+        DynamicVars["Chords"].UpgradeValueBy(2);
     }
 }

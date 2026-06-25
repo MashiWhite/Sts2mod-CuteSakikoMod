@@ -339,11 +339,8 @@ public class AnonGuitar : CuteAnonRelic
         return result;
     }
 
-    // ==================== 核心修改：提取公共自动演奏逻辑 ====================
-
     /// <summary>
-    /// 统一的自动演奏入口：处理溢出、立即演奏、StageNerves。
-    /// 所有通过 AddNote 产生新和弦的地方，都应该调用本方法。
+    /// 统一的自动演奏入口：处理溢出、立即演奏（可叠层）、StageNerves。
     /// </summary>
     public async Task AutoPlayNewChords(PlayerChoiceContext ctx, MusicNoteManager.NoteProcessResult result)
     {
@@ -353,13 +350,18 @@ public class AnonGuitar : CuteAnonRelic
         if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
             await PlaySingleChord(ctx, result.OverflowChord, false);
 
-        // 2. 立即演奏（PlayImmediatelyPower）
-        if (Owner.Creature.HasPower<PlayImmediatelyPower>() && result.NewChords.Count > 0)
+        // 2. 立即演奏（PlayImmediatelyPower）—— 每层消耗一个和弦
+        var playImmediately = Owner.Creature.GetPower<PlayImmediatelyPower>();
+        if (playImmediately != null && playImmediately.Amount > 0 && result.NewChords.Count > 0)
         {
-            foreach (var chordId in result.NewChords)
+            var chordsToPlay = result.NewChords.ToList();
+            foreach (var chordId in chordsToPlay)
             {
+                if (playImmediately.Amount <= 0) break;
                 await PlaySingleChord(ctx, chordId, false);
                 MusicNoteManager.RemoveChord(Owner, chordId);
+                // 消耗一层
+                await PowerCmd.Decrement(playImmediately);
             }
         }
         // 3. 无新和弦时触发 StageNervesPower
@@ -382,8 +384,6 @@ public class AnonGuitar : CuteAnonRelic
         AudioManager.PlaySound(sfx, 1.0f);
     }
 
-    // ==================== 修改后的 AfterCardPlayed ====================
-    // AfterCardPlayed
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         EnsureInitialized();
@@ -397,7 +397,6 @@ public class AnonGuitar : CuteAnonRelic
             return;
         }
 
-        // 传入上下文，内部已完成自动演奏
         await MusicNoteManager.AddNoteAndAutoPlayAsync(
             Owner, cardPlay.Card.Type, _currentChords,
             _bonusChords.Concat(_temporaryChords),
@@ -429,8 +428,6 @@ public class AnonGuitar : CuteAnonRelic
         }
     }
 
-    // ==================== 修改后的 OnNoteGenerated ====================
-    // OnNoteGenerated
     public async Task OnNoteGenerated(PlayerChoiceContext choiceContext, CardType noteType)
     {
         if (Owner.Creature.CombatState == null) return;
@@ -472,10 +469,12 @@ public class AnonGuitar : CuteAnonRelic
     {
         if (!ChordManager.AllChords.ContainsKey(chordId)) return;
 
-        // 如果拥有立即演奏，直接演奏后返回，不存入存储
-        if (Owner.Creature.HasPower<PlayImmediatelyPower>())
+        // 如果有“即刻演奏”层数，则立即演奏并消耗一层，不储存
+        var playImmediately = Owner.Creature.GetPower<PlayImmediatelyPower>();
+        if (playImmediately != null && playImmediately.Amount > 0)
         {
             await PlaySingleChord(choiceContext, chordId, false);
+            await PowerCmd.Decrement(playImmediately);
             return;
         }
 

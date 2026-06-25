@@ -14,7 +14,7 @@ public class HeartShield() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Com
     // 动态变量：压力层数（基础2层）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<PressurePower>(2m)
+        new PowerVar<PressurePower>(4m)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -30,7 +30,7 @@ public class HeartShield() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Com
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var pressureToGain = IsUpgraded ? 4 : 2;
+        var pressureToGain = DynamicVars["PressurePower"].BaseValue;
 
         // 先施加压力
         await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureToGain, Owner.Creature, this);
@@ -50,6 +50,6 @@ public class HeartShield() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Com
 
     protected override void OnUpgrade()
     {
-        // 升级后压力层数增加，已在 OnPlay 中通过 IsUpgraded 处理
+        DynamicVars["PressurePower"].UpgradeValueBy(2);
     }
 }

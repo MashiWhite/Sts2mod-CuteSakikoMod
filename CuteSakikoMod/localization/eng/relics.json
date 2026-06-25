@@ -1,4 +1,13 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.title": "The Cat That Died a Million Times",
+  "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.description": "If your HP after combat is lower than before, heal [blue]{Heal}[/blue] HP after combat.\nCan prevent [blue]1[/blue] death and restore [blue]30%[/blue] HP, then become inactive.",
+  "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.flavor": "If the [purple]black cat[/purple] can resurrect ten thousand and one times, may the [green]white cat[/green] not leave first.",
+  "CUTE_SAKIKO_MOD_RELIC_RING_ANNUAL_PASS.title": "RiNG Annual Pass",
+  "CUTE_SAKIKO_MOD_RELIC_RING_ANNUAL_PASS.description": "Upon entering a shop, gain 3 cups of [gold]Matcha Parfait[/gold].",
+  "CUTE_SAKIKO_MOD_RELIC_RING_ANNUAL_PASS.flavor": "[purple]Rikki[/purple], you spoil [green]Rana[/green] too much.",
+  "CUTE_SAKIKO_MOD_RELIC_RANA_PICK.title": "Rana's Pick",
+  "CUTE_SAKIKO_MOD_RELIC_RANA_PICK.description": "Whenever you gain [gold]Live[/gold], gain an additional stack.",
+  "CUTE_SAKIKO_MOD_RELIC_RANA_PICK.flavor": "[gold]SPACE[/gold], which now no longer exists.",
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.title": "Gaze of the Black Cat",
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.description": "At the start of each combat, lose [blue]1[/blue] Max HP.\nAt the start of each turn, gain {energyPrefix:energyIcons(1)}, draw [blue]{Cards}[/blue] cards.",
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.flavor": "The black cat's [b][purple]eyes[/purple][/b] stare at me like those of Death himself.",

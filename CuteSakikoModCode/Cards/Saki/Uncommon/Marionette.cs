@@ -12,8 +12,8 @@ public class Marionette() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new CardsVar(2), // 抽牌数和随机打出数（基础2，升级3）
-        new CardsVar("PlayCount",3) // 抽牌数和随机打出数（基础2，升级3）
+        new CardsVar(3), 
+        new CardsVar("PlayCount",2) 
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

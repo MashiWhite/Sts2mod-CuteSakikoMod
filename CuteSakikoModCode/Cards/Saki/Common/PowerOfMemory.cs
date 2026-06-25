@@ -11,6 +11,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class PowerOfMemory() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
+
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Memory.GetModCardKeyword()); }

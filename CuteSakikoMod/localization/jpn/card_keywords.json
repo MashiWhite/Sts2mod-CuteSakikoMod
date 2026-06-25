@@ -86,5 +86,7 @@
   "CUTESAKIKOMOD-GREYANONCHORD.title": "灰愛音コード",
   "CUTESAKIKOMOD-GREYANONCHORD.description": "[blue]{0}[/blue]HPを失い、すべての味方がカードを[blue]{1}[/blue]枚引き、[blue]{2}[/blue]エナジーを得る。",
   "CUTESAKIKOMOD-HEKITENBANSOUCHORD.title": "碧天伴走",
-  "CUTESAKIKOMOD-HEKITENBANSOUCHORD.description": "すべての味方の[red]脆弱[/red]を[blue]{0}[/blue][gold]敏捷[/gold]に、[red]弱体[/red]を[blue]{0}[/blue][gold]筋力[/gold]に変換する。"
+  "CUTESAKIKOMOD-HEKITENBANSOUCHORD.description": "すべての味方の[red]脆弱[/red]を[blue]{0}[/blue][gold]敏捷[/gold]に、[red]弱体[/red]を[blue]{0}[/blue][gold]筋力[/gold]に変換する。",
+  "CUTE_SAKIKO_MOD_KEYWORD_PANCAKE.title": "煎饼打击",
+  "CUTE_SAKIKO_MOD_KEYWORD_PANCAKE.description": "敌人造成9点伤害，该伤害可以被格挡所阻挡，若格挡大于伤害值则不对生命值造成任何效果，只对格挡值造成减法效果；若格挡值小于伤害值，则对生命值造成伤害值与格挡值二者差值的伤害，然后此牌进入弃牌区。若为升级版本则对指定敌人造成10点伤害，该伤害可以被格挡所阻挡，若格挡大于伤害值则不对生命值造成任何效果，只对格挡值造成减法效果；若格挡值小于伤害值，则对生命值造成伤害值与格挡值二者差值的伤害。接着若没有无法抽牌相关的debuff，则从抽牌堆中随机抽取2张牌放入手牌，然后此牌进入弃牌区。若有无法抽牌相关的debuff则只对指定敌人造成10点伤害，该伤害可以被格挡所阻挡，若格挡大于伤害值则不对生命值造成任何效果，只对格挡值造成减法效果；若格挡值小于伤害值，则对生命值造成伤害值与格挡值二者差值的伤害，然后此牌进入弃牌区。"
 }

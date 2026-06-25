@@ -1,13 +1,10 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
-using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
@@ -39,9 +36,7 @@ public class AtkByMemory : CuteSakikoModCard
             Owner.Creature,
             cardPlay.Card
         );
-
-        // 用记忆牌填满手牌（升级由 Recall 内部处理，此处不升级）
-        await MemoryCmd.Recall(choiceContext, Owner, allowChoose: false, fillHand: true, upgraded: false, source: this);
+        // 填满手牌的逻辑已移到能力 AfterApplied 中，避免重复触发
     }
 
     protected override void OnUpgrade()

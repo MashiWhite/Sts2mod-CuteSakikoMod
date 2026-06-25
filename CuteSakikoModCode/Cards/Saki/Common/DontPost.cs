@@ -15,7 +15,7 @@ public class DontPost() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Common
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(13m, ValueProp.Move),
+        new BlockVar(14m, ValueProp.Move),
         new PowerVar<PressurePower>(5m)
     ];
 
@@ -37,7 +37,7 @@ public class DontPost() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Common
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(5m);
+        DynamicVars.Block.UpgradeValueBy(4m);
         DynamicVars["PressurePower"].UpgradeValueBy(5m);
     }
 }

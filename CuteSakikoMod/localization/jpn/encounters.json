@@ -6,5 +6,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.title": "天素羅",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "天祥羅",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.title": "追憶の渦",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.loss": "追憶の渦が、{character}を飲み込んだ……"
 }

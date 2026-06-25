@@ -39,15 +39,21 @@ public class FastStudy : CuteRanaCard
             var move = enemy.Monster?.NextMove;
             if (move == null) continue;
 
+            AttackIntent firstAttack = null;
             foreach (var intent in move.Intents)
             {
                 if (intent is AttackIntent attackIntent && attackIntent.DamageCalc != null)
                 {
-                    // 只取怪物原始伤害，不经玩家能力修饰
-                    decimal rawDamage = attackIntent.DamageCalc();
-                    int repeats = attackIntent.Repeats;
-                    totalDamage += (int)(rawDamage * (repeats + 1));
+                    firstAttack = attackIntent;
+                    break; // 只取第一个攻击意图
                 }
+            }
+
+            if (firstAttack != null)
+            {
+                decimal rawDamage = firstAttack.DamageCalc();
+                int repeats = firstAttack.Repeats; // 总攻击次数
+                totalDamage += (int)(rawDamage * repeats);
             }
         }
 

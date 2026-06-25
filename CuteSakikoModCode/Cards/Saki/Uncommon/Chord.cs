@@ -40,8 +40,8 @@ public class Chord() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon
         {
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
-            yield return HoverTipFactory.FromCard<StrikeSlow>();
-            yield return HoverTipFactory.FromCard<StrikeFast>();
+            yield return HoverTipFactory.FromCard<StrikeSlow>(IsUpgraded);
+            yield return HoverTipFactory.FromCard<StrikeFast>(IsUpgraded);
         }
     }
 

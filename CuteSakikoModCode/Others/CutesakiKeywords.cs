@@ -1,4 +1,5 @@
-﻿using STS2RitsuLib.Content;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Common;
+using STS2RitsuLib.Content;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 
@@ -24,6 +25,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
 [RegisterOwnedCardKeyword(nameof(RanaLive),
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
+[RegisterOwnedCardKeyword(nameof(Pancake))]
 public class CutesakiKeywords
 {
     public static readonly string Pressure = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Pressure));
@@ -54,4 +56,6 @@ public class CutesakiKeywords
         Neko = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Neko));
     public static readonly string
         RanaLive = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(RanaLive));
+    public static readonly string
+        Pancake = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Pancake));
 }

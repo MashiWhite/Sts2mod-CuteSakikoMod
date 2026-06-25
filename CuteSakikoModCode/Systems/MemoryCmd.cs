@@ -144,40 +144,61 @@ public static class MemoryCmd
 
         return selectedList;
     }
-    else
+    else // allowChoose == false
     {
         var rng = player.RunState.Rng.Shuffle;
-        var tempList = sourceCards.ToList();
-        if (targetCount > tempList.Count)
-            targetCount = tempList.Count;
+        var sourceList = sourceCards.ToList();
+        if (sourceList.Count == 0)
+            return new List<CardModel>();
 
         var newCards = new List<CardModel>();
+        int toAdd = targetCount;
 
-        for (int i = 0; i < targetCount; i++)
+        if (fillHand)
         {
-            int index = rng.NextInt(0, tempList.Count);
-            var template = tempList[index];
-            tempList.RemoveAt(index);
-
-            // ✅ 从规范牌生成战斗实例
-            var newCard = MemoryCardPile.CreateCardFromMemorySnapshot(player, template);
-            if (newCard != null)
+            // 填满手牌：允许重复选择同一模板
+            for (int i = 0; i < toAdd; i++)
             {
-                if (upgraded && !newCard.IsUpgraded)
+                var template = sourceList[rng.NextInt(0, sourceList.Count)];
+                var newCard = MemoryCardPile.CreateCardFromMemorySnapshot(player, template);
+                if (newCard != null)
                 {
-                    newCard.UpgradeInternal();
-                    newCard.FinalizeUpgradeInternal();
+                    if (upgraded && !newCard.IsUpgraded)
+                    {
+                        newCard.UpgradeInternal();
+                        newCard.FinalizeUpgradeInternal();
+                    }
+                    newCards.Add(newCard);
                 }
-                newCards.Add(newCard);
+            }
+        }
+        else
+        {
+            // 普通回忆：每个模板只能选一次
+            toAdd = Math.Min(toAdd, sourceList.Count);
+            var tempList = sourceList.ToList();
+            for (int i = 0; i < toAdd; i++)
+            {
+                int index = rng.NextInt(0, tempList.Count);
+                var template = tempList[index];
+                tempList.RemoveAt(index);
+                var newCard = MemoryCardPile.CreateCardFromMemorySnapshot(player, template);
+                if (newCard != null)
+                {
+                    if (upgraded && !newCard.IsUpgraded)
+                    {
+                        newCard.UpgradeInternal();
+                        newCard.FinalizeUpgradeInternal();
+                    }
+                    newCards.Add(newCard);
+                }
             }
         }
 
-        // ✅ 使用 AddGeneratedCardsToCombat 加入手牌
         if (newCards.Count > 0)
         {
             await CardPileCmd.AddGeneratedCardsToCombat(newCards, PileType.Hand, player);
         }
-
         return newCards;
     }
 }

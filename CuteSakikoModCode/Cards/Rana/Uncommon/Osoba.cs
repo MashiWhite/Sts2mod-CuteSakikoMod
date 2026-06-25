@@ -12,24 +12,24 @@ public class Osoba : CuteRanaCard
     {
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
+    public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Retain,CardKeyword.Exhaust };
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            yield return new EnergyVar(2);
+            yield return new CardsVar(4);
         }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int energy = DynamicVars.Energy.IntValue;
-        await PlayerCmd.GainEnergy(energy, Owner);
+        var cards = DynamicVars.Cards.BaseValue;
+        await CardPileCmd.Draw(choiceContext,cards,Owner);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 1费 -> 0费
+        DynamicVars.Cards.UpgradeValueBy(2);
     }
 }

@@ -31,13 +31,14 @@ public class SakiBathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
         {
             yield return new CardsVar(2);
             yield return new EnergyVar(1);
+            yield return new PowerVar<PressurePower>(15m);
         }
     }
 
     protected override PileType GetResultPileTypeForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
-        var required = IsUpgraded ? 10 : 12;
+        var required = DynamicVars["PressurePower"].BaseValue;
         var enough = pressure != null && pressure.Amount >= required;
         if (enough)
             return PileType.Hand;
@@ -56,7 +57,7 @@ public class SakiBathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
         await PlayerCmd.GainEnergy(DynamicVars.Energy.BaseValue, Owner);
 
         var pressure = Owner.Creature.GetPower<PressurePower>();
-        var required = IsUpgraded ? 10 : 12;
+        var required = DynamicVars["PressurePower"].BaseValue;
         if (pressure != null && pressure.Amount >= required)
             await PowerCmd.ModifyAmount(choiceContext, pressure, -required, Owner.Creature, this);
 
@@ -115,5 +116,6 @@ public class SakiBathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
     protected override void OnUpgrade()
     {
         DynamicVars.Energy.UpgradeValueBy(1m);
+        DynamicVars["PressurePower"].UpgradeValueBy(-3);
     }
 }

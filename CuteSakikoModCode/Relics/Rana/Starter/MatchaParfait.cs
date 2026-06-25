@@ -24,11 +24,24 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     IRelicExtraIconAmountLabelSpecsProvider, IRelicExtraIconAmountLabelsChangeSource
 {
+    private int _totalConsumedThisCombat;
     private int _charges;
     private int _currentTurnCount;
     private int _drawAmount = 1;
     private int _energyGain = 1;
 
+    [SavedProperty]
+    public int TotalConsumedThisCombat
+    {
+        get => _totalConsumedThisCombat;
+        private set
+        {
+            if (_totalConsumedThisCombat == value) return;
+            _totalConsumedThisCombat = value;
+            InvokeDisplayAmountChanged(); // 可选，用于更新相关 UI
+        }
+    }
+    
     [SavedProperty]
     public int Charges
     {
@@ -137,6 +150,9 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         if (side == CombatSide.Player && Owner != null)
         {
             CurrentTurnCount = 0;
+            // 只在第一回合重置本场战斗的累计食用数量
+            if (combatState.RoundNumber == 1)
+                TotalConsumedThisCombat = 0;
         }
         RelicExtraIconAmountLabelsInvalidated?.Invoke();
         InvokeDisplayAmountChanged();
@@ -194,6 +210,8 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             Entry.Logger.Info($"[芭菲] 有人请客，不扣除杯数，但计数{amount}次");
             relic.ChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+            // 即使不扣杯数，也要累计食用数量
+            relic.TotalConsumedThisCombat += amount;
             return;
         }
 
@@ -202,10 +220,10 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         int removed = old - relic.Charges;
         if (removed > 0)
         {
+            relic.TotalConsumedThisCombat += removed; // 累加实际消耗的杯数
             relic.ChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
-            _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+            _ = relic.OnParfaitConsumedInstanceAsync(removed, choiceContext);
 
-            // 如果拥有 WantBothPower，则同步执行能量和抽牌
             if (relic.Owner.Creature.HasPower<WantBothPower>())
             {
                 await ApplyWantBothEffect(relic.Owner, removed, choiceContext);
