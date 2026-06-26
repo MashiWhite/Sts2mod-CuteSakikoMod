@@ -45,7 +45,7 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
         if (pressure != null && pressure.Amount >= 2)
         {
             await PowerCmd.ModifyAmount(choiceContext, pressure, -2, Owner.Creature, this);
-            DynamicVars.Damage.BaseValue += DynamicVars["Increase"].BaseValue;
+            DynamicVars.Damage.UpgradeValueBy(DynamicVars["Increase"].BaseValue);
         }
 
         // 2. 火焰特效（参考 FirePotion）

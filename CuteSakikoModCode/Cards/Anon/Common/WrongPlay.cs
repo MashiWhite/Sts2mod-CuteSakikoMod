@@ -21,9 +21,8 @@ public class WrongPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, Ta
         TriggerBanter();
         // 获得格挡
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-
-        // 将上一个音符改为技能音符
-        MusicNoteManager.ModifyLastNote(Owner, CardType.Skill);
+        
+        MusicNoteManager.ModifyAllNotes(Owner, CardType.Skill);
     }
 
     protected override void OnUpgrade()

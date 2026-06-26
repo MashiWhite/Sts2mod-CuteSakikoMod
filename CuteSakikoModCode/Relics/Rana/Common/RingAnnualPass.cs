@@ -6,11 +6,11 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Rooms;
 
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Common;
 
 public class RingAnnualPass : CuteRanaRelic
 {
-    public override RelicRarity Rarity => RelicRarity.Uncommon;
+    public override RelicRarity Rarity => RelicRarity.Common;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [];
 

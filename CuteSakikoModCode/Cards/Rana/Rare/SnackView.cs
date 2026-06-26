@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Keywords;
 
@@ -12,6 +13,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 public class SnackView : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
     public SnackView() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self) { }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new PowerVar<IntangiblePower>(1)
+    ];
 
     
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -37,11 +43,13 @@ public class SnackView : CuteRanaCard, CuteRanaCard.IEatParfaitCard
             await MatchaParfait.RemoveCharges(parfait, parfait.Charges, choiceContext);
         }
         // 获得1层无实体
-        await PowerCmd.Apply<IntangiblePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<IntangiblePower>(choiceContext, Owner.Creature, DynamicVars["IntangiblePower"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
         EnergyCost.UpgradeBy(-1);
+        DynamicVars["IntangiblePower"].UpgradeValueBy(1);
+        
     }
 }

@@ -12,6 +12,6 @@ public class CuteSakiPotionPool : TypeListPotionPoolModel
     public override string EnergyColorName => CuteSaki.CharacterId;
 
 
-    public override string BigEnergyIconPath => "charui/big_energy.png".ImagePath();
-    public override string TextEnergyIconPath => "charui/text_energy.png".ImagePath();
+    public override string BigEnergyIconPath => "charui/saki/saki_big_energy.png".ImagePath();
+    public override string TextEnergyIconPath => "charui/saki/saki_text_energy.png".ImagePath();
 }

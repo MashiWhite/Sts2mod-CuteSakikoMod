@@ -38,7 +38,7 @@ public class KnightSword() : ModTokenCard(2, CardType.Attack, CardRarity.Token, 
     // 动态目标类型：拥有横扫能力时变为群体攻击
     public override TargetType TargetType => HasSweepPower ? TargetType.AllEnemies : base.TargetType;
 
-    private bool HasSweepPower => IsMutable && Owner != null && Owner.Creature.HasPower<SweepPower>();
+    private bool HasSweepPower => IsMutable && Owner != null && Owner.Creature.HasPower<SakiSweepPower>();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

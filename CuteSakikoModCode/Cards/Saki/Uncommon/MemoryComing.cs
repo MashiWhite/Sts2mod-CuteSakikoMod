@@ -35,7 +35,7 @@ public class MemoryComing() : CuteSakikoModCard(1, CardType.Power, CardRarity.Un
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 根据升级状态决定施加层数：未升级1层，升级2层
-        var amount = IsUpgraded ? 2 : 1;
+        var amount = DynamicVars["MemoryComingPower"].BaseValue;
         await PowerCmd.Apply<MemoryComingPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 

@@ -40,7 +40,7 @@ public class ManyNeko : CuteRanaCard
             cardDraw.UpgradeInternal();
             cardDraw.FinalizeUpgradeInternal();
         }
-        var drawResult = await CardPileCmd.AddGeneratedCardToCombat(cardDraw, PileType.Draw, Owner);
+        var drawResult = await CardPileCmd.AddGeneratedCardToCombat(cardDraw, PileType.Draw, Owner,CardPilePosition.Random);
 
         // 手牌堆
         var templateHand = rng.NextItem(allNekoCards);
@@ -60,7 +60,7 @@ public class ManyNeko : CuteRanaCard
             cardDiscard.UpgradeInternal();
             cardDiscard.FinalizeUpgradeInternal();
         }
-        var discardResult = await CardPileCmd.AddGeneratedCardToCombat(cardDiscard, PileType.Discard, Owner);
+        var discardResult = await CardPileCmd.AddGeneratedCardToCombat(cardDiscard, PileType.Discard, Owner,CardPilePosition.Random);
 
         // 预览抽牌堆和弃牌堆的添加，刷新 UI 数字
         CardCmd.PreviewCardPileAdd(new List<CardPileAddResult> { drawResult, discardResult });

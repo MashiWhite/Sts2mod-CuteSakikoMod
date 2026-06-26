@@ -1,4 +1,10 @@
 ﻿{
-  "CUTE_SAKIKO_MOD_POTION_CAFE.description": "重圧を5層得る。",
-  "CUTE_SAKIKO_MOD_POTION_CAFE.title": "コーヒー"
+  "CUTE_SAKIKO_MOD_POTION_CAFE.title": "コーヒー",
+  "CUTE_SAKIKO_MOD_POTION_CAFE.description": "[blue]{PressurePower:diff()}[/blue]層の[gold]重圧[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POTION_ASAHI_BEER.title": "アサヒビール",
+  "CUTE_SAKIKO_MOD_POTION_ASAHI_BEER.description": "[blue]{Damage:diff()}[/blue]ダメージを与え、[blue]{PressurePower:diff()}[/blue]層の[gold]重圧[/gold]を付与する。",
+  "CUTE_SAKIKO_MOD_POTION_LIVE_BOOST.title": "LiveBoostドリンク",
+  "CUTE_SAKIKO_MOD_POTION_LIVE_BOOST.description": "[blue]{VigorPower:diff()}[/blue]層の[gold]活力[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POTION_VEGETABLE_JUICE.title": "野菜ジュース",
+  "CUTE_SAKIKO_MOD_POTION_VEGETABLE_JUICE.description": "ランダムに[red]デバフ[/red]を1つ除去する。\n[blue]{WeakPower:diff()}[/blue]層の[gold]弱体[/gold]を得る。"
 }

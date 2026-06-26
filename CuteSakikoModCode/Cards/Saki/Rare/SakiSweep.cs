@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class SakiSweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -18,7 +18,7 @@ public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare, Tar
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return HoverTipFactory.FromPower<SweepPower>(); }
+        get { yield return HoverTipFactory.FromPower<SakiSweepPower>(); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -48,7 +48,7 @@ public class Sweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare, Tar
         // 2. 然后施加压力和横扫能力（剑已就位，可以吃到压力加成）
         var pressureAmount = DynamicVars["PressurePower"].IntValue;
         await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmount, Owner.Creature, this);
-        await PowerCmd.Apply<SweepPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<SakiSweepPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

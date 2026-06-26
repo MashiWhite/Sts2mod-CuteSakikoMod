@@ -128,7 +128,8 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             Entry.Logger.Info("[芭菲] 效果开始");
             await CardPileCmd.Draw(context.PlayerChoiceContext, DrawAmount, player);
             await PlayerCmd.GainEnergy(EnergyGain, player);
-            await RemoveCharges(this, 1, context.PlayerChoiceContext);
+            // 右键食用强制忽略“有人请客”
+            await RemoveCharges(this, 1, context.PlayerChoiceContext, ignoreTreat: true);
             Entry.Logger.Info("[芭菲] 效果完成");
         }
         catch (Exception ex)
@@ -200,27 +201,29 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     }
 
     // 将 RemoveCharges 改为 async Task
-    public static async Task RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null)
+    public static async Task RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null, bool ignoreTreat = false)
     {
         if (relic == null) return;
 
         bool hasTreat = relic.Owner.Creature.HasPower<ParfaitTreatPower>();
-        if (hasTreat)
+
+        // 如果有“有人请客”且不是强制忽略，则卡牌食用不扣杯数
+        if (hasTreat && !ignoreTreat)
         {
             Entry.Logger.Info($"[芭菲] 有人请客，不扣除杯数，但计数{amount}次");
+            relic.TotalConsumedThisCombat += amount;
             relic.ChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
-            // 即使不扣杯数，也要累计食用数量
-            relic.TotalConsumedThisCombat += amount;
             return;
         }
 
+        // 正常消耗（无请客效果 或 强制忽略）
         int old = relic.Charges;
         relic.Charges = Math.Max(0, relic.Charges - amount);
         int removed = old - relic.Charges;
         if (removed > 0)
         {
-            relic.TotalConsumedThisCombat += removed; // 累加实际消耗的杯数
+            relic.TotalConsumedThisCombat += removed;
             relic.ChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(removed, choiceContext);
 

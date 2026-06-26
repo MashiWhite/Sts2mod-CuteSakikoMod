@@ -51,6 +51,8 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
         // 获取计算基础变量并升级：10 → 13
         var calcBase = DynamicVars["CalculationBase"];
         calcBase.UpgradeValueBy(3m);
+        var extraPer = DynamicVars["ExtraDamage"];
+        extraPer.UpgradeValueBy(1m);
 
         AddKeyword(CardKeyword.Retain);
     }

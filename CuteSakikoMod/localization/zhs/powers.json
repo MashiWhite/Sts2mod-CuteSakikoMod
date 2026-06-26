@@ -1,8 +1,14 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.title": "猫咪领袖",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.description": "每回合开始时，将层数等量[gold]猫咪[/gold]加入手牌。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.smartDescription": "每回合开始时，将{Amount}张[gold]猫咪[/gold]加入手牌。",
+  "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.title": "莱芜前夕",
+  "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.description": "本回合每打出1张牌就获得层数等量[gold]莱芜[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.smartDescription": "每打出1张牌获得{Amount}层[gold]莱芜[/gold]。",
+  
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.title": "和声",
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.description": "每次打出[gold]来莱芜[/gold]时，对所有敌人造成层数等量点伤害。",
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.smartDescription": "每次打出[gold]来莱芜[/gold]时，对所有敌人造成[blue]{Amount}[/blue]点伤害。",
-  
   "CUTE_SAKIKO_MOD_POWER_PARFAIT_TREAT_POWER.title": "有人请客",
   "CUTE_SAKIKO_MOD_POWER_PARFAIT_TREAT_POWER.description": "本场战斗中，用卡牌食用[gold]抹茶芭菲[/gold]不再减少存量。",
   "CUTE_SAKIKO_MOD_POWER_PARFAIT_TREAT_POWER.smartDescription": "本场战斗中，用卡牌食用[gold]抹茶芭菲[/gold]不再减少存量。",
@@ -70,9 +76,9 @@
   "CUTE_SAKIKO_MOD_POWER_ESCAPISM_TENDENCY_POWER.title": "习惯逃避",
   "CUTE_SAKIKO_MOD_POWER_ESCAPISM_TENDENCY_POWER.description": "每回合开始时随机丢弃1张手牌。回合结束时获得层数等量格挡。",
   "CUTE_SAKIKO_MOD_POWER_ESCAPISM_TENDENCY_POWER.smartDescription": "每回合开始时随机丢弃1张手牌。回合结束时获得{Amount}点格挡。",
-  "CUTE_SAKIKO_MOD_POWER_SWEEP_POWER.title": "横扫",
-  "CUTE_SAKIKO_MOD_POWER_SWEEP_POWER.description": "[gold]骑士之剑[/gold]现在可以攻击所有敌人。",
-  "CUTE_SAKIKO_MOD_POWER_SWEEP_POWER.smartDescription": "[gold]骑士之剑[/gold]现在可以攻击所有敌人。",
+  "CUTE_SAKIKO_MOD_POWER_SAKI_SWEEP_POWER.title": "横扫",
+  "CUTE_SAKIKO_MOD_POWER_SAKI_SWEEP_POWER.description": "[gold]骑士之剑[/gold]现在可以攻击所有敌人。",
+  "CUTE_SAKIKO_MOD_POWER_SAKI_SWEEP_POWER.smartDescription": "[gold]骑士之剑[/gold]现在可以攻击所有敌人。",
   "CUTE_SAKIKO_MOD_POWER_LINGERING_TASTE_POWER.title": "意犹未尽",
   "CUTE_SAKIKO_MOD_POWER_LINGERING_TASTE_POWER.description": "当储存[pink]和弦[/pink]溢出时，溢出的[pink]和弦[/pink]将被自动演奏。",
   "CUTE_SAKIKO_MOD_POWER_LINGERING_TASTE_POWER.smartDescription": "当储存[pink]和弦[/pink]溢出时，溢出的[pink]和弦[/pink]将被自动演奏。",

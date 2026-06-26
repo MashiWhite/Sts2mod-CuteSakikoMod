@@ -1,20 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Saves.Runs;
-using STS2RitsuLib.Interop.AutoRegistration;
-using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.HoverTips;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Common
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Uncommon
 {
     public class RanaPick : CuteRanaRelic
     {
-        public override RelicRarity Rarity => RelicRarity.Common;
+        public override RelicRarity Rarity => RelicRarity.Uncommon;
 
         protected override IEnumerable<DynamicVar> CanonicalVars => [];
         

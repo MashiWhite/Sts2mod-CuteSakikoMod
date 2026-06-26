@@ -1,6 +1,8 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -128,14 +130,41 @@ public class GreyAnon : ModMonsterTemplate
     }
 
     private async Task Devote1Move(IReadOnlyList<Creature> targets)
-    {
-        foreach (var player in Creature.CombatState.Players)
-            await PowerCmd.Apply<DexterityPower>(new ThrowingPlayerChoiceContext(),
-                player.Creature, -1, Creature, null, true);
+{
+    var combatState = Creature.CombatState as CombatState;
 
-        foreach (var player in Creature.CombatState.Players)
-            await CreatureCmd.Heal(player.Creature, 10);
+    foreach (var player in Creature.CombatState.Players)
+    {
+        // 记录回血前是否死亡
+        var wasDead = player.Creature.IsDead;
+
+        await PowerCmd.Apply<DexterityPower>(new ThrowingPlayerChoiceContext(),
+            player.Creature, -1, Creature, null, true);
+
+        await CreatureCmd.Heal(player.Creature, 10);
+
+        // 复活后恢复抽牌堆并播放待机动画
+        if (wasDead && player.Creature.IsAlive && combatState != null)
+        {
+            var drawPile = PileType.Draw.GetPile(player);
+            if (drawPile != null && drawPile.Cards.Count == 0)
+            {
+                var rng = combatState.RunState.Rng.Shuffle;
+                foreach (var deckCard in player.Deck.Cards)
+                {
+                    var canonical = ModelDb.GetById<CardModel>(deckCard.Id);
+                    if (canonical == null) continue;
+                    var combatCard = combatState.CreateCard(canonical, player);
+                    drawPile.AddInternal(combatCard);
+                }
+                drawPile.RandomizeOrderInternal(player, rng, combatState);
+            }
+
+            await CreatureCmd.TriggerAnim(player.Creature, "idle_loop", 0f);
+        }
     }
+}
+    
 
     private async Task Buff1Move(IReadOnlyList<Creature> targets)
     {
@@ -168,11 +197,35 @@ public class GreyAnon : ModMonsterTemplate
 
     private async Task Devote2Move(IReadOnlyList<Creature> targets)
     {
+        var combatState = Creature.CombatState as CombatState;
+
         foreach (var player in Creature.CombatState.Players)
+        {
+            var wasDead = player.Creature.IsDead;
+
             await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(),
                 player.Creature, 3, Creature, null);
 
-        foreach (var player in Creature.CombatState.Players)
             await CreatureCmd.Heal(player.Creature, 5);
+
+            if (wasDead && player.Creature.IsAlive && combatState != null)
+            {
+                var drawPile = PileType.Draw.GetPile(player);
+                if (drawPile != null && drawPile.Cards.Count == 0)
+                {
+                    var rng = combatState.RunState.Rng.Shuffle;
+                    foreach (var deckCard in player.Deck.Cards)
+                    {
+                        var canonical = ModelDb.GetById<CardModel>(deckCard.Id);
+                        if (canonical == null) continue;
+                        var combatCard = combatState.CreateCard(canonical, player);
+                        drawPile.AddInternal(combatCard);
+                    }
+                    drawPile.RandomizeOrderInternal(player, rng, combatState);
+                }
+
+                await CreatureCmd.TriggerAnim(player.Creature, "idle_loop", 0f);
+            }
+        }
     }
 }

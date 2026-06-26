@@ -14,7 +14,7 @@ public class Provoke() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, Targ
         get
         {
             yield return new BlockVar(18m, ValueProp.Move);
-            yield return new PowerVar<StrengthPower>(3m);
+            yield return new PowerVar<StrengthPower>(2m);
         }
     }
 

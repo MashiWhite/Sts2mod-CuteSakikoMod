@@ -28,11 +28,11 @@ public class SwollenFingers() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
             .Execute(choiceContext);
 
         // 将上一个打出的音符变为攻击
-        MusicNoteManager.ModifyLastNote(Owner, CardType.Attack);
+        MusicNoteManager.ModifyAllNotes(Owner, CardType.Attack);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 8 → 11
+        DynamicVars.Damage.UpgradeValueBy(3m); 
     }
 }

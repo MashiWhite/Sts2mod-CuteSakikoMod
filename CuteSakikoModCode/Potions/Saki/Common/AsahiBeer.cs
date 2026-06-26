@@ -1,25 +1,27 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
-using Godot;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Potions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.ValueProps;
+using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Potions.Saki.Common;
 
-public sealed class Cafe : CuteSakikoModPotion
+
+public sealed class AsahiBeer : CuteSakikoModPotion
 {
     public override PotionRarity Rarity => PotionRarity.Common;
     public override PotionUsage Usage => PotionUsage.CombatOnly;
-    public override TargetType TargetType => CutesakiTargets.Anyone;
+    public override TargetType TargetType => TargetType.AnyEnemy;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new PowerVar<PressurePower>(20m)];
+    [
+        new DamageVar(15m, ValueProp.Move),
+        new PowerVar<PressurePower>(15m)
+    ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -28,12 +30,26 @@ public sealed class Cafe : CuteSakikoModPotion
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)
     {
-        // 手工验证目标合法性（因为原版 AssertValidForTargetedPotion 不理解自定义类型）
         if (target == null || !target.IsAlive)
-            return; // 或者抛出异常提示
+            return;
 
-        NCombatRoom.Instance?.PlaySplashVfx(target, new Color("8B4513"));
-        await PowerCmd.Apply<PressurePower>(choiceContext, target, DynamicVars["PressurePower"].BaseValue,
-            Owner.Creature, null);
+        // 造成 15 点伤害（使用 CreatureCmd.Damage）
+        await CreatureCmd.Damage(
+            choiceContext,
+            target,
+            DynamicVars["Damage"].BaseValue,
+            ValueProp.Move,
+            Owner.Creature,
+            null // cardSource
+        );
+
+        // 给予 15 层压力
+        await PowerCmd.Apply<PressurePower>(
+            choiceContext,
+            target,
+            DynamicVars["PressurePower"].BaseValue,
+            Owner.Creature,
+            null
+        );
     }
 }

@@ -66,7 +66,7 @@ public class AllAreNeko : CuteRanaCard
             var template = rng.NextItem(allNekoCards);
             var newCard = combatState.CreateCard(template, Owner);
             // 添加的猫咪不升级
-            var result = await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Draw, Owner);
+            var result = await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Draw, Owner,CardPilePosition.Random);
             results.Add(result);
         }
 

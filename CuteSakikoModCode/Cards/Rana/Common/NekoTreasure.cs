@@ -53,7 +53,7 @@ public class NekoTreasure : CuteRanaCard
             var template = rng.NextItem(allNekoCards);
             var newCard = combatState.CreateCard(template, Owner);
             newCard.EnergyCost.SetThisCombat(0, true); // 本场战斗免费
-            await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Draw, Owner);
+            await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Draw, Owner,CardPilePosition.Random);
         }
     }
 

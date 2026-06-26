@@ -1,4 +1,10 @@
 ﻿{
-  "CUTE_SAKIKO_MOD_POTION_CAFE.description": "获得5层压力。",
-  "CUTE_SAKIKO_MOD_POTION_CAFE.title": "咖啡"
+  "CUTE_SAKIKO_MOD_POTION_CAFE.title": "咖啡",
+  "CUTE_SAKIKO_MOD_POTION_CAFE.description": "获得[blue]{PressurePower:diff()}[/blue]层[gold]压力[/gold]。",
+  "CUTE_SAKIKO_MOD_POTION_ASAHI_BEER.title": "朝日啤酒",
+  "CUTE_SAKIKO_MOD_POTION_ASAHI_BEER.description": "造成[blue]{Damage:diff()}[/blue]点伤害，给予[blue]{PressurePower:diff()}[/blue]层[gold]压力[/gold]。",
+  "CUTE_SAKIKO_MOD_POTION_LIVE_BOOST.title": "LiveBoost饮料",
+  "CUTE_SAKIKO_MOD_POTION_LIVE_BOOST.description": "获得[blue]{VigorPower:diff()}[/blue]层[gold]活力[/gold]。",
+  "CUTE_SAKIKO_MOD_POTION_VEGETABLE_JUICE.title": "蔬菜汁",
+  "CUTE_SAKIKO_MOD_POTION_VEGETABLE_JUICE.description": "随机清除1个[red]负面效果[/red]。\n获得[blue]{WeakPower:diff()}[/blue]层[gold]虚弱[/gold]。"
 }

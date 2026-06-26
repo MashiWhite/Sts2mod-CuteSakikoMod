@@ -1,14 +1,17 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 using MegaCrit.Sts2.Core.Entities.Players;
 using STS2RitsuLib.Models;
 
@@ -22,7 +25,7 @@ public sealed class RanaLiveManager : HookedSingletonModel
     // 记录本回合已触发过回收的玩家
     private readonly HashSet<ulong> _liveCravingMovedThisTurn = new();
 
-    // 原有：打出 RanaLive 卡牌时给予 1 层莱芜（如果没有莱芜爽）
+    // 打出 RanaLive 卡牌时给予 1 层莱芜（即使有莱芜爽也会给，但会被立刻清除）
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var card = cardPlay.Card;
@@ -32,13 +35,10 @@ public sealed class RanaLiveManager : HookedSingletonModel
         if (!card.Keywords.Contains(CutesakiKeywords.RanaLive.GetModCardKeyword()))
             return;
 
-        if (ownerCreature.HasPower<LiveSweetPower>())
-            return;
-
         await PowerCmd.Apply<RanaLivePower>(choiceContext, ownerCreature, 1, ownerCreature, card);
     }
 
-    // 新增：当 RanaLivePower 层数增加时，尝试回收 LiveCraving
+    // 当 RanaLivePower 层数增加时，检查莱芜爽并处理回收
     public override async Task AfterPowerAmountChanged(
         PlayerChoiceContext choiceContext,
         PowerModel power,
@@ -51,26 +51,34 @@ public sealed class RanaLiveManager : HookedSingletonModel
         var player = power.Owner?.Player;
         if (player == null) return;
 
-        // 本回合已经触发过，跳过
-        if (_liveCravingMovedThisTurn.Contains(player.NetId)) return;
+        bool hasLiveSweet = power.Owner.HasPower<LiveSweetPower>();
 
-        // 从抽牌堆、弃牌堆、消耗堆中寻找 LiveCraving
-        var piles = new[] { PileType.Draw, PileType.Discard, PileType.Exhaust };
-        CardModel? toMove = null;
-        foreach (var pileType in piles)
+        // 无论有无莱芜爽，每回合首次获得莱芜时尝试回收 LiveCraving
+        if (!_liveCravingMovedThisTurn.Contains(player.NetId))
         {
-            var pile = pileType.GetPile(player);
-            if (pile != null)
+            var piles = new[] { PileType.Draw, PileType.Discard, PileType.Exhaust };
+            CardModel? toMove = null;
+            foreach (var pileType in piles)
             {
-                toMove = pile.Cards.FirstOrDefault(c => c is LiveCraving);
-                if (toMove != null) break;
+                var pile = pileType.GetPile(player);
+                if (pile != null)
+                {
+                    toMove = pile.Cards.FirstOrDefault(c => c is LiveCraving);
+                    if (toMove != null) break;
+                }
+            }
+
+            if (toMove != null)
+            {
+                await CardPileCmd.Add(toMove, PileType.Hand);
+                _liveCravingMovedThisTurn.Add(player.NetId);
             }
         }
 
-        if (toMove != null)
+        // 如果拥有莱芜爽，立即移除刚获得的 RanaLivePower
+        if (hasLiveSweet)
         {
-            await CardPileCmd.Add(toMove, PileType.Hand);
-            _liveCravingMovedThisTurn.Add(player.NetId);
+            await PowerCmd.Remove(power);
         }
     }
 

@@ -17,7 +17,7 @@
   "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.INITIAL.options.ENTER_SPACE_LOCKED.title": "Spaceに入る",
   "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.INITIAL.options.ENTER_SPACE_LOCKED.description": "パーティーに[green]楽奈[/green]がいないため、Spaceに入れない。",
   "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.INITIAL.options.LEAVE.title": "立ち去る",
-  "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.INITIAL.options.LEAVE.description": "HPを[blue]5[/blue]失い、[gold]デッキ[/gold]からカードを[blue]1[/blue]枚除去する。",
+  "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.INITIAL.options.LEAVE.description": "HPを[red]5[/red]失い、[gold]デッキ[/gold]からカードを[blue]1[/blue]枚除去する。",
   "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.STAY_DESC.description": "君はしばらくここに留まることにした…… いつの間にか、周りにはたくさんの猫が集まっている。彼らはきっとここの常連なのだろう。猫たちとつかの間の静けさを楽しんだあと、君はその場をあとにした。",
   "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.ENTER_SPACE_DESC.description": "[green]楽奈[/green]が君の手を引いて、慣れた足取りで建物前の警告標識やゴミ箱を迂回し、君を建物裏の隠れた一角へとまっすぐに連れて行く。そこには、すでに[orange]まだらに[/orange]錆びついた鉄扉があった。\n\n君が[green]楽奈[/green]を見ると、彼女は説明する気がまるでないらしく、君の手をさっと離して、ほこりまみれの壁に沿って探り始めた。しばらくして、ようやくどこからか[gold]鍵[/gold]を取り出す。\n\n[green]「閉店の前、こっそり残した、予備の鍵。おばあちゃんは知らない。」[/green]\n\n蝶番が回る音とともに、君たちはこの[gold]多くの思い出が詰まった場所[/gold]へと足を踏み入れた。",
   "CUTE_SAKIKO_MOD_EVENT_COIN_PARKING_EVENT.pages.LEAVE_DESC.description": "[sine]君はここがどんな場所か知っている。[/sine]\n\n名残惜しみながら、持っていた品を一つここに置いて、かつての思い出に別れを告げる。\n\nしかし、[pink]店主[/pink]がこの店を閉めた理由があるように、もう先へ進まなければならない。",

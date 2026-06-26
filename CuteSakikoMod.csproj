@@ -48,7 +48,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
         <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
-        <RitsuLibPackageVersion>0.4.36</RitsuLibPackageVersion>
+        <RitsuLibPackageVersion>0.4.38</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <!-- 引用 -->
@@ -69,7 +69,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.4.36" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.4.38" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -103,6 +103,7 @@
         <Folder Include="CuteSakikoModCode\Encounters\Elite\"/>
         <Folder Include="CuteSakikoModCode\Encounters\Normal\" />
         <Folder Include="CuteSakikoModCode\Monsters\Normal\"/>
+        <Folder Include="CuteSakikoModCode\Potions\Shared\Uncommon\" />
         <Folder Include="CuteSakikoModCode\Relics\Anon\Uncommon\"/>
         <Folder Include="CuteSakikoModCode\Relics\Other\Common\" />
         <Folder Include="CuteSakikoModCode\Relics\Other\Rare\" />

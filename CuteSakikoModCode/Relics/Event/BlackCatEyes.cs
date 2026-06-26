@@ -3,6 +3,9 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 
@@ -19,16 +22,26 @@ public class BlackCatEyes : CuteSakikoEventRelic
         }
     }
 
-    // 每场战斗开始时，减少1点最大生命值
+    // 每场战斗开始时，减少3点最大生命值
     public override async Task BeforeCombatStart()
     {
         await base.BeforeCombatStart();
         if (Owner == null) return;
+
+        var creature = Owner.Creature;
+        var maxHp = creature.MaxHp;
+
+        // 如果当前最大生命值已经<=1，不再扣除
+        if (maxHp <= 1) return;
+
+        // 计算实际扣除量：最多扣除3点，但确保剩余至少1点
+        var loss = Math.Min(3m, maxHp - 1);
+
         await CreatureCmd.LoseMaxHp(
             new ThrowingPlayerChoiceContext(),
-            Owner.Creature,
-            1m,
-            false
+            creature,
+            loss,
+            false // 不是来自卡牌
         );
     }
 
@@ -37,10 +50,7 @@ public class BlackCatEyes : CuteSakikoEventRelic
     {
         if (player != Owner) return;
 
-        // ✅ 修正：GainEnergy 只需要 amount 和 player，不需要 choiceContext
         await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, player);
-
-        // 抽1张牌（Draw 需要 choiceContext）
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, player);
     }
 }

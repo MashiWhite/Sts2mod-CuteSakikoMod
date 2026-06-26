@@ -7,11 +7,11 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 
 public class SweetTaste : CuteRanaCard
 {
-    public SweetTaste() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public SweetTaste() : base(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
     {
     }
 

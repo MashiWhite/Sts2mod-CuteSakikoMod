@@ -1,4 +1,10 @@
 ﻿{
-  "CUTE_SAKIKO_MOD_POTION_CAFE.description": "Gain 5 Pressure.",
-  "CUTE_SAKIKO_MOD_POTION_CAFE.title": "Coffee"
+  "CUTE_SAKIKO_MOD_POTION_CAFE.title": "Coffee",
+  "CUTE_SAKIKO_MOD_POTION_CAFE.description": "Gain [blue]{PressurePower:diff()}[/blue] [gold]Pressure[/gold].",
+  "CUTE_SAKIKO_MOD_POTION_ASAHI_BEER.title": "Asahi Beer",
+  "CUTE_SAKIKO_MOD_POTION_ASAHI_BEER.description": "Deal [blue]{Damage:diff()}[/blue] damage, apply [blue]{PressurePower:diff()}[/blue] [gold]Pressure[/gold].",
+  "CUTE_SAKIKO_MOD_POTION_LIVE_BOOST.title": "LiveBoost Drink",
+  "CUTE_SAKIKO_MOD_POTION_LIVE_BOOST.description": "Gain [blue]{VigorPower:diff()}[/blue] [gold]Vigor[/gold].",
+  "CUTE_SAKIKO_MOD_POTION_VEGETABLE_JUICE.title": "Vegetable Juice",
+  "CUTE_SAKIKO_MOD_POTION_VEGETABLE_JUICE.description": "Randomly cleanse 1 [red]Debuff[/red].\nGain [blue]{WeakPower:diff()}[/blue] [gold]Weak[/gold]."
 }

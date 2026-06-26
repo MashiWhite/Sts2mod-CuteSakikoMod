@@ -18,7 +18,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
     {
         get
         {
-            yield return new BlockVar(5m, ValueProp.Move); // 基础倍数
+            yield return new BlockVar(6m, ValueProp.Move); // 基础倍数
             yield return new SuccessRecitalBlockVar(); // 实时总格挡
         }
     }
@@ -46,7 +46,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(1m); // 5 → 6
+        DynamicVars.Block.UpgradeValueBy(3m); 
     }
 
     /// <summary>动态变量：实时计算总格挡（基于当前储存的和弦数）</summary>

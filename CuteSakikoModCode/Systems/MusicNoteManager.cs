@@ -258,6 +258,22 @@ public static class MusicNoteManager
         PlayerNotesChanged?.Invoke(player);
         return count;
     }
+    
+    /// <summary>
+    /// 将所有当前音符全部修改为指定类型。如果没有音符则返回 false。
+    /// </summary>
+    public static bool ModifyAllNotes(Player player, CardType newType)
+    {
+        if (player == null) return false;
+        var data = GetData(player);
+        var count = data.Notes.Count;
+        if (count == 0) return false;
+        data.Notes.Clear();
+        for (int i = 0; i < count; i++)
+            data.Notes.Enqueue(newType);
+        PlayerNotesChanged?.Invoke(player);
+        return true;
+    }
 
     public static bool ModifyLastNote(Player player, CardType newType)
     {

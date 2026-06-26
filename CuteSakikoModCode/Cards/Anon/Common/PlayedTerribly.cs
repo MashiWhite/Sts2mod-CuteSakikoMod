@@ -9,11 +9,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class PlayedTerribly() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
+public class PlayedTerribly() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, TargetType.RandomEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(5m, ValueProp.Move); }
+        get
+        {
+            yield return new DamageVar(5m, ValueProp.Move);
+            yield return new RepeatVar(2);
+        }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -28,7 +32,7 @@ public class PlayedTerribly() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        var hitCount = IsUpgraded ? 2 : 1;
+        var hitCount = DynamicVars.Repeat.IntValue;
         var damage = DynamicVars.Damage.BaseValue;
 
         // 一次多段随机攻击
@@ -38,9 +42,6 @@ public class PlayedTerribly() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
             .WithHitCount(hitCount)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-
-        // 随机清除一个音符
-        MusicNoteManager.RemoveRandomNote(Owner, Owner.RunState.Rng.CombatCardSelection);
 
         // 添加躺平到手牌
         var layFlatCard = CombatState.CreateCard<LayFlat>(Owner);
@@ -54,6 +55,6 @@ public class PlayedTerribly() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
 
     protected override void OnUpgrade()
     {
-        // 升级效果已在 OnPlay 中通过 IsUpgraded 处理
+        DynamicVars.Repeat.UpgradeValueBy(1);
     }
 }
