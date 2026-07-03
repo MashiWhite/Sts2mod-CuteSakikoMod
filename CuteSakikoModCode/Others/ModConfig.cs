@@ -12,6 +12,25 @@ public class CuteSakikoModConfigData
 
     public bool EggsCard { get; set; }
     public bool EnableModMonsters { get; set; } = true;
+    
+    private bool _enableAudio = true;
+
+    public bool EnableAudio
+    {
+        get => _enableAudio;
+        set
+        {
+            if (_enableAudio != value)
+            {
+                _enableAudio = value;
+                if (!value)
+                {
+                    // 关闭音频时立即停止当前模组音乐并恢复原 BGM
+                    AudioManager.StopMusic();
+                }
+            }
+        }
+    }
 
     public float ModBgmVolume
     {
@@ -36,6 +55,7 @@ public static class ModConfig
     private static CuteSakikoModConfigData? _cached;
     private static readonly object _lock = new();
 
+    public static bool EnableAudio => Load().EnableAudio;
     public static bool EggsCard => Load().EggsCard;
     public static bool EnableModMonsters => Load().EnableModMonsters;
     public static float ModBgmVolume => Load().ModBgmVolume;
@@ -53,4 +73,6 @@ public static class ModConfig
             return _cached;
         }
     }
+    
+    
 }

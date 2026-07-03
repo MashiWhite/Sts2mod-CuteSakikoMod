@@ -193,6 +193,31 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             }
         }
     }
+    
+    public static void SimulateParfaitEaten(Player player, int amount, PlayerChoiceContext? choiceContext)
+    {
+        var relic = player.Relics.OfType<MatchaParfait>().FirstOrDefault();
+        if (relic != null)
+        {
+            // 模拟食用：不扣杯数，但增加计数并触发效果
+            relic.TotalConsumedThisCombat += amount;
+            relic.ChargesRemoved?.Invoke(player, amount, choiceContext);
+            _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+            if (player.Creature.HasPower<WantBothPower>())
+            {
+                _ = ApplyWantBothEffect(player, amount, choiceContext);
+            }
+        }
+        else
+        {
+            // 没有遗物，仍触发 WantBothPower 效果
+            if (player.Creature.HasPower<WantBothPower>())
+            {
+                _ = ApplyWantBothEffect(player, amount, choiceContext);
+            }
+            // 其他 power 可能需要遗物存在，暂时忽略
+        }
+    }
 
     public static void AddCharges(MatchaParfait relic, int amount)
     {

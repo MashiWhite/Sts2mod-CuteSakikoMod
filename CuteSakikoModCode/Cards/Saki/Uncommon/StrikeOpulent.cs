@@ -55,7 +55,7 @@ public class StrikeOpulent : CuteSakikoModCard
         var totalHits = 1 + totalExtraHits; // 基础 1 次 + 额外次数
 
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .WithHitCount(totalHits)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

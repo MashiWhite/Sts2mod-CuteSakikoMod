@@ -9,6 +9,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
 public class GotCaught() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    public override bool GainsBlock => true;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
         new BlockVar("BaseBlock", 2m, ValueProp.Move),

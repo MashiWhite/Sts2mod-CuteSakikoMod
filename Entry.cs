@@ -26,7 +26,6 @@ using STS2RitsuLib.Content;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.RunData;
 using STS2RitsuLib.Settings;
-using STS2RitsuLib.Telemetry;
 using STS2RitsuLib.Utils;
 using STS2RitsuLib.Utils.Persistence;
 using Logger = MegaCrit.Sts2.Core.Logging.Logger;
@@ -83,7 +82,11 @@ public class Entry
             model => model.ModSfxVolume,
             (model, value) => model.ModSfxVolume = value
         );
-        
+        var audioBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+            ModId, "config",
+            model => model.EnableAudio,
+            (model, value) => model.EnableAudio = value
+        );
 
         // 3. 注册设置界面
         var i18n = I18n;
@@ -113,6 +116,11 @@ public class Entry
                     0.0f, 1.0f, 0.01f,
                     valueFormatter: value => $"{value:P0}",
                     description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.DESC", "Controls the volume of mod-specific sound effects.")
+                )
+                .AddToggle("audio_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.LABEL", "Enable Mod Audio"),
+                    audioBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.DESC", "If disabled, all mod sounds and music will be muted. This can help troubleshoot audio-related crashes.")
                 )
             )
         );
@@ -149,6 +157,9 @@ public class Entry
                 SyncLobbyOnChange = true
             });
 
+        // ✅ 新增：注册玩家自定义名称数据
+        PlayerNameData.Init(runDataStore);
+
         Log.Debug("Mod initialized!");
 
         // 7. 事件订阅
@@ -172,13 +183,30 @@ public class Entry
             var netService = RunManager.Instance.NetService;
             if (netService != null)
             {
+                // 原有的 ReloadCountSyncMessage 注册
                 netService.RegisterMessageHandler(new MessageHandlerDelegate<ReloadCountSyncMessage>((msg, senderId) =>
                     FlybackManager.OnReloadCountReceived(msg.ReloadCount)));
+
+                // ✅ 新增：NameChangeMessage 注册
+                netService.RegisterMessageHandler(new MessageHandlerDelegate<NameChangeMessage>((msg, senderId) =>
+                {
+                    var runState = NameChangeCmd.GetCurrentRunState();
+                    if (runState != null)
+                    {
+                        PlayerNameData.PlayerNameSlot.Modify(runState, msg.TargetNetId, data =>
+                        {
+                            data.CustomName = msg.NewName;
+                        });
+                    }
+                    // 刷新所有 UI
+                    NameChangeCmd.RefreshAllPlayerNameUI();
+                }));
+
                 if (netService is NetHostGameService hostService)
                     hostService.ClientConnected += peerId => { FlybackManager.SyncReloadCountIfHost(); };
             }
         };
-
+        
         ModContentRegistry.For(ModId)
             .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoModCardPool>(
                 "cute_sakiko_mod_card_pool",
@@ -187,7 +215,7 @@ public class Entry
         ModContentRegistry.For(ModId)
             .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoTokenCardPool>(
                 "cute_sakiko_token_card_pool",
-                "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png"
+                "res://CuteSakikoMod/images/others/others/mod_token_card_pool_icon.png"
             );
 
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
@@ -204,7 +232,7 @@ public class Entry
             }
         });
         
-        // 离开房间时停止 Mod BGM（覆盖战斗结束、保存退出、放弃等所有情况）
+        // 离开房间时停止 Mod BGM
         RitsuLibFramework.SubscribeLifecycle<RoomExitedEvent>(_ =>
         {
             AudioManager.StopMusic();
@@ -218,18 +246,15 @@ public class Entry
         };
     }
 
-    private static void OnRunStarted(RunState state)
+    private static async void OnRunStarted(RunState state)
     {
         if (!ModConfig.EggsCard) return;
         var me = LocalContext.GetMe(state);
         if (me == null) return;
         if (me.Relics.Any(r => r.Id == ModelDb.Relic<Eggs>().Id)) return;
 
-        _ = Task.Run(async () =>
-        {
-            var eggs = ModelDb.Relic<Eggs>().ToMutable();
-            await RelicCmd.Obtain(eggs, me);
-        });
+        var eggs = ModelDb.Relic<Eggs>().ToMutable();
+        await RelicCmd.Obtain(eggs, me);
     }
 
     private static string GetSnakeCaseName(Type type)

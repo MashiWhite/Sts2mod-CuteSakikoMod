@@ -21,7 +21,7 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
         // 演奏所有储存的和弦
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
-            await guitar.TriggerAllStoredChords(choiceContext);
+            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
 
         // 对所有敌人造成伤害
         var enemies = Owner.Creature.CombatState?.Enemies;
@@ -29,7 +29,7 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
         {
             var damage = DynamicVars.Damage.BaseValue;
             await DamageCmd.Attack(damage)
-                .FromCard(this)
+                .FromCard(this,cardPlay)
                 .TargetingAllOpponents(CombatState)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -87,7 +88,7 @@ public static class ChordManager
                 {
                     // 2. 用同步随机数随机选一个
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                    await CreatureCmd.Damage(ctx, target, 3 * mult, ValueProp.Move, owner, null);
+                    await CreatureCmd.Damage(ctx, target, new DamageVar(3 * mult, ValueProp.Move), owner, null, null);
                 }
 
                 // 3. 获得格挡（无随机）
@@ -131,7 +132,7 @@ public static class ChordManager
             {
                 var enemies = owner.CombatState?.Enemies;
                 if (enemies != null)
-                    await CreatureCmd.Damage(ctx, enemies, 6 * mult, ValueProp.Move, owner, null);
+                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(6 * mult, ValueProp.Move), owner, null, null);
             });
 
         // E【能 攻 技】所有友方获得1点力量（数值已调整）
@@ -170,7 +171,7 @@ public static class ChordManager
                 if (enemies.Any())
                 {
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                    await CreatureCmd.Damage(ctx, target, 3 * mult, ValueProp.Move, owner, null);
+                    await CreatureCmd.Damage(ctx, target, new DamageVar(3 * mult, ValueProp.Move), owner, null, null);
                 }
             });
 
@@ -480,7 +481,7 @@ public static class ChordManager
                 if (combat == null) return;
                 var enemies = combat.Enemies;
                 if (enemies != null && enemies.Any())
-                    await CreatureCmd.Damage(ctx, enemies, 20 * mult, ValueProp.Move, owner, null);
+                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(20 * mult, ValueProp.Move), owner, null, null);
                 // 对全体友方施加 1 * mult 层虚弱
                 var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
@@ -509,19 +510,25 @@ public static class ChordManager
             });
 
         //灰爱音和弦【特 攻 攻】 对自己造成2点伤害，所有友方抽1获得1能量
+        //灰爱音和弦【特 攻 攻】 对自己造成2点伤害，所有友方抽1获得1能量
         AddTemporaryChord("GreyAnonChord", ChordCategory.Anon,
             new[] { CardType.Status, CardType.Attack, CardType.Attack },
             "CUTESAKIKOMOD-GREYANONCHORD.title", "CUTESAKIKOMOD-GREYANONCHORD.description", "grey_anon_chord",
-            new[] { 2, 1, 1 }, // 伤害值, 抽牌数, 能量数
+            new[] { 2, 1, 1 },
             async (ctx, owner, mult) =>
             {
                 var combat = owner.CombatState;
                 if (combat == null) return;
 
                 // 对自己造成伤害（不可格挡，不受力量影响）
-                await CreatureCmd.Damage(ctx, owner, 2 * mult,
-                    ValueProp.Unblockable | ValueProp.Unpowered,
-                    owner, null);
+                await CreatureCmd.Damage(
+                    ctx,
+                    owner,
+                    new DamageVar(2 * mult, ValueProp.Unblockable | ValueProp.Unpowered),
+                    owner,
+                    (CardModel?)null,
+                    (CardPlay?)null
+                );
 
                 // 所有友方（包括自己）抽牌并获得能量
                 foreach (var player in combat.Players)
@@ -531,6 +538,7 @@ public static class ChordManager
                     await PlayerCmd.GainEnergy(1 * mult, player);
                 }
             });
+        
         //碧天伴走
         AddTemporaryChord("HekitenbansouChord", ChordCategory.Anon,
             new[] { CardType.Attack, CardType.Skill, CardType.Attack, CardType.Skill },

@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
@@ -19,7 +21,6 @@ public class VocalHarmonyPower : CuteSakikoModPower
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var card = cardPlay.Card;
-        // 必须是自己打出的，且含有关键词 RanaLive
         if (card.Owner?.Creature != Owner) return;
         if (!card.Keywords.Contains(CutesakiKeywords.RanaLive.GetModCardKeyword())) return;
 
@@ -35,10 +36,10 @@ public class VocalHarmonyPower : CuteSakikoModPower
         await CreatureCmd.Damage(
             choiceContext,
             enemies,
-            damagePerEnemy,
-            ValueProp.Unpowered,
+            new DamageVar(damagePerEnemy, ValueProp.Unpowered),
             Owner,
-            null
+            (CardModel?)null,
+            (CardPlay?)null
         );
     }
 }

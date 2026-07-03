@@ -19,7 +19,7 @@ public class LeadMeeting() : CuteAnonCard(1, CardType.Attack, CardRarity.Common,
 
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

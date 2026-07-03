@@ -36,7 +36,7 @@ public class WantHaruhikage() : CuteRanaCard(2, CardType.Attack, CardRarity.Rare
     {
         // 对所有敌人造成伤害
         var attackCommand = await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

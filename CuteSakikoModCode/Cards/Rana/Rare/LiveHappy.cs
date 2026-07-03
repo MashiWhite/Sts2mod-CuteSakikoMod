@@ -52,7 +52,7 @@ public class LiveHappy : CuteRanaCard
                 if (enemies.Count == 0) break;
 
                 var target = enemies[targetRng.NextInt(enemies.Count)];
-                var results = await CreatureCmd.Damage(choiceContext, target, DynamicVars.Damage, Owner.Creature, this);
+                var results = await CreatureCmd.Damage(choiceContext, target, DynamicVars.Damage, this, null);
                 if (results.Any(r => r.WasTargetKilled))
                     anyKill = true;
             }

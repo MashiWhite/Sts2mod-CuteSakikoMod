@@ -23,7 +23,7 @@ public class SecretPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncom
         // 演奏所有储存的和弦
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
-            await guitar.TriggerAllStoredChords(choiceContext);
+            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
 
         // 获得格挡
         var blockAmount = DynamicVars.Block.IntValue;

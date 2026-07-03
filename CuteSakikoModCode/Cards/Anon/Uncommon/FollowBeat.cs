@@ -23,7 +23,7 @@ public class FollowBeat() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon
         // 造成伤害
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

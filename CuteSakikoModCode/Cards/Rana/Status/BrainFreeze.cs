@@ -28,19 +28,17 @@ public class BrainFreeze : ModStatusCard
         if (card != this) return;
         await Cmd.Wait(0.25f);
         int damage = DynamicVars.Damage.IntValue;
-        // 指定目标为自己
         await CreatureCmd.Damage(
             choiceContext,
             Owner.Creature,
-            damage,
-            ValueProp.Unpowered,
+            new DamageVar(damage, ValueProp.Unpowered | ValueProp.Move),
             Owner.Creature,
+            this,
             null);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 打出无效果，仅消耗
         await Task.CompletedTask;
     }
 }

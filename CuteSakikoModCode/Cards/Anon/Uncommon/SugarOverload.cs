@@ -8,7 +8,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
 public class SugarOverload() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    [SavedProperty] private int _timesPlayedThisCombat;
+    [SavedProperty]
+    private int TimesPlayedThisCombat { get; set; }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
@@ -31,8 +32,7 @@ public class SugarOverload() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncomm
         await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
 
-        _timesPlayedThisCombat++;
-        // 使用 AddThisCombat 增加费用，避免设置 WasJustUpgraded 标记
+        TimesPlayedThisCombat++;
         EnergyCost.AddThisCombat(1);
     }
 

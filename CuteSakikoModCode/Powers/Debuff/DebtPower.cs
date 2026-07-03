@@ -1,8 +1,11 @@
 ﻿using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;          // 新增，用于 CardPlay
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -20,8 +23,14 @@ public sealed class DebtPower : CuteSakikoModPower
         if (side != Owner.Side) return;
         if (Amount <= 0) return;
 
-        await CreatureCmd.Damage(choiceContext, Owner, Amount, ValueProp.Unblockable | ValueProp.Unpowered, Owner,
-            null);
+        await CreatureCmd.Damage(
+            choiceContext,
+            Owner,
+            new DamageVar(Amount, ValueProp.Unblockable | ValueProp.Unpowered),
+            Owner,               // 伤害来源（能力所属生物）
+            (CardModel?)null,    // 没有卡牌来源
+            (CardPlay?)null      // 没有 CardPlay
+        );
         await PowerCmd.Remove(this);
     }
 }

@@ -38,7 +38,7 @@ public class SweetTaste : CuteRanaCard
         if (cardPlay.Target == null) return;
 
         await DamageCmd.Attack(DynamicVars.CalculatedDamage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

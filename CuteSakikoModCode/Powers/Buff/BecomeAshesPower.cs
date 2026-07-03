@@ -6,14 +6,17 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
-
 using MegaCrit.Sts2.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class BecomeAshesPower : CuteSakikoModPower
 {
     private bool _hasGrantedAiHeart;
+    private int _initialMaxHp; // 记录获得此能力时的最大生命值，用于固定二阶段阈值
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -24,14 +27,24 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
         {
             yield return new DynamicVar("SelfDamage", 0);
             yield return new DynamicVar("StrengthGain", 0);
+            yield return new DynamicVar("PhaseTwoThreshold", 0); // 二阶段血量阈值
         }
     }
 
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await base.AfterApplied(applier, cardSource);
+        // 记录此时的真实最大生命值作为初始值
+        _initialMaxHp = Owner.MaxHp;
+        UpdatePhaseTwoThreshold();
         UpdateSelfDamage();
         UpdateStrengthGain();
+    }
+
+    private void UpdatePhaseTwoThreshold()
+    {
+        if (Owner != null)
+            DynamicVars["PhaseTwoThreshold"].BaseValue = (int)(_initialMaxHp * 0.85);
     }
 
     public override Task AfterCurrentHpChanged(Creature creature, Decimal delta)
@@ -48,12 +61,13 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
     {
         if (side != Owner.Side || !participants.Contains(Owner)) return;
 
-        int selfDamage = (int)Math.Ceiling(Owner.MaxHp * 0.05);
-        if (selfDamage > 0)
-            await CreatureCmd.Damage(choiceContext, Owner, selfDamage,
-                ValueProp.Unblockable | ValueProp.Unpowered, null, null);
+        // 减少最大生命值（当前最大生命值的 5%），而不是造成伤害
+        int maxHpLoss = (int)Math.Ceiling(Owner.MaxHp * 0.05);
+        if (maxHpLoss > 0)
+            await CreatureCmd.LoseMaxHp(choiceContext, Owner, maxHpLoss, false);
 
         UpdateStrengthGain();
+        UpdateSelfDamage(); // 最大生命值改变后，下次损失的值也会变化
     }
 
     public override async Task AfterSideTurnStart(
@@ -63,10 +77,11 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
     {
         if (side != Owner.Side) return;
 
-        float lostPercent = (float)(Owner.MaxHp - Owner.CurrentHp) / Owner.MaxHp * 100f;
+        float lostPercent = (float)(_initialMaxHp - Owner.CurrentHp) / _initialMaxHp * 100f;
         int strength = Math.Max(1, (int)Math.Floor(lostPercent / 20f));
 
-        if (Owner.CurrentHp < Owner.MaxHp * 0.5)
+        // 二阶段条件：当前生命值低于初始最大生命值的 85%
+        if (Owner.CurrentHp < _initialMaxHp * 0.85)
         {
             strength *= 2;
             if (!_hasGrantedAiHeart)
@@ -94,9 +109,9 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
     {
         if (Owner != null)
         {
-            float lostPercent = (float)(Owner.MaxHp - Owner.CurrentHp) / Owner.MaxHp * 100f;
+            float lostPercent = (float)(_initialMaxHp - Owner.CurrentHp) / _initialMaxHp * 100f;
             int strength = Math.Max(2, (int)Math.Floor(lostPercent / 20f));
-            if (Owner.CurrentHp < Owner.MaxHp * 0.5)
+            if (Owner.CurrentHp < _initialMaxHp * 0.85)
                 strength *= 2;
             DynamicVars["StrengthGain"].BaseValue = strength;
         }

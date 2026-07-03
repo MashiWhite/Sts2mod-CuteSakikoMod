@@ -10,5 +10,7 @@
   "MOD_SETTINGS.MOD_BGM_VOLUME.DESC": "Control the volume of mod's BGM. Final volume = Master Volume × this value.",
   "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL": "Mod's SFX Volume",
   "MOD_SETTINGS.MOD_SFX_VOLUME.DESC": "Control the volume of mod's sound effects. Final volume = Master Volume × SFX Volume × this value.",
+  "MOD_SETTINGS.AUDIO_TOGGLE.LABEL": "Enable Mod Audio",
+  "MOD_SETTINGS.AUDIO_TOGGLE.DESC": "If disabled, all mod audio playback (SFX and BGM) will be skipped entirely, which can help prevent audio-related crashes.",
   "MOD_SETTINGS.DESCRIPTION": "Cute Sakiko Mod Settings"
 }

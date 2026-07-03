@@ -13,6 +13,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 public class NobodyKnowParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
+    public override bool GainsBlock => true;
+    
     public NobodyKnowParfait() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }

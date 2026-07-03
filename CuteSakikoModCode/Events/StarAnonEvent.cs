@@ -18,6 +18,8 @@ public sealed class StarAnonEvent : ModEventTemplate
         InitialPortraitPath: "res://CuteSakikoMod/images/events/star_anon.png"
     );
     
+    public override bool IsShared => true;
+    
     public override bool IsAllowed(IRunState runState)
     {
         return ModConfig.EnableModMonsters;

@@ -37,7 +37,7 @@ public class NekoMarch : CuteRanaCard
         // 1. 对所有敌人造成伤害
         int damage = (int)DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .TargetingAllOpponents(CombatState)
             .Execute(choiceContext);
 

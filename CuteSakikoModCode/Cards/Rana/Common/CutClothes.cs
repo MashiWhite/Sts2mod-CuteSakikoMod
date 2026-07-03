@@ -60,7 +60,7 @@ public class CutClothes : CuteRanaCard
         if (preBlockDamage > 0)
         {
             await DamageCmd.Attack(preBlockDamage)
-                .FromCard(this)
+                .FromCard(this,cardPlay)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

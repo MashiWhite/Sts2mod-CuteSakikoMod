@@ -1,5 +1,6 @@
 ﻿using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -18,16 +19,26 @@ public sealed class BreakDownPower : CuteSakikoModPower
     public override bool AllowNegative => false;
 
     // 自身造成伤害减少 50%
-    public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer,
-        CardModel? cardSource)
+    public override decimal ModifyDamageAdditive(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource,
+        CardPlay? cardPlay)  // 补上缺失参数
     {
         if (dealer != Owner) return 0m;
         return -amount * 0.5m;
     }
 
     // 自身受到的伤害翻倍
-    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
-        Creature? dealer, CardModel? cardSource)
+    public override decimal ModifyDamageMultiplicative(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource,
+        CardPlay? cardPlay)  // 补上缺失参数
     {
         if (target != Owner) return 1m;
         if (Amount <= 0) return 1m;
@@ -48,7 +59,7 @@ public sealed class BreakDownPower : CuteSakikoModPower
             _hasTakenDamageSinceLastOwnTurnEnd = true;
     }
 
-    // 在自己的回合结束时，如果期间受到过伤害，则减少1层并重置标记
+    // 在自己的回合结束时，如果期间受到过伤害，则移除该能力
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
@@ -59,11 +70,5 @@ public sealed class BreakDownPower : CuteSakikoModPower
             _hasTakenDamageSinceLastOwnTurnEnd = false;
         }
     }
-
-    // 回合开始时不做任何重置（让标记累积）
-    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
-    {
-        // 不重置标记
-        await Task.CompletedTask;
-    }
+    
 }

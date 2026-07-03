@@ -26,7 +26,7 @@ public class BiteGuitar : CuteAnonCard
         // 伤害
         var damage = DynamicVars.Damage.IntValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

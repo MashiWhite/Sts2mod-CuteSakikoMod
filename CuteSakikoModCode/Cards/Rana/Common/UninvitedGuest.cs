@@ -9,7 +9,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
 public class UninvitedGuest : CuteRanaCard
 {
-    [SavedProperty] private bool _hasIncreasedCost;  // 是否已经增加过费用
+    [SavedProperty]
+    private bool HasIncreasedCost { get; set; }  // 改为属性
 
     public UninvitedGuest() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
 
@@ -18,27 +19,23 @@ public class UninvitedGuest : CuteRanaCard
         new DamageVar(10m, ValueProp.Move)
     };
     
-    protected override bool ShouldGlowGoldInternal =>
-        // 尚未打出时发光，提示玩家首次打出有额外收益
-        !_hasIncreasedCost;
+    // 如果基类有 ShouldGlowGold，用这个；否则删除
+    protected override bool ShouldGlowGoldInternal => !HasIncreasedCost;
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 第一次打出后，将本场战斗后续费用改为1
-        if (!_hasIncreasedCost)
+        if (!HasIncreasedCost)
         {
-            // 当前这张卡费用已经是0（因为基类传入0）
-            // 打出后将本场战斗的费用永久设置为1
+            // 确保 SetThisCombat 方法存在，否则改用 AddThisCombat(1) 或直接赋值
             EnergyCost.SetThisCombat(1);
-            _hasIncreasedCost = true;
+            HasIncreasedCost = true;
         }
 
-        // 造成伤害
         if (cardPlay.Target != null)
         {
             int damage = (int)DynamicVars.Damage.BaseValue;
             await DamageCmd.Attack(damage)
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .Execute(choiceContext);
         }
@@ -46,7 +43,6 @@ public class UninvitedGuest : CuteRanaCard
 
     protected override void OnUpgrade()
     {
-        // 升级：伤害 +3（10 -> 13）
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

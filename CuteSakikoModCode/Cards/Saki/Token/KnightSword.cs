@@ -9,15 +9,22 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Saves.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-// SweepPower
-
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 
-public class KnightSword() : ModTokenCard(2, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
+public class KnightSword : ModTokenCard
 {
+    public KnightSword() : base(2, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
+    {
+    }
+
+    // 使用属性来存储额外伤害，满足 SavedProperty 要求
+    [SavedProperty]
+    private int ExtraDamage { get; set; }
+
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         [CardKeyword.Retain, CutesakiKeywords.Sword.GetModCardKeyword()];
 
@@ -35,29 +42,25 @@ public class KnightSword() : ModTokenCard(2, CardType.Attack, CardRarity.Token, 
         }
     }
 
-    // 动态目标类型：拥有横扫能力时变为群体攻击
     public override TargetType TargetType => HasSweepPower ? TargetType.AllEnemies : base.TargetType;
 
     private bool HasSweepPower => IsMutable && Owner != null && Owner.Creature.HasPower<SakiSweepPower>();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 当TargetType为AllEnemies时，cardPlay.Target为null，需要特殊处理
         if (HasSweepPower)
         {
-            // 群体攻击：对所有敌人造成伤害
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .TargetingAllOpponents(CombatState)
                 .WithHitFx("vfx/vfx_giant_horizontal_slash", tmpSfx: "slash_attack.mp3")
                 .Execute(choiceContext);
         }
         else
         {
-            // 单体攻击
             if (cardPlay.Target != null)
                 await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                    .FromCard(this)
+                    .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_giant_horizontal_slash", tmpSfx: "slash_attack.mp3")
                     .Execute(choiceContext);
@@ -68,6 +71,16 @@ public class KnightSword() : ModTokenCard(2, CardType.Attack, CardRarity.Token, 
     {
         EnergyCost.UpgradeBy(-1);
         DynamicVars.Damage.UpgradeValueBy(5);
+        // 恢复累积的额外伤害
+        if (ExtraDamage > 0)
+            DynamicVars.Damage.BaseValue += ExtraDamage;
+    }
+
+    protected override void AfterDowngraded()
+    {
+        base.AfterDowngraded();
+        if (ExtraDamage > 0)
+            DynamicVars.Damage.BaseValue += ExtraDamage;
     }
 
     public static void IncreaseDamage(int delta, CombatState combatState)
@@ -80,7 +93,10 @@ public class KnightSword() : ModTokenCard(2, CardType.Attack, CardRarity.Token, 
             if (pile == null) continue;
             foreach (var card in pile.Cards)
                 if (card is KnightSword ks)
+                {
+                    ks.ExtraDamage += delta;
                     ks.DynamicVars.Damage.BaseValue += delta;
+                }
         }
     }
 }

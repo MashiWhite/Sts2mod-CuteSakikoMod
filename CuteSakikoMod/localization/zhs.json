@@ -10,5 +10,7 @@
   "MOD_SETTINGS.MOD_BGM_VOLUME.DESC": "控制本模组专属背景音乐的音量大小，最终音量 = 主音量 × 此值。",
   "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL": "Mod 音效音量",
   "MOD_SETTINGS.MOD_SFX_VOLUME.DESC": "控制本模组自定义音效的音量大小，最终音量 = 主音量 × 音效音量 × 此值。",
+  "MOD_SETTINGS.AUDIO_TOGGLE.LABEL": "启用模组音频",
+  "MOD_SETTINGS.AUDIO_TOGGLE.DESC": "关闭后，所有播放模组音效和音乐的行为将被跳过，防止产生崩溃问题。",
   "MOD_SETTINGS.DESCRIPTION": "可爱小祥模组的设置"
 }

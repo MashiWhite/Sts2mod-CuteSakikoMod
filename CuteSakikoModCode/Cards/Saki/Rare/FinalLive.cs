@@ -67,7 +67,7 @@ public class FinalLive() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
         var totalDamage = count * valueDamage;
         if (totalDamage > 0)
             await DamageCmd.Attack(totalDamage)
-                .FromCard(this)
+                .FromCard(this,cardPlay)
                 .TargetingAllOpponents(CombatState)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

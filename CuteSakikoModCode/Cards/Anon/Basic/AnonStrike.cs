@@ -29,7 +29,7 @@ public class AnonStrike() : CuteAnonCard(1, CardType.Attack, CardRarity.Basic, T
         if (cardPlay.Target == null) return;
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

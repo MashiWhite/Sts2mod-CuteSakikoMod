@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -42,7 +43,13 @@ public sealed class AiHeartPower : CuteSakikoModPower
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         await ReplaceVisual();
-        PlayMusic(); // AudioManager 内部会自动跳过重复音乐
+        PlayMusic();
+
+        // ★ 启动灰爱音弹幕（如果是 GreyAnon）
+        if (Owner.Monster is GreyAnon greyAnon)
+        {
+            greyAnon.StartGreyText();
+        }
     }
 
     public override async Task AfterRemoved(Creature oldOwner)

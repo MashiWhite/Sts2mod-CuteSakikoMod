@@ -26,14 +26,14 @@ public class Jr3() :OtherModTokenCard(0, CardType.Attack, CardRarity.Common, Tar
         var lowDamage = DynamicVars["lowDamage"].IntValue;
         // 低伤一次
         await DamageCmd.Attack(lowDamage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
         // 高伤一次
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

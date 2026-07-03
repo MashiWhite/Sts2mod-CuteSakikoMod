@@ -1,5 +1,6 @@
 ﻿using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;          // 新增，用于 CardPlay
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -23,12 +24,14 @@ public class CloseObservePower : CuteSakikoModPower
         get { yield return new DynamicVar("DamageIncrease", 1.5m); }
     }
 
+    // 补上缺失的 CardPlay? cardPlay 参数
     public override decimal ModifyDamageMultiplicative(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
-        CardModel? cardSource)
+        CardModel? cardSource,
+        CardPlay? cardPlay)   // 已修正
     {
         if (target != Owner || !props.IsPoweredAttack())
             return 1m;

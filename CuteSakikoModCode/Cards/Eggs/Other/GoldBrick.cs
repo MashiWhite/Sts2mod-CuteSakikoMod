@@ -51,7 +51,7 @@ public class GoldBrick() : OtherModTokenCard(1, CardType.Attack, CardRarity.Anci
         var mult = (int)DynamicVars["Multiplier"].BaseValue;
         var damage = goldAmountBefore * mult;
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

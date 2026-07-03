@@ -34,7 +34,7 @@ public class Glare() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncommon
         // 造成伤害
         var damage = DynamicVars["Damage"].IntValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

@@ -33,7 +33,7 @@ public class SeekingTarget() : CuteAnonCard(1, CardType.Attack, CardRarity.Commo
 
         var damage = DynamicVars.Damage.IntValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .TargetingAllOpponents(combat)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

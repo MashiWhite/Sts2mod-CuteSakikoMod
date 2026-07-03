@@ -36,7 +36,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
         var chordCount = MusicNoteManager.GetStoredChords(Owner).Count;
 
         // 演奏所有储存的和弦
-        await guitar.TriggerAllStoredChords(choiceContext);
+        await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
 
         // 获得格挡 = 实际演奏数量 × 倍数
         var totalBlock = perBlock * chordCount;

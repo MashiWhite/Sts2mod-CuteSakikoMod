@@ -34,7 +34,7 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
         // 统一使用一个 AttackCommand，通过 WithHitCount 指定总命中次数
         // 活力只会消耗 1 层，但会对所有命中生效
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .WithHitCount(totalHits) // 关键：合并所有命中
             .TargetingRandomOpponents(combat) // 随机选择目标
             .WithHitFx("vfx/vfx_attack_slash")

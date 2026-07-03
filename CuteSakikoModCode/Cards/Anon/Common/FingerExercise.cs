@@ -30,7 +30,7 @@ public class FingerExercise() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
         var damage = DynamicVars.Damage.BaseValue;
         
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .WithHitCount(hitCount)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

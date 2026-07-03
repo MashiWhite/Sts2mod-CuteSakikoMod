@@ -12,7 +12,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana;
 public abstract class CuteRanaCard(int cost, CardType type, CardRarity rarity, TargetType target)
     : ModCardTemplate(cost, type, rarity, target)
 {
-    
     public override CardAssetProfile AssetProfile => this.CardAssetProfile();
 
     protected override bool IsPlayable
@@ -22,20 +21,21 @@ public abstract class CuteRanaCard(int cost, CardType type, CardRarity rarity, T
             if (this is IEatParfaitCard eater)
             {
                 var parfait = Owner?.Relics.OfType<MatchaParfait>().FirstOrDefault();
-                if (parfait != null)
-                {
-                    // 如果有人请客，无条件可打出
-                    if (Owner.Creature.HasPower<ParfaitTreatPower>())
-                        return true;
+                // 没有抹茶芭菲遗物，无法打出
+                if (parfait == null)
+                    return false;
 
-                    // 特殊处理：消耗所有杯数（ConsumeAll = true）
-                    if (eater.ConsumeAll)
-                        return parfait.Charges > 0;
+                // 如果有人请客，无条件可打出
+                if (Owner.Creature.HasPower<ParfaitTreatPower>())
+                    return true;
 
-                    // 否则检查杯数是否足够
-                    if (parfait.Charges < eater.GetParfaitConsumeCount())
-                        return false;
-                }
+                // 特殊处理：消耗所有杯数（ConsumeAll = true）
+                if (eater.ConsumeAll)
+                    return parfait.Charges > 0;
+
+                // 否则检查杯数是否足够
+                if (parfait.Charges < eater.GetParfaitConsumeCount())
+                    return false;
             }
             return true;
         }
@@ -51,6 +51,6 @@ public abstract class CuteRanaCard(int cost, CardType type, CardRarity rarity, T
         /// <summary>
         /// 是否消耗所有杯数（优先级高于 GetParfaitConsumeCount）
         /// </summary>
-        bool ConsumeAll => false; // 默认 false，只有消耗所有的卡牌才需要重写为 true
+        bool ConsumeAll => false;
     }
 }

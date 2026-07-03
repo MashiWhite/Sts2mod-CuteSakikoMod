@@ -1,4 +1,11 @@
 {
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.title": "名前のセンス",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.description": "このゲームの間、対象アライの表示名を変更する。",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.title": "{target}の名前を変更",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.placeholder": "{target}の新しい名前を入力",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.confirm": "決定",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.cancel": "キャンセル",
+  
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.title": "ストライク",
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.description": "{Damage:diff()}ダメージを与える。",
   "CUTE_SAKIKO_MOD_CARD_RANA_DEFEND.title": "防御",
@@ -140,6 +147,9 @@
   "CUTE_SAKIKO_MOD_CARD_NEKO_LEADER.description": "毎ターン開始時、1枚の[gold]猫[/gold]を手札に加える。",
   "CUTE_SAKIKO_MOD_CARD_EVE_LIVE.title": "ライブ前夜",
   "CUTE_SAKIKO_MOD_CARD_EVE_LIVE.description": "このターン、カードを1枚プレイするたび、[gold]ライブ[/gold]を1層得る。",
+  "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.title": "猫がお腹すいた",
+  "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.description": "[gold]手札[/gold]のカードを{Cards:diff()}枚選んで[gold]廃棄[/gold]する。\nその枚数分の[gold]抹茶パフェ[/gold]を食べたとみなす。",
+  "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.selectionScreenPrompt": "[gold]廃棄[/gold]するカードを選択",
   
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "テストカード",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "テストカード。",

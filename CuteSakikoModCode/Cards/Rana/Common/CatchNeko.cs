@@ -41,7 +41,7 @@ public class CatchNeko : CuteRanaCard
         {
             int damage = (int)DynamicVars.Damage.BaseValue;
             await DamageCmd.Attack(damage)
-                .FromCard(this)
+                .FromCard(this,cardPlay)
                 .Targeting(cardPlay.Target)
                 .Execute(choiceContext);
         }

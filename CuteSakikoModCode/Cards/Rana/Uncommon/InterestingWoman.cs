@@ -32,8 +32,8 @@ public class InterestingWoman : CuteRanaCard
     {
         if (cardPlay.Target == null) return;
 
-        int vulnerablePower = DynamicVars["WeakPower"].IntValue;
-        int weakAmount = DynamicVars["VulnerablePower"].IntValue;
+        int weakAmount= DynamicVars["WeakPower"].IntValue;
+        int vulnerablePower = DynamicVars["VulnerablePower"].IntValue;
 
         
         // 给予虚弱

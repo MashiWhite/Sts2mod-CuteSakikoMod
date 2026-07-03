@@ -10,7 +10,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
 public class WaitItCool : CuteRanaCard
 {
-    [SavedProperty] private int _timesRetainedThisCombat; // 本场战斗中已保留的次数
+    [SavedProperty]
+    private int TimesRetainedThisCombat { get; set; }
 
     public WaitItCool() : base(3, CardType.Skill, CardRarity.Common, TargetType.Self) { }
 
@@ -43,17 +44,20 @@ public class WaitItCool : CuteRanaCard
             await CardPileCmd.Draw(choiceContext, draw, Owner);
     }
 
-    // 每回合结束（敌方回合结束时即玩家回合结束）检查是否在手牌中
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
-        if (side != CombatSide.Enemy) return; // 只在玩家回合结束时处理
-        if (Pile?.Type != PileType.Hand) return; // 不在手牌则无事
-        if (IsExhausted) return; // 已经消耗掉的不处理（实际上消耗后牌就不在手牌了）
+        if (side != CombatSide.Enemy) return;
+        if (Pile?.Type != PileType.Hand) return;
+        if (IsExhausted) return;
 
-        // 增加保留计数，每次减少1费
-        _timesRetainedThisCombat++;
-        EnergyCost.AddThisCombat(-1);
-        // 可选：如果费用降至0以下，可以重置为0（但AddThisCombat内部会处理）
+        TimesRetainedThisCombat++;
+
+        // 获取基础费用（升级后的费用，不含任何本地或全局修饰）
+        int baseCost = EnergyCost.GetWithModifiers((CostModifiers)0);
+        int newCost = Math.Max(0, baseCost - TimesRetainedThisCombat);
+
+        // 设置为新费用，并确保只降低不升高（reduceOnly = true）
+        EnergyCost.SetThisCombat(newCost, true);
     }
 
     protected override void OnUpgrade()
@@ -61,6 +65,5 @@ public class WaitItCool : CuteRanaCard
         EnergyCost.UpgradeBy(-1); // 3c -> 2c
     }
 
-    // 辅助属性：判断是否已经消耗（Exhaust后牌不在任何Pile，或Pile.Type为None）
     private bool IsExhausted => Pile == null;
 }

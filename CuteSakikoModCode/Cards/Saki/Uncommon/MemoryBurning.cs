@@ -29,7 +29,6 @@ public class MemoryBurning : CuteSakikoModCard
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
-            yield return HoverTipFactory.FromPower<MemoryBurningPower>();
         }
     }
 

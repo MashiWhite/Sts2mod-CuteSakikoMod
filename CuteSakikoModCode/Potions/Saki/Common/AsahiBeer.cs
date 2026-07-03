@@ -33,14 +33,14 @@ public sealed class AsahiBeer : CuteSakikoModPotion
         if (target == null || !target.IsAlive)
             return;
 
-        // 造成 15 点伤害（使用 CreatureCmd.Damage）
+        // 造成 15 点伤害
         await CreatureCmd.Damage(
             choiceContext,
             target,
             DynamicVars["Damage"].BaseValue,
             ValueProp.Move,
-            Owner.Creature,
-            null // cardSource
+            null,  // 药水没有 CardModel，传 null
+            null    // 药水没有 CardPlay，传 null
         );
 
         // 给予 15 层压力

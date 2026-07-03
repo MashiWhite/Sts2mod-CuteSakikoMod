@@ -3,7 +3,6 @@ using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -22,7 +21,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events
     {
         private IHoverTip[]? _relicHoverTips;  // 缓存遗物提示
         
-        public override bool IsShared => true;
+        public override bool IsShared => false;
 
         public override EventAssetProfile AssetProfile => new(
             InitialPortraitPath: "res://CuteSakikoMod/images/events/coin_parking.png"
@@ -102,8 +101,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events
                 Owner!.Creature,
                 5m,
                 ValueProp.Unblockable | ValueProp.Unpowered,
-                (Creature?)null,
-                (CardModel?)null
+                null,
+                null
             );
 
             var selected = await CardSelectCmd.FromDeckForRemoval(

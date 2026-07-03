@@ -45,7 +45,7 @@ public class DeterminedToWin() : CuteSakikoModCard(0, CardType.Attack, CardRarit
             var pressure = basePressure + i * step;
 
             await DamageCmd.Attack(damage)
-                .FromCard(this)
+                .FromCard(this,cardPlay)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

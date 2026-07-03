@@ -1,8 +1,10 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -16,7 +18,6 @@ public sealed class OblivionisPower : CuteSakikoModPower
 
     static OblivionisPower()
     {
-        // ★ 订阅自定义遗忘事件（在类静态构造时注册）
         MemoryCardPileManager.CardsForgotten += OnCardsForgotten;
     }
 
@@ -51,20 +52,11 @@ public sealed class OblivionisPower : CuteSakikoModPower
             await CreatureCmd.Damage(
                 choiceContext,
                 enemies,
-                damagePerCard,
-                ValueProp.Unpowered,
+                new DamageVar(damagePerCard, ValueProp.Unpowered),
                 owner.Creature,
-                null);
+                (CardModel?)null,
+                (CardPlay?)null
+            );
         }
-    }
-
-    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
-    {
-        await base.AfterApplied(applier, cardSource);
-    }
-
-    public override async Task AfterRemoved(Creature oldOwner)
-    {
-        await base.AfterRemoved(oldOwner);
     }
 }

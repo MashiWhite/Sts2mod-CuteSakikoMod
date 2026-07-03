@@ -20,6 +20,8 @@ public sealed class AlleyShadowCat : ModEventTemplate
     public override EventAssetProfile AssetProfile => new(
         InitialPortraitPath: "res://CuteSakikoMod/images/events/alley_shadow_cat.png"
     );
+    
+    public override bool IsShared => false;
 
     public override bool IsAllowed(IRunState runState) => true;
 

@@ -36,7 +36,7 @@ public class Jr1() : OtherModTokenCard(0, CardType.Attack, CardRarity.Common, Ta
         // 两次低伤害（基础8，升级10）
         var lowDamage = DynamicVars["lowdamage"].IntValue;
         await DamageCmd.Attack(lowDamage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .WithHitCount(2)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
@@ -44,7 +44,7 @@ public class Jr1() : OtherModTokenCard(0, CardType.Attack, CardRarity.Common, Ta
 
         // 一次高伤害（基础10，升级13）
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

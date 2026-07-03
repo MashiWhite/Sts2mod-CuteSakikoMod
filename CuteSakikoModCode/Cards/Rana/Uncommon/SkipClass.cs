@@ -9,6 +9,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 public class SkipClass : CuteRanaCard
 {
+    public override bool GainsBlock => true;
+    
     private bool _hasPlayedCardThisTurn;
     
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain,CardKeyword.Exhaust];

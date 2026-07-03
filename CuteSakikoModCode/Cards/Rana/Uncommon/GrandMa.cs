@@ -41,7 +41,7 @@ public class GrandMa : CuteRanaCard
         var counts = DynamicVars.Repeat.IntValue;
         
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .WithHitCount(counts)             // 2次（升级后3次）
             .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")

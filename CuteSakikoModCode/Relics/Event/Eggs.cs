@@ -1,7 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
 using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.CardSelection;
@@ -9,7 +7,6 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -22,8 +19,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 
 public sealed class Eggs : CuteSakiRelic
 {
-    [SavedProperty] private readonly List<ModelId> _gainedEggCards = new();
-
     public static PlayerRunSavedData<PlayerEggsData>? PlayerEggsSlot { get; set; }
 
     public override RelicRarity Rarity => RelicRarity.Event;
@@ -40,11 +35,8 @@ public sealed class Eggs : CuteSakiRelic
     {
         if (player != Owner) return;
 
-        if (PlayerEggsSlot != null)
-        {
-            var data = PlayerEggsSlot.Get(player);
-            if (data.HasSelected) return;
-        }
+        var data = PlayerEggsSlot?.Get(player);
+        if (data != null && data.HasSelected) return;
 
         await Cmd.Wait(0.1f);
         await GiveEggCardChoice(choiceContext, player);
@@ -58,8 +50,13 @@ public sealed class Eggs : CuteSakiRelic
 
     private void OnEggCardGained(CardModel card)
     {
-        if (!_gainedEggCards.Contains(card.Id))
-            _gainedEggCards.Add(card.Id);
+        if (Owner == null) return;
+        var entry = card.Id.Entry;
+        PlayerEggsSlot?.Modify(Owner, data =>
+        {
+            if (!data.GainedEggCardEntries.Contains(entry))
+                data.GainedEggCardEntries.Add(entry);
+        });
     }
 
     private async Task GiveEggCardChoice(PlayerChoiceContext choiceContext, Player player)
@@ -109,13 +106,15 @@ public sealed class Eggs : CuteSakiRelic
             .Where(c => typeof(CuteSakikoModEggCard).IsAssignableFrom(c.GetType()))
             .ToList();
 
-        var available = allEggCards.Where(c => !_gainedEggCards.Contains(c.Id)).ToList();
+        var data = PlayerEggsSlot?.Get(player);
+        if (data == null) return false;
+
+        var available = allEggCards.Where(c => !data.GainedEggCardEntries.Contains(c.Id.Entry)).ToList();
         if (available.Count == 0) return false;
 
         var selected = player.RunState.Rng.UpFront.NextItem(available);
         if (selected == null) return false;
 
-        // 转换为可变副本，避免 CanonicalModelException
         var mutableCard = player.RunState.CreateCard(selected, player);
         var cardResult = new CardCreationResult(mutableCard);
         options.Add(cardResult);

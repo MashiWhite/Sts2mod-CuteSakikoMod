@@ -37,7 +37,7 @@ public class StageJitters() : CuteAnonCard(0, CardType.Attack, CardRarity.Uncomm
 
         // 使用计算后的伤害值（会自动应用染色和实时计算）
         await DamageCmd.Attack(DynamicVars.CalculatedDamage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

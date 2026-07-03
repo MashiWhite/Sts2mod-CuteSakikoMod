@@ -17,5 +17,6 @@ public class LayFlat() : ModStatusCard(1, CardType.Status, CardRarity.Status, Ta
     protected override void OnUpgrade()
     {
         RemoveKeyword(CardKeyword.Retain);
+        AddKeyword(CardKeyword.Ethereal);
     }
 }

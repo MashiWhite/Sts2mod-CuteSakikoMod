@@ -28,7 +28,7 @@ public class GuitarStrike() : CuteRanaCard(1, CardType.Attack, CardRarity.Common
         var count = DynamicVars["Count"].IntValue;
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .WithHitCount(count)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

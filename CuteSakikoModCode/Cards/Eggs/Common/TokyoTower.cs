@@ -41,10 +41,15 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
         // 3. 等待动画飞入
         await Cmd.CustomScaledWait(0.25f, 0.8f);
 
-        // 4. 造成伤害
+        // 4. 对主目标造成伤害（使用多目标重载，传入单元素列表）
         var damageResults = (await CreatureCmd.Damage(
-            choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
-            ValueProp.Move, this)).ToList();
+            choiceContext,
+            new[] { cardPlay.Target },
+            new DamageVar(DynamicVars.Damage.BaseValue, ValueProp.Move),
+            Owner.Creature,
+            this,
+            null
+        )).ToList();
 
         // 5. 对其他敌方队友造成同等伤害
         var primary = damageResults.FirstOrDefault();
@@ -58,9 +63,16 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
                 .ToList();
 
             if (otherEnemies.Count > 0)
-                await CreatureCmd.Damage(choiceContext, otherEnemies,
-                    totalDamage, ValueProp.Unpowered | ValueProp.Move,
-                    Owner.Creature, this);
+            {
+                await CreatureCmd.Damage(
+                    choiceContext,
+                    otherEnemies,
+                    new DamageVar(totalDamage, ValueProp.Unpowered | ValueProp.Move),
+                    Owner.Creature,
+                    this,
+                    null
+                );
+            }
         }
     }
 

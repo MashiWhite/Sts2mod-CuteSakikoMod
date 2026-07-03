@@ -27,21 +27,19 @@ public class StageConfidence() : CuteSakikoModCard(0, CardType.Skill, CardRarity
         }
     }
 
-    protected override PileType GetResultPileTypeForCardPlay()
+    protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount >= 5)
-            return PileType.Hand;
-        return PileType.Discard;
+            return (PileType.Hand, CardPilePosition.Bottom);
+        return (PileType.Discard, CardPilePosition.Bottom);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 获得格挡
         var block = DynamicVars.Block.IntValue;
         await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
-        // 若压力足够，消耗5层压力（返回手牌已在GetResultPileType中处理）
         var pressure = Owner.Creature.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount >= 5)
             await PowerCmd.ModifyAmount(choiceContext, pressure, -5, Owner.Creature, this);
@@ -49,6 +47,6 @@ public class StageConfidence() : CuteSakikoModCard(0, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3m); // 10 → 13
+        DynamicVars.Block.UpgradeValueBy(3m);
     }
 }

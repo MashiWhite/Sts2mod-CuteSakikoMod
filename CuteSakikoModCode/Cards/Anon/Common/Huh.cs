@@ -30,7 +30,7 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
 
         // 一次多段随机攻击
         await DamageCmd.Attack(damage)
-            .FromCard(this)
+            .FromCard(this,cardPlay)
             .TargetingRandomOpponents(combat)
             .WithHitCount(_hitCount)
             .WithHitFx("vfx/vfx_attack_slash")

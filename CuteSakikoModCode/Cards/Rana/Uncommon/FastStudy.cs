@@ -61,7 +61,7 @@ public class FastStudy : CuteRanaCard
         {
             DynamicVars.Damage.BaseValue = totalDamage;
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this)
+                .FromCard(this,cardPlay)
                 .TargetingAllOpponents(combatState)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

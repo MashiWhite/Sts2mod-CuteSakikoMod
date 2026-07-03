@@ -1,4 +1,11 @@
 ﻿{
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.title": "Naming Sense",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.description": "Change the display name of a target ally for the remainder of the run.",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.title": "Change {target}'s name",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.placeholder": "Enter a new name for {target}",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.confirm": "Confirm",
+  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.cancel": "Cancel",
+  
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.title": "Strike",
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.description": "Deal {Damage:diff()} damage.",
   "CUTE_SAKIKO_MOD_CARD_RANA_DEFEND.title": "Defend",
@@ -140,6 +147,9 @@
   "CUTE_SAKIKO_MOD_CARD_NEKO_LEADER.description": "At the start of each turn, add 1 [gold]Cat[/gold] to your hand.",
   "CUTE_SAKIKO_MOD_CARD_EVE_LIVE.title": "Eve of Live",
   "CUTE_SAKIKO_MOD_CARD_EVE_LIVE.description": "For each card you play this turn, gain 1 [gold]Live[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.title": "Hungry Cat",
+  "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.description": "Choose and [gold]Exhaust[/gold] {Cards:diff()} card(s) in your [gold]hand[/gold].\nTreat this as consuming that many cups of [gold]Matcha Parfait[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.selectionScreenPrompt": "Choose cards to [gold]Exhaust[/gold]",
   
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "Test Card",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "A test card.",

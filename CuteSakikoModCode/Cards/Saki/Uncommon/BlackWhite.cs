@@ -38,7 +38,7 @@ public class BlackWhite() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unc
             if (hasPressure)
             {
                 await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                    .FromCard(this)
+                    .FromCard(this,cardPlay)
                     .TargetingAllOpponents(CombatState)
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);

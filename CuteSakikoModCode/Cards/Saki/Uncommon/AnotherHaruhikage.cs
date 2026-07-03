@@ -47,7 +47,7 @@ public class AnotherHaruhikage() : CuteSakikoModCard(2, CardType.Attack, CardRar
             foreach (var enemy in enemies)
             {
                 await DamageCmd.Attack(damage)
-                    .FromCard(this)
+                    .FromCard(this,cardPlay)
                     .Targeting(enemy)
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);
