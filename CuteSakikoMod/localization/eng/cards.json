@@ -150,6 +150,9 @@
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.title": "Hungry Cat",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.description": "Choose and [gold]Exhaust[/gold] {Cards:diff()} card(s) in your [gold]hand[/gold].\nTreat this as consuming that many cups of [gold]Matcha Parfait[/gold].",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.selectionScreenPrompt": "Choose cards to [gold]Exhaust[/gold]",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_WANT.title": "Cat Wants, Cat Gets",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_WANT.description": "Choose 1 card in your [gold]hand[/gold]. Add {Cards:diff()} [gold]Exhaust[/gold]-ing copy(ies) of it to your [gold]hand[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_WANT.selectionScreenPrompt": "Choose a card in your hand to copy.",
   
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "Test Card",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "A test card.",
@@ -409,7 +412,7 @@
   "CUTE_SAKIKO_MOD_CARD_POWER_NOTE.title": "Power Note",
   "CUTE_SAKIKO_MOD_CARD_POWER_NOTE.description": "Gain a [gold]Power[/gold] Note.",
   "CUTE_SAKIKO_MOD_CARD_ESCAPISM_TENDENCY.title": "Tendency to Escape",
-  "CUTE_SAKIKO_MOD_CARD_ESCAPISM_TENDENCY.description": "At the start of your turn, randomly [gold]discard[/gold] 1 card.\nAt the end of your turn, gain {EscapismTendencyPower:diff()} Block.",
+  "CUTE_SAKIKO_MOD_CARD_ESCAPISM_TENDENCY.description": "At the start of each turn,\nchoose and [gold]discard[/gold] 1 card.\nAt the end of your turn, gain {EscapismTendencyPower:diff()} Block.",
   "CUTE_SAKIKO_MOD_CARD_WALK_HANDING.title": "Walking Hand in Hand",
   "CUTE_SAKIKO_MOD_CARD_WALK_HANDING.description": "Can only be played on an ally with [gold]Tendency to Escape[/gold].\nCleanse their [gold]Tendency to Escape[/gold]; both of you gain {WalkHandingPower:diff()} Block at the end of each turn.",
   "CUTE_SAKIKO_MOD_CARD_HASTY_PLAY.title": "Guitar Performance: Hasty",

@@ -1,15 +1,14 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Systems;
+﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 {
     public sealed class NameSense : CuteAnonCard
     {
-        public NameSense() : base(0, CardType.Skill, CardRarity.Common, TargetType.AnyAlly)
+        public NameSense() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
         {
         }
 

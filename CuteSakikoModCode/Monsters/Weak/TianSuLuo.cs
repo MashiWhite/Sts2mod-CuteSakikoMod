@@ -19,8 +19,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Weak;
 [RegisterMonster]
 public class TianSuLuo : ModMonsterTemplate
 {
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 55, 45);
-    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 70, 60);
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 40, 35);
+    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 50, 45);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/tiansuluo.tscn"
@@ -28,9 +28,9 @@ public class TianSuLuo : ModMonsterTemplate
 
     // 高进阶时伤害和格挡 +1
     private int OhYeahDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 5, 4);
-    private int OhYeahBlock => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 6, 5);
-    private int ActingCuteBlock => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 7, 6);
-    private int HappyBlock => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 6, 5);
+    private int OhYeahBlock => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 5, 3);
+    private int ActingCuteBlock => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 4, 3);
+    private int HappyBlock => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 3, 2);
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {

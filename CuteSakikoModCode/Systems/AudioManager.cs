@@ -1,7 +1,4 @@
 ﻿using Godot;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using MegaCrit.Sts2.Core.Nodes.Audio;
@@ -12,7 +9,7 @@ using CuteSakikoMod.CuteSakikoModCode.Others;
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 /// <summary>
-/// 管理模组的音效和音乐播放，提供线程安全、GC 安全和路径编码安全封装。
+/// 管理模组的音效和音乐播放，基于 RitsuLib 的 FMOD 封装，增加预加载检查防止闪退。
 /// </summary>
 public static class AudioManager
 {
@@ -29,6 +26,10 @@ public static class AudioManager
     // ---- 路径编码修复缓存（映射原始路径 -> 纯 ASCII 临时路径） ----
     private static readonly Dictionary<string, string> _cachedAsciiPaths = new();
     private static readonly object _pathCacheLock = new();
+
+    // ---- 预加载记录（避免重复尝试已知失败文件） ----
+    private static readonly HashSet<string> _preloadedPaths = new();
+    private static readonly object _preloadLock = new();
 
     // ==================== 公开接口 ====================
 
@@ -47,7 +48,7 @@ public static class AudioManager
     }
 
     /// <summary>
-    /// 播放背景音乐（循环）。线程安全，但非主线程调用会返回 null（调用者应处理）。
+    /// 播放背景音乐（循环）。线程安全，但非主线程调用会返回 null。
     /// </summary>
     public static AudioMusicHandle? PlayMusic(string filePath, float baseVolume = 1.0f)
     {
@@ -88,11 +89,7 @@ public static class AudioManager
     private static bool IsMainThread() => OS.GetMainThreadId() == OS.GetThreadCallerId();
 
     // ---- 路径编码修复 ----
-    /// <summary>
-    /// 将任意路径（可能包含中文等非 ASCII 字符）转换为纯 ASCII 的临时文件路径。
-    /// 如果源文件已复制过，直接返回缓存路径；否则复制到 %TEMP% 并缓存。
-    /// </summary>
-    private static string GetAsciiSafePath(string originalPath)
+    private static string? GetAsciiSafePath(string originalPath)
     {
         lock (_pathCacheLock)
         {
@@ -107,7 +104,10 @@ public static class AudioManager
             sourceExists = File.Exists(originalPath);
 
         if (!sourceExists)
-            return originalPath;
+        {
+            STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] Audio file not found: {originalPath}");
+            return null;
+        }
 
         byte[] hashBytes;
         using (var md5 = MD5.Create())
@@ -121,7 +121,9 @@ public static class AudioManager
 
         var tempDir = Path.Combine(Path.GetTempPath(), "CuteSakikoModAudio");
         Directory.CreateDirectory(tempDir);
-        var safePath = Path.Combine(tempDir, hashName + extension);
+
+        var uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
+        var safePath = Path.Combine(tempDir, $"{hashName}_{uniqueId}{extension}");
 
         if (!File.Exists(safePath))
         {
@@ -132,7 +134,10 @@ public static class AudioManager
                 {
                     using var file = Godot.FileAccess.Open(originalPath, Godot.FileAccess.ModeFlags.Read);
                     if (file == null)
-                        return originalPath;
+                    {
+                        STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] Failed to open Godot resource: {originalPath}");
+                        return null;
+                    }
                     var length = (long)file.GetLength();
                     data = file.GetBuffer(length);
                 }
@@ -143,9 +148,10 @@ public static class AudioManager
 
                 File.WriteAllBytes(safePath, data);
             }
-            catch
+            catch (Exception ex)
             {
-                return originalPath;
+                STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] Failed to copy audio file to safe path: {originalPath} -> {safePath}. Reason: {ex.Message}");
+                return null;
             }
         }
 
@@ -156,27 +162,112 @@ public static class AudioManager
         return safePath;
     }
 
+    // ---- 预加载检查（使用 RitsuLib 的预加载接口） ----
+    private static bool EnsurePreloadedAsSound(string safePath)
+    {
+        lock (_preloadLock)
+        {
+            if (_preloadedPaths.Contains(safePath))
+                return true;
+        }
+
+        bool success = FmodStudioStreamingFiles.TryPreloadAsSound(safePath);
+
+        if (success)
+        {
+            lock (_preloadLock)
+            {
+                _preloadedPaths.Add(safePath);
+            }
+        }
+        else
+        {
+            STS2RitsuLib.RitsuLibFramework.Logger.Warn($"[AudioManager] FMOD cannot preload file, skipping playback: {safePath}");
+        }
+
+        return success;
+    }
+
+    private static bool EnsurePreloadedAsStreamingMusic(string safePath)
+    {
+        lock (_preloadLock)
+        {
+            if (_preloadedPaths.Contains(safePath))
+                return true;
+        }
+
+        bool success = FmodStudioStreamingFiles.TryPreloadAsStreamingMusic(safePath);
+
+        if (success)
+        {
+            lock (_preloadLock)
+            {
+                _preloadedPaths.Add(safePath);
+            }
+        }
+        else
+        {
+            STS2RitsuLib.RitsuLibFramework.Logger.Warn($"[AudioManager] FMOD cannot preload music file, skipping playback: {safePath}");
+        }
+
+        return success;
+    }
+
     // ---- 音效播放（内部） ----
     private static void PlaySoundInternal(string filePath, float baseVolume)
     {
-        var safePath = GetAsciiSafePath(filePath);
-
-        var settings = SaveManager.Instance?.SettingsSave;
-        var masterVol = settings?.VolumeMaster ?? 1.0f;
-        var sfxVol = settings?.VolumeSfx ?? 1.0f;
-        var modSfxVol = ModConfig.ModSfxVolume;
-        var finalVol = Mathf.Clamp(baseVolume * masterVol * sfxVol * modSfxVol, 0.0f, 1.0f);
-
-        var handle = FmodStudioStreamingFiles.TryCreateSoundHandle(safePath);
-        if (handle == null)
+        try
         {
-            FmodStudioStreamingFiles.TryPlaySoundFile(safePath, finalVol);
-            return;
+            var safePath = GetAsciiSafePath(filePath);
+            if (string.IsNullOrEmpty(safePath))
+                return;
+
+            // 🔒 预加载检查：FMOD 无法加载的文件直接跳过，避免原生层崩溃
+            if (!EnsurePreloadedAsSound(safePath))
+                return;
+
+            var settings = SaveManager.Instance?.SettingsSave;
+            var masterVol = settings?.VolumeMaster ?? 1.0f;
+            var sfxVol = settings?.VolumeSfx ?? 1.0f;
+            var modSfxVol = ModConfig.ModSfxVolume;
+
+            var rawVol = baseVolume * masterVol * sfxVol * modSfxVol;
+            if (float.IsNaN(rawVol) || float.IsInfinity(rawVol))
+                rawVol = 1.0f;
+            var finalVol = Mathf.Clamp(rawVol, 0.0f, 1.0f);
+
+            // 定期清理无效句柄
+            PurgeInvalidHandles();
+
+            var handle = FmodStudioStreamingFiles.TryCreateSoundHandle(safePath);
+            if (handle != null)
+            {
+                if (GodotObject.IsInstanceValid(handle.RawInstance))
+                {
+                    handle.RawInstance.Call("set_volume", finalVol);
+                    handle.RawInstance.Call("play");
+                    CacheHandle(handle);
+                }
+                else
+                {
+                    // 句柄无效，回退到简单播放
+                    FmodStudioStreamingFiles.TryPlaySoundFile(safePath, finalVol);
+                }
+            }
+            else
+            {
+                // 无法创建句柄，回退到简单播放
+                FmodStudioStreamingFiles.TryPlaySoundFile(safePath, finalVol);
+            }
         }
+        catch (Exception e)
+        {
+            STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] PlaySound error: {e}");
+        }
+    }
 
-        handle.RawInstance.Call("set_volume", finalVol);
-        handle.RawInstance.Call("play");
-
+    private static void CacheHandle(AudioFileHandle handle)
+    {
         lock (_handleLock)
         {
             _activeSoundHandles.Add(handle);
@@ -190,78 +281,121 @@ public static class AudioManager
         }
     }
 
+    private static void PurgeInvalidHandles()
+    {
+        lock (_handleLock)
+        {
+            _activeSoundHandles.RemoveAll(h => !GodotObject.IsInstanceValid(h.RawInstance));
+        }
+    }
+
     // ---- 音乐播放（内部） ----
     private static AudioMusicHandle? PlayMusicInternal(string filePath, float baseVolume)
     {
-        var safePath = GetAsciiSafePath(filePath);
-
-        if (_currentMusicHandle != null &&
-            GodotObject.IsInstanceValid(_currentMusicHandle.RawInstance) &&
-            _currentMusicPath == safePath)
+        try
         {
-            return _currentMusicHandle;
+            var safePath = GetAsciiSafePath(filePath);
+            if (string.IsNullOrEmpty(safePath))
+                return null;
+
+            // 🔒 预加载检查
+            if (!EnsurePreloadedAsStreamingMusic(safePath))
+                return null;
+
+            if (_currentMusicHandle != null &&
+                GodotObject.IsInstanceValid(_currentMusicHandle.RawInstance) &&
+                _currentMusicPath == safePath)
+            {
+                return _currentMusicHandle;
+            }
+
+            StopMusicInternal();
+
+            if (!_nativeMusicStopped)
+            {
+                NRunMusicController.Instance?.StopMusic();
+                _nativeMusicStopped = true;
+            }
+
+            var settings = SaveManager.Instance?.SettingsSave;
+            var masterVol = settings?.VolumeMaster ?? 1.0f;
+            var bgmVol = settings?.VolumeBgm ?? 1.0f;
+            var modBgmVol = ModConfig.ModBgmVolume;
+
+            var rawVol = baseVolume * masterVol * modBgmVol * bgmVol;
+            if (float.IsNaN(rawVol) || float.IsInfinity(rawVol))
+                rawVol = 1.0f;
+            var finalVol = Mathf.Clamp(rawVol, 0.0f, 1.0f);
+
+            var options = new AudioPlaybackOptions { Scope = AudioLifecycleScope.Combat };
+            var handle = FmodStudioStreamingFiles.TryCreateStreamingMusicHandle(safePath, options);
+            if (handle != null && GodotObject.IsInstanceValid(handle.RawInstance))
+            {
+                handle.RawInstance.Call("set_volume", finalVol);
+                handle.RawInstance.Call("play");
+                handle.RawInstance.Call("set_loop_count", -1);
+                _currentMusicHandle = handle;
+                _currentMusicPath = safePath;
+            }
+            return handle;
         }
-
-        StopMusicInternal();
-
-        if (!_nativeMusicStopped)
+        catch (Exception e)
         {
-            NRunMusicController.Instance?.StopMusic();
-            _nativeMusicStopped = true;
+            STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] PlayMusic error: {e}");
+            return null;
         }
-
-        var settings = SaveManager.Instance?.SettingsSave;
-        var masterVol = settings?.VolumeMaster ?? 1.0f;
-        var bgmVol = settings?.VolumeBgm ?? 1.0f;
-        var modBgmVol = ModConfig.ModBgmVolume;
-        var finalVol = Mathf.Clamp(baseVolume * masterVol * modBgmVol * bgmVol, 0.0f, 1.0f);
-
-        var options = new AudioPlaybackOptions { Scope = AudioLifecycleScope.Combat };
-        var handle = FmodStudioStreamingFiles.TryCreateStreamingMusicHandle(safePath, options);
-        if (handle != null)
-        {
-            handle.RawInstance.Call("set_volume", finalVol);
-            handle.RawInstance.Call("play");
-            handle.RawInstance.Call("set_loop_count", -1);
-            _currentMusicHandle = handle;
-            _currentMusicPath = safePath;
-        }
-        return handle;
     }
 
     // ---- 刷新音乐音量（内部） ----
     private static void RefreshMusicVolumeInternal()
     {
-        if (_currentMusicHandle == null || !GodotObject.IsInstanceValid(_currentMusicHandle.RawInstance))
+        try
         {
-            _currentMusicHandle = null;
-            _currentMusicPath = null;
-            return;
-        }
+            if (_currentMusicHandle == null || !GodotObject.IsInstanceValid(_currentMusicHandle.RawInstance))
+            {
+                _currentMusicHandle = null;
+                _currentMusicPath = null;
+                return;
+            }
 
-        var settings = SaveManager.Instance?.SettingsSave;
-        var masterVol = settings?.VolumeMaster ?? 1.0f;
-        var bgmVol = settings?.VolumeBgm ?? 1.0f;
-        var modBgmVol = ModConfig.ModBgmVolume;
-        var finalVol = Mathf.Clamp(1.0f * masterVol * bgmVol * modBgmVol, 0.0f, 1.0f);
-        _currentMusicHandle.RawInstance.Call("set_volume", finalVol);
+            var settings = SaveManager.Instance?.SettingsSave;
+            var masterVol = settings?.VolumeMaster ?? 1.0f;
+            var bgmVol = settings?.VolumeBgm ?? 1.0f;
+            var modBgmVol = ModConfig.ModBgmVolume;
+            var rawVol = 1.0f * masterVol * bgmVol * modBgmVol;
+            if (float.IsNaN(rawVol) || float.IsInfinity(rawVol))
+                rawVol = 1.0f;
+            var finalVol = Mathf.Clamp(rawVol, 0.0f, 1.0f);
+            _currentMusicHandle.RawInstance.Call("set_volume", finalVol);
+        }
+        catch (Exception e)
+        {
+            STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] RefreshMusicVolume error: {e}");
+        }
     }
 
     // ---- 停止音乐（内部） ----
     private static void StopMusicInternal()
     {
-        if (_currentMusicHandle != null)
+        try
         {
-            if (GodotObject.IsInstanceValid(_currentMusicHandle.RawInstance))
-                _currentMusicHandle.RawInstance.Call("stop");
-            _currentMusicHandle = null;
-            _currentMusicPath = null;
-        }
+            if (_currentMusicHandle != null)
+            {
+                if (GodotObject.IsInstanceValid(_currentMusicHandle.RawInstance))
+                    _currentMusicHandle.RawInstance.Call("stop");
+                _currentMusicHandle = null;
+                _currentMusicPath = null;
+            }
 
-        if (_nativeMusicStopped)
+            if (_nativeMusicStopped)
+            {
+                NRunMusicController.Instance?.UpdateMusic();
+                _nativeMusicStopped = false;
+            }
+        }
+        catch (Exception e)
         {
-            NRunMusicController.Instance?.UpdateMusic();
-            _nativeMusicStopped = false;
+            STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] StopMusic error: {e}");
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+﻿using MegaCrit.Sts2.Core.CardSelection;        // CardSelectorPrefs
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -23,16 +25,30 @@ public sealed class EscapismTendencyPower : CuteSakikoModPower
         var hand = player.PlayerCombatState?.Hand;
         if (hand == null || hand.Cards.Count == 0) return;
 
-        var cards = hand.Cards.ToList();
-        var rng = player.RunState.Rng.CombatCardSelection;
-        var cardToDiscard = cards[rng.NextInt(cards.Count)];
-        await CardCmd.Discard(choiceContext, cardToDiscard);
+        // 选择一张手牌丢弃，不可取消
+        var prefs = new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, 1, 1)
+        {
+            Cancelable = false
+        };
+
+        var selectedCards = await CardSelectCmd.FromHand(
+            choiceContext,
+            player,
+            prefs,
+            null,          // 所有手牌均可选
+            this
+        );
+
+        var cardToDiscard = selectedCards.FirstOrDefault();
+        if (cardToDiscard != null)
+            await CardCmd.Discard(choiceContext, cardToDiscard);
     }
 
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
         await base.AfterSideTurnEnd(choiceContext, side, participants);
-        if (side == Owner.Side) await CreatureCmd.GainBlock(Owner, Amount, 0, null);
+        if (side == Owner.Side)
+            await CreatureCmd.GainBlock(Owner, Amount, 0, null);
     }
 }

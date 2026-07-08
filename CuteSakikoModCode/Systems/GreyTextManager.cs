@@ -24,33 +24,66 @@ public static class GreyTextManager
 
     public static void Setup(NCombatRoom room)
     {
-        if (_container != null && GodotObject.IsInstanceValid(_container))
+        if (_container != null && GodotObject.IsInstanceValid(_container) && _container.GetParent() == room)
             return;
+
+        if (_container != null && GodotObject.IsInstanceValid(_container))
+        {
+            _container.QueueFree();
+        }
 
         _container = new Node2D
         {
             Name = "GreyTextContainer",
-            ZIndex = 100   // 确保在最顶层，不被战斗 UI 遮挡
+            ZIndex = 100
         };
         room.AddChild(_container);
         _font = ThemeDB.FallbackFont;
+        GD.Print("[GreyTextManager] Setup complete for room: " + room.Name);
     }
 
     public static void Spawn(string text, Vector2 position, string? audioPath = null)
     {
-        if (_container == null) return;
+        EnsureContainer();
+
+        if (_container == null || !GodotObject.IsInstanceValid(_container))
+        {
+            GD.PrintErr("[GreyTextManager] Container invalid, cannot spawn.");
+            return;
+        }
+
+        // ★ 添加粗体 BBCode，不破坏原有颜色标签
+        string boldText = "[font_size=38][b]" + text + "[/b][/font_size]";
 
         var label = GetOrCreateLabel();
-        // 先设置完整文本
-        label.Text = text;
-        // ★ 关键：在标签进入场景树之前，就将可见字符数归零，防止第一帧渲染全部文字
+        label.Text = boldText;
         label.VisibleCharacters = 0;
         label.Visible = true;
         label.Modulate = Colors.White;
         label.Position = position;
 
         _container.AddChild(label);
-        _ = AnimateText(label, text, position, audioPath);
+        _ = AnimateText(label, boldText, position, audioPath);
+    }
+
+    private static void EnsureContainer()
+    {
+        if (_container != null && GodotObject.IsInstanceValid(_container))
+        {
+            var currentRoom = NCombatRoom.Instance;
+            if (currentRoom != null && _container.GetParent() == currentRoom)
+                return;
+        }
+
+        var room = NCombatRoom.Instance;
+        if (room != null)
+        {
+            Setup(room);
+        }
+        else
+        {
+            GD.PrintErr("[GreyTextManager] Cannot ensure container: NCombatRoom.Instance is null.");
+        }
     }
 
     private static async Task AnimateText(MegaRichTextLabel label, string fullText, Vector2 basePosition, string? audioPath)
@@ -60,11 +93,9 @@ public static class GreyTextManager
         const float floatDistance = 50f;
         const float stayDuration = 1.5f;
 
-        // 等待一帧，让 BBCode 解析完成（此时 VisibleCharacters 已经是 0，不会显示文字）
         await Task.Yield();
         if (!GodotObject.IsInstanceValid(label)) return;
 
-        // 打字机效果：逐字增加 VisibleCharacters
         int totalChars = fullText.Length;
         for (int i = 0; i < totalChars; i++)
         {
@@ -78,11 +109,9 @@ public static class GreyTextManager
 
         label.Position = basePosition;
 
-        // 停留
         await Task.Delay((int)(stayDuration * 1000));
         if (!GodotObject.IsInstanceValid(label)) return;
 
-        // 浮动淡出
         var tween = _container?.CreateTween();
         if (tween == null) return;
 
@@ -92,7 +121,6 @@ public static class GreyTextManager
         await Task.Delay((int)(floatDuration * 1000) + 50);
         if (!GodotObject.IsInstanceValid(label)) return;
 
-        // 回收
         label.Visible = false;
         label.GetParent()?.RemoveChild(label);
     }
@@ -118,18 +146,16 @@ public static class GreyTextManager
         var label = new MegaRichTextLabel
         {
             BbcodeEnabled = true,
-            FitContent = false,           // 必须关闭，否则与 AutoSizeEnabled 冲突
-            AutoSizeEnabled = false,      // 关闭自动字号
+            FitContent = false,
+            AutoSizeEnabled = false,
             ScrollActive = false,
             Visible = false,
             MouseFilter = Control.MouseFilterEnum.Ignore
         };
 
-        // 固定一个较大的尺寸，保证所有台词都能完整显示
         label.Size = new Vector2(800, 120);
 
-        // 样式
-        label.AddThemeFontSizeOverride("normal_font_size", 35);
+        label.AddThemeFontSizeOverride("normal_font_size", 80);
         if (_font != null)
             label.AddThemeFontOverride("normal_font", _font);
 

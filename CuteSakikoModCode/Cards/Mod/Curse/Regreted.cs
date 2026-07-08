@@ -11,18 +11,20 @@ public class Regreted : ModCurseCard
     public Regreted() : base(0, CardType.Curse, CardRarity.Ancient, TargetType.Self)
     {
     }
-
-    protected override bool IsPlayable => true;
     public override int MaxUpgradeLevel => 0;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        get { yield return CardKeyword.Exhaust; }
+        get
+        {
+            yield return CardKeyword.Exhaust;
+            yield return CardKeyword.Ethereal;
+        }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new HpLossVar(2m); }
+        get { yield return new HpLossVar(1m); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

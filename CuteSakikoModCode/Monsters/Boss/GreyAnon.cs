@@ -5,22 +5,22 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Scaffolding.Godot;
-using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Rooms;
 using Timer = Godot.Timer;
-
 
 namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 
@@ -30,7 +30,9 @@ public class GreyAnon : ModMonsterTemplate
     private bool _isPhaseTwo;
     private MoveState _performState;
     private Timer? _greyTextTimer;
-    private string? _lastMonologueKey;
+    private int _monologueIndex = 0;
+    private List<string> _monologueKeys = new();
+    private Vector2 _lastGreyTextPosition = new Vector2(-1000, -1000); // 记录上一次位置，避免重叠
 
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 950, 850);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 1030, 930);
@@ -39,24 +41,6 @@ public class GreyAnon : ModMonsterTemplate
         "res://CuteSakikoMod/scenes/monster/grey_anon_boss.tscn"
     );
 
-    public void StartGreyText()
-    {
-        // 防止重复创建
-        if (_greyTextTimer != null) return;
-
-        var room = NCombatRoom.Instance;
-        if (room == null) return;
-
-        _greyTextTimer = new Timer
-        {
-            WaitTime = 4.5f,
-            OneShot = false,
-            Autostart = true
-        };
-        _greyTextTimer.Timeout += SpawnRandomMonologue;
-        room.AddChild(_greyTextTimer);
-    }
-    
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
         return RitsuGodotNodeFactories.CreateFromScenePath<NCreatureVisuals>(AssetProfile.VisualsScenePath!);
@@ -97,54 +81,118 @@ public class GreyAnon : ModMonsterTemplate
         }
     }
 
+    // 初始化台词列表（按数字顺序）
+    private void InitializeMonologueKeys()
+    {
+        if (_monologueKeys.Count > 0) return;
+
+        const string prefix = "CUTE_SAKIKO_MOD_MONSTER_GREY_ANON.monologue";
+        var table = LocManager.Instance.GetTable("monsters");
+        var allLocStrings = table.GetLocStringsWithPrefix(prefix);
+        _monologueKeys = allLocStrings
+            .Select(loc => loc.LocEntryKey)
+            .OrderBy(key =>
+            {
+                var numStr = key.Substring(prefix.Length + 1);
+                return int.TryParse(numStr, out var num) ? num : 0;
+            })
+            .ToList();
+
+        if (_monologueKeys.Count == 0)
+            _monologueKeys = new List<string>();
+    }
+
+    // 启动定时器
     private void StartGreyTextTimer()
     {
+        StopGreyTextTimer();
+
         var room = NCombatRoom.Instance;
         if (room == null) return;
 
         _greyTextTimer = new Timer
         {
-            WaitTime = 3.5f,   // 比总动画时长略短，保证无缝衔接
+            WaitTime = 4.0f,          // 4 秒间隔
             OneShot = false,
             Autostart = true
         };
-        _greyTextTimer.Timeout += SpawnRandomMonologue;
+        _greyTextTimer.Timeout += SpawnMonologueSequentially;
         room.AddChild(_greyTextTimer);
     }
 
-    private void SpawnRandomMonologue()
+    // 停止定时器
+    private void StopGreyTextTimer()
     {
-        if (Creature.IsDead) return;
-
-        var rng = Creature.CombatState.RunState.Rng.Shuffle;
-        const string prefix = "CUTE_SAKIKO_MOD_MONSTER_GREY_ANON.monologue";
-        var allLines = LocManager.Instance.GetTable("monsters").GetLocStringsWithPrefix(prefix);
-        if (allLines.Count == 0) return;
-
-        var candidates = allLines.AsEnumerable();
-        if (_lastMonologueKey != null && allLines.Count > 1)
+        if (_greyTextTimer != null)
         {
-            candidates = allLines.Where(l => l.LocEntryKey != _lastMonologueKey);
-            if (!candidates.Any())
-                candidates = allLines;
+            if (GodotObject.IsInstanceValid(_greyTextTimer))
+            {
+                _greyTextTimer.Stop();
+                _greyTextTimer.Timeout -= SpawnMonologueSequentially;
+                _greyTextTimer.QueueFree();
+            }
+            _greyTextTimer = null;
+        }
+    }
+
+    // 顺序播放台词
+    private void SpawnMonologueSequentially()
+    {
+        if (Creature == null || Creature.IsDead || NCombatRoom.Instance == null)
+        {
+            StopGreyTextTimer();
+            return;
         }
 
-        var line = rng.NextItem(candidates);
-        if (line != null && !line.IsEmpty)
+        if (_monologueKeys.Count == 0) return;
+
+        var key = _monologueKeys[_monologueIndex];
+        var locString = LocManager.Instance.GetTable("monsters").GetLocString(key);
+        if (locString != null && !locString.IsEmpty)
         {
-            _lastMonologueKey = line.LocEntryKey;
-            GreyTextManager.Spawn(line.GetFormattedText(), GetRandomGreyTextPosition());
+            string text = locString.GetFormattedText();
+            GreyTextManager.Spawn(text, GetRandomGreyTextPosition());
         }
+
+        _monologueIndex = (_monologueIndex + 1) % _monologueKeys.Count;
+    }
+
+    // 生成不重叠的随机位置
+    private Vector2 GetRandomGreyTextPosition()
+    {
+        const float minDistance = 300f;
+        Vector2 newPos;
+        int attempts = 0;
+        do
+        {
+            newPos = new Vector2(
+                (float)GD.RandRange(450, 1280),
+                (float)GD.RandRange(300, 750)
+            );
+            attempts++;
+        } while (attempts < 20 && _lastGreyTextPosition.DistanceTo(newPos) < minDistance);
+
+        _lastGreyTextPosition = newPos;
+        return newPos;
     }
 
     public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature, bool wasRemovalPrevented, float deathAnimLength)
     {
-        if (_greyTextTimer != null)
-        {
-            _greyTextTimer.QueueFree();
-            _greyTextTimer = null;
-        }
+        StopGreyTextTimer();
         await base.AfterDeath(choiceContext, creature, wasRemovalPrevented, deathAnimLength);
+    }
+
+    public override async Task AfterCombatEnd(CombatRoom room)
+    {
+        StopGreyTextTimer();
+        await base.AfterCombatEnd(room);
+    }
+
+    // 公开的启动方法，供 AiHeartPower 调用
+    public void StartGreyText()
+    {
+        InitializeMonologueKeys();
+        StartGreyTextTimer();
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -274,12 +322,5 @@ public class GreyAnon : ModMonsterTemplate
                 await CreatureCmd.TriggerAnim(player.Creature, "idle_loop", 0f);
             }
         }
-    }
-
-    private static Vector2 GetRandomGreyTextPosition()
-    {
-        return new Vector2(
-            (float)GD.RandRange(500, 1400),
-            (float)GD.RandRange(300, 650));
     }
 }

@@ -607,7 +607,13 @@ public class AnonGuitar : CuteAnonRelic
             Flash();
             return false;
         }
-
+        // 如果已经练习过，且所有其他选项均已不可用，则也允许清空剩余选项（自动完成）
+        if (PracticeUsedThisVisit)
+        {
+            var options = RunManager.Instance.RestSiteSynchronizer?.GetOptionsForPlayer(player);
+            if (options != null && options.All(o => o is PracticeGuitarOption || !o.IsEnabled))
+                return true;
+        }
         return NormalOptionUsed && PracticeUsedThisVisit;
     }
 
@@ -616,18 +622,25 @@ public class AnonGuitar : CuteAnonRelic
         if (player != Owner) return false;
         NormalOptionUsed = false;
         PracticeUsedThisVisit = false;
-        var hasTent = Owner.Relics.Any(r => r is MiniatureTent);
+
+        // 绑定（确保 HandleAfterPlayerOptionChosen 能被触发）
         ModelDb.Singleton<RestSiteOptionsManager>().BindToSynchronizer();
+
+        // 移除可能残留的旧练习选项，然后无条件添加新选项
         var existingPractice = options.FirstOrDefault(o => o is PracticeGuitarOption);
         if (existingPractice != null) options.Remove(existingPractice);
+
         var canLearn = ChordManager.GetLearnableChordIds(ChordCategory.Major).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Minor).Count > 0 ||
                        ChordManager.GetLearnableChordIds(ChordCategory.Dominant).Count > 0;
-        if (canLearn) options.Add(new PracticeGuitarOption(player, this));
-        if (hasTent)
+        if (canLearn)
+            options.Add(new PracticeGuitarOption(player, this));
+
+        // 有帐篷时仅跳过后续的“普通选项互斥”逻辑，不影响练习吉他的添加
+        if (Owner.Relics.Any(r => r is MiniatureTent))
         {
             Flash();
-            return false;
+            return true; // 返回 true 表示已修改过选项（添加了练习吉他）
         }
 
         return true;

@@ -150,6 +150,9 @@
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.title": "猫がお腹すいた",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.description": "[gold]手札[/gold]のカードを{Cards:diff()}枚選んで[gold]廃棄[/gold]する。\nその枚数分の[gold]抹茶パフェ[/gold]を食べたとみなす。",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.selectionScreenPrompt": "[gold]廃棄[/gold]するカードを選択",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_WANT.title": "猫が欲しい、猫がもらう",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_WANT.description": "[gold]手札[/gold]のカードを1枚選ぶ。その[gold]廃棄[/gold]するコピーを{Cards:diff()}枚[gold]手札[/gold]に加える。",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_WANT.selectionScreenPrompt": "コピーする手札のカードを選択",
   
   "CUTE_SAKIKO_MOD_CARD_TEST.title": "テストカード",
   "CUTE_SAKIKO_MOD_CARD_TEST.description": "テストカード。",
@@ -409,7 +412,7 @@
   "CUTE_SAKIKO_MOD_CARD_POWER_NOTE.title": "パワー音符",
   "CUTE_SAKIKO_MOD_CARD_POWER_NOTE.description": "[gold]パワー[/gold]音符を1つ得る。",
   "CUTE_SAKIKO_MOD_CARD_ESCAPISM_TENDENCY.title": "逃避癖",
-  "CUTE_SAKIKO_MOD_CARD_ESCAPISM_TENDENCY.description": "毎ターン開始時、ランダムに[gold]1枚捨てる[/gold]。\nターン終了時、{EscapismTendencyPower:diff()}ブロックを得る。",
+  "CUTE_SAKIKO_MOD_CARD_ESCAPISM_TENDENCY.description": "毎ターン開始時、\n1枚選んで[gold]捨てる[/gold]。\nターン終了時、{EscapismTendencyPower:diff()}ブロックを得る。",
   "CUTE_SAKIKO_MOD_CARD_WALK_HANDING.title": "手をつないで歩く",
   "CUTE_SAKIKO_MOD_CARD_WALK_HANDING.description": "[gold]逃避癖[/gold]を持つ味方にのみプレイできる。\nその[gold]逃避癖[/gold]を除去し、毎ターン終了時に双方が{WalkHandingPower:diff()}ブロックを得る。",
   "CUTE_SAKIKO_MOD_CARD_HASTY_PLAY.title": "ギター奏：あわてて",

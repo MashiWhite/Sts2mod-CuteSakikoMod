@@ -12,7 +12,7 @@ public class WalkHanding() : OtherModTokenCard(0, CardType.Power, CardRarity.Tok
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new PowerVar<WalkHandingPower>(6m); }
+        get { yield return new PowerVar<WalkHandingPower>(5m); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -41,6 +41,6 @@ public class WalkHanding() : OtherModTokenCard(0, CardType.Power, CardRarity.Tok
 
     protected override void OnUpgrade()
     {
-        DynamicVars["WalkHandingPower"].UpgradeValueBy(3m); // 6-9
+        DynamicVars["WalkHandingPower"].UpgradeValueBy(3m); // 5-8
     }
 }

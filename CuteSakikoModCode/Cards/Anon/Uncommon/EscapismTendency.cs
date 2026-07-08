@@ -12,7 +12,7 @@ public class EscapismTendency() : CuteAnonCard(1, CardType.Power, CardRarity.Unc
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new PowerVar<EscapismTendencyPower>(5m); }
+        get { yield return new PowerVar<EscapismTendencyPower>(4m); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -40,6 +40,6 @@ public class EscapismTendency() : CuteAnonCard(1, CardType.Power, CardRarity.Unc
 
     protected override void OnUpgrade()
     {
-        DynamicVars["EscapismTendencyPower"].UpgradeValueBy(3m); // 5-8
+        DynamicVars["EscapismTendencyPower"].UpgradeValueBy(3m); // 4-7
     }
 }
