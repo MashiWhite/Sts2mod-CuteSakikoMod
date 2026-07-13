@@ -6,9 +6,9 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class PerfectPlay() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class PerfectPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword(),CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword()];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

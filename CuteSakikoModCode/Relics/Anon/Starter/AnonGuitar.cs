@@ -9,6 +9,7 @@ using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -775,9 +776,12 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
     // 本地快速预检：非战斗状态下允许右键查看
     public bool CanHandleRightClickLocal(ModRightClickContext context) => true;
     
-    // 右键执行：打开只读的和弦管理界面
     public async Task OnRightClick(ModRightClickExecutionContext context)
     {
+        // 主人判定：只有发起右键的玩家本人才打开界面，其他客户端忽略
+        var me = LocalContext.GetMe(RunManager.Instance.DebugOnlyGetState()?.Players);
+        if (me == null || me.NetId != this.Owner.NetId) return;
+
         var screen = new ChordManagementScreen();
         screen.SetGuitar(this);
         screen.SetReadOnly(true);
