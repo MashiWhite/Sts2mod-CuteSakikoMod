@@ -22,7 +22,7 @@ public class Recorder : CuteAnonRelic
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        var chordIds = guitar.GetLearnedChordIds();
+        var chordIds = guitar.GetEquippedChordIds();
         if (chordIds.Count == 0) return;
 
         // 随机选择 1 个和弦并演奏

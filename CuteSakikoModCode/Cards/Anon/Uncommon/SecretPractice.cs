@@ -13,7 +13,11 @@ public class SecretPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncom
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(10m, ValueProp.Move); }
+        get
+        {
+            yield return new BlockVar(10m, ValueProp.Move);
+            yield return new RepeatVar(1);
+        }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -22,8 +26,9 @@ public class SecretPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncom
 
         // 演奏所有储存的和弦
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        var count = DynamicVars.Repeat.IntValue;
         if (guitar != null)
-            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext,count);
 
         // 获得格挡
         var blockAmount = DynamicVars.Block.IntValue;
@@ -33,5 +38,6 @@ public class SecretPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncom
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(4m); // 10 → 14
+        DynamicVars.Repeat.UpgradeValueBy(1);
     }
 }

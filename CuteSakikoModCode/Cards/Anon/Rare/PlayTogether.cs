@@ -21,7 +21,7 @@ public class PlayTogether() : CuteAnonCard(-1, CardType.Skill, CardRarity.Rare, 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        var chordIds = guitar.GetLearnedChordIds(); // 所有已学习和弦
+        var chordIds = guitar.GetEquippedChordIds(); // 所有已学习和弦
         if (chordIds.Count == 0) return;
 
         var x = ResolveEnergyXValue();

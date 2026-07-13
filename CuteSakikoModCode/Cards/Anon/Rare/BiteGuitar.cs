@@ -46,7 +46,7 @@ public class BiteGuitar : CuteAnonCard
             (CardType.Power, 0.04)
         };
 
-        foreach (var chordId in guitar.GetLearnedChordIds())
+        foreach (var chordId in guitar.GetEquippedChordIds())
         {
             if (!ChordManager.AllChords.TryGetValue(chordId, out var def)) continue;
 

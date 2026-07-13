@@ -13,7 +13,11 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new BlockVar(9m, ValueProp.Move); }
+        get
+        {
+            yield return new BlockVar(9m, ValueProp.Move);
+            yield return new RepeatVar(1);
+        }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -26,12 +30,14 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
 
         // 演奏最新储存的和弦
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        var count = DynamicVars.Repeat.IntValue;
         if (guitar != null)
-            await guitar.TriggerLastStoredChord(choiceContext);
+            await guitar.TriggerLastStoredChord(choiceContext,count);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(4m); 
+        DynamicVars.Repeat.UpgradeValueBy(1);
     }
 }

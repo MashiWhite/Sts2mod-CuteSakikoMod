@@ -11,7 +11,7 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(16m, ValueProp.Move); }
+        get { yield return new DamageVar(13m, ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -21,7 +21,7 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
         // 演奏所有储存的和弦
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
-            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext,2);
 
         // 对所有敌人造成伤害
         var enemies = Owner.Creature.CombatState?.Enemies;

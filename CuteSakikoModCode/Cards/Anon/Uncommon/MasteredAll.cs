@@ -29,7 +29,7 @@ public class MasteredAll() : CuteAnonCard(4, CardType.Attack, CardRarity.Uncommo
         {
             var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
             if (guitar != null)
-                await guitar.TriggerAllLearnedChords(choiceContext);
+                await guitar.TriggerAllEquippedChords(choiceContext);
         }
     }
 

@@ -10,9 +10,9 @@
   "CHORD_DESC_WITH_CONDITION.title": "",
   "CHORD_DESC_WITH_CONDITION.description": "{effect}\n条件：{condition}",
   "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.title": "回忆",
-  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.description": "储存所有记忆卡牌的原始状态。遗忘一张卡牌时，其记忆也会消失。",
+  "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.description": "储存所有回忆卡牌的原始状态。遗忘一张卡牌时，其回忆也会消失。",
   "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.empty": "回忆中空无一物……",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.title": "遗忘",
-  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "被遗忘的卡牌将永远离开本场战斗，并清除与之相关的记忆。",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "被遗忘的卡牌将永远离开本场战斗，并清除与之相关的回忆。",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "还没有卡牌被遗忘。"
 }

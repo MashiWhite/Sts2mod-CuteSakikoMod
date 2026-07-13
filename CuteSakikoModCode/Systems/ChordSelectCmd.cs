@@ -50,36 +50,5 @@ public static class ChordSelectCmd
 
         return chordIndexes.Select(i => ChordManager.AllChordsList[i].Id).ToList();
     }
-
-    // 供练习吉他使用的同步选择方法（无需 PlayerChoiceContext）
-    public static async Task<List<string>> SelectChordsForPractice(
-        Player player,
-        List<string> candidateIds,
-        LocString prompt)
-    {
-        var sync = RunManager.Instance.PlayerChoiceSynchronizer;
-        var choiceId = sync.ReserveChoiceId(player);
-
-        List<int> chordIndexes;
-
-        if (LocalContext.IsMe(player))
-        {
-            var screen = new ChordLibraryScreen();
-            var selectedIds = await screen.ShowFreeSelection(candidateIds, prompt);
-            chordIndexes = selectedIds
-                .Select(id => ChordManager.AllChordsList.FindIndex(c => c.Id == id))
-                .ToList();
-            sync.SyncLocalChoice(player, choiceId, PlayerChoiceResult.FromIndexes(chordIndexes));
-        }
-        else
-        {
-            var remoteResult = await sync.WaitForRemoteChoice(player, choiceId);
-            chordIndexes = remoteResult.AsIndexes();
-        }
-
-        if (chordIndexes == null || chordIndexes.Count == 0)
-            return new List<string>();
-
-        return chordIndexes.Select(i => ChordManager.AllChordsList[i].Id).ToList();
-    }
+    
 }

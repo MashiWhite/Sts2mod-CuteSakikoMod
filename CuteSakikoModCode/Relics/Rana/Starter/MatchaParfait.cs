@@ -29,16 +29,29 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     private int _currentTurnCount;
     private int _drawAmount = 1;
     private int _energyGain = 1;
-
+    
     [SavedProperty]
     public int TotalConsumedThisCombat
     {
         get => _totalConsumedThisCombat;
-        private set
+        set
         {
             if (_totalConsumedThisCombat == value) return;
             _totalConsumedThisCombat = value;
-            InvokeDisplayAmountChanged(); // 可选，用于更新相关 UI
+            InvokeDisplayAmountChanged();
+        }
+    }
+
+    [SavedProperty]
+    public int CurrentTurnCount
+    {
+        get => _currentTurnCount;
+        set
+        {
+            if (_currentTurnCount == value) return;
+            _currentTurnCount = value;
+            RelicExtraIconAmountLabelsInvalidated?.Invoke();
+            InvokeDisplayAmountChanged();
         }
     }
     
@@ -50,19 +63,6 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         {
             if (_charges == value) return;
             _charges = value;
-            InvokeDisplayAmountChanged();
-        }
-    }
-
-    [SavedProperty]
-    public int CurrentTurnCount
-    {
-        get => _currentTurnCount;
-        private set
-        {
-            if (_currentTurnCount == value) return;
-            _currentTurnCount = value;
-            RelicExtraIconAmountLabelsInvalidated?.Invoke();
             InvokeDisplayAmountChanged();
         }
     }

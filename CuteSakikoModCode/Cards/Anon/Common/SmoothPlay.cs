@@ -20,7 +20,7 @@ public class SmoothPlay : CuteAnonCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(20m, ValueProp.Move); }
+        get { yield return new DamageVar(25m, ValueProp.Move); }
     }
 
     public override void AfterCreated()
@@ -92,6 +92,6 @@ public class SmoothPlay : CuteAnonCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m); // 20 → 25
+        DynamicVars.Damage.UpgradeValueBy(10m); // 20 → 25
     }
 }

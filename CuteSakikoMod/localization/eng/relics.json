@@ -36,7 +36,7 @@
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.description": "Allows you to memorize an additional random Chord.",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.flavor": "[pink]Anon's sheet music. Though it's battered and torn, at least she got it back.[/pink]",
   "CUTE_SAKIKO_MOD_RELIC_RECORDER.title": "Recorder",
-  "CUTE_SAKIKO_MOD_RELIC_RECORDER.description": "On the first turn of each combat, randomly [gold]Perform[/gold] 1 [pink]Learned Chord[/pink].",
+  "CUTE_SAKIKO_MOD_RELIC_RECORDER.description": "On the first turn of each combat, randomly [gold]Perform[/gold] 1 [pink]Memorized Chord[/pink].",
   "CUTE_SAKIKO_MOD_RELIC_RECORDER.flavor": "[pink][b]I can record my coolest guitar moments![/b][/pink]",
   "CUTE_SAKIKO_MOD_RELIC_ROUGH_SKETCH.title": "Rough Sketch",
   "CUTE_SAKIKO_MOD_RELIC_ROUGH_SKETCH.description": "At the start of each combat, add a random [pink]Chord[/pink] card to your hand and give it [gold]Ethereal[/gold].",

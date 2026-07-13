@@ -120,7 +120,7 @@ public static class ChordDisplayHelper
             var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, owner);
 
             // 组合：效果 + 条件
-            var fullDesc = new LocString("static_hover_tips", "CHORD_DESC_WITH_CONDITION");
+            var fullDesc = new LocString("static_hover_tips", "CHORD_DESC_WITH_CONDITION.description");
             fullDesc.Add("effect", effectDesc);
             fullDesc.Add("condition", condition);
 

@@ -1,4 +1,4 @@
-﻿
+﻿using System.Linq;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using MegaCrit.Sts2.Core.CardSelection;
@@ -20,9 +20,9 @@ public class HungryNeko : CuteRanaCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new CardsVar(1); } // 用于描述需要消耗的数量
+        get { yield return new CardsVar(1); }
     }
-    
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -34,31 +34,31 @@ public class HungryNeko : CuteRanaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int count = DynamicVars.Cards.IntValue;
+        int count = DynamicVars.Cards.IntValue;          // 最大可选数量：升级前1，升级后2
         var hand = PileType.Hand.GetPile(Owner);
         int handCount = hand?.Cards.Count ?? 0;
-        int actualSelect = Math.Min(count, handCount);
+        int maxSelect = Math.Min(count, handCount);
 
-        if (actualSelect > 0)
+        // 最少可选 0 张，允许跳过
+        var prefs = new CardSelectorPrefs(
+            new LocString("cards", "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.selectionScreenPrompt"),
+            0, maxSelect);
+
+        var selected = await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, this);
+        var selectedCards = selected.ToList();
+        foreach (var card in selectedCards)
         {
-            var prefs = new CardSelectorPrefs(
-                new LocString("cards", "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.selectionScreenPrompt"),
-                actualSelect,
-                actualSelect
-            );
-            var selected = await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, this);
-            foreach (var card in selected)
-            {
-                await CardCmd.Exhaust(choiceContext, card);
-            }
+            await CardCmd.Exhaust(choiceContext, card);
         }
 
-        // 视为食用了 count 杯抹茶芭菲（无论实际消耗了几张牌）
-        MatchaParfait.SimulateParfaitEaten(Owner, count, choiceContext);
+        // 食用杯数 = 实际消耗的手牌数量（选择了几张就吃几杯）
+        int eaten = selectedCards.Count;
+        if (eaten > 0)
+            MatchaParfait.SimulateParfaitEaten(Owner, eaten, choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Cards.UpgradeValueBy(1); // 1 -> 2
+        DynamicVars.Cards.UpgradeValueBy(1); // 1 → 2
     }
 }

@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Random;
 
@@ -13,9 +14,8 @@ public static class MusicNoteManager
 
     private static readonly Dictionary<Player, PlayerData> _data = new();
 
-    // ---------- 新增：音符变化事件 ----------
+    // 音符变化事件，所有修改音符的地方都会触发
     public static event Action<Player>? PlayerNotesChanged;
-    // --------------------------------------
 
     private static PlayerData GetData(Player player)
     {
@@ -24,10 +24,13 @@ public static class MusicNoteManager
             data = new PlayerData();
             _data[player] = data;
         }
-
         return data;
     }
-    
+
+    /// <summary>
+    /// 统一的异步入口：添加音符 → 触发 GuitarVocalPower → 自动演奏和弦。
+    /// 所有有上下文的音符添加（如打牌、遗物触发）都应调用此方法。
+    /// </summary>
     public static async Task AddNoteAndAutoPlayAsync(
         Player player,
         CardType type,
@@ -35,19 +38,28 @@ public static class MusicNoteManager
         IEnumerable<string> bonusChordIds,
         PlayerChoiceContext context)
     {
+        // 1. 同步添加音符，获取识别结果
         var result = AddNote(player, type, learnedChords, bonusChordIds);
 
+        // 2. 触发 GuitarVocalPower（如果有）
+        var vocalPower = player?.Creature?.GetPower<GuitarVocalPower>();
+        if (vocalPower != null)
+            await vocalPower.OnNoteGained(context, 1);
+
+        // 3. 自动演奏和弦（溢出、立即演奏、StageNerves）
         var guitar = player?.Relics?.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null && context != null)
+        if (guitar != null)
             await guitar.AutoPlayNewChords(context, result);
     }
 
+    /// <summary>
+    /// 同步添加音符，识别和弦并存储。不触发任何异步效果。
+    /// </summary>
     public static NoteProcessResult AddNote(
         Player player,
         CardType type,
         IReadOnlyDictionary<ChordCategory, string> learnedChords,
-        IEnumerable<string> bonusChordIds,
-        PlayerChoiceContext? context = null)
+        IEnumerable<string> bonusChordIds)
     {
         var result = new NoteProcessResult
         {
@@ -114,23 +126,12 @@ public static class MusicNoteManager
 
         result.TotalStoredCount = data.StoredChords.Count;
 
-        if (player?.Creature != null)
-        {
-            var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
-            if (vocalPower != null) _ = vocalPower.OnNoteGained(1);
-        }
-
-        if (context != null)
-        {
-            var guitar = player.Relics?.OfType<AnonGuitar>().FirstOrDefault();
-            if (guitar != null)
-                _ = guitar.AutoPlayNewChords(context, result);
-        }
-
-        // ★ 音符变化通知
+        // 音符变化通知（UI 刷新）
         PlayerNotesChanged?.Invoke(player);
         return result;
     }
+
+    // 以下所有方法保持不变，包括 ModifyAllNotes、RemoveRandomNote 等，均已在音符变动处触发事件。
 
     public static int GetNotesGainedThisTurn(Player player)
     {
@@ -143,7 +144,6 @@ public static class MusicNoteManager
             data.NotesGainedThisTurn = 0;
             data.LastRoundNumber = currentRound;
         }
-
         return data.NotesGainedThisTurn;
     }
 
@@ -158,8 +158,7 @@ public static class MusicNoteManager
         for (var i = 0; i < notesArray.Length; i++)
             if (i != removeIndex)
                 data.Notes.Enqueue(notesArray[i]);
-        
-        // ★ 音符变化通知
+
         PlayerNotesChanged?.Invoke(player);
         return true;
     }
@@ -186,8 +185,6 @@ public static class MusicNoteManager
     {
         if (player == null) return;
         GetData(player).Notes.Clear();
-        
-        // ★ 音符变化通知
         PlayerNotesChanged?.Invoke(player);
     }
 
@@ -202,8 +199,6 @@ public static class MusicNoteManager
             data.TotalNotesGainedThisCombat = 0;
             data.LastRoundNumber = 0;
         }
-        
-        // ★ 音符变化通知
         PlayerNotesChanged?.Invoke(player);
     }
 
@@ -211,8 +206,6 @@ public static class MusicNoteManager
     {
         if (player == null) return;
         _data.Remove(player);
-        
-        // ★ 音符变化通知
         PlayerNotesChanged?.Invoke(player);
     }
 
@@ -227,7 +220,6 @@ public static class MusicNoteManager
             list.RemoveAt(index);
             return true;
         }
-
         return false;
     }
 
@@ -253,12 +245,10 @@ public static class MusicNoteManager
         var data = GetData(player);
         var count = data.Notes.Count;
         data.Notes.Clear();
-        
-        // ★ 音符变化通知
         PlayerNotesChanged?.Invoke(player);
         return count;
     }
-    
+
     /// <summary>
     /// 将所有当前音符全部修改为指定类型。如果没有音符则返回 false。
     /// </summary>
@@ -285,8 +275,6 @@ public static class MusicNoteManager
         data.Notes.Clear();
         foreach (var note in notesArray)
             data.Notes.Enqueue(note);
-        
-        // ★ 音符变化通知
         PlayerNotesChanged?.Invoke(player);
         return true;
     }

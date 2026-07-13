@@ -13,6 +13,6 @@
   "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.description": "Stores the original state of all Memory cards. When a card is Forgotten, its Memory also disappears.",
   "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.empty": "There is nothing in memory...",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.title": "Forget",
-  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "Forgotten cards permanently leave this combat and clear their associated Memories.",
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "Forgotten cards permanently leave this combat, and the Memories associated with them are cleared.",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "No cards have been forgotten yet."
 }

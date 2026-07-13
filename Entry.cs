@@ -201,9 +201,26 @@ public class Entry
                     // 刷新所有 UI
                     NameChangeCmd.RefreshAllPlayerNameUI();
                 }));
+                
+                netService.RegisterMessageHandler(new MessageHandlerDelegate<ChordSyncMessage>((msg, senderId) =>
+                {
+                    // 忽略自己发出的消息（本地已处理）
+                    if (msg.PlayerNetId == netService.NetId) return;
+    
+                    var state = RunManager.Instance.DebugOnlyGetState();
+                    if (state == null) return;
+                    var player = state.Players.FirstOrDefault(p => p.NetId == msg.PlayerNetId);
+                    if (player == null) return;
+                    var guitar = player.Relics.OfType<AnonGuitar>().FirstOrDefault();
+                    if (guitar == null) return;
+    
+                    guitar.RestoreChordData(msg.ChordsData, msg.BonusChordsData, "");
+                    guitar.SetLearnedChordsFromString(msg.LearnedChordsData);
+                }));
 
                 if (netService is NetHostGameService hostService)
                     hostService.ClientConnected += peerId => { FlybackManager.SyncReloadCountIfHost(); };
+                
             }
         };
         

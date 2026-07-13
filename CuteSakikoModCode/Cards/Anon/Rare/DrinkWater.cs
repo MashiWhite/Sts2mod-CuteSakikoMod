@@ -5,9 +5,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class DrinkWater() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class DrinkWater() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {

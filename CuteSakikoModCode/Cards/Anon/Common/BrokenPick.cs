@@ -24,7 +24,9 @@ public class BrokenPick() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, T
         var noteCount = MusicNoteManager.ClearNotesAndGetCount(Owner);
         var blockAmount = noteCount * DynamicVars.Block.IntValue;
 
-        if (blockAmount > 0) await CreatureCmd.GainBlock(Owner.Creature, blockAmount, 0, null);
+        // 传入 cardPlay 和 ValueProp.Move，确保被遗物加成
+        if (blockAmount > 0)
+            await CreatureCmd.GainBlock(Owner.Creature, blockAmount, ValueProp.Move, cardPlay);
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         guitar?.UpdateNoteDisplay();

@@ -28,7 +28,7 @@ public class SongOfStrength() : CuteAnonCard(-1, CardType.Power, CardRarity.Unco
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        var chordIds = guitar.GetLearnedChordIds();
+        var chordIds = guitar.GetEquippedChordIds();
         if (chordIds.Count == 0) return;
 
         var attackCount = 0;

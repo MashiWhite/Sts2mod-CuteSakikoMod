@@ -1,4 +1,6 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -11,7 +13,7 @@ public class GuitarVocalPower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    public async Task OnNoteGained(int count)
+    public async Task OnNoteGained(PlayerChoiceContext context, int count)
     {
         var owner = Owner;
         if (owner?.CombatState == null) return;
@@ -19,7 +21,7 @@ public class GuitarVocalPower : CuteSakikoModPower
         int totalDamage = count * Amount;
         if (totalDamage <= 0) return;
 
-        var hittableEnemies = owner.CombatState.HittableEnemies;
+        var hittableEnemies = owner.CombatState.HittableEnemies.ToList();
         if (hittableEnemies.Count == 0) return;
 
         var rng = owner.CombatState.RunState.Rng.CombatTargets;
@@ -28,12 +30,13 @@ public class GuitarVocalPower : CuteSakikoModPower
         Flash();
 
         await CreatureCmd.Damage(
-            new ThrowingPlayerChoiceContext(),
+            context,
             target,
-            new DamageVar(totalDamage, ValueProp.Unpowered),
-            Owner,      // 伤害来源（能力所属生物）
-            null,       // 没有卡牌来源
-            null        // 没有 CardPlay
+            totalDamage,
+            ValueProp.Unpowered,
+            Owner,
+            null,
+            null
         );
     }
 }

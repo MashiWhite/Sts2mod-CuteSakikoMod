@@ -6,13 +6,12 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class PrepSupply() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class PrepSupply() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
-            // 未升级获得1点能量，升级后2点
             yield return new EnergyVar(1);
         }
     }
@@ -32,6 +31,6 @@ public class PrepSupply() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Energy.UpgradeValueBy(1m); // 1-2
+        EnergyCost.UpgradeBy(-1);
     }
 }

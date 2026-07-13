@@ -21,7 +21,6 @@ public class KnightSword : ModTokenCard
     {
     }
 
-    // 使用属性来存储额外伤害，满足 SavedProperty 要求
     [SavedProperty]
     private int ExtraDamage { get; set; }
 
@@ -45,6 +44,14 @@ public class KnightSword : ModTokenCard
     public override TargetType TargetType => HasSweepPower ? TargetType.AllEnemies : base.TargetType;
 
     private bool HasSweepPower => IsMutable && Owner != null && Owner.Creature.HasPower<SakiSweepPower>();
+
+    // ★ 在克隆/降级/读档完成后恢复额外伤害
+    protected override void AfterCloned()
+    {
+        base.AfterCloned();
+        if (ExtraDamage > 0)
+            DynamicVars.Damage.BaseValue += ExtraDamage;
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -71,17 +78,10 @@ public class KnightSword : ModTokenCard
     {
         EnergyCost.UpgradeBy(-1);
         DynamicVars.Damage.UpgradeValueBy(5);
-        // 恢复累积的额外伤害
-        if (ExtraDamage > 0)
-            DynamicVars.Damage.BaseValue += ExtraDamage;
+        // 不再手动恢复，AfterCloned 会处理
     }
 
-    protected override void AfterDowngraded()
-    {
-        base.AfterDowngraded();
-        if (ExtraDamage > 0)
-            DynamicVars.Damage.BaseValue += ExtraDamage;
-    }
+    // 不再需要 AfterDowngraded
 
     public static void IncreaseDamage(int delta, CombatState combatState)
     {

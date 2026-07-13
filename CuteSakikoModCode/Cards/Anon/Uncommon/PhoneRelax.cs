@@ -32,6 +32,5 @@ public class PhoneRelax() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon,
     protected override void OnUpgrade()
     {
         DynamicVars["Cards"].UpgradeValueBy(1m); // 1 → 2
-        EnergyCost.UpgradeBy(-1);
     }
 }

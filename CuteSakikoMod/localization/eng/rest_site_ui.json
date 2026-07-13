@@ -1,8 +1,8 @@
 ﻿{
   "CUTE_SAKIKO_MOD_OPTION_PRACTICE_GUITAR_NAME": "Practice Guitar",
-  "CUTE_SAKIKO_MOD_PRACTICE_GUITAR_DESC": "Randomly replace the chord in each chord category.",
+  "CUTE_SAKIKO_MOD_PRACTICE_GUITAR_DESC": "Allows you to change your sequence of [pink]Memorized Chords[/pink].",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_BROWSE_TITLE": "Chord Library",
-  "CUTE_SAKIKO_MOD_CHORD_LIBRARY_SELECT_TITLE": "Select {Count} chord(s)",
+  "CUTE_SAKIKO_MOD_CHORD_LIBRARY_SELECT_TITLE": "Select {Count} Chord(s)",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_FREE_SELECT_TITLE": "{Prompt}",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_MAJOR": "Major Chords",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_MINOR": "Minor Chords",
@@ -11,6 +11,11 @@
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_BONUS": "Bonus Chords",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CATEGORY_OTHER": "Other Chords",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CONFIRM": "Confirm",
+  "CUTE_SAKIKO_MOD_RETURN": "Return",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_CANCEL": "Cancel",
-  "CUTE_SAKIKO_MOD_PRACTICE_GUITAR_SELECT_PROMPT": "Select the chords to change (unselected ones will be kept)."
+  "CUTE_SAKIKO_MOD_PRACTICE_GUITAR_SELECT_PROMPT": "Select the chords you want to change (unselected ones will be kept).",
+  "CUTE_SAKIKO_MOD_SLOT_MAJOR": "Major Chord Slot",
+  "CUTE_SAKIKO_MOD_SLOT_MINOR": "Minor Chord Slot",
+  "CUTE_SAKIKO_MOD_SLOT_DOMINANT": "Dominant 7th Chord Slot",
+  "CUTE_SAKIKO_MOD_SLOT_BONUS": "Bonus Chord Slot"
 }
