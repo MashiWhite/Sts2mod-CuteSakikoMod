@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+﻿
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,7 +14,7 @@ public class LiveHappy : CuteRanaCard
     public LiveHappy() : base(-1, CardType.Attack, CardRarity.Rare, TargetType.RandomEnemy)
     {
     }
-    
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
 
     protected override bool HasEnergyCostX => true;
@@ -31,7 +32,6 @@ public class LiveHappy : CuteRanaCard
         }
     }
 
-    // 只有拥有“莱芜爽”能力时才可打出
     protected override bool IsPlayable => Owner != null && Owner.Creature.HasPower<LiveSweetPower>();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -41,6 +41,7 @@ public class LiveHappy : CuteRanaCard
 
         var combat = Owner.Creature.CombatState;
         var targetRng = Owner.RunState.Rng.CombatTargets;
+        var damage = DynamicVars.Damage.BaseValue;
 
         bool anyKill;
         do
@@ -52,8 +53,16 @@ public class LiveHappy : CuteRanaCard
                 if (enemies.Count == 0) break;
 
                 var target = enemies[targetRng.NextInt(enemies.Count)];
-                var results = await CreatureCmd.Damage(choiceContext, target, DynamicVars.Damage, this, null);
-                if (results.Any(r => r.WasTargetKilled))
+
+                // 每次攻击构建一个新的 AttackCommand，并传入 cardPlay
+                var attackCmd = await DamageCmd.Attack(damage)
+                    .FromCard(this, cardPlay)  // 注意第二个参数
+                    .Targeting(target)
+                    .WithHitFx("vfx/vfx_attack_slash")
+                    .Execute(choiceContext);
+
+                // 检查是否有敌人被击杀
+                if (attackCmd.Results.SelectMany(r => r).Any(dr => dr.WasTargetKilled))
                     anyKill = true;
             }
         } while (anyKill);

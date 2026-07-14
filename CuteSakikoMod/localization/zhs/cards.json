@@ -88,7 +88,7 @@
   "CUTE_SAKIKO_MOD_CARD_GROOM_QUIETLY.description": "获得{Block:diff()}点格挡。\n将1张[gold]猫咪[/gold]加入手牌。",
   "CUTE_SAKIKO_MOD_CARD_THRILLING_LIVE.title": "酣畅淋漓的Live",
   "CUTE_SAKIKO_MOD_CARD_THRILLING_LIVE.description": "对所有敌人造成{Damage:diff()}点伤害。",
-  "CUTE_SAKIKO_MOD_CARD_LIVE_HAPPY.title": "Live爽！",
+  "CUTE_SAKIKO_MOD_CARD_LIVE_HAPPY.title": "莱芜爽！",
   "CUTE_SAKIKO_MOD_CARD_LIVE_HAPPY.description": "[gold]莱芜爽[/gold]期间才可打出。\n随机造成{Damage:diff()}点伤害X次。\n若击杀敌人则重复效果。",
   "CUTE_SAKIKO_MOD_CARD_REPLY_HELPER.title": "帮我回消息",
   "CUTE_SAKIKO_MOD_CARD_REPLY_HELPER.description": "选择手牌里的一张牌[gold]移除[/gold]，将其添加到队友的手牌。",

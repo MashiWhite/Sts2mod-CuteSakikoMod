@@ -6,8 +6,12 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class MendedGrudge() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public class MendedGrudge : CuteAnonCard
 {
+    public MendedGrudge() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+    {
+    }
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(8m, ValueProp.Move)
@@ -15,8 +19,8 @@ public class MendedGrudge() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncomm
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
-        get 
-        { 
+        get
+        {
             yield return CardKeyword.Retain;
         }
     }
@@ -25,22 +29,26 @@ public class MendedGrudge() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncomm
     {
         TriggerBanter();
 
-        var damage = DynamicVars.Damage.BaseValue;
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        // 1. 先对所有敌人造成伤害
+        // 对所有敌人造成伤害
         var enemies = combat.Enemies;
-        if (enemies != null)
-            await CreatureCmd.Damage(choiceContext, enemies, damage, ValueProp.Move, Owner.Creature);
+        if (enemies != null && enemies.Any())
+        {
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+                .FromCard(this, cardPlay)
+                .TargetingAllOpponents(combat)            // 修正为全体目标
+                .WithHitFx("vfx/vfx_attack_slash")
+                .Execute(choiceContext);
+        }
 
-        // 2. 收集并移除手牌中的所有状态卡
+        // 收集并移除手牌中的所有状态卡
         var hand = PileType.Hand.GetPile(Owner);
         if (hand == null) return;
 
         var statusCards = hand.Cards.Where(c => c.Type == CardType.Status).ToList();
-        var count = statusCards.Count;
-        if (count == 0) return;
+        if (statusCards.Count == 0) return;
 
         await CardPileCmd.RemoveFromCombat(statusCards);
     }

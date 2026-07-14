@@ -34,12 +34,11 @@ public class HungryNeko : CuteRanaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int count = DynamicVars.Cards.IntValue;          // 最大可选数量：升级前1，升级后2
+        int count = DynamicVars.Cards.IntValue;
         var hand = PileType.Hand.GetPile(Owner);
         int handCount = hand?.Cards.Count ?? 0;
         int maxSelect = Math.Min(count, handCount);
 
-        // 最少可选 0 张，允许跳过
         var prefs = new CardSelectorPrefs(
             new LocString("cards", "CUTE_SAKIKO_MOD_CARD_HUNGRY_NEKO.selectionScreenPrompt"),
             0, maxSelect);
@@ -51,14 +50,13 @@ public class HungryNeko : CuteRanaCard
             await CardCmd.Exhaust(choiceContext, card);
         }
 
-        // 食用杯数 = 实际消耗的手牌数量（选择了几张就吃几杯）
         int eaten = selectedCards.Count;
         if (eaten > 0)
-            MatchaParfait.SimulateParfaitEaten(Owner, eaten, choiceContext);
+            await MatchaParfait.SimulateParfaitEaten(Owner, eaten, choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Cards.UpgradeValueBy(1); // 1 → 2
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

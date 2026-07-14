@@ -29,7 +29,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     private int _currentTurnCount;
     private int _drawAmount = 1;
     private int _energyGain = 1;
-    
+
     [SavedProperty]
     public int TotalConsumedThisCombat
     {
@@ -54,7 +54,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             InvokeDisplayAmountChanged();
         }
     }
-    
+
     [SavedProperty]
     public int Charges
     {
@@ -103,8 +103,6 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     }
 
     public event Action? RelicExtraIconAmountLabelsInvalidated;
-
-    // 实例事件，不带额外参数
     public event Action<Player, int, PlayerChoiceContext?>? ChargesRemoved;
 
     public override RelicRarity Rarity => RelicRarity.Starter;
@@ -128,7 +126,6 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             Entry.Logger.Info("[芭菲] 效果开始");
             await CardPileCmd.Draw(context.PlayerChoiceContext, DrawAmount, player);
             await PlayerCmd.GainEnergy(EnergyGain, player);
-            // 右键食用强制忽略“有人请客”
             await RemoveCharges(this, 1, context.PlayerChoiceContext, ignoreTreat: true);
             Entry.Logger.Info("[芭菲] 效果完成");
         }
@@ -151,7 +148,6 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         if (side == CombatSide.Player && Owner != null)
         {
             CurrentTurnCount = 0;
-            // 只在第一回合重置本场战斗的累计食用数量
             if (combatState.RoundNumber == 1)
                 TotalConsumedThisCombat = 0;
         }
@@ -175,7 +171,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
                     if (combatState != null)
                     {
                         var brainFreeze = combatState.CreateCard<BrainFreeze>(Owner);
-                        var result = await CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner,CardPilePosition.Random);
+                        var result = await CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner, CardPilePosition.Random);
                         CardCmd.PreviewCardPileAdd(result);
                         Entry.Logger.Info("[芭菲] 添加吃到头疼并预览");
                     }
@@ -193,29 +189,27 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             }
         }
     }
-    
-    public static void SimulateParfaitEaten(Player player, int amount, PlayerChoiceContext? choiceContext)
+
+    // ===== 核心修改：改为 async Task，并 await 两者皆要 =====
+    public static async Task SimulateParfaitEaten(Player player, int amount, PlayerChoiceContext? choiceContext)
     {
         var relic = player.Relics.OfType<MatchaParfait>().FirstOrDefault();
         if (relic != null)
         {
-            // 模拟食用：不扣杯数，但增加计数并触发效果
             relic.TotalConsumedThisCombat += amount;
             relic.ChargesRemoved?.Invoke(player, amount, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
             if (player.Creature.HasPower<WantBothPower>())
             {
-                _ = ApplyWantBothEffect(player, amount, choiceContext);
+                await ApplyWantBothEffect(player, amount, choiceContext);
             }
         }
         else
         {
-            // 没有遗物，仍触发 WantBothPower 效果
             if (player.Creature.HasPower<WantBothPower>())
             {
-                _ = ApplyWantBothEffect(player, amount, choiceContext);
+                await ApplyWantBothEffect(player, amount, choiceContext);
             }
-            // 其他 power 可能需要遗物存在，暂时忽略
         }
     }
 
@@ -225,24 +219,28 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         relic.Charges += amount;
     }
 
-    // 将 RemoveCharges 改为 async Task
+    // ===== 修复：有人请客时也触发两者皆要 =====
     public static async Task RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null, bool ignoreTreat = false)
     {
         if (relic == null) return;
 
         bool hasTreat = relic.Owner.Creature.HasPower<ParfaitTreatPower>();
 
-        // 如果有“有人请客”且不是强制忽略，则卡牌食用不扣杯数
         if (hasTreat && !ignoreTreat)
         {
             Entry.Logger.Info($"[芭菲] 有人请客，不扣除杯数，但计数{amount}次");
             relic.TotalConsumedThisCombat += amount;
             relic.ChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+
+            // 即使不扣杯数，也要触发“两者皆要”
+            if (relic.Owner.Creature.HasPower<WantBothPower>())
+            {
+                await ApplyWantBothEffect(relic.Owner, amount, choiceContext);
+            }
             return;
         }
 
-        // 正常消耗（无请客效果 或 强制忽略）
         int old = relic.Charges;
         relic.Charges = Math.Max(0, relic.Charges - amount);
         int removed = old - relic.Charges;
@@ -259,7 +257,6 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         }
     }
 
-// 原 ApplyWantBothEffect 保持不变
     private static async Task ApplyWantBothEffect(Player player, int amount, PlayerChoiceContext? choiceContext)
     {
         for (int i = 0; i < amount; i++)
