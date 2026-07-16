@@ -1,10 +1,12 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
@@ -18,6 +20,7 @@ public class SongOfStrength() : CuteAnonCard(-1, CardType.Power, CardRarity.Unco
         {
             yield return HoverTipFactory.FromPower<StrengthPower>();
             yield return HoverTipFactory.FromPower<DexterityPower>();
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.EquippedChords.GetModCardKeyword());
         }
     }
 

@@ -44,16 +44,7 @@ public class FlashAnonGuitar : AnonGuitar
         if (!_bonusAdded)
         {
             _bonusAdded = true;
-            if (Owner != null)
-            {
-                var rng = Owner.RunState.Rng.UpFront;
-                var allPools = new List<string>();
-                allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
-                allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
-                allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
-                if (allPools.Count > 0)
-                    AddBonusChord(rng.NextItem(allPools));
-            }
+            ChordCmd.AddRandomBonusChord(this);
         }
     }
 }

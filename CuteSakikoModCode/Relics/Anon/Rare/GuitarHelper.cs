@@ -10,7 +10,8 @@ public class GuitarHelper : CuteAnonRelic, IChordSequenceModifierProvider
 
     public IEnumerable<ChordCategory>? AffectedCategories => null;
 
-    public IEnumerable<ChordSequenceModifier> GetModifiers(Creature creature)
+    // 更新为新接口，增加 chordDef 参数（此处未使用）
+    public IEnumerable<ChordSequenceModifier> GetModifiers(Creature creature, ChordDefinition chordDef)
     {
         return new[] { new RemoveLastNoteModifier() };
     }

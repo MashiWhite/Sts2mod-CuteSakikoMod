@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
@@ -14,6 +16,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
@@ -40,6 +43,9 @@ public class Entry
 
     public static PlayerRunSavedData<PlayerParfaitData> ParfaitChargesSlot = null!;
 
+    // 通配音符类型（仅用于和弦序列识别）
+    public static CardType AnyNote;
+
     private static I18N? _i18n;
     private static I18N I18n => _i18n ??= new I18N(
         instanceName: ModId,
@@ -51,6 +57,10 @@ public class Entry
         var assembly = Assembly.GetExecutingAssembly();
         RitsuLibFramework.EnsureGodotScriptsRegistered(assembly, Logger);
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
+
+        // 注册通配音符类型
+        var cardTypeMinter = new DynamicEnumValueMinter<CardType>();
+        AnyNote = cardTypeMinter.Mint("cute_sakiko_mod:any_note");
 
         CuteSakikoModTelemetry.Register();
 

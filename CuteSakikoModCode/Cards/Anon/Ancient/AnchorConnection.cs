@@ -5,20 +5,11 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Ancient;
 
-public class AnchorConnection() : CuteAnonCard(2, CardType.Skill, CardRarity.Ancient, TargetType.Self)
+public class AnchorConnection() : CuteAnonCard(2, CardType.Power, CardRarity.Ancient, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords
-    {
-        get
-        {
-            yield return CardKeyword.Exhaust;
-            if (IsUpgraded) yield return CardKeyword.Innate;
-        }
-    }
-
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var selectedChordIds = await ChordSelectCmd.SelectChords(choiceContext, Owner, 2);
+        var selectedChordIds = await ChordCmd.SelectChords(choiceContext, Owner, 2);
         if (selectedChordIds.Count < 2) return; // 用户取消或无有效选择
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
@@ -31,7 +22,6 @@ public class AnchorConnection() : CuteAnonCard(2, CardType.Skill, CardRarity.Anc
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
         AddKeyword(CardKeyword.Innate);
     }
 }

@@ -1,10 +1,11 @@
-﻿using Godot;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
-
-// 新增引用
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
@@ -30,7 +31,6 @@ public static class ChordDisplayHelper
             var path = $"res://CuteSakikoMod/images/ui/chords/{def.IconName}.png";
             return GD.Load<Texture2D>(path);
         }
-
         return null;
     }
 
@@ -70,11 +70,9 @@ public static class ChordDisplayHelper
             var desc = new LocString("card_keywords", data.DescKey);
             list.Add($"[{title.GetFormattedText()}]({data.Condition})\n{desc.GetFormattedText() ?? "无效果"}");
         }
-
         return list;
     }
 
-    // 新增方法：返回可用于悬停提示的 HoverTip 对象
     public static HoverTip GetChordHoverTip(string chord, int multiplier = 1)
     {
         if (ChordManager.AllChords.TryGetValue(chord, out var def))
@@ -83,29 +81,23 @@ public static class ChordDisplayHelper
             var descText = GetFormattedDescription(def, multiplier);
             return new HoverTip(title, descText);
         }
-
         return new HoverTip(new LocString("card_keywords", "CUTESAKIKOMOD-CCHORD.title"), "未知和弦");
     }
 
     public static HoverTip GetNoteTypeHoverTip(CardType type)
     {
         string key;
-        switch (type)
+        if (type == Entry.AnyNote)
         {
-            case CardType.Attack:
-                key = "CUTESAKIKOMOD_NOTE_ATTACK";
-                break;
-            case CardType.Skill:
-                key = "CUTESAKIKOMOD_NOTE_SKILL";
-                break;
-            case CardType.Power:
-                key = "CUTESAKIKOMOD_NOTE_POWER";
-                break;
-            default:
-                key = "CUTESAKIKOMOD_NOTE_SPECIAL";
-                break;
+            key = "CUTESAKIKOMOD_NOTE_ANY";
         }
-
+        else switch (type)
+        {
+            case CardType.Attack: key = "CUTESAKIKOMOD_NOTE_ATTACK"; break;
+            case CardType.Skill: key = "CUTESAKIKOMOD_NOTE_SKILL"; break;
+            case CardType.Power: key = "CUTESAKIKOMOD_NOTE_POWER"; break;
+            default: key = "CUTESAKIKOMOD_NOTE_SPECIAL"; break;
+        }
         var title = new LocString("static_hover_tips", $"{key}.title");
         var desc = new LocString("static_hover_tips", $"{key}.description");
         return new HoverTip(title, desc);
@@ -119,14 +111,12 @@ public static class ChordDisplayHelper
             var effectDesc = GetFormattedDescription(def, multiplier);
             var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, owner);
 
-            // 组合：效果 + 条件
-            var fullDesc = new LocString("static_hover_tips", "CHORD_DESC_WITH_CONDITION.description");
+            var fullDesc = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CHORD_DESC_WITH_CONDITION.description");
             fullDesc.Add("effect", effectDesc);
             fullDesc.Add("condition", condition);
 
             return new HoverTip(title, fullDesc);
         }
-
         return new HoverTip(new LocString("card_keywords", "UNKNOWN"), "未知和弦");
     }
 }

@@ -12,7 +12,7 @@ public class PhoneRelax() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon,
     {
         get
         {
-            yield return new CardsVar(1);
+            yield return new CardsVar(2);
             yield return new EnergyVar(1); // 用于描述中的能量图标
         }
     }
@@ -24,7 +24,7 @@ public class PhoneRelax() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon,
         var drawCount = DynamicVars["Cards"].IntValue;
 
         // 立刻抽牌
-        await CardPileCmd.Draw(choiceContext, drawCount, Owner);
+        await CardPileCmd.Draw(choiceContext, 2, Owner);
         await PowerCmd.Apply<EnergyNextTurnPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
         await PowerCmd.Apply<DrawCardsNextTurnPower>(choiceContext, Owner.Creature, drawCount, Owner.Creature, this);
     }

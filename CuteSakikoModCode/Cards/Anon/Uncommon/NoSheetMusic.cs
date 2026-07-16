@@ -18,14 +18,7 @@ public class NoSheetMusic() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommo
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        var pools = new List<string>();
-        pools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
-        pools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
-        pools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
-        if (pools.Count == 0) return;
-
-        var randomChordId = Owner.RunState.Rng.CombatCardSelection.NextItem(pools);
-        await guitar.AddChordToStored(choiceContext, randomChordId);
+        await ChordCmd.AddRandomImprovisedChord(guitar, choiceContext);
     }
 
     protected override void OnUpgrade()

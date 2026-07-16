@@ -42,24 +42,22 @@ public static class ChordSequenceModifierHelper
             if (dict.TryGetValue(chordDef.Id, out var mod))
                 result.Add(mod);
 
-        // 2. 来自 Power 的修改器
+        // 来自 Power 的修改器
         foreach (var provider in creature.Powers.OfType<IChordSequenceModifierProvider>())
         {
             var cats = provider.AffectedCategories;
             if (cats == null || !cats.Any() || cats.Contains(chordDef.Category))
-                result.AddRange(provider.GetModifiers(creature));
+                result.AddRange(provider.GetModifiers(creature, chordDef));  // 传入 chordDef
         }
-
-        // 3. 来自遗物的修改器
+        
+        // 来自遗物的修改器
         if (player != null)
             foreach (var provider in player.Relics.OfType<IChordSequenceModifierProvider>())
             {
                 var cats = provider.AffectedCategories;
                 if (cats == null || !cats.Any() || cats.Contains(chordDef.Category))
-                    result.AddRange(provider.GetModifiers(creature));
+                    result.AddRange(provider.GetModifiers(creature, chordDef));  // 传入 chordDef
             }
-
-
         return result;
     }
 
@@ -74,6 +72,19 @@ public static class ChordSequenceModifierHelper
             seq = mod.Apply(seq);
         return seq;
     }
+    
+    /// <summary>
+    /// 移除某个玩家特定和弦的卡牌临时修改器。
+    /// </summary>
+    public static void RemoveCardModifier(Player player, string chordId)
+    {
+        if (_cardModifiers.TryGetValue(player, out var dict))
+        {
+            dict.Remove(chordId);
+            if (dict.Count == 0)
+                _cardModifiers.Remove(player);
+        }
+    }
 
     /// <summary>
     ///     生成修改后的条件文本（用于 UI）
@@ -85,6 +96,7 @@ public static class ChordSequenceModifierHelper
         foreach (var t in seq)
             parts.Add(t switch
             {
+                _ when t == Entry.AnyNote => "[pink]音[/pink]",
                 CardType.Attack => "[red]攻[/red]",
                 CardType.Skill => "[blue]技[/blue]",
                 CardType.Power => "[gold]能[/gold]",

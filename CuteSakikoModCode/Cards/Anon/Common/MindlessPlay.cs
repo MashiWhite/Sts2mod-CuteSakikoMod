@@ -15,7 +15,7 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
     {
         get
         {
-            yield return new BlockVar(9m, ValueProp.Move);
+            yield return new BlockVar(7m, ValueProp.Move);
             yield return new RepeatVar(1);
         }
     }

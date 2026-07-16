@@ -1,20 +1,22 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Curse;
+﻿
+using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Curse;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Nodes.Combat;
-using MegaCrit.Sts2.Core.ValueProps;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
-using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -25,9 +27,6 @@ public sealed class AiHeartPower : CuteSakikoModPower
 
     private NCreatureVisuals? _liveVisual;
     private NCreatureVisuals? _originalVisual;
-
-    // ★ 记录刚刚被移除的持有者，用于归还时跳过音乐
-    private static readonly HashSet<Creature> _recentlyRemovedOwners = new();
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -45,17 +44,31 @@ public sealed class AiHeartPower : CuteSakikoModPower
         await ReplaceVisual();
         PlayMusic();
 
-        // ★ 启动灰爱音弹幕（如果是 GreyAnon）
         if (Owner.Monster is GreyAnon greyAnon)
         {
             greyAnon.StartGreyText();
+        }
+
+        // 将拥有吉他的玩家的一个随机已记忆和弦替换为灰爱音和弦
+        var combat = Owner.CombatState;
+        if (combat != null)
+        {
+            const string chordId = "GreyAnonChord";
+            foreach (var player in combat.Players)
+            {
+                var guitar = player.Relics.OfType<AnonGuitar>().FirstOrDefault();
+                if (guitar != null)
+                {
+                    guitar.ReplaceRandomEquippedChord(chordId);
+                }
+            }
         }
     }
 
     public override async Task AfterRemoved(Creature oldOwner)
     {
         RestoreVisual();
-        // 不再停止音乐，也不添加任何标记
+        // 不停止音乐，也不做任何标记
     }
 
     // 玩家造成伤害时，给攻击者抽牌堆添加 Regreted
@@ -74,8 +87,32 @@ public sealed class AiHeartPower : CuteSakikoModPower
         if (combatState == null) return;
 
         var regreted = combatState.CreateCard<Regreted>(dealer.Player);
-        var addResult = await CardPileCmd.AddGeneratedCardToCombat(regreted, PileType.Draw, dealer.Player,CardPilePosition.Random);
+        var addResult = await CardPileCmd.AddGeneratedCardToCombat(regreted, PileType.Draw, dealer.Player, CardPilePosition.Random);
         CardCmd.PreviewCardPileAdd(addResult);
+    }
+
+    // ===== 新功能：每回合结束时给持有吉他的玩家储存3个灰爱音和弦 =====
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
+    {
+        // 仅在敌方回合结束（即玩家回合结束）时执行
+        if (side != CombatSide.Enemy) return;
+
+        var combat = Owner.CombatState;
+        if (combat == null) return;
+
+        const string chordId = "GreyAnonChord";
+
+        foreach (var player in combat.Players)
+        {
+            var guitar = player.Relics.OfType<AnonGuitar>().FirstOrDefault();
+            if (guitar == null) continue;
+
+            // 为该玩家构造合法的上下文
+            var ctx = new HookPlayerChoiceContext(player, player.NetId, GameActionType.Combat);
+            var task = guitar.AddChordToStored(ctx, chordId, 3);
+            await ctx.AssignTaskAndWaitForPauseOrCompletion(task);
+        }
     }
 
     private async Task ReplaceVisual()

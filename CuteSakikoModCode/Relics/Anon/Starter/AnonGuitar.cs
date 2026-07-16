@@ -569,11 +569,16 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         }
 
         var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
-        var storedBefore = MusicNoteManager.GetStoredChords(Owner);
-        MusicNoteManager.AddChordDirectly(Owner, chordId);
 
-        if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords)
-            await PlaySingleChord(choiceContext, storedBefore[0], count: count, removeStored: false);
+        // 按 count 次数循环添加
+        for (int i = 0; i < count; i++)
+        {
+            var storedBefore = MusicNoteManager.GetStoredChords(Owner);
+            MusicNoteManager.AddChordDirectly(Owner, chordId);
+
+            if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords)
+                await PlaySingleChord(choiceContext, storedBefore[0], count: 1, removeStored: false);
+        }
 
         UpdateStoredChordDisplay();
         SyncToSaved();
@@ -800,6 +805,29 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         AddToLearnedIfMissing(chordId);
         SyncToSaved();
         if (Owner != null) Flash();
+    }
+    
+    /// <summary>
+    /// 随机将一个已记忆（装备中）的和弦替换为指定和弦，类别不限。
+    /// 如果没有任何已记忆和弦则不操作。
+    /// </summary>
+    public void ReplaceRandomEquippedChord(string newChordId)
+    {
+        EnsureInitialized();
+        if (!ChordManager.AllChords.ContainsKey(newChordId)) return;
+
+        // 过滤出有值的分类
+        var availableCategories = _currentChords
+            .Where(kv => !string.IsNullOrEmpty(kv.Value))
+            .Select(kv => kv.Key)
+            .ToList();
+
+        if (availableCategories.Count == 0) return;
+
+        var rng = Owner.RunState.Rng.Niche;
+        var targetCategory = rng.NextItem(availableCategories);
+
+        ReplaceChord(targetCategory, newChordId);  // 复用已有方法
     }
 
     [HarmonyPatch(typeof(Hook), nameof(Hook.AfterRoomEntered))]

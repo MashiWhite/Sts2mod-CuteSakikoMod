@@ -12,7 +12,8 @@ public class TouchedPerformance() : CuteAnonCard(1, CardType.Skill, CardRarity.U
     {
         get
         {
-            yield return new CardsVar(3);
+            yield return new CardsVar(2);
+            yield return new RepeatVar(2);
         }
     }
 
@@ -21,17 +22,18 @@ public class TouchedPerformance() : CuteAnonCard(1, CardType.Skill, CardRarity.U
         TriggerBanter();
 
         // 抽牌
-        var drawCount = DynamicVars["Cards"].IntValue;
+        var drawCount = DynamicVars.Cards.IntValue;
         await CardPileCmd.Draw(choiceContext, drawCount, Owner);
 
         // 演奏最新储存的和弦
+        var count = DynamicVars.Repeat.IntValue;
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
-            await guitar.TriggerLastStoredChord(choiceContext);
+            await guitar.TriggerLastStoredChord(choiceContext,count);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Cards"].UpgradeValueBy(1m); 
+        DynamicVars.Repeat.UpgradeValueBy(1);
     }
 }

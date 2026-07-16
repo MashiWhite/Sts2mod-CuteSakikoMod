@@ -16,7 +16,8 @@ public class PlayImmediately() : CuteAnonCard(0, CardType.Skill, CardRarity.Anci
     
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new ("Chords",3)
+        new ("Chords",1),
+        new RepeatVar(2)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -43,5 +44,6 @@ public class PlayImmediately() : CuteAnonCard(0, CardType.Skill, CardRarity.Anci
     protected override void OnUpgrade()
     {
         DynamicVars["Chords"].UpgradeValueBy(2);
+        DynamicVars.Repeat.UpgradeValueBy(1);
     }
 }

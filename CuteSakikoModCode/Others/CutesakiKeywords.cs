@@ -17,10 +17,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
 [RegisterOwnedCardKeyword(nameof(OtherAnon))]
 [RegisterOwnedCardKeyword(nameof(Chord))]
+[RegisterOwnedCardKeyword(nameof(LearnedChords))]
+[RegisterOwnedCardKeyword(nameof(EquippedChords))]
 [RegisterOwnedCardKeyword(nameof(RememberChord))]
 [RegisterOwnedCardKeyword(nameof(Memorysaki))]
 [RegisterOwnedCardKeyword(nameof(Sakiforget))]
 [RegisterOwnedCardKeyword(nameof(Parfait))]
+[RegisterOwnedCardKeyword(nameof(AnonNote))]
 [RegisterOwnedCardKeyword(nameof(Neko),
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
 [RegisterOwnedCardKeyword(nameof(RanaLive),
@@ -58,4 +61,10 @@ public class CutesakiKeywords
         RanaLive = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(RanaLive));
     public static readonly string
         Pancake = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Pancake));
+    public static readonly string
+        LearnedChords = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(LearnedChords));
+    public static readonly string
+        EquippedChords = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(EquippedChords));
+    public static readonly string
+        AnonNote = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(AnonNote));
 }

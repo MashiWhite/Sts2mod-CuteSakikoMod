@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -7,26 +8,40 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
-public class PerfectPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class MakeSimpler : CuteAnonCard
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.NoNote.GetModCardKeyword()];
+    public MakeSimpler() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    {
+    }
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords
+    {
+        get
+        {
+            yield return CutesakiKeywords.AnonNote.GetModCardKeyword();
+        }
+    }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
+            yield return HoverTipFactory.FromPower<MakeSimplerPower>();
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.EquippedChords.GetModCardKeyword());
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.LearnedChords.GetModCardKeyword());
         }
     }
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         TriggerBanter();
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar == null) return;
 
-        await guitar.TriggerAllLearnedChords(choiceContext);
+        await PowerCmd.Apply<MakeSimplerPower>(
+            choiceContext,
+            Owner.Creature,
+            1,
+            Owner.Creature,
+            this
+        );
     }
 
     protected override void OnUpgrade()
