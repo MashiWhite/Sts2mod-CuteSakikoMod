@@ -24,7 +24,7 @@ public static class ChordCmd
         var sync = runManager.PlayerChoiceSynchronizer;
         var choiceId = sync.ReserveChoiceId(player);
 
-        await context.SignalPlayerChoiceBegun(PlayerChoiceOptions.CancelPlayCardActions);
+        await context.SignalPlayerChoiceBegun(player,PlayerChoiceOptions.CancelPlayCardActions);
 
         List<int> chordIndexes = null;
 
@@ -80,6 +80,7 @@ public static class ChordCmd
 
         var newChord = guitar.Owner.RunState.Rng.UpFront.NextItem(available);
         guitar.AddBonusChord(newChord);
+        guitar.LearnChord(newChord); // 可选
         return true;
     }
 

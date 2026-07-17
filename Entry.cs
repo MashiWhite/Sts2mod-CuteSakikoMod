@@ -178,12 +178,6 @@ public class Entry
         else
             Logger.Warn("RunManager.Instance is null, RunStarted event not subscribed.");
 
-        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(TimeWatch));
-        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(AnonGuitar));
-        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(FlashAnonGuitar));
-        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(MatchaParfait));
-        SavedPropertiesTypeCache.InjectTypeIntoCache(typeof(BigMatchaParfait));
-
         // 8. 预加载 VFX
         VFXUtil.PreloadScenes(new List<string> { "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
 

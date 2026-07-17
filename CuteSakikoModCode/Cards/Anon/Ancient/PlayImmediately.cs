@@ -30,10 +30,11 @@ public class PlayImmediately() : CuteAnonCard(0, CardType.Skill, CardRarity.Anci
         TriggerBanter();
 
         // 演奏所有储存的和弦
+        var count =DynamicVars.Repeat.IntValue;
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
         {
-            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext,count);
         }
         var chords = DynamicVars["Chords"].BaseValue;
 

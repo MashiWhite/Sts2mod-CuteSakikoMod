@@ -9,6 +9,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Combat.Ui.ExtraCornerAmountLabels;
+using System.Reflection;
+using MegaCrit.Sts2.Core.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
@@ -18,7 +20,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
 {
     private int _hpBoostApplied;
     private bool _subscribed;
-    private int _totalCardWeight; // 当前回合累计打出的卡牌权重（用于UI显示）
+    private int _totalCardWeight;
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -30,7 +32,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
             yield return new DynamicVar("ExtraMaxHp", 0);
             yield return new DynamicVar("FlybackPlayCount", 0);
             yield return new DynamicVar("ReloadCount", 0);
-            yield return new DynamicVar("Countdown", 0); // ★ 加回 Countdown 变量
+            yield return new DynamicVar("Countdown", 0);
         }
     }
 
@@ -43,7 +45,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
             new ExtraIconAmountLabelSlot
             {
                 Corner = ExtraIconAmountLabelCorner.BottomLeft,
-                Text = $"{_totalCardWeight}/{GetTotalLimit()}" // 显示 当前权重/上限
+                Text = $"{_totalCardWeight}/{GetTotalLimit()}"
             }
         };
     }
@@ -83,7 +85,6 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         if (side == CombatSide.Player)
         {
             _totalCardWeight = 0;
-            // ★ 初始化 Countdown 为当前上限
             DynamicVars["Countdown"].BaseValue = GetTotalLimit();
             InvalidateLabels();
         }
@@ -98,7 +99,6 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         var weight = cardPlay.Card is Flyback ? 5 : 1;
         _totalCardWeight += weight;
 
-        // ★ 更新 Countdown（剩余可打出权重）
         var countdown = Math.Max(0, (int)DynamicVars["Countdown"].BaseValue - weight);
         DynamicVars["Countdown"].BaseValue = countdown;
         InvalidateLabels();
@@ -106,12 +106,39 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         if (_totalCardWeight >= GetTotalLimit())
         {
             _totalCardWeight = 0;
-            DynamicVars["Countdown"].BaseValue = GetTotalLimit(); // 重置
+            DynamicVars["Countdown"].BaseValue = GetTotalLimit();
             InvalidateLabels();
+
+            // ★ 关键修复：等待所有玩家选择完成，避免与 DoAnything 等选择界面冲突
+            await WaitForAllChoices();
 
             if (Owner?.CombatState != null)
                 foreach (var p in Owner.CombatState.Players)
                     PlayerCmd.EndTurn(p, false);
+        }
+    }
+
+    // ★ 等待所有进行中的玩家选择完成
+    private async Task WaitForAllChoices()
+    {
+        var sync = RunManager.Instance?.PlayerChoiceSynchronizer;
+        if (sync == null) return;
+
+        // 通过反射获取私有字段 _pendingChoices，判断是否还有等待中的选择
+        var field = sync.GetType().GetField("_pendingChoices", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (field == null) return;
+
+        while (true)
+        {
+            var pending = field.GetValue(sync) as System.Collections.IEnumerable;
+            if (pending == null) break;
+
+            // 如果集合中没有元素，则退出循环
+            var hasAny = false;
+            foreach (var _ in pending) { hasAny = true; break; }
+            if (!hasAny) break;
+
+            await Cmd.Wait(0.1f);
         }
     }
 
@@ -129,7 +156,6 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
         InvokeDisplayAmountChanged();
     }
 
-    // 以下方法保持不变
     private void OnFlybackDataChanged(int playCount, int reloadCount)
     {
         UpdateDynamicInfo(playCount, reloadCount);
@@ -159,7 +185,7 @@ public sealed class LastRetrogradePower : CuteSakikoModPower,
     {
         var playCount = FlybackManager.Instance?.TotalPlayCount ?? 0;
         var reloads = FlybackManager.GetReloadCount();
-        return (int)(playCount * (float)reloads / 10);  // 整数除法，向下取整
+        return (int)(playCount * (float)reloads / 10);
     }
 
     public async Task RefreshHpBoost()

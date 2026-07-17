@@ -27,12 +27,12 @@ public class StageConfidence() : CuteSakikoModCard(0, CardType.Skill, CardRarity
         }
     }
 
-    protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+    protected override CardLocation GetResultLocationForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount >= 5)
-            return (PileType.Hand, CardPilePosition.Bottom);
-        return (PileType.Discard, CardPilePosition.Bottom);
+            return new CardLocation(Owner, PileType.Hand, CardPilePosition.Bottom);
+        return new CardLocation(Owner, PileType.Discard, CardPilePosition.Bottom);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
