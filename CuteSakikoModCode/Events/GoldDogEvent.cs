@@ -15,7 +15,7 @@ using MegaCrit.Sts2.Core.Models.RelicPools;
 namespace CuteSakikoMod.CuteSakikoModCode.Events;
 
 [RegisterSharedEvent]
-public sealed class GoldDogEvent : ModEventTemplate
+public sealed class GoldDogEvent : CuteSakikoEvent 
 {
     public override bool IsShared => true;
 
@@ -29,7 +29,7 @@ public sealed class GoldDogEvent : ModEventTemplate
         new GoldVar(20)
     };
 
-    public override bool IsAllowed(IRunState runState) => runState.CurrentActIndex == 2;
+    protected override bool IsAllowedInternal(IRunState runState) => runState.CurrentActIndex == 2;
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {

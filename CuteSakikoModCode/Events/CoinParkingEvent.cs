@@ -17,7 +17,7 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace CuteSakikoMod.CuteSakikoModCode.Events
 {
     [RegisterSharedEvent]
-    public sealed class CoinParkingEvent : ModEventTemplate
+    public sealed class CoinParkingEvent : CuteSakikoEvent 
     {
         private IHoverTip[]? _relicHoverTips;  // 缓存遗物提示
         
@@ -29,7 +29,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events
 
         protected override IEnumerable<DynamicVar> CanonicalVars => Enumerable.Empty<DynamicVar>();
 
-        public override bool IsAllowed(IRunState runState) => true;
+        protected override bool IsAllowedInternal(IRunState runState) => true;
 
         protected override IReadOnlyList<EventOption> GenerateInitialOptions()
         {

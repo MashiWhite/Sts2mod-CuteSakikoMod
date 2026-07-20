@@ -1,0 +1,22 @@
+﻿{
+  "MOD_SETTINGS.DISPLAY_NAME": "可愛い祥子MOD",
+  "MOD_SETTINGS.TITLE": "可愛い祥子MOD設定",
+  "MOD_SETTINGS.SECTION.GENERAL": "一般",
+  "MOD_SETTINGS.EGG_TOGGLE.LABEL": "イースターエッグカード",
+  "MOD_SETTINGS.EGG_TOGGLE.DESC": "有効にすると、ゲーム開始時にイースターエッグレリックを自動的に取得する。",
+  "MOD_SETTINGS.MONSTER_TOGGLE.LABEL": "MODモンスターを有効化",
+  "MOD_SETTINGS.MONSTER_TOGGLE.DESC": "有効にすると、MODのカスタムモンスターや遭遇がゲーム内に自然に出現するようになる。",
+  "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL": "MOD BGM音量",
+  "MOD_SETTINGS.MOD_BGM_VOLUME.DESC": "MOD専用の背景音楽の音量を調整する。最終音量 = マスター音量 × この値。",
+  "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL": "MOD 効果音音量",
+  "MOD_SETTINGS.MOD_SFX_VOLUME.DESC": "MODのカスタム効果音の音量を調整する。最終音量 = マスター音量 × 効果音音量 × この値。",
+  "MOD_SETTINGS.AUDIO_TOGGLE.LABEL": "MODオーディオを有効化",
+  "MOD_SETTINGS.AUDIO_TOGGLE.DESC": "無効にすると、MODのすべての効果音と音楽の再生がスキップされ、クラッシュ問題を防ぐ。",
+  "MOD_SETTINGS.DESCRIPTION": "可愛い祥子MODの設定",
+  "MOD_SETTINGS.SECTION.GAME_CONTENT": "ゲームコンテンツ",
+  "MOD_SETTINGS.ANCIENT_TOGGLE.LABEL": "カスタム古代イベント",
+  "MOD_SETTINGS.ANCIENT_TOGGLE.DESC": "有効にすると、MODが追加したカスタム古代イベントがゲーム内に自然に出現するようになる。",
+  "MOD_SETTINGS.SECTION.AUDIO": "オーディオ",
+  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL": "カスタムイベント",
+  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "有効にすると、MODが追加したカスタム通常イベントがゲーム内に自然に出現するようになる。"
+}

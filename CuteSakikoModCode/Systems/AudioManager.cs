@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Nodes.Audio;
 using MegaCrit.Sts2.Core.Saves;
 using STS2RitsuLib.Audio;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using System.Collections.Concurrent;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
@@ -30,6 +31,9 @@ public static class AudioManager
     // ---- 预加载记录（避免重复尝试已知失败文件） ----
     private static readonly HashSet<string> _preloadedPaths = new();
     private static readonly object _preloadLock = new();
+
+    // ---- 文件写入锁，防止并发复制同一文件 ----
+    private static readonly ConcurrentDictionary<string, object> _fileWriteLocks = new();
 
     // ==================== 公开接口 ====================
 
@@ -97,6 +101,7 @@ public static class AudioManager
                 return cached;
         }
 
+        // 检查源文件是否存在
         bool sourceExists;
         if (originalPath.StartsWith("res://", StringComparison.OrdinalIgnoreCase))
             sourceExists = Godot.FileAccess.FileExists(originalPath);
@@ -109,6 +114,7 @@ public static class AudioManager
             return null;
         }
 
+        // 生成纯 ASCII 文件名
         byte[] hashBytes;
         using (var md5 = MD5.Create())
         {
@@ -119,7 +125,8 @@ public static class AudioManager
         if (string.IsNullOrEmpty(extension))
             extension = ".mp3";
 
-        var tempDir = Path.Combine(Path.GetTempPath(), "CuteSakikoModAudio");
+        // 关键修改：使用 OS.GetUserDataDir() 确保临时目录路径纯 ASCII
+        var tempDir = Path.Combine(OS.GetUserDataDir(), "CuteSakikoModAudio");
         Directory.CreateDirectory(tempDir);
 
         var uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
@@ -127,31 +134,39 @@ public static class AudioManager
 
         if (!File.Exists(safePath))
         {
-            try
+            // 防止并发写同一个 safePath（虽然 uniqueId 已防重，仍加锁保护）
+            var writeLock = _fileWriteLocks.GetOrAdd(safePath, _ => new object());
+            lock (writeLock)
             {
-                byte[] data;
-                if (originalPath.StartsWith("res://", StringComparison.OrdinalIgnoreCase))
+                if (!File.Exists(safePath))
                 {
-                    using var file = Godot.FileAccess.Open(originalPath, Godot.FileAccess.ModeFlags.Read);
-                    if (file == null)
+                    try
                     {
-                        STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] Failed to open Godot resource: {originalPath}");
+                        byte[] data;
+                        if (originalPath.StartsWith("res://", StringComparison.OrdinalIgnoreCase))
+                        {
+                            using var file = Godot.FileAccess.Open(originalPath, Godot.FileAccess.ModeFlags.Read);
+                            if (file == null)
+                            {
+                                STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] Failed to open Godot resource: {originalPath}");
+                                return null;
+                            }
+                            var length = (long)file.GetLength();
+                            data = file.GetBuffer(length);
+                        }
+                        else
+                        {
+                            data = File.ReadAllBytes(originalPath);
+                        }
+
+                        File.WriteAllBytes(safePath, data);
+                    }
+                    catch (Exception ex)
+                    {
+                        STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] Failed to copy audio file to safe path: {originalPath} -> {safePath}. Reason: {ex.Message}");
                         return null;
                     }
-                    var length = (long)file.GetLength();
-                    data = file.GetBuffer(length);
                 }
-                else
-                {
-                    data = File.ReadAllBytes(originalPath);
-                }
-
-                File.WriteAllBytes(safePath, data);
-            }
-            catch (Exception ex)
-            {
-                STS2RitsuLib.RitsuLibFramework.Logger.Error($"[AudioManager] Failed to copy audio file to safe path: {originalPath} -> {safePath}. Reason: {ex.Message}");
-                return null;
             }
         }
 

@@ -71,69 +71,94 @@ public class Entry
             store.Register("config", "config.json", SaveScope.Global, () => new CuteSakikoModConfigData(), true);
         }
 
-        // 2. 创建绑定
-        var eggBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
-            ModId, "config",
-            model => model.EggsCard,
-            (model, value) => model.EggsCard = value
-        );
-        var monsterBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
-            ModId, "config",
-            model => model.EnableModMonsters,
-            (model, value) => model.EnableModMonsters = value
-        );
-        var volumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, float>(
-            ModId, "config",
-            model => model.ModBgmVolume,
-            (model, value) => model.ModBgmVolume = value
-        );
-        var sfxVolumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, float>(
-            ModId, "config",
-            model => model.ModSfxVolume,
-            (model, value) => model.ModSfxVolume = value
-        );
-        var audioBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
-            ModId, "config",
-            model => model.EnableAudio,
-            (model, value) => model.EnableAudio = value
-        );
+        // 2. 创建绑定（原有 + 新增）
+    var eggBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+        ModId, "config",
+        model => model.EggsCard,
+        (model, value) => model.EggsCard = value
+    );
+    var monsterBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+        ModId, "config",
+        model => model.EnableModMonsters,
+        (model, value) => model.EnableModMonsters = value
+    );
+    var ancientBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+        ModId, "config",
+        model => model.EnableCustomAncients,
+        (model, value) => model.EnableCustomAncients = value
+    );
+    var volumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, float>(
+        ModId, "config",
+        model => model.ModBgmVolume,
+        (model, value) => model.ModBgmVolume = value
+    );
+    var sfxVolumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, float>(
+        ModId, "config",
+        model => model.ModSfxVolume,
+        (model, value) => model.ModSfxVolume = value
+    );
+    var audioBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+        ModId, "config",
+        model => model.EnableAudio,
+        (model, value) => model.EnableAudio = value
+    );
+    var customEventBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+        ModId, "config",
+        model => model.EnableCustomEvents,
+        (model, value) => model.EnableCustomEvents = value
+    );
 
-        // 3. 注册设置界面
-        var i18n = I18n;
-        RitsuLibFramework.RegisterModSettings(ModId, page => page
-            .WithModDisplayName(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DISPLAY_NAME", "Cute Sakiko Mod"))
-            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.TITLE", "Cute Sakiko Mod Settings"))
-            .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DESCRIPTION", "Cute Sakiko Mod Settings"))
-            .AddSection("general", section => section
-                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.GENERAL", "General"))
-                .AddToggle("egg_toggle",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.LABEL", "Egg Card"),
-                    eggBinding,
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.DESC", "Automatically obtain the Egg Relic at the start of the game"))
-                .AddToggle("monster_toggle",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.LABEL", "Enable Mod Monsters"),
-                    monsterBinding,
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.DESC", "If enabled, custom monsters and encounters from the mod will appear naturally"))
-                .AddSlider("mod_bgm_volume_slider",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL", "Mod BGM Volume"),
-                    volumeBinding,
-                    0.0f, 1.0f, 0.01f,
-                    valueFormatter: value => $"{value:P0}",
-                    description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.DESC", "Controls the volume of mod-specific background music."))
-                .AddSlider("mod_sfx_volume_slider",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL", "Mod SFX Volume"),
-                    sfxVolumeBinding,
-                    0.0f, 1.0f, 0.01f,
-                    valueFormatter: value => $"{value:P0}",
-                    description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.DESC", "Controls the volume of mod-specific sound effects.")
-                )
-                .AddToggle("audio_toggle",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.LABEL", "Enable Mod Audio"),
-                    audioBinding,
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.DESC", "If disabled, all mod sounds and music will be muted. This can help troubleshoot audio-related crashes.")
-                )
+    var i18n = I18n;
+
+    // 3. 注册设置界面：分为“游戏内容”和“音频”两个 Section
+    RitsuLibFramework.RegisterModSettings(ModId, page => page
+        .WithModDisplayName(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DISPLAY_NAME", "Cute Sakiko Mod"))
+        .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.TITLE", "Cute Sakiko Mod Settings"))
+        .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DESCRIPTION", "Cute Sakiko Mod Settings"))
+
+        // 游戏内容 Section
+        .AddSection("game_content", section => section
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.GAME_CONTENT", "Game Content"))
+            .AddToggle("egg_toggle",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.LABEL", "Egg Card"),
+                eggBinding,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.DESC", "..."))
+            .AddToggle("monster_toggle",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.LABEL", "Enable Mod Monsters"),
+                monsterBinding,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.DESC", "..."))
+            .AddToggle("ancient_toggle",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.ANCIENT_TOGGLE.LABEL", "Custom Ancient Events"),
+                ancientBinding,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.ANCIENT_TOGGLE.DESC", "Allow custom ancient events to appear naturally."))
+            .AddToggle("custom_event_toggle",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL", "Custom Events"),
+                customEventBinding,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC", "Allow custom events to appear naturally.")
             )
-        );
+        )
+
+        // 音频 Section
+        .AddSection("audio", section => section
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.AUDIO", "Audio"))
+            .AddToggle("audio_toggle",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.LABEL", "Enable Mod Audio"),
+                audioBinding,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.DESC", "..."))
+            .AddSlider("mod_bgm_volume_slider",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL", "Mod BGM Volume"),
+                volumeBinding,
+                0.0f, 1.0f, 0.01f,
+                valueFormatter: value => $"{value:P0}",
+                description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.DESC", "..."))
+            .AddSlider("mod_sfx_volume_slider",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL", "Mod SFX Volume"),
+                sfxVolumeBinding,
+                0.0f, 1.0f, 0.01f,
+                valueFormatter: value => $"{value:P0}",
+                description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.DESC", "..."))
+        )
+    );
 
         // 4. Harmony 补丁
         var harmony = new Harmony("White.CuteSakikoMod");

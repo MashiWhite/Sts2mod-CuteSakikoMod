@@ -13,7 +13,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace CuteSakikoMod.CuteSakikoModCode.Events;
 
 [RegisterSharedEvent]
-public sealed class AlleyShadowCat : ModEventTemplate
+public sealed class AlleyShadowCat : CuteSakikoEvent 
 {
     private IHoverTip[]? _relicHoverTips;  // 缓存遗物提示
 
@@ -23,7 +23,7 @@ public sealed class AlleyShadowCat : ModEventTemplate
     
     public override bool IsShared => false;
 
-    public override bool IsAllowed(IRunState runState) => true;
+    protected override bool IsAllowedInternal(IRunState runState) => true;
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {

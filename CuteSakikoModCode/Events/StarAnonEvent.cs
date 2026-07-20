@@ -12,7 +12,7 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace CuteSakikoMod.CuteSakikoModCode.Events;
 
 [RegisterSharedEvent]
-public sealed class StarAnonEvent : ModEventTemplate
+public sealed class StarAnonEvent : CuteSakikoEvent 
 {
     public override EventAssetProfile AssetProfile => new(
         InitialPortraitPath: "res://CuteSakikoMod/images/events/star_anon.png"
@@ -20,7 +20,7 @@ public sealed class StarAnonEvent : ModEventTemplate
     
     public override bool IsShared => true;
     
-    public override bool IsAllowed(IRunState runState)
+    protected override bool IsAllowedInternal(IRunState runState)
     {
         return ModConfig.EnableModMonsters;
     }

@@ -12,5 +12,11 @@
   "MOD_SETTINGS.MOD_SFX_VOLUME.DESC": "控制本模组自定义音效的音量大小，最终音量 = 主音量 × 音效音量 × 此值。",
   "MOD_SETTINGS.AUDIO_TOGGLE.LABEL": "启用模组音频",
   "MOD_SETTINGS.AUDIO_TOGGLE.DESC": "关闭后，所有播放模组音效和音乐的行为将被跳过，防止产生崩溃问题。",
-  "MOD_SETTINGS.DESCRIPTION": "可爱小祥模组的设置"
+  "MOD_SETTINGS.DESCRIPTION": "可爱小祥模组的设置",
+  "MOD_SETTINGS.SECTION.GAME_CONTENT": "游戏内容",
+  "MOD_SETTINGS.ANCIENT_TOGGLE.LABEL": "先古之民事件",
+  "MOD_SETTINGS.ANCIENT_TOGGLE.DESC": "开启后，Mod添加的先古之民事件会在游戏中自然出现。",
+  "MOD_SETTINGS.SECTION.AUDIO": "音频",
+  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL": "普通事件",
+  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "开启后，Mod添加的普通事件会在游戏中自然出现。"
 }

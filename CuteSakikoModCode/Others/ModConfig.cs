@@ -47,6 +47,9 @@ public class CuteSakikoModConfigData
         get => _modSfxVolume;
         set => _modSfxVolume = value;   // 即时生效，无需额外操作
     }
+    
+    public bool EnableCustomAncients { get; set; } = true;
+    public bool EnableCustomEvents { get; set; } = true; // 新增：控制所有普通自定义事件
 }
 
 // 统一配置访问入口
@@ -60,6 +63,9 @@ public static class ModConfig
     public static bool EnableModMonsters => Load().EnableModMonsters;
     public static float ModBgmVolume => Load().ModBgmVolume;
     public static float ModSfxVolume => Load().ModSfxVolume;   // 新增
+    
+    public static bool EnableCustomAncients => Load().EnableCustomAncients;
+    public static bool EnableCustomEvents => Load().EnableCustomEvents;
 
     private static CuteSakikoModConfigData Load()
     {

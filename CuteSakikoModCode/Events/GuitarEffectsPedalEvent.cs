@@ -14,7 +14,7 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace CuteSakikoMod.CuteSakikoModCode.Events;
 
 [RegisterSharedEvent]
-public sealed class GuitarEffectsPedalEvent : ModEventTemplate
+public sealed class GuitarEffectsPedalEvent : CuteSakikoEvent 
 {
     private const int LowCost = 50;
     private const int HighCost = 100;
@@ -30,7 +30,7 @@ public sealed class GuitarEffectsPedalEvent : ModEventTemplate
         new("HighCost", HighCost)
     ];
 
-    public override bool IsAllowed(IRunState runState)
+    protected override bool IsAllowedInternal(IRunState runState)
     {
         return runState.Players.All(p => p.Relics.OfType<AnonGuitar>().Any()) 
                && runState.Players.All(p => p.Gold >= DynamicVars.Gold.BaseValue);

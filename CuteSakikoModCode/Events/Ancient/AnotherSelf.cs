@@ -10,7 +10,7 @@ using STS2RitsuLib.Utils;
 namespace CuteSakikoMod.CuteSakikoModCode.Events.Ancient;
 
 [RegisterActAncient(typeof(Hive))] 
-public class AnotherSelf : ModAncientEventTemplate
+public class AnotherSelf : CuteSakikoAncientEvent
 {
     public override Color ButtonColor => new(0f, 0.09f, 0.2f, 0.75f);
     public override Color DialogueColor => new(0.39f, 0.64f, 0.75f);
