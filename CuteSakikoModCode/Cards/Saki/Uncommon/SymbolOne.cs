@@ -56,7 +56,7 @@ public class SymbolOne() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Unco
 
         // 3. 发起攻击（使用 AttackCmd 以触发角色攻击动画和武器特效）
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash") // 可替换为你自己的武器轨迹特效
             .Execute(choiceContext);

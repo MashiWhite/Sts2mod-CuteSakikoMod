@@ -37,7 +37,7 @@ public class PlayedTerribly() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
 
         // 一次多段随机攻击
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .TargetingRandomOpponents(combat)
             .WithHitCount(hitCount)
             .WithHitFx("vfx/vfx_attack_slash")

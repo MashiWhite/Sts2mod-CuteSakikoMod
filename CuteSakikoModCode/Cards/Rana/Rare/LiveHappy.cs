@@ -56,7 +56,7 @@ public class LiveHappy : CuteRanaCard
 
                 // 每次攻击构建一个新的 AttackCommand，并传入 cardPlay
                 var attackCmd = await DamageCmd.Attack(damage)
-                    .FromCard(this, cardPlay)  // 注意第二个参数
+                    .FromCard(this)  // 注意第二个参数
                     .Targeting(target)
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);

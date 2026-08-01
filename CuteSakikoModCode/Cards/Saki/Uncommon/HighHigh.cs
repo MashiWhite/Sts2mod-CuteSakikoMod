@@ -51,7 +51,7 @@ public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
         // 造成伤害
         var damage = DynamicVars["Damage"].IntValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(target)
             .Execute(choiceContext);
 

@@ -65,9 +65,7 @@ public class MakeSimplerPower : CuteSakikoModPower, IChordSequenceModifierProvid
         private int _state;
         public DeterministicRng(Rng baseRng, int seed)
         {
-            // 从 baseRng 获取一个确定性值（不消耗计数器）
-            // 注意：这里不使用 NextInt，避免消耗计数器
-            _state = seed ^ (int)baseRng.ToSerializable().state0;
+            _state = (int)(baseRng.Seed ^ (uint)seed);
         }
         public int NextInt(int max)
         {

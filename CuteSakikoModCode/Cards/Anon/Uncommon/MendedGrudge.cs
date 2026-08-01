@@ -37,7 +37,7 @@ public class MendedGrudge : CuteAnonCard
         if (enemies != null && enemies.Any())
         {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this, cardPlay)
+                .FromCard(this)
                 .TargetingAllOpponents(combat)            // 修正为全体目标
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

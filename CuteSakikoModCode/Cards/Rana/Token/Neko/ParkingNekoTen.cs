@@ -21,7 +21,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Token.Neko
             int times = DynamicVars.Repeat.IntValue;
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .WithHitCount(times)
-                .FromCard(this,cardPlay)
+                .FromCard(this)
                 .TargetingRandomOpponents(CombatState)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

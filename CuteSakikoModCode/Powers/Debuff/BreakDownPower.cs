@@ -24,8 +24,7 @@ public sealed class BreakDownPower : CuteSakikoModPower
         decimal amount,
         ValueProp props,
         Creature? dealer,
-        CardModel? cardSource,
-        CardPlay? cardPlay)  // 补上缺失参数
+        CardModel? cardSource)  // 补上缺失参数
     {
         if (dealer != Owner) return 0m;
         return -amount * 0.5m;
@@ -37,8 +36,7 @@ public sealed class BreakDownPower : CuteSakikoModPower
         decimal amount,
         ValueProp props,
         Creature? dealer,
-        CardModel? cardSource,
-        CardPlay? cardPlay)  // 补上缺失参数
+        CardModel? cardSource)  // 补上缺失参数
     {
         if (target != Owner) return 1m;
         if (Amount <= 0) return 1m;

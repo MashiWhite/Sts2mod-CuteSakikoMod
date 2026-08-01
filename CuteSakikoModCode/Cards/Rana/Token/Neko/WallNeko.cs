@@ -21,7 +21,7 @@ public class WallNeko : NekoCard
     {
         var times = IsUpgraded ? 6 : 3;
         await DamageCmd.Attack(DynamicVars.Damage.IntValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(times)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

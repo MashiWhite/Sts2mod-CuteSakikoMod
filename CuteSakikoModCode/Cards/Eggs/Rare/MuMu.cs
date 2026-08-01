@@ -30,7 +30,7 @@ public class MuMu() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.Rare, 
 
         // 基础伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

@@ -53,14 +53,14 @@ public class CutClothes : CuteRanaCard
         {
             int loseAmount = creature.Block / 2;
             if (loseAmount > 0)
-                await CreatureCmd.LoseBlock(choiceContext,creature, loseAmount,creature);
+                await CreatureCmd.LoseBlock(creature, loseAmount);
         }
 
         // 3. 用减半前的格挡值造成伤害（伤害数字在减格挡之后出现）
         if (preBlockDamage > 0)
         {
             await DamageCmd.Attack(preBlockDamage)
-                .FromCard(this,cardPlay)
+                .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

@@ -28,8 +28,7 @@ public sealed class DebtPower : CuteSakikoModPower
             Owner,
             new DamageVar(Amount, ValueProp.Unblockable | ValueProp.Unpowered),
             Owner,               // 伤害来源（能力所属生物）
-            (CardModel?)null,    // 没有卡牌来源
-            (CardPlay?)null      // 没有 CardPlay
+            (CardModel?)null
         );
         await PowerCmd.Remove(this);
     }

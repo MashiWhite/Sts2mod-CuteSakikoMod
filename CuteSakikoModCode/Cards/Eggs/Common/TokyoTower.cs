@@ -47,8 +47,7 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
             new[] { cardPlay.Target },
             new DamageVar(DynamicVars.Damage.BaseValue, ValueProp.Move),
             Owner.Creature,
-            this,
-            null
+            this
         )).ToList();
 
         // 5. 对其他敌方队友造成同等伤害
@@ -69,8 +68,7 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
                     otherEnemies,
                     new DamageVar(totalDamage, ValueProp.Unpowered | ValueProp.Move),
                     Owner.Creature,
-                    this,
-                    null
+                    this
                 );
             }
         }

@@ -81,7 +81,7 @@ public class SmoothPlay : CuteAnonCard
         // 造成伤害
         var damage = DynamicVars.Damage.IntValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .TargetingRandomOpponents(combat)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

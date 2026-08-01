@@ -30,8 +30,7 @@ public class CloseObservePower : CuteSakikoModPower
         decimal amount,
         ValueProp props,
         Creature? dealer,
-        CardModel? cardSource,
-        CardPlay? cardPlay)   // 已修正
+        CardModel? cardSource)   // 已修正
     {
         if (target != Owner || !props.IsPoweredAttack())
             return 1m;

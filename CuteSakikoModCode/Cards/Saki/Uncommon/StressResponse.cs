@@ -43,7 +43,7 @@ public class StressResponse : CuteSakikoModCard
         int damage = layers * 2;
 
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .TargetingRandomOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

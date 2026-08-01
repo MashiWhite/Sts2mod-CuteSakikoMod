@@ -24,7 +24,7 @@ public static class ChordCmd
         var sync = runManager.PlayerChoiceSynchronizer;
         var choiceId = sync.ReserveChoiceId(player);
 
-        await context.SignalPlayerChoiceBegun(player,PlayerChoiceOptions.CancelPlayCardActions);
+        await context.SignalPlayerChoiceBegun(PlayerChoiceOptions.CancelPlayCardActions);
 
         List<int> chordIndexes = null;
 

@@ -62,7 +62,7 @@ public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
         }
 
         await DamageCmd.Attack(baseDamage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

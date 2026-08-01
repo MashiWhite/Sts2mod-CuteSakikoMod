@@ -33,8 +33,7 @@ public class BrainFreeze : ModStatusCard
             Owner.Creature,
             new DamageVar(damage, ValueProp.Unpowered | ValueProp.Move),
             Owner.Creature,
-            this,
-            null);
+            this);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

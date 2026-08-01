@@ -22,7 +22,7 @@ public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.
         var damage = DynamicVars.Damage.BaseValue;
 
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(extraHits)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

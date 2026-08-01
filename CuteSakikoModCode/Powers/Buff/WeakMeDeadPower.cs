@@ -21,8 +21,7 @@ public sealed class WeakMeDeadPower : CuteSakikoModPower
         decimal amount,
         ValueProp props,
         Creature? dealer,
-        CardModel? cardSource,
-        CardPlay? cardPlay)  // 补上缺失的参数
+        CardModel? cardSource)
     {
         if (dealer == Owner && target != null && target.GetPower<BreakDownPower>() != null) return 2m;
         return 1m;

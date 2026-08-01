@@ -42,7 +42,7 @@ public class DefensiveSlash() : ModStatusCard(0, CardType.Status, CardRarity.Sta
             var target = Owner.RunState.Rng.CombatCardSelection.NextItem(enemies);
             var damage = DynamicVars.Damage.BaseValue;
             await DamageCmd.Attack(damage)
-                .FromCard(this,null)
+                .FromCard(this)
                 .Targeting(target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

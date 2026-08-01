@@ -33,7 +33,7 @@ public class HeartAtk() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
     {
         // 造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

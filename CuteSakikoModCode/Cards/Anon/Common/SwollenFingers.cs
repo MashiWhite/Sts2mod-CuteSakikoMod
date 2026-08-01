@@ -22,7 +22,7 @@ public class SwollenFingers() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
         // 造成伤害
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

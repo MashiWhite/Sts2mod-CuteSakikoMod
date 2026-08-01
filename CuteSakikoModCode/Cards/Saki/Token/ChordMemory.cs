@@ -28,7 +28,7 @@ public class ChordMemory() : ModTokenCard(1, CardType.Attack, CardRarity.Token, 
         var block = DynamicVars.Block;
 
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitCount(hitCount)
             .WithHitFx("vfx/vfx_attack_slash")

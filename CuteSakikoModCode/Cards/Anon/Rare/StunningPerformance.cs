@@ -40,7 +40,7 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
         TriggerBanter();
 
         await DamageCmd.Attack(DynamicVars.CalculatedDamage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

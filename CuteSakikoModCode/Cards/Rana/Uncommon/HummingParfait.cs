@@ -40,7 +40,7 @@ public class HummingParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 
         // 对全体敌人造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .TargetingAllOpponents(Owner.Creature.CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

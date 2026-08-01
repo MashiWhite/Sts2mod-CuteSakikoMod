@@ -35,7 +35,6 @@ public class GuitarVocalPower : CuteSakikoModPower
             totalDamage,
             ValueProp.Unpowered,
             Owner,
-            null,
             null
         );
     }
