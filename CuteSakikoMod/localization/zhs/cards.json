@@ -1,6 +1,6 @@
 {
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.title": "取名的品味",
-  "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.description": "在本局游戏内，修改目标队友的显示名称。",
+  "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.description": "在本局游戏内，修改目标队友的显示名称。\n抽到这张牌时，抽{Cards:diff()}张牌。",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.dialog.title": "修改 {target} 的名称",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.dialog.placeholder": "输入 {target} 的新名字",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.dialog.confirm": "确定",

@@ -74,7 +74,7 @@ public static class ChordManager
         // ========== 大三和弦 ==========
         AddChord("C", ChordCategory.Major,
             new[] { CardType.Attack, CardType.Attack, CardType.Skill },
-            "CUTESAKIKOMOD-CCHORD.title", "CUTESAKIKOMOD-CCHORD.description", "c_chord",
+            "CUTE_SAKIKO_MOD_CCHORD.title", "CUTE_SAKIKO_MOD_CCHORD.description", "c_chord",
             new[] { 3, 3 },
             async (ctx, owner, mult) =>
             {
@@ -96,7 +96,7 @@ public static class ChordManager
 
         AddChord("G", ChordCategory.Major,
             new[] { CardType.Attack, CardType.Attack, CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-GCHORD.title", "CUTESAKIKOMOD-GCHORD.description", "g_chord",
+            "CUTE_SAKIKO_MOD_GCHORD.title", "CUTE_SAKIKO_MOD_GCHORD.description", "g_chord",
             new[] { 3 },
             async (ctx, owner, mult) =>
             {
@@ -107,7 +107,7 @@ public static class ChordManager
 
         AddChord("D", ChordCategory.Major,
             new[] { CardType.Skill, CardType.Attack, CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-DCHORD.title", "CUTESAKIKOMOD-DCHORD.description", "d_chord",
+            "CUTE_SAKIKO_MOD_DCHORD.title", "CUTE_SAKIKO_MOD_DCHORD.description", "d_chord",
             new[] { 1, 2 },
             async (ctx, owner, mult) =>
             {
@@ -122,7 +122,7 @@ public static class ChordManager
 
         AddChord("A", ChordCategory.Major,
             new[] { CardType.Attack, CardType.Skill, CardType.Skill },
-            "CUTESAKIKOMOD-ACHORD.title", "CUTESAKIKOMOD-ACHORD.description", "a_chord",
+            "CUTE_SAKIKO_MOD_ACHORD.title", "CUTE_SAKIKO_MOD_ACHORD.description", "a_chord",
             new[] { 6 },
             async (ctx, owner, mult) =>
             {
@@ -133,7 +133,7 @@ public static class ChordManager
 
         AddChord("E", ChordCategory.Major,
             new[] { CardType.Power, CardType.Attack, CardType.Skill },
-            "CUTESAKIKOMOD-ECHORD.title", "CUTESAKIKOMOD-ECHORD.description", "e_chord",
+            "CUTE_SAKIKO_MOD_ECHORD.title", "CUTE_SAKIKO_MOD_ECHORD.description", "e_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -144,13 +144,13 @@ public static class ChordManager
 
         AddChord("C#", ChordCategory.Major,
             new[] { CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-C#CHORD.title", "CUTESAKIKOMOD-C#CHORD.description", "c_sharp_chord",
+            "CUTE_SAKIKO_MOD_C#CHORD.title", "CUTE_SAKIKO_MOD_C#CHORD.description", "c_sharp_chord",
             new[] { 1 },
             async (ctx, owner, mult) => { await PowerCmd.Apply<VigorPower>(ctx, owner, 1 * mult, owner, null); });
 
         AddChord("D#", ChordCategory.Major,
             new[] { CardType.Skill, CardType.Attack },
-            "CUTESAKIKOMOD-D#CHORD.title", "CUTESAKIKOMOD-D#CHORD.description", "d_sharp_chord",
+            "CUTE_SAKIKO_MOD_D#CHORD.title", "CUTE_SAKIKO_MOD_D#CHORD.description", "d_sharp_chord",
             new[] { 3 },
             async (ctx, owner, mult) =>
             {
@@ -171,7 +171,7 @@ public static class ChordManager
         // ========== 小三和弦 ==========
         AddChord("Am", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill, CardType.Attack },
-            "CUTESAKIKOMOD-AMCHORD.title", "CUTESAKIKOMOD-AMCHORD.description", "am_chord",
+            "CUTE_SAKIKO_MOD_AMCHORD.title", "CUTE_SAKIKO_MOD_AMCHORD.description", "am_chord",
             new[] { 4 },
             async (ctx, owner, mult) =>
             {
@@ -182,7 +182,7 @@ public static class ChordManager
 
         AddChord("Gm", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill, CardType.Skill, CardType.Skill },
-            "CUTESAKIKOMOD-GMCHORD.title", "CUTESAKIKOMOD-GMCHORD.description", "gm_chord",
+            "CUTE_SAKIKO_MOD_GMCHORD.title", "CUTE_SAKIKO_MOD_GMCHORD.description", "gm_chord",
             new[] { 3 },
             async (ctx, owner, mult) =>
             {
@@ -218,7 +218,7 @@ public static class ChordManager
 
         AddChord("Em", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill, CardType.Attack, CardType.Skill },
-            "CUTESAKIKOMOD-EMCHORD.title", "CUTESAKIKOMOD-EMCHORD.description", "em_chord",
+            "CUTE_SAKIKO_MOD_EMCHORD.title", "CUTE_SAKIKO_MOD_EMCHORD.description", "em_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -229,7 +229,7 @@ public static class ChordManager
 
         AddChord("Dm", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Attack, CardType.Skill },
-            "CUTESAKIKOMOD-DMCHORD.title", "CUTESAKIKOMOD-DMCHORD.description", "dm_chord",
+            "CUTE_SAKIKO_MOD_DMCHORD.title", "CUTE_SAKIKO_MOD_DMCHORD.description", "dm_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -240,7 +240,7 @@ public static class ChordManager
 
         AddChord("Bm", ChordCategory.Minor,
             new[] { CardType.Power, CardType.Skill, CardType.Skill },
-            "CUTESAKIKOMOD-BMCHORD.title", "CUTESAKIKOMOD-BMCHORD.description", "bm_chord",
+            "CUTE_SAKIKO_MOD_BMCHORD.title", "CUTE_SAKIKO_MOD_BMCHORD.description", "bm_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -251,7 +251,7 @@ public static class ChordManager
 
         AddChord("C#m", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill },
-            "CUTESAKIKOMOD-C#MCHORD.title", "CUTESAKIKOMOD-C#MCHORD.description", "c_sharp_m_chord",
+            "CUTE_SAKIKO_MOD_C#MCHORD.title", "CUTE_SAKIKO_MOD_C#MCHORD.description", "c_sharp_m_chord",
             new[] { 2 },
             async (ctx, owner, mult) =>
             {
@@ -262,7 +262,7 @@ public static class ChordManager
 
         AddChord("D#m", ChordCategory.Minor,
             new[] { CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-D#MCHORD.title", "CUTESAKIKOMOD-D#MCHORD.description", "d_sharp_m_chord",
+            "CUTE_SAKIKO_MOD_D#MCHORD.title", "CUTE_SAKIKO_MOD_D#MCHORD.description", "d_sharp_m_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -273,7 +273,7 @@ public static class ChordManager
 
         AddChord("E#m", ChordCategory.Minor,
             new[] { CardType.Skill, CardType.Skill, CardType.Attack, CardType.Skill },
-            "CUTESAKIKOMOD-E#MCHORD.title", "CUTESAKIKOMOD-E#MCHORD.description", "e_sharp_m_chord",
+            "CUTE_SAKIKO_MOD_E#MCHORD.title", "CUTE_SAKIKO_MOD_E#MCHORD.description", "e_sharp_m_chord",
             new[] { 1, 8 },
             async (ctx, owner, mult) =>
             {
@@ -290,7 +290,7 @@ public static class ChordManager
         // ========== 属七和弦 ==========
         AddChord("G7", ChordCategory.Dominant,
             new[] { CardType.Attack, CardType.Skill, CardType.Attack },
-            "CUTESAKIKOMOD-G7CHORD.title", "CUTESAKIKOMOD-G7CHORD.description", "g7_chord",
+            "CUTE_SAKIKO_MOD_G7CHORD.title", "CUTE_SAKIKO_MOD_G7CHORD.description", "g7_chord",
             new[] { 2 },
             async (ctx, owner, mult) =>
             {
@@ -302,7 +302,7 @@ public static class ChordManager
 
         AddChord("D7", ChordCategory.Dominant,
             new[] { CardType.Skill, CardType.Skill, CardType.Attack },
-            "CUTESAKIKOMOD-D7CHORD.title", "CUTESAKIKOMOD-D7CHORD.description", "d7_chord",
+            "CUTE_SAKIKO_MOD_D7CHORD.title", "CUTE_SAKIKO_MOD_D7CHORD.description", "d7_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -314,7 +314,7 @@ public static class ChordManager
 
         AddChord("A7", ChordCategory.Dominant,
             new[] { CardType.Power, CardType.Skill, CardType.Power, CardType.Skill },
-            "CUTESAKIKOMOD-A7CHORD.title", "CUTESAKIKOMOD-A7CHORD.description", "a7_chord",
+            "CUTE_SAKIKO_MOD_A7CHORD.title", "CUTE_SAKIKO_MOD_A7CHORD.description", "a7_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -330,7 +330,7 @@ public static class ChordManager
 
         AddChord("E7", ChordCategory.Dominant,
             new[] { CardType.Skill, CardType.Power, CardType.Skill, CardType.Power },
-            "CUTESAKIKOMOD-E7CHORD.title", "CUTESAKIKOMOD-E7CHORD.description", "e7_chord",
+            "CUTE_SAKIKO_MOD_E7CHORD.title", "CUTE_SAKIKO_MOD_E7CHORD.description", "e7_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -341,7 +341,7 @@ public static class ChordManager
 
         AddChord("C#7", ChordCategory.Dominant,
             new[] { CardType.Attack, CardType.Skill },
-            "CUTESAKIKOMOD-C#7CHORD.title", "CUTESAKIKOMOD-C#7CHORD.description", "c_sharp_7_chord",
+            "CUTE_SAKIKO_MOD_C#7CHORD.title", "CUTE_SAKIKO_MOD_C#7CHORD.description", "c_sharp_7_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -353,7 +353,7 @@ public static class ChordManager
 
         AddChord("D#7", ChordCategory.Dominant,
             new[] { CardType.Skill, CardType.Attack },
-            "CUTESAKIKOMOD-D#7CHORD.title", "CUTESAKIKOMOD-D#7CHORD.description", "d_sharp_7_chord",
+            "CUTE_SAKIKO_MOD_D#7CHORD.title", "CUTE_SAKIKO_MOD_D#7CHORD.description", "d_sharp_7_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -365,7 +365,7 @@ public static class ChordManager
 
         AddTemporaryChord("AnonCChord", ChordCategory.Anon,
             new[] { CardType.Skill, CardType.Skill, CardType.Skill },
-            "CUTESAKIKOMOD-ANONCCHORD.title", "CUTESAKIKOMOD-ANONCCHORD.description", "anon_c_chord",
+            "CUTE_SAKIKO_MOD_ANONCCHORD.title", "CUTE_SAKIKO_MOD_ANONCCHORD.description", "anon_c_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>
             {
@@ -408,7 +408,7 @@ public static class ChordManager
 
         AddTemporaryChord("AnonDChord", ChordCategory.Anon,
             new[] { CardType.Skill, CardType.Attack, CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-ANONDCHORD.title", "CUTESAKIKOMOD-ANONDCHORD.description", "anon_d_chord",
+            "CUTE_SAKIKO_MOD_ANONDCHORD.title", "CUTE_SAKIKO_MOD_ANONDCHORD.description", "anon_d_chord",
             new int[0],
             async (ctx, owner, mult) =>
             {
@@ -428,7 +428,7 @@ public static class ChordManager
 
         AddTemporaryChord("AnonEChord", ChordCategory.Anon,
             new[] { CardType.Skill, CardType.Attack, CardType.Skill, CardType.Skill },
-            "CUTESAKIKOMOD-ANONECHORD.title", "CUTESAKIKOMOD-ANONECHORD.description", "anon_e_chord",
+            "CUTE_SAKIKO_MOD_ANONECHORD.title", "CUTE_SAKIKO_MOD_ANONECHORD.description", "anon_e_chord",
             new[] { 1, 4 },
             async (ctx, owner, mult) =>
             {
@@ -445,7 +445,7 @@ public static class ChordManager
 
         AddTemporaryChord("AnonFChord", ChordCategory.Anon,
             new[] { CardType.Attack, CardType.Attack, CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-ANONFCHORD.title", "CUTESAKIKOMOD-ANONFCHORD.description", "anon_f_chord",
+            "CUTE_SAKIKO_MOD_ANONFCHORD.title", "CUTE_SAKIKO_MOD_ANONFCHORD.description", "anon_f_chord",
             new[] { 20, 1 },
             async (ctx, owner, mult) =>
             {
@@ -464,7 +464,7 @@ public static class ChordManager
 
         AddTemporaryChord("AnonGChord", ChordCategory.Anon,
             new[] { CardType.Skill, CardType.Skill, CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-ANONGCHORD.title", "CUTESAKIKOMOD-ANONGCHORD.description", "anon_g_chord",
+            "CUTE_SAKIKO_MOD_ANONGCHORD.title", "CUTE_SAKIKO_MOD_ANONGCHORD.description", "anon_g_chord",
             new[] { 1, 1 },
             async (ctx, owner, mult) =>
             {
@@ -481,7 +481,7 @@ public static class ChordManager
 
         AddTemporaryChord("GreyAnonChord", ChordCategory.Anon,
             new[] { CardType.Status, CardType.Attack, CardType.Attack },
-            "CUTESAKIKOMOD-GREYANONCHORD.title", "CUTESAKIKOMOD-GREYANONCHORD.description", "grey_anon_chord",
+            "CUTE_SAKIKO_MOD_GREYANONCHORD.title", "CUTE_SAKIKO_MOD_GREYANONCHORD.description", "grey_anon_chord",
             new[] { 2, 1, 1 },
             async (ctx, owner, mult) =>
             {
@@ -507,7 +507,7 @@ public static class ChordManager
         
         AddTemporaryChord("HekitenbansouChord", ChordCategory.Anon,
             new[] { CardType.Attack, CardType.Skill, CardType.Attack, CardType.Skill },
-            "CUTESAKIKOMOD-HEKITENBANSOUCHORD.title", "CUTESAKIKOMOD-HEKITENBANSOUCHORD.description",
+            "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.title", "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.description",
             "hekitenbansou_chord",
             new[] { 1 },
             async (ctx, owner, mult) =>

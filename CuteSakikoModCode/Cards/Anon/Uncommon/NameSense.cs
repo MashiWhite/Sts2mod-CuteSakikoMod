@@ -1,8 +1,10 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 {
@@ -19,7 +21,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
 
         public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
+        protected override IEnumerable<DynamicVar> CanonicalVars
+        {
+            get { yield return new CardsVar(1); }
+        }
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
@@ -36,9 +41,19 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon
             }
         }
 
+        // 抽到时抽1张牌
+        public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
+        {
+            var cards = DynamicVars.Cards.BaseValue;
+            await base.AfterCardDrawn(choiceContext, card, fromHandDraw);
+            if (card != this) return;
+            await Cmd.Wait(0.25f);
+            await CardPileCmd.Draw(choiceContext, cards, Owner);
+        }
+
         protected override void OnUpgrade()
         {
-            EnergyCost.UpgradeBy(-1);
+            DynamicVars.Cards.UpgradeValueBy(1);
         }
     }
 }

@@ -37,8 +37,8 @@ public class TimeWatch : CuteSakikoEventRelic
         {
             var playCount = FlybackManager.Instance.TotalPlayCount;
             var reloads = FlybackManager.GetReloadCount();
-            var title = new LocString("relics", "TIMEWATCH_FLYBACK_TITLE");
-            var desc = new LocString("relics", "TIMEWATCH_FLYBACK_DESC");
+            var title = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH_FLYBACK_TITLE");
+            var desc = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH_FLYBACK_DESC");
             desc.Add("playCount", playCount.ToString());
             desc.Add("reloadCount", reloads.ToString());
             yield return new HoverTip(title, desc);

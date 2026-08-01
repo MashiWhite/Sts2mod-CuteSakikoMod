@@ -1,6 +1,6 @@
 ﻿{
-  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.title": "Naming Sense",
-  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.description": "Change the display name of a target ally for the remainder of the run.",
+  "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.title": "Naming Sense",
+  "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.description": "This run, change the displayed name of the targeted ally.\nWhen you draw this card, draw {Cards:diff()} card(s).",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.title": "Change {target}'s name",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.placeholder": "Enter a new name for {target}",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.confirm": "Confirm",

@@ -29,25 +29,22 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
         var targetCreature = cardPlay.Target;
         if (targetCreature == null || !targetCreature.IsAlive) return;
 
-        // 造成伤害
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this, cardPlay)
             .Targeting(targetCreature)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 目标必须依然存活且为怪物
         if (!targetCreature.IsAlive || !targetCreature.IsMonster) return;
 
         var monster = targetCreature.Monster;
         if (monster == null) return;
 
-        // 新增判断：如果怪物当前意图是 DEAD_MOVE，则跳过修改（千足虫死亡状态）
-        if (monster.NextMove?.Id == "DEAD_MOVE") return;
-
-        // 安全地获取怪物原本的意图 ID，跳过临时状态（如 STUNNED）
-        string? originalMoveId = MonsterMoveHelper.GetEffectiveFollowUpId(monster);
+        // 使用安全方法获取后续状态 ID
+        string? safeFollowUpId = MonsterMoveHelper.GetSafeFollowUpId(monster);
+        if (safeFollowUpId == null)
+            return; // 无法获取有效后续状态，放弃强制设置
 
         var attackIntent = new SingleAttackIntent(15);
         var customMove = new MoveState(
@@ -66,14 +63,14 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
                         null
                     );
                 }
+                // 注意：不再需要手动恢复状态，因为 FollowUpStateId 已指向正确状态
             },
             attackIntent
         )
         {
-            FollowUpStateId = originalMoveId
+            FollowUpStateId = safeFollowUpId  // 使用安全 ID
         };
 
-        // 强制插入自定义动作
         if (targetCreature.IsAlive && targetCreature.Monster != null)
             monster.SetMoveImmediate(customMove, true);
     }

@@ -1,6 +1,6 @@
 {
-  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.title": "名前のセンス",
-  "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.description": "このゲームの間、対象アライの表示名を変更する。",
+  "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.title": "ネーミングセンス",
+  "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.description": "今回のプレイ中、対象の味方の表示名を変更する。\nこのカードを引いた時、カードを{Cards:diff()}枚引く。",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.title": "{target}の名前を変更",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.placeholder": "{target}の新しい名前を入力",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.confirm": "決定",

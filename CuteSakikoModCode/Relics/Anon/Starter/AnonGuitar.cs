@@ -109,7 +109,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
             var chords = _currentChords ?? new Dictionary<ChordCategory, string>();
             var bonus = _bonusChords ?? new List<string>();
             var temp = _temporaryChords ?? new List<string>();
-            var desc = new LocString("relics", "ANON_GUITAR_CHORDS_DESC");
+            var desc = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR_CHORDS_DESC");
             var lines = new List<string>();
             foreach (var kv in chords.Where(kv => kv.Key != ChordCategory.Bonus))
                 if (ChordManager.AllChords.TryGetValue(kv.Value, out var def))
@@ -139,7 +139,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
                 }
 
             desc.Add("Chords", string.Join("\n\n", lines));
-            yield return new HoverTip(new LocString("relics", "ANON_GUITAR_CHORDS_TITLE"), desc);
+            yield return new HoverTip(new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR_CHORDS_TITLE"), desc);
         }
     }
 
