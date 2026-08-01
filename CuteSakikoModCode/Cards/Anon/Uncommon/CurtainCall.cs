@@ -32,7 +32,7 @@ public class CurtainCall() : CuteAnonCard(0, CardType.Attack, CardRarity.Uncommo
 
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

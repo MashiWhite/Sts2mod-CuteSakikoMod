@@ -35,20 +35,20 @@ public class SakiBathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
         }
     }
 
-    protected override CardLocation GetResultLocationForCardPlay()
+    protected override PileType GetResultPileTypeForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
         var required = DynamicVars["PressurePower"].BaseValue;
         var enough = pressure != null && pressure.Amount >= required;
         if (enough)
-            return new CardLocation(Owner, PileType.Hand, CardPilePosition.Bottom);
+            return PileType.Hand;
 
         // 卡牌当前拥有消耗关键词 → 正常消耗
         if (Keywords.Contains(CardKeyword.Exhaust))
-            return new CardLocation(Owner, PileType.Exhaust, CardPilePosition.Bottom);
+            return PileType.Exhaust;
 
         // 消耗关键词被移除 → 进入弃牌堆
-        return new CardLocation(Owner, PileType.Discard, CardPilePosition.Bottom);
+        return PileType.Discard;
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

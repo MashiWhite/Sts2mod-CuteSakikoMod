@@ -88,7 +88,7 @@ public static class ChordManager
                 if (enemies.Any())
                 {
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                    await CreatureCmd.Damage(ctx, target, new DamageVar(3 * mult, ValueProp.Move), owner, null, null);
+                    await CreatureCmd.Damage(ctx, target, new DamageVar(3 * mult, ValueProp.Move), owner, null);
                 }
 
                 await CreatureCmd.GainBlock(owner, 3 * mult, 0, null);
@@ -128,7 +128,7 @@ public static class ChordManager
             {
                 var enemies = owner.CombatState?.Enemies;
                 if (enemies != null)
-                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(6 * mult, ValueProp.Move), owner, null, null);
+                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(6 * mult, ValueProp.Move), owner, null);
             });
 
         AddChord("E", ChordCategory.Major,
@@ -164,7 +164,7 @@ public static class ChordManager
                 if (enemies.Any())
                 {
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                    await CreatureCmd.Damage(ctx, target, new DamageVar(3 * mult, ValueProp.Move), owner, null, null);
+                    await CreatureCmd.Damage(ctx, target, new DamageVar(3 * mult, ValueProp.Move), owner, null);
                 }
             });
 
@@ -453,7 +453,7 @@ public static class ChordManager
                 if (combat == null) return;
                 var enemies = combat.Enemies;
                 if (enemies != null && enemies.Any())
-                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(20 * mult, ValueProp.Move), owner, null, null);
+                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(20 * mult, ValueProp.Move), owner, null);
                 var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
                 {
@@ -493,8 +493,7 @@ public static class ChordManager
                     owner,
                     new DamageVar(2 * mult, ValueProp.Unblockable | ValueProp.Unpowered),
                     owner,
-                    (CardModel?)null,
-                    (CardPlay?)null
+                    (CardModel?)null
                 );
 
                 foreach (var player in combat.Players)

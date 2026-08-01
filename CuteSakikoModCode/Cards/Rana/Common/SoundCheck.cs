@@ -41,7 +41,7 @@ public class SoundCheck() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, T
 
         // 执行攻击
         var attackCommand = await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

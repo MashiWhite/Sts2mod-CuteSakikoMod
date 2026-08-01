@@ -27,7 +27,7 @@ public class AreYouShy() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncommon,
 
         // 造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

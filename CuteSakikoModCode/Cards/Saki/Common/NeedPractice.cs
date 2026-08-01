@@ -29,7 +29,7 @@ public class NeedPractice() : CuteSakikoModCard(1, CardType.Attack, CardRarity.C
     {
         // 1. 造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

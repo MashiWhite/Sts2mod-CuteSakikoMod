@@ -87,15 +87,15 @@ public class Entry
         model => model.EnableCustomAncients,
         (model, value) => model.EnableCustomAncients = value
     );
-    var volumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, float>(
+    var volumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
         ModId, "config",
-        model => model.ModBgmVolume,
-        (model, value) => model.ModBgmVolume = value
+        model => (double)model.ModBgmVolume,
+        (model, value) => model.ModBgmVolume = (float)value
     );
-    var sfxVolumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, float>(
+    var sfxVolumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
         ModId, "config",
-        model => model.ModSfxVolume,
-        (model, value) => model.ModSfxVolume = value
+        model => (double)model.ModSfxVolume,
+        (model, value) => model.ModSfxVolume = (float)value
     );
     var audioBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
         ModId, "config",
@@ -148,13 +148,13 @@ public class Entry
             .AddSlider("mod_bgm_volume_slider",
                 ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL", "Mod BGM Volume"),
                 volumeBinding,
-                0.0f, 1.0f, 0.01f,
+                0.0, 1.0, 0.01,   // 原来是 0.0f, 1.0f, 0.01f
                 valueFormatter: value => $"{value:P0}",
                 description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.DESC", "..."))
             .AddSlider("mod_sfx_volume_slider",
                 ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL", "Mod SFX Volume"),
                 sfxVolumeBinding,
-                0.0f, 1.0f, 0.01f,
+                0.0, 1.0, 0.01,   // 原来是 0.0f, 1.0f, 0.01f
                 valueFormatter: value => $"{value:P0}",
                 description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.DESC", "..."))
         )

@@ -57,8 +57,7 @@ public sealed class CalmnessLadyPower : CuteSakikoModPower
             _pendingDealer,
             new DamageVar(_pendingDamage, ValueProp.Unpowered),
             Owner,   // 伤害来源为 Owner（你自己）
-            null,             // 没有卡牌来源
-            null              // 没有 CardPlay
+            null             // 没有 CardPlay
         );
 
         // 清理记录

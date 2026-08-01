@@ -39,7 +39,7 @@ public class ImmersedGuitar() : CuteRanaCard(1, CardType.Attack, CardRarity.Comm
         if (cardPlay.Target != null)
         {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this,cardPlay)
+                .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

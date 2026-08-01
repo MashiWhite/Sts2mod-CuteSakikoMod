@@ -20,11 +20,12 @@ public sealed class MemoryCardPileManager : HookedSingletonModel
 {
     private static readonly CardKeyword MemoryKeyword = CutesakiKeywords.Memory.GetModCardKeyword();
 
-    public MemoryCardPileManager() : base(true, false)
+    // 新版基类构造函数：传入 HookType.Combat 以订阅战斗钩子
+    public MemoryCardPileManager() : base(HookedSingletonModel.HookType.Combat)
     {
     }
 
-    public override bool ShouldReceiveCombatHooks => true;
+    // 不再重写 ShouldReceiveCombatHooks，基类已根据 HookType 自动设置
 
     // ★ 自定义遗忘事件（所有遗忘操作都会触发）
     public static event Func<PlayerChoiceContext, IReadOnlyList<CardModel>, CardModel?, Task>? CardsForgotten;

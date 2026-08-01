@@ -45,7 +45,7 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
         var hitCount = DynamicVars.Repeat.IntValue;
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(hitCount)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

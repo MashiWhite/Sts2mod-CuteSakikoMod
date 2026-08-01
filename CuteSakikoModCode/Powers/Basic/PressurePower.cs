@@ -111,8 +111,7 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
         decimal amount,
         ValueProp props,
         Creature? dealer,
-        CardModel? cardSource,
-        CardPlay? cardPlay)
+        CardModel? cardSource)
     {
         if (Owner != target) return 0m;
         return amount * (Amount / 100m);

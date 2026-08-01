@@ -57,7 +57,7 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
         var totalHits = 1 + extraHits;
 
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(totalHits)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

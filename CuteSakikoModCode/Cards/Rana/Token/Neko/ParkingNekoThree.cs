@@ -23,7 +23,7 @@ public class ParkingNekoThree : NekoCard
     {
         var damage = (int)DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(2)
             .Targeting(cardPlay.Target)
             .Execute(choiceContext);

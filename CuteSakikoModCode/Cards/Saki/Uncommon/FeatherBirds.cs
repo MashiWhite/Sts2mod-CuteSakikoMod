@@ -38,7 +38,7 @@ public class FeatherBirds() : CuteSakikoModCard(2, CardType.Attack, CardRarity.U
             {
                 // 造成伤害
                 await DamageCmd.Attack(damage)
-                    .FromCard(this,cardPlay)
+                    .FromCard(this)
                     .Targeting(enemy)
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);

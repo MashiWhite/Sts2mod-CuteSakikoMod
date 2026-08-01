@@ -43,7 +43,7 @@ public class WantLive() : CuteRanaCard(1, CardType.Attack, CardRarity.Basic, Tar
         if (cardPlay.Target != null)
         {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this,cardPlay)
+                .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

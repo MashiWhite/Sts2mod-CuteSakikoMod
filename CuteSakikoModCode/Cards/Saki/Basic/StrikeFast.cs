@@ -60,7 +60,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
 
         // 所有攻击合并在同一个 AttackCommand 里，活力等 buff 自然覆盖全部命中
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(totalHits)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

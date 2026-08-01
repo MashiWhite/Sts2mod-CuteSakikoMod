@@ -58,7 +58,7 @@ public class KnightSword : ModTokenCard
         if (HasSweepPower)
         {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this, cardPlay)
+                .FromCard(this)
                 .TargetingAllOpponents(CombatState)
                 .WithHitFx("vfx/vfx_giant_horizontal_slash", tmpSfx: "slash_attack.mp3")
                 .Execute(choiceContext);
@@ -67,7 +67,7 @@ public class KnightSword : ModTokenCard
         {
             if (cardPlay.Target != null)
                 await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                    .FromCard(this, cardPlay)
+                    .FromCard(this)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_giant_horizontal_slash", tmpSfx: "slash_attack.mp3")
                     .Execute(choiceContext);

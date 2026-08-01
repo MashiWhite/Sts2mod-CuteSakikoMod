@@ -28,7 +28,7 @@ public class Intermission : CuteSakikoModCard
 
         // 造成多次 1 点伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(cardPlay.Target)
             .WithHitCount(DynamicVars.Repeat.IntValue)
             .WithHitFx("vfx/vfx_attack_slash")

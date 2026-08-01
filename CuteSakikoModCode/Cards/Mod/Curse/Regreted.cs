@@ -33,6 +33,6 @@ public class Regreted : ModCurseCard
         VfxCmd.PlayOnCreatureCenter(Owner.Creature, "vfx/vfx_bloody_impact");
         await CreatureCmd.Damage(choiceContext, Owner.Creature,
             new DamageVar(DynamicVars.HpLoss.BaseValue, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move),
-            this, null);
+            this);
     }
 }

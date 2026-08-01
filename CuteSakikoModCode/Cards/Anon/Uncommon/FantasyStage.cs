@@ -29,7 +29,7 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
         {
             var damage = DynamicVars.Damage.BaseValue;
             await DamageCmd.Attack(damage)
-                .FromCard(this,cardPlay)
+                .FromCard(this)
                 .TargetingAllOpponents(CombatState)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

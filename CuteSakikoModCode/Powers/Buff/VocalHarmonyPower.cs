@@ -38,8 +38,7 @@ public class VocalHarmonyPower : CuteSakikoModPower
             enemies,
             new DamageVar(damagePerEnemy, ValueProp.Unpowered),
             Owner,
-            (CardModel?)null,
-            (CardPlay?)null
+            (CardModel?)null
         );
     }
 }

@@ -48,14 +48,14 @@ public class HellBombOn() : OtherModTokenCard(1, CardType.Skill, CardRarity.Toke
     {
         // 先对敌人造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,null)
+            .FromCard(this)
             .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
         // 再对自己造成伤害
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,null)
+            .FromCard(this)
             .Targeting(Owner.Creature)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

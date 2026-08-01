@@ -35,7 +35,7 @@ public class ThrillingLive() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncom
     {
         int damage = (int)DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .TargetingAllOpponents(CombatState)
             .Execute(choiceContext);
     }

@@ -15,11 +15,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 [RegisterSingleton]
 public class LittleMomentsManager : HookedSingletonModel
 {
-    public LittleMomentsManager() : base(true, false)
+    // 通过构造函数指定订阅战斗 Hook
+    public LittleMomentsManager()
+        : base(HookedSingletonModel.HookType.Combat)
     {
     }
-
-    public override bool ShouldReceiveCombatHooks => true;
 
     // 玩家回合开始时：将消耗堆中的所有 LittleMoments 和 Lifetime 移到弃牌堆
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
@@ -27,7 +27,6 @@ public class LittleMomentsManager : HookedSingletonModel
         var exhaustPile = PileType.Exhaust.GetPile(player);
         if (exhaustPile == null) return;
 
-        // 收集所有的 LittleMoments 和 Lifetime
         var cardsToMove = exhaustPile.Cards
             .Where(c => c is LittleMoments || c is Lifetime)
             .ToList();
@@ -50,7 +49,6 @@ public class LittleMomentsManager : HookedSingletonModel
         {
             if (player.Creature?.CombatState == null) continue;
 
-            // 检查弃牌堆、抽牌堆和消耗堆
             await TryMergeInPile(player, PileType.Discard);
             await TryMergeInPile(player, PileType.Draw);
             await TryMergeInPile(player, PileType.Exhaust);

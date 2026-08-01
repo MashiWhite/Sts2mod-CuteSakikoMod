@@ -44,7 +44,7 @@ public class Wink : CuteAnonCard
         var damage = DynamicVars.Damage.IntValue;
 
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(totalHits)
             .TargetingAllOpponents(combat)
             .WithHitFx("vfx/vfx_attack_slash")

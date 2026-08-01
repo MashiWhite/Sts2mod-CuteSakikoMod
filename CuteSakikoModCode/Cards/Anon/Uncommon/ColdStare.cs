@@ -27,7 +27,7 @@ public class ColdStare() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon,
         var hits = DynamicVars.Repeat.IntValue;
         
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .WithHitCount(hits)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")

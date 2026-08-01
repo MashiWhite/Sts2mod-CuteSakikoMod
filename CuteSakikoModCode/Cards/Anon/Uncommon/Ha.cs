@@ -32,7 +32,7 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
         // 造成伤害
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this)
             .Targeting(targetCreature)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
@@ -62,7 +62,6 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
                         players,
                         new DamageVar(15, ValueProp.Move),
                         targetCreature,
-                        null,
                         null
                     );
                 }
