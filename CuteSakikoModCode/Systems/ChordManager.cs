@@ -881,8 +881,8 @@ private static void RegisterChords()
         var exclude = category switch
         {
             ChordCategory.Major => new[] { "C" },
-            ChordCategory.Minor => new[] { "Am" },
-            ChordCategory.Dominant => new[] { "G7" },
+            ChordCategory.Minor => new[] { "Cm" },
+            ChordCategory.Dominant => new[] { "C7" },
             _ => Array.Empty<string>()
         };
         return AllChords.Values
