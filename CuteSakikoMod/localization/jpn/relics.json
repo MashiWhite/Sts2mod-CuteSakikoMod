@@ -29,9 +29,6 @@
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH.flavor": "[pink]なぜだろう…すごく見覚えがある気がする…[/pink]",
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH_FLYBACK_TITLE": "フライバック統計",
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH_FLYBACK_DESC": "フライバックプレイ回数：{playCount}\nリロード回数：{reloadCount}",
-  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.flavor": "[pink]りっきーがいなくて、長い間練習してなかったから、コードを忘れかけちゃった。ちゃんと練習しなきゃ。[/pink]",
-  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.title": "愛音のギター",
-  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "[pink]音符[/pink]を弾いて[gold]コード[/gold]をストックできる。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.title": "愛音の楽譜",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.description": "ランダムなコードを追加で1つ記憶できる。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.flavor": "[pink]愛音の楽譜。ボロボロだけど、少なくとも取り戻せた。[/pink]",
@@ -48,9 +45,6 @@
   "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR_CHORDS_DESC": "{Chords}",
   "ANON_GUITAR_SEQUENCE_TITLE": "現在の音符",
   "ANON_GUITAR_SEQUENCE_DESC": "{Sequence}",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "[pink]音符[/pink]を弾いて[gold]コード[/gold]をストックできる。\n追加でコードを1つ記憶し、演奏するコードの数値が倍になる。",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]ふふん、どう？練習の成果。[/pink]",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "愛音の練習後のギター",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "タコガラス",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "ピンクガラス",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "抹茶ガラス",
@@ -68,5 +62,11 @@
   "CUTE_SAKIKO_MOD_RELIC_CRYCHIC_SAKIKO.flavor": "[blue][b]美しい時間はいつも儚い[/b][/blue]",
   "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.title": "女神の剣",
   "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.description": "各戦闘開始時、[gold]騎士の剣[/gold]を手札に加える。誰かの[gold]重圧[/gold]が増加するたび、[gold]騎士の剣[/gold]のダメージが増加する。",
-  "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.flavor": "[blue][b]私の騎士になってくれますか？[/b][/blue]"
+  "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.flavor": "[blue][b]私の騎士になってくれますか？[/b][/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.flavor": "[pink]りっきーがいなくて、長い間練習してなかったから、コードを忘れかけちゃった。ちゃんと練習しなきゃ。[/pink]",
+  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.title": "愛音のギター",
+  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "[pink]音符[/pink]を弾いて[gold]コード[/gold]をストックできる。\n毎ターン最初に[gold]コード[/gold]を演奏する時、その数値が1増加する。",
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "[pink]音符[/pink]を弾いて[gold]コード[/gold]をストックできる。\n各カテゴリーで追加のコードを1つ記憶できる。\n毎ターン最初に[gold]コード[/gold]を演奏する時、その数値が3増加する。",
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]ふふん、どう？練習の成果。[/pink]",
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "愛音の練習後のギター"
 }

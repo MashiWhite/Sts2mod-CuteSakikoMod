@@ -2,11 +2,10 @@
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
-using System.Linq;
+
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
@@ -27,8 +26,6 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
         if (combat == null) return;
 
         var damage = DynamicVars.Damage.BaseValue;
-
-        // 一次多段随机攻击
         await DamageCmd.Attack(damage)
             .FromCard(this,cardPlay)
             .TargetingRandomOpponents(combat)
@@ -36,32 +33,23 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 额外获得一个随机音符（不消耗 CombatCardSelection）
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
         {
             var shuffleRng = Owner.RunState.Rng.Shuffle;
             var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
             var randomType = noteTypes[shuffleRng.NextInt(noteTypes.Length)];
-            
-            var mainChords = guitar.GetCurrentChords();
-            var bonusChords = guitar.GetBonusChords();
-            var tempChords = guitar.GetTemporaryChords();
-            
+            var allChords = guitar.GetAllEquippedChords();
+
             int manualNoteCount = IsUpgraded ? 3 : 2;
             for (int i = 0; i < manualNoteCount; i++)
-            {
-                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, randomType,
-                    mainChords,
-                    bonusChords.Concat(tempChords),choiceContext);
-            }
+                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, randomType, allChords, choiceContext);
 
-            // 刷新 UI
             guitar.UpdateNoteDisplay();
             guitar.UpdateStoredChordDisplay();
         }
     }
-   
+
     protected override void OnUpgrade()
     {
         _hitCount = 5;

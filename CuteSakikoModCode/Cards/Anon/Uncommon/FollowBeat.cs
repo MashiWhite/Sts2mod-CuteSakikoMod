@@ -31,7 +31,6 @@ public class FollowBeat() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         TriggerBanter();
 
-        // 造成伤害
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
             .FromCard(this,cardPlay)
@@ -39,25 +38,21 @@ public class FollowBeat() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 获取吉他遗物
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        // 获取当前大三和弦槽位的 ID
-        var majorChords = guitar.GetCurrentChords();
-        if (!majorChords.TryGetValue(ChordCategory.Major, out var majorChordId) || string.IsNullOrEmpty(majorChordId))
-            return;
+        var majorChords = guitar.GetCategorySlots(ChordCategory.Major);
+        if (majorChords.Count == 0) return;
+        var majorChordId = majorChords[0];
 
-        // 将同一个大三和弦储存三次
         for (var i = 0; i < 3; i++)
             await guitar.AddChordToStored(choiceContext, majorChordId);
 
-        // 刷新储存和弦 UI
         guitar.UpdateStoredChordDisplay();
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m); // 12 → 16
+        DynamicVars.Damage.UpgradeValueBy(4m);
     }
 }

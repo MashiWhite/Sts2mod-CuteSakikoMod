@@ -15,7 +15,7 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
         get
         {
             yield return new DamageVar(30m, ValueProp.Move);
-            yield return new DynamicVar("Notes", 4m); // 初始获得5个音符
+            yield return new DynamicVar("Notes", 4m);
         }
     }
 
@@ -24,7 +24,6 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         TriggerBanter();
 
-        // 造成伤害
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
             .FromCard(this,cardPlay)
@@ -32,20 +31,14 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 额外获得攻击音符（次数由动态变量 Notes 决定）
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
         {
-            var mainChords = guitar.GetCurrentChords();
-            var bonusChords = guitar.GetBonusChords();
-            var tempChords = guitar.GetTemporaryChords();
-            var allBonus = bonusChords.Concat(tempChords);
-
+            var allChords = guitar.GetAllEquippedChords();
             var noteCount = (int)DynamicVars["Notes"].BaseValue;
             for (var i = 0; i < noteCount; i++)
-                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Attack, mainChords, allBonus,choiceContext);
+                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Attack, allChords, choiceContext);
 
-            // 刷新 UI
             guitar.UpdateNoteDisplay();
             guitar.UpdateStoredChordDisplay();
         }
@@ -53,7 +46,7 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(10m); // 伤害 30 → 40
-        DynamicVars["Notes"].UpgradeValueBy(3m); 
+        DynamicVars.Damage.UpgradeValueBy(10m);
+        DynamicVars["Notes"].UpgradeValueBy(3m);
     }
 }

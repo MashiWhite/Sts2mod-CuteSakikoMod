@@ -8,14 +8,14 @@ namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 public partial class ChordSlotDropTarget : Control
 {
     private ChordCategory _slotCategory;
+    private int _slotIndex;          // 当前槽位的索引（0-based）
     private string _currentChordId;
     private ChordManagementScreen _screen;
 
-    
-    
-    public ChordSlotDropTarget(ChordCategory slotCategory, string currentChordId, ChordManagementScreen screen)
+    public ChordSlotDropTarget(ChordCategory slotCategory, int slotIndex, string currentChordId, ChordManagementScreen screen)
     {
         _slotCategory = slotCategory;
+        _slotIndex = slotIndex;
         _currentChordId = currentChordId;
         _screen = screen;
         CustomMinimumSize = new Vector2(80, 80);
@@ -62,16 +62,8 @@ public partial class ChordSlotDropTarget : Control
         if (_screen.Guitar == null || _screen._readOnly) return;
         string newChordId = (string)data;
 
-        if (_slotCategory == ChordCategory.Bonus)
-        {
-            int index = _screen.GetBonusChordIndex(_currentChordId);
-            if (index >= 0)
-                _screen.SetTempSlot(ChordCategory.Bonus, index, newChordId);
-        }
-        else
-        {
-            _screen.SetTempSlot(_slotCategory, -1, newChordId);
-        }
+        // 直接使用构造函数传入的槽位索引
+        _screen.SetTempSlot(_slotCategory, _slotIndex, newChordId);
     }
 
     private void OnMouseEntered()
@@ -81,7 +73,7 @@ public partial class ChordSlotDropTarget : Control
             var tip = ChordDisplayHelper.GetDynamicChordHoverTip(
                 _currentChordId,
                 _screen.Guitar.Owner.Creature,
-                _screen.Guitar.GetEffectMultiplier());
+                _screen.Guitar.GetTotalBonus());
             var tipSet = NHoverTipSet.CreateAndShow(this, tip);
             if (tipSet == null) return;
 

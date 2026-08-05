@@ -32,12 +32,13 @@ public static class ChordDisplayHelper
         return null;
     }
 
-    public static string GetFormattedDescription(ChordDefinition def, int multiplier)
+    // ChordDisplayHelper.cs
+    public static string GetFormattedDescription(ChordDefinition def, int bonus)
     {
         var rawDesc = new LocString("card_keywords", def.DescKey).GetRawText();
         if (def.BaseValues == null || def.BaseValues.Length == 0)
             return rawDesc;
-        var values = def.BaseValues.Select(v => (v * multiplier).ToString()).ToArray();
+        var values = def.BaseValues.Select(v => (v + bonus).ToString()).ToArray();
         try
         {
             return string.Format(rawDesc, values);

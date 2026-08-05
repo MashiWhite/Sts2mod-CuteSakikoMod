@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
+
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
 public class DontRun() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
@@ -20,7 +21,6 @@ public class DontRun() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, Tar
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         TriggerBanter();
 
-        // 造成伤害
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
             .FromCard(this,cardPlay)
@@ -28,23 +28,14 @@ public class DontRun() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, Tar
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 额外获得攻击音符
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
         {
-            var mainChords = guitar.GetCurrentChords();
-            var bonusChords = guitar.GetBonusChords();
-            var tempChords = guitar.GetTemporaryChords();
-            
+            var allChords = guitar.GetAllEquippedChords();
             int manualNoteCount = IsUpgraded ? 3 : 2;
             for (int i = 0; i < manualNoteCount; i++)
-            {
-                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Attack,
-                    mainChords,
-                    bonusChords.Concat(tempChords),choiceContext);
-            }
+                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Attack, allChords, choiceContext);
 
-            // 刷新 UI
             guitar.UpdateNoteDisplay();
             guitar.UpdateStoredChordDisplay();
         }
@@ -52,6 +43,6 @@ public class DontRun() : CuteAnonCard(1, CardType.Attack, CardRarity.Common, Tar
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 10 → 13
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

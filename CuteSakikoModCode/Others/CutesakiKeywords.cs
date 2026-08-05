@@ -24,8 +24,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
 [RegisterOwnedCardKeyword(nameof(Sakiforget))]
 [RegisterOwnedCardKeyword(nameof(Parfait))]
 [RegisterOwnedCardKeyword(nameof(AnonNote))]
-[RegisterOwnedCardKeyword(nameof(Neko),
-    CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
+[RegisterOwnedCardKeyword(nameof(Neko))]
 [RegisterOwnedCardKeyword(nameof(RanaLive),
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
 [RegisterOwnedCardKeyword(nameof(Pancake))]

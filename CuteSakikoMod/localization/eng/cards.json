@@ -5,6 +5,8 @@
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.placeholder": "Enter a new name for {target}",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.confirm": "Confirm",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.cancel": "Cancel",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_TRANCE.title": "Spacing Out with Cats",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_TRANCE.description": "Add {IfUpgraded:show:2|1} [gold]Cat(s)[/gold] to your hand.\nYour [gold]Cats[/gold] gain [gold]Retain[/gold].",
   
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.title": "Strike",
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.description": "Deal {Damage:diff()} damage.",

@@ -54,8 +54,8 @@ public sealed class OblivionisPower : CuteSakikoModPower
                 enemies,
                 new DamageVar(damagePerCard, ValueProp.Unpowered),
                 owner.Creature,
-                (CardModel?)null,
-                (CardPlay?)null
+                null,
+                null
             );
         }
     }

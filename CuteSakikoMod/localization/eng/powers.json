@@ -206,5 +206,24 @@
   "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.title": "HiBiKi Bank",
   "HBK_BANK_POWER.chooseToken": "Choose a Gold trading method",
   "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.description": "At the start of each turn, choose a Gold trading method.",
-  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.smartDescription": "At the start of each turn, choose a Gold trading method.\nCurrent Gold Price: [blue]{GoldPrice}[/blue]."
+  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.smartDescription": "At the start of each turn, choose a Gold trading method.\nCurrent Gold Price: [blue]{GoldPrice}[/blue].",
+
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TRANCE_POWER.title": "Spacing Out with Cats",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TRANCE_POWER.description": "Your [gold]Cats[/gold] gain [gold]Retain[/gold].",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TRANCE_POWER.smartDescription": "Your [gold]Cats[/gold] gain [gold]Retain[/gold].",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_POWER.title": "Chord Power",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_POWER.description": "Gain temporary [gold]Strength[/gold] equal to the number of stacks this turn.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_POWER.smartDescription": "Increase [gold]Strength[/gold] by [blue]{Amount}[/blue] this turn.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_DEXTERITY_POWER.title": "Chord Power",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_DEXTERITY_POWER.description": "Gain temporary [gold]Dexterity[/gold] equal to the number of stacks this turn.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_DEXTERITY_POWER.smartDescription": "Increase [gold]Dexterity[/gold] by [blue]{Amount}[/blue] this turn.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_ATTACK_COST_REDUCTION_POWER.title": "Chord Power",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_ATTACK_COST_REDUCTION_POWER.description": "Your next Attack costs [blue]1[/blue] less.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_ATTACK_COST_REDUCTION_POWER.smartDescription": "Your next [blue]{Amount}[/blue] Attacks cost [blue]1[/blue] less.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.title": "Chord Power",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.description": "Your next Skill costs [blue]1[/blue] less.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.smartDescription": "Your next [blue]{Amount}[/blue] Skills cost [blue]1[/blue] less.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.title": "Chord Amplification",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "The next time you perform any [gold]Chords[/gold], increase their values by the number of stacks.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "The next performed [gold]Chord(s)[/gold] have their values increased by [blue]{Amount}[/blue]."
 }

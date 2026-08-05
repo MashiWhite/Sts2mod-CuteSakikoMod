@@ -203,5 +203,25 @@
   "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.title": "HiBiKi银行",
   "HBK_BANK_POWER.chooseToken": "选择一种黄金交易",
   "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.description": "每回合开始时，选择一种黄金交易。",
-  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.smartDescription": "每回合开始时，选择一种黄金交易。\n当前金价：[blue]{GoldPrice}[/blue]。"
+  "CUTE_SAKIKO_MOD_POWER_HBK_BANK_POWER.smartDescription": "每回合开始时，选择一种黄金交易。\n当前金价：[blue]{GoldPrice}[/blue]。",
+  
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TRANCE_POWER.title": "和猫发呆",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TRANCE_POWER.description": "你的[gold]猫咪[/gold]获得[gold]保留[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_TRANCE_POWER.smartDescription": "你的[gold]猫咪[/gold]获得[gold]保留[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_POWER.title": "和弦之力",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_POWER.description": "本回合获得层数等量临时[gold]力量[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_STRENGTH_POWER.smartDescription": "本回合[gold]力量[/gold]增加[blue]{Amount}[/blue]层。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_DEXTERITY_POWER.title": "和弦之力",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_DEXTERITY_POWER.description": "本回合获得层数等量临时[gold]敏捷[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_TEMP_DEXTERITY_POWER.smartDescription": "本回合[gold]敏捷[/gold]增加[blue]{Amount}[/blue]层。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_ATTACK_COST_REDUCTION_POWER.title": "和弦之力",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_ATTACK_COST_REDUCTION_POWER.description": "下一张攻击牌的费用减少[blue]1[/blue]点。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_ATTACK_COST_REDUCTION_POWER.smartDescription": "下[blue]{Amount}[/blue]次攻击费用-[blue]1[/blue]。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.title": "和弦之力",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.description": "下一张技能牌的费用减少[blue]1[/blue]点。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.smartDescription": "下[blue]{Amount}[/blue]次技能费用-[blue]1[/blue]。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.title": "和弦增幅",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "下一次演奏的所有[gold]和弦[/gold]数值增加层数等量点。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "下一次演奏的所有[gold]和弦[/gold]数值+[blue]{Amount}[/blue]。"
+
 }

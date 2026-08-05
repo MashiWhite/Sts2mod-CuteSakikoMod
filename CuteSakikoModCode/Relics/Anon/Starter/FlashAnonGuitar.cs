@@ -6,10 +6,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 
 public class FlashAnonGuitar : AnonGuitar
 {
-    private bool _bonusAdded;
     public override RelicRarity Rarity => RelicRarity.Starter;
     protected override int MaxLearnedChordsPerCategory => 2;
-    protected override int EffectMultiplier => 2;
+    protected override int FirstPlayBonus => 3; // 新增这一行
 
     [OnDeserialized]
     private void OnDeserialized(StreamingContext context)
@@ -20,7 +19,6 @@ public class FlashAnonGuitar : AnonGuitar
 
     public override async Task AfterObtained()
     {
-        // 尝试从静态字典恢复（进化瞬间传递）
         if (Owner != null && _pendingMigration.TryGetValue(Owner, out var data))
         {
             RestoreChordData(data.chords, data.bonus, data.temp);
@@ -28,23 +26,16 @@ public class FlashAnonGuitar : AnonGuitar
         }
         else if (Owner != null)
         {
-            // 静态字典没有，尝试从可能还存在的旧吉他复制
             var oldGuitar = Owner.Relics.OfType<AnonGuitar>()
                 .FirstOrDefault(r => r is not FlashAnonGuitar && r != this);
             if (oldGuitar != null) oldGuitar.CopyChordsTo(this);
         }
 
-        // 调用基类 AfterObtained，确保 EnsureInitialized 执行
         await base.AfterObtained();
-
-        // 清理旧的 bonus 迁移数据
         _pendingBonusMigration.Remove(Owner);
 
-        // 添加专属 Bonus 和弦
-        if (!_bonusAdded)
-        {
-            _bonusAdded = true;
-            ChordCmd.AddRandomBonusChord(this);
-        }
+        // 先古吉他：填充所有类别至上限（2个）
+        foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
+            FillCategorySlots(cat);
     }
 }

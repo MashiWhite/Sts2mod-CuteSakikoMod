@@ -15,23 +15,25 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 public static class ChordCmd
 {
+    // ChordCmd.cs 中的 SelectChords 方法（完整替换）
     public static async Task<List<string>> SelectChords(
         PlayerChoiceContext context,
         Player player,
-        int count)
+        int count,
+        int multiplier = 0)  // 新增 multiplier 参数，默认为 0 表示基础值
     {
         var runManager = RunManager.Instance;
         var sync = runManager.PlayerChoiceSynchronizer;
         var choiceId = sync.ReserveChoiceId(player);
 
-        await context.SignalPlayerChoiceBegun(player,PlayerChoiceOptions.CancelPlayCardActions);
+        await context.SignalPlayerChoiceBegun(player, PlayerChoiceOptions.CancelPlayCardActions);
 
         List<int> chordIndexes = null;
 
         if (runManager.NetService.NetId == player.NetId)
         {
             var screen = new ChordLibraryScreen();
-            var selectedIds = await screen.ShowSelection(count);
+            var selectedIds = await screen.ShowSelection(count, multiplier);
             if (selectedIds != null && selectedIds.Count == count)
                 chordIndexes = selectedIds
                     .Select(id => ChordManager.AllChordsList.FindIndex(c => c.Id == id))
@@ -55,39 +57,28 @@ public static class ChordCmd
         return chordIndexes.Select(i => ChordManager.AllChordsList[i].Id).ToList();
     }
 
-    /// <summary>
-    /// 为指定吉他添加一个随机的可学习 Bonus 和弦，并自动加入已学习列表。
-    /// 所有客户端调用结果一致（全局同步随机数 UpFront）。
-    /// </summary>
     public static bool AddRandomBonusChord(AnonGuitar guitar)
     {
         if (guitar?.Owner == null) return false;
 
-        var ownedChordIds = new HashSet<string>();
-        foreach (var kv in guitar.GetCurrentChords())
-            if (!string.IsNullOrEmpty(kv.Value))
-                ownedChordIds.Add(kv.Value);
-        foreach (var id in guitar.GetBonusChords())
-            ownedChordIds.Add(id);
+        var owned = new HashSet<string>(guitar.GetAllEquippedChords());
+        foreach (var id in guitar.GetLearnedChords())
+            owned.Add(id);
 
         var allPools = new List<string>();
         allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
         allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
         allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
 
-        var available = allPools.Where(id => !ownedChordIds.Contains(id)).ToList();
+        var available = allPools.Where(id => !owned.Contains(id)).ToList();
         if (available.Count == 0) return false;
 
         var newChord = guitar.Owner.RunState.Rng.UpFront.NextItem(available);
         guitar.AddBonusChord(newChord);
-        guitar.LearnChord(newChord); // 可选
+        guitar.LearnChord(newChord);
         return true;
     }
 
-    /// <summary>
-    /// 为指定吉他添加指定数量的临时和弦（随机、不重复），同时加入已学习列表。
-    /// 所有客户端调用结果一致（全局同步随机数 UpFront）。
-    /// </summary>
     public static int AddRandomTemporaryChords(AnonGuitar guitar, int targetCount)
     {
         if (guitar?.Owner == null) return 0;
@@ -96,43 +87,55 @@ public static class ChordCmd
         int currentCount = existing.Count;
         if (currentCount >= targetCount) return 0;
 
-        var needed = targetCount - currentCount;
+        int needed = targetCount - currentCount;
+        int added = 0;
+        var rng = guitar.Owner.RunState.Rng.UpFront;
 
-        var ownedChordIds = new HashSet<string>();
-        foreach (var kv in guitar.GetCurrentChords())
-            if (!string.IsNullOrEmpty(kv.Value))
-                ownedChordIds.Add(kv.Value);
-        foreach (var id in guitar.GetBonusChords())
-            ownedChordIds.Add(id);
-        foreach (var id in existing)
-            ownedChordIds.Add(id);
-
+        // 1. 获取所有可学习和弦（全量池）
         var allPools = new List<string>();
         allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
         allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
         allPools.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
 
-        var available = allPools.Where(id => !ownedChordIds.Contains(id)).ToList();
-        if (available.Count == 0) return 0;
+        // 构建“已拥有”集合（已学、已装备、当前临时），用于过滤未学
+        var owned = new HashSet<string>(guitar.GetAllEquippedChords());
+        foreach (var id in guitar.GetLearnedChords())
+            owned.Add(id);
+        foreach (var id in existing)
+            owned.Add(id);
 
-        var rng = guitar.Owner.RunState.Rng.UpFront;
-        int added = 0;
-        for (int i = 0; i < needed; i++)
+        // 从未学且未拥有的池中选取（优先）
+        var available = allPools.Where(id => !owned.Contains(id)).ToList();
+
+        // 2. 优先从 available 中取（未学）
+        while (added < needed && available.Count > 0)
         {
-            if (available.Count == 0) break;
             var chordId = rng.NextItem(available);
             guitar.AddTemporaryChord(chordId);
-            guitar.LearnChord(chordId);
-            available.Remove(chordId);
+            guitar.LearnChord(chordId);      // 永久学习
+            available.Remove(chordId);       // 防止重复
+            // 注意：该和弦现在已加入 owned，但我们不更新 owned 集合，因为 fallback 会从已学集合取，不影响
             added++;
+        }
+
+        // 3. 如果还需要，从已学习和弦中取（所有和弦都已学完，或 available 不够）
+        if (added < needed)
+        {
+            var learned = guitar.GetLearnedChords().ToList(); // 所有已学
+            if (learned.Count == 0) return added; // 如果没有已学的，无法继续
+
+            while (added < needed)
+            {
+                var chordId = rng.NextItem(learned); // 从已学池随机取，允许重复
+                guitar.AddTemporaryChord(chordId);
+                // 不调用 LearnChord，因为已经学过了
+                added++;
+            }
         }
 
         return added;
     }
 
-    /// <summary>
-    /// 随机学习指定数量的新和弦（不自动装备），使用战斗内随机数 CombatCardGeneration。
-    /// </summary>
     public static List<string> LearnRandomChords(AnonGuitar guitar, int count)
     {
         if (guitar?.Owner == null) return new List<string>();
@@ -155,9 +158,6 @@ public static class ChordCmd
         return toLearn;
     }
 
-    /// <summary>
-    /// 偶然弹奏一个随机和弦并储存，不学习。
-    /// </summary>
     public static async Task AddRandomImprovisedChord(AnonGuitar guitar, PlayerChoiceContext context)
     {
         if (guitar?.Owner == null) return;

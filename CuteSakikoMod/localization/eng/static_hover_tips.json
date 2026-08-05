@@ -16,5 +16,10 @@
   "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.empty": "There is nothing in memory...",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.title": "Forget",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "Forgotten cards permanently leave this combat, and the Memories associated with them are cleared.",
-  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "No cards have been forgotten yet."
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "No cards have been forgotten yet.",
+  "CUTE_SAKIKO_MOD_CONDITION_ATTACK": "Atk",
+  "CUTE_SAKIKO_MOD_CONDITION_SKILL": "Skl",
+  "CUTE_SAKIKO_MOD_CONDITION_POWER": "Pwr",
+  "CUTE_SAKIKO_MOD_CONDITION_ANY": "Any",
+  "CUTE_SAKIKO_MOD_CONDITION_STATUS": "Sts"
 }

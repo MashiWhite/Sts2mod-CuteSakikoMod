@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 public enum ChordCategory
 {
-    Major,
-    Minor,
-    Dominant,
-    Bonus,
-    Anon
+    Major, Minor, Dominant, Bonus, Anon
 }
 
 public class ChordDefinition
@@ -26,20 +21,45 @@ public class ChordDefinition
     public string DescKey { get; set; }
     public string IconName { get; set; }
     public bool IsTemporaryOnly { get; set; }
-    public Func<PlayerChoiceContext, Creature, int, Task> Effect { get; set; }
 
+    // 新版委托：bonus 为加算数值
+    public Func<PlayerChoiceContext, Creature, int, Task> Effect { get; set; }
+    
     public string GetConditionText()
     {
         var parts = new List<string>();
         foreach (var type in NoteSequence)
-            parts.Add(type switch
+        {
+            string text;
+            string color;
+
+            if (type == Entry.AnyNote)
             {
-                _ when type == Entry.AnyNote => "[pink]音[/pink]",
-                CardType.Attack => "[red]攻[/red]",
-                CardType.Skill => "[blue]技[/blue]",
-                CardType.Power => "[gold]能[/gold]",
-                _ => "特"
-            });
+                text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ANY").GetFormattedText();
+                color = "gray";
+            }
+            else switch (type)
+            {
+                case CardType.Attack:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ATTACK").GetFormattedText();
+                    color = "red";
+                    break;
+                case CardType.Skill:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_SKILL").GetFormattedText();
+                    color = "blue";
+                    break;
+                case CardType.Power:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_POWER").GetFormattedText();
+                    color = "gold";
+                    break;
+                default:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_STATUS").GetFormattedText();
+                    color = "pink";
+                    break;
+            }
+
+            parts.Add($"[{color}]{text}[/{color}]");
+        }
         return string.Join(" ", parts);
     }
 }

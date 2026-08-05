@@ -18,9 +18,8 @@ public class ImpromptuPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, 
         TriggerBanter();
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        var multiplier = guitar?.GetEffectMultiplier() ?? 1;
+        if (guitar == null) return;
 
-        // 收集手牌、抽牌堆、弃牌堆（不包括消耗堆）
         var allPiles = new[]
         {
             PileType.Hand.GetPile(Owner),
@@ -31,25 +30,29 @@ public class ImpromptuPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, 
         var chordCards = allPiles
             .Where(p => p != null)
             .SelectMany(p => p.Cards)
-            .Where(c => c.Keywords.Contains(CutesakiKeywords.Chord.GetModCardKeyword())) // 修改这一行
+            .Where(c => c.Keywords.Contains(CutesakiKeywords.Chord.GetModCardKeyword()))
             .ToList();
 
+        // 收集所有要演奏的和弦ID
+        var chordIds = new List<string>();
         foreach (var card in chordCards)
         {
-            // 从卡牌自身获取和弦ID（要求卡牌重写了 ChordId）
             var chordId = (card as CuteAnonCard)?.ChordId;
-            if (!string.IsNullOrEmpty(chordId) && ChordManager.AllChords.TryGetValue(chordId, out var def))
+            if (!string.IsNullOrEmpty(chordId) && ChordManager.AllChords.ContainsKey(chordId))
             {
-                // 先消耗，再演奏
+                chordIds.Add(chordId);
                 await CardCmd.Exhaust(choiceContext, card);
-                await def.Effect(choiceContext, Owner.Creature, multiplier);
             }
         }
+
+        // 一次性演奏所有和弦，共享首次加成
+        if (chordIds.Count > 0)
+            await guitar.PlaySpecificChords(choiceContext, chordIds);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 3 → 2
+        EnergyCost.UpgradeBy(-1);
         AddKeyword(CardKeyword.Innate);
     }
 }

@@ -32,23 +32,11 @@ public class PlayTogether() : CuteAnonCard(-1, CardType.Skill, CardRarity.Rare, 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        var chordIds = guitar.GetEquippedChordIds(); // 所有已学习和弦
-        if (chordIds.Count == 0) return;
-
         var x = ResolveEnergyXValue();
         var times = IsUpgraded ? x + 4 : x + 2; 
         if (times <= 0) return;
 
-        var rng = Owner.RunState.Rng.CombatCardSelection;
-        var creature = Owner.Creature;
-        var multiplier = guitar.GetEffectMultiplier(); // 使用新增的公共方法
-
-        for (var i = 0; i < times; i++)
-        {
-            var randomChordId = rng.NextItem(chordIds);
-            if (ChordManager.AllChords.TryGetValue(randomChordId, out var def))
-                await def.Effect(choiceContext, creature, multiplier);
-        }
+        await guitar.PlayRandomEquippedChord(choiceContext, times);
     }
 
     protected override void OnUpgrade()

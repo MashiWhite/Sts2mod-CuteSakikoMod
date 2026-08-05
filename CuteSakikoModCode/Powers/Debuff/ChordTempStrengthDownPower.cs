@@ -1,19 +1,14 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
-using STS2RitsuLib.Combat.Powers;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 
 [RegisterPower]
-public class ChordTempStrengthDownPower : ModTemporaryPowerTemplate
+public class ChordTempStrengthDownPower : CuteSakikoTemporaryPower
 {
-    public override LocString Title => new("powers", Id.Entry + ".title");
-    public override PowerAssetProfile AssetProfile => this.PowerAssetProfile();
 
     public override PowerModel InternallyAppliedPower =>
         ModelDb.Power<StrengthPower>().ToMutable();

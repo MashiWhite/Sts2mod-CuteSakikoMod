@@ -5,6 +5,8 @@
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.placeholder": "{target}の新しい名前を入力",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.confirm": "決定",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.cancel": "キャンセル",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_TRANCE.title": "猫とぼんやり",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_TRANCE.description": "{IfUpgraded:show:2|1}枚の[gold]猫[/gold]を手札に加える。\n自分の[gold]猫[/gold]が[gold]保留[/gold]を得る。",
   
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.title": "ストライク",
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.description": "{Damage:diff()}ダメージを与える。",

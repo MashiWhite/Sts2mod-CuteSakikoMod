@@ -1,9 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Common;
 
@@ -22,14 +20,8 @@ public class Recorder : CuteAnonRelic
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
-        var chordIds = guitar.GetEquippedChordIds();
-        if (chordIds.Count == 0) return;
-
-        // 随机选择 1 个和弦并演奏
-        var randomChord = Owner.RunState.Rng.CombatCardSelection.NextItem(chordIds);
-        if (ChordManager.AllChords.TryGetValue(randomChord, out var def))
-            await def.Effect(new ThrowingPlayerChoiceContext(), Owner.Creature, guitar.GetEffectMultiplier());
-
+        // 使用吉他提供的自动演奏方法，正确处理加成
+        await guitar.PlayRandomEquippedChordImmediate();
         Flash();
     }
 }

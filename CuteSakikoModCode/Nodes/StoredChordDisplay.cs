@@ -15,7 +15,7 @@ public partial class StoredChordDisplay : Control
         _vbox.MouseFilter = MouseFilterEnum.Ignore;
     }
 
-    public void UpdateChords(List<string> chords, int multiplier)
+    public void UpdateChords(List<string> chords, int bonus)
     {
         // 清空现有子节点
         foreach (var child in _vbox.GetChildren())
@@ -24,7 +24,7 @@ public partial class StoredChordDisplay : Control
         foreach (var chord in chords)
         {
             var tex = ChordDisplayHelper.GetChordTexture(chord);
-            var tip = ChordDisplayHelper.GetChordHoverTip(chord, multiplier);
+            var tip = ChordDisplayHelper.GetChordHoverTip(chord, bonus);
 
             if (tex != null)
             {

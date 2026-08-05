@@ -31,22 +31,24 @@ public static class MusicNoteManager
     /// 统一的异步入口：添加音符 → 触发 GuitarVocalPower → 自动演奏和弦。
     /// 所有有上下文的音符添加（如打牌、遗物触发）都应调用此方法。
     /// </summary>
+    /// <summary>
+    /// 统一的异步入口（新）：使用统一的和弦ID列表进行匹配。
+    /// </summary>
     public static async Task AddNoteAndAutoPlayAsync(
         Player player,
         CardType type,
-        IReadOnlyDictionary<ChordCategory, string> learnedChords,
-        IEnumerable<string> bonusChordIds,
+        IReadOnlyList<string> allChordIds,
         PlayerChoiceContext context)
     {
-        // 1. 同步添加音符，获取识别结果
-        var result = AddNote(player, type, learnedChords, bonusChordIds);
+        // 1. 同步添加音符，识别结果
+        var result = AddNote(player, type, allChordIds);
 
-        // 2. 触发 GuitarVocalPower（如果有）
+        // 2. 触发 GuitarVocalPower
         var vocalPower = player?.Creature?.GetPower<GuitarVocalPower>();
         if (vocalPower != null)
             await vocalPower.OnNoteGained(context, 1);
 
-        // 3. 自动演奏和弦（溢出、立即演奏、StageNerves）
+        // 3. 自动演奏和弦
         var guitar = player?.Relics?.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar != null)
             await guitar.AutoPlayNewChords(context, result);
@@ -58,8 +60,7 @@ public static class MusicNoteManager
     public static NoteProcessResult AddNote(
         Player player,
         CardType type,
-        IReadOnlyDictionary<ChordCategory, string> learnedChords,
-        IEnumerable<string> bonusChordIds)
+        IReadOnlyList<string> allChordIds)
     {
         var result = new NoteProcessResult
         {
@@ -87,21 +88,8 @@ public static class MusicNoteManager
         var sequence = data.Notes.ToList();
         var matchedChords = new List<string>();
 
-        if (learnedChords != null)
-            foreach (var kv in learnedChords)
-            {
-                var chordId = kv.Value;
-                if (string.IsNullOrEmpty(chordId)) continue;
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                {
-                    var modifiedSeq = ChordSequenceModifierHelper.GetModifiedSequence(def, player.Creature);
-                    if (ChordManager.MatchesChord(modifiedSeq, sequence))
-                        matchedChords.Add(chordId);
-                }
-            }
-
-        if (bonusChordIds != null)
-            foreach (var chordId in bonusChordIds)
+        if (allChordIds != null)
+            foreach (var chordId in allChordIds)
             {
                 if (string.IsNullOrEmpty(chordId)) continue;
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
@@ -125,8 +113,6 @@ public static class MusicNoteManager
         }
 
         result.TotalStoredCount = data.StoredChords.Count;
-
-        // 音符变化通知（UI 刷新）
         PlayerNotesChanged?.Invoke(player);
         return result;
     }

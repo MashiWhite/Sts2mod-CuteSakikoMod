@@ -16,5 +16,10 @@
   "CUTE_SAKIKO_MOD_CARDPILE_MEMORY.empty": "メモリーは空っぽ……",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.title": "忘却",
   "CUTE_SAKIKO_MOD_CARDPILE_FORGET.description": "忘却されたカードはこの戦闘から永久に消え、それに関連するメモリーも消去される。",
-  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "まだ忘却されたカードはない。"
+  "CUTE_SAKIKO_MOD_CARDPILE_FORGET.empty": "まだ忘却されたカードはない。",
+  "CUTE_SAKIKO_MOD_CONDITION_ATTACK": "攻",
+  "CUTE_SAKIKO_MOD_CONDITION_SKILL": "技",
+  "CUTE_SAKIKO_MOD_CONDITION_POWER": "能",
+  "CUTE_SAKIKO_MOD_CONDITION_ANY": "音",
+  "CUTE_SAKIKO_MOD_CONDITION_STATUS": "特"
 }

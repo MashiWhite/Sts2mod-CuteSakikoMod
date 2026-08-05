@@ -1,6 +1,7 @@
 ﻿using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Localization;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
@@ -94,14 +95,37 @@ public static class ChordSequenceModifierHelper
         var seq = GetModifiedSequence(chordDef, owner);
         var parts = new List<string>();
         foreach (var t in seq)
-            parts.Add(t switch
+        {
+            string text;
+            string color;
+
+            if (t == Entry.AnyNote)
             {
-                _ when t == Entry.AnyNote => "[pink]音[/pink]",
-                CardType.Attack => "[red]攻[/red]",
-                CardType.Skill => "[blue]技[/blue]",
-                CardType.Power => "[gold]能[/gold]",
-                _ => "[pink]特[/pink]"
-            });
+                text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ANY").GetFormattedText();
+                color = "gray";
+            }
+            else switch (t)
+            {
+                case CardType.Attack:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ATTACK").GetFormattedText();
+                    color = "red";
+                    break;
+                case CardType.Skill:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_SKILL").GetFormattedText();
+                    color = "blue";
+                    break;
+                case CardType.Power:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_POWER").GetFormattedText();
+                    color = "gold";
+                    break;
+                default:
+                    text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_STATUS").GetFormattedText();
+                    color = "pink";
+                    break;
+            }
+
+            parts.Add($"[{color}]{text}[/{color}]");
+        }
         return string.Join(" ", parts);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Nodes;
@@ -42,23 +41,33 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         { "guitar_strum1.mp3", "guitar_strum2.mp3", "guitar_strum3.mp3", "guitar_strum4.mp3", "guitar_strum5.mp3" };
 
     private static readonly Random _rand = new();
-    protected List<string> _bonusChords = new();
+    protected List<string> _bonusChords = new(); // 额外槽位（不限种类）
+    private bool _chordBonusConsumedThisOperation;
 
-    private Dictionary<ChordCategory, string> _currentChords = new();
     private bool _curtainCallRecalledThisTurn;
+
+    // 装备和弦：每个分类一个列表（支持多槽位）
+    protected Dictionary<ChordCategory, List<string>> _equippedChords = new();
+    private bool _firstPlayBonusAppliedThisOperation;
+    private bool _firstPlayBonusConsumedThisTurn;
     protected bool _initialized;
 
+    protected List<string> _learnedChords = new();
+
     private NoteDisplay _noteDisplay;
-    private Dictionary<ChordCategory, string>? _preTempChords;
     protected string _savedBonusChordsData = "";
+
+    // 序列化字段
     protected string _savedChordsData = "";
+    protected string _savedLearnedChordsData = "";
     protected string _savedTemporaryChordsData = "";
     private StoredChordDisplay _storedChordDisplay;
-    private List<string> _temporaryChords = new();
 
-    // ========== 新增：已学习和弦池 ==========
-    protected List<string> _learnedChords = new();
-    protected string _savedLearnedChordsData = "";
+    protected List<string> _temporaryChords = new(); // 临时槽位
+
+    // 新增字段（放在 _chordBonusConsumedThisOperation 附近）
+    // 新增虚拟属性（放在 BaseChordBonus 附近）
+    protected virtual int FirstPlayBonus => 1;
 
     [SavedProperty]
     protected string SavedChordsData
@@ -90,50 +99,41 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
 
     public override RelicRarity Rarity => RelicRarity.Starter;
     protected virtual int MaxLearnedChordsPerCategory => 1;
-    protected virtual int EffectMultiplier => 1;
+    protected virtual int BaseChordBonus => 0;
+
     protected override IEnumerable<string> RegisteredKeywordIds => [CutesakiKeywords.RememberChord];
-    
-    public void SetLearnedChordsFromString(string data)
-    {
-        EnsureInitialized();
-        _learnedChords = data.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
-        SyncToSaved();
-        if (Owner != null) Flash();
-    }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
             if (!IsMutable) yield break;
-            var chords = _currentChords ?? new Dictionary<ChordCategory, string>();
-            var bonus = _bonusChords ?? new List<string>();
-            var temp = _temporaryChords ?? new List<string>();
             var desc = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR_CHORDS_DESC");
             var lines = new List<string>();
-            foreach (var kv in chords.Where(kv => kv.Key != ChordCategory.Bonus))
-                if (ChordManager.AllChords.TryGetValue(kv.Value, out var def))
+            foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
+            foreach (var chordId in _equippedChords.GetValueOrDefault(cat, new List<string>()))
+                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-                    var text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
+                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetTotalBonus());
                     var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
                     lines.Add($"[{title}]({condition})\n{text}");
                 }
 
-            foreach (var chordId in bonus)
+            foreach (var chordId in _bonusChords)
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-                    var text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
+                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetTotalBonus());
                     var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
                     lines.Add($"[{title}]({condition})\n{text}");
                 }
 
-            foreach (var chordId in temp)
+            foreach (var chordId in _temporaryChords)
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-                    var text = ChordDisplayHelper.GetFormattedDescription(def, EffectMultiplier);
+                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetTotalBonus());
                     var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
                     lines.Add($"[临时] [{title}]({condition})\n{text}");
                 }
@@ -143,11 +143,66 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         }
     }
 
+    public bool CanHandleRightClickLocal(ModRightClickContext context)
+    {
+        return true;
+    }
+
+    public async Task OnRightClick(ModRightClickExecutionContext context)
+    {
+        var me = LocalContext.GetMe(RunManager.Instance.DebugOnlyGetState()?.Players);
+        if (me == null || me.NetId != Owner.NetId) return;
+
+        var screen = new ChordManagementScreen();
+        screen.SetGuitar(this);
+        screen.SetReadOnly(true);
+        screen.ShowScreen();
+        await Task.CompletedTask;
+    }
+
+    /// <summary> 公开获取每类别最大槽位数 </summary>
+    public int GetMaxChordsPerCategory()
+    {
+        return MaxLearnedChordsPerCategory;
+    }
+
+    /// <summary> 为指定类别填充空槽位至最大数量（随机学习并装备） </summary>
+    protected void FillCategorySlots(ChordCategory category)
+    {
+        EnsureInitialized();
+        var targetCount = MaxLearnedChordsPerCategory;
+        if (!_equippedChords.ContainsKey(category))
+            _equippedChords[category] = new List<string>();
+        var slots = _equippedChords[category];
+        while (slots.Count < targetCount)
+        {
+            var available = ChordManager.GetLearnableChordIds(category)
+                .Where(id => !_learnedChords.Contains(id) && !ChordManager.AllChords[id].IsTemporaryOnly)
+                .ToList();
+            if (available.Count == 0) break;
+            var newChord = Owner.RunState.Rng.UpFront.NextItem(available);
+            AddEquippedChord(category, newChord); // 内部会调用 AddToLearnedIfMissing 并 SyncToSaved
+        }
+    }
+
+    public void SetLearnedChordsFromString(string data)
+    {
+        EnsureInitialized();
+        _learnedChords = data.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
+        SyncToSaved();
+        if (Owner != null) Flash();
+    }
+
     protected void EnsureInitialized()
     {
         if (_initialized) return;
         _initialized = true;
-        _currentChords = new Dictionary<ChordCategory, string>();
+        _equippedChords = new Dictionary<ChordCategory, List<string>>
+        {
+            { ChordCategory.Major, new List<string>() },
+            { ChordCategory.Minor, new List<string>() },
+            { ChordCategory.Dominant, new List<string>() }
+        };
         _bonusChords = new List<string>();
         _temporaryChords = new List<string>();
         var hasAnyData = false;
@@ -157,8 +212,8 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
             {
                 var parts = pair.Split(':');
                 if (parts.Length == 2 && int.TryParse(parts[0], out var catInt) &&
-                    Enum.IsDefined(typeof(ChordCategory), catInt))
-                    _currentChords[(ChordCategory)catInt] = parts[1];
+                    Enum.IsDefined(typeof(ChordCategory), catInt) && (ChordCategory)catInt != ChordCategory.Bonus)
+                    _equippedChords[(ChordCategory)catInt].Add(parts[1]);
             }
 
             hasAnyData = true;
@@ -178,25 +233,21 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
 
         if (!hasAnyData)
         {
-            _currentChords[ChordCategory.Major] = ChordManager.GetBaseChordId(ChordCategory.Major);
-            _currentChords[ChordCategory.Minor] = ChordManager.GetBaseChordId(ChordCategory.Minor);
-            _currentChords[ChordCategory.Dominant] = ChordManager.GetBaseChordId(ChordCategory.Dominant);
+            _equippedChords[ChordCategory.Major].Add("C");
+            _equippedChords[ChordCategory.Minor].Add("Cm");
+            _equippedChords[ChordCategory.Dominant].Add("C7");
         }
 
-        // 初始化已学习列表
         if (!string.IsNullOrEmpty(_savedLearnedChordsData))
         {
             _learnedChords = _savedLearnedChordsData.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
         }
         else
         {
-            _learnedChords = _currentChords.Values.Where(id => !string.IsNullOrEmpty(id)).ToList();
-            _learnedChords.AddRange(_bonusChords);
-            _learnedChords = _learnedChords.Distinct().ToList();
-            // 确保基础和弦在列表中
+            _learnedChords = _equippedChords.Values.SelectMany(l => l).Concat(_bonusChords).Distinct().ToList();
             if (!_learnedChords.Contains("C")) _learnedChords.Add("C");
-            if (!_learnedChords.Contains("Am")) _learnedChords.Add("Am");
-            if (!_learnedChords.Contains("G7")) _learnedChords.Add("G7");
+            if (!_learnedChords.Contains("Cm")) _learnedChords.Add("Cm");
+            if (!_learnedChords.Contains("C7")) _learnedChords.Add("C7");
         }
 
         SyncToSaved();
@@ -204,7 +255,8 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
 
     internal void SyncToSaved()
     {
-        _savedChordsData = string.Join(";", _currentChords.Select(kv => $"{(int)kv.Key}:{kv.Value}"));
+        _savedChordsData = string.Join(";",
+            _equippedChords.SelectMany(kv => kv.Value.Select(id => $"{(int)kv.Key}:{id}")));
         _savedBonusChordsData = string.Join(";", _bonusChords);
         _savedTemporaryChordsData = string.Join(";", _temporaryChords);
         _savedLearnedChordsData = string.Join(";", _learnedChords);
@@ -221,17 +273,86 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         EnsureInitialized();
     }
 
-    public IReadOnlyList<string> GetTemporaryChords()
+    // 获取所有用于匹配的和弦ID列表（包括主槽位、额外、临时）
+    public List<string> GetAllEquippedChords()
     {
         EnsureInitialized();
-        return _temporaryChords.AsReadOnly();
+        var list = new List<string>();
+        foreach (var kv in _equippedChords)
+            list.AddRange(kv.Value);
+        list.AddRange(_bonusChords);
+        list.AddRange(_temporaryChords);
+        return list;
     }
 
-    public int GetEffectMultiplier()
+    // 获取指定分类的所有装备和弦（含额外和临时）——带参数分类筛选
+    public List<string> GetEquippedChordIds(params ChordCategory[] categories)
     {
-        return EffectMultiplier;
+        EnsureInitialized();
+        var result = new List<string>();
+        var filter = categories.Length > 0 ? new HashSet<ChordCategory>(categories) : null;
+        foreach (var kv in _equippedChords)
+            if (filter == null || filter.Contains(kv.Key))
+                result.AddRange(kv.Value);
+        if (filter == null || filter.Contains(ChordCategory.Bonus))
+            result.AddRange(_bonusChords);
+        if (_temporaryChords.Count > 0) result.AddRange(_temporaryChords);
+        return result;
     }
 
+    // 仅获取指定分类的装备槽位列表（不含额外、临时）
+    public IReadOnlyList<string> GetCategorySlots(ChordCategory category)
+    {
+        EnsureInitialized();
+        return _equippedChords.TryGetValue(category, out var list)
+            ? list.AsReadOnly()
+            : new List<string>().AsReadOnly();
+    }
+
+    // 已学习和弦
+    public IReadOnlyList<string> GetLearnedChords()
+    {
+        EnsureInitialized();
+        return _learnedChords.AsReadOnly();
+    }
+
+    // 类别槽位操作
+    public void AddEquippedChord(ChordCategory category, string chordId)
+    {
+        EnsureInitialized();
+        if (!_equippedChords.ContainsKey(category)) return;
+        if (_equippedChords[category].Count >= MaxLearnedChordsPerCategory) return;
+        _equippedChords[category].Add(chordId);
+        AddToLearnedIfMissing(chordId);
+        if (Owner != null) Flash();
+        SyncToSaved();
+    }
+
+    public void ReplaceEquippedChord(ChordCategory category, int index, string newChordId)
+    {
+        EnsureInitialized();
+        if (!_equippedChords.ContainsKey(category) || index < 0 || index >= _equippedChords[category].Count) return;
+        _equippedChords[category][index] = newChordId;
+        AddToLearnedIfMissing(newChordId);
+        if (Owner != null) Flash();
+        SyncToSaved();
+    }
+
+    public bool RemoveEquippedChord(ChordCategory category, string chordId)
+    {
+        EnsureInitialized();
+        if (!_equippedChords.ContainsKey(category)) return false;
+        if (_equippedChords[category].Remove(chordId))
+        {
+            SyncToSaved();
+            if (Owner != null) Flash();
+            return true;
+        }
+
+        return false;
+    }
+
+    // 额外槽位
     public IReadOnlyList<string> GetBonusChords()
     {
         EnsureInitialized();
@@ -261,79 +382,11 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         return false;
     }
 
-    public bool HasBonusChord()
+    // 临时槽位
+    public IReadOnlyList<string> GetTemporaryChords()
     {
         EnsureInitialized();
-        return _bonusChords.Count > 0;
-    }
-
-    public string GetBonusChord()
-    {
-        EnsureInitialized();
-        return _bonusChords.FirstOrDefault();
-    }
-
-    public void SetBonusChord(string chordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(chordId)) return;
-        _bonusChords.Clear();
-        _bonusChords.Add(chordId);
-        AddToLearnedIfMissing(chordId);
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public void TempReplaceChord(ChordCategory category, string tempChordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(tempChordId) || !ChordManager.AllChords.TryGetValue(tempChordId, out var def) ||
-            !def.IsTemporaryOnly) return;
-        if (!_currentChords.ContainsKey(category)) return;
-        _preTempChords ??= new Dictionary<ChordCategory, string>();
-        if (!_preTempChords.ContainsKey(category)) _preTempChords[category] = _currentChords[category];
-        _currentChords[category] = tempChordId;
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public void RestoreTempChords()
-    {
-        EnsureInitialized();
-        if (_preTempChords == null) return;
-        foreach (var kv in _preTempChords)
-            if (_currentChords.ContainsKey(kv.Key))
-                _currentChords[kv.Key] = kv.Value;
-        _preTempChords = null;
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public void ReplaceChord(ChordCategory category, string newChordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(newChordId)) return;
-        _currentChords[category] = newChordId;
-        AddToLearnedIfMissing(newChordId);
-        if (Owner != null) Flash();
-        SyncToSaved();
-    }
-
-    public bool ReplaceBonusChord(int index, string newChordId)
-    {
-        EnsureInitialized();
-        if (index < 0 || index >= _bonusChords.Count) return false;
-        _bonusChords[index] = newChordId;
-        AddToLearnedIfMissing(newChordId);
-        if (Owner != null) Flash();
-        SyncToSaved();
-        return true;
-    }
-
-    public int GetBonusChordIndex(string chordId)
-    {
-        EnsureInitialized();
-        return _bonusChords.IndexOf(chordId);
+        return _temporaryChords.AsReadOnly();
     }
 
     public void AddTemporaryChord(string chordId)
@@ -367,78 +420,163 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         SyncToSaved();
     }
 
-    public IReadOnlyDictionary<ChordCategory, string> GetCurrentChords()
-    {
-        EnsureInitialized();
-        return _currentChords;
-    }
-
-    // 获取已记忆和弦序列（战斗中装备的和弦）
-    public List<string> GetEquippedChordIds(params ChordCategory[] categories)
-    {
-        EnsureInitialized();
-        var result = new List<string>();
-        var filter = categories.Length > 0 ? new HashSet<ChordCategory>(categories) : null;
-        foreach (var kv in _currentChords)
-        {
-            if (string.IsNullOrEmpty(kv.Value)) continue;
-            if (kv.Key == ChordCategory.Bonus) continue;
-            if (filter == null || filter.Contains(kv.Key)) result.Add(kv.Value);
-        }
-
-        if ((filter == null || filter.Contains(ChordCategory.Bonus)) && _bonusChords.Count > 0)
-            result.AddRange(_bonusChords);
-        if (_temporaryChords.Count > 0) result.AddRange(_temporaryChords);
-        return result;
-    }
-
-    // 获取所有已学习和弦ID（用于仓库界面）
-    public IReadOnlyList<string> GetLearnedChords()
-    {
-        EnsureInitialized();
-        return _learnedChords.AsReadOnly();
-    }
-
     private void AddToLearnedIfMissing(string chordId)
     {
         if (!_learnedChords.Contains(chordId))
             _learnedChords.Add(chordId);
     }
 
+    public void LearnChord(string chordId)
+    {
+        EnsureInitialized();
+        if (string.IsNullOrEmpty(chordId)) return;
+        if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+        AddToLearnedIfMissing(chordId);
+        SyncToSaved();
+        if (Owner != null) Flash();
+    }
+
     public void AutoLearnChordOnRest()
     {
         EnsureInitialized();
         if (Owner?.RunState == null) return;
-
         var pool = new List<string>();
-        foreach (ChordCategory cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
-        {
+        foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
             pool.AddRange(ChordManager.GetLearnableChordIds(cat));
-        }
-        var available = pool.Where(id => !_learnedChords.Contains(id) && !ChordManager.AllChords[id].IsTemporaryOnly).ToList();
+        var available = pool.Where(id => !_learnedChords.Contains(id) && !ChordManager.AllChords[id].IsTemporaryOnly)
+            .ToList();
         if (available.Count == 0) return;
-
         var newChord = Owner.RunState.Rng.Niche.NextItem(available);
         _learnedChords.Add(newChord);
         SyncToSaved();
         Flash();
     }
 
+    public int GetTotalBonus()
+    {
+        var bonus = BaseChordBonus;
+        if (Owner?.Creature != null)
+        {
+            foreach (var provider in Owner.Creature.Powers.OfType<IChordBonusProvider>())
+                bonus += provider.GetBonus();
+            foreach (var provider in Owner.Relics.OfType<IChordBonusProvider>())
+                bonus += provider.GetBonus();
+
+            var chordBonusPower = Owner.Creature.GetPower<ChordBonusPower>();
+            if (chordBonusPower != null)
+                bonus += chordBonusPower.Amount;
+
+            // 如果回合首次加成尚未消耗，或者当前操作正在享受该加成，则将其计入
+            if ((!_firstPlayBonusConsumedThisTurn && FirstPlayBonus > 0) || _firstPlayBonusAppliedThisOperation)
+                bonus += FirstPlayBonus;
+        }
+
+        return bonus;
+    }
+
+    private void TryConsumeFirstPlayBonus()
+    {
+        if (!_firstPlayBonusConsumedThisTurn && FirstPlayBonus > 0)
+        {
+            _firstPlayBonusConsumedThisTurn = true;
+            _firstPlayBonusAppliedThisOperation = true;
+        }
+    }
+    
     /// <summary>
-    /// 统一的自动演奏入口：处理溢出、立即演奏（可叠层）、StageNerves。
+    /// 随机演奏已记忆和弦指定次数，会消耗回合首次演奏加成和 ChordBonusPower。
     /// </summary>
+    public async Task PlayRandomEquippedChord(PlayerChoiceContext ctx, int count)
+    {
+        _firstPlayBonusAppliedThisOperation = false;
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+
+        var chordIds = GetEquippedChordIds();
+        if (chordIds.Count == 0) return;
+
+        var rng = Owner.RunState.Rng.CombatCardSelection;
+        for (int i = 0; i < count; i++)
+        {
+            var randomChordId = rng.NextItem(chordIds);
+            await PlaySingleChord(ctx, randomChordId, 1, false);
+        }
+        UpdateStoredChordDisplay();
+    }
+    
+    
+    /// <summary>
+    /// 立即演奏一个随机已装备和弦，会消耗回合首次演奏加成和 ChordBonusPower。
+    /// </summary>
+    public async Task PlayRandomEquippedChordImmediate()
+    {
+        _firstPlayBonusAppliedThisOperation = false;
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+
+        var chordIds = GetAllEquippedChords();
+        if (chordIds.Count == 0) return;
+        var rng = Owner.RunState.Rng.CombatCardSelection;
+        var randomChord = rng.NextItem(chordIds);
+
+        await PlaySingleChord(null, randomChord, 1, false); // 使用 null 上下文，和原 Recorder 一致
+        UpdateStoredChordDisplay();
+    }
+    
+    /// <summary>
+    /// 演奏单个指定和弦（用于已选定的和弦），会消耗回合首次演奏加成和 ChordBonusPower。
+    /// 注意：如果需要演奏多个指定和弦并共享一次加成，请使用 PlaySpecificChords。
+    /// </summary>
+    public async Task PlaySpecificChord(PlayerChoiceContext ctx, string chordId, int count = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false;
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+
+        await PlaySingleChord(ctx, chordId, count, false);
+        UpdateStoredChordDisplay();
+    }
+
+    /// <summary>
+    /// 一次性演奏多个指定和弦，整个操作共享一次回合首次加成和 ChordBonusPower 消耗。
+    /// </summary>
+    /// <summary>
+    /// 一次性演奏多个指定和弦，整个操作共享一次回合首次加成和 ChordBonusPower 消耗。
+    /// </summary>
+    public async Task PlaySpecificChords(PlayerChoiceContext ctx, IReadOnlyList<string> chordIds, int countPerChord = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false;
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+
+        foreach (var chordId in chordIds)
+            await PlaySingleChord(ctx, chordId, countPerChord, false);
+
+        UpdateStoredChordDisplay();
+    }
+
     public async Task AutoPlayNewChords(PlayerChoiceContext ctx, MusicNoteManager.NoteProcessResult result)
     {
+        // 清理操作标志（不在这里消耗首次加成）
+        _firstPlayBonusAppliedThisOperation = false;
+        _chordBonusConsumedThisOperation = false;
+
         if (Owner.Creature == null) return;
 
-        // 1. 溢出（LingeringTastePower）
+        // 溢出且立即演奏（需要 LingeringTastePower）
         if (result.OverflowChord != null && Owner.Creature.HasPower<LingeringTastePower>())
+        {
+            TryConsumeFirstPlayBonus();
             await PlaySingleChord(ctx, result.OverflowChord, removeStored: false);
+            UpdateStoredChordDisplay();
+            return; // 已演奏，直接返回
+        }
 
-        // 2. 立即演奏（PlayImmediatelyPower）—— 每层消耗一个和弦
+        // 拥有 PlayImmediatelyPower 且存在新和弦 → 立即演奏
         var playImmediately = Owner.Creature.GetPower<PlayImmediatelyPower>();
         if (playImmediately != null && playImmediately.Amount > 0 && result.NewChords.Count > 0)
         {
+            TryConsumeFirstPlayBonus();
             var chordsToPlay = result.NewChords.ToList();
             foreach (var chordId in chordsToPlay)
             {
@@ -447,27 +585,156 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
                 MusicNoteManager.RemoveChord(Owner, chordId);
                 await PowerCmd.Decrement(playImmediately);
             }
+
+            UpdateStoredChordDisplay();
         }
-        // 3. 无新和弦时触发 StageNervesPower
         else if (result.NewChords.Count == 0)
         {
+            // 无新和弦 → StageNerves，不演奏也不消耗加成
             foreach (var power in Owner.Creature.Powers.OfType<StageNervesPower>())
                 await power.OnNoteWithoutChord();
         }
+        // 如果新和弦只是被储存而没有立即演奏，不消耗加成，也不做任何操作
+    }
+
+    public async Task TriggerAllStoredChords(PlayerChoiceContext choiceContext, int count = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false; // 确保干净状态
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+        var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
+        foreach (var chordId in stored)
+            await PlaySingleChord(choiceContext, chordId, count);
+        ClearSequence();
+    }
+
+    public async Task TriggerAllStoredChordsKeepNotes(PlayerChoiceContext choiceContext, int count = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false; // 确保干净状态
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+        var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
+        foreach (var chordId in stored)
+            await PlaySingleChord(choiceContext, chordId, count, false);
+        MusicNoteManager.ClearStoredChords(Owner);
+        UpdateStoredChordDisplay();
+        SyncToSaved();
+    }
+
+    public async Task AddChordToStored(PlayerChoiceContext choiceContext, string chordId, int count = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false; // 确保干净状态
+        _chordBonusConsumedThisOperation = false;
+        // 注意：不在此处消耗首次加成，因为可能不会演奏
+
+        if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+
+        var playImmediately = Owner.Creature.GetPower<PlayImmediatelyPower>();
+        if (playImmediately != null && playImmediately.Amount > 0)
+        {
+            TryConsumeFirstPlayBonus(); // 立即演奏，消耗加成
+            await PlaySingleChord(choiceContext, chordId, count, false);
+            await PowerCmd.Decrement(playImmediately);
+            UpdateStoredChordDisplay(); // 补充 UI 刷新
+            return;
+        }
+
+        var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
+
+        for (var i = 0; i < count; i++)
+        {
+            var storedBefore = MusicNoteManager.GetStoredChords(Owner);
+            MusicNoteManager.AddChordDirectly(Owner, chordId);
+
+            if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords)
+            {
+                TryConsumeFirstPlayBonus(); // 溢出演奏，消耗加成（仅首次溢出时）
+                await PlaySingleChord(choiceContext, storedBefore[0], 1, false);
+            }
+        }
+
+        UpdateStoredChordDisplay();
+        SyncToSaved();
+    }
+
+    public async Task TriggerAllEquippedChords(PlayerChoiceContext choiceContext, int count = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false; // 确保干净状态
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+        await TriggerEquippedChords(choiceContext, count);
+    }
+
+    public async Task TriggerLastStoredChord(PlayerChoiceContext choiceContext, int count = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false; // 确保干净状态
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+        var stored = MusicNoteManager.GetStoredChords(Owner);
+        if (stored.Count == 0) return;
+        await PlaySingleChord(choiceContext, stored.Last(), count);
+        UpdateStoredChordDisplay();
+        SyncToSaved();
+    }
+
+    public async Task TriggerLearnedChords(PlayerChoiceContext choiceContext, int count = 1,
+        params ChordCategory[] categories)
+    {
+        var chordIds = GetLearnedChordIds(categories);
+        foreach (var chordId in chordIds)
+            await PlaySingleChord(choiceContext, chordId, count, false);
+    }
+
+    public async Task TriggerEquippedChords(PlayerChoiceContext choiceContext, int count = 1,
+        params ChordCategory[] categories)
+    {
+        var chordIds = GetEquippedChordIds(categories);
+        foreach (var chordId in chordIds)
+            await PlaySingleChord(choiceContext, chordId, count, false);
+    }
+
+    public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext, int count = 1)
+    {
+        _firstPlayBonusAppliedThisOperation = false;
+        _chordBonusConsumedThisOperation = false;
+        TryConsumeFirstPlayBonus();
+        await TriggerLearnedChords(choiceContext, count);
+        UpdateStoredChordDisplay(); // 确保 UI 反映演奏后的状态
     }
 
     private async Task PlaySingleChord(PlayerChoiceContext ctx, string chordId, int count = 1, bool removeStored = true)
     {
-        for (int i = 0; i < count; i++)
+        var chordBonusPower = Owner.Creature?.GetPower<ChordBonusPower>();
+        bool shouldConsumeChordBonus =
+            chordBonusPower != null && chordBonusPower.Amount > 0 && !_chordBonusConsumedThisOperation;
+        if (shouldConsumeChordBonus)
+            _chordBonusConsumedThisOperation = true;
+
+        // ★ 在循环开始前固定本次操作的首次演奏加成
+        int fixedFirstPlayBonus = _firstPlayBonusAppliedThisOperation ? FirstPlayBonus : 0;
+
+        for (var i = 0; i < count; i++)
         {
             _ = ChordEffectPlayer.PlayChordIcons(Owner.Creature, new[] { chordId }, 0f);
             if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                await def.Effect(ctx, Owner.Creature, EffectMultiplier);
+            {
+                // 使用固定加成而非实时读取
+                int baseBonus = GetTotalBonus() - (_firstPlayBonusAppliedThisOperation ? FirstPlayBonus : 0);
+                int totalBonus = baseBonus + fixedFirstPlayBonus;
+                await def.Effect(ctx, Owner.Creature, totalBonus);
+            }
+
             if (removeStored)
                 MusicNoteManager.RemoveChord(Owner, chordId);
             await NotifyChordPlayed(ctx);
             var sfx = Path.Combine(AudioDir, StrumFiles[_rand.Next(StrumFiles.Length)]);
-            AudioManager.PlaySound(sfx, 1.0f);
+            AudioManager.PlaySound(sfx);
+        }
+
+        if (shouldConsumeChordBonus && chordBonusPower != null)
+        {
+            await PowerCmd.Decrement(chordBonusPower);
+            UpdateStoredChordDisplay();
         }
     }
 
@@ -485,9 +752,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         }
 
         await MusicNoteManager.AddNoteAndAutoPlayAsync(
-            Owner, cardPlay.Card.Type, _currentChords,
-            _bonusChords.Concat(_temporaryChords),
-            choiceContext);
+            Owner, cardPlay.Card.Type, GetAllEquippedChords(), choiceContext);
 
         await HandleMessyPlay(choiceContext);
         UpdateNoteDisplay();
@@ -519,9 +784,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
     {
         if (Owner.Creature.CombatState == null) return;
         await MusicNoteManager.AddNoteAndAutoPlayAsync(
-            Owner, noteType, _currentChords,
-            _bonusChords.Concat(_temporaryChords),
-            choiceContext);
+            Owner, noteType, GetAllEquippedChords(), choiceContext);
 
         await HandleMessyPlay(choiceContext);
         UpdateNoteDisplay();
@@ -536,83 +799,13 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         UpdateStoredChordDisplay();
     }
 
-    // --- 演奏已记忆和弦序列的方法（均支持 count 参数） ---
-
-    public async Task TriggerAllStoredChords(PlayerChoiceContext choiceContext, int count = 1)
-    {
-        var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
-        foreach (var chordId in stored)
-            await PlaySingleChord(choiceContext, chordId, count: count, removeStored: true);
-        ClearSequence();
-    }
-
-    public async Task TriggerAllStoredChordsKeepNotes(PlayerChoiceContext choiceContext, int count = 1)
-    {
-        var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
-        foreach (var chordId in stored)
-            await PlaySingleChord(choiceContext, chordId, count: count, removeStored: false);
-        MusicNoteManager.ClearStoredChords(Owner);
-        UpdateStoredChordDisplay();
-        SyncToSaved();
-    }
-
-    public async Task AddChordToStored(PlayerChoiceContext choiceContext, string chordId, int count = 1)
-    {
-        if (!ChordManager.AllChords.ContainsKey(chordId)) return;
-
-        var playImmediately = Owner.Creature.GetPower<PlayImmediatelyPower>();
-        if (playImmediately != null && playImmediately.Amount > 0)
-        {
-            await PlaySingleChord(choiceContext, chordId, count: count, removeStored: false);
-            await PowerCmd.Decrement(playImmediately);
-            return;
-        }
-
-        var hasLingering = Owner.Creature.HasPower<LingeringTastePower>();
-
-        // 按 count 次数循环添加
-        for (int i = 0; i < count; i++)
-        {
-            var storedBefore = MusicNoteManager.GetStoredChords(Owner);
-            MusicNoteManager.AddChordDirectly(Owner, chordId);
-
-            if (hasLingering && storedBefore.Count >= MusicNoteManager.MaxStoredChords)
-                await PlaySingleChord(choiceContext, storedBefore[0], count: 1, removeStored: false);
-        }
-
-        UpdateStoredChordDisplay();
-        SyncToSaved();
-    }
-
-    // 演奏指定分类的已记忆和弦序列
-    public async Task TriggerEquippedChords(PlayerChoiceContext choiceContext, int count = 1, params ChordCategory[] categories)
-    {
-        var chordIds = GetEquippedChordIds(categories);
-        foreach (var chordId in chordIds)
-            await PlaySingleChord(choiceContext, chordId, count: count, removeStored: false);
-    }
-
-    // 演奏所有已记忆和弦序列
-    public async Task TriggerAllEquippedChords(PlayerChoiceContext choiceContext, int count = 1)
-    {
-        await TriggerEquippedChords(choiceContext, count: count);
-    }
-
-    public async Task TriggerLastStoredChord(PlayerChoiceContext choiceContext, int count = 1)
-    {
-        var stored = MusicNoteManager.GetStoredChords(Owner);
-        if (stored.Count == 0) return;
-        await PlaySingleChord(choiceContext, stored.Last(), count: count, removeStored: true);
-        UpdateStoredChordDisplay();
-        SyncToSaved();
-    }
-
-    // --- 其余方法不变 ---
-
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player != Owner) return;
         _curtainCallRecalledThisTurn = false;
+        _firstPlayBonusConsumedThisTurn = false;
+        _firstPlayBonusAppliedThisOperation = false;
+        UpdateStoredChordDisplay(); // 刷新 UI 以显示潜在的首次加成
         await Task.CompletedTask;
     }
 
@@ -639,8 +832,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
             await CardPileCmd.Add(card, PileType.Hand);
         if (cardsToMove.Count > 0) Flash();
     }
-    
-    // 获取已学习和弦库中指定分类的和弦 ID
+
     public List<string> GetLearnedChordIds(params ChordCategory[] categories)
     {
         EnsureInitialized();
@@ -651,20 +843,6 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         return _learnedChords
             .Where(id => ChordManager.AllChords.TryGetValue(id, out var def) && filter.Contains(def.Category))
             .ToList();
-    }
-
-    // 演奏已学习和弦库中指定分类的和弦（不消耗储存）
-    public async Task TriggerLearnedChords(PlayerChoiceContext choiceContext, int count = 1, params ChordCategory[] categories)
-    {
-        var chordIds = GetLearnedChordIds(categories);
-        foreach (var chordId in chordIds)
-            await PlaySingleChord(choiceContext, chordId, count: count, removeStored: false);
-    }
-    
-    // 演奏所有已学习和弦（不消耗储存）
-    public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext, int count = 1)
-    {
-        await TriggerLearnedChords(choiceContext, count: count);
     }
 
     private void EnsureNoteDisplay()
@@ -709,7 +887,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         if (_storedChordDisplay != null && GodotObject.IsInstanceValid(_storedChordDisplay))
         {
             var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
-            _storedChordDisplay.UpdateChords(stored, EffectMultiplier);
+            _storedChordDisplay.UpdateChords(stored, GetTotalBonus());
         }
         else if (Owner?.Creature?.CombatState != null)
         {
@@ -729,10 +907,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
     public override async Task AfterRoomEntered(AbstractRoom room)
     {
         await base.AfterRoomEntered(room);
-        if (room is RestSiteRoom)
-        {
-            AutoLearnChordOnRest();
-        }
+        if (room is RestSiteRoom) AutoLearnChordOnRest();
     }
 
     public override async Task AfterRemoved()
@@ -747,8 +922,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
 
     public override async Task AfterCombatEnd(CombatRoom room)
     {
-        RestoreTempChords();
-        _temporaryChords.Clear();
+        ClearTemporaryChords();
         MusicNoteManager.ClearCombatData(Owner);
         ChordSequenceModifierHelper.ClearCardModifiers(Owner);
         CleanupUI();
@@ -770,55 +944,22 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
     public void CopyChordsTo(AnonGuitar target)
     {
         EnsureInitialized();
-        foreach (var kv in _currentChords) target._currentChords[kv.Key] = kv.Value;
+        foreach (var kv in _equippedChords)
+            target._equippedChords[kv.Key] = new List<string>(kv.Value);
         target._bonusChords = new List<string>(_bonusChords);
         target._temporaryChords = new List<string>(_temporaryChords);
         target._learnedChords = new List<string>(_learnedChords);
         target.SyncToSaved();
         target.Flash();
     }
-    
-    // 本地快速预检：非战斗状态下允许右键查看
-    public bool CanHandleRightClickLocal(ModRightClickContext context) => true;
-    
-    public async Task OnRightClick(ModRightClickExecutionContext context)
-    {
-        // 主人判定：只有发起右键的玩家本人才打开界面，其他客户端忽略
-        var me = LocalContext.GetMe(RunManager.Instance.DebugOnlyGetState()?.Players);
-        if (me == null || me.NetId != this.Owner.NetId) return;
 
-        var screen = new ChordManagementScreen();
-        screen.SetGuitar(this);
-        screen.SetReadOnly(true);
-        screen.ShowScreen();
-        await Task.CompletedTask;
-    }
-    
-    /// <summary>
-    /// 将一个和弦加入已学习列表，但不自动装备。
-    /// </summary>
-    public void LearnChord(string chordId)
-    {
-        EnsureInitialized();
-        if (string.IsNullOrEmpty(chordId)) return;
-        if (!ChordManager.AllChords.ContainsKey(chordId)) return;
-        AddToLearnedIfMissing(chordId);
-        SyncToSaved();
-        if (Owner != null) Flash();
-    }
-    
-    /// <summary>
-    /// 随机将一个已记忆（装备中）的和弦替换为指定和弦，类别不限。
-    /// 如果没有任何已记忆和弦则不操作。
-    /// </summary>
     public void ReplaceRandomEquippedChord(string newChordId)
     {
         EnsureInitialized();
         if (!ChordManager.AllChords.ContainsKey(newChordId)) return;
 
-        // 过滤出有值的分类
-        var availableCategories = _currentChords
-            .Where(kv => !string.IsNullOrEmpty(kv.Value))
+        var availableCategories = _equippedChords
+            .Where(kv => kv.Value.Count > 0)
             .Select(kv => kv.Key)
             .ToList();
 
@@ -826,8 +967,10 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
 
         var rng = Owner.RunState.Rng.Niche;
         var targetCategory = rng.NextItem(availableCategories);
+        var targetList = _equippedChords[targetCategory];
+        var targetIndex = rng.NextInt(targetList.Count);
 
-        ReplaceChord(targetCategory, newChordId);  // 复用已有方法
+        ReplaceEquippedChord(targetCategory, targetIndex, newChordId);
     }
 
     [HarmonyPatch(typeof(Hook), nameof(Hook.AfterRoomEntered))]

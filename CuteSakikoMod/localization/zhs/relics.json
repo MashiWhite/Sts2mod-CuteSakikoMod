@@ -30,9 +30,6 @@
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH.flavor": "[pink]不知道为什么，感觉对这个东西好熟悉....[/pink]",
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH_FLYBACK_TITLE": "飞返统计",
   "CUTE_SAKIKO_MOD_RELIC_TIME_WATCH_FLYBACK_DESC": "已打出飞返次数：{playCount}\n读取存档次数：{reloadCount}",
-  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.flavor": "[pink]Rikki不在，好久都没练习了，和弦都快忘光了，得好好练习一下。[/pink]",
-  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.title": "爱音的吉他",
-  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.title": "爱音的乐谱",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.description": "可以额外记忆一个随机[gold]和弦[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_MUSIC_SCORE.flavor": "[pink]爱音的乐谱，虽然已经破破烂烂的，但至少还是找了回来。[/pink]",
@@ -49,9 +46,6 @@
   "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR_CHORDS_DESC": "{Chords}",
   "ANON_GUITAR_SEQUENCE_TITLE": "当前音符",
   "ANON_GUITAR_SEQUENCE_DESC": "{Sequence}",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。\n额外记忆一个和弦，且演奏和弦的数值翻倍。",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]哼哼，怎么样，我练习的成果。[/pink]",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "爱音练习后的吉他",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "章鱼玻璃",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "粉粉玻璃",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "抹茶玻璃",
@@ -69,5 +63,11 @@
   "CUTE_SAKIKO_MOD_RELIC_CRYCHIC_SAKIKO.flavor": "[blue][b]美好的时光总是短暂[/b][/blue]",
   "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.title": "女神之剑",
   "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.description": "每场战斗开始时，将[gold]骑士之剑[/gold]添加到手牌。任何人[gold]压力[/gold]增加时，都会提升[gold]骑士之剑[/gold]的伤害。",
-  "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.flavor": "[blue][b]你愿意成为我的骑士吗[/b][/blue]"
+  "CUTE_SAKIKO_MOD_RELIC_OBLIVIONIS_SWORD.flavor": "[blue][b]你愿意成为我的骑士吗[/b][/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.title": "爱音的吉他",
+  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。\n每回合第一次演奏[gold]和弦[/gold]数值增加1。",
+  "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.flavor": "[pink]Rikki不在，好久都没练习了，和弦都快忘光了，得好好练习一下。[/pink]",
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "爱音练习后的吉他",
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。\n每个种类可以额外记忆一个和弦。\n每回合第一次演奏[gold]和弦[/gold]数值增加3。",
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]哼哼，怎么样，我练习的成果。[/pink]"
 }

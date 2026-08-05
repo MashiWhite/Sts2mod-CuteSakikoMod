@@ -1,10 +1,10 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
@@ -29,6 +29,8 @@ public partial class ChordLibraryScreen : Control
     private Button _confirmButton = null!;
     private Button _cancelButton = null!;
 
+    private int _multiplier = 0; // 新增字段
+
     private const string LocTable = "rest_site_ui";
 
     public static void OpenBrowse()
@@ -43,29 +45,29 @@ public partial class ChordLibraryScreen : Control
         _browseInstance.TreeExited += () => _browseInstance = null;
     }
 
-    public async Task<List<string>> ShowSelection(int count)
+    public async Task<List<string>> ShowSelection(int count, int multiplier = 0)
     {
         return await ShowSelectionInternal(
             count,
             LocTable,
             "CUTE_SAKIKO_MOD_CHORD_LIBRARY_SELECT_TITLE",
-            null
-        );
+            null,
+            multiplier);
     }
 
-    public async Task<List<string>> ShowFreeSelection(List<string> candidateIds, LocString prompt)
+    public async Task<List<string>> ShowFreeSelection(List<string> candidateIds, LocString prompt, int multiplier = 0)
     {
         _candidateIds = candidateIds;
         return await ShowSelectionInternal(
             int.MaxValue,
             LocTable,
             "CUTE_SAKIKO_MOD_CHORD_LIBRARY_FREE_SELECT_TITLE",
-            prompt
-        );
+            prompt,
+            multiplier);
     }
 
     private async Task<List<string>> ShowSelectionInternal(
-        int count, string table, string key, LocString? prompt)
+        int count, string table, string key, LocString? prompt, int multiplier = 0)
     {
         if (_selectionTcs != null && !_selectionTcs.Task.IsCompleted)
             _selectionTcs.TrySetCanceled();
@@ -78,6 +80,7 @@ public partial class ChordLibraryScreen : Control
         _titleTable = table;
         _titleKey = key;
         _freePromptLoc = prompt;
+        _multiplier = multiplier; // 保存 multiplier
 
         if (!IsInsideTree())
         {
@@ -206,7 +209,7 @@ public partial class ChordLibraryScreen : Control
             foreach (var chordDef in kv.Value)
             {
                 var btn = new ChordButton();
-                btn.Setup(chordDef.Id);
+                btn.Setup(chordDef.Id, _multiplier); // 使用 _multiplier
                 btn.Modulate = _isSelectMode && _selectedChords.Contains(chordDef.Id)
                     ? new Color(1, 1, 0.5f) : Colors.White;
 
@@ -228,7 +231,6 @@ public partial class ChordLibraryScreen : Control
             buttonBar.Alignment = BoxContainer.AlignmentMode.Center;
             buttonBar.AddThemeConstantOverride("separation", 20);
 
-            // 正常状态：白底圆角
             StyleBoxFlat normalStyle = new()
             {
                 BgColor = Colors.White,
@@ -241,11 +243,9 @@ public partial class ChordLibraryScreen : Control
                 ContentMarginTop = 5,
                 ContentMarginBottom = 5
             };
-
-            // 悬浮/按下状态：灰色背景，圆角保持不变
             StyleBoxFlat hoverStyle = new()
             {
-                BgColor = new Color(0.75f, 0.75f, 0.75f), // 浅灰色
+                BgColor = new Color(0.75f, 0.75f, 0.75f),
                 CornerRadiusTopLeft = 10,
                 CornerRadiusTopRight = 10,
                 CornerRadiusBottomLeft = 10,
