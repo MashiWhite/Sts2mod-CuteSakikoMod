@@ -50,7 +50,7 @@ public sealed class OnTurnEndInHandManager : SingletonModel
                     case NotNeeded notNeeded:
                     {
                         var blockAmount = notNeeded.DynamicVars["block"].IntValue;
-                        await CreatureCmd.GainBlock(player.Creature, blockAmount, ValueProp.Move, null);
+                        await CreatureCmd.GainBlock(player.Creature, blockAmount, ValueProp.Unpowered, null);
 
                         var copy = notNeeded.CreateClone();
                         copy.GiveSingleTurnRetain();

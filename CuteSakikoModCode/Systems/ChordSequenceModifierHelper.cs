@@ -102,7 +102,7 @@ public static class ChordSequenceModifierHelper
             if (t == Entry.AnyNote)
             {
                 text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ANY").GetFormattedText();
-                color = "gray";
+                color = "pink";
             }
             else switch (t)
             {
@@ -120,7 +120,7 @@ public static class ChordSequenceModifierHelper
                     break;
                 default:
                     text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_STATUS").GetFormattedText();
-                    color = "pink";
+                    color = "purple";
                     break;
             }
 

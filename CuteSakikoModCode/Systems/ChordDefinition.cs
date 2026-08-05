@@ -36,7 +36,7 @@ public class ChordDefinition
             if (type == Entry.AnyNote)
             {
                 text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ANY").GetFormattedText();
-                color = "gray";
+                color = "pink";
             }
             else switch (type)
             {
@@ -54,7 +54,7 @@ public class ChordDefinition
                     break;
                 default:
                     text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_STATUS").GetFormattedText();
-                    color = "pink";
+                    color = "purple";
                     break;
             }
 
