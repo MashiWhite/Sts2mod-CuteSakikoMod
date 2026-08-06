@@ -13,7 +13,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 public sealed class BeGodPower : CuteSakikoModPower
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter; // 可叠层
+    public override PowerStackType StackType => PowerStackType.Counter;
 
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
@@ -24,36 +24,56 @@ public sealed class BeGodPower : CuteSakikoModPower
         var forgetPile = ForgetCardPile.Get(Owner.Player);
         if (forgetPile == null || forgetPile.Cards.Count == 0) return;
 
-        var toSelect = Math.Min(Amount, forgetPile.Cards.Count);
-        if (toSelect <= 0) return;
-
-        // 自定义提示 LocString
-        var customPrompt = new LocString("powers", "CUTE_SAKIKO_MOD_TO_FORGET");
-        var prefs = new CardSelectorPrefs(customPrompt, toSelect);
-
-        var selected = await CardSelectCmd.FromCombatPile(
-            choiceContext,
-            forgetPile,
-            Owner.Player,
-            prefs,
-            _ => true
-        );
-
-        var selectedList = selected.ToList();
-        foreach (var card in selectedList)
+        // 当层数 >= 遗忘堆牌数时，自动处理全部牌（避免联机异步）
+        if (Amount >= forgetPile.Cards.Count)
         {
-            if (card.Pile == forgetPile)
-                forgetPile.RemoveInternal(card);
-            else
-                card.RemoveFromCurrentPile();
+            var allCards = forgetPile.Cards.ToList();
+            foreach (var card in allCards)
+            {
+                if (card.Pile == forgetPile)
+                    forgetPile.RemoveInternal(card);
+                else
+                    card.RemoveFromCurrentPile();
 
-            await CardPileCmd.Add(card, PileType.Hand);
-            await CardCmd.AutoPlay(choiceContext, card, null);
+                await CardPileCmd.Add(card, PileType.Hand);
+                await CardCmd.AutoPlay(choiceContext, card, null);
 
-            if (card.Pile != null)
-                await CardPileCmd.Add(card, forgetPile);
+                if (card.Pile != null)
+                    await CardPileCmd.Add(card, forgetPile);
+            }
+            forgetPile.InvokeContentsChanged();
         }
+        else
+        {
+            // 层数不足时，保留原有的选择界面
+            var toSelect = Math.Min(Amount, forgetPile.Cards.Count);
+            var customPrompt = new LocString("powers", "CUTE_SAKIKO_MOD_TO_FORGET");
+            var prefs = new CardSelectorPrefs(customPrompt, toSelect);
 
-        forgetPile.InvokeContentsChanged();
+            var selected = await CardSelectCmd.FromCombatPile(
+                choiceContext,
+                forgetPile,
+                Owner.Player,
+                prefs,
+                _ => true
+            );
+
+            var selectedList = selected.ToList();
+            foreach (var card in selectedList)
+            {
+                if (card.Pile == forgetPile)
+                    forgetPile.RemoveInternal(card);
+                else
+                    card.RemoveFromCurrentPile();
+
+                await CardPileCmd.Add(card, PileType.Hand);
+                await CardCmd.AutoPlay(choiceContext, card, null);
+
+                if (card.Pile != null)
+                    await CardPileCmd.Add(card, forgetPile);
+            }
+
+            forgetPile.InvokeContentsChanged();
+        }
     }
 }

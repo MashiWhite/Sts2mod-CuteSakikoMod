@@ -11,7 +11,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class SoundCheck() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+public class SoundCheck() : CuteRanaCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
     

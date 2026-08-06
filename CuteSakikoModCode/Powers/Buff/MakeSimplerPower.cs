@@ -1,78 +1,79 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+﻿
+using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using MegaCrit.Sts2.Core.Random;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public class MakeSimplerPower : CuteSakikoModPower, IChordSequenceModifierProvider
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;  // ★ 可叠层
-    public IEnumerable<ChordCategory>? AffectedCategories => null;       // 影响所有类别
+    public override PowerStackType StackType => PowerStackType.Counter;
+    public IEnumerable<ChordCategory>? AffectedCategories => null;
+
+    // 缓存修饰符结果，键为和弦ID
+    private Dictionary<string, List<ChordSequenceModifier>> _cachedModifiers = new();
 
     public IEnumerable<ChordSequenceModifier> GetModifiers(Creature owner, ChordDefinition chordDef)
     {
         if (Amount <= 0) yield break;
 
-        // 检查该和弦是否属于拥有吉他玩家的已记忆和弦
+        // 有缓存直接返回
+        if (_cachedModifiers.TryGetValue(chordDef.Id, out var cached))
+        {
+            foreach (var mod in cached)
+                yield return mod;
+            yield break;
+        }
+
         var guitar = owner.Player?.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) yield break;
 
         var allChordIds = guitar.GetEquippedChordIds();
-        if (!allChordIds.Contains(chordDef.Id)) yield break;  // 只处理自己拥有的和弦
+        if (!allChordIds.Contains(chordDef.Id)) yield break;
 
         int noteCount = chordDef.NoteSequence.Length;
         if (noteCount == 0) yield break;
 
-        int replaceCount = Math.Min(Amount, noteCount);  // 最多替换所有音符
+        int replaceCount = Math.Min(Amount, noteCount);
 
-        // 使用稳定的随机序列（基于和弦ID和战斗RNG），确保每次查询返回相同位置
-        var rng = owner.CombatState?.RunState.Rng.CombatCardGeneration;
-        if (rng == null)
-        {
-            // 没有RNG时按顺序替换前面的音符
-            for (int i = 0; i < replaceCount; i++)
-                yield return new ReplaceNoteModifier(i, Entry.AnyNote);
-        }
-        else
-        {
-            // 生成随机不重复位置
-            var indices = Enumerable.Range(0, noteCount).ToList();
-            // 使用 Fisher-Yates 打乱（基于和弦ID的确定性随机）
-            var seededRng = new DeterministicRng(rng, chordDef.Id.GetHashCode());
-            for (int i = indices.Count - 1; i > 0; i--)
-            {
-                int j = seededRng.NextInt(i + 1);
-                (indices[i], indices[j]) = (indices[j], indices[i]);
-            }
+        var combatState = owner.CombatState;
+        if (combatState == null) yield break;
 
-            for (int i = 0; i < replaceCount; i++)
-            {
-                yield return new ReplaceNoteModifier(indices[i], Entry.AnyNote);
-            }
+        var rng = combatState.RunState.Rng.Niche;
+
+        var indices = Enumerable.Range(0, noteCount).ToList();
+        for (int i = indices.Count - 1; i > 0; i--)
+        {
+            int j = rng.NextInt(i + 1);
+            (indices[i], indices[j]) = (indices[j], indices[i]);
         }
+
+        var newModifiers = new List<ChordSequenceModifier>();
+        for (int i = 0; i < replaceCount; i++)
+        {
+            var mod = new ReplaceNoteModifier(indices[i], Entry.AnyNote);
+            newModifiers.Add(mod);
+            yield return mod;
+        }
+
+        // 存入缓存
+        _cachedModifiers[chordDef.Id] = newModifiers;
     }
 
-    // 一个简单的确定性随机数生成器，用于保证和弦修改器的顺序一致
-    private class DeterministicRng
+    // 当层数改变时清除缓存，保证效果更新
+    public override async Task AfterPowerAmountChanged(
+        PlayerChoiceContext choiceContext,
+        PowerModel power,
+        decimal amount,
+        Creature? applier,
+        CardModel? cardSource)
     {
-        private int _state;
-        public DeterministicRng(Rng baseRng, int seed)
-        {
-            // 从 baseRng 获取一个确定性值（不消耗计数器）
-            // 注意：这里不使用 NextInt，避免消耗计数器
-            _state = seed ^ (int)baseRng.ToSerializable().state0;
-        }
-        public int NextInt(int max)
-        {
-            _state = (int)(((uint)_state * 1103515245 + 12345) & 0x7fffffff);
-            return _state % max;
-        }
+        await base.AfterPowerAmountChanged(choiceContext, power, amount, applier, cardSource);
+        if (power == this)
+            _cachedModifiers.Clear();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -26,7 +27,9 @@ public class PerfectPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, Ta
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         if (guitar == null) return;
 
+        GD.Print($"[PerfectPlay] 准备演奏所有已学习和弦，当前已学习数量: {guitar.GetLearnedChords().Count}");
         await guitar.TriggerAllLearnedChords(choiceContext);
+        GD.Print("[PerfectPlay] 演奏完成");
     }
 
     protected override void OnUpgrade()

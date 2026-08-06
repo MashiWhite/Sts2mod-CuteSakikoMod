@@ -222,6 +222,9 @@
   "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.smartDescription": "下[blue]{Amount}[/blue]次技能费用-[blue]1[/blue]。",
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.title": "和弦增幅",
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "下一次演奏的所有[gold]和弦[/gold]数值增加层数等量点。",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "下一次演奏的所有[gold]和弦[/gold]数值+[blue]{Amount}[/blue]。"
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "下一次演奏的所有[gold]和弦[/gold]数值+[blue]{Amount}[/blue]。",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.title": "这是什么动物",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.description": "你搞不清楚它到底是什么......也不知道它下一步要做什么......",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.smartDescription": "你搞不清楚它到底是什么......也不知道它下一步要做什么......"
 
 }

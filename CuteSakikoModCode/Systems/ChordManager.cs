@@ -183,11 +183,11 @@ private static void RegisterChords()
             }
         });
 
-    // D#【技攻攻攻】对随机敌人造成其最大生命值5%的伤害
+    // D#【技攻攻攻】对随机敌人造成其最大生命值 (5+bonus)% 的伤害
     AddChord("D#", ChordCategory.Major,
         new[] { CardType.Skill, CardType.Attack, CardType.Attack, CardType.Attack },
         "CUTE_SAKIKO_MOD_D#CHORD.title", "CUTE_SAKIKO_MOD_D#CHORD.description", "d_sharp_chord",
-        new int[0],
+        new[] { 5 }, // BaseValues[0] = 5，用于计算百分比
         async (ctx, owner, bonus) =>
         {
             var combat = owner.CombatState; if (combat == null) return;
@@ -195,7 +195,9 @@ private static void RegisterChords()
             if (enemies.Any())
             {
                 var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                int dmg = (int)(target.MaxHp * 0.05);
+                int percent = 5 + bonus;
+                int dmg = (int)(target.MaxHp * percent / 100.0);
+                if (dmg < 1) dmg = 1;
                 await CreatureCmd.Damage(ctx, target, new DamageVar(dmg, ValueProp.Unblockable), owner, null, null);
             }
         });
@@ -224,19 +226,22 @@ private static void RegisterChords()
                 await PowerCmd.Apply<RitualPower>(ctx, ally, 1 + bonus, owner, null);
         });
 
-    // G#【技攻】在所有友方手牌中生成一张随机攻击牌（不免费）
+    // G#【技攻】在所有友方手牌中生成 1+bonus 张随机攻击牌（不重复）
     AddChord("G#", ChordCategory.Major,
         new[] { CardType.Skill, CardType.Attack },
         "CUTE_SAKIKO_MOD_G#CHORD.title", "CUTE_SAKIKO_MOD_G#CHORD.description", "g_sharp_chord",
-        new int[0],
+        new[] { 1 }, // 基础数量 1
         async (ctx, owner, bonus) =>
         {
             foreach (var player in owner.CombatState?.Players ?? Enumerable.Empty<Player>())
             {
-                var card = CardFactory.GetDistinctForCombat(player,
+                int count = 1 + bonus;
+                var cards = CardFactory.GetDistinctForCombat(player,
                     player.Character.CardPool.GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
-                    .Where(c => c.Type == CardType.Attack), 1, player.RunState.Rng.CombatCardGeneration).FirstOrDefault();
-                if (card != null)
+                        .Where(c => c.Type == CardType.Attack),
+                    count,
+                    player.RunState.Rng.CombatCardGeneration);
+                foreach (var card in cards)
                     await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, player);
             }
         });
@@ -424,19 +429,22 @@ private static void RegisterChords()
                 await PowerCmd.Apply<BarricadePower>(ctx, ally, 1 + bonus, owner, null);
         });
 
-    // G#m【技攻】在所有友方手牌中生成一张随机技能牌
+    // G#m【技攻】在所有友方手牌中生成 1+bonus 张随机技能牌（不重复）
     AddChord("G#m", ChordCategory.Minor,
         new[] { CardType.Skill, CardType.Attack },
         "CUTE_SAKIKO_MOD_G#MCHORD.title", "CUTE_SAKIKO_MOD_G#MCHORD.description", "g_sharp_m_chord",
-        new int[0],
+        new[] { 1 }, // 基础数量 1
         async (ctx, owner, bonus) =>
         {
             foreach (var player in owner.CombatState?.Players ?? Enumerable.Empty<Player>())
             {
-                var card = CardFactory.GetDistinctForCombat(player,
+                int count = 1 + bonus;
+                var cards = CardFactory.GetDistinctForCombat(player,
                     player.Character.CardPool.GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
-                    .Where(c => c.Type == CardType.Skill), 1, player.RunState.Rng.CombatCardGeneration).FirstOrDefault();
-                if (card != null)
+                        .Where(c => c.Type == CardType.Skill),
+                    count,
+                    player.RunState.Rng.CombatCardGeneration);
+                foreach (var card in cards)
                     await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, player);
             }
         });
@@ -526,7 +534,7 @@ private static void RegisterChords()
     AddChord("G7", ChordCategory.Dominant,
         new[] { CardType.Attack, CardType.Attack, CardType.Skill, CardType.Skill },
         "CUTE_SAKIKO_MOD_G7CHORD.title", "CUTE_SAKIKO_MOD_G7CHORD.description", "g7_chord",
-        new int[0],
+        new int[1],
         async (ctx, owner, bonus) =>
         {
             foreach (var player in owner.CombatState?.Players ?? Enumerable.Empty<Player>())
@@ -541,9 +549,8 @@ private static void RegisterChords()
                     .ToList();
 
                 if (allCards.Count == 0) continue;
-
-                // 使用原版消耗选择提示，min=0 max=1 允许不选
-                var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, minCount: 0, maxCount: 1);
+                
+                var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, minCount: 0, maxCount: 1 + bonus);
 
                 var selected = await CardSelectCmd.FromSimpleGrid(ctx, allCards, player, prefs);
                 var chosen = selected.FirstOrDefault();
@@ -630,19 +637,22 @@ private static void RegisterChords()
             }
         });
 
-    // F#7【能技技攻】在所有友方手牌中生成一张免费随机能力牌（角色卡池）
+    // F#7【能技技攻】在所有友方手牌中生成 1+bonus 张免费随机能力牌（不重复）
     AddChord("F#7", ChordCategory.Dominant,
         new[] { CardType.Power, CardType.Skill, CardType.Skill, CardType.Attack },
         "CUTE_SAKIKO_MOD_F#7CHORD.title", "CUTE_SAKIKO_MOD_F#7CHORD.description", "f_sharp_7_chord",
-        new int[0],
+        new[] { 1 }, // 基础数量 1
         async (ctx, owner, bonus) =>
         {
             foreach (var player in owner.CombatState?.Players ?? Enumerable.Empty<Player>())
             {
-                var card = CardFactory.GetDistinctForCombat(player,
+                int count = 1 + bonus;
+                var cards = CardFactory.GetDistinctForCombat(player,
                     player.Character.CardPool.GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
-                    .Where(c => c.Type == CardType.Power), 1, player.RunState.Rng.CombatCardGeneration).FirstOrDefault();
-                if (card != null)
+                        .Where(c => c.Type == CardType.Power),
+                    count,
+                    player.RunState.Rng.CombatCardGeneration);
+                foreach (var card in cards)
                 {
                     card.SetToFreeThisTurn();
                     await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, player);

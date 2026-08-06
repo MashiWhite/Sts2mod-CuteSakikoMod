@@ -681,16 +681,28 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         params ChordCategory[] categories)
     {
         var chordIds = GetLearnedChordIds(categories);
-        foreach (var chordId in chordIds)
+        GD.Print($"[TriggerLearnedChords] 将要演奏 {chordIds.Count} 个已学习和弦");
+        for (int idx = 0; idx < chordIds.Count; idx++)
+        {
+            var chordId = chordIds[idx];
+            GD.Print($"[TriggerLearnedChords] 演奏第 {idx+1}/{chordIds.Count} 个和弦: {chordId}");
             await PlaySingleChord(choiceContext, chordId, count, false);
+        }
+        GD.Print("[TriggerLearnedChords] 所有已学习和弦演奏结束");
     }
 
     public async Task TriggerEquippedChords(PlayerChoiceContext choiceContext, int count = 1,
         params ChordCategory[] categories)
     {
         var chordIds = GetEquippedChordIds(categories);
-        foreach (var chordId in chordIds)
+        GD.Print($"[TriggerEquippedChords] 将要演奏 {chordIds.Count} 个已记忆和弦");
+        for (int idx = 0; idx < chordIds.Count; idx++)
+        {
+            var chordId = chordIds[idx];
+            GD.Print($"[TriggerEquippedChords] 演奏第 {idx+1}/{chordIds.Count} 个和弦: {chordId}");
             await PlaySingleChord(choiceContext, chordId, count, false);
+        }
+        GD.Print("[TriggerEquippedChords] 所有已记忆和弦演奏结束");
     }
 
     public async Task TriggerAllLearnedChords(PlayerChoiceContext choiceContext, int count = 1)
@@ -801,6 +813,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        Entry.Logger.Debug($"[AfterPlayerTurnStart] Player {player.NetId} entering");
         if (player != Owner) return;
         _curtainCallRecalledThisTurn = false;
         _firstPlayBonusConsumedThisTurn = false;

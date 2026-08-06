@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+﻿using System.Diagnostics;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -57,11 +58,11 @@ public static class MusicNoteManager
     /// <summary>
     /// 同步添加音符，识别和弦并存储。不触发任何异步效果。
     /// </summary>
-    public static NoteProcessResult AddNote(
-        Player player,
-        CardType type,
-        IReadOnlyList<string> allChordIds)
+    public static NoteProcessResult AddNote(Player player, CardType type, IReadOnlyList<string> allChordIds)
     {
+        var stackTrace = new StackTrace(true);
+        var caller = stackTrace.GetFrame(1)?.GetMethod()?.Name ?? "Unknown";
+        Entry.Logger.Debug($"[AddNote] Player {player?.NetId}, note {type}, seq count {allChordIds?.Count}, caller {caller}");
         var result = new NoteProcessResult
         {
             NewChords = new List<string>(),

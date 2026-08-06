@@ -2,17 +2,15 @@
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Localization;
+using System.Diagnostics;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 public static class ChordSequenceModifierHelper
 {
-    // ★ 用于存储卡牌直接提供的临时修改器，按玩家 -> 和弦ID -> 修改器 存储
     private static readonly Dictionary<Player, Dictionary<string, ChordSequenceModifier>> _cardModifiers = new();
+    private static int _getModifiedSequenceCallCount = 0; // 全局调用计数器
 
-    /// <summary>
-    ///     为某个玩家的特定和弦设置临时修改器（由卡牌直接调用）
-    /// </summary>
     public static void SetCardModifier(Player player, string chordId, ChordSequenceModifier modifier)
     {
         if (!_cardModifiers.ContainsKey(player))
@@ -21,52 +19,66 @@ public static class ChordSequenceModifierHelper
         _cardModifiers[player][chordId] = modifier;
     }
 
-    /// <summary>
-    ///     清除某个玩家的所有卡牌临时修改器（可在战斗结束时调用）
-    /// </summary>
     public static void ClearCardModifiers(Player player)
     {
         _cardModifiers.Remove(player);
     }
 
-    /// <summary>
-    ///     收集生物身上所有活跃的修改器（Power、Relic、卡牌）
-    /// </summary>
     public static List<ChordSequenceModifier> CollectModifiers(Creature creature, ChordDefinition chordDef)
     {
         var result = new List<ChordSequenceModifier>();
         if (creature == null) return result;
 
-        // 1. ★ 来自卡牌直接提供的临时修改器（按和弦ID精准匹配）
+        // 记录调用上下文
+        var stackTrace = new StackTrace(true);
+        var caller = stackTrace.GetFrame(1)?.GetMethod()?.Name ?? "Unknown";
+        var log = $"[CollectModifiers] Called for chord {chordDef.Id} from {caller}";
+        Entry.Logger.Debug(log);
+
         var player = creature.Player;
         if (player != null && _cardModifiers.TryGetValue(player, out var dict))
             if (dict.TryGetValue(chordDef.Id, out var mod))
+            {
                 result.Add(mod);
+                Entry.Logger.Debug($"[CollectModifiers] Added card modifier for {chordDef.Id}");
+            }
 
         // 来自 Power 的修改器
         foreach (var provider in creature.Powers.OfType<IChordSequenceModifierProvider>())
         {
             var cats = provider.AffectedCategories;
             if (cats == null || !cats.Any() || cats.Contains(chordDef.Category))
-                result.AddRange(provider.GetModifiers(creature, chordDef));  // 传入 chordDef
+            {
+                var mods = provider.GetModifiers(creature, chordDef).ToList();
+                if (mods.Count > 0)
+                    Entry.Logger.Debug($"[CollectModifiers] Power {provider.GetType().Name} added {mods.Count} mod(s) for {chordDef.Id}");
+                result.AddRange(mods);
+            }
         }
         
-        // 来自遗物的修改器
         if (player != null)
             foreach (var provider in player.Relics.OfType<IChordSequenceModifierProvider>())
             {
                 var cats = provider.AffectedCategories;
                 if (cats == null || !cats.Any() || cats.Contains(chordDef.Category))
-                    result.AddRange(provider.GetModifiers(creature, chordDef));  // 传入 chordDef
+                {
+                    var mods = provider.GetModifiers(creature, chordDef).ToList();
+                    if (mods.Count > 0)
+                        Entry.Logger.Debug($"[CollectModifiers] Relic {provider.GetType().Name} added {mods.Count} mod(s) for {chordDef.Id}");
+                    result.AddRange(mods);
+                }
             }
         return result;
     }
 
-    /// <summary>
-    ///     依次应用所有修改器，获得修改后的音符序列
-    /// </summary>
     public static IReadOnlyList<CardType> GetModifiedSequence(ChordDefinition chordDef, Creature owner)
     {
+        _getModifiedSequenceCallCount++;
+        var stackTrace = new StackTrace(true);
+        var caller = stackTrace.GetFrame(1)?.GetMethod()?.Name ?? "Unknown";
+        var log = $"[GetModifiedSequence] #{_getModifiedSequenceCallCount} for chord {chordDef.Id} from {caller}, owner={owner?.Player?.NetId}";
+        Entry.Logger.Debug(log);
+
         var mods = CollectModifiers(owner, chordDef);
         IReadOnlyList<CardType> seq = chordDef.NoteSequence;
         foreach (var mod in mods)
@@ -74,9 +86,6 @@ public static class ChordSequenceModifierHelper
         return seq;
     }
     
-    /// <summary>
-    /// 移除某个玩家特定和弦的卡牌临时修改器。
-    /// </summary>
     public static void RemoveCardModifier(Player player, string chordId)
     {
         if (_cardModifiers.TryGetValue(player, out var dict))
@@ -87,9 +96,6 @@ public static class ChordSequenceModifierHelper
         }
     }
 
-    /// <summary>
-    ///     生成修改后的条件文本（用于 UI）
-    /// </summary>
     public static string GetModifiedConditionText(ChordDefinition chordDef, Creature owner)
     {
         var seq = GetModifiedSequence(chordDef, owner);

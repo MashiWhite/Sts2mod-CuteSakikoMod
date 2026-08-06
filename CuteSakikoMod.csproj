@@ -100,7 +100,6 @@
         <Folder Include="CuteSakikoModCode\Cards\Mod\Event\" />
         <Folder Include="CuteSakikoModCode\Cards\Rana\Ancient\" />
         <Folder Include="CuteSakikoModCode\Cards\Rana\Token\" />
-        <Folder Include="CuteSakikoModCode\Encounters\Elite\"/>
         <Folder Include="CuteSakikoModCode\Encounters\Normal\" />
         <Folder Include="CuteSakikoModCode\Monsters\Normal\"/>
         <Folder Include="CuteSakikoModCode\Potions\Shared\Uncommon\" />
