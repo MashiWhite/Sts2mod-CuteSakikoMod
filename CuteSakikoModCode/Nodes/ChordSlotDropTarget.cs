@@ -73,7 +73,7 @@ public partial class ChordSlotDropTarget : Control
             var tip = ChordDisplayHelper.GetDynamicChordHoverTip(
                 _currentChordId,
                 _screen.Guitar.Owner.Creature,
-                _screen.Guitar.GetTotalBonus());
+                _screen.Guitar.GetDisplayBonus());
             var tipSet = NHoverTipSet.CreateAndShow(this, tip);
             if (tipSet == null) return;
 

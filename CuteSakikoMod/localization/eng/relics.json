@@ -68,5 +68,11 @@
   "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "Allows you to play [pink]Notes[/pink] to store [gold]Chords[/gold].\nThe first time you perform a [gold]Chord[/gold] each turn, its values are increased by 1.",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "Allows you to play [pink]Notes[/pink] to store [gold]Chords[/gold].\nYou can memorize one extra chord per category.\nThe first time you perform a [gold]Chord[/gold] each turn, its values are increased by 3.",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]Hehe, so, what do you think of my practice?[/pink]",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "Anon's Guitar (After Practice)"
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "Anon's Guitar (After Practice)",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.title": "Mask of Oblivion",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.description": "The first time you [red]Forget[/red] a card each turn, draw 1 card.\nWhenever a card is [red]Forgotten[/red], deal 3 damage to ALL enemies.",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.flavor": "[sine][red]Primo die in scaena, omnia incerta[/red][/sine]",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.title": "Hairband of Oblivion",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.description": "Whenever a card is [red]Forgotten[/red], draw 1 card and deal 6 damage to ALL enemies.",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]"
 }

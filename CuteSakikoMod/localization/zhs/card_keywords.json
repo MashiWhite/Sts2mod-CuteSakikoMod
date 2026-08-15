@@ -68,7 +68,7 @@
   "CUTE_SAKIKO_MOD_A#CHORD.description": "所有友方下[blue]{0}[/blue]张攻击牌的费用减少1点。",
   "CUTE_SAKIKO_MOD_B#CHORD.title": "#B和弦",
   "CUTE_SAKIKO_MOD_B#CHORD.description": "所有友方获得[blue]{0}[/blue]层[gold]活力[/gold]。",
-
+  
   "CUTE_SAKIKO_MOD_CMCHORD.title": "Cm和弦",
   "CUTE_SAKIKO_MOD_CMCHORD.description": "所有友方获得[blue]{0}[/blue]点[gold]格挡[/gold]。",
   "CUTE_SAKIKO_MOD_DMCHORD.title": "Dm和弦",
@@ -107,11 +107,11 @@
   "CUTE_SAKIKO_MOD_F7CHORD.title": "F7和弦",
   "CUTE_SAKIKO_MOD_F7CHORD.description": "所有敌人获得[blue]{0}[/blue]层[gold]易伤[/gold]和[blue]{1}[/blue]层[gold]虚弱[/gold]。",
   "CUTE_SAKIKO_MOD_G7CHORD.title": "G7和弦",
-  "CUTE_SAKIKO_MOD_G7CHORD.description": "所有友方选择至多[blue]{0}[/blue]张牌[gold]消耗[/gold]。",
+  "CUTE_SAKIKO_MOD_G7CHORD.description": "所有友方回合结束时选择至多[blue]{0}[/blue]张牌[gold]消耗[/gold]。",
   "CUTE_SAKIKO_MOD_A7CHORD.title": "A7和弦",
   "CUTE_SAKIKO_MOD_A7CHORD.description": "所有友方保留手牌[blue]{0}[/blue]回合。",
   "CUTE_SAKIKO_MOD_B7CHORD.title": "B7和弦",
-  "CUTE_SAKIKO_MOD_B7CHORD.description": "所有友方下一张打出的牌会多打出[blue]{0}[/blue]次。",
+  "CUTE_SAKIKO_MOD_B7CHORD.description": "所有友方下[blue]{0}[/blue]张打出的牌会多打出1次。",
   "CUTE_SAKIKO_MOD_C#7CHORD.title": "#C7和弦",
   "CUTE_SAKIKO_MOD_C#7CHORD.description": "所有敌人本回合减少[blue]{0}[/blue]层[gold]力量[/gold]。",
   "CUTE_SAKIKO_MOD_D#7CHORD.title": "#D7和弦",
@@ -125,7 +125,7 @@
   "CUTE_SAKIKO_MOD_A#7CHORD.title": "#A7和弦",
   "CUTE_SAKIKO_MOD_A#7CHORD.description": "所有友方获得[blue]{0}[/blue]点能量。",
   "CUTE_SAKIKO_MOD_B#7CHORD.title": "#B7和弦",
-  "CUTE_SAKIKO_MOD_B#7CHORD.description": "下一个[gold]和弦[/gold]演奏的数值增加[blue]{0}[/blue]点。",
+  "CUTE_SAKIKO_MOD_B#7CHORD.description": "下[blue]{0}[/blue]个[gold]和弦[/gold]演奏的数值增加1点。",
 
   "CUTE_SAKIKO_MOD_ANONCCHORD.title": "爱音C和弦",
   "CUTE_SAKIKO_MOD_ANONCCHORD.description": "在本场战斗中升级所有友方牌堆中的[blue]{0}[/blue]张牌。",

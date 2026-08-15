@@ -528,36 +528,17 @@ private static void RegisterChords()
                     await PowerCmd.Apply<WeakPower>(ctx, enemy, 1 + bonus, owner, null);
                 }
         });
-
-    // G7【攻攻技技】所有友方选择至多1张牌消耗（从手牌、抽牌堆、弃牌堆中选择）
-    // 注：此处简化实现为直接从手牌中选择消耗，类似 Purity，需要玩家交互。这里提供一个简单实现，需要时可通过 PlayerChoiceContext 提供选择。
+    
+    // G7【攻攻技技】所有友方获得 (1+bonus) 层“和弦之力：消耗”
     AddChord("G7", ChordCategory.Dominant,
         new[] { CardType.Attack, CardType.Attack, CardType.Skill, CardType.Skill },
         "CUTE_SAKIKO_MOD_G7CHORD.title", "CUTE_SAKIKO_MOD_G7CHORD.description", "g7_chord",
-        new int[1],
+        new[] { 1 }, // 基础层数 1
         async (ctx, owner, bonus) =>
         {
-            foreach (var player in owner.CombatState?.Players ?? Enumerable.Empty<Player>())
-            {
-                var handCards = PileType.Hand.GetPile(player)?.Cards ?? Enumerable.Empty<CardModel>();
-                var drawCards = PileType.Draw.GetPile(player)?.Cards ?? Enumerable.Empty<CardModel>();
-                var discardCards = PileType.Discard.GetPile(player)?.Cards ?? Enumerable.Empty<CardModel>();
-
-                var allCards = handCards
-                    .Concat(drawCards)
-                    .Concat(discardCards)
-                    .ToList();
-
-                if (allCards.Count == 0) continue;
-                
-                var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, minCount: 0, maxCount: 1 + bonus);
-
-                var selected = await CardSelectCmd.FromSimpleGrid(ctx, allCards, player, prefs);
-                var chosen = selected.FirstOrDefault();
-                if (chosen == null) continue;
-
-                await CardCmd.Exhaust(ctx, chosen);
-            }
+            var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
+            foreach (var ally in allies)
+                await PowerCmd.Apply<ChordEndOfTurnExhaustPower>(ctx, ally, 1 + bonus, owner, null);
         });
 
     // A7【攻技攻技】所有友方保留手牌1回合（RetainHandPower）

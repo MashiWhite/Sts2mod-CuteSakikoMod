@@ -410,7 +410,7 @@ public partial class ChordManagementScreen : Control
             {
                 if (Guitar?.Owner?.Creature != null)
                 {
-                    var tip = ChordDisplayHelper.GetDynamicChordHoverTip(chordId, Guitar.Owner.Creature, Guitar.GetTotalBonus());
+                    var tip = ChordDisplayHelper.GetDynamicChordHoverTip(chordId, Guitar.Owner.Creature, Guitar.GetDisplayBonus());
                     ShowHoverTip(iconControl, tip);
                 }
             };
@@ -467,7 +467,7 @@ public partial class ChordManagementScreen : Control
                         {
                             if (Guitar?.Owner?.Creature != null)
                             {
-                                var tip = ChordDisplayHelper.GetDynamicChordHoverTip(chord.Id, Guitar.Owner.Creature, Guitar.GetTotalBonus());
+                                var tip = ChordDisplayHelper.GetDynamicChordHoverTip(chord.Id, Guitar.Owner.Creature, Guitar.GetDisplayBonus());
                                 ShowHoverTip(iconControl, tip);
                             }
                         };
@@ -520,7 +520,7 @@ public partial class ChordManagementScreen : Control
                     {
                         if (Guitar?.Owner?.Creature != null)
                         {
-                            var tip = ChordDisplayHelper.GetDynamicChordHoverTip(chord.Id, Guitar.Owner.Creature, Guitar.GetTotalBonus());
+                            var tip = ChordDisplayHelper.GetDynamicChordHoverTip(chord.Id, Guitar.Owner.Creature, Guitar.GetDisplayBonus());
                             ShowHoverTip(iconControl, tip);
                         }
                     };

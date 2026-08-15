@@ -45,6 +45,12 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
     private bool _chordBonusConsumedThisOperation;
 
     private bool _curtainCallRecalledThisTurn;
+    
+    /// <summary> 用于 UI 显示的加成值：战斗内包含所有加成，战斗外仅基础值 </summary>
+    public int GetDisplayBonus()
+    {
+        return Owner?.Creature?.CombatState != null ? GetTotalBonus() : BaseChordBonus;
+    }
 
     // 装备和弦：每个分类一个列表（支持多槽位）
     protected Dictionary<ChordCategory, List<string>> _equippedChords = new();
@@ -115,7 +121,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetTotalBonus());
+                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetDisplayBonus());
                     var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
                     lines.Add($"[{title}]({condition})\n{text}");
                 }
@@ -124,7 +130,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetTotalBonus());
+                    var text = ChordDisplayHelper.GetFormattedDescription(def,GetDisplayBonus());
                     var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
                     lines.Add($"[{title}]({condition})\n{text}");
                 }
@@ -133,7 +139,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetTotalBonus());
+                    var text = ChordDisplayHelper.GetFormattedDescription(def, GetDisplayBonus());
                     var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
                     lines.Add($"[临时] [{title}]({condition})\n{text}");
                 }
@@ -463,14 +469,12 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
                 bonus += provider.GetBonus();
 
             var chordBonusPower = Owner.Creature.GetPower<ChordBonusPower>();
-            if (chordBonusPower != null)
-                bonus += chordBonusPower.Amount;
+            if (chordBonusPower != null && chordBonusPower.Amount > 0)
+                bonus += 1; // 每次演奏 +1，不再使用层数作为加数值
 
-            // 如果回合首次加成尚未消耗，或者当前操作正在享受该加成，则将其计入
             if ((!_firstPlayBonusConsumedThisTurn && FirstPlayBonus > 0) || _firstPlayBonusAppliedThisOperation)
                 bonus += FirstPlayBonus;
         }
-
         return bonus;
     }
 
@@ -900,7 +904,7 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         if (_storedChordDisplay != null && GodotObject.IsInstanceValid(_storedChordDisplay))
         {
             var stored = MusicNoteManager.GetStoredChords(Owner).ToList();
-            _storedChordDisplay.UpdateChords(stored, GetTotalBonus());
+            _storedChordDisplay.UpdateChords(stored, GetDisplayBonus());
         }
         else if (Owner?.Creature?.CombatState != null)
         {

@@ -69,5 +69,11 @@
   "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.flavor": "[pink]Rikki不在，好久都没练习了，和弦都快忘光了，得好好练习一下。[/pink]",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "爱音练习后的吉他",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "可以弹奏[pink]音符[/pink]储存[gold]和弦[/gold]。\n每个种类可以额外记忆一个和弦。\n每回合第一次演奏[gold]和弦[/gold]数值增加3。",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]哼哼，怎么样，我练习的成果。[/pink]"
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]哼哼，怎么样，我练习的成果。[/pink]",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.title": "遗忘面具",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.description": "每回合第一次[red]遗忘[/red]时，抽1张牌。\n每当有一张牌被[red]遗忘[/red]时，对所有敌人造成3点伤害。",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.flavor": "[sine][red]Primo die in scaena, omnia incerta[/red][/sine]",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.title": "遗忘发带",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.description": "每当有一张牌被[red]遗忘[/red]时，抽1张牌，并对所有敌人造成6点伤害。",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]"
 }

@@ -40,8 +40,6 @@ public class SakiSweep() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare,
         {
             // 没有骑士之剑：创建一张新的并加入手牌
             var newSword = CombatState.CreateCard<KnightSword>(Owner);
-            if (IsUpgraded)
-                CardCmd.Upgrade(newSword);
             await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, Owner);
         }
 

@@ -221,10 +221,13 @@
   "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.description": "下一张技能牌的费用减少[blue]1[/blue]点。",
   "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.smartDescription": "下[blue]{Amount}[/blue]次技能费用-[blue]1[/blue]。",
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.title": "和弦增幅",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "下一次演奏的所有[gold]和弦[/gold]数值增加层数等量点。",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "下一次演奏的所有[gold]和弦[/gold]数值+[blue]{Amount}[/blue]。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "每层使下一次演奏的所有[gold]和弦[/gold]数值+1。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "下[blue]{Amount}[/blue]次，每次所有[gold]和弦[/gold]数值+1。",
   "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.title": "这是什么动物",
-  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.description": "你搞不清楚它到底是什么......也不知道它下一步要做什么......",
-  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.smartDescription": "你搞不清楚它到底是什么......也不知道它下一步要做什么......"
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.description": "[sine]你搞不清楚它到底是什么......也不知道它下一步要做什么......[/sine]",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.smartDescription": "[sine]你搞不清楚它到底是什么......也不知道它下一步要做什么......[/sine]",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.title": "和弦之力",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.description": "回合结束时，可选择至多层数等量张牌堆里的牌[gold]消耗[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.smartDescription": "回合结束时消耗牌，可选择至多[blue]{Amount}[/blue]张牌堆里的牌[gold]消耗[/gold]。"
 
 }

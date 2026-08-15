@@ -591,6 +591,12 @@
   "CUTE_SAKIKO_MOD_CARD_REGRETED.title": "Deep Regret",
   "CUTE_SAKIKO_MOD_CARD_REGRETED.description": "Lose {HpLoss:diff()} HP.\nDraw 1 card.",
   "CUTE_SAKIKO_MOD_CARD_RECALL.selectionScreenPrompt": "Select a Memory.",
+  "CUTE_SAKIKO_MOD_CARD_TEMPORARY_FORGETFULNESS.title": "Temporary Forgetfulness",
+  "CUTE_SAKIKO_MOD_CARD_TEMPORARY_FORGETFULNESS.description": "Choose 1 card in your hand, play it, then [red]Forget[/red] it.",
+  "CUTE_SAKIKO_MOD_CARD_TEMPORARY_FORGETFULNESS.selectionScreenPrompt": "Choose a card in your hand to play and Forget",
+  "CUTE_SAKIKO_MOD_CARD_ONLY_OBLIVION.title": "Only Oblivion",
+  "CUTE_SAKIKO_MOD_CARD_ONLY_OBLIVION.description": "Choose {Cards:diff()} card(s) from all piles, play them, then [red]Forget[/red] them.",
+  "CUTE_SAKIKO_MOD_CARD_ONLY_OBLIVION.selectionScreenPrompt": "Choose {Cards:diff()} card(s) to play and Forget",
   "CUTE_SAKIKO_MOD_CARD_PANCAKE_STRIKE.title": "煎饼打击",
   "CUTE_SAKIKO_MOD_CARD_PANCAKE_STRIKE.description": "打出该牌后，若费用足够则将其放入打出区，并减少相应能量。若不足够则返回手牌区。若该牌在打出区，则先检测该牌是否为升级版本，若为未升级版本，则对指定敌人造成9点伤害，该伤害可以被格挡所阻挡，若格挡大于伤害值则不对生命值造成任何效果，只对格挡值造成减法效果；若格挡值小于伤害值，则对生命值造成伤害值与格挡值二者差值的伤害。接着若没有无法抽牌相关的debuff，则从抽牌堆中随机抽取1张牌放入手牌，然后此牌进入弃牌区。若有无法抽牌相关的debuff则只对指定"
 }

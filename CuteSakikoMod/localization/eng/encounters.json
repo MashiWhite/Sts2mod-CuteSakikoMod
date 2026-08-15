@@ -8,5 +8,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "Tianxiangluo",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.loss": "{character} was overwhelmed by [gold]{encounter}[/gold]'s cuteness.",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.title": "Vortex of Memories",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.loss": "The vortex of memories consumes {character}..."
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.loss": "The vortex of memories consumes {character}...",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_JENNIFER_ENCOUNTER.title": "Little Jennifer?",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_JENNIFER_ENCOUNTER.loss": "{character} was scared to death by [gold]{encounter}[/gold]'s unknown methods."
 }

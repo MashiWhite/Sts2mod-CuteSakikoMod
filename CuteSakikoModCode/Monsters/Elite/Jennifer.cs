@@ -50,13 +50,13 @@ public class Jennifer : ModMonsterTemplate
     {
         // 四个动作，全部使用隐藏意图
         var whatMove = new MoveState("WHAT", WhatMove,
-            new HiddenIntent());
+            new UnknownIntent());
         var unknownMove = new MoveState("UNKNOWN", UnknownMove,
-            new HiddenIntent());
+            new UnknownIntent());
         var hmmMove = new MoveState("HMM", HmmMove,
-            new HiddenIntent());
+            new UnknownIntent());
         var whatTheMove = new MoveState("WHAT_THE", WhatTheMove,
-            new HiddenIntent());
+            new UnknownIntent());
 
         // 随机意图分支：概率分别为 20%, 20%, 25%, 35%
         var randomState = new RandomBranchState("JENNIFER_RANDOM");

@@ -68,5 +68,11 @@
   "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR.description": "[pink]音符[/pink]を弾いて[gold]コード[/gold]をストックできる。\n毎ターン最初に[gold]コード[/gold]を演奏する時、その数値が1増加する。",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.description": "[pink]音符[/pink]を弾いて[gold]コード[/gold]をストックできる。\n各カテゴリーで追加のコードを1つ記憶できる。\n毎ターン最初に[gold]コード[/gold]を演奏する時、その数値が3増加する。",
   "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.flavor": "[pink]ふふん、どう？練習の成果。[/pink]",
-  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "愛音の練習後のギター"
+  "CUTE_SAKIKO_MOD_RELIC_FLASH_ANON_GUITAR.title": "愛音の練習後のギター",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.title": "忘却の仮面",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.description": "毎ターン最初に[red]忘却[/red]した時、カードを1枚引く。\nカードが1枚[red]忘却[/red]されるたび、すべての敵に3ダメージを与える。",
+  "CUTE_SAKIKO_MOD_RELIC_OB_MASK.flavor": "[sine][red]Primo die in scaena, omnia incerta[/red][/sine]",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.title": "忘却のヘアバンド",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.description": "カードが1枚[red]忘却[/red]されるたび、カードを1枚引き、すべての敵に6ダメージを与える。",
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]"
 }

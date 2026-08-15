@@ -62,7 +62,7 @@ public partial class ChordDragSource : Control
             var tip = ChordDisplayHelper.GetDynamicChordHoverTip(
                 _chordId,
                 _screen.Guitar.Owner.Creature,
-                _screen.Guitar.GetTotalBonus()); // 使用 GetTotalBonus
+                _screen.Guitar.GetDisplayBonus()); // 使用 GetTotalBonus
             var tipSet = NHoverTipSet.CreateAndShow(this, tip);
             if (tipSet == null) return;
 

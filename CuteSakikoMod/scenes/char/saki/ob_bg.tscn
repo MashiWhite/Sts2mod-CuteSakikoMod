@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://boq3lc03qhyos"]
+
+[ext_resource type="Texture2D" uid="uid://skjh0nskq43u" path="res://CuteSakikoMod/images/charui/oblivionis/ob_bg.png" id="1_cfh1p"]
+
+[node name="SakiBg" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 118.0
+offset_top = -165.0
+offset_right = 2577.0
+offset_bottom = 1245.0
+texture = ExtResource("1_cfh1p")

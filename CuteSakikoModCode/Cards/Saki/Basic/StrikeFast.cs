@@ -13,6 +13,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 
+[RegisterCharacterStarterCard(typeof(CuteOb), 2, Order = 0)]
 [RegisterCharacterStarterCard(typeof(CuteSaki), 2, Order = 0)]
 public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {

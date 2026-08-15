@@ -257,5 +257,10 @@
   "CUTE_SAKIKO_MOD_MONSTER_TIAN_XIANG_LUO.moves.ACTING_CUTE.title": "Act Cute",
   "CUTE_SAKIKO_MOD_MONSTER_TIAN_XIANG_LUO.moves.HAPPY.title": "Happy",
   "CUTE_SAKIKO_MOD_MONSTER_TIAN_XIANG_LUO.banter": "Tenshorou is here!",
-  "CUTE_SAKIKO_MOD_MONSTER_TIAN_XIANG_LUO.moves.DESUWA.banter": "Desuwa——!"
+  "CUTE_SAKIKO_MOD_MONSTER_TIAN_XIANG_LUO.moves.DESUWA.banter": "Desuwa——!",
+  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.name": "Little Jennifer?",
+  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT.title": "What",
+  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.UNKNOWN.title": "Unknown",
+  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.HMM.title": "Hmm...",
+  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT_THE.title": "What the"
 }

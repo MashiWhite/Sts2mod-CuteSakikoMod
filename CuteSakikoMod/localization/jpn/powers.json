@@ -225,6 +225,12 @@
   "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.description": "次のスキルのコストが[blue]1[/blue]減る。",
   "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.smartDescription": "次の[blue]{Amount}[/blue]回のスキルのコストが[blue]1[/blue]減る。",
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.title": "コード増幅",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "次に演奏するすべての[gold]コード[/gold]の数値が層数分増加する。",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "次に演奏する[gold]コード[/gold]の数値が[blue]{Amount}[/blue]増加する。"
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "1層につき、次に演奏するすべての[gold]コード[/gold]の数値が1増加する。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "次の[blue]{Amount}[/blue]回、毎回すべての[gold]コード[/gold]の数値が1増加する。",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.title": "これは何の動物？",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.description": "その正体がまったくわからない…… 次に何をするのかも……",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.smartDescription": "その正体がまったくわからない…… 次に何をするのかも……",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.title": "コードの力",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.description": "ターン終了時、層数と同じ枚数まで、自分の山にあるカードを選んで[gold]廃棄[/gold]できる。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.smartDescription": "ターン終了時にカードを廃棄する：自分の山から最大[blue]{Amount}[/blue]枚選んで[gold]廃棄[/gold]できる。"
 }

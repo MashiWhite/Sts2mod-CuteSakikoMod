@@ -224,6 +224,12 @@
   "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.description": "Your next Skill costs [blue]1[/blue] less.",
   "CUTE_SAKIKO_MOD_POWER_CHORD_NEXT_SKILL_COST_REDUCTION_POWER.smartDescription": "Your next [blue]{Amount}[/blue] Skills cost [blue]1[/blue] less.",
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.title": "Chord Amplification",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "The next time you perform any [gold]Chords[/gold], increase their values by the number of stacks.",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "The next performed [gold]Chord(s)[/gold] have their values increased by [blue]{Amount}[/blue]."
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "Each stack increases the values of all [gold]Chords[/gold] the next time they are performed by 1.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "For the next [blue]{Amount}[/blue] time(s), each time all [gold]Chords[/gold] have their values increased by 1.",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.title": "What Animal Is This",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.description": "You can't figure out what it really is... Nor what it's going to do next...",
+  "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.smartDescription": "You can't figure out what it really is... Nor what it's going to do next...",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.title": "Chord Power",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.description": "At the end of your turn, you may choose a number of cards from your piles up to the number of stacks and [gold]Exhaust[/gold] them.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.smartDescription": "Exhaust cards at the end of your turn: choose up to [blue]{Amount}[/blue] card(s) from your piles to [gold]Exhaust[/gold]."
 }
