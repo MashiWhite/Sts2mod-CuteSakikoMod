@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using Godot;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes;

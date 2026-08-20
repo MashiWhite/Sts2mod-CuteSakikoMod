@@ -11,7 +11,6 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Oblivionis;
@@ -59,7 +58,7 @@ public class OnlyOblivion : CuteObCard
         var exhaust = PileType.Exhaust.GetPile(Owner);
         if (exhaust != null) allCards.AddRange(exhaust.Cards);
 
-        // 遗忘堆（ModCardPile）
+        // 遗忘堆
         var forgetPile = ForgetCardPile.Get(Owner);
         if (forgetPile != null) allCards.AddRange(forgetPile.Cards);
 
@@ -78,20 +77,23 @@ public class OnlyOblivion : CuteObCard
             prefs
         );
 
-        var cardToForget = selected.FirstOrDefault();
-        if (cardToForget == null) return;
+        var selectedList = selected.ToList();
+        if (selectedList.Count == 0) return;
 
-        // 如果选中的牌在遗忘堆，则只需打出（已在遗忘堆，不再重复遗忘）
-        bool alreadyForgotten = cardToForget.Pile == forgetPile;
+        var cardsToForget = new List<CardModel>();
 
-        // 打出选中的牌
-        await CardCmd.AutoPlay(choiceContext, cardToForget, null);
-
-        // 遗忘（若原本不在遗忘堆）
-        if (!alreadyForgotten)
+        foreach (var card in selectedList)
         {
-            await MemoryCmd.Forget(choiceContext, new[] { cardToForget }, this);
+            // 打出选中的牌
+            await CardCmd.AutoPlay(choiceContext, card, null);
+
+            // 无论原本在哪个牌堆，打出后都需要遗忘以回到遗忘堆
+            cardsToForget.Add(card);
         }
+
+        // 统一遗忘所有选中的牌
+        if (cardsToForget.Count > 0)
+            await MemoryCmd.Forget(choiceContext, cardsToForget, this);
     }
 
     protected override void OnUpgrade()

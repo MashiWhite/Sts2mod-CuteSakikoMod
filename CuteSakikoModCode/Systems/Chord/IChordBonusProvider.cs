@@ -1,5 +1,5 @@
 ﻿// Systems/IChordBonusProvider.cs
-namespace CuteSakikoMod.CuteSakikoModCode.Systems
+namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
 {
     public interface IChordBonusProvider
     {

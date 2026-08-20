@@ -1,6 +1,6 @@
 ﻿using MegaCrit.Sts2.Core.Entities.Cards;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Systems;
+namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 
 public abstract class ChordSequenceModifier
 {

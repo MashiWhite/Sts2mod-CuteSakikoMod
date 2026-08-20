@@ -5,6 +5,8 @@ using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Others.Telemetry;
+using CuteSakikoMod.CuteSakikoModCode.Patches;
+using CuteSakikoMod.CuteSakikoModCode.Patches.Skin;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
@@ -287,6 +289,7 @@ public class Entry
             if (CombatManager.Instance != null)
                 CombatManager.Instance.CombatEnded += _ => AudioManager.StopMusic();
         };
+        ObPopupHelper.PreloadButtonScene();
     }
 
     private static async void OnRunStarted(RunState state)

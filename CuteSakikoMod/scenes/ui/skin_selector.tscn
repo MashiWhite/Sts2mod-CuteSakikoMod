@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://iprwsrs6tun0"]
+
+[ext_resource type="Script" uid="uid://c641nkhmx4ssr" path="res://CuteSakikoModCode/Nodes/NSkinSelector.cs" id="1_hydbw"]
+[ext_resource type="Texture2D" uid="uid://4ilw72g6mfdv" path="res://CuteSakikoMod/images/ui/settings_tiny_left_arrow.png" id="1_k60ey"]
+[ext_resource type="Texture2D" uid="uid://b4rrl24anfri4" path="res://CuteSakikoMod/images/ui/settings_tiny_right_arrow.png" id="2_hydbw"]
+
+[node name="SkinSelector" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_hydbw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 459.0
+offset_bottom = 500.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LeftArrowButton" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("1_k60ey")
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(8, 8)
+
+[node name="PreviewContainer" type="Control" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RightArrowButton" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("2_hydbw")
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(8, 8)
+
+[node name="SkinNameLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+horizontal_alignment = 1

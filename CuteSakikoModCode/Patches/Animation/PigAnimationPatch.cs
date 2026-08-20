@@ -5,7 +5,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Patches;
+namespace CuteSakikoMod.CuteSakikoModCode.Patches.Animation;
 
 [HarmonyPatch]
 public static class PigAnimationPatch

@@ -11,8 +11,6 @@ public class BigMatchaParfait : MatchaParfait
     public BigMatchaParfait()
     {
         DrawAmount = 2;
-        // 注意：Charges 已在基类构造函数中通过 GetInitialCharges() 初始化为 12，
-        // 无需再手动增加。加载存档时会自动恢复为保存的值。
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]

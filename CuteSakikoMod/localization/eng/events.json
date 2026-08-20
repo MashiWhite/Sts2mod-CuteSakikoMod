@@ -56,6 +56,8 @@
   "COLORFUL_PHILOSOPHERS.pages.INITIAL.options.CUTEANON.description": "Gain [blue]{Cards}[/blue] Anon Chihaya cards.",
   "COLORFUL_PHILOSOPHERS.pages.INITIAL.options.CUTERANA.title": "Matcha Green",
   "COLORFUL_PHILOSOPHERS.pages.INITIAL.options.CUTERANA.description": "Gain [blue]{Cards}[/blue] Rana Kaname cards.",
+  "COLORFUL_PHILOSOPHERS.pages.INITIAL.options.CUTEOB.title": "Moonlight Red",
+  "COLORFUL_PHILOSOPHERS.pages.INITIAL.options.CUTEOB.description": "Obtain [blue]{Cards}[/blue] Oblivionis card(s).",
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.title": "Star Relic",
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.description": "As you walk along, you see something [gold]sparkling[/gold]\n[pink]Wow, what's this![/pink]\nYou approach and find a mysterious silver wristwatch.",
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.PICK_UP.title": "Pick it up and put it on",

@@ -3,11 +3,10 @@ using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Random;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Systems;
+namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 
 public static class MusicNoteManager
 {

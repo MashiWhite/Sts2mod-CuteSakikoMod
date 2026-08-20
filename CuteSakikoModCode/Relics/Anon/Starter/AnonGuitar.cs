@@ -5,6 +5,7 @@ using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;

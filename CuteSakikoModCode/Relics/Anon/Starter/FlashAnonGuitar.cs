@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Entities.Relics;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;

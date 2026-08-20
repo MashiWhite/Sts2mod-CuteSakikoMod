@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
+using MegaCrit.Sts2.Core.Models.Characters;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
@@ -10,11 +11,12 @@ using STS2RitsuLib.Scaffolding.Godot;
 namespace CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 
 [RegisterCharacter]
-public class CuteOb : CuteSakikoCharacter<CuteObCardPool, CuteObRelicPool, CuteObPotionPool>
+public class CuteOb : CuteSakikoCharacter<CuteObCardPool, CuteSakiRelicPool, CuteSakiPotionPool>
 {
     public const string CharacterId = "CUTEOB";
     public static readonly Color Color = new("#7799cc");
     public override Color EnergyLabelOutlineColor => new(1f, 0f, 0f);
+    public override bool HideFromVanillaCharacterSelect => true;
 
     public override Color NameColor => Color;
     public override CharacterGender Gender => CharacterGender.Feminine;

@@ -1,10 +1,10 @@
-﻿using MegaCrit.Sts2.Core.Entities.Cards;
+﻿using System.Diagnostics;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Localization;
-using System.Diagnostics;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Systems;
+namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 
 public static class ChordSequenceModifierHelper
 {

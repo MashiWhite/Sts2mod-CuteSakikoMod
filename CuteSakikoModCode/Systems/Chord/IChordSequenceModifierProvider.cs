@@ -1,7 +1,7 @@
 ﻿
 using MegaCrit.Sts2.Core.Entities.Creatures;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Systems;
+namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 
 public interface IChordSequenceModifierProvider
 {
