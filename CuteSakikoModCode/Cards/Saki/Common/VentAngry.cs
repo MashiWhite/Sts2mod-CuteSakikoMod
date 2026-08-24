@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿/*using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -69,4 +69,4 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
     {
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
-}
+}*/

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -8,14 +8,12 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
-using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[RegisterCharacterStarterCard(typeof(CuteOb), 2, Order = 1)]
-[RegisterCharacterStarterCard(typeof(CuteSaki), 2, Order = 1)]
-public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+
+public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
@@ -26,7 +24,7 @@ public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(5m, ValueProp.Move),
-        new BlockVar(3m, ValueProp.Move) // 仅用于描述，实际动态使用
+        new BlockVar(5m, ValueProp.Move) 
     ];
 
     protected override bool ShouldGlowGoldInternal
@@ -71,7 +69,6 @@ public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars.Block.UpgradeValueBy(2m);
+        DynamicVars.Block.UpgradeValueBy(4m);
     }
 }

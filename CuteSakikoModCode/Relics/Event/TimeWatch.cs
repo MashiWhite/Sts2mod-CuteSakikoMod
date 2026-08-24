@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
 using CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;

@@ -20,8 +20,8 @@ public class StressResponse : CuteSakikoModCard
     {
         get
         {
-            yield return new PowerVar<PressurePower>("Pressure", 0m); // 显示当前压力层数
-            yield return new PressureDamageVar(); // 动态伤害值 = 压力 × 2
+            yield return new PowerVar<PressurePower>("Pressure", 0m);
+            yield return new PressureDamageVar();
         }
     }
 
@@ -40,10 +40,12 @@ public class StressResponse : CuteSakikoModCard
         var layers = pressure?.Amount ?? 0;
         if (layers <= 0) return;
 
-        int damage = layers * 2;
+        // 基础 2 倍，升级后 3 倍
+        int multiplier = IsUpgraded ? 3 : 2;
+        int damage = layers * multiplier;
 
         await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+            .FromCard(this, cardPlay)
             .TargetingRandomOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
@@ -51,12 +53,9 @@ public class StressResponse : CuteSakikoModCard
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1); // 2c → 1c
+        // 费用不变，伤害倍数提升，在 OnPlay 和预览中通过 IsUpgraded 控制
     }
 
-    /// <summary>
-    /// 动态变量：伤害值 = 压力层数 × 2，战斗中实时预览
-    /// </summary>
     private class PressureDamageVar : DynamicVar
     {
         public PressureDamageVar() : base("PressureDamage", 0m)
@@ -69,7 +68,8 @@ public class StressResponse : CuteSakikoModCard
             if (card.Owner == null) return;
 
             var pressurePower = card.Owner.Creature?.GetPower<PressurePower>();
-            BaseValue = pressurePower != null ? pressurePower.Amount * 2 : 0;
+            int multiplier = card.IsUpgraded ? 3 : 2;
+            BaseValue = pressurePower != null ? pressurePower.Amount * multiplier : 0;
         }
     }
 }

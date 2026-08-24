@@ -24,7 +24,7 @@ public class CuteOb : CuteSakikoCharacter<CuteObCardPool, CuteSakiRelicPool, Cut
     public override int StartingGold => 99;
 
     public override CharacterAssetProfile AssetProfile => CharacterAssetProfiles.Merge(
-        CharacterAssetProfiles.Ironclad(),
+        CharacterAssetProfiles.Regent(),
         new CharacterAssetProfile(
             new CharacterSceneAssetSet(
                 // 人物模型tscn路径。

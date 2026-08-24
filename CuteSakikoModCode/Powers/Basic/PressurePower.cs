@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -8,7 +9,6 @@ using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
-using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
@@ -27,6 +27,7 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
+    private bool _isDoubling;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { };
 
@@ -62,6 +63,19 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
     {
         if (power != this) return;
 
+        // 遗物效果：压力层数翻倍（仅当增加且未处于加倍过程中）
+        if (amount > 0 && Owner != null && Owner.IsPlayer && !_isDoubling)
+        {
+            var player = Owner.Player;
+            if (player != null && player.Relics.OfType<MasqueradeRhapsody>().Any())
+            {
+                _isDoubling = true;
+                await PowerCmd.ModifyAmount(choiceContext, this, amount, Owner, null);
+                _isDoubling = false;
+            }
+        }
+
+        // 原有逻辑：压力增加时提升骑士之剑伤害（不再重复）
         if (amount > 0 && Owner != null && Owner.IsPlayer && CombatState != null)
         {
             var delta = (int)amount;

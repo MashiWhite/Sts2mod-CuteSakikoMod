@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -8,14 +8,12 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
-using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-[RegisterCharacterStarterCard(typeof(CuteOb), 2, Order = 0)]
-[RegisterCharacterStarterCard(typeof(CuteSaki), 2, Order = 0)]
-public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+
+public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
 
@@ -23,7 +21,8 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(5m, ValueProp.Move) // 基础伤害 5，升级后 +3
+        new DamageVar(6m, ValueProp.Move), 
+        new RepeatVar(1)
     ];
 
     protected override bool ShouldGlowGoldInternal
@@ -53,7 +52,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
         var pressure = Owner.Creature.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount > 0)
         {
-            extraHits = IsUpgraded ? 2 : 1; // 升级额外 2 次，未升级 1 次
+            extraHits = DynamicVars.Repeat.IntValue;
             await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
         }
 
@@ -70,5 +69,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Bas
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Damage.UpgradeValueBy(1);
+        DynamicVars.Repeat.UpgradeValueBy(1);
     }
 }

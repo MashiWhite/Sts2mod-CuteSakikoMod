@@ -47,6 +47,7 @@
   "ANON_GUITAR_SEQUENCE_DESC": "{Sequence}",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "Octopus Glass",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "Pink Pink Glass",
+  "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.title": "Octopus Glass",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "Matcha Glass",
   "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.title": "Matcha Parfait",
   "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.description": "Start with 6 cups. Right-click to draw {Cards:diff()} cards and gain {Energy:energyIcons()}.\nGain 5 cups at Rest Sites.",
@@ -74,5 +75,11 @@
   "CUTE_SAKIKO_MOD_RELIC_OB_MASK.flavor": "[sine][red]Primo die in scaena, omnia incerta[/red][/sine]",
   "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.title": "Hairband of Oblivion",
   "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.description": "Whenever a card is [red]Forgotten[/red], draw 1 card and deal 6 damage to ALL enemies.",
-  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]"
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]",
+  "CUTE_SAKIKO_MOD_RELIC_MASQUERADE_RHAPSODY.title": "Masquerade Rhapsody",
+  "CUTE_SAKIKO_MOD_RELIC_MASQUERADE_RHAPSODY.description": "Double the [gold]Pressure[/gold] applied to you. [gold]Collapse[/gold] no longer reduces the damage you deal.",
+  "CUTE_SAKIKO_MOD_RELIC_MASQUERADE_RHAPSODY.flavor": "Even if you are [red]covered in filth[/red], it matters not.",
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.title": "The Girl with Flaxen Hair",
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.description": "Choose [blue]1[/blue] card from all allies' [gold]decks[/gold], add it to your [gold]deck[/gold], and upgrade it.",
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.flavor": "[pink]\"Sakiko-chan plays so well~\"[/pink]\n[blue]\"Really, you only need to say it once.\"[/blue]"
 }

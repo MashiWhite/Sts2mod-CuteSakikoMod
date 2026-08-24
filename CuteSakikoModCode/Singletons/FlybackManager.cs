@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;

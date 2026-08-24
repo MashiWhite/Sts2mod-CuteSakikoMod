@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Token;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
 
 public class Flyback : OtherModTokenCard
 {

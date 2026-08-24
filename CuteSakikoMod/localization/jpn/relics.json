@@ -48,6 +48,7 @@
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "タコガラス",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "ピンクガラス",
   "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "抹茶ガラス",
+  "SEA_GLASS.CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.title": "タコガラス",
   "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.title": "抹茶パフェ",
   "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.description": "初期所持6杯。右クリックでカードを{Cards:diff()}枚引き、{Energy:energyIcons()}を得る。\n休憩所で5杯を得る。",
   "CUTE_SAKIKO_MOD_RELIC_MATCHA_PARFAIT.flavor": "[green][b]抹茶パフェ、美味しい。[/b][/green][orange]食べ過ぎは良くないよ…[/orange]",
@@ -74,5 +75,11 @@
   "CUTE_SAKIKO_MOD_RELIC_OB_MASK.flavor": "[sine][red]Primo die in scaena, omnia incerta[/red][/sine]",
   "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.title": "忘却のヘアバンド",
   "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.description": "カードが1枚[red]忘却[/red]されるたび、カードを1枚引き、すべての敵に6ダメージを与える。",
-  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]"
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]",
+  "CUTE_SAKIKO_MOD_RELIC_MASQUERADE_RHAPSODY.title": "仮面舞踏会狂想曲",
+  "CUTE_SAKIKO_MOD_RELIC_MASQUERADE_RHAPSODY.description": "自身に付与される[gold]重圧[/gold]の層数が倍になる。[gold]崩壊[/gold]による与ダメージ減少が発生しなくなる。",
+  "CUTE_SAKIKO_MOD_RELIC_MASQUERADE_RHAPSODY.flavor": "たとえ[red]穢れにまみれても[/red]構わない。",
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.title": "亜麻色の髪の乙女",
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.description": "すべての味方の[gold]デッキ[/gold]から[blue]1[/blue]枚を選び、自分の[gold]デッキ[/gold]に加えてアップグレードする。",
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.flavor": "[pink]「さきこちゃん、演奏上手だね～」[/pink]\n[blue]「本当に、一度で十分だよ。」[/blue]"
 }

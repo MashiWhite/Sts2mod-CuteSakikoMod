@@ -58,12 +58,12 @@ public class Jennifer : ModMonsterTemplate
         var whatTheMove = new MoveState("WHAT_THE", WhatTheMove,
             new UnknownIntent());
 
-        // 随机意图分支：概率分别为 20%, 20%, 25%, 35%
+        // 随机意图分支：
         var randomState = new RandomBranchState("JENNIFER_RANDOM");
-        randomState.AddBranch(whatMove, MoveRepeatType.CanRepeatForever, 0.30f);
-        randomState.AddBranch(unknownMove, MoveRepeatType.CanRepeatForever, 0.10f);
-        randomState.AddBranch(hmmMove, MoveRepeatType.CanRepeatForever, 0.30f);
-        randomState.AddBranch(whatTheMove, MoveRepeatType.CanRepeatForever, 0.30f);
+        randomState.AddBranch(whatMove, MoveRepeatType.CanRepeatForever, 0.40f);
+        randomState.AddBranch(unknownMove, MoveRepeatType.CanRepeatForever, 0.30f);
+        randomState.AddBranch(hmmMove, MoveRepeatType.CanRepeatForever, 0.10f);
+        randomState.AddBranch(whatTheMove, MoveRepeatType.CanRepeatForever, 0.20f);
 
         // 所有动作执行完后回到随机分支，形成循环
         whatMove.FollowUpState = randomState;

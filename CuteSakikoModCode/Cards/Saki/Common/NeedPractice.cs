@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+﻿/*using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -79,4 +79,4 @@ public class NeedPractice() : CuteSakikoModCard(1, CardType.Attack, CardRarity.C
         // 升级：伤害 9 -> 13
         DynamicVars.Damage.UpgradeValueBy(4m);
     }
-}
+}*/

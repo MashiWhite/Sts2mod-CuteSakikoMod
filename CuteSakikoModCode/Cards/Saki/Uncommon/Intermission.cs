@@ -4,11 +4,11 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class Intermission : CuteSakikoModCard
 {
-    public Intermission() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    public Intermission() : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
     }
 
@@ -17,7 +17,7 @@ public class Intermission : CuteSakikoModCard
     {
         get
         {
-            yield return new DamageVar(1, ValueProp.Move);
+            yield return new DamageVar(2, ValueProp.Move);
             yield return new RepeatVar(3);
         }
     }

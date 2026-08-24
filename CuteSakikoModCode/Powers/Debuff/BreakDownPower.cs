@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -25,9 +26,14 @@ public sealed class BreakDownPower : CuteSakikoModPower
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
-        CardPlay? cardPlay)  // 补上缺失参数
+        CardPlay? cardPlay)
     {
         if (dealer != Owner) return 0m;
+
+        // 遗物效果：拥有 MasqueradeRhapsody 时，不再降低自身伤害
+        if (Owner.Player != null && Owner.Player.Relics.OfType<MasqueradeRhapsody>().Any())
+            return 0m;
+
         return -amount * 0.5m;
     }
 

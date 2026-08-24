@@ -17,7 +17,7 @@ using STS2RitsuLib.RunData;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 
-public sealed class Eggs : CuteSakiRelic
+public sealed class Eggs : CuteSakikoEventRelic
 {
     public static PlayerRunSavedData<PlayerEggsData>? PlayerEggsSlot { get; set; }
 

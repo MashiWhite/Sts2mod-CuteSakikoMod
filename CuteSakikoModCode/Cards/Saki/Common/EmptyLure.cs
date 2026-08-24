@@ -37,6 +37,5 @@ public class EmptyLure() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Commo
     protected override void OnUpgrade()
     {
         DynamicVars.Energy.UpgradeValueBy(1m);
-        DynamicVars.Cards.UpgradeValueBy(1m);
     }
 }

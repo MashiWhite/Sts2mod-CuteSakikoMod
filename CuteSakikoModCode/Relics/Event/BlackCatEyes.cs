@@ -3,9 +3,6 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 

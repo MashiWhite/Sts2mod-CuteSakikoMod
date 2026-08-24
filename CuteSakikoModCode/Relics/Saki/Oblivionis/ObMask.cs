@@ -14,7 +14,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Oblivionis;
 
 [RegisterCharacterStarterRelic(typeof(CuteOb))]
 [RegisterTouchOfOrobasRefinement(typeof(ObHairBand))]
-public class ObMask : CuteObRelic
+public class ObMask : CuteSakiRelic
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
     private int _triggeredRound = -1;
