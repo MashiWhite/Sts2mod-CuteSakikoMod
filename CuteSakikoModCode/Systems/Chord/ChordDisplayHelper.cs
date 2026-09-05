@@ -8,18 +8,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 
 public static class ChordDisplayHelper
 {
-    private static readonly Dictionary<string, (string TitleKey, string DescKey, string Condition, string IconPath)>
-        ChordData = new()
-        {
-            ["C"] = ("CUTESAKIKOMOD-CCHORD.title", "CUTESAKIKOMOD-CCHORD.description",
-                "[red]攻[/red] [red]攻[/red] [red]攻[/red]", "c_chord.png"),
-            ["G"] = ("CUTESAKIKOMOD-GCHORD.title", "CUTESAKIKOMOD-GCHORD.description",
-                "[red]攻[/red] [red]攻[/red] [red]攻[/red] [red]攻[/red]", "g_chord.png"),
-            ["Am"] = ("CUTESAKIKOMOD-AMCHORD.title", "CUTESAKIKOMOD-AMCHORD.description",
-                "[blue]技[/blue] [blue]技[/blue] [blue]技[/blue] [blue]技[/blue]", "am_chord.png"),
-            ["F"] = ("CUTESAKIKOMOD-FCHORD.title", "CUTESAKIKOMOD-FCHORD.description",
-                "[gold]能[/gold] [blue]技[/blue] [red]攻[/red]", "f_chord.png")
-        };
 
     public static Texture2D GetChordTexture(string chord)
     {
@@ -46,29 +34,6 @@ public static class ChordDisplayHelper
         {
             return rawDesc;
         }
-    }
-
-    public static string GetChordTooltip(string chord)
-    {
-        if (!ChordData.TryGetValue(chord, out var data))
-            return "未知和弦";
-        var title = new LocString("card_keywords", data.TitleKey).GetFormattedText();
-        var description = new LocString("card_keywords", data.DescKey).GetFormattedText();
-        return $"{title}\n{description}";
-    }
-
-    public static List<string> GetChordInfoStrings(IReadOnlyList<string> chords)
-    {
-        var list = new List<string>();
-        foreach (var chord in chords)
-        {
-            if (!ChordData.TryGetValue(chord, out var data))
-                continue;
-            var title = new LocString("card_keywords", data.TitleKey);
-            var desc = new LocString("card_keywords", data.DescKey);
-            list.Add($"[{title.GetFormattedText()}]({data.Condition})\n{desc.GetFormattedText() ?? "无效果"}");
-        }
-        return list;
     }
 
     public static HoverTip GetChordHoverTip(string chord, int multiplier = 1)

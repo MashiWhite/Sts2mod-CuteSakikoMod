@@ -23,8 +23,8 @@ public class StrikeSlow() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Com
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(5m, ValueProp.Move),
-        new BlockVar(5m, ValueProp.Move) 
+        new DamageVar(6m, ValueProp.Move),
+        new BlockVar(6m, ValueProp.Move) 
     ];
 
     protected override bool ShouldGlowGoldInternal

@@ -57,7 +57,7 @@ public class CatchNeko : CuteRanaCard
 
         var targetKeyword = CutesakiKeywords.Neko.GetModCardKeyword();
         // 优先级顺序：Exhaust → Discard → Draw → Hand
-        var pileOrder = new[] { PileType.Exhaust, PileType.Discard, PileType.Draw, PileType.Hand };
+        var pileOrder = new[] { PileType.Discard, PileType.Draw, PileType.Hand };
         var allNekoCards = new List<CardModel>();
 
         foreach (var pileType in pileOrder)

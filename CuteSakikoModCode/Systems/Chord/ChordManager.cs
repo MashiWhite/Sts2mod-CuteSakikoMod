@@ -722,7 +722,7 @@ private static void RegisterChords()
         AddTemporaryChord("AnonDChord", ChordCategory.Anon,
             new[] { CardType.Skill, CardType.Attack, CardType.Attack, CardType.Attack },
             "CUTE_SAKIKO_MOD_ANONDCHORD.title", "CUTE_SAKIKO_MOD_ANONDCHORD.description", "anon_d_chord",
-            new int[0],
+            new[] { 1 },
             async (ctx, owner, bonus) =>
             {
                 var combat = owner.CombatState;

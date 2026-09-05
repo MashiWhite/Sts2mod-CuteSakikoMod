@@ -3,14 +3,14 @@
   "name": "可爱小祥mod",
   "author": "MashiWhite",
   "description": "一个初心只是想做个[blue]可爱小祥[/blue]的mod。\n感谢名单：\n支援立绘-[blue]杏[/blue][pink]仁[/pink]",
-  "version": "v0.3.33",
+  "version": "v0.3.34",
   "min_game_version": "0.111.0",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [
     {
       "id": "STS2-RitsuLib",
-      "min_version": "0.5.14"
+      "min_version": "0.5.18"
     }
   ], 
   "affects_gameplay": true

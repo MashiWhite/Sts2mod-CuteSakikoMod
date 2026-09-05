@@ -16,9 +16,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    public override bool GainsBlock => true;
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(10m, ValueProp.Move)
+        new BlockVar(7m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -35,12 +37,11 @@ public class GetMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Commo
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
 
-        // 从记忆牌堆随机取1张牌（不消耗），是否升级取决于本牌是否升级
         await MemoryCmd.Recall(choiceContext, Owner, allowChoose: false, count: 1, upgraded: IsUpgraded, source: this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3m);
+
     }
 }

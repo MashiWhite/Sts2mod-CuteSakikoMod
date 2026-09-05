@@ -1,5 +1,5 @@
 ﻿{
   "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.title": "Perform",
-  "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.extraCardText": "When played, Perform the most recently stored Chord.",
-  "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.description": "When you play this card, Perform the most recently stored Chord."
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.extraCardText": "When played, Perform the most recently stored [gold]Chord[/gold].",
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.description": "When you play this card, Perform the most recently stored [gold]Chord[/gold]."
 }

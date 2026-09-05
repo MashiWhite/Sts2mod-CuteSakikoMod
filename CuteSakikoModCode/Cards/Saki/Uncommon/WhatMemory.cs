@@ -12,14 +12,13 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class WhatMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class WhatMemory() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-
-    // 基础选择数量 1，升级后变为 2
+    
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new CardsVar(1); }
+        get { yield return new CardsVar(2); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -55,7 +54,7 @@ public class WhatMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
 
         foreach (var card in selectedCards)
         {
-            card.EnergyCost.SetThisCombat(0, true);
+            card.EnergyCost.SetThisCombat(1, true);
             card.AddKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
             card.AddKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
         }
@@ -64,6 +63,5 @@ public class WhatMemory() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Unco
     protected override void OnUpgrade()
     {
         AddKeyword(CardKeyword.Retain);
-        DynamicVars.Cards.UpgradeValueBy(1); // 1 → 2
     }
 }

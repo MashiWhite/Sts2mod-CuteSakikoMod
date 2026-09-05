@@ -69,7 +69,6 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Com
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(1);
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars.Damage.UpgradeValueBy(2);
     }
 }

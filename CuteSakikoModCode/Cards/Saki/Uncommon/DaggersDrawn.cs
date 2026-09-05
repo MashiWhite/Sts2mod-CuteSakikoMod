@@ -9,11 +9,11 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class DaggersDrawn() : CuteSakikoModCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<DaggersDrawnPower>(6m) 
+        new PowerVar<DaggersDrawnPower>(5m) 
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -35,6 +35,6 @@ public class DaggersDrawn() : CuteSakikoModCard(2, CardType.Power, CardRarity.Un
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        DynamicVars["DaggersDrawnPower"].UpgradeValueBy(3);
     }
 }

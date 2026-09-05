@@ -143,73 +143,7 @@ public sealed class HaneokaCorridorEvent : CuteSakikoEvent
 
     // 选项3：推开门 - 获得遗物“亚麻色头发的少女”
     private async Task OpenDoorAnon()
-{
-    // 收集所有队友牌组中的卡牌
-    var teammates = Owner!.RunState.Players.Where(p => p != Owner).ToList();
-    var allCards = new List<CardModel>();
-    foreach (var teammate in teammates)
     {
-        var deck = PileType.Deck.GetPile(teammate);
-        allCards.AddRange(deck.Cards);
-    }
-
-    // 去重：相同 ID + 升级状态 + 附魔 ID/数量 视为相同
-    var distinctCards = allCards
-        .GroupBy(c => new
-        {
-            Id = c.Id,
-            UpgradeLevel = c.CurrentUpgradeLevel,
-            EnchantmentId = c.Enchantment?.Id,
-            EnchantmentAmount = c.Enchantment?.Amount
-        })
-        .Select(g => g.First())
-        .ToList();
-
-    if (distinctCards.Count == 0)
-    {
-        // 无卡可选，仅给予遗物
-        var relicNoCard = ModelDb.Relic<FlaxenHairedGirl>().ToMutable();
-        await RelicCmd.Obtain(relicNoCard, Owner!);
-        SetEventFinished(PageDescription("ANON_SUCCESS_NO_CARDS"));
-        return;
-    }
-
-    // 创建 CardCreationResult 列表（复制原始升级/附魔，并额外升级一次）
-    var cardCreationResults = new List<CardCreationResult>();
-    foreach (var original in distinctCards)
-    {
-        var newCard = Owner.RunState.CreateCard(ModelDb.GetById<CardModel>(original.Id), Owner);
-        for (int i = 0; i < original.CurrentUpgradeLevel; i++)
-        {
-            CardCmd.Upgrade(newCard);
-        }
-        // 额外升级一次（如果可升级），对应遗物效果“加入牌组前升级”
-        if (newCard.IsUpgradable)
-        {
-            CardCmd.Upgrade(newCard);
-        }
-        // 复制附魔
-        if (original.Enchantment != null)
-        {
-            var ench = (EnchantmentModel)original.Enchantment.MutableClone();
-            if (ench.CanEnchant(newCard))
-            {
-                CardCmd.Enchant(ench, newCard, ench.Amount);
-            }
-        }
-        cardCreationResults.Add(new CardCreationResult(newCard));
-    }
-
-    // 设置选择提示
-    var prompt = new LocString("relics", "FLAXEN_HAIRED_GIRL.selectionPrompt");
-    var prefs = new CardSelectorPrefs(prompt, 1, 1)
-    {
-        Cancelable = false
-    };
-
-    // 调用事件基类方法进行手动选择（自动处理上下文）
-    await SelectCardsToAddToDeckFromGrid(cardCreationResults, prefs);
-
     // 授予遗物
     var relicFinal = ModelDb.Relic<FlaxenHairedGirl>().ToMutable();
     await RelicCmd.Obtain(relicFinal, Owner!);

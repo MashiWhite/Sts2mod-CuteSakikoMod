@@ -22,7 +22,7 @@ public class NekoTrance : CuteRanaCard
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         // 动态变量：添加的猫咪数量（用于描述）
-        new CardsVar(1) // 基础1张，升级后变为2张（在 OnUpgrade 中修改）
+        new CardsVar(2) // 基础1张，升级后变为2张（在 OnUpgrade 中修改）
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -63,8 +63,6 @@ public class NekoTrance : CuteRanaCard
 
     protected override void OnUpgrade()
     {
-        // 升级：猫咪数量 +1（1→2），费用 -1（2→1）
-        DynamicVars.Cards.UpgradeValueBy(1);
         EnergyCost.UpgradeBy(-1);
     }
 }

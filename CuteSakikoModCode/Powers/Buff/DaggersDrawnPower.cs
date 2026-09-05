@@ -1,6 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -22,15 +21,11 @@ public sealed class DaggersDrawnPower : CuteSakikoModPower
         var amount = Amount;
         if (amount <= 0) return;
 
-        // 获取所有生物：所有玩家 + 所有敌人
-        var allCreatures = new List<Creature>();
-        foreach (var p in CombatState.Players)
-            allCreatures.Add(p.Creature);
-        if (CombatState.HittableEnemies != null)
-            allCreatures.AddRange(CombatState.HittableEnemies);
+        // 只对所有敌人施加压力
+        var enemies = CombatState.HittableEnemies;
+        if (enemies == null || enemies.Count == 0) return;
 
-        // 给每个生物施加对应层数的压力
-        foreach (var creature in allCreatures)
-            await PowerCmd.Apply<PressurePower>(choiceContext, creature, amount, Owner, null);
+        foreach (var enemy in enemies)
+            await PowerCmd.Apply<PressurePower>(choiceContext, enemy, amount, Owner, null);
     }
 }

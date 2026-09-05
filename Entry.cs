@@ -162,6 +162,7 @@ public class Entry
         // 4. Harmony 补丁
         var harmony = new Harmony("White.CuteSakikoMod");
         harmony.PatchAll();
+        ModelDbDedupePatches.Apply();
 
         // 5. 提前注册自定义牌堆
         MemoryCardPile.Register(ModId);

@@ -30,34 +30,28 @@ public class ChordDefinition
         foreach (var type in NoteSequence)
         {
             string text;
-            string color;
 
             if (type == Entry.AnyNote)
             {
                 text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ANY").GetFormattedText();
-                color = "pink";
             }
             else switch (type)
             {
                 case CardType.Attack:
                     text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_ATTACK").GetFormattedText();
-                    color = "red";
                     break;
                 case CardType.Skill:
                     text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_SKILL").GetFormattedText();
-                    color = "blue";
                     break;
                 case CardType.Power:
                     text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_POWER").GetFormattedText();
-                    color = "gold";
                     break;
                 default:
                     text = new LocString("static_hover_tips", "CUTE_SAKIKO_MOD_CONDITION_STATUS").GetFormattedText();
-                    color = "purple";
                     break;
             }
 
-            parts.Add($"[{color}]{text}[/{color}]");
+            parts.Add($"{text}");
         }
         return string.Join(" ", parts);
     }

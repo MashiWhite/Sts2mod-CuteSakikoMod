@@ -75,6 +75,7 @@ public class SmoothPlay : CuteAnonCard
 
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
+        if (cardPlay.Target == null) return;
 
         // 清除所有音符
         MusicNoteManager.ClearNotes(Owner);
@@ -83,7 +84,7 @@ public class SmoothPlay : CuteAnonCard
         var damage = DynamicVars.Damage.IntValue;
         await DamageCmd.Attack(damage)
             .FromCard(this,cardPlay)
-            .TargetingRandomOpponents(combat)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
@@ -93,6 +94,6 @@ public class SmoothPlay : CuteAnonCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(10m); // 20 → 25
+        DynamicVars.Damage.UpgradeValueBy(10m); 
     }
 }

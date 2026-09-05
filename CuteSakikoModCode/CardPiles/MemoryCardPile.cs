@@ -127,8 +127,8 @@ public sealed class MemoryCardPile
 
         _isAddingSnapshot = true;
 
-        // 1. 设置费用为 0
-        snapshot.EnergyCost.SetThisCombat(0, true);
+        // 1. 设置费用为 1
+        snapshot.EnergyCost.SetThisCombat(1, true);
 
         // 2. 添加 Memory 关键词
         snapshot.AddKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
@@ -140,8 +140,8 @@ public sealed class MemoryCardPile
             if (enchantClone != null)
             {
                 snapshot.EnchantInternal(enchantClone, enchantClone.Amount);
-                // 附魔可能会修改费用，我们强制保持 0 费
-                snapshot.EnergyCost.SetThisCombat(0, true);
+                // 附魔可能会修改费用，我们强制保持 1 费
+                snapshot.EnergyCost.SetThisCombat(1, true);
             }
         }
 
@@ -181,7 +181,7 @@ public sealed class MemoryCardPile
         if (card == null) return null;
 
         // 复制费用
-        card.EnergyCost.SetThisCombat(0, true);
+        card.EnergyCost.SetThisCombat(1, true);
 
         // 复制关键词
         foreach (var kw in snapshot.Keywords)
@@ -203,8 +203,8 @@ public sealed class MemoryCardPile
             {
                 card.EnchantInternal(enchantClone, enchantClone.Amount);
                 // 注意：EnchantInternal 会调用 ApplyInternal，可能会修改卡牌属性，比如费用、关键词等，这些应该已经被复制了，但为了保险，可以再次设置费用为0？
-                // 因为附魔可能会覆盖费用，但我们的卡期望是0费，所以重新设置一下
-                card.EnergyCost.SetThisCombat(0, true);
+                // 因为附魔可能会覆盖费用，但我们的卡期望是1费，所以重新设置一下
+                card.EnergyCost.SetThisCombat(1, true);
             }
         }
 
@@ -258,7 +258,7 @@ public sealed class MemoryCardPile
                 {
                     var snapshot = player.RunState.CreateCard(template, player);
                     snapshot.AddKeyword(CutesakiKeywords.Memory.GetModCardKeyword());
-                    snapshot.EnergyCost.SetThisCombat(0, true);
+                    snapshot.EnergyCost.SetThisCombat(1, true);
                     memoryPile.AddInternal(snapshot);
                     memoryPile.InvokeCardAddFinished();
                 }

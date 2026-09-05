@@ -22,18 +22,18 @@ namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Elite;
 [RegisterMonster]
 public class Jennifer : ModMonsterTemplate
 {
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 120, 110);
-    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 130, 120);
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 125, 115);
+    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 135, 125);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/jennifer.tscn"
     );
 
     // 伤害与格挡数值（高进阶变化）
-    private int WhatDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 16, 11);
-    private int UnknownDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 4, 3);
+    private int WhatDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 14, 9);
+    private int UnknownDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 3, 2);
     private int HmmBlock => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 30, 25);
-    private int WhatThe => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 4, 2);
+    private int WhatThe => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 3, 2);
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
@@ -60,10 +60,10 @@ public class Jennifer : ModMonsterTemplate
 
         // 随机意图分支：
         var randomState = new RandomBranchState("JENNIFER_RANDOM");
-        randomState.AddBranch(whatMove, MoveRepeatType.CanRepeatForever, 0.40f);
-        randomState.AddBranch(unknownMove, MoveRepeatType.CanRepeatForever, 0.30f);
-        randomState.AddBranch(hmmMove, MoveRepeatType.CanRepeatForever, 0.10f);
-        randomState.AddBranch(whatTheMove, MoveRepeatType.CanRepeatForever, 0.20f);
+        randomState.AddBranch(whatMove, MoveRepeatType.CanRepeatForever, 0.40f);//重击
+        randomState.AddBranch(unknownMove, MoveRepeatType.CanRepeatForever, 0.30f);//连击
+        randomState.AddBranch(hmmMove, MoveRepeatType.CanRepeatForever, 0.10f);//防御
+        randomState.AddBranch(whatTheMove, MoveRepeatType.CanRepeatForever, 0.20f);//加力
 
         // 所有动作执行完后回到随机分支，形成循环
         whatMove.FollowUpState = randomState;

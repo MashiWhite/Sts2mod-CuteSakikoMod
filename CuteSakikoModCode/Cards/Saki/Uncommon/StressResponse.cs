@@ -12,7 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class StressResponse : CuteSakikoModCard
 {
-    public StressResponse() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
+    public StressResponse() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
     }
 
@@ -36,6 +36,8 @@ public class StressResponse : CuteSakikoModCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        if (cardPlay.Target == null) return;
+        
         var pressure = Owner.Creature.GetPower<PressurePower>();
         var layers = pressure?.Amount ?? 0;
         if (layers <= 0) return;
@@ -46,7 +48,7 @@ public class StressResponse : CuteSakikoModCard
 
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
-            .TargetingRandomOpponents(CombatState)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
     }

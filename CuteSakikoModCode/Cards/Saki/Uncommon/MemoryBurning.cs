@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -37,47 +38,47 @@ public class MemoryBurning : CuteSakikoModCard
         // 播放施法动画
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
 
-        // 收集手牌、抽牌堆、弃牌堆中的所有回忆牌（按顺序避免重复）
-        var memoryCards = new List<CardModel>();
-        foreach (var pileType in new[] { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust })
-        {
-            var pile = pileType.GetPile(Owner);
-            if (pile != null)
-                // 只添加尚未收集的牌（防止同一张牌在多个牌堆）
-                memoryCards.AddRange(pile.Cards
-                    .Where(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
-                    .Where(c => !memoryCards.Contains(c)));
-        }
+        // 获取遗忘堆
+        var forgetPile = ForgetCardPile.Get(Owner);
+        if (forgetPile == null || forgetPile.Cards.Count == 0) return;
 
-        if (memoryCards.Count == 0)
-            return;
+        // 收集遗忘堆中的所有回忆牌
+        var memoryCards = forgetPile.Cards
+            .Where(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
+            .ToList();
 
-        // 获取一个随机敌人作为攻击牌的目标（若无则留空）
+        if (memoryCards.Count == 0) return;
+
+        // 获取随机敌人作为需要目标的牌的目标
         var target = GetRandomEnemy();
 
         foreach (var card in memoryCards)
         {
-            // 如果牌不在手牌中，先移入手牌（参照 Legato 的做法）
-            if (card.Pile?.Type != PileType.Hand)
-            {
+            // 从遗忘堆移除
+            if (card.Pile == forgetPile)
+                forgetPile.RemoveInternal(card);
+            else
                 card.RemoveFromCurrentPile();
-                await CardPileCmd.Add(card, PileType.Hand);
-            }
 
-            // 自动打出（若有可用目标）
+            // 加入手牌
+            await CardPileCmd.Add(card, PileType.Hand);
+
+            // 自动打出（如果需要目标但无敌人则跳过打出，直接消耗）
             if (target != null)
                 await CardCmd.AutoPlay(choiceContext, card, target);
             else
-                // 如果没有敌人，但牌可能需要目标，则跳过打出直接遗忘
-                // 可根据需求调整
-                ;
+                // 没有目标时，如果卡牌不需要目标，则尝试打出；如果需要目标则放弃打出
+                if (card.TargetType == TargetType.None || card.TargetType == TargetType.Self)
+                    await CardCmd.AutoPlay(choiceContext, card, null);
 
-            // 立即遗忘该牌
-            await MemoryCmd.Forget(choiceContext, new List<CardModel> { card }, this);
+            // 消耗该回忆牌
+            await CardCmd.Exhaust(choiceContext, card);
         }
+
+        // 通知遗忘堆内容变化
+        forgetPile.InvokeContentsChanged();
     }
 
-    /// <summary> 获取随机可命中敌人（参考 ByMyReign）</summary>
     private Creature? GetRandomEnemy()
     {
         var enemies = CombatState?.HittableEnemies;

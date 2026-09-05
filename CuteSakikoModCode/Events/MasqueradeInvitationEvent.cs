@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
+using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -72,12 +73,17 @@ public sealed class MasqueradeInvitationEvent : CuteSakikoEvent
     private async Task Refuse()
     {
         var lossAmount = Owner!.Creature.MaxHp * 0.05m;
-        await CreatureCmd.LoseMaxHp(
-            new ThrowingPlayerChoiceContext(),
-            Owner.Creature,
-            lossAmount,
-            false
-        );
+        await CreatureCmd.Damage
+            (
+                new ThrowingPlayerChoiceContext(),
+                Owner!.Creature,
+                lossAmount,
+                ValueProp.Unblockable | ValueProp.Unpowered,
+                null,
+                null
+            );
+        
+        
 
         var selected = await CardSelectCmd.FromDeckForRemoval(
             Owner,
