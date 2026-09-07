@@ -14,6 +14,9 @@
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.title": "亚麻色头发的少女",
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.description": "从所有队友[gold]牌组[/gold]中选择[blue]1[/blue]张牌加入自己的[gold]牌组[/gold]并升级。",
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.flavor": "[pink]“祥祥弹得真好~”[/pink]\n[blue]“真的是，说一次就够啦。”[/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.title": "自动饮料机",
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.description": "[gold]右键[/gold]此遗物时，花费[blue]15[/blue]金币获得[blue]1[/blue]瓶随机药水。",
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.flavor": "[b][blue]出来了哇！刚刚是怎么做到的！[/blue][/b]",
   
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.title": "黑猫的注视",
   "CUTE_SAKIKO_MOD_RELIC_BLACK_CAT_EYES.description": "每场战斗开始时，减少[blue]3[/blue]点最大生命值。\n每回合开始时获得{energyPrefix:energyIcons(1)}，抽[blue]{Cards}[/blue]张牌。",

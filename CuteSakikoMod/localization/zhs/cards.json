@@ -90,7 +90,7 @@
   "CUTE_SAKIKO_MOD_CARD_FAST_STUDY.title": "快速学习",
   "CUTE_SAKIKO_MOD_CARD_FAST_STUDY.description": "造成所有敌人攻击意图总和等量的伤害。",
   "CUTE_SAKIKO_MOD_CARD_GROOM_QUIETLY.title": "乖乖理毛",
-  "CUTE_SAKIKO_MOD_CARD_GROOM_QUIETLY.description": "获得{Block:diff()}点格挡。\n将1张[gold]猫咪[/gold]加入手牌。",
+  "CUTE_SAKIKO_MOD_CARD_GROOM_QUIETLY.description": "获得{Block:diff()}点格挡。\n将1张{IfUpgraded:show:[gold]猫咪+[/gold]|[gold]猫咪[/gold]}加入手牌。",
   "CUTE_SAKIKO_MOD_CARD_THRILLING_LIVE.title": "酣畅淋漓的Live",
   "CUTE_SAKIKO_MOD_CARD_THRILLING_LIVE.description": "对所有敌人造成{Damage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_LIVE_HAPPY.title": "莱芜爽！",
@@ -165,7 +165,7 @@
   "CUTE_SAKIKO_MOD_CARD_MAKE_SIMPLER.title": "简单一点嘛",
   "CUTE_SAKIKO_MOD_CARD_MAKE_SIMPLER.description": "在本场战斗中，将每个[pink]已记忆和弦[/pink]中随机一个[img]CuteSakikoMod/images/ui/text/text_note.png[/img]替换为[img]CuteSakikoMod/images/ui/text/text_anon.png[/img]。",
   "CUTE_SAKIKO_MOD_CARD_NEKO_TRANCE.title": "和猫发呆",
-  "CUTE_SAKIKO_MOD_CARD_NEKO_TRANCE.description": "将{IfUpgraded:show:2|1}张[gold]猫咪[/gold]加入手牌。\n使你的[gold]猫咪[/gold]获得[gold]保留[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_NEKO_TRANCE.description": "将{Cards:diff()}张[gold]猫咪[/gold]加入手牌。\n使你的[gold]猫咪[/gold]获得[gold]保留[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_ENCORE_WISH.title": "还想安可",
   "CUTE_SAKIKO_MOD_CARD_ENCORE_WISH.description": "[gold]莱芜爽[/gold]期间才能打出。\n下一个回合开始时获得[gold]莱芜爽[/gold]。",
   

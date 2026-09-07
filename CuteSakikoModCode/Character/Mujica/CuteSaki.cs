@@ -12,7 +12,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 public class CuteSaki : CuteSakikoCharacter<CuteSakiCardPool, CuteSakiRelicPool, CuteSakiPotionPool>
 {
     public const string CharacterId = "CUTESAKI";
-    public const string CharacterEggId = "SAKIEGGS";
     public static readonly Color Color = new("#7799cc");
     public override Color EnergyLabelOutlineColor => new(1f, 0f, 0f);
 

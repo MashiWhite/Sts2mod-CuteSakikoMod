@@ -17,6 +17,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
 public partial class ChordManagementScreen : Control
 {
+    
     public AnonGuitar Guitar { get; private set; }
     private VBoxContainer _leftSlotsContainer;
     private VBoxContainer _rightWarehouseContainer;
@@ -34,6 +35,8 @@ public partial class ChordManagementScreen : Control
     private Button _libraryTabButton;
     private ScrollContainer _rightScroll; // 用于获取宽度计算列数
 
+    private static ChordManagementScreen? _currentOpenScreen;
+    
     public void SetGuitar(AnonGuitar guitar)
     {
         Guitar = guitar;
@@ -56,10 +59,25 @@ public partial class ChordManagementScreen : Control
 
     public void SetReadOnly(bool readOnly) => _readOnly = readOnly;
 
+    // 修改 ShowScreen 方法
     public void ShowScreen()
     {
+        // 如果已有打开的界面，先关闭它
+        if (_currentOpenScreen != null && IsInstanceValid(_currentOpenScreen))
+        {
+            _currentOpenScreen.QueueFree();
+        }
+        _currentOpenScreen = this;
         SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         NRun.Instance.GlobalUi.AddChild(this);
+    }
+
+    // 在 _ExitTree 中清理
+    public override void _ExitTree()
+    {
+        if (_currentOpenScreen == this)
+            _currentOpenScreen = null;
+        base._ExitTree();
     }
 
     public override void _Ready()
@@ -181,8 +199,9 @@ public partial class ChordManagementScreen : Control
             buttonBar.AddChild(cancelButton);
             buttonBar.AddChild(confirmButton);
         }
-
-        RefreshAll();
+        GetViewport().SizeChanged += () => RefreshAll();
+        // 延迟到下一帧刷新，确保容器尺寸已计算
+        CallDeferred(nameof(RefreshAll));
     }
 
     private void SwitchTab(int tab)
@@ -423,6 +442,15 @@ public partial class ChordManagementScreen : Control
 
     public void RefreshRightWarehouse()
     {
+        // 在方法开头添加：
+        if (_rightScroll == null) return;
+        // 如果宽度还没准备好，延迟一帧再刷新
+        if (_rightScroll.Size.X <= 0)
+        {
+            CallDeferred(nameof(RefreshRightWarehouse));
+            return;
+        }
+        
         foreach (Node child in _rightWarehouseContainer.GetChildren())
             child.QueueFree();
 

@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Oblivionis;
 
 public class RegainMemory : CuteObCard
 {

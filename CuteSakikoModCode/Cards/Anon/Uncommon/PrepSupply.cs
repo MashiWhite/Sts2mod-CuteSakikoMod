@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
-public class PrepSupply() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class PrepSupply() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
@@ -31,6 +31,6 @@ public class PrepSupply() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon,
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+      AddKeyword(CardKeyword.Retain);
     }
 }

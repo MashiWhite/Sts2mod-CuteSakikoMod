@@ -34,8 +34,7 @@ public class AnotherSelf : CuteSakikoAncientEvent
 
     private IReadOnlyList<EventOption> Pool2 => new[]
     {
-        CreateModRelicOption<LizardTail>(),
-        CreateModRelicOption<ArcaneScroll>()
+        CreateModRelicOption<AutoDrinkMachine>(),
     };
 
     private WeightedList<EventOption> Pool3 => new()

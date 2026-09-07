@@ -56,6 +56,5 @@ public class GroomQuietly() : CuteRanaCard(1, CardType.Skill, CardRarity.Common,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2m); // 8 → 10
     }
 }

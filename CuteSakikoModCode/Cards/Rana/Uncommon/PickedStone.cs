@@ -20,7 +20,7 @@ public class PickedStone : CuteRanaCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<PickedStoneTemporaryDexterity>(2m)
+        new PowerVar<PickedStoneTemporaryDexterity>(3m)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
