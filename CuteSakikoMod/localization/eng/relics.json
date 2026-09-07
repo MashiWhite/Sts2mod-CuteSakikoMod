@@ -1,4 +1,7 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.title": "Auto Drink Machine",
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.description": "When you [gold]right-click[/gold] this relic, spend [blue]15[/blue] Gold to gain [blue]1[/blue] random potion.",
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.flavor": "[b][blue]It came out! How did it just do that![/blue][/b]",
   "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.title": "The Cat That Died a Million Times",
   "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.description": "If your HP after combat is lower than before, heal [blue]{Heal}[/blue] HP after combat.\nCan prevent [blue]1[/blue] death and restore [blue]30%[/blue] HP, then become inactive.",
   "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.flavor": "If the [purple]black cat[/purple] can resurrect ten thousand and one times, may the [green]white cat[/green] not leave first.",

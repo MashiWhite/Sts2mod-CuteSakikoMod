@@ -1,4 +1,7 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.title": "自動販売機",
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.description": "このレリックを[gold]右クリック[/gold]した時、[blue]15[/blue]ゴールドを消費してランダムなポーションを[blue]1[/blue]本獲得する。",
+  "CUTE_SAKIKO_MOD_RELIC_AUTO_DRINK_MACHINE.flavor": "[b][blue]出てきた！今、どうやってやったの！[/blue][/b]",
   "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.title": "百万回死んだ猫",
   "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.description": "戦闘後のHPが戦闘前より低い場合、戦闘終了後にHPを[blue]{Heal}[/blue]回復する。\n[blue]1[/blue]回の死亡を防ぎ、HPを[blue]30%[/blue]回復できる。その後、この効果は失われる。",
   "CUTE_SAKIKO_MOD_RELIC_MILLION_TIMES_CAT.flavor": "もし[purple]黒猫[/purple]が一万と一回蘇れるなら、[green]白猫[/green]よ、どうか先に行かないで。",

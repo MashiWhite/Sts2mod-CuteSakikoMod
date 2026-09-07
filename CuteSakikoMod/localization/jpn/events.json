@@ -104,8 +104,8 @@
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.KICK_AWAY.title": "蹴り飛ばして立ち去る",
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.KICK_AWAY.description": "カードを1枚選んで除去する。",
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.KICK_AWAY_FAIL.description": "君は気にせず、それを蹴り飛ばした。\n[pink]あああ！ちょっと待って！[/pink]\n君はうっかり自分の持ち物を壊してしまった。\n[pink]ついてないなあ…うう…[/pink]",
-  "TOGAWA_GROUP.title": "借金",
-  "TOGAWA_GROUP.description": "50[gold]ゴールド[/gold]を得て、[purple]借金[/purple]を1枚デッキに加える。",
+  "CUTE_SAKIKO_MOD_TOGAWA_GROUP.title": "ローン",
+  "CUTE_SAKIKO_MOD_TOGAWA_GROUP.description": "[blue]{amount}[/blue]ゴールドを得て、[purple]借金[/purple]を1枚[gold]デッキ[/gold]に加える。",
   "CUTE_SAKIKO_MOD_VAKUU_BUTTON.title": "愛嬌を振りまく",
   "CUTE_SAKIKO_MOD_VAKUU_BUTTON.description": "5の[pink]最大HP[/pink]を得て、すぐに立ち去る。"
 }

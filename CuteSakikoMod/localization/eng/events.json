@@ -105,8 +105,8 @@
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.KICK_AWAY.title": "Kick it away and leave",
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.INITIAL.options.KICK_AWAY.description": "Choose a card to remove.",
   "CUTE_SAKIKO_MOD_EVENT_STAR_ANON_EVENT.pages.KICK_AWAY_FAIL.description": "You think nothing of it and kick it away.\n[pink]Ahhh! Wait![/pink]\nYou accidentally break something of your own.\n[pink]What bad luck... wuwu[/pink]",
-  "TOGAWA_GROUP.title": "Loan",
-  "TOGAWA_GROUP.description": "Gain 50 [gold]Gold[/gold], add a [purple]Debt[/purple] to your deck.",
+  "CUTE_SAKIKO_MOD_TOGAWA_GROUP.title": "Loan",
+  "CUTE_SAKIKO_MOD_TOGAWA_GROUP.description": "Gain [blue]{amount}[/blue] Gold, add a [purple]Debt[/purple] to your [gold]deck[/gold].",
   "CUTE_SAKIKO_MOD_VAKUU_BUTTON.title": "Act Cute",
   "CUTE_SAKIKO_MOD_VAKUU_BUTTON.description": "Gain 5 [pink]Max HP[/pink], then immediately leave."
 }

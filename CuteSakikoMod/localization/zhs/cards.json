@@ -444,7 +444,7 @@
   "CUTE_SAKIKO_MOD_CARD_WRONG_PLAY.title": "弹错了",
   "CUTE_SAKIKO_MOD_CARD_WRONG_PLAY.description": "获得{Block:diff()}点格挡。\n将所有[img]CuteSakikoMod/images/ui/text/text_note.png[/img]变为[img]CuteSakikoMod/images/ui/text/text_skill.png[/img]。",
   "CUTE_SAKIKO_MOD_CARD_PERFECT_PLAY.title": "完美演奏",
-  "CUTE_SAKIKO_MOD_CARD_PERFECT_PLAY.description": "[gold]演奏[/gold]当前所有[pink]已学习的和弦[/pink]。",
+  "CUTE_SAKIKO_MOD_CARD_PERFECT_PLAY.description": "随机[gold]演奏[/gold]{ChordCount:diff()}个[pink]已学习和弦[/pink]。",
   "CUTE_SAKIKO_MOD_CARD_OB_CARD.title": "遗忘女神形态",
   "CUTE_SAKIKO_MOD_CARD_OB_CARD.description": "所有卡牌费用变化为1，[gold]重放[/gold]1次，打出后[red]遗忘[/red]。\n回合结束时若[gold]压力[/gold]为0则退出形态。",
   "CUTE_SAKIKO_MOD_CARD_THEN_GET_SWORD.title": "那么，持剑吧",
