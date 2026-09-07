@@ -1,6 +1,9 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Status;
+﻿
+using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Status;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -8,7 +11,6 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Rooms;
@@ -29,6 +31,14 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     private int _currentTurnCount;
     private int _drawAmount = 1;
     private int _energyGain = 1;
+
+    private static readonly string AudioDir =
+        Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio");
+    private static readonly string[] ParfaitSfxFiles =
+    {
+        "rana1.mp3", "rana2.mp3", "rana3.mp3", "rana4.mp3", "rana5.mp3","rana6.mp3", "rana7.mp3", "rana8.mp3", "rana9.mp3"
+    };
+    private static readonly Random _rand = new();
 
     [SavedProperty]
     public int TotalConsumedThisCombat
@@ -160,6 +170,10 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     {
         for (int i = 0; i < amount; i++)
         {
+            // ★ 播放随机音效
+            var sfx = Path.Combine(AudioDir, ParfaitSfxFiles[_rand.Next(ParfaitSfxFiles.Length)]);
+            AudioManager.PlaySound(sfx, 1.0f);
+
             CurrentTurnCount++;
             Entry.Logger.Info($"[芭菲] 当前回合计数={CurrentTurnCount}");
 

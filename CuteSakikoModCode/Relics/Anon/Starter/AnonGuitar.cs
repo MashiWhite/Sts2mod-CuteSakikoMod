@@ -32,6 +32,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 [RegisterTouchOfOrobasRefinement(typeof(FlashAnonGuitar))]
 public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
 {
+    public static event Func<PlayerChoiceContext, Task>? ChordPlayed;
     protected static Dictionary<Player, (string chords, string bonus, string temp)> _pendingMigration = new();
     protected static Dictionary<Player, List<string>> _pendingBonusMigration = new();
 
@@ -849,6 +850,8 @@ public class AnonGuitar : CuteAnonRelic, IModRightClickableRelic
         foreach (var card in cardsToMove)
             await CardPileCmd.Add(card, PileType.Hand);
         if (cardsToMove.Count > 0) Flash();
+        if (ChordPlayed != null && choiceContext != null)
+            await ChordPlayed(choiceContext);
     }
 
     public List<string> GetLearnedChordIds(params ChordCategory[] categories)
