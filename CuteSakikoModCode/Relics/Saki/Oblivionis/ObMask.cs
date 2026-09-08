@@ -1,85 +1,75 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
+﻿
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
-using STS2RitsuLib.Interop.AutoRegistration;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Oblivionis;
-
-[RegisterCharacterStarterRelic(typeof(CuteOb))]
-[RegisterTouchOfOrobasRefinement(typeof(ObHairBand))]
-public class ObMask : CuteSakiRelic
+namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Oblivionis
 {
-    public override RelicRarity Rarity => RelicRarity.Starter;
-    private int _triggeredRound = -1;
-
-    // 每遗忘一张牌对所有敌人造成的伤害，进化后子类覆盖为6
-    protected virtual int DamagePerForgottenCard => 3;
-
-    public override async Task BeforeCombatStart()
+    public class ObMask : CuteSakiRelic, IForgetHookHandler   // 实现接口
     {
-        await base.BeforeCombatStart();
-        MemoryCardPileManager.CardsForgotten += OnCardsForgotten;
-    }
+        public override RelicRarity Rarity => RelicRarity.Starter;
+        private int _triggeredRound = -1;
+        protected virtual int DamagePerForgottenCard => 3;
 
-    public override async Task AfterCombatEnd(CombatRoom room)
-    {
-        MemoryCardPileManager.CardsForgotten -= OnCardsForgotten;
-        await base.AfterCombatEnd(room);
-    }
-
-    protected virtual async Task OnCardsForgotten(
-        PlayerChoiceContext choiceContext,
-        IReadOnlyList<CardModel> cards,
-        CardModel? source)
-    {
-        if (Owner == null || cards.Count == 0) return;
-        if (cards[0].Owner != Owner) return;
-
-        var combat = Owner.Creature?.CombatState;
-        if (combat == null) return;
-
-        // 伤害：每遗忘一张牌对所有敌人造成一次伤害
-        await ApplyDamageForForgottenCards(choiceContext, cards);
-
-        // 抽牌：每回合第一次遗忘时抽1张牌
-        int round = combat.RoundNumber;
-        if (_triggeredRound == round) return;
-        _triggeredRound = round;
-
-        await CardPileCmd.Draw(choiceContext, 1, Owner);
-    }
-
-    /// <summary>
-    /// 每遗忘一张牌，对所有敌人造成一次伤害。
-    /// </summary>
-    protected async Task ApplyDamageForForgottenCards(
-        PlayerChoiceContext choiceContext,
-        IReadOnlyList<CardModel> cards)
-    {
-        if (cards.Count == 0) return;
-        var combat = Owner?.Creature?.CombatState;
-        if (combat == null) return;
-
-        var enemies = combat.HittableEnemies;
-        if (enemies.Count == 0) return;
-
-        for (int i = 0; i < cards.Count; i++)
+        // 实现 BeforeForget：在卡牌移动前造成伤害
+        public virtual async Task BeforeForget(
+            PlayerChoiceContext choiceContext,
+            IReadOnlyList<CardModel> cards,
+            CardModel? source)
         {
-            await CreatureCmd.Damage(
-                choiceContext,
-                enemies,
-                new DamageVar(DamagePerForgottenCard, ValueProp.Unpowered),
-                Owner.Creature,
-                null,
-                null
-            );
+            if (Owner == null || cards.Count == 0) return;
+            if (cards[0].Owner != Owner) return;
+            var combat = Owner.Creature?.CombatState;
+            if (combat == null) return;
+
+            await ApplyDamageForForgottenCards(choiceContext, cards);
+        }
+
+        // 实现 AfterForget：在卡牌移动后处理抽牌
+        public virtual async Task AfterForget(
+            PlayerChoiceContext choiceContext,
+            IReadOnlyList<CardModel> cards,
+            CardModel? source)
+        {
+            if (Owner == null || cards.Count == 0) return;
+            if (cards[0].Owner != Owner) return;
+            var combat = Owner.Creature?.CombatState;
+            if (combat == null) return;
+
+            int round = combat.RoundNumber;
+            if (_triggeredRound == round) return;
+            _triggeredRound = round;
+
+            await CardPileCmd.Draw(choiceContext, 1, Owner);
+        }
+
+        // 原有伤害方法保持不变
+        protected async Task ApplyDamageForForgottenCards(
+            PlayerChoiceContext choiceContext,
+            IReadOnlyList<CardModel> cards)
+        {
+            if (cards.Count == 0) return;
+            var combat = Owner?.Creature?.CombatState;
+            if (combat == null) return;
+
+            var enemies = combat.HittableEnemies;
+            if (enemies.Count == 0) return;
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                await CreatureCmd.Damage(
+                    choiceContext,
+                    enemies,
+                    new DamageVar(DamagePerForgottenCard, ValueProp.Unpowered),
+                    Owner.Creature,
+                    null,
+                    null
+                );
+            }
         }
     }
 }

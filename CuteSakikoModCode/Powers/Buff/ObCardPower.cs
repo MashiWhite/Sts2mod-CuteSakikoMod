@@ -4,6 +4,7 @@ using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;

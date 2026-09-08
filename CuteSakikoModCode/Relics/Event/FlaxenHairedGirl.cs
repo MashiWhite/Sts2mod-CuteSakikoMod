@@ -95,6 +95,9 @@ public class FlaxenHairedGirl : CuteSakikoEventRelic
                 CardCmd.Enchant(ench, newCard, ench.Amount);
             }
         }
+        
+        newCard.UpgradeInternal();
+        newCard.FinalizeUpgradeInternal();
 
         // 加入牌组
         await CardPileCmd.Add(newCard, PileType.Deck);

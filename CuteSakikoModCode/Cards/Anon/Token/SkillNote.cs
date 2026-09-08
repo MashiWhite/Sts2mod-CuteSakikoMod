@@ -7,7 +7,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Token;
 public class SkillNote() : OtherModTokenCard(0, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
-
+    public override int MaxUpgradeLevel => 0;
+    
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 空效果，仅获得音符

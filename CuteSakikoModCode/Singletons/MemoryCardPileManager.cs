@@ -1,7 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -23,23 +23,6 @@ public sealed class MemoryCardPileManager : HookedSingletonModel
     // 新版基类构造函数：传入 HookType.Combat 以订阅战斗钩子
     public MemoryCardPileManager() : base(HookedSingletonModel.HookType.Combat)
     {
-    }
-
-    // 不再重写 ShouldReceiveCombatHooks，基类已根据 HookType 自动设置
-
-    // ★ 自定义遗忘事件（所有遗忘操作都会触发）
-    public static event Func<PlayerChoiceContext, IReadOnlyList<CardModel>, CardModel?, Task>? CardsForgotten;
-
-    /// <summary>
-    /// 触发遗忘事件。在任何导致卡牌被遗忘的地方调用此方法。
-    /// </summary>
-    public static async Task FireCardsForgotten(PlayerChoiceContext choiceContext, IReadOnlyList<CardModel> cards,
-        CardModel? source)
-    {
-        if (CardsForgotten != null && cards.Count > 0)
-        {
-            await CardsForgotten.Invoke(choiceContext, cards, source);
-        }
     }
 
     public override async Task AfterCombatEnd(CombatRoom room)

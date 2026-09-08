@@ -1,67 +1,64 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
-using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib;
-using System.Linq;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Systems;
+namespace CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
 
 public static class MemoryCmd
 {
-    public static async Task Forget(PlayerChoiceContext choiceContext, IEnumerable<CardModel> cards,
-        CardModel? source = null, bool removeFromMemory = true)
+    public static async Task Forget(PlayerChoiceContext choiceContext, IEnumerable<CardModel> cards, CardModel? source = null, bool removeFromMemory = true)
     {
         var list = cards.ToList();
         if (list.Count == 0) return;
         var player = list[0].Owner;
 
-        // ✅ 确保记忆牌堆已初始化
         await MemoryCardPile.EnsureInitializedAsync(player);
 
-        await MemoryCardPileManager.FireCardsForgotten(choiceContext, list, source);
-
         var forgetPileType = ForgetCardPile.GetPileType();
-        if (forgetPileType == null)
-        {
-            Log.Error($"[MemoryCmd] ForgetCardPile.GetPileType() returned null for player {player.NetId}! " +
-                      $"Card count: {list.Count}, source: {source?.Id.Entry ?? "null"}");
-            return;
-        }
+
+        var combatState = player.Creature?.CombatState;
+        if (combatState == null) return;
+
+        // 过滤出实际可以遗忘的卡牌（在战斗堆且不在遗忘堆）
+        var validCards = list
+            .Where(card => card.Pile != null && card.Pile.Type.IsCombatPile() && card.Pile.Type != forgetPileType)
+            .ToList();
+
+        if (validCards.Count == 0) return;
 
         var memoryPile = removeFromMemory ? MemoryCardPile.Get(player) : null;
 
-        foreach (var card in list)
+        // 1. BeforeForget 使用有效卡牌
+        await ForgetHook.BeforeForget(combatState, choiceContext, validCards, source);
+
+        // 2. 移动有效卡牌
+        var movedCards = new List<CardModel>();
+        foreach (var card in validCards)
         {
-            // 安全检查：仅当卡牌在战斗中且位于某个战斗牌堆时，才执行遗忘操作
-            if (card.Pile == null || !card.Pile.Type.IsCombatPile())
-            {
-                Log.Warn($"[MemoryCmd] Skipping card {card.Id.Entry} because it is not in a combat pile.");
-                continue;
-            }
-
-            if (card.Pile.Type == forgetPileType) continue;
-
             await CardPileCmd.Add(card, forgetPileType);
+            movedCards.Add(card);
 
             var pressure = player.Creature.GetPower<PressurePower>();
             if (pressure != null)
                 await PowerCmd.ModifyAmount(choiceContext, pressure, -2, player.Creature, source);
 
-            if (memoryPile != null && removeFromMemory)
+            if (memoryPile != null)
             {
                 var toRemove = memoryPile.Cards.Where(c => c.Id == card.Id).ToList();
                 foreach (var mCard in toRemove)
                     memoryPile.RemoveInternal(mCard);
             }
         }
+
+        // 3. AfterForget 同样使用移动成功的卡牌（此处与 validCards 一致，但保留以防万一）
+        await ForgetHook.AfterForget(combatState, choiceContext, movedCards, source);
     }
 
     public static async Task<List<CardModel>> Recall(

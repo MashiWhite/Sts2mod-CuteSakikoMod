@@ -26,16 +26,14 @@ public class NekoTreasure : CuteRanaCard
     
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
-        new CardsVar(2)
+        new CardsVar(2),
+        new DynamicVar("Neko",2)
     };
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 抽2张牌
-        await CardPileCmd.Draw(choiceContext, 2, Owner);
-
         // 确定添加的猫咪数量（升级前1，升级后2）
-        int addCount = IsUpgraded ? 2 : 1;
+        int addCount = DynamicVars["Neko"].IntValue;
         if (addCount <= 0) return;
 
         // 获取所有 Neko 卡模板
@@ -51,14 +49,21 @@ public class NekoTreasure : CuteRanaCard
         for (int i = 0; i < addCount; i++)
         {
             var template = rng.NextItem(allNekoCards);
-            var newCard = combatState.CreateCard(template, Owner);
-            newCard.EnergyCost.SetThisCombat(0, true); // 本场战斗免费
-            await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Draw, Owner,CardPilePosition.Random);
+            if (template != null)
+            {
+                var newCard = combatState.CreateCard(template, Owner);
+                newCard.EnergyCost.SetThisCombat(0, true); // 本场战斗免费
+                await CardPileCmd.AddGeneratedCardToCombat(newCard, PileType.Draw, Owner,CardPilePosition.Random);
+            }
         }
+        
+        // 抽2张牌
+        await CardPileCmd.Draw(choiceContext, 2, Owner);
+
     }
 
     protected override void OnUpgrade()
     {
-        // 升级效果已在 OnPlay 中通过 addCount 处理
+       DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

@@ -2,6 +2,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;

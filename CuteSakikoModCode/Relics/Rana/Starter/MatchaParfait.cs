@@ -273,7 +273,12 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
 
     private static async Task ApplyWantBothEffect(Player player, int amount, PlayerChoiceContext? choiceContext)
     {
-        for (int i = 0; i < amount; i++)
+        var wantBothPower = player.Creature.GetPower<WantBothPower>();
+        int layers = wantBothPower?.Amount ?? 0;
+        if (layers <= 0) return;
+
+        int totalRewards = amount * layers; // 每杯每层一次奖励
+        for (int i = 0; i < totalRewards; i++)
         {
             await PlayerCmd.GainEnergy(1, player);
             if (choiceContext != null)
