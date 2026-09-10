@@ -28,7 +28,7 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        var notesGained = MusicNoteManager.GetNotesGainedThisTurn(Owner);
+        var notesGained = ChordNoteSystem.GetNotesGainedThisTurn(Owner);
         var totalHits = 1 + notesGained;
         var damage = DynamicVars.Damage.BaseValue;
 
@@ -59,7 +59,7 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
             base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
             if (card.Owner != null)
             {
-                var notesGained = MusicNoteManager.GetNotesGainedThisTurn(card.Owner);
+                var notesGained = ChordNoteSystem.GetNotesGainedThisTurn(card.Owner);
                 BaseValue = 1 + notesGained;
             }
         }

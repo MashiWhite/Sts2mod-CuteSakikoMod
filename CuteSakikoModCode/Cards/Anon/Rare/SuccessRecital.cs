@@ -34,10 +34,10 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
         var perBlock = (int)DynamicVars.Block.BaseValue;
 
         // 演奏前获取当前储存的和弦数量（实际将被演奏的数量）
-        var chordCount = MusicNoteManager.GetStoredChords(Owner).Count;
+        var chordCount = ChordNoteSystem.GetStoredChords(Owner).Count;
 
         // 演奏所有储存的和弦
-        await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+        await ChordNoteSystem.PlayAllStoredChordsAsync(Owner, choiceContext);
 
         // 获得格挡 = 实际演奏数量 × 倍数
         var totalBlock = perBlock * chordCount;
@@ -64,7 +64,7 @@ public class SuccessRecital() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare,
             if (card.Owner == null) return;
 
             var perBlock = (int)card.DynamicVars.Block.BaseValue;
-            var chordCount = MusicNoteManager.GetStoredChords(card.Owner).Count; // 使用储存和弦数
+            var chordCount = ChordNoteSystem.GetStoredChords(card.Owner).Count; // 使用储存和弦数
             BaseValue = perBlock * chordCount;
         }
     }

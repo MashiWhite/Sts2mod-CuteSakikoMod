@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -27,9 +28,8 @@ public class TouchedPerformance() : CuteAnonCard(1, CardType.Skill, CardRarity.U
 
         // 演奏最新储存的和弦
         var count = DynamicVars.Repeat.IntValue;
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-            await guitar.TriggerLastStoredChord(choiceContext,count);
+        ChordNoteSystem.Activate(Owner);
+        await ChordNoteSystem.PlayLastStoredChordAsync(Owner, choiceContext, count);
     }
 
     protected override void OnUpgrade()

@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -29,10 +30,9 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
         await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
         // 演奏最新储存的和弦
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
         var count = DynamicVars.Repeat.IntValue;
-        if (guitar != null)
-            await guitar.TriggerLastStoredChord(choiceContext,count);
+        ChordNoteSystem.Activate(Owner);
+        await ChordNoteSystem.PlayLastStoredChordAsync(Owner, choiceContext, count);
     }
 
     protected override void OnUpgrade()

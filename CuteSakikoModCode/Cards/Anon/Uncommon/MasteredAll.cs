@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -38,9 +39,8 @@ public class MasteredAll() : CuteAnonCard(4, CardType.Attack, CardRarity.Uncommo
 
         if (command.Results.Any(hitList => hitList.Any(r => r.WasTargetKilled)))
         {
-            var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-            if (guitar != null)
-                await guitar.TriggerAllEquippedChords(choiceContext);
+            ChordNoteSystem.Activate(Owner);
+            await ChordNoteSystem.PlayAllEquippedChordsAsync(Owner, choiceContext);
         }
     }
 

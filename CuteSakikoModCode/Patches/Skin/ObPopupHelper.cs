@@ -204,6 +204,26 @@ internal static class ObPopupHelper
             _obSelected = false;
         }
     }
+    
+    public static void OnBeginRun()
+    {
+        if (_popup == null || !GodotObject.IsInstanceValid(_popup)) return;
+        if (_screen == null || !GodotObject.IsInstanceValid(_screen)) return;
+
+        // 先记录全局位置
+        Vector2 globalPos = _popup.GlobalPosition;
+
+        // 关闭 TopLevel，回到正常绘制顺序
+        _popup.TopLevel = false;
+        // 同步坐标（父节点坐标系）
+        _popup.Position = globalPos - _screen.GlobalPosition;
+
+        // ★ 关键：把 ZIndex 从 100 降回 0，让过渡遮罩能覆盖它
+        _popup.ZIndex = 0;
+
+        // 过渡期间禁止交互
+        _popup.MouseFilter = Control.MouseFilterEnum.Ignore;
+    }
 
     public static void Cleanup(NCharacterSelectScreen screen)
     {

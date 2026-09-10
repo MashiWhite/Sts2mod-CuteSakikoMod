@@ -49,12 +49,12 @@ public class FinalLive() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
 
         var count = allCards.Count;
         if (count <= 0) return;
-
-        // 1. 统一并发 Exhaust 所有符合条件的卡牌
-        var exhaustTasks = allCards
-            .Where(card => card.Pile != null && card.Pile.IsCombatPile)
-            .Select(card => CardCmd.Exhaust(choiceContext, card));
-        await Task.WhenAll(exhaustTasks);
+        
+        foreach (var card in allCards)
+        {
+            if (card.Pile != null && card.Pile.IsCombatPile)
+                await CardCmd.Exhaust(choiceContext, card);
+        }
 
         // 2. 获得格挡（基于 count）
         var valueBlock = DynamicVars.Block.BaseValue;
@@ -67,7 +67,7 @@ public class FinalLive() : CuteSakikoModCard(3, CardType.Attack, CardRarity.Rare
         var totalDamage = count * valueDamage;
         if (totalDamage > 0)
             await DamageCmd.Attack(totalDamage)
-                .FromCard(this,cardPlay)
+                .FromCard(this, cardPlay)
                 .TargetingAllOpponents(CombatState)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

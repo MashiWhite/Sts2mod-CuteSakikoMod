@@ -4,6 +4,7 @@ using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Curse;
 using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -95,7 +96,6 @@ public sealed class AiHeartPower : CuteSakikoModPower
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
-        // 仅在敌方回合结束（即玩家回合结束）时执行
         if (side != CombatSide.Enemy) return;
 
         var combat = Owner.CombatState;
@@ -108,10 +108,8 @@ public sealed class AiHeartPower : CuteSakikoModPower
             var guitar = player.Relics.OfType<AnonGuitar>().FirstOrDefault();
             if (guitar == null) continue;
 
-            // 为该玩家构造合法的上下文
-            var ctx = new HookPlayerChoiceContext(player, player.NetId, GameActionType.Combat);
-            var task = guitar.AddChordToStored(ctx, chordId, 3);
-            await ctx.AssignTaskAndWaitForPauseOrCompletion(task);
+            // 使用新系统添加存储和弦，不依赖吉他方法
+            await ChordNoteSystem.AddStoredChordAsync(player, chordId, 3, choiceContext);
         }
     }
 

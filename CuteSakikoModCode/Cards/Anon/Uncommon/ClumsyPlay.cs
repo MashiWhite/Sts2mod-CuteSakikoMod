@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -44,9 +45,8 @@ public class ClumsyPlay() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon
         await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
         // 演奏最新储存的和弦
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-            await guitar.TriggerLastStoredChord(choiceContext);
+        ChordNoteSystem.Activate(Owner);
+        await ChordNoteSystem.PlayLastStoredChordAsync(Owner, choiceContext);
     }
 
     protected override void OnUpgrade()

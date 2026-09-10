@@ -32,13 +32,12 @@ public class Wink : CuteAnonCard
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
+        ChordNoteSystem.Activate(Owner);
         // 先记录当前储存的和弦数量（演奏后会清空，所以提前记下）
-        var storedCount = MusicNoteManager.GetStoredChords(Owner).Count;
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
+        var storedCount = ChordNoteSystem.GetStoredChords(Owner).Count;
 
         // 演奏所有储存的和弦，并清空储存，但保留音符
-        if (guitar != null)
-            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+        await ChordNoteSystem.PlayAllStoredChordsAsync(Owner, choiceContext);
 
         // 基础 1 次 + 每演奏一个和弦额外 1 次
         int totalHits = 1 + storedCount;

@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -20,9 +21,8 @@ public class PrepSupply() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon,
     {
         TriggerBanter();
 
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext);
+        ChordNoteSystem.Activate(Owner);
+        await ChordNoteSystem.PlayAllStoredChordsAsync(Owner, choiceContext);
 
         // 获得能量
         var energyGain = DynamicVars.Energy.IntValue;

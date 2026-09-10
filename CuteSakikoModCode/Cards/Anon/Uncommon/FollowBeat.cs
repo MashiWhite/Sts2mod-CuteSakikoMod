@@ -47,9 +47,9 @@ public class FollowBeat() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncommon
         var majorChordId = majorChords[0];
 
         for (var i = 0; i < 3; i++)
-            await guitar.AddChordToStored(choiceContext, majorChordId);
+            await ChordNoteSystem.AddStoredChordAsync(Owner, majorChordId, 1, choiceContext);;
 
-        guitar.UpdateStoredChordDisplay();
+        ChordNoteUIManager.UpdateStoredChordDisplay(Owner);
     }
 
     protected override void OnUpgrade()

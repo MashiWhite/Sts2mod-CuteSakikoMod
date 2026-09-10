@@ -31,7 +31,7 @@ public class StunningPerformance() : CuteAnonCard(2, CardType.Attack, CardRarity
                     var owner = card.Owner;
                     if (owner == null) return 0m;
                     // 改为使用本场战斗累计音符数
-                    return MusicNoteManager.GetTotalNotesGainedThisCombat(owner);
+                    return ChordNoteSystem.GetTotalNotesThisCombat(owner);
                 });
         }
     }

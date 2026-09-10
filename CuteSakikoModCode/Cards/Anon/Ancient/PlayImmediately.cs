@@ -1,6 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -29,16 +30,14 @@ public class PlayImmediately() : CuteAnonCard(0, CardType.Skill, CardRarity.Anci
     {
         TriggerBanter();
 
-        // 演奏所有储存的和弦
-        var count =DynamicVars.Repeat.IntValue;
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-        {
-            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext,count);
-        }
+        var count = DynamicVars.Repeat.IntValue;
+        // 激活音符系统（即使没有吉他）
+        ChordNoteSystem.Activate(Owner);
+        
+        // 播放所有储存的和弦，保留音符但清空储存和弦
+        await ChordNoteSystem.PlayAllStoredChordsAsync(Owner, choiceContext, countPerChord: count);
+        
         var chords = DynamicVars["Chords"].BaseValue;
-
-        // 获得可叠层的“即刻演奏”，层数 = Chords
         await PowerCmd.Apply<PlayImmediatelyPower>(choiceContext, Owner.Creature, chords, Owner.Creature, this);
     }
 

@@ -33,16 +33,13 @@ public class KeepCenter() : CuteAnonCard(3, CardType.Attack, CardRarity.Uncommon
             .Execute(choiceContext);
 
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-        {
-            var allChords = guitar.GetAllEquippedChords();
+        ChordNoteSystem.Activate(Owner);
             var noteCount = (int)DynamicVars["Notes"].BaseValue;
             for (var i = 0; i < noteCount; i++)
-                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Attack, allChords, choiceContext);
-
-            guitar.UpdateNoteDisplay();
-            guitar.UpdateStoredChordDisplay();
-        }
+                await ChordNoteSystem.AddNoteAsync(Owner, CardType.Attack, choiceContext);
+       
+        ChordNoteUIManager.UpdateNoteDisplay(Owner);
+        ChordNoteUIManager.UpdateStoredChordDisplay(Owner);
     }
 
     protected override void OnUpgrade()

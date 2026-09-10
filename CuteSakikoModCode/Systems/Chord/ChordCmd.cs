@@ -164,6 +164,7 @@ public static class ChordCmd
         if (pool.Count == 0) return;
 
         var randomChordId = guitar.Owner.RunState.Rng.CombatCardSelection.NextItem(pool);
-        await guitar.AddChordToStored(context, randomChordId);
+        // 直接演奏该和弦（也可改为加入存储，根据原意选择）
+        await ChordNoteSystem.PlayChordAsync(guitar.Owner, randomChordId, context);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Enchantments;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -26,8 +27,6 @@ public sealed class PlayEnchantment : ModEnchantmentTemplate
     {
         await base.OnPlay(choiceContext, cardPlay);
         if (Status != EnchantmentStatus.Normal) return;
-
-        var guitar = Card.Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null) await guitar.TriggerLastStoredChord(choiceContext);
+        await ChordNoteSystem.PlayLastStoredChordAsync(Card.Owner, choiceContext);
     }
 }

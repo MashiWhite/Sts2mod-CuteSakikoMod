@@ -12,6 +12,7 @@ using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -291,6 +292,9 @@ public class Entry
                 CombatManager.Instance.CombatEnded += _ => AudioManager.StopMusic();
         };
         ObPopupHelper.PreloadButtonScene();
+        
+        // 触发静态构造
+        _ = ChordNoteSystem.MaxStoredChords;
     }
 
     private static async void OnRunStarted(RunState state)

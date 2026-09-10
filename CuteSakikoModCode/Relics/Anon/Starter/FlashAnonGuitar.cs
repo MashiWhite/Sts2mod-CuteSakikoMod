@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Entities.Relics;
 
@@ -9,7 +8,7 @@ public class FlashAnonGuitar : AnonGuitar
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
     protected override int MaxLearnedChordsPerCategory => 2;
-    protected override int FirstPlayBonus => 3; // 新增这一行
+    public override int FirstPlayBonus => 3;
 
     [OnDeserialized]
     private void OnDeserialized(StreamingContext context)

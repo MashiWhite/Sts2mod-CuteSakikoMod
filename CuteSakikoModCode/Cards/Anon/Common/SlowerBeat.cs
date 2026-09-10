@@ -34,17 +34,15 @@ public class SlowerBeat() : CuteAnonCard(2, CardType.Skill, CardRarity.Common, T
         var nextTurnBlock = (int)DynamicVars["BlockNextTurn"].BaseValue;
         await PowerCmd.Apply<BlockNextTurnPower>(choiceContext, Owner.Creature, nextTurnBlock, Owner.Creature, this);
 
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-        {
-            var allChords = guitar.GetAllEquippedChords();
-            int manualNoteCount = IsUpgraded ? 3 : 2;
-            for (int i = 0; i < manualNoteCount; i++)
-                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, CardType.Skill, allChords, choiceContext);
+        ChordNoteSystem.Activate(Owner);
+        
+        int manualNoteCount = IsUpgraded ? 3 : 2;
+        for (int i = 0; i < manualNoteCount; i++)
+            await ChordNoteSystem.AddNoteAsync(Owner, CardType.Skill, choiceContext);
 
-            guitar.UpdateNoteDisplay();
-            guitar.UpdateStoredChordDisplay();
-        }
+        ChordNoteUIManager.UpdateNoteDisplay(Owner);
+        ChordNoteUIManager.UpdateStoredChordDisplay(Owner);
+        
     }
 
     protected override void OnUpgrade()

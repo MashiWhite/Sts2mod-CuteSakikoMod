@@ -20,7 +20,7 @@ public class DrinkWater() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, Tar
         TriggerBanter();
 
         // 清除所有音符，并获取清除的数量
-        var clearedCount = MusicNoteManager.ClearNotesAndGetCount(Owner);
+        var clearedCount = ChordNoteSystem.ClearNotesAndGetCount(Owner);
 
         // 按清除数量抽牌
         if (clearedCount > 0)
@@ -32,7 +32,7 @@ public class DrinkWater() : CuteAnonCard(1, CardType.Skill, CardRarity.Rare, Tar
 
         // 更新音符UI（如果有吉他遗物）
         var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        guitar?.UpdateNoteDisplay();
+        ChordNoteUIManager.UpdateNoteDisplay(Owner);
     }
 
     protected override void OnUpgrade()

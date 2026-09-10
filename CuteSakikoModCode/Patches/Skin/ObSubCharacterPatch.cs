@@ -23,17 +23,20 @@ public static class ObPopupShowOnSakiSelectPatch
         CharacterModel characterModel)
     {
         if (characterModel is CuteSaki)
-        {
             ObPopupHelper.OnSakiSelected();
-        }
         else if (characterModel is CuteOb)
-        {
             ObPopupHelper.OnObSelected();
-        }
         else
-        {
             ObPopupHelper.OnOtherCharacterSelected();
-        }
+    }
+}
+
+[HarmonyPatch(typeof(NCharacterSelectScreen), "BeginRun")]
+public static class ObPopupBeginRunPatch
+{
+    static void Prefix(NCharacterSelectScreen __instance)
+    {
+        ObPopupHelper.OnBeginRun();
     }
 }
 

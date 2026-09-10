@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -19,9 +20,8 @@ public class FantasyStage() : CuteAnonCard(2, CardType.Attack, CardRarity.Uncomm
         TriggerBanter();
 
         // 演奏所有储存的和弦
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-            await guitar.TriggerAllStoredChordsKeepNotes(choiceContext,2);
+        ChordNoteSystem.Activate(Owner);
+        await ChordNoteSystem.PlayAllStoredChordsAsync(Owner, choiceContext,2);
 
         // 对所有敌人造成伤害
         var enemies = Owner.Creature.CombatState?.Enemies;

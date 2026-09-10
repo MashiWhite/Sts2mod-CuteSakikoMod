@@ -33,22 +33,20 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
             .WithHitCount(_hitCount)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
+        
 
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar != null)
-        {
-            var shuffleRng = Owner.RunState.Rng.Shuffle;
-            var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
-            var randomType = noteTypes[shuffleRng.NextInt(noteTypes.Length)];
-            var allChords = guitar.GetAllEquippedChords();
+        ChordNoteSystem.Activate(Owner);
+        var shuffleRng = Owner.RunState.Rng.Shuffle;
+        var noteTypes = new[] { CardType.Attack, CardType.Skill, CardType.Power };
+        var randomType = noteTypes[shuffleRng.NextInt(noteTypes.Length)];
 
-            int manualNoteCount = IsUpgraded ? 3 : 2;
-            for (int i = 0; i < manualNoteCount; i++)
-                await MusicNoteManager.AddNoteAndAutoPlayAsync(Owner, randomType, allChords, choiceContext);
+        int manualNoteCount = IsUpgraded ? 3 : 2;
+        for (int i = 0; i < manualNoteCount; i++)
+            await ChordNoteSystem.AddNoteAsync(Owner, randomType, choiceContext);
 
-            guitar.UpdateNoteDisplay();
-            guitar.UpdateStoredChordDisplay();
-        }
+        ChordNoteUIManager.UpdateNoteDisplay(Owner);
+        ChordNoteUIManager.UpdateStoredChordDisplay(Owner);
+        
     }
 
     protected override void OnUpgrade()

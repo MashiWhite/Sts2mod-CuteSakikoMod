@@ -49,7 +49,7 @@ public class SmoothPlay : CuteAnonCard
     {
         if (!_eventSubscribed)
         {
-            MusicNoteManager.PlayerNotesChanged += OnPlayerNotesChanged;
+            ChordNoteSystem.PlayerNotesChanged += OnPlayerNotesChanged;
             _eventSubscribed = true;
         }
         UpdateCost();
@@ -64,7 +64,7 @@ public class SmoothPlay : CuteAnonCard
     private void UpdateCost()
     {
         if (Owner?.Creature?.CombatState == null) return;
-        var attackCount = MusicNoteManager.GetCurrentNotes(Owner)
+        var attackCount = ChordNoteSystem.GetCurrentNotes(Owner)
             .Count(n => n == CardType.Attack);
         EnergyCost.SetThisTurn(Math.Max(0, 4 - attackCount));
     }
@@ -78,7 +78,7 @@ public class SmoothPlay : CuteAnonCard
         if (cardPlay.Target == null) return;
 
         // 清除所有音符
-        MusicNoteManager.ClearNotes(Owner);
+        ChordNoteSystem.ClearNotes(Owner);
 
         // 造成伤害
         var damage = DynamicVars.Damage.IntValue;
@@ -89,7 +89,7 @@ public class SmoothPlay : CuteAnonCard
             .Execute(choiceContext);
 
         // 刷新 UI
-        Owner.Relics.OfType<AnonGuitar>().FirstOrDefault()?.UpdateNoteDisplay();
+        ChordNoteUIManager.UpdateNoteDisplay(Owner);
     }
 
     protected override void OnUpgrade()

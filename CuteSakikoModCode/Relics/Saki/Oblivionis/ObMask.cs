@@ -1,4 +1,6 @@
 ﻿
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -6,13 +8,24 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
+using MegaCrit.Sts2.Core.Saves.Runs;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Oblivionis
 {
+    [RegisterCharacterStarterRelic(typeof(CuteOb))]
+    [RegisterTouchOfOrobasRefinement(typeof(ObHairBand))]
     public class ObMask : CuteSakiRelic, IForgetHookHandler   // 实现接口
     {
         public override RelicRarity Rarity => RelicRarity.Starter;
-        private int _triggeredRound = -1;
+        private int _savedTriggeredRound = -1;
+
+        [SavedProperty]
+        protected int SavedTriggeredRound
+        {
+            get => _savedTriggeredRound;
+            set => _savedTriggeredRound = value;
+        }
         protected virtual int DamagePerForgottenCard => 3;
 
         // 实现 BeforeForget：在卡牌移动前造成伤害
@@ -41,10 +54,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Oblivionis
             if (combat == null) return;
 
             int round = combat.RoundNumber;
-            if (_triggeredRound == round) return;
-            _triggeredRound = round;
-
+            if (SavedTriggeredRound == round) return;
+            SavedTriggeredRound = round;
             await CardPileCmd.Draw(choiceContext, 1, Owner);
+            
         }
 
         // 原有伤害方法保持不变

@@ -23,8 +23,8 @@ public class StageJitters() : CuteAnonCard(0, CardType.Attack, CardRarity.Uncomm
                 .WithMultiplier((card, _) =>
                 {
                     if (card.Owner == null) return 0m;
-                    var noteCount = MusicNoteManager.GetCurrentNotes(card.Owner).Count;
-                    var chordCount = MusicNoteManager.GetStoredChords(card.Owner).Count;
+                    var noteCount = ChordNoteSystem.GetCurrentNotes(card.Owner).Count;
+                    var chordCount = ChordNoteSystem.GetStoredChords(card.Owner).Count;
                     // 倍率 = -(音符总数 + 和弦总数)，使伤害降低
                     return -(decimal)(noteCount + chordCount);
                 });

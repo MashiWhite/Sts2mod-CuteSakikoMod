@@ -33,7 +33,7 @@ public class HastyPlay : CuteAnonCard
 
     // 金色高亮：上一个音符是攻击时发光
     protected override bool ShouldGlowGoldInternal =>
-        MusicNoteManager.GetLastNote(Owner) == CardType.Attack;
+        ChordNoteSystem.GetLastNoteType(Owner) == CardType.Attack;
 
     public override void AfterCreated()
     {
@@ -50,8 +50,8 @@ public class HastyPlay : CuteAnonCard
     private void SubscribeAndRefresh()
     {
         // 避免重复订阅
-        MusicNoteManager.PlayerNotesChanged -= OnNotesChanged;
-        MusicNoteManager.PlayerNotesChanged += OnNotesChanged;
+        ChordNoteSystem.PlayerNotesChanged -= OnNotesChanged;
+        ChordNoteSystem.PlayerNotesChanged += OnNotesChanged;
         RefreshCost();
     }
 
@@ -64,7 +64,7 @@ public class HastyPlay : CuteAnonCard
     private void RefreshCost()
     {
         if (Owner?.Creature?.CombatState == null) return;
-        var lastNote = MusicNoteManager.GetLastNote(Owner);
+        var lastNote = ChordNoteSystem.GetLastNoteType(Owner);
         // 核心：用 SetThisTurn 动态设置费用
         EnergyCost.SetThisTurn(lastNote == CardType.Attack ? 0 : 1);
     }

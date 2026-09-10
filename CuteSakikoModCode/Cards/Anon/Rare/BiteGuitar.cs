@@ -68,8 +68,8 @@ public class BiteGuitar : CuteAnonCard
         }
 
         // 刷新吉他 UI
-        guitar.UpdateStoredChordDisplay();
-        guitar.UpdateNoteDisplay();
+        ChordNoteUIManager.UpdateNoteDisplay(Owner);
+        ChordNoteUIManager.UpdateStoredChordDisplay(Owner);
     }
 
     protected override void OnUpgrade()

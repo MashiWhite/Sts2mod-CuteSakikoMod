@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -17,11 +18,9 @@ public class Recorder : CuteAnonRelic
         if (side != Owner.Creature.Side || combatState.RoundNumber != 1)
             return;
 
-        var guitar = Owner.Relics.OfType<AnonGuitar>().FirstOrDefault();
-        if (guitar == null) return;
+        if (Owner.Relics.OfType<AnonGuitar>().FirstOrDefault() == null) return;
 
-        // 使用吉他提供的自动演奏方法，正确处理加成
-        await guitar.PlayRandomEquippedChordImmediate();
+        await ChordNoteSystem.PlayRandomEquippedChordImmediateAsync(Owner);
         Flash();
     }
 }

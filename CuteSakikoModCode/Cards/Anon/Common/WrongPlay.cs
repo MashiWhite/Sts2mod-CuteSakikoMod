@@ -23,7 +23,7 @@ public class WrongPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common, Ta
         // 获得格挡
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         
-        MusicNoteManager.ModifyAllNotes(Owner, CardType.Skill);
+        ChordNoteSystem.ModifyAllNotes(Owner, CardType.Skill);
     }
 
     protected override void OnUpgrade()
