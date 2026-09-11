@@ -22,9 +22,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
         private static readonly SavedAttachedState<Player, string> _savedState =
             new("chord_note_state", defaultValueFactory: () => "");
 
-        private static readonly AttachedState<Player, List<IChordProvider>> _providers =
-            new(() => new List<IChordProvider>());
-
         public static event Action<Player>? PlayerNotesChanged;
 
         private sealed class StateData
@@ -116,31 +113,27 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             state.IsActive = false;
             state.Notes.Clear();
             state.StoredChords.Clear();
-            if (_providers.TryGetValue(player, out var providers))
-                providers.Clear();
             SaveState(player, state);
         }
 
         // ==================== Provider ====================
 
-        public static void RegisterProvider(Player player, IChordProvider provider)
-        {
-            if (player == null || provider == null) return;
-            var providers = _providers[player];
-            if (!providers.Contains(provider))
-                providers.Add(provider);
-        }
-
-        public static void UnregisterProvider(Player player, IChordProvider provider)
-        {
-            if (player == null || provider == null) return;
-            _providers[player].Remove(provider);
-        }
-
         private static IReadOnlyList<string> GetAvailableChordIds(Player player)
         {
-            var providers = _providers[player];
-            return providers.SelectMany(p => p.GetAvailableChordIds(player)).Distinct().ToList();
+            if (player?.Relics == null)
+                return Array.Empty<string>();
+
+            var list = new List<string>();
+            foreach (var relic in player.Relics)
+            {
+                if (relic is IChordProvider provider)
+                    list.AddRange(provider.GetAvailableChordIds(player));
+            }
+
+            return list
+                .Distinct()
+                .OrderBy(x => x, StringComparer.Ordinal)
+                .ToList();
         }
 
         // ==================== Bonus 计算 ====================
@@ -187,7 +180,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
                 bonus += firstPlayBonus;
             return bonus;
         }
-        
+
         public static int GetDisplayBonus(Player player)
         {
             if (player?.Creature?.CombatState == null)
@@ -210,29 +203,28 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
                 state.NotesGainedThisTurn = 0;
             }
 
-            await ChordNoteHooks.BeforeNoteAdded(combat, player, noteType, context);
-
             state.NotesGainedThisTurn++;
             state.TotalNotesThisCombat++;
             state.Notes.Enqueue(noteType);
             while (state.Notes.Count > 4) state.Notes.Dequeue();
 
-            await ChordNoteHooks.AfterNoteAdded(combat, player, noteType, context);
-
+            // 保存我们的修改，让 Hook 和后续逻辑看到最新状态
             SaveState(player, state);
 
-            // 触发 GuitarVocalPower
+            await ChordNoteHooks.BeforeNoteAdded(combat, player, noteType, context);
+            await ChordNoteHooks.AfterNoteAdded(combat, player, noteType, context);
+
             var vocalPower = player.Creature.GetPower<GuitarVocalPower>();
             if (vocalPower != null)
                 await vocalPower.OnNoteGained(context, 1);
 
-            // 匹配和弦并自动演奏
-            await TryMatchAndAutoPlayAsync(player, context, state);
+            await TryMatchAndAutoPlayAsync(player, context);
             PlayerNotesChanged?.Invoke(player);
         }
 
-        private static async Task TryMatchAndAutoPlayAsync(Player player, PlayerChoiceContext context, StateData state)
+        private static async Task TryMatchAndAutoPlayAsync(Player player, PlayerChoiceContext context)
         {
+            var state = GetState(player);
             var available = GetAvailableChordIds(player);
             if (available.Count == 0) return;
 
@@ -249,13 +241,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             }
 
             foreach (var chordId in matched)
-            {
-                await ChordNoteHooks.BeforeChordMatched(player.Creature.CombatState, player, chordId, context);
                 state.StoredChords.Add(chordId);
-                await ChordNoteHooks.AfterChordMatched(player.Creature.CombatState, player, chordId, context);
-            }
 
-            // 处理溢出：记录最老的溢出和弦，只记录第一个（与原版 MusicNoteManager 一致）
             string? overflowChord = null;
             while (state.StoredChords.Count > MaxStoredChords)
             {
@@ -265,39 +252,51 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
 
             SaveState(player, state);
 
-            await AutoPlayNewChordsAsync(player, context, state, matched, overflowChord);
+            foreach (var chordId in matched)
+            {
+                await ChordNoteHooks.BeforeChordMatched(player.Creature.CombatState, player, chordId, context);
+                await ChordNoteHooks.AfterChordMatched(player.Creature.CombatState, player, chordId, context);
+            }
+
+            await AutoPlayNewChordsAsync(player, context, matched, overflowChord);
         }
 
         private static async Task AutoPlayNewChordsAsync(
-            Player player, PlayerChoiceContext context, StateData state,
+            Player player, PlayerChoiceContext context,
             List<string> newChords, string? overflowChord)
         {
-            // 溢出且立即演奏（需要 LingeringTastePower）
             if (overflowChord != null && player.Creature.HasPower<LingeringTastePower>())
             {
+                var state = GetState(player);
                 BeginPlayOperation(state, player);
-                await PlaySingleChordInternalAsync(player, context, state, overflowChord, 1, removeStored: false);
                 SaveState(player, state);
+                await PlaySingleChordInternalAsync(player, context, state, overflowChord, 1, removeStored: false);
                 return;
             }
 
-            // 拥有 PlayImmediatelyPower 且存在新和弦 → 立即演奏
             var playImmediately = player.Creature.GetPower<PlayImmediatelyPower>();
             if (playImmediately != null && playImmediately.Amount > 0 && newChords.Count > 0)
             {
+                var state = GetState(player);
                 BeginPlayOperation(state, player);
+                SaveState(player, state);
+
                 foreach (var chordId in newChords.ToList())
                 {
                     if (playImmediately.Amount <= 0) break;
+
                     await PlaySingleChordInternalAsync(player, context, state, chordId, 1, removeStored: false);
+
+                    // 重新从字符串读取，因为 PlaySingleChordInternalAsync 里可能已经 SaveState
+                    state = GetState(player);
                     RemoveChordFromStored(state, chordId);
+                    SaveState(player, state);
+
                     await PowerCmd.Decrement(playImmediately);
                 }
-                SaveState(player, state);
             }
             else if (newChords.Count == 0)
             {
-                // 无新和弦 → StageNerves，不演奏也不消耗加成
                 foreach (var power in player.Creature.Powers.OfType<StageNervesPower>())
                     await power.OnNoteWithoutChord();
             }
@@ -327,6 +326,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             for (var i = 0; i < count; i++)
             {
                 _ = ChordEffectPlayer.PlayChordIcons(player.Creature, new[] { chordId }, 0f);
+                ChordAudioHelper.PlayStrumSound();
                 if (ChordManager.AllChords.TryGetValue(chordId, out var def))
                 {
                     int baseBonus = CalculateBaseBonus(player);
@@ -337,6 +337,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
                 if (removeStored)
                     state.StoredChords.Remove(chordId);
 
+                SaveState(player, state);
+
                 await NotifyChordPlayedAsync(player, context, state);
             }
 
@@ -345,6 +347,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
                 await PowerCmd.Decrement(chordBonusPower);
                 PlayerNotesChanged?.Invoke(player);
             }
+
+            SaveState(player, state);
         }
 
         private static async Task NotifyChordPlayedAsync(Player player, PlayerChoiceContext context, StateData state)
@@ -380,8 +384,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             var state = GetState(player);
             if (!state.IsActive) return;
             BeginPlayOperation(state, player);
-            await PlaySingleChordInternalAsync(player, context, state, chordId, 1, removeStored: false);
             SaveState(player, state);
+            await PlaySingleChordInternalAsync(player, context, state, chordId, 1, removeStored: true);
         }
 
         public static async Task PlayAllStoredChordsAsync(Player player, PlayerChoiceContext context, int countPerChord = 1, bool keepStored = false)
@@ -391,12 +395,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             BeginPlayOperation(state, player);
             var chords = state.StoredChords.ToList();
             if (!keepStored) state.StoredChords.Clear();
+            SaveState(player, state);
+
             foreach (var chordId in chords)
             {
                 for (int i = 0; i < countPerChord; i++)
+                {
+                    state = GetState(player);
                     await PlaySingleChordInternalAsync(player, context, state, chordId, 1, removeStored: false);
+                }
             }
-            SaveState(player, state);
             PlayerNotesChanged?.Invoke(player);
         }
 
@@ -406,9 +414,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             if (!state.IsActive || state.StoredChords.Count == 0) return;
             BeginPlayOperation(state, player);
             var last = state.StoredChords.Last();
-            for (int i = 0; i < count; i++)
-                await PlaySingleChordInternalAsync(player, context, state, last, 1, removeStored: false);
             SaveState(player, state);
+
+            for (int i = 0; i < count; i++)
+            {
+                state = GetState(player);
+                await PlaySingleChordInternalAsync(player, context, state, last, 1, removeStored: true);
+            }
         }
 
         public static async Task PlayAllEquippedChordsAsync(Player player, PlayerChoiceContext context, int countPerChord = 1)
@@ -416,11 +428,17 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             var state = GetState(player);
             if (!state.IsActive) return;
             BeginPlayOperation(state, player);
+            SaveState(player, state);
+
             var available = GetAvailableChordIds(player);
             foreach (var chordId in available)
+            {
                 for (int i = 0; i < countPerChord; i++)
+                {
+                    state = GetState(player);
                     await PlaySingleChordInternalAsync(player, context, state, chordId, 1, removeStored: false);
-            SaveState(player, state);
+                }
+            }
         }
 
         public static async Task PlayRandomEquippedChordAsync(Player player, PlayerChoiceContext context, int count = 1)
@@ -430,16 +448,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             var available = GetAvailableChordIds(player);
             if (available.Count == 0) return;
             BeginPlayOperation(state, player);
+            SaveState(player, state);
+
             var rng = player.RunState.Rng.CombatCardSelection;
             for (int i = 0; i < count; i++)
+            {
+                state = GetState(player);
                 await PlaySingleChordInternalAsync(player, context, state, rng.NextItem(available), 1, removeStored: false);
-            SaveState(player, state);
+            }
         }
-        
-        /// <summary>
-        /// 用于没有 PlayerChoiceContext 的钩子场景（如 AfterSideTurnStart）。
-        /// 内部自建一个本地 HookPlayerChoiceContext。
-        /// </summary>
+
         public static async Task PlayRandomEquippedChordImmediateAsync(Player player)
         {
             var state = GetState(player);
@@ -448,13 +466,18 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             if (available.Count == 0) return;
 
             BeginPlayOperation(state, player);
+            SaveState(player, state);
+
             var rng = player.RunState.Rng.CombatCardSelection;
             var randomChord = rng.NextItem(available);
 
             var ctx = new HookPlayerChoiceContext(player, player.NetId, GameActionType.Combat);
-            var task = PlaySingleChordInternalAsync(player, ctx, state, randomChord, 1, removeStored: false);
-            await ctx.AssignTaskAndWaitForPauseOrCompletion(task);
-            SaveState(player, state);
+            if (randomChord != null)
+            {
+                state = GetState(player);
+                var task = PlaySingleChordInternalAsync(player, ctx, state, randomChord, 1, removeStored: false);
+                await ctx.AssignTaskAndWaitForPauseOrCompletion(task);
+            }
         }
 
         // ==================== 手动添加存储和弦 ====================
@@ -466,15 +489,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
             var combat = player.Creature.CombatState;
             var hasLingeringTaste = player.Creature.HasPower<LingeringTastePower>();
 
-            // 重置操作标记（与 AddChordToStored 一致）
             state.FirstPlayBonusAppliedThisOperation = false;
             state.ChordBonusConsumedThisOperation = false;
 
             for (int i = 0; i < count; i++)
             {
-                await ChordNoteHooks.BeforeChordMatched(combat, player, chordId, context);
                 state.StoredChords.Add(chordId);
-                await ChordNoteHooks.AfterChordMatched(combat, player, chordId, context);
 
                 while (state.StoredChords.Count > MaxStoredChords)
                 {
@@ -483,11 +503,21 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
                     if (hasLingeringTaste && context != null)
                     {
                         TryConsumeFirstPlayBonus(state, player);
+                        SaveState(player, state);
                         await PlaySingleChordInternalAsync(player, context, state, overflow, 1, removeStored: false);
+                        state = GetState(player);
                     }
                 }
             }
+
             SaveState(player, state);
+
+            for (int i = 0; i < count; i++)
+            {
+                await ChordNoteHooks.BeforeChordMatched(combat, player, chordId, context);
+                await ChordNoteHooks.AfterChordMatched(combat, player, chordId, context);
+            }
+
             PlayerNotesChanged?.Invoke(player);
         }
 
@@ -566,10 +596,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
 
         // ==================== 生命周期 ====================
 
-        /// <summary>
-        /// 在玩家回合开始时调用，重置本回合的首次演奏和 CurtainCall 标记。
-        /// 应从 AnonGuitar.AfterPlayerTurnStart 中调用。
-        /// </summary>
         public static void OnPlayerTurnStart(Player player)
         {
             var state = GetState(player);

@@ -32,7 +32,7 @@
   "CUTE_SAKIKO_MOD_KEYWORD_ANON_NOTE.title": "Anon Note",
   "CUTE_SAKIKO_MOD_KEYWORD_ANON_NOTE.description": "Can match any type of [img]CuteSakikoMod/images/ui/text/text_note.png[/img] to form a [pink]Chord[/pink].",
   "CUTE_SAKIKO_MOD_KEYWORD_PARFAIT.title": "Matcha Parfait",
-  "CUTE_SAKIKO_MOD_KEYWORD_PARFAIT.description": "[green]Very delicious.[/green]",
+  "CUTE_SAKIKO_MOD_KEYWORD_PARFAIT.description": "When you don't have enough [gold]Matcha Parfait[/gold], some cards cannot be played.\n[green]Very delicious.[/green]",
   "CUTE_SAKIKO_MOD_KEYWORD_NEKO.title": "Cat",
   "CUTE_SAKIKO_MOD_KEYWORD_NEKO.description": "[green]Meow.[/green]",
   "CUTE_SAKIKO_MOD_KEYWORD_RANA_LIVE.title": "Live",

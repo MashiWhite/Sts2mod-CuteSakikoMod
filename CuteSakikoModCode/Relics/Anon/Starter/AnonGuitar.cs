@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿
+using System.Runtime.CompilerServices;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
@@ -27,15 +28,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
 {
     // ==================== 静态字段 ====================
-    protected static Dictionary<Player, (string chords, string bonus, string temp)> _pendingMigration = new();
-    protected static Dictionary<Player, List<string>> _pendingBonusMigration = new();
+    protected static readonly ConditionalWeakTable<Player, PendingChordMigration> _pendingMigrationTable = new();
 
     // ==================== 实例字段 ====================
     protected Dictionary<ChordCategory, List<string>> _equippedChords = new();
     protected List<string> _learnedChords = new();
     protected List<string> _bonusChords = new();
     protected List<string> _temporaryChords = new();
-    protected bool _initialized;
+
+    // 脏检查：记录上次解析时的原始字符串指纹
+    protected string _lastSyncedRaw = "";
 
     // 序列化字段
     protected string _savedChordsData = "";
@@ -90,25 +92,28 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
 
             foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
             foreach (var chordId in _equippedChords.GetValueOrDefault(cat, new List<string>()))
-                AppendChordLine(lines, chordId, "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR_CHORDS_TITLE", cat);
+                AppendChordLine(lines, chordId, "");
 
             foreach (var chordId in _bonusChords)
-                AppendChordLine(lines, chordId, null, null);
+                AppendChordLine(lines, chordId, "");
 
             foreach (var chordId in _temporaryChords)
-                AppendChordLine(lines, chordId, null, null, "[临时] ");
+                AppendChordLine(lines, chordId, "[临时] ");
 
             desc.Add("Chords", string.Join("\n\n", lines));
             yield return new HoverTip(new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_ANON_GUITAR_CHORDS_TITLE"), desc);
         }
     }
 
-    private void AppendChordLine(List<string> lines, string chordId, string? titleKey, ChordCategory? cat, string prefix = "")
+    private void AppendChordLine(List<string> lines, string chordId, string prefix)
     {
         if (!ChordManager.AllChords.TryGetValue(chordId, out var def)) return;
         var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
         var text = ChordDisplayHelper.GetFormattedDescription(def, GetDisplayBonus());
-        var condition = ChordSequenceModifierHelper.GetModifiedConditionText(def, Owner.Creature);
+        var owner = Owner?.Creature;
+        var condition = owner != null
+            ? ChordSequenceModifierHelper.GetModifiedConditionText(def, owner)
+            : def.GetConditionText();
         lines.Add($"{prefix}[{title}]({condition})\n{text}");
     }
 
@@ -140,22 +145,17 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
         await base.AfterObtained();
         EnsureInitialized();
         if (Owner?.Creature?.CombatState != null)
-        {
             ChordNoteSystem.Activate(Owner);
-            ChordNoteSystem.RegisterProvider(Owner, this);
-        }
     }
 
     public override async Task BeforeCombatStart()
     {
         await base.BeforeCombatStart();
         ChordNoteSystem.Activate(Owner);
-        ChordNoteSystem.RegisterProvider(Owner, this);
     }
 
     public override async Task AfterRemoved()
     {
-        ChordNoteSystem.UnregisterProvider(Owner, this);
         await base.AfterRemoved();
     }
 
@@ -242,8 +242,9 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
     {
         EnsureInitialized();
         var list = new List<string>();
-        foreach (var kv in _equippedChords)
-            list.AddRange(kv.Value);
+        foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
+            if (_equippedChords.TryGetValue(cat, out var slots))
+                list.AddRange(slots);
         list.AddRange(_bonusChords);
         list.AddRange(_temporaryChords);
         return list;
@@ -254,9 +255,14 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
         EnsureInitialized();
         var result = new List<string>();
         var filter = categories.Length > 0 ? new HashSet<ChordCategory>(categories) : null;
-        foreach (var kv in _equippedChords)
-            if (filter == null || filter.Contains(kv.Key))
-                result.AddRange(kv.Value);
+
+        foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
+        {
+            if (filter != null && !filter.Contains(cat)) continue;
+            if (_equippedChords.TryGetValue(cat, out var slots))
+                result.AddRange(slots);
+        }
+
         if (filter == null || filter.Contains(ChordCategory.Bonus))
             result.AddRange(_bonusChords);
         if (_temporaryChords.Count > 0) result.AddRange(_temporaryChords);
@@ -441,8 +447,12 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
     // ==================== 初始化与序列化 ====================
     protected void EnsureInitialized()
     {
-        if (_initialized) return;
-        _initialized = true;
+        var raw = $"{_savedChordsData}|{_savedBonusChordsData}|{_savedTemporaryChordsData}|{_savedLearnedChordsData}";
+
+        if (_lastSyncedRaw == raw) return;
+
+        _lastSyncedRaw = raw;
+
         _equippedChords = new Dictionary<ChordCategory, List<string>>
         {
             { ChordCategory.Major, new List<string>() },
@@ -496,22 +506,34 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
 
     internal void SyncToSaved()
     {
-        _savedChordsData = string.Join(";",
-            _equippedChords.SelectMany(kv => kv.Value.Select(id => $"{(int)kv.Key}:{id}")));
+        var chordParts = new List<string>();
+        foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
+            if (_equippedChords.TryGetValue(cat, out var slots))
+                foreach (var id in slots)
+                    chordParts.Add($"{(int)cat}:{id}");
+
+        _savedChordsData = string.Join(";", chordParts);
         _savedBonusChordsData = string.Join(";", _bonusChords);
         _savedTemporaryChordsData = string.Join(";", _temporaryChords);
         _savedLearnedChordsData = string.Join(";", _learnedChords);
+
+        _lastSyncedRaw = $"{_savedChordsData}|{_savedBonusChordsData}|{_savedTemporaryChordsData}|{_savedLearnedChordsData}";
+
         if (Owner != null)
         {
-            _pendingMigration[Owner] = (_savedChordsData, _savedBonusChordsData, _savedTemporaryChordsData);
-            if (_bonusChords.Count > 0) _pendingBonusMigration[Owner] = new List<string>(_bonusChords);
+            var mig = _pendingMigrationTable.GetOrCreateValue(Owner);
+            mig.Chords = _savedChordsData;
+            mig.Bonus = _savedBonusChordsData;
+            mig.Temp = _savedTemporaryChordsData;
+            mig.BonusChords = new List<string>(_bonusChords);
         }
     }
 
     public void SetLearnedChordsFromString(string data)
     {
+        _savedLearnedChordsData = data;
+        _lastSyncedRaw = "";
         EnsureInitialized();
-        _learnedChords = data.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
         SyncToSaved();
         if (Owner != null) Flash();
     }
@@ -521,7 +543,7 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
         _savedChordsData = chordsData;
         _savedBonusChordsData = bonusData;
         _savedTemporaryChordsData = tempData;
-        _initialized = false;
+        _lastSyncedRaw = "";
         EnsureInitialized();
         SyncToSaved();
         if (Owner != null) Flash();
@@ -530,11 +552,12 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
     public void CopyChordsTo(AnonGuitar target)
     {
         EnsureInitialized();
-        foreach (var kv in _equippedChords)
-            target._equippedChords[kv.Key] = new List<string>(kv.Value);
-        target._bonusChords = new List<string>(_bonusChords);
-        target._temporaryChords = new List<string>(_temporaryChords);
-        target._learnedChords = new List<string>(_learnedChords);
+        target._savedChordsData = _savedChordsData;
+        target._savedBonusChordsData = _savedBonusChordsData;
+        target._savedTemporaryChordsData = _savedTemporaryChordsData;
+        target._savedLearnedChordsData = _savedLearnedChordsData;
+        target._lastSyncedRaw = "";
+        target.EnsureInitialized();
         target.SyncToSaved();
         target.Flash();
     }
@@ -575,12 +598,9 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
             foreach (var player in runState.Players)
             {
                 var guitar = player.Relics?.OfType<AnonGuitar>().FirstOrDefault();
-                if (guitar != null)
-                {
-                    guitar._initialized = false;
-                    guitar.EnsureInitialized();
-                    guitar.SyncToSaved();
-                }
+                if (guitar == null) continue;
+
+                guitar.EnsureInitialized();
             }
         }
     }

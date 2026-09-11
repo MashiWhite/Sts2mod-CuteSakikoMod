@@ -6,9 +6,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
 
-public class AreYouShy() : CuteRanaCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class AreYouShy() : CuteRanaCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

@@ -17,7 +17,7 @@ public class WhyNoHelp : CuteSakikoModCard
     {
         get
         {
-            yield return new DamageVar(25m, ValueProp.Move);
+            yield return new DamageVar(30m, ValueProp.Move);
             yield return new EnergyVar(2);
         }
     }
@@ -46,7 +46,7 @@ public class WhyNoHelp : CuteSakikoModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 25 → 28
-        DynamicVars.Energy.UpgradeValueBy(1m); // 2 → 3
+        DynamicVars.Damage.UpgradeValueBy(10m); 
+        DynamicVars.Energy.UpgradeValueBy(1m); 
     }
 }

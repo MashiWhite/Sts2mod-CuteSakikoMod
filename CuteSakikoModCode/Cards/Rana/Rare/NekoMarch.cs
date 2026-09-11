@@ -17,7 +17,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 
 public class NekoMarch : CuteRanaCard
 {
-    public NekoMarch() : base(5, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies) { }
+    public NekoMarch() : base(4, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies) { }
     
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -29,7 +29,7 @@ public class NekoMarch : CuteRanaCard
     
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
-        new DamageVar(5m, ValueProp.Move)
+        new DamageVar(10m, ValueProp.Move)
     };
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

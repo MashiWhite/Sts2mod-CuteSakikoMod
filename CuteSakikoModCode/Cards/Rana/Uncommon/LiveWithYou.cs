@@ -8,7 +8,7 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-public class LiveWithYou() : CuteRanaCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
+public class LiveWithYou() : CuteRanaCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
@@ -43,6 +43,5 @@ public class LiveWithYou() : CuteRanaCard(2, CardType.Skill, CardRarity.Uncommon
 
     protected override void OnUpgrade()
     {
-        // 升级效果已在 IsUpgraded 中处理
     }
 }

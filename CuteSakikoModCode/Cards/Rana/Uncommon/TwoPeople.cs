@@ -10,7 +10,7 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-public class TwoPeople() : CuteRanaCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class TwoPeople() : CuteRanaCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     private static readonly Dictionary<ICombatState, List<Godot.Vector2>> OccupiedPositions = new();
 

@@ -21,7 +21,7 @@ public class SpacePick() : CuteRanaCard(2, CardType.Skill, CardRarity.Common, Ta
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(14m, ValueProp.Move)
+        new BlockVar(16m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -40,6 +40,6 @@ public class SpacePick() : CuteRanaCard(2, CardType.Skill, CardRarity.Common, Ta
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3m); // 14 → 17
+        DynamicVars.Block.UpgradeValueBy(4m); 
     }
 }

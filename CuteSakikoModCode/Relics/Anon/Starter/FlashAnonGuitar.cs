@@ -13,16 +13,16 @@ public class FlashAnonGuitar : AnonGuitar
     [OnDeserialized]
     private void OnDeserialized(StreamingContext context)
     {
-        _initialized = false;
-        EnsureInitialized();
+        // 强制下次 EnsureInitialized 重新解析
+        _lastSyncedRaw = "";
     }
 
     public override async Task AfterObtained()
     {
-        if (Owner != null && _pendingMigration.TryGetValue(Owner, out var data))
+        if (Owner != null && _pendingMigrationTable.TryGetValue(Owner, out var data))
         {
-            RestoreChordData(data.chords, data.bonus, data.temp);
-            _pendingMigration.Remove(Owner);
+            RestoreChordData(data.Chords, data.Bonus, data.Temp);
+            _pendingMigrationTable.Remove(Owner);
         }
         else if (Owner != null)
         {
@@ -32,7 +32,6 @@ public class FlashAnonGuitar : AnonGuitar
         }
 
         await base.AfterObtained();
-        _pendingBonusMigration.Remove(Owner);
 
         // 先古吉他：填充所有类别至上限（2个）
         foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })

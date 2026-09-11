@@ -8,9 +8,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-public class ImmersedGuitar() : CuteRanaCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class ImmersedGuitar() : CuteRanaCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
     

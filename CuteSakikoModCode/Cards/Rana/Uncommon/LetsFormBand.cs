@@ -6,9 +6,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Common;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
-public class LetsFormBand() : CuteRanaCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class LetsFormBand() : CuteRanaCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
     [

@@ -153,18 +153,17 @@ public static class ChordCmd
         return toLearn;
     }
 
-    public static async Task AddRandomImprovisedChord(AnonGuitar guitar, PlayerChoiceContext context)
+    public static async Task AddRandomImprovisedChord(Player player, PlayerChoiceContext context)
     {
-        if (guitar?.Owner == null) return;
-
         var pool = new List<string>();
         pool.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Major));
         pool.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Minor));
         pool.AddRange(ChordManager.GetLearnableChordIds(ChordCategory.Dominant));
         if (pool.Count == 0) return;
 
-        var randomChordId = guitar.Owner.RunState.Rng.CombatCardSelection.NextItem(pool);
-        // 直接演奏该和弦（也可改为加入存储，根据原意选择）
-        await ChordNoteSystem.PlayChordAsync(guitar.Owner, randomChordId, context);
+        var randomChordId = player.RunState.Rng.CombatCardSelection.NextItem(pool);
+
+        ChordNoteSystem.Activate(player);
+        await ChordNoteSystem.AddStoredChordAsync(player, randomChordId, 1, context);
     }
 }
