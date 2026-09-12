@@ -10,19 +10,19 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="snail1" type="Marker2D" parent="."]
-position = Vector2(961, 678)
+position = Vector2(1077, 693)
 
 [node name="snail2" type="Marker2D" parent="."]
 position = Vector2(1322, 738)
 
 [node name="snail3" type="Marker2D" parent="."]
-position = Vector2(1666, 665)
+position = Vector2(1591, 706)
 
 [node name="snail4" type="Marker2D" parent="."]
-position = Vector2(1138, 466)
+position = Vector2(1213, 488)
 
 [node name="snail5" type="Marker2D" parent="."]
-position = Vector2(1466, 469)
+position = Vector2(1476, 495)
 
 [node name="boss" type="Marker2D" parent="."]
-position = Vector2(1971, 699)
+position = Vector2(1958, 658)

@@ -11,25 +11,19 @@
         <PathMap>$(AppOutputBase)=.\</PathMap>
     </PropertyGroup>
 
-    <!-- ★ Mod 版本号自动从 CuteSakikoMod.json 读取 -->
-    <Target Name="ReadModVersionFromManifest" BeforeTargets="GenerateAssemblyInfo">
-        <PropertyGroup>
-            <_ManifestPath>$(MSBuildProjectDirectory)\CuteSakikoMod.json</_ManifestPath>
-        </PropertyGroup>
-        <Error Text="[CuteSakikoMod] CuteSakikoMod.json not found at $(_ManifestPath)"
-               Condition="!Exists('$(_ManifestPath)')" />
-        <PropertyGroup>
-            <_ManifestContent>$([System.IO.File]::ReadAllText('$(_ManifestPath)'))</_ManifestContent>
-            <_ManifestVersion>$([System.Text.RegularExpressions.Regex]::Match($(_ManifestContent), '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</_ManifestVersion>
-        </PropertyGroup>
-        <Error Text="[CuteSakikoMod] Could not parse 'version' from CuteSakikoMod.json"
-               Condition="'$(_ManifestVersion)' == ''" />
-        <PropertyGroup>
-            <Version>$(_ManifestVersion)</Version>
-            <InformationalVersion>$(_ManifestVersion)</InformationalVersion>
-            <AssemblyVersion>$(_ManifestVersion).0</AssemblyVersion>
-        </PropertyGroup>
-        <Message Text="[CuteSakikoMod] Version auto-detected from manifest: $(_ManifestVersion)"
+    <!-- ★ Mod 版本号自动从 CuteSakikoMod.json 读取（顶层 PropertyGroup，SDK 生成 AssemblyInfo 前即可见） -->
+    <PropertyGroup>
+        <_ManifestPath>$(MSBuildProjectDirectory)\CuteSakikoMod.json</_ManifestPath>
+        <_ManifestContent Condition="Exists('$(_ManifestPath)')">$([System.IO.File]::ReadAllText('$(_ManifestPath)'))</_ManifestContent>
+        <_ManifestVersion Condition="'$(_ManifestContent)' != ''">$([System.Text.RegularExpressions.Regex]::Match($(_ManifestContent), '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</_ManifestVersion>
+        <Version Condition="'$(_ManifestVersion)' != ''">$(_ManifestVersion)</Version>
+        <InformationalVersion Condition="'$(_ManifestVersion)' != ''">$(_ManifestVersion)</InformationalVersion>
+        <AssemblyVersion Condition="'$(_ManifestVersion)' != ''">$(_ManifestVersion).0</AssemblyVersion>
+    </PropertyGroup>
+
+    <!-- 版本号诊断日志（可选） -->
+    <Target Name="LogModVersion" BeforeTargets="CoreCompile">
+        <Message Text="[CuteSakikoMod] Version from manifest: $(_ManifestVersion) (Version=$(Version), InformationalVersion=$(InformationalVersion))"
                  Importance="high" />
     </Target>
 
@@ -145,8 +139,8 @@
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
         <Copy SourceFiles="CuteSakikoMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
     </Target>
-    
-    <!-- ★ 从 obj/project.assets.json 读取 NuGet 实际解析出的 RitsuLib 版本 -->
+
+    <!-- ★ 从 project.assets.json 读取 NuGet 实际解析出的 RitsuLib 版本 -->
     <Target Name="ResolveRitsuLibVersion" BeforeTargets="CopyRitsuLibToModsFolder">
         <PropertyGroup>
             <!-- Godot 项目的中间目录在 .godot/mono/temp/obj/，用 MSBuild 扩展路径自动指向 -->
