@@ -18,5 +18,9 @@
   "MOD_SETTINGS.ANCIENT_TOGGLE.DESC": "开启后，Mod添加的先古之民事件会在游戏中自然出现。",
   "MOD_SETTINGS.SECTION.AUDIO": "音频",
   "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL": "普通事件",
-  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "开启后，Mod添加的普通事件会在游戏中自然出现。"
+  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "开启后，Mod添加的普通事件会在游戏中自然出现。",
+  "TELEMETRY.BASIC_USAGE.DESC": "发送版本、平台、语言和匿名安装 ID，用于统计兼容性问题范围。",
+  "TELEMETRY.BALANCE.DESC": "发送本 Mod 的平衡性事件（角色选择、卡牌打出等），用于分析平衡性。",
+  "TELEMETRY.DIAGNOSTICS.DESC": "发送异常和诊断上下文，用于定位崩溃。",
+  "TELEMETRY.RUN_HISTORY.DESC": "发送已结束跑局的原版数据，用于分析平衡性。"
 }

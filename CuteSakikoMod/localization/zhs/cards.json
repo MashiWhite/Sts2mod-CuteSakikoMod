@@ -393,7 +393,7 @@
   "CUTE_SAKIKO_MOD_CARD_MEMORY_COMING.title": "回忆涌来",
   "CUTE_SAKIKO_MOD_CARD_MEMORY_COMING.description": "每回合开始时，将{IfUpgraded:show:2|1}张[gold]回忆[/gold]加入手牌。",
   "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.title": "忘却一切",
-  "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.description": "[red]遗忘[/red]所有手牌，如果有5张[gold]回忆[/gold]，则给予所有敌人[gold]崩溃[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.description": "[red]遗忘[/red]所有手牌，如果有{Cards:diff()}张[gold]回忆[/gold]，则给予所有敌人[gold]崩溃[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_DONT_ASSOCIATE_ME.title": "别和我扯上关系",
   "CUTE_SAKIKO_MOD_CARD_DONT_ASSOCIATE_ME.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n本回合内每受到一次攻击时，都使攻击者获得{IfUpgraded:show:6|4}层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_CHORD_MEMORY.title": "回忆中的和弦",

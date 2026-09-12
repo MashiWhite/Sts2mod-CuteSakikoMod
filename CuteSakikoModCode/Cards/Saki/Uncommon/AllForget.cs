@@ -7,11 +7,12 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
-public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class AllForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -21,6 +22,14 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sakiforget.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();
+        }
+    }
+    
+    protected override IEnumerable<DynamicVar> CanonicalVars
+    {
+        get
+        {
+            yield return new CardsVar(3);
         }
     }
 
@@ -37,8 +46,10 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
         // 遗忘所有手牌
         await MemoryCmd.Forget(choiceContext, handCards, this);
 
-        // 若遗忘的记忆牌 ≥5 张，给所有敌人施加崩溃
-        if (memoryCount >= 5)
+        
+        // 若遗忘的记忆牌 ≥ x 张，给所有敌人施加崩溃
+        var cards = DynamicVars.Cards.BaseValue;
+        if (memoryCount >= cards)
         {
             var combatState = Owner.Creature.CombatState;
             if (combatState != null)
@@ -49,6 +60,6 @@ public class AllForget() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+       DynamicVars.Cards.UpgradeValueBy(-1);
     }
 }

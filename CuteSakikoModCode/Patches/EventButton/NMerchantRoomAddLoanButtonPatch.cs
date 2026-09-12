@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Nodes.Screens.Shops;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Patches;
+namespace CuteSakikoMod.CuteSakikoModCode.Patches.EventButton;
 
 // 在 _Ready 时创建按钮并订阅房间进入事件
 [HarmonyPatch(typeof(NMerchantRoom), "_Ready")]

@@ -18,5 +18,9 @@
   "MOD_SETTINGS.ANCIENT_TOGGLE.DESC": "有効にすると、MODが追加したカスタム古代イベントがゲーム内に自然に出現するようになる。",
   "MOD_SETTINGS.SECTION.AUDIO": "オーディオ",
   "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL": "カスタムイベント",
-  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "有効にすると、MODが追加したカスタム通常イベントがゲーム内に自然に出現するようになる。"
+  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "有効にすると、MODが追加したカスタム通常イベントがゲーム内に自然に出現するようになる。",
+  "TELEMETRY.BASIC_USAGE.DESC": "バージョン、プラットフォーム、言語、匿名のインストールIDを送信し、互換性問題の範囲を把握するために使用します。",
+  "TELEMETRY.BALANCE.DESC": "本MODのバランス関連イベント（キャラクター選択、カードのプレイなど）を送信し、バランス分析に使用します。",
+  "TELEMETRY.DIAGNOSTICS.DESC": "例外と診断コンテキストを送信し、クラッシュの特定に使用します。",
+  "TELEMETRY.RUN_HISTORY.DESC": "終了したプレイのバニラデータを送信し、バランス分析に使用します。"
 }

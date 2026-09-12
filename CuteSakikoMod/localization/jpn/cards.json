@@ -393,7 +393,7 @@
   "CUTE_SAKIKO_MOD_CARD_MEMORY_COMING.title": "押し寄せるメモリー",
   "CUTE_SAKIKO_MOD_CARD_MEMORY_COMING.description": "毎ターン開始時、{IfUpgraded:show:2|1}枚の[gold]メモリー[/gold]を手札に加える。",
   "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.title": "全てを忘却する",
-  "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.description": "手札をすべて[red]忘却[/red]する。その中に5枚の[gold]メモリー[/gold]があれば、すべての敵に[gold]崩壊[/gold]を付与する。",
+  "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.description": "手札をすべて[red]忘却[/red]する。その中に{Cards:diff()}枚の[gold]メモリー[/gold]があれば、すべての敵に[gold]崩壊[/gold]を付与する。",
   "CUTE_SAKIKO_MOD_CARD_DONT_ASSOCIATE_ME.title": "私に関わらないで",
   "CUTE_SAKIKO_MOD_CARD_DONT_ASSOCIATE_ME.description": "{Block:diff()}の[gold]ブロック[/gold]を得る。\nこのターン攻撃を受けるたび、攻撃者に{IfUpgraded:show:6|4}層の[gold]重圧[/gold]を付与する。",
   "CUTE_SAKIKO_MOD_CARD_CHORD_MEMORY.title": "メモリーの中のコード",

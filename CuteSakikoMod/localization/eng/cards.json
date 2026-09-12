@@ -393,7 +393,7 @@
   "CUTE_SAKIKO_MOD_CARD_MEMORY_COMING.title": "Flood of Memories",
   "CUTE_SAKIKO_MOD_CARD_MEMORY_COMING.description": "At the start of each turn, add {IfUpgraded:show:2|1} [gold]Memory(ies)[/gold] to your hand.",
   "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.title": "Forget Everything",
-  "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.description": "[red]Forget[/red] all cards in your hand. If there are 5 [gold]Memories[/gold] among them, apply [gold]Collapse[/gold] to ALL enemies.",
+  "CUTE_SAKIKO_MOD_CARD_ALL_FORGET.description": "[red]Forget[/red] all cards in your hand. If there are {Cards:diff()} [gold]Memories[/gold] among them, apply [gold]Collapse[/gold] to ALL enemies.",
   "CUTE_SAKIKO_MOD_CARD_DONT_ASSOCIATE_ME.title": "Don't Associate With Me",
   "CUTE_SAKIKO_MOD_CARD_DONT_ASSOCIATE_ME.description": "Gain {Block:diff()} [gold]Block[/gold].\nWhenever you are attacked this turn, the attacker gains {IfUpgraded:show:6|4} [gold]Pressure[/gold].",
   "CUTE_SAKIKO_MOD_CARD_CHORD_MEMORY.title": "Chord of Memory",

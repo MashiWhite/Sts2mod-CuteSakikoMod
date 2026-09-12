@@ -2,7 +2,7 @@
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Patches;
+namespace CuteSakikoMod.CuteSakikoModCode.Patches.EventButton;
 
 [HarmonyPatch(typeof(NEventRoom), "_Ready")]
 public static class NEventRoomAddVakuuButtonPatch

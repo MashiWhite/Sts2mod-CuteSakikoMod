@@ -18,5 +18,10 @@
   "MOD_SETTINGS.ANCIENT_TOGGLE.DESC": "If enabled, custom Ancient events added by the mod will appear naturally in the game.",
   "MOD_SETTINGS.SECTION.AUDIO": "Audio",
   "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL": "Custom Events",
-  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "If enabled, custom normal events added by the mod will appear naturally in the game."
+  "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC": "If enabled, custom normal events added by the mod will appear naturally in the game.",
+  "TELEMETRY.BASIC_USAGE.DESC": "Sends version, platform, language, and an anonymous install ID to estimate compatibility issues.",
+  "TELEMETRY.BALANCE.DESC": "Sends this mod's balance events (character picks, card plays) for balance analysis.",
+  "TELEMETRY.DIAGNOSTICS.DESC": "Sends exceptions and diagnostic context to help locate crashes.",
+  "TELEMETRY.RUN_HISTORY.DESC": "Sends finished runs' vanilla data for balance analysis.",
+  
 }

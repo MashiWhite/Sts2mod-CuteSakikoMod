@@ -1,6 +1,7 @@
-﻿
+﻿using MegaCrit.Sts2.Core.Entities.Cards;     
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Map;
+using MegaCrit.Sts2.Core.Models.Cards;          
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.Runs;
 
@@ -8,7 +9,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Map;
 
 public class ScaledActMap : ActMap
 {
-    // 与原版完全一致的约束规则
     private static readonly HashSet<MapPointType> _lowerRestrictions = new()
         { MapPointType.RestSite, MapPointType.Elite };
     private static readonly HashSet<MapPointType> _upperRestrictions = new()
@@ -21,12 +21,16 @@ public class ScaledActMap : ActMap
         { MapPointType.RestSite, MapPointType.Monster, MapPointType.Unknown, MapPointType.Elite, MapPointType.Shop };
 
     private const int MapWidth = 7;
-    private const int PathCount = 7;   // 与原版相同，保证覆盖所有列
+    private const int PathCount = 7;
 
     private readonly int _mapLength;
     private readonly Rng _rng;
     private readonly MapPointTypeCounts _pointTypeCounts;
     private readonly MapPoint?[,] _grid;
+
+    // 新增字段
+    private readonly int _treasureRow;
+    private readonly bool _hasActiveSpoilsMap;
 
     public override MapPoint BossMapPoint { get; }
     public override MapPoint StartingMapPoint { get; }
@@ -38,28 +42,36 @@ public class ScaledActMap : ActMap
         _rng = new Rng(runState.Rng.Seed, $"scaled_{scaleFactor}_{runState.CurrentActIndex + 1}_map");
 
         bool hasSecondBoss = runState.Act.HasSecondBoss;
-    
+
         // ---------- 新计算逻辑 ----------
-        // 原地图的房间行数 = originalMap.GetRowCount() - 1
         int totalRooms = originalMap.GetRowCount() - 2;
-        int fixedRows = 3;                     // 第1行、宝箱行、最后一行
+        int fixedRows = 3;
         int randomRows = totalRooms - fixedRows;
         int scaledRandom = Math.Max(0, (int)Math.Round(randomRows * scaleFactor));
-        _mapLength = fixedRows + scaledRandom; // 至少保持3行固定行
-    
-        // 获取原图类型数量，按比例缩放（只缩放随机部分对应的数量）
+        _mapLength = fixedRows + scaledRandom;
+
         var baseCounts = runState.Act.GetMapPointTypes(_rng);
-    
         int scaleCount(int original) => Math.Max(0, (int)Math.Round(original * scaleFactor));
-    
+
         _pointTypeCounts = new MapPointTypeCounts(
             scaleCount(baseCounts.NumOfUnknowns),
             scaleCount(baseCounts.NumOfRests))
         {
-            NumOfElites = scaleCount(baseCounts.NumOfElites),   // 精英也按比例缩放（若想保留原数可改为 baseCounts.NumOfElites）
+            NumOfElites = scaleCount(baseCounts.NumOfElites),
             PointTypesThatIgnoreRules = baseCounts.PointTypesThatIgnoreRules
         };
         // ---------- 新计算结束 ----------
+
+        // 提前计算宝箱行（原 AssignPointTypes 里的逻辑）
+        _treasureRow = (int)Math.Ceiling((1.0 + _mapLength) / 2.0);
+        if (_treasureRow <= 1) _treasureRow = 2;
+        if (_treasureRow >= _mapLength) _treasureRow = _mapLength - 1;
+
+        // 检测当前幕是否有生效的 SpoilsMap（在牌组中、且 SpoilsActIndex 等于当前幕）
+        _hasActiveSpoilsMap = runState.Players.Any(p => p.Deck.Cards
+            .OfType<SpoilsMap>()
+            .Any(c => c.SpoilsActIndex == runState.CurrentActIndex
+                      && c.Pile?.Type == PileType.Deck));
 
         _grid = new MapPoint[MapWidth, _mapLength + 2];
         StartingMapPoint = new MapPoint(MapWidth / 2, 0);
@@ -87,21 +99,29 @@ public class ScaledActMap : ActMap
             PathGenerate(start);
         }
 
-        // 最后一行所有节点连Boss
         ForEachInRow(_grid, _mapLength, x => x.AddChildPoint(BossMapPoint));
         if (SecondBossMapPoint != null)
             BossMapPoint.AddChildPoint(SecondBossMapPoint);
 
-        // 起始点连第一行所有节点
         ForEachInRow(_grid, 1, x => StartingMapPoint.AddChildPoint(x));
     }
 
     private void PathGenerate(MapPoint current)
     {
-        // 原来：current.coord.row < _mapLength - 1
         while (current.coord.row < _mapLength)
         {
-            MapCoord nextCoord = GenerateNextCoord(current);
+            MapCoord nextCoord;
+
+            // 若藏宝图生效，进入宝箱行时强制汇聚到中间列
+            if (_hasActiveSpoilsMap && current.coord.row == _treasureRow - 1)
+            {
+                nextCoord = new MapCoord { col = MapWidth / 2, row = _treasureRow };
+            }
+            else
+            {
+                nextCoord = GenerateNextCoord(current);
+            }
+
             MapPoint next = GetOrCreatePoint(nextCoord.col, nextCoord.row);
             current.AddChildPoint(next);
             current = next;
@@ -182,17 +202,28 @@ public class ScaledActMap : ActMap
             p.CanBeModified = false;
         });
 
-        // 宝箱动态放在中间行（向上取整）
-        int treasureRow = (int)Math.Ceiling((1.0 + _mapLength) / 2.0);
-        // 确保宝箱行不会与第一行/最后一行重叠（当地图极短时手动保护）
-        if (treasureRow <= 1) treasureRow = 2;
-        if (treasureRow >= _mapLength) treasureRow = _mapLength - 1;
-
-        ForEachInRow(_grid, treasureRow, p =>
+        // 宝箱行
+        if (_hasActiveSpoilsMap)
         {
-            p.PointType = MapPointType.Treasure;
-            p.CanBeModified = false;
-        });
+            // 藏宝图生效：只把中间列设为 Treasure，其他列（理论上不存在）设为 Monster
+            int midCol = MapWidth / 2;
+            ForEachInRow(_grid, _treasureRow, p =>
+            {
+                p.PointType = p.coord.col == midCol
+                    ? MapPointType.Treasure
+                    : MapPointType.Monster;
+                p.CanBeModified = false;
+            });
+        }
+        else
+        {
+            // 普通情况：整行 Treasure
+            ForEachInRow(_grid, _treasureRow, p =>
+            {
+                p.PointType = MapPointType.Treasure;
+                p.CanBeModified = false;
+            });
+        }
 
         // ---------- 随机类型分配（保持不变）----------
         Queue<MapPointType> queue = new();
@@ -207,7 +238,6 @@ public class ScaledActMap : ActMap
 
         AssignRemainingTypesToRandomPoints(queue);
 
-        // 剩余未分配的 → 怪物
         foreach (MapPoint p in GetAllMapPoints().Where(p => p.PointType == MapPointType.Unassigned))
             p.PointType = MapPointType.Monster;
 
@@ -284,7 +314,6 @@ public class ScaledActMap : ActMap
         MapPoint?[,] centered = MapPostProcessing.CenterGrid(_grid);
         centered = MapPostProcessing.SpreadAdjacentMapPoints(centered);
         centered = MapPostProcessing.StraightenPaths(centered);
-        // 将处理后的结果写回 _grid（因为 MapPostProcessing 返回新数组）
         Array.Copy(centered, _grid, centered.Length);
     }
 }

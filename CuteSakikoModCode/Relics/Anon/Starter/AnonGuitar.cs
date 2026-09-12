@@ -6,6 +6,7 @@ using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -583,9 +584,24 @@ public class AnonGuitar : CuteAnonRelic, IChordProvider, IModRightClickableRelic
     public async Task PlaySpecificChords(PlayerChoiceContext ctx, IReadOnlyList<string> chordIds, int countPerChord = 1)
     {
         foreach (var chordId in chordIds)
+        {
+            // ★ 每次演奏前检查战斗是否已结束
+            if (CombatManager.Instance.IsOverOrEnding || Owner?.Creature == null || Owner.Creature.IsDead)
+                break;
+
             for (int i = 0; i < countPerChord; i++)
+            {
+                // ★ 内层循环也检查，避免单个和弦被重复演奏时战斗结束
+                if (CombatManager.Instance.IsOverOrEnding || Owner.Creature.IsDead)
+                    break;
+
                 await ChordNoteSystem.PlayChordAsync(Owner, chordId, ctx);
-        ChordNoteUIManager.UpdateStoredChordDisplay(Owner);
+            }
+        }
+
+        // ★ UI 更新前也检查，避免操作已释放的对象
+        if (Owner?.Creature != null && !Owner.Creature.IsDead)
+            ChordNoteUIManager.UpdateStoredChordDisplay(Owner);
     }
 
     // ==================== Harmony 补丁 ====================

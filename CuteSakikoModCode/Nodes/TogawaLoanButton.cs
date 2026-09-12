@@ -1,3 +1,4 @@
+using CuteSakikoMod.CuteSakikoModCode.Others.Telemetry;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -161,6 +162,25 @@ public partial class TogawaLoanButton : NButton
             var addResult = await CardPileCmd.Add(debtCard, PileType.Deck);
             CardCmd.PreviewCardPileAdd(addResult, 1.5f);
 
+            // ★ 上传遥测
+            try
+            {
+                CuteSakikoModTelemetry.CaptureRoomButtonClicked(
+                    roomType: "shop",
+                    buttonId: "togawa_loan",
+                    characterId: _player.Character.Id.Entry,
+                    floor: CuteSakikoModTelemetry.GetCurrentFloor(_player),
+                    extra: new Dictionary<string, object?>
+                    {
+                        ["gold_amount"] = gold,
+                        ["click_index"] = _clickCount,     // 第几次点击
+                    });
+            }
+            catch (Exception ex)
+            {
+                GD.PrintErr($"[TogawaLoan] Telemetry failed: {ex}");
+            }
+            
             _clickCount++;
 
             if (_clickCount >= GoldAmounts.Length)
