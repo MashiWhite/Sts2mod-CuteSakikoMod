@@ -5,6 +5,9 @@
   "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.title": "Eve of Live",
   "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.description": "For each card you play this turn, gain [gold]Live[/gold] equal to the number of stacks.",
   "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.smartDescription": "For each card you play, gain {Amount} [gold]Live[/gold].",
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.title": "Delicious",
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.description": "When the owner dies, heal all creatures on the field for HP equal to the number of stacks.",
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.smartDescription": "On death, heal all creatures on the field for [green]{Amount}[/green] HP.",
   
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.title": "Vocal Harmony",
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.description": "Whenever you play a [gold]Live[/gold] card, deal damage equal to the number of stacks to ALL enemies.",

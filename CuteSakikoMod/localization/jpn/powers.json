@@ -1,4 +1,7 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.title": "美味",
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.description": "保持者が死亡した時、戦場のすべての生物のHPを層数に等しい値だけ回復する。",
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.smartDescription": "死亡時、戦場のすべての生物のHPを[green]{Amount}[/green]回復する。",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.title": "猫のリーダー",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.description": "毎ターン開始時、層数に等しい枚数の[gold]猫[/gold]を手札に加える。",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.smartDescription": "毎ターン開始時、{Amount}枚の[gold]猫[/gold]を手札に加える。",

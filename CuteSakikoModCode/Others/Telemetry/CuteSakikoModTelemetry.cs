@@ -25,39 +25,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others.Telemetry
         /// 优先从 mod manifest JSON（与 DLL 同目录）读取 "version" 字段；
         /// 读不到时回退到程序集 InformationalVersion / AssemblyVersion。
         /// </summary>
+        /// <summary>
+        /// 当前 Mod 版本号，从程序集 InformationalVersion 读取。
+        /// 版本号在 csproj 中通过 &lt;InformationalVersion&gt; 指定。
+        /// </summary>
         public static string ModVersion
         {
             get
             {
                 if (_cachedVersion != null) return _cachedVersion;
-
-                // 1) 从 mod manifest JSON 读取（最可靠）
-                try
-                {
-                    var asmPath = Assembly.GetExecutingAssembly().Location;
-                    var modDir = Path.GetDirectoryName(asmPath);
-                    if (!string.IsNullOrEmpty(modDir))
-                    {
-                        var manifestPath = Path.Combine(modDir, Entry.ModId + ".json");
-                        if (File.Exists(manifestPath))
-                        {
-                            var json = File.ReadAllText(manifestPath);
-                            var node = JsonNode.Parse(json);
-                            var version = node?["version"]?.GetValue<string>();
-                            if (!string.IsNullOrWhiteSpace(version))
-                            {
-                                _cachedVersion = version.Trim();
-                                return _cachedVersion;
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    // 忽略，走回退
-                }
-
-                // 2) 回退到程序集 InformationalVersion
                 try
                 {
                     var asm = Assembly.GetExecutingAssembly();

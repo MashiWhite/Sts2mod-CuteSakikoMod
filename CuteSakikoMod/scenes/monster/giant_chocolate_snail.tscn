@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://cioolnas08p26"]
+[gd_scene load_steps=10 format=3 uid="uid://d30n4ix8tef7h"]
 
-[ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_3vbpg"]
-[ext_resource type="Texture2D" uid="uid://yj71qes3u8jo" path="res://CuteSakikoMod/images/char/jennifer/jennifer1.png" id="2_cdegq"]
-[ext_resource type="Texture2D" uid="uid://3hwv5nt6p08g" path="res://CuteSakikoMod/images/char/jennifer/jennifer2.png" id="3_eqa1s"]
+[ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_nyguk"]
+[ext_resource type="Texture2D" uid="uid://dbueqjldpupxf" path="res://CuteSakikoMod/images/char/chocolatesnail/giant_chocolate_snail.png" id="2_hb4fq"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001
@@ -16,7 +15,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_cdegq")]
+"values": [ExtResource("2_hb4fq")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -80,7 +79,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_cdegq")]
+"values": [ExtResource("2_hb4fq")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -156,7 +155,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_cdegq")]
+"values": [ExtResource("2_hb4fq")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -229,10 +228,10 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_cdegq"), ExtResource("3_eqa1s")]
+"values": [ExtResource("2_hb4fq")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -305,10 +304,10 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.26666668, 1.6333333),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_cdegq"), ExtResource("3_eqa1s"), ExtResource("2_cdegq")]
+"values": [ExtResource("2_hb4fq")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -385,7 +384,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_cdegq")]
+"values": [ExtResource("2_hb4fq")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -458,8 +457,8 @@ _data = {
 &"idle_loop": SubResource("Animation_dn2tn")
 }
 
-[node name="jennifer" type="Node2D"]
-script = ExtResource("1_3vbpg")
+[node name="giant_chocolate_snail" type="Node2D"]
+script = ExtResource("1_nyguk")
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
@@ -477,10 +476,10 @@ position = Vector2(-148.81815, -252.72728)
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -135.0
-offset_top = -348.0
-offset_right = 119.0
-offset_bottom = 15.0
+offset_left = -203.0
+offset_top = -245.0
+offset_right = 200.0
+offset_bottom = 5.0
 
 [node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -488,12 +487,12 @@ unique_name_in_owner = true
 [node name="Node2D" type="Node2D" parent="Visuals"]
 position = Vector2(0.7077637, -2.664978)
 
-[node name="jennifer" type="Sprite2D" parent="Visuals/Node2D"]
+[node name="giant_chocolate_snail" type="Sprite2D" parent="Visuals/Node2D"]
 position = Vector2(8, -153)
-texture = ExtResource("2_cdegq")
+texture = ExtResource("2_hb4fq")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
-root_node = NodePath("../jennifer")
+root_node = NodePath("../giant_chocolate_snail")
 libraries = {
 &"": SubResource("AnimationLibrary_esqhf")
 }
