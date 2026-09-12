@@ -20,6 +20,8 @@
   "CUTE_SAKIKO_MOD_CARD_DONT_RUSH_ME.description": "{CalculatedDamage:diff()}ダメージを与える。\nこの戦闘中、このカードを1ターン[gold]保留[/gold]するごとにダメージが{ExtraDamage:diff()}増加する。",
   "CUTE_SAKIKO_MOD_CARD_LIN_BING_DOU_ZHE.title": "臨兵闘者皆陣列在前",
   "CUTE_SAKIKO_MOD_CARD_LIN_BING_DOU_ZHE.description": "プレイ後、[gold]デッキ[/gold]からこのカードを除去する。\nすべての敵の意図を[gold]逃走[/gold]に変える。",
+  "CUTE_SAKIKO_MOD_CARD_CHOCOLATE_SNAIL_CARD.title": "チョコレートカタツムリ",
+  "CUTE_SAKIKO_MOD_CARD_CHOCOLATE_SNAIL_CARD.description": "すべての敵に[gold]美味[/gold]を5層付与する。",
   
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.title": "ストライク",
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.description": "{Damage:diff()}ダメージを与える。",

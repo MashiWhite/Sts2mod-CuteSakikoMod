@@ -11,6 +11,28 @@
         <PathMap>$(AppOutputBase)=.\</PathMap>
     </PropertyGroup>
 
+    <!-- ★ Mod 版本号自动从 CuteSakikoMod.json 读取 -->
+    <Target Name="ReadModVersionFromManifest" BeforeTargets="GenerateAssemblyInfo">
+        <PropertyGroup>
+            <_ManifestPath>$(MSBuildProjectDirectory)\CuteSakikoMod.json</_ManifestPath>
+        </PropertyGroup>
+        <Error Text="[CuteSakikoMod] CuteSakikoMod.json not found at $(_ManifestPath)"
+               Condition="!Exists('$(_ManifestPath)')" />
+        <PropertyGroup>
+            <_ManifestContent>$([System.IO.File]::ReadAllText('$(_ManifestPath)'))</_ManifestContent>
+            <_ManifestVersion>$([System.Text.RegularExpressions.Regex]::Match($(_ManifestContent), '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</_ManifestVersion>
+        </PropertyGroup>
+        <Error Text="[CuteSakikoMod] Could not parse 'version' from CuteSakikoMod.json"
+               Condition="'$(_ManifestVersion)' == ''" />
+        <PropertyGroup>
+            <Version>$(_ManifestVersion)</Version>
+            <InformationalVersion>$(_ManifestVersion)</InformationalVersion>
+            <AssemblyVersion>$(_ManifestVersion).0</AssemblyVersion>
+        </PropertyGroup>
+        <Message Text="[CuteSakikoMod] Version auto-detected from manifest: $(_ManifestVersion)"
+                 Importance="high" />
+    </Target>
+
     <!-- OS Detection & Paths -->
     <PropertyGroup>
         <IsWindows>false</IsWindows>
@@ -47,8 +69,6 @@
 
     <PropertyGroup>
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
-        <!-- 硬编码 RitsuLib 版本号：升级后请在这里修改为对应的版本 -->
-        <RitsuLibPackageVersion>0.5.20</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <!-- 引用 -->
@@ -69,7 +89,8 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.5.20" />
+        <!-- ★ 使用浮动版本 *，还原时自动解析为最新可用版本 -->
+        <PackageReference Include="STS2.RitsuLib" Version="*" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -117,7 +138,6 @@
         <Content Include="audio\look_cchord.mp3"/>
     </ItemGroup>
 
-
     <!-- 构建后复制你自己的 Mod -->
     <Target Name="CopyToModsFolderOnBuild" AfterTargets="Build">
         <Message Text="Copying mod files to game mods folder." Importance="high"/>
@@ -125,8 +145,34 @@
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
         <Copy SourceFiles="CuteSakikoMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
     </Target>
+    
+    <!-- ★ 从 obj/project.assets.json 读取 NuGet 实际解析出的 RitsuLib 版本 -->
+    <Target Name="ResolveRitsuLibVersion" BeforeTargets="CopyRitsuLibToModsFolder">
+        <PropertyGroup>
+            <!-- Godot 项目的中间目录在 .godot/mono/temp/obj/，用 MSBuild 扩展路径自动指向 -->
+            <_AssetsFile>$(MSBuildProjectExtensionsPath)project.assets.json</_AssetsFile>
+        </PropertyGroup>
 
-    <!-- 硬编码复制 RitsuLib 文件（稳定可靠） -->
+        <Error Text="[CuteSakikoMod] project.assets.json not found at $(_AssetsFile). Run 'dotnet restore' first."
+               Condition="!Exists('$(_AssetsFile)')" />
+
+        <PropertyGroup>
+            <_AssetsContent>$([System.IO.File]::ReadAllText('$(_AssetsFile)'))</_AssetsContent>
+            <_RitsuLibResolvedVersion>$([System.Text.RegularExpressions.Regex]::Match($(_AssetsContent), '"STS2\.RitsuLib/([^"]+)"').Groups[1].Value)</_RitsuLibResolvedVersion>
+        </PropertyGroup>
+
+        <Error Text="[CuteSakikoMod] Could not resolve STS2.RitsuLib version from $(_AssetsFile)"
+               Condition="'$(_RitsuLibResolvedVersion)' == ''" />
+
+        <PropertyGroup>
+            <RitsuLibPackageVersion>$(_RitsuLibResolvedVersion)</RitsuLibPackageVersion>
+        </PropertyGroup>
+
+        <Message Text="[CuteSakikoMod] RitsuLib resolved version: $(RitsuLibPackageVersion)"
+                 Importance="high" />
+    </Target>
+
+    <!-- 复制 RitsuLib 文件（版本号自动探测） -->
     <Target Name="CopyRitsuLibToModsFolder" AfterTargets="CopyToModsFolderOnBuild">
         <PropertyGroup>
             <RitsuLibModDest>$(ModsPath)STS2-RitsuLib</RitsuLibModDest>
@@ -137,31 +183,26 @@
         <Message Importance="high" Text="Copying RitsuLib mod files (v$(RitsuLibPackageVersion)) to $(RitsuLibModDest)"/>
         <MakeDir Directories="$(RitsuLibModDest)" Condition="!Exists('$(RitsuLibModDest)')"/>
 
-        <!-- 一次收集 contentFiles\any\any\ 下的所有文件（含子目录） -->
         <ItemGroup>
             <RitsuContentFiles Include="$(RitsuLibContentSource)**\*" />
         </ItemGroup>
 
-        <!-- 一次复制所有内容，保留子目录结构（包括 viewer 和 mod_manifest.json） -->
         <Copy SourceFiles="@(RitsuContentFiles)"
               DestinationFolder="$(RitsuLibModDest)\%(RecursiveDir)"
               SkipUnchangedFiles="true"
               Condition="Exists('$(RitsuLibContentSource)')"/>
 
-        <!-- 最后复制 DLL -->
         <Copy SourceFiles="$(RitsuLibPackageBase)lib\net9.0\STS2-RitsuLib.dll"
               DestinationFolder="$(RitsuLibModDest)"
               SkipUnchangedFiles="true"/>
     </Target>
 
-    <!-- 把你 audio 目录下的文件原样复制到模组文件夹（保留 audio 根目录） -->
+    <!-- 把 audio 目录下的文件原样复制到模组文件夹 -->
     <Target Name="CopyAudioToModsFolder" AfterTargets="CopyToModsFolderOnBuild">
         <Message Text="Copying audio files to game mods folder." Importance="high"/>
         <ItemGroup>
-            <!-- 把 None 组里 audio 目录下的文件筛选出来，重新映射目标路径 -->
             <AudioFilesToCopy Include="@(None)"
                               Condition="$([System.String]::new('%(Identity)').Contains('audio'))"/>
-            <!-- 构造目标路径：mods/CuteSakikoMod + audio/子路径/文件名.mp3 -->
             <MappedAudioFiles Include="@(AudioFilesToCopy)">
                 <DestPath>$(ModsPath)$(MSBuildProjectName)\%(Identity)</DestPath>
             </MappedAudioFiles>
@@ -179,7 +220,6 @@
               ContinueOnError="WarnAndContinue"/>
     </Target>
 
-    <!-- 发布时自动打包 PCK -->
     <Target Name="GodotPublish" AfterTargets="Publish" Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
         <Message Text="Exporting Godot .pck to mods folder" Importance="high"/>
         <Exec Command="&quot;$(GodotPath)&quot; --headless --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
@@ -196,13 +236,9 @@
     </Target>
 
     <ItemGroup>
-        <!-- 把 audio 目录下的文件作为普通文件包含，但不参与编译 -->
         <None Include="audio\**\*">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-            <!-- 这一行是关键：告诉 Godot 不要把这个文件扫描进资源系统 -->
             <GodotResource>false</GodotResource>
         </None>
     </ItemGroup>
-
-
 </Project>

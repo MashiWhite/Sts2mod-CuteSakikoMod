@@ -10,5 +10,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.title": "回忆的漩涡",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ACT1_DOUBLE_BOSS_ENCOUNTER.loss": "这回忆的漩涡，把{character}吞没……",
   "CUTE_SAKIKO_MOD_ENCOUNTER_JENNIFER_ENCOUNTER.title": "小珍妮弗?",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_JENNIFER_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]用不知名方法吓得晕死过去。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_JENNIFER_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]用不知名方法吓得晕死过去。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GIANT_CHOCOLATE_SNAIL_ENCOUNTER.title": "巨型巧克力螺",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GIANT_CHOCOLATE_SNAIL_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]甜倒了。"
 }

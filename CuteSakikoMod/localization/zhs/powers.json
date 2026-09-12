@@ -1,11 +1,13 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.title": "美味",
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.description": "拥有者死亡时，为场上所有生物回复层数等量生命值。",
+  "CUTE_SAKIKO_MOD_POWER_DELICIOUS_POWER.smartDescription": "死亡时，为场上所有生物回复[green]{Amount}[/green]点生命值。",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.title": "猫咪领袖",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.description": "每回合开始时，将层数等量[gold]猫咪[/gold]加入手牌。",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.smartDescription": "每回合开始时，将[blue]{Amount}[/blue]张[gold]猫咪[/gold]加入手牌。",
   "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.title": "莱芜前夕",
   "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.description": "本回合每打出1张牌就获得层数等量[gold]莱芜[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_EVE_LIVE_POWER.smartDescription": "每打出1张牌获得[blue]{Amount}[/blue]层[gold]莱芜[/gold]。",
-  
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.title": "和声",
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.description": "每次打出[gold]来莱芜[/gold]时，对所有敌人造成层数等量点伤害。",
   "CUTE_SAKIKO_MOD_POWER_VOCAL_HARMONY_POWER.smartDescription": "每次打出[gold]来莱芜[/gold]时，对所有敌人造成[blue]{Amount}[/blue]点伤害。",
@@ -63,7 +65,7 @@
   "CUTE_SAKIKO_MOD_POWER_RETROGRADE_POWER.smartDescription": "每回合开始时，额外生命上限变为：[blue]{ExtraMaxHp}[/blue]\n([pink]飞返[/pink]打出次数 × 读档次数 / 10) \n飞返打出次数：[blue]{FlybackPlayCount}[/blue] \n读档次数：[blue]{ReloadCount}[/blue] \n[pink]将要死亡时，回溯至最大生命值，最多1次[/pink]",
   "CUTE_SAKIKO_MOD_POWER_TIME_WATCH_POWER.title": "银色腕表",
   "CUTE_SAKIKO_MOD_POWER_TIME_WATCH_POWER.description": "每回合开始时，[pink]回溯[/pink]上回合受到总伤害的 20% +（[pink]飞返[/pink]打出次数% × 读档次数*2）% 点生命。",
-  "CUTE_SAKIKO_MOD_POWER_TIME_WATCH_POWER.smartDescription": "每回合开始时，[pink]回溯[/pink]上回合受到总伤害的百分比：20% + [blue]{HealPercent}%[/blue] \n（[pink]飞返[/pink]打出次数% × 读档次数*2）%\n将要恢复血量：[blue]{HealAmount}[/blue] \n飞返打出次数：[blue]{FlybackPlayCount}[/blue] \n读档次数：[blue]{ReloadCount}[/blue]",
+  "CUTE_SAKIKO_MOD_POWER_TIME_WATCH_POWER.smartDescription": "每回合开始时，[pink]回溯[/pink]上回合受到总伤害的百分比：20% + [blue]{HealPercent}%[/blue] \n（[pink]飞返[/pink]打出次数% × 读档次数*2）%\n将要恢复血量：[green]{HealAmount}[/green] \n飞返打出次数：[blue]{FlybackPlayCount}[/blue] \n读档次数：[gold]{ReloadCount}[/gold]",
   "CUTE_SAKIKO_MOD_POWER_PLAY_IMMEDIATELY_POWER.title": "即刻演奏",
   "CUTE_SAKIKO_MOD_POWER_PLAY_IMMEDIATELY_POWER.description": "即刻[gold]演奏[/gold]接下来储存的层数等量个[pink]和弦[/pink]。",
   "CUTE_SAKIKO_MOD_POWER_PLAY_IMMEDIATELY_POWER.smartDescription": "接下来储存的[blue]{Amount}[/blue]个[pink]和弦[/pink]将被即刻[gold]演奏[/gold]。",

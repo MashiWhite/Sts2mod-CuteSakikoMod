@@ -16,6 +16,8 @@
   "CUTE_SAKIKO_MOD_CARD_DONT_RUSH_ME.description": "造成{CalculatedDamage:diff()}点伤害。\n本场战斗此牌每保留1回合增加{ExtraDamage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_LIN_BING_DOU_ZHE.title": "临兵斗者皆阵列在前",
   "CUTE_SAKIKO_MOD_CARD_LIN_BING_DOU_ZHE.description": "打出后从[gold]牌组[/gold]里移除。\n使所有敌人意图变为[gold]逃跑[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_CHOCOLATE_SNAIL_CARD.title": "巧克力螺",
+  "CUTE_SAKIKO_MOD_CARD_CHOCOLATE_SNAIL_CARD.description": "给予所有敌人5层[gold]美味[/gold]。",
   
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.title": "打击",
   "CUTE_SAKIKO_MOD_CARD_RANA_STRIKE.description": "造成{Damage:diff()}点伤害。",
