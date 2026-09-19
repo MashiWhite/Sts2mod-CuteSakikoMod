@@ -43,6 +43,26 @@ public class RegainMemory : CuteObCard
             prefs,
             _ => true
         );
+        
+        var selected = await CardSelectCmd.FromCombatPile(
+            choiceContext,
+            forgetPile,
+            Owner,
+            prefs,
+            _ => true
+        );
+        // 用 FromSimpleGrid 取代 FromCombatPile：
+        // 遗忘堆是自定义牌堆，FromCombatPile 需校验 combat pile；
+        // 装了"选牌抓取"类补丁(如 CoopDesyncContinue)时，对端会抛
+        // InvalidOperationException: Cannot perform on a non combat pile → 两端分叉。
+        // FromSimpleGrid 接收显式牌列表，不触发该校验（同 mod 的 Recall / OnlyOblivion 即用此法）。
+        var candidates = forgetPile.Cards.ToList();
+        var selected = await CardSelectCmd.FromSimpleGrid(
+            choiceContext,
+            candidates,
+            Owner,
+            prefs
+        );
 
         foreach (var card in selected)
         {
