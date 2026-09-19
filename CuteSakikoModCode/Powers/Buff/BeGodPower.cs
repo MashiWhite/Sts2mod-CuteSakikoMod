@@ -50,6 +50,23 @@ public sealed class BeGodPower : CuteSakikoModPower
             var customPrompt = new LocString("powers", "CUTE_SAKIKO_MOD_TO_FORGET");
             var prefs = new CardSelectorPrefs(customPrompt, toSelect);
 
+            //自定义牌堆的补丁喵~
+            var selected = await CardSelectCmd.FromCombatPile(
+                choiceContext,
+                forgetPile,
+                Owner.Player,
+                prefs,
+                _ => true
+            );
+            // 同上：自定义牌堆不要走 FromCombatPile（联机下对端会抛异常）
+            var candidates = forgetPile.Cards.ToList();
+            var selected = await CardSelectCmd.FromSimpleGrid(
+                choiceContext,
+                candidates,
+                Owner.Player,
+                prefs
+            );
+
             var selected = await CardSelectCmd.FromCombatPile(
                 choiceContext,
                 forgetPile,
