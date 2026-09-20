@@ -36,12 +36,18 @@ public class RegainMemory : CuteObCard
             maxSelect
         );
 
-        var selected = await CardSelectCmd.FromCombatPile(
+        // 改用 FromSimpleGrid 取代 FromCombatPile：遗忘堆是自定义牌堆，
+        // FromCombatPile 的牌堆类型校验路径会被"选牌抓取"类联机补丁
+        // （如 Multiplayer Desync Fix，工坊 3792872414）改写，导致非出牌方抛
+        // InvalidOperationException: Cannot perform on a non combat pile → 两端分叉卡死。
+        // FromSimpleGrid 只接收显式牌列表，不做牌堆类型校验
+        // （同 mod 的 MemoryCmd.Recall / OnlyOblivion 即用此法，联机从未出问题）。
+        var candidates = forgetPile.Cards.ToList();
+        var selected = await CardSelectCmd.FromSimpleGrid(
             choiceContext,
-            forgetPile,
+            candidates,
             Owner,
-            prefs,
-            _ => true
+            prefs
         );
 
         foreach (var card in selected)
