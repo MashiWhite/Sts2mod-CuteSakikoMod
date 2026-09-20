@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
+﻿using CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event.Doll;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -20,7 +19,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events;
 [RegisterSharedEvent]
 public sealed class FriedShrimpEvent : CuteSakikoEvent
 {
-    private int _combatContext;
     private IHoverTip[]? _dollHoverTips;
 
     public override EventAssetProfile AssetProfile => new(
@@ -29,12 +27,10 @@ public sealed class FriedShrimpEvent : CuteSakikoEvent
 
     public override bool IsShared => true;
 
-    
-    protected override bool IsAllowedInternal(IRunState runState) => true;
+    protected override bool IsAllowedInternal(IRunState runState) => runState.CurrentActIndex >= 1;
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        // 缓存三个玩偶遗物的完整提示（含遗物自身描述 + 额外提示）
         _dollHoverTips ??= HoverTipFactory.FromRelic<TianSuLuoDoll>()
             .Concat(HoverTipFactory.FromRelic<TianXiangLuoDoll>())
             .Concat(HoverTipFactory.FromRelic<AraluoDoll>())
@@ -50,12 +46,22 @@ public sealed class FriedShrimpEvent : CuteSakikoEvent
 
     private Task CrossBush()
     {
-        _combatContext = 1;
-        EnterCombatWithoutExitingEvent<LuoEncounter>(
+        EnterCombatWithoutExitingEvent<LuoEncounterCrossBush>(
             Array.Empty<Reward>(),
             shouldResumeAfterCombat: true
         );
         return Task.CompletedTask;
+    }
+
+    private async Task RestHere()
+    {
+        var healAmount = Owner!.Creature.MaxHp * 0.3m;
+        await CreatureCmd.Heal(Owner.Creature, healAmount);
+
+        EnterCombatWithoutExitingEvent<LuoEncounterRestHere>(
+            Array.Empty<Reward>(),
+            shouldResumeAfterCombat: true
+        );
     }
 
     private async Task Detour()
@@ -82,32 +88,23 @@ public sealed class FriedShrimpEvent : CuteSakikoEvent
         SetEventFinished(PageDescription("DETOUR_DESC"));
     }
 
-    private async Task RestHere()
-    {
-        var healAmount = Owner!.Creature.MaxHp * 0.3m;
-        await CreatureCmd.Heal(Owner.Creature, healAmount);
-
-        _combatContext = 2;
-        EnterCombatWithoutExitingEvent<LuoEncounter>(
-            Array.Empty<Reward>(),
-            shouldResumeAfterCombat: true
-        );
-    }
-
     public override async Task Resume(AbstractRoom room)
     {
-        if (_combatContext == 1)
+        if (room is not CombatRoom combatRoom) return;
+
+        if (combatRoom.Encounter is LuoEncounterCrossBush)
         {
+            // ★ 先标记事件完成，再展示奖励
+            SetEventFinished(PageDescription("CROSS_BUSH_WIN"));
+
             await RewardsCmd.OfferCustom(Owner!, new List<Reward>
             {
                 new RelicReward(ModelDb.Relic<TianSuLuoDoll>().ToMutable(), Owner!),
                 new RelicReward(ModelDb.Relic<TianXiangLuoDoll>().ToMutable(), Owner!),
                 new RelicReward(ModelDb.Relic<AraluoDoll>().ToMutable(), Owner!)
             });
-
-            SetEventFinished(PageDescription("CROSS_BUSH_WIN"));
         }
-        else if (_combatContext == 2)
+        else if (combatRoom.Encounter is LuoEncounterRestHere)
         {
             SetEventFinished(PageDescription("REST_HERE_WIN"));
         }

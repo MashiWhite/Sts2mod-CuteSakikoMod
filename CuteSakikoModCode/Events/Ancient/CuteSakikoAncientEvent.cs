@@ -1,6 +1,7 @@
 ﻿using MegaCrit.Sts2.Core.Models.Acts;
 using STS2RitsuLib.Scaffolding.Content;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Events.Ancient;

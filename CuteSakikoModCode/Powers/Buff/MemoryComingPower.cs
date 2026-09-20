@@ -34,6 +34,6 @@ public sealed class MemoryComingPower : CuteSakikoModPower
         if (player.Creature != Owner) return;
 
         // 从记忆牌堆随机取 Amount 张牌（不消耗），不升级
-        await MemoryCmd.Recall(choiceContext, player, allowChoose: false, count: Amount, upgraded: false, source: null);
+        await MemoryCmd.Recall(choiceContext, player, allowChoose: false, count: Amount, false, false, null,true);
     }
 }

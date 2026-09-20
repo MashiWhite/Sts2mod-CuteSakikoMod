@@ -1,4 +1,7 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.title": "Bow to Me",
+  "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.description": "Whenever your [gold]Knight's Sword[/gold] deals damage, apply that much [gold]Pressure[/gold] to the enemy.",
+  "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.smartDescription": "Whenever your [gold]Knight's Sword[/gold] deals damage, apply that much [gold]Pressure[/gold] to the enemy.",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.title": "Cat Leader",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.description": "At the start of each turn, add a number of [gold]Cats[/gold] equal to the number of stacks to your hand.",
   "CUTE_SAKIKO_MOD_POWER_NEKO_LEADER_POWER.smartDescription": "At the start of each turn, add {Amount} [gold]Cat(s)[/gold] to your hand.",

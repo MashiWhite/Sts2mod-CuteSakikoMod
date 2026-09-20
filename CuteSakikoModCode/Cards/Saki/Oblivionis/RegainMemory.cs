@@ -13,7 +13,7 @@ public class RegainMemory : CuteObCard
     public RegainMemory() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get { yield return new CardsVar(1); }
@@ -26,8 +26,13 @@ public class RegainMemory : CuteObCard
         var forgetPile = ForgetCardPile.Get(Owner);
         if (forgetPile == null || forgetPile.Cards.Count == 0) return;
 
-        int maxSelect = DynamicVars.Cards.IntValue;
-        maxSelect = Math.Min(maxSelect, forgetPile.Cards.Count);
+        // 手牌上限保护
+        var hand = PileType.Hand.GetPile(Owner);
+        int handSpace = 10 - (hand?.Cards.Count ?? 0);
+        if (handSpace <= 0) return;
+
+        int maxSelect = Math.Min(DynamicVars.Cards.IntValue, forgetPile.Cards.Count);
+        maxSelect = Math.Min(maxSelect, handSpace);
         if (maxSelect <= 0) return;
 
         var prefs = new CardSelectorPrefs(
@@ -36,19 +41,25 @@ public class RegainMemory : CuteObCard
             maxSelect
         );
 
-        var selected = await CardSelectCmd.FromCombatPile(
+        var candidates = forgetPile.Cards.ToList();
+        var selected = await CardSelectCmd.FromSimpleGrid(
             choiceContext,
-            forgetPile,
+            candidates,
             Owner,
-            prefs,
-            _ => true
+            prefs
+
         );
 
-        foreach (var card in selected)
+        // 快照，避免遍历时修改源集合
+        var selectedList = selected.ToList();
+        foreach (var card in selectedList)
         {
             await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Bottom, this);
-            card.SetToFreeThisTurn();
+            card.SetToFreeThisCombat();
         }
+
+        // 刷新遗忘堆 UI
+        forgetPile.InvokeContentsChanged();
     }
 
     protected override void OnUpgrade()

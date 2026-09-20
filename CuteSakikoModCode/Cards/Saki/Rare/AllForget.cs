@@ -1,18 +1,16 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Systems;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class AllForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class AllForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
@@ -24,14 +22,8 @@ public class AllForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
             yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
-    
-    protected override IEnumerable<DynamicVar> CanonicalVars
-    {
-        get
-        {
-            yield return new CardsVar(3);
-        }
-    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -40,26 +32,27 @@ public class AllForget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
         var handCards = handPile.Cards.ToList();
         if (handCards.Count == 0) return;
 
-        // 统计记忆牌数量（在遗忘前）
-        var memoryCount = handCards.Count(card => card.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()));
+        int count = handCards.Count;
 
         // 遗忘所有手牌
         await MemoryCmd.Forget(choiceContext, handCards, this);
 
-        
-        // 若遗忘的记忆牌 ≥ x 张，给所有敌人施加崩溃
-        var cards = DynamicVars.Cards.BaseValue;
-        if (memoryCount >= cards)
+        // 每遗忘一张牌，获得一张回忆（升级后获得回忆+）
+        if (count > 0)
         {
-            var combatState = Owner.Creature.CombatState;
-            if (combatState != null)
-                foreach (var enemy in combatState.Enemies.Where(e => e.IsAlive))
-                    await PowerCmd.Apply<BreakDownPower>(choiceContext, enemy, 1, Owner.Creature, this);
+            await MemoryCmd.Recall(
+                choiceContext,
+                Owner,
+                allowChoose: false,
+                count: count,
+                upgraded: IsUpgraded,
+                source: this,
+                allowDuplicates: true);
         }
     }
 
     protected override void OnUpgrade()
     {
-       DynamicVars.Cards.UpgradeValueBy(-1);
+        // 升级效果在 OnPlay 中通过 IsUpgraded 处理（改为获得回忆+）
     }
 }

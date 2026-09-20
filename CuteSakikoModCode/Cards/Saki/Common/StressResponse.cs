@@ -8,11 +8,11 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class StressResponse : CuteSakikoModCard
 {
-    public StressResponse() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public StressResponse() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
 

@@ -16,7 +16,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class MemoryBurning : CuteSakikoModCard
 {
-    public MemoryBurning() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public MemoryBurning() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -88,6 +88,6 @@ public class MemoryBurning : CuteSakikoModCard
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        RemoveKeyword(CardKeyword.Exhaust);
     }
 }

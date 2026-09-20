@@ -4,16 +4,17 @@ using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Scaffolding.Content;
 using System.Collections.Generic;
 using System.Linq;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.ChocolateSnail;
+using MegaCrit.Sts2.Core.Models.Acts;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
 
+[RegisterGlobalEncounter]
 public class Act1DoubleBossEncounter : ModEncounterTemplate
 {
-    public override bool IsValidForAct(ActModel act)
-    {
-        return false; // 只通过事件触发，不自然生成
-    }
-
+    public override bool IsValidForAct(ActModel act) => false;
+    
     private static IReadOnlyList<EncounterModel> GetAllAct1BossEncounters()
     {
         if (ModelDb.ActsByIndex == null || ModelDb.ActsByIndex.Count == 0)
@@ -31,13 +32,11 @@ public class Act1DoubleBossEncounter : ModEncounterTemplate
     /// </summary>
     private static bool IsMinionMonster(MonsterModel monster)
     {
-        // KinFollower 是爪牙
-        if (monster is KinFollower)
-            return true;
+        // 爪牙怪物，不能作为 Boss 参与双 Boss 事件
+        if (monster is KinFollower) return true;
+        if (monster is SmallChocolateSnail) return true;
 
-        // 未来如有其他爪牙，可继续添加：
-        // if (monster is SomeOtherMinion) return true;
-
+        // 未来如有其他爪牙，继续添加
         return false;
     }
 
@@ -58,7 +57,7 @@ public class Act1DoubleBossEncounter : ModEncounterTemplate
         EncounterScenePath: "res://CuteSakikoMod/scenes/encounter/act1_double_boss.tscn"
     );
 
-    public override float GetCameraScaling() => 1.0f;
+    public override float GetCameraScaling() => 0.8f;
 
     protected override IReadOnlyList<(MonsterModel, string?)> GenerateMonsters()
     {

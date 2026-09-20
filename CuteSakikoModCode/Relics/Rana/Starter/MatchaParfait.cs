@@ -1,5 +1,4 @@
-﻿
-using System.Reflection;
+﻿using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Status;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
@@ -34,11 +33,23 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
 
     private static readonly string AudioDir =
         Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio");
+
     private static readonly string[] ParfaitSfxFiles =
     {
-        "rana1.mp3", "rana2.mp3", "rana3.mp3", "rana4.mp3", "rana5.mp3","rana6.mp3", "rana7.mp3", "rana8.mp3", "rana9.mp3"
+        "rana1.mp3", "rana2.mp3", "rana3.mp3", "rana4.mp3", "rana5.mp3",
+        "rana6.mp3", "rana7.mp3", "rana8.mp3", "rana9.mp3"
     };
+
     private static readonly Random _rand = new();
+
+    // 暂存被替换遗物的杯数，供触神升级后的新遗物继承
+    private static int? _pendingTransferCharges;
+
+    protected static int? PendingTransferCharges
+    {
+        get => _pendingTransferCharges;
+        set => _pendingTransferCharges = value;
+    }
 
     [SavedProperty]
     public int TotalConsumedThisCombat
@@ -79,10 +90,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get
-        {
-            yield return HoverTipFactory.FromCard<BrainFreeze>();
-        }
+        get { yield return HoverTipFactory.FromCard<BrainFreeze>(); }
     }
 
     public int DrawAmount
@@ -119,7 +127,11 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     public override bool ShowCounter => true;
     public override int DisplayAmount => Charges;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { new CardsVar(DrawAmount), new EnergyVar(EnergyGain) };
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
+    {
+        new CardsVar(DrawAmount),
+        new EnergyVar(EnergyGain)
+    };
 
     public bool CanHandleRightClickLocal(ModRightClickContext context)
     {
@@ -153,7 +165,10 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         };
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+    public override async Task AfterSideTurnStart(
+        CombatSide side,
+        IReadOnlyList<Creature> participants,
+        ICombatState combatState)
     {
         if (side == CombatSide.Player && Owner != null)
         {
@@ -161,16 +176,24 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             if (combatState.RoundNumber == 1)
                 TotalConsumedThisCombat = 0;
         }
+
         RelicExtraIconAmountLabelsInvalidated?.Invoke();
         InvokeDisplayAmountChanged();
         await Task.CompletedTask;
+    }
+
+    // ★ 新增：被移除时暂存杯数
+    public override Task AfterRemoved()
+    {
+        _pendingTransferCharges = Charges;
+        return Task.CompletedTask;
     }
 
     private async Task OnParfaitConsumedInstanceAsync(int amount, PlayerChoiceContext? choiceContext)
     {
         for (int i = 0; i < amount; i++)
         {
-            // ★ 播放随机音效
+            // 播放随机音效
             var sfx = Path.Combine(AudioDir, ParfaitSfxFiles[_rand.Next(ParfaitSfxFiles.Length)]);
             AudioManager.PlaySound(sfx, 1.0f);
 
@@ -185,7 +208,8 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
                     if (combatState != null)
                     {
                         var brainFreeze = combatState.CreateCard<BrainFreeze>(Owner);
-                        var result = await CardPileCmd.AddGeneratedCardToCombat(brainFreeze, PileType.Draw, Owner, CardPilePosition.Random);
+                        var result = await CardPileCmd.AddGeneratedCardToCombat(
+                            brainFreeze, PileType.Draw, Owner, CardPilePosition.Random);
                         CardCmd.PreviewCardPileAdd(result);
                         Entry.Logger.Info("[芭菲] 添加吃到头疼并预览");
                     }
@@ -200,13 +224,15 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
                 }
 
                 CurrentTurnCount = 0;
-                // ★ 不 break，继续处理剩余杯数
+                // 不 break，继续处理剩余杯数
             }
         }
     }
 
-    // ===== 核心修改：改为 async Task，并 await 两者皆要 =====
-    public static async Task SimulateParfaitEaten(Player player, int amount, PlayerChoiceContext? choiceContext)
+    public static async Task SimulateParfaitEaten(
+        Player player,
+        int amount,
+        PlayerChoiceContext? choiceContext)
     {
         var relic = player.Relics.OfType<MatchaParfait>().FirstOrDefault();
         if (relic != null)
@@ -214,6 +240,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             relic.TotalConsumedThisCombat += amount;
             relic.ChargesRemoved?.Invoke(player, amount, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+
             if (player.Creature.HasPower<WantBothPower>())
             {
                 await ApplyWantBothEffect(player, amount, choiceContext);
@@ -234,8 +261,11 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         relic.Charges += amount;
     }
 
-    // ===== 修复：有人请客时也触发两者皆要 =====
-    public static async Task RemoveCharges(MatchaParfait relic, int amount, PlayerChoiceContext? choiceContext = null, bool ignoreTreat = false)
+    public static async Task RemoveCharges(
+        MatchaParfait relic,
+        int amount,
+        PlayerChoiceContext? choiceContext = null,
+        bool ignoreTreat = false)
     {
         if (relic == null) return;
 
@@ -248,7 +278,6 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             relic.ChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
 
-            // 即使不扣杯数，也要触发“两者皆要”
             if (relic.Owner.Creature.HasPower<WantBothPower>())
             {
                 await ApplyWantBothEffect(relic.Owner, amount, choiceContext);
@@ -272,7 +301,10 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         }
     }
 
-    private static async Task ApplyWantBothEffect(Player player, int amount, PlayerChoiceContext? choiceContext)
+    private static async Task ApplyWantBothEffect(
+        Player player,
+        int amount,
+        PlayerChoiceContext? choiceContext)
     {
         var wantBothPower = player.Creature.GetPower<WantBothPower>();
         int layers = wantBothPower?.Amount ?? 0;

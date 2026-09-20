@@ -25,7 +25,7 @@ public class KnightSword : ModTokenCard
     private int ExtraDamage { get; set; }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        [CardKeyword.Retain, CutesakiKeywords.Sword.GetModCardKeyword()];
+        [CardKeyword.Retain];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -36,6 +36,7 @@ public class KnightSword : ModTokenCard
     {
         get
         {
+            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.KnightSword.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<BreakDownPower>();
             yield return HoverTipFactory.FromPower<PressurePower>();
         }

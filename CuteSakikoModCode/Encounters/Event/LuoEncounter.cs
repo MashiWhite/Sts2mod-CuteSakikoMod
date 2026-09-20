@@ -2,14 +2,16 @@
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Scaffolding.Content;
+using STS2RitsuLib.Interop.AutoRegistration;
 using System.Collections.Generic;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
 
+[RegisterGlobalEncounter]
 public class LuoEncounter : ModEncounterTemplate
 {
     public override bool IsValidForAct(ActModel act) => false;
-
+    
     public override RoomType RoomType => RoomType.Monster;
     public override bool IsWeak => false;
 
@@ -47,7 +49,6 @@ public class LuoEncounter : ModEncounterTemplate
             var pick = pool[Rng.NextInt(pool.Count)];
             var mutable = pick.ToMutable();
 
-            // ★ 用遭遇专属的同步随机源决定这只怪的开局意图
             int initialIdx = Rng.NextInt(3);
             switch (mutable)
             {

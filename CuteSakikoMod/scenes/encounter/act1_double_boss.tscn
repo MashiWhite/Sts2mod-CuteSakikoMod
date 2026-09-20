@@ -5,7 +5,7 @@ layout_mode = 3
 anchors_preset = 0
 
 [node name="first" type="Marker2D" parent="."]
-position = Vector2(1672, 704)
+position = Vector2(2230, 468)
 
 [node name="first2" type="Marker2D" parent="."]
-position = Vector2(1167, 762)
+position = Vector2(1800, 932)

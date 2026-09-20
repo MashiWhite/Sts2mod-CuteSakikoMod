@@ -1,7 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
 using STS2RitsuLib;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Others;
+namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
 
 // 配置数据类（持久化到 config.json）
 // CuteSakikoModCode/Others/CuteSakikoModConfigData.cs

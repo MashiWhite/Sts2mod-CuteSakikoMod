@@ -13,8 +13,8 @@ public class AbsoluteAuthority() : CuteSakikoModCard(2, CardType.Attack, CardRar
     {
         get
         {
-            yield return new DamageVar(16m, ValueProp.Move);
-            yield return new PowerVar<PressurePower>(15m);
+            yield return new DamageVar(15m, ValueProp.Move);
+            yield return new PowerVar<PressurePower>(25m);
         }
     }
 
@@ -35,7 +35,7 @@ public class AbsoluteAuthority() : CuteSakikoModCard(2, CardType.Attack, CardRar
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m); 
+        DynamicVars.Damage.UpgradeValueBy(5m); 
         DynamicVars["PressurePower"].UpgradeValueBy(10m); 
     }
 }

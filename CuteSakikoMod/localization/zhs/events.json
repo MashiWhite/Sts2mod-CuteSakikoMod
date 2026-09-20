@@ -52,7 +52,7 @@
   "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.INITIAL.options.OPEN_DOOR_ANON_LOCKED.description": "队伍中没有[blue]丰川祥子[/blue]和[pink]千早爱音[/pink]，无法推开门。",
   "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.LISTEN_SUCCESS.description": "你靠近了门口，清晰的钢琴声在你耳边响起。\n你想起了很多以前的事，随后慢慢地闭上了眼\n一曲终了，当周围重新归于寂静。\n你睁开眼，发现身前哪还有什么音乐室",
   "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.OPEN_DOOR_PIANO.selectionScreenPrompt": "选择一张初始[gold]打击[/gold]",
-  "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.PIANO_SUCCESS.description": "[blue]丰川祥子[/blue]看向门牌，随后推开了门。\n她知道这里，她不可能不知道这里。\n在她最困难的时期，只有在这里她才能短暂的忘记生活的重压。\n她走向了那架钢琴，手指在琴身上拂过。\n随后，没有丝毫的停留，[blue]丰川祥子[/blue]向门外走去。\n“[red]我，毋畏遗忘[/red]”",
+  "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.PIANO_SUCCESS.description": "[blue]丰川祥子[/blue]看向门牌，随后推开了门。\n\n她知道这里，她不可能不知道这里。\n在她最困难的时期，只有在这里她才能短暂的忘记生活的重压。\n\n她走向了那架钢琴，手指在琴身上拂过。\n随后，没有丝毫的停留，[blue]丰川祥子[/blue]向门外走去。\n\n“[red]我，毋畏遗忘[/red]”",
   "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.PIANO_NO_CARDS.description": "你推开了门，却发现钢琴旁空空如也，没有琴谱。",
   "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.ANON_SUCCESS_PART1.description": "“诶诶！[blue]祥祥[/blue]，这里是不是我们第一次见面的地方啊？”[pink]爱音[/pink]边说着边把门打开。\n\n“啊……这里”[blue]祥子[/blue]的目光看向了里面那架钢琴\n\n“[blue]祥祥[/blue] [blue]祥祥[/blue]，你能不能再弹一次我们第一次见面时的那首歌啊！”[pink]爱音[/pink]饱含期待的目光看向了[blue]祥子[/blue]。\n\n“……好吧”[blue]祥子[/blue]坐在了钢琴前开始演奏。",
   "CUTE_SAKIKO_MOD_EVENT_HANEOKA_CORRIDOR_EVENT.pages.ANON_SUCCESS.options.CONTINUE.title": "继续",

@@ -71,9 +71,13 @@ public class Maracas : CuteSakikoEventRelic, IModRightClickableRelic
         if (player != Owner)
             return Task.CompletedTask;
 
+        // 关键：如果不是沙锤等待触发的额外回合，忽略
+        if (!PendingExtraTurn)
+            return Task.CompletedTask;
+
         UsedThisCombat = true;
         PendingExtraTurn = false;
-        Status = RelicStatus.Disabled; // 本场已用完 → 变灰
+        Status = RelicStatus.Disabled;
         Flash();
         return Task.CompletedTask;
     }

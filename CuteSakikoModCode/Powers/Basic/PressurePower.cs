@@ -1,6 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -27,7 +26,6 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
-    private bool _isDoubling;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[] { };
 
@@ -53,7 +51,8 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
             TaskHelper.RunSafely(PowerCmd.Remove(this));
     }
 
-    // 压力增加时，提升骑士之剑伤害（已有合法上下文）
+    // 压力层数变化时只处理崩溃检查
+    // 翻倍与骑士之剑增伤已迁移到 SwordManager / MasqueradeRhapsody
     public override async Task AfterPowerAmountChanged(
         PlayerChoiceContext choiceContext,
         PowerModel power,
@@ -62,36 +61,6 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
         CardModel? cardSource)
     {
         if (power != this) return;
-
-        // 遗物效果：压力层数翻倍（仅当增加且未处于加倍过程中）
-        if (amount > 0 && Owner != null && Owner.IsPlayer && !_isDoubling)
-        {
-            var player = Owner.Player;
-            if (player != null && player.Relics.OfType<MasqueradeRhapsody>().Any())
-            {
-                _isDoubling = true;
-                await PowerCmd.ModifyAmount(choiceContext, this, amount, Owner, null);
-                _isDoubling = false;
-            }
-        }
-
-        // 原有逻辑：压力增加时提升骑士之剑伤害（不再重复）
-        if (amount > 0 && Owner != null && Owner.IsPlayer && CombatState != null)
-        {
-            var delta = (int)amount;
-            if (delta <= 0) return;
-            var player = Owner.Player;
-            var piles = new[] { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust };
-            foreach (var pileType in piles)
-            {
-                var pile = pileType.GetPile(player);
-                if (pile == null) continue;
-                foreach (var card in pile.Cards)
-                    if (card is KnightSword ks)
-                        ks.DynamicVars.Damage.BaseValue += delta;
-            }
-        }
-
         await CheckAndTriggerCollapse(choiceContext);
     }
 

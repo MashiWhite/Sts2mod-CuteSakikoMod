@@ -8,7 +8,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
 [RegisterOwnedCardKeyword(nameof(Pressure))]
 [RegisterOwnedCardKeyword(nameof(Memory),
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.AfterCardDescription)]
-[RegisterOwnedCardKeyword(nameof(Sword))]
+[RegisterOwnedCardKeyword(nameof(Sword),
+    CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
+[RegisterOwnedCardKeyword(nameof(KnightSword))]
 [RegisterOwnedCardKeyword(nameof(Eggs))]
 [RegisterOwnedCardKeyword(nameof(Nochest))]
 [RegisterOwnedCardKeyword(nameof(Playpiano))]
@@ -33,6 +35,7 @@ public class CutesakiKeywords
     public static readonly string Pressure = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Pressure));
     public static readonly string Memory = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Memory));
     public static readonly string Sword = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Sword));
+    public static readonly string KnightSword = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(KnightSword));
     public static readonly string Eggs = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Eggs));
     public static readonly string Nochest = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Nochest));
     public static readonly string Playpiano = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Playpiano));

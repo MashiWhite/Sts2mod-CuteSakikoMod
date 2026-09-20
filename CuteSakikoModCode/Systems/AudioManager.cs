@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Nodes.Audio;
 using MegaCrit.Sts2.Core.Saves;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using System.Collections.Generic;
+using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using STS2RitsuLib;
 using FileAccess = Godot.FileAccess;
 

@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -7,93 +8,71 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
-public class Unsheathe() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class Unsheathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Sword.GetModCardKeyword()];
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(8m, ValueProp.Move); }
+        get { yield return new PowerVar<PressurePower>(5m); }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
         {
-            yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword.GetModCardKeyword());
-            yield return HoverTipFactory.FromCard<KnightSword>(IsUpgraded);
-            yield return HoverTipFactory.FromPower<BreakDownPower>();
+            yield return HoverTipFactory.FromCard<KnightSword>();
             yield return HoverTipFactory.FromPower<PressurePower>();
+            yield return HoverTipFactory.FromPower<BreakDownPower>();
         }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Target == null) return;
+        // 1. 获得压力
+        int pressureAmount = DynamicVars["PressurePower"].IntValue;
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, pressureAmount, Owner.Creature, this);
 
-        // 造成伤害
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this,cardPlay)
-            .Targeting(cardPlay.Target)
-            .WithHitFx("vfx/vfx_attack_slash")
-            .Execute(choiceContext);
+        // 2. 手牌已有剑则跳过（避免与 SwordManager 重复）
+        var swordKeyword = CutesakiKeywords.Sword.GetModCardKeyword();
+        var hand = PileType.Hand.GetPile(Owner);
+        if (hand != null && hand.Cards.Any(c => c != this && c is KnightSword))
+            return;
 
-        // 检查手牌是否已有骑士之剑
-        var handPile = PileType.Hand.GetPile(Owner);
-        var hasInHand = handPile != null && handPile.Cards.Any(c => c is KnightSword);
-        if (hasInHand) return;
-
-        // 从抽牌堆和弃牌堆中寻找骑士之剑
-        CardModel sword = null;
-        var searchPiles = new[] { PileType.Draw, PileType.Discard };
-        foreach (var pileType in searchPiles)
+        // 3. 从抽牌堆/弃牌堆/消耗堆拉剑
+        foreach (var pileType in new[] { PileType.Draw, PileType.Discard, PileType.Exhaust })
         {
             var pile = pileType.GetPile(Owner);
-            if (pile != null)
+            if (pile == null) continue;
+            var swords = pile.Cards.Where(c => c is KnightSword).ToList();
+            foreach (var sword in swords)
             {
-                sword = pile.Cards.FirstOrDefault(c => c is KnightSword);
-                if (sword != null)
-                    break;
+                sword.RemoveFromCurrentPile();
+                await CardPileCmd.Add(sword, PileType.Hand);
             }
         }
 
-        bool isNew = false;
-        CardModel swordToMove;
-
-        if (sword != null)
+        // 4. 从遗忘堆拉剑
+        var forgetPile = ForgetCardPile.Get(Owner);
+        if (forgetPile != null)
         {
-            sword.RemoveFromCurrentPile();
-            swordToMove = sword;
-        }
-        else
-        {
-            swordToMove = CombatState.CreateCard<KnightSword>(Owner);
-            isNew = true;
-        }
-
-        // 卡牌已升级时，升级骑士之剑
-        if (IsUpgraded)
-        {
-            // 如果骑士之剑还可以升级，才进行升级
-            if (swordToMove.IsUpgradable)
+            var swords = forgetPile.Cards.Where(c => c is KnightSword).ToList();
+            foreach (var sword in swords)
             {
-                swordToMove.UpgradeInternal();
-                swordToMove.FinalizeUpgradeInternal();
+                forgetPile.RemoveInternal(sword);
+                await CardPileCmd.Add(sword, PileType.Hand);
             }
+            if (swords.Count > 0)
+                forgetPile.InvokeContentsChanged();
         }
-
-        if (isNew)
-            await CardPileCmd.AddGeneratedCardToCombat(swordToMove, PileType.Hand, Owner);
-        else
-            await CardPileCmd.Add(swordToMove, PileType.Hand);
     }
+
     protected override void OnUpgrade()
     {
-        // 升级：费用 1 → 0
-        EnergyCost.UpgradeBy(-1);
+        DynamicVars["PressurePower"].UpgradeValueBy(3m); // 5 → 8
     }
 }

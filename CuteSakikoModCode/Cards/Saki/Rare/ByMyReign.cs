@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -9,9 +10,8 @@ using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
-public class ByMyReign() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class ByMyReign() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    // 设置为多人卡限定
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -22,7 +22,6 @@ public class ByMyReign() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare,
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword.GetModCardKeyword());
         }
     }
-
 
     protected override bool ShouldGlowGoldInternal
     {
@@ -56,20 +55,17 @@ public class ByMyReign() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare,
                     var target = GetRandomEnemy();
                     if (target == null) continue;
 
-
                     if (IsUpgraded) sword.BaseReplayCount += 1;
 
                     await CardCmd.AutoPlay(choiceContext, sword, target);
-
 
                     if (IsUpgraded) sword.BaseReplayCount -= 1;
                 }
             }
             else
             {
-                // 手牌中没有剑时，添加一张
-                var newSword = CombatState.CreateCard<KnightSword>(player);
-                await CardPileCmd.AddGeneratedCardToCombat(newSword, PileType.Hand, Owner);
+                // 为所有人出鞘：若手牌/抽牌堆/弃牌堆中没有骑士之剑，补一把
+                await SwordManager.EnsureSwordExists(player, IsUpgraded);
             }
         }
     }
@@ -83,6 +79,5 @@ public class ByMyReign() : CuteSakikoModCard(3, CardType.Skill, CardRarity.Rare,
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
     }
 }

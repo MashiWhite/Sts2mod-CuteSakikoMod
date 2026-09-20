@@ -1,5 +1,5 @@
 {
-  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.aromaPrinciple": "[sine][blue]...Desuwa!?[/sine][/blue]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.aromaPrinciple": "[sine][blue]...Desuwa!?[/blue][/sine]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.banter.alive.endTurnPing": "Can you hurry up?",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.banter.dead.endTurnPing": "Forget...",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.cardsModifierDescription": "Sakiko's cards now appear in reward pools and shops.",
@@ -14,7 +14,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "Sakiko Togawa",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.titleObject": "Cute Sakiko",
 
-  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.aromaPrinciple": "[sine][blue]...Desuwa!?[/sine][/blue]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.aromaPrinciple": "[sine][blue]...Desuwa!?[/blue][/sine]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.banter.alive.endTurnPing": "Can you hurry up?",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.banter.dead.endTurnPing": "Forget...",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.cardsModifierDescription": "Oblivionis's cards now appear in reward pools and shops.",
@@ -56,7 +56,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.2": "[pink]I can become even stronger![/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.3": "[pink]Watch this, this is my power![/pink]",
 
-  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.aromaPrinciple": "[sine][blue]...Desuwa!?[/sine][/blue]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.aromaPrinciple": "[sine][green]Parfait[/green]...[/sine]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.banter.alive.endTurnPing": "[green]Matcha Parfait[/green]...\nIt's going to melt.",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.banter.dead.endTurnPing": "[green]Parfait[/green]...",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.cardsModifierDescription": "Rana's cards now appear in reward pools and shops.",

@@ -15,12 +15,12 @@ public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Commo
     // 添加悬停提示，显示生成的“逃避”卡牌
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
-        get { yield return HoverTipFactory.FromCard<Shirk>(); }
+        get { yield return HoverTipFactory.FromCard<Shirk>(IsUpgraded); }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(14m, ValueProp.Move)
+        new DamageVar(13m, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -32,13 +32,13 @@ public class Argument() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Commo
             .Execute(choiceContext);
 
         var shirk = CombatState.CreateCard<Shirk>(Owner);
+        if (IsUpgraded) CardCmd.Upgrade(shirk);
         CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(shirk, PileType.Discard, Owner));
         await Cmd.Wait(0.5f);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
-        DynamicVars.Damage.UpgradeValueBy(3m);
+        DynamicVars.Damage.UpgradeValueBy(3);
     }
 }

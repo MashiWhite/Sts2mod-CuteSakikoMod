@@ -50,12 +50,13 @@ public sealed class BeGodPower : CuteSakikoModPower
             var customPrompt = new LocString("powers", "CUTE_SAKIKO_MOD_TO_FORGET");
             var prefs = new CardSelectorPrefs(customPrompt, toSelect);
 
-            var selected = await CardSelectCmd.FromCombatPile(
+            var candidates = forgetPile.Cards.ToList();
+            var selected = await CardSelectCmd.FromSimpleGrid(
                 choiceContext,
-                forgetPile,
+                candidates,
                 Owner.Player,
-                prefs,
-                _ => true
+                prefs
+
             );
 
             var selectedList = selected.ToList();

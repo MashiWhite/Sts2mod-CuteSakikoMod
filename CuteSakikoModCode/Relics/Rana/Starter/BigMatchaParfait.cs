@@ -21,13 +21,11 @@ public class BigMatchaParfait : MatchaParfait
 
     public override async Task AfterObtained()
     {
-        // 查找玩家身上已有的普通芭菲（排除自己）
-        var oldParfait = Owner?.Relics.OfType<MatchaParfait>().FirstOrDefault(r => r != this);
-
-        if (oldParfait != null)
+        // 优先继承被替换的普通芭菲的杯数（+6）
+        if (PendingTransferCharges.HasValue)
         {
-            // 继承旧杯数 + 额外 6 杯
-            Charges = oldParfait.Charges + 6;
+            Charges = PendingTransferCharges.Value + 6;
+            PendingTransferCharges = null; // 用完即清，避免污染
         }
         else
         {
@@ -40,7 +38,7 @@ public class BigMatchaParfait : MatchaParfait
 
     public override Task AfterRoomEntered(AbstractRoom room)
     {
-        if (room is RestSiteRoom) Charges += 8;
+        if (room is RestSiteRoom) Charges += 8; // 休息处增加 8 杯
         return Task.CompletedTask;
     }
 }

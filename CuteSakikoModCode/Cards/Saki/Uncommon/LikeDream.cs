@@ -1,5 +1,6 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Rare;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -27,26 +28,36 @@ public class LikeDream() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 获取当前压力层数
         var pressure = Owner.Creature.GetPower<PressurePower>();
         var currentAmount = pressure?.Amount ?? 0;
-        if (currentAmount > 0)
+        if (currentAmount <= 0) return;
+
+        // 有面具时崩溃会被移除，需用另一套判断
+        var hasMask = Owner.Relics.OfType<Mask>().Any();
+        var preHp = Owner.Creature.CurrentHp;
+
+        // 翻倍前记录崩溃层数
+        var previousBreakDownAmount = Owner.Creature.GetPower<BreakDownPower>()?.Amount ?? 0;
+
+        // 翻倍
+        await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, currentAmount, Owner.Creature, this);
+
+        bool triggeredCollapse;
+        if (hasMask)
         {
-            // 记录翻倍前的崩溃层数
-            var breakDown = Owner.Creature.GetPower<BreakDownPower>();
-            var previousBreakDownAmount = breakDown?.Amount ?? 0;
+            // 有面具：崩溃不会出现，用"翻倍后压力 >= 当前生命值"判定本该触发崩溃
+            triggeredCollapse = currentAmount * 2 >= preHp;
+        }
+        else
+        {
+            var newBreakDownAmount = Owner.Creature.GetPower<BreakDownPower>()?.Amount ?? 0;
+            triggeredCollapse = newBreakDownAmount > previousBreakDownAmount;
+        }
 
-            // 翻倍：增加相同数量的层数
-            await PowerCmd.Apply<PressurePower>(choiceContext, Owner.Creature, currentAmount, Owner.Creature, this);
-
-            // 检查崩溃层数是否增加（即触发了崩溃）
-            breakDown = Owner.Creature.GetPower<BreakDownPower>();
-            var newBreakDownAmount = breakDown?.Amount ?? 0;
-            if (newBreakDownAmount > previousBreakDownAmount)
-            {
-                await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner);
-                await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
-            }
+        if (triggeredCollapse)
+        {
+            await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner);
+            await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
         }
     }
 

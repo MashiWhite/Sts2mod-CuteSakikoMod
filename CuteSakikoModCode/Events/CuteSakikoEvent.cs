@@ -1,6 +1,7 @@
 ﻿using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Scaffolding.Content;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Events;
 

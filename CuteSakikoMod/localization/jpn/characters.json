@@ -1,5 +1,5 @@
 {
-  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.aromaPrinciple": "[sine][blue]...ですわ！？[/sine][/blue]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.aromaPrinciple": "[sine][blue]...ですわ！？[/blue][/sine]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.banter.alive.endTurnPing": "早くしてくれませんか？",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.banter.dead.endTurnPing": "忘却...",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.cardsModifierDescription": "報酬やショップに祥子のカードが出現するようになる。",
@@ -14,7 +14,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "豊川祥子",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.titleObject": "可愛い祥子",
 
-  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.aromaPrinciple": "[sine][blue]...ですわ！？[/sine][/blue]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.aromaPrinciple": "[sine][blue]...ですわ！？[/blue][/sine]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.banter.alive.endTurnPing": "早くしてくれませんか？",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.banter.dead.endTurnPing": "忘却...",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_OB.cardsModifierDescription": "報酬やショップにオブリビオニスのカードが出現するようになる。",
@@ -56,7 +56,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.2": "[pink]もっと強くなれる！[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.power.3": "[pink]見てて、これが私の力！[/pink]",
 
-  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.aromaPrinciple": "[sine][blue]...ですわ！？[/sine][/blue]",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.aromaPrinciple": "[sine][green]パフェ[/green]...[/sine]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.banter.alive.endTurnPing": "[green]抹茶パフェ[/green]....\n溶けちゃう",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.banter.dead.endTurnPing": "[green]パフェ[/green]...",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.cardsModifierDescription": "報酬やショップに楽奈のカードが出現するようになる。",
