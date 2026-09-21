@@ -608,7 +608,7 @@
   "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.title": "Tokyo Tower",
   "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.description": "Crash the [red]Tokyo Tower[/red] into the enemy, dealing {Damage:diff()} damage.",
   "CUTE_SAKIKO_MOD_CARD_REGRETED.title": "Deep Regret",
-  "CUTE_SAKIKO_MOD_CARD_REGRETED.description": "Lose {HpLoss:diff()} HP.\nDraw 1 card.",
+  "CUTE_SAKIKO_MOD_CARD_REGRETED.description": "Take {Damage:diff()} damage.\nDraw 1 card.",
   "CUTE_SAKIKO_MOD_CARD_RECALL.selectionScreenPrompt": "Select a Memory.",
   "CUTE_SAKIKO_MOD_CARD_TEMPORARY_FORGETFULNESS.title": "Temporary Forgetfulness",
   "CUTE_SAKIKO_MOD_CARD_TEMPORARY_FORGETFULNESS.description": "Choose 1 card in your hand, play it, then [red]Forget[/red] it.",

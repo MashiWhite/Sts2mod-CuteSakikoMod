@@ -9,13 +9,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class RedTea() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    // 保留关键词
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
-
-    // 动态变量：能量（基础1，升级2）
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [];
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new EnergyVar(1)
+        new EnergyVar(2)
     ];
 
     // 悬停提示：显示“买单”卡牌
@@ -42,7 +40,6 @@ public class RedTea() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon
 
     protected override void OnUpgrade()
     {
-        // 升级：能量+1（1→2）
-        DynamicVars.Energy.UpgradeValueBy(1m);
+        AddKeyword(CardKeyword.Retain);
     }
 }

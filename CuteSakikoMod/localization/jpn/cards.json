@@ -608,7 +608,7 @@
   "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.title": "東京タワー",
   "CUTE_SAKIKO_MOD_CARD_TOKYO_TOWER.description": "[red]東京タワー[/red]で敵を粉砕し、{Damage:diff()}ダメージを与える。",
   "CUTE_SAKIKO_MOD_CARD_REGRETED.title": "悔恨",
-  "CUTE_SAKIKO_MOD_CARD_REGRETED.description": "HPを{HpLoss:diff()}失う。\nカードを1枚引く。",
+  "CUTE_SAKIKO_MOD_CARD_REGRETED.description": "{Damage:diff()}ダメージを受ける。\nカードを1枚引く。",
   "CUTE_SAKIKO_MOD_CARD_RECALL.selectionScreenPrompt": "メモリーを選ぶ。",
   "CUTE_SAKIKO_MOD_CARD_TEMPORARY_FORGETFULNESS.title": "一時の忘却",
   "CUTE_SAKIKO_MOD_CARD_TEMPORARY_FORGETFULNESS.description": "手札のカードを1枚選び、プレイしてから[red]忘却[/red]する。",

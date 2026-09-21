@@ -1,4 +1,5 @@
 {
+
   "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.title": "向我俯首",
   "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.description": "你的[gold]骑士之剑[/gold]造成伤害时，给予敌人等量[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.smartDescription": "你的[gold]骑士之剑[/gold]造成伤害时，给予敌人等量[gold]压力[/gold]。",
@@ -228,6 +229,9 @@
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.title": "和弦增幅",
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.description": "每层使下一次演奏的所有[gold]和弦[/gold]数值+1。",
   "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_POWER.smartDescription": "下[blue]{Amount}[/blue]次，演奏的所有[gold]和弦[/gold]数值+1。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.title": "本回合和弦增幅",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.description": "本回合内，每层使下一次演奏的所有[gold]和弦[/gold]数值+1。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.smartDescription": "本回合内，下[blue]{Amount}[/blue]次，演奏的所有[gold]和弦[/gold]数值+1。",
   "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.title": "这是什么动物",
   "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.description": "[sine]你搞不清楚它到底是什么......也不知道它下一步要做什么......[/sine]",
   "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.smartDescription": "[sine]你搞不清楚它到底是什么......也不知道它下一步要做什么......[/sine]",

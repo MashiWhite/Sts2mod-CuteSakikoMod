@@ -1,18 +1,32 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
-using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
+﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Common;
 
-public class SwollenFingers() : CuteAnonCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class SwollenFingers : CuteAnonCard
 {
+    public SwollenFingers() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    {
+    }
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new DamageVar(8m, ValueProp.Move); }
+        get
+        {
+            yield return new DamageVar(10m, ValueProp.Move);
+            yield return new PowerVar<ChordBonusThisTurnPower>(1m);
+        }
+    }
+    
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get { yield return HoverTipFactory.FromPower<ChordBonusThisTurnPower>(); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -21,19 +35,23 @@ public class SwollenFingers() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
         TriggerBanter();
 
         // 造成伤害
-        var damage = DynamicVars.Damage.BaseValue;
-        await DamageCmd.Attack(damage)
-            .FromCard(this,cardPlay)
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 将上一个打出的音符变为攻击
-        ChordNoteSystem.ModifyAllNotes(Owner, CardType.Attack);
+        // 本回合获得和弦增幅（回合结束自动移除）
+        await PowerCmd.Apply<ChordBonusThisTurnPower>(
+            choiceContext,
+            Owner.Creature,
+            DynamicVars["ChordBonusThisTurnPower"].IntValue,
+            Owner.Creature,
+            this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); 
+        DynamicVars["ChordBonusThisTurnPower"].UpgradeValueBy(1m); // 1 → 2
     }
 }

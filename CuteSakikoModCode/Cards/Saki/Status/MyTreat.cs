@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 
-public class MyTreat() : ModStatusCard(1, CardType.Status, CardRarity.Status, TargetType.Self)
+public class MyTreat() : ModStatusCard(0, CardType.Status, CardRarity.Status, TargetType.Self)
 {
     // 没有 Unplayable，可以主动打出
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal];
@@ -15,7 +15,10 @@ public class MyTreat() : ModStatusCard(1, CardType.Status, CardRarity.Status, Ta
     // 升级可降低费用（从1变为0）
     public override int MaxUpgradeLevel => 1;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new GoldVar(5)
+    ];
 
     // 打出时：抽一张牌
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -28,12 +31,11 @@ public class MyTreat() : ModStatusCard(1, CardType.Status, CardRarity.Status, Ta
     {
         if (card != this) return;
         await Cmd.Wait(0.25f);
-        await PlayerCmd.LoseGold(5, Owner);
+        await PlayerCmd.LoseGold(DynamicVars.Gold.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        // 升级：费用从1变为0
-        EnergyCost.UpgradeBy(-1);
+      DynamicVars.Gold.UpgradeValueBy(-2);
     }
 }

@@ -113,7 +113,7 @@ public sealed class SwordManager : HookedSingletonModel
 
         bool includeExhaustAndForget = playedCard is Unsheathe;
 
-        return EnsureSwordExists(player, playedCard.IsUpgraded, playedCard, includeExhaustAndForget);
+        return EnsureSwordExists(player, false, playedCard, includeExhaustAndForget);
     }
 
     public override async Task AfterPowerAmountChanged(

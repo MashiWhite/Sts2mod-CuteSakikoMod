@@ -27,6 +27,8 @@ public static class GameplayConfigSync
 
     private static IDisposable? _handshakeSub;
     private static IDisposable? _topicChangedSub;
+    private static IDisposable? _sessionBoundSub;
+    private static IDisposable? _sessionUnboundSub;
     private static bool _runStartedSubscribed;
 
     /// <summary>
@@ -50,7 +52,22 @@ public static class GameplayConfigSync
 
         _topicChangedSub ??= RitsuLibSidecarEvents.OnConfigTopicChanged(OnTopicChanged);
 
-        // 订阅官方 RunStartedEvent（RitsuLib 生命周期事件，比原版 RunManager.RunStarted 更早、更可靠）
+        // ⭐ 订阅会话绑定/解绑，实时更新权威状态
+        _sessionBoundSub ??= RitsuLibSidecarEvents.OnSessionBound(evt =>
+        {
+            UpdateAuthority(evt.NetService);
+            Entry.Logger.Info(
+                $"[ConfigSync] SessionBound: type={evt.NetService.Type} IsHostAuthority={IsHostAuthority}");
+        });
+
+        _sessionUnboundSub ??= RitsuLibSidecarEvents.OnSessionUnbound(_ =>
+        {
+            // 会话解绑 = 离开联机房间，回退到本地/单机权威
+            UpdateAuthority(null);
+            Entry.Logger.Info($"[ConfigSync] SessionUnbound: IsHostAuthority={IsHostAuthority}");
+        });
+
+        // 订阅官方 RunStartedEvent
         if (!_runStartedSubscribed)
         {
             _runStartedSubscribed = true;

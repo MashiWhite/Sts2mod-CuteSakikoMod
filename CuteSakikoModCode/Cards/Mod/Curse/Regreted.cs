@@ -24,7 +24,7 @@ public class Regreted : ModCurseCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new HpLossVar(1m); }
+        get { yield return new DamageVar(2m,ValueProp.Unpowered | ValueProp.Move); }
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -32,7 +32,7 @@ public class Regreted : ModCurseCard
         await CardPileCmd.Draw(choiceContext, 1, Owner);
         VfxCmd.PlayOnCreatureCenter(Owner.Creature, "vfx/vfx_bloody_impact");
         await CreatureCmd.Damage(choiceContext, Owner.Creature,
-            new DamageVar(DynamicVars.HpLoss.BaseValue, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move),
+            new DamageVar(DynamicVars.Damage.BaseValue, ValueProp.Unpowered | ValueProp.Move),
             this, null);
     }
 }
