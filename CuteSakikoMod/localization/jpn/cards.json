@@ -1,4 +1,8 @@
 {
+  "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.title": "重圧を刃に変えて",
+  "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.description": "[gold]騎士の剣[/gold]をプレイし、すべての[gold]重圧[/gold]を消費する。消費した分の追加ダメージを与える。",
+  "CUTE_SAKIKO_MOD_CARD_NO_LONGER_NAIVE.title": "もう幼稚ではない私",
+  "CUTE_SAKIKO_MOD_CARD_NO_LONGER_NAIVE.description": "{CalculatedDamage:diff()}ダメージを与える。\n自分の[red]忘却山[/red]にカードが1枚あるごとに、ダメージが{ExtraDamage:diff()}増加する。",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.title": "ネーミングセンス",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.description": "今回のプレイ中、対象の味方の表示名を変更する。\nこのカードを引いた時、カードを{Cards:diff()}枚引く。",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.title": "{target}の名前を変更",

@@ -310,46 +310,63 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord
 
         // ==================== 核心演奏 ====================
 
-        private static async Task PlaySingleChordInternalAsync(
-            Player player, PlayerChoiceContext context, StateData state,
-            string chordId, int count = 1, bool removeStored = true)
+       private static async Task PlaySingleChordInternalAsync(
+    Player player, PlayerChoiceContext context, StateData state,
+    string chordId, int count = 1, bool removeStored = true)
+{
+    var chordBonusPower = player.Creature?.GetPower<ChordBonusPower>();
+    bool shouldConsumeChordBonus =
+        chordBonusPower != null && chordBonusPower.Amount > 0 && !state.ChordBonusConsumedThisOperation;
+    if (shouldConsumeChordBonus)
+        state.ChordBonusConsumedThisOperation = true;
+
+    int firstPlayBonus = GetFirstPlayBonus(player);
+    int fixedFirstPlayBonus = state.FirstPlayBonusAppliedThisOperation ? firstPlayBonus : 0;
+
+    for (var i = 0; i < count; i++)
+    {
+        _ = ChordEffectPlayer.PlayChordIcons(player.Creature, new[] { chordId }, 0f);
+        ChordAudioHelper.PlayStrumSound();
+
+        if (ChordManager.AllChords.TryGetValue(chordId, out var def))
         {
-            var chordBonusPower = player.Creature?.GetPower<ChordBonusPower>();
-            bool shouldConsumeChordBonus =
-                chordBonusPower != null && chordBonusPower.Amount > 0 && !state.ChordBonusConsumedThisOperation;
-            if (shouldConsumeChordBonus)
-                state.ChordBonusConsumedThisOperation = true;
+            int baseBonus = CalculateBaseBonus(player);
+            int totalBonus = baseBonus + fixedFirstPlayBonus;
 
-            int firstPlayBonus = GetFirstPlayBonus(player);
-            int fixedFirstPlayBonus = state.FirstPlayBonusAppliedThisOperation ? firstPlayBonus : 0;
-
-            for (var i = 0; i < count; i++)
+            var combat = player.Creature?.CombatState;
+            if (combat != null)
             {
-                _ = ChordEffectPlayer.PlayChordIcons(player.Creature, new[] { chordId }, 0f);
-                ChordAudioHelper.PlayStrumSound();
-                if (ChordManager.AllChords.TryGetValue(chordId, out var def))
-                {
-                    int baseBonus = CalculateBaseBonus(player);
-                    int totalBonus = baseBonus + fixedFirstPlayBonus;
-                    await def.Effect(context, player.Creature, totalBonus);
-                }
+                // ★ 演奏前钩子
+                await ChordNoteHooks.BeforeChordPlayed(combat, player, chordId, totalBonus, context);
 
-                if (removeStored)
-                    state.StoredChords.Remove(chordId);
+                await def.Effect(context, player.Creature, totalBonus);
 
-                SaveState(player, state);
-
-                await NotifyChordPlayedAsync(player, context, state);
+                // ★ 演奏后钩子
+                await ChordNoteHooks.AfterChordPlayed(combat, player, chordId, totalBonus, context);
             }
-
-            if (shouldConsumeChordBonus && chordBonusPower != null)
+            else
             {
-                await PowerCmd.Decrement(chordBonusPower);
-                PlayerNotesChanged?.Invoke(player);
+                // 没有战斗状态时也执行效果（例如战斗外模拟），但不触发钩子
+                await def.Effect(context, player.Creature, totalBonus);
             }
-
-            SaveState(player, state);
         }
+
+        if (removeStored)
+            state.StoredChords.Remove(chordId);
+
+        SaveState(player, state);
+
+        await NotifyChordPlayedAsync(player, context, state);
+    }
+
+    if (shouldConsumeChordBonus && chordBonusPower != null)
+    {
+        await PowerCmd.Decrement(chordBonusPower);
+        PlayerNotesChanged?.Invoke(player);
+    }
+
+    SaveState(player, state);
+}
 
         private static async Task NotifyChordPlayedAsync(Player player, PlayerChoiceContext context, StateData state)
         {

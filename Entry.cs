@@ -72,14 +72,14 @@ public class Entry
         }
 
         // 2. 创建绑定
-        // 游戏性开关：客户端 setter 直接拒绝（双保险，视觉上也会被 WithEntryEnabledWhen 灰掉）
-        // 音频：保持原样
+        // 游戏性开关：只有"联机 + 客户端 + 跑局中"才锁定，其他情况（大厅/主菜单/断连后）可自由修改
+        // 音频：永远保持本地可改
         var eggBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
             ModId, "config",
             model => model.EggsCard,
             (model, value) =>
             {
-                if (!GameplayConfigSync.IsHostAuthority) return;
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
                 model.EggsCard = value;
                 GameplayConfigSync.OnLocalConfigChanged();
             }
@@ -89,7 +89,7 @@ public class Entry
             model => model.EnableModMonsters,
             (model, value) =>
             {
-                if (!GameplayConfigSync.IsHostAuthority) return;
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
                 model.EnableModMonsters = value;
                 GameplayConfigSync.OnLocalConfigChanged();
             }
@@ -99,7 +99,7 @@ public class Entry
             model => model.EnableCustomAncients,
             (model, value) =>
             {
-                if (!GameplayConfigSync.IsHostAuthority) return;
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
                 model.EnableCustomAncients = value;
                 GameplayConfigSync.OnLocalConfigChanged();
             }
@@ -109,7 +109,7 @@ public class Entry
             model => model.EnableCustomEvents,
             (model, value) =>
             {
-                if (!GameplayConfigSync.IsHostAuthority) return;
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
                 model.EnableCustomEvents = value;
                 GameplayConfigSync.OnLocalConfigChanged();
             }
@@ -138,29 +138,29 @@ public class Entry
             .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.TITLE", "Cute Sakiko Mod Settings"))
             .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DESCRIPTION", "Cute Sakiko Mod Settings"))
 
-            // 游戏内容 Section —— 四个 toggle 在客户端会被灰掉
+            // 游戏内容 Section —— 只有跑局中的客户端会灰掉
             .AddSection("game_content", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.GAME_CONTENT", "Game Content"))
                 .AddToggle("egg_toggle",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.LABEL", "Egg Card"),
                     eggBinding,
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.EGG_TOGGLE.DESC", "..."))
-                .WithEntryEnabledWhen("egg_toggle", () => GameplayConfigSync.IsHostAuthority)
+                .WithEntryEnabledWhen("egg_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
                 .AddToggle("monster_toggle",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.LABEL", "Enable Mod Monsters"),
                     monsterBinding,
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MONSTER_TOGGLE.DESC", "..."))
-                .WithEntryEnabledWhen("monster_toggle", () => GameplayConfigSync.IsHostAuthority)
+                .WithEntryEnabledWhen("monster_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
                 .AddToggle("ancient_toggle",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.ANCIENT_TOGGLE.LABEL", "Custom Ancient Events"),
                     ancientBinding,
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.ANCIENT_TOGGLE.DESC", "Allow custom ancient events to appear naturally."))
-                .WithEntryEnabledWhen("ancient_toggle", () => GameplayConfigSync.IsHostAuthority)
+                .WithEntryEnabledWhen("ancient_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
                 .AddToggle("custom_event_toggle",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL", "Custom Events"),
                     customEventBinding,
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC", "Allow custom events to appear naturally."))
-                .WithEntryEnabledWhen("custom_event_toggle", () => GameplayConfigSync.IsHostAuthority)
+                .WithEntryEnabledWhen("custom_event_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
             )
 
             // 音频 Section —— 永远是本地设置，所有玩家可改
@@ -237,7 +237,7 @@ public class Entry
         Log.Debug("Mod initialized!");
 
         // 8. 预加载 VFX
-        VFXUtil.PreloadScenes(new List<string> { "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
+        VfxUtil.PreloadScenes(new List<string> { "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
 
         // 9. 网络消息处理器 + 房主权威配置同步
         if (RunManager.Instance != null)
@@ -282,8 +282,7 @@ public class Entry
                         guitar.SetLearnedChordsFromString(msg.LearnedChordsData);
                     }));
 
-                    // ⭐ 新增：EggsGrantMessage handler
-                    // ⭐ 新增：EggsGrantMessage handler
+                    // ⭐ EggsGrantMessage handler
                     netService.RegisterMessageHandler(new MessageHandlerDelegate<EggsGrantMessage>(async (msg, senderId) =>
                     {
                         try

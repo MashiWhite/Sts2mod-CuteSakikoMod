@@ -27,7 +27,7 @@ public class PressureIntoBlade() : CuteSakikoModCard(1, CardType.Skill, CardRari
     {
         get
         {
-            yield return HoverTipFactory.FromCard<KnightSword>(IsUpgraded);
+            yield return HoverTipFactory.FromCard<KnightSword>();
             yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Sword.GetModCardKeyword());
             yield return HoverTipFactory.FromPower<PressurePower>();
             yield return HoverTipFactory.FromPower<BreakDownPower>();

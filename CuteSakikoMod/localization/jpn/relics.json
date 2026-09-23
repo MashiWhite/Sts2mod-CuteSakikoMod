@@ -1,4 +1,11 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.title": "学年一位のノート",
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.description": "[gold]鍛造[/gold]する時、追加でカードを1枚選んでアップグレードできる。",
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.flavor": "[green]パフェ[/green]よりも甘いのは、[blue]二[/blue][pink]人[/pink]で一緒に勉強した思い出。",
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.selectionPrompt": "アップグレードするカードを1枚選ぶ",
+  "CUTE_SAKIKO_MOD_RELIC_EMO_MASK.title": "Emoのピンクと青の仮面",
+  "CUTE_SAKIKO_MOD_RELIC_EMO_MASK.description": "[gold]重圧[/gold]を付与するか、[gold]演奏[/gold]で[gold]コード[/gold]を演奏するたびにカウントが+1される。カウントが[blue]7[/blue]に達した時、無料で[gold]エンチャント[/gold]：[purple]演奏[/purple]が付与されたランダムな[gold]ピアノ奏[/gold]を1枚[gold]手札[/gold]に加え、カウントをリセットする。",
+  "CUTE_SAKIKO_MOD_RELIC_EMO_MASK.flavor": "[pink]ピンク[/pink]と[blue]黒青[/blue]の二つの残影の[rainbow]ハーモニー[/rainbow]は、今もなお[gold]仮面[/gold]の奥深くで重なり合い、決して終わることはない...... [b][orange]それで、Emoとは一体何なのか[/orange][/b]？",
   "CUTE_SAKIKO_MOD_RELIC_MARACAS.title": "マラカス",
   "CUTE_SAKIKO_MOD_RELIC_MARACAS.description": "[gold]このレリックを右クリック[/gold]すると、ターン終了時に追加ターンを得る。各戦闘につき[blue]1[/blue]回。",
   "CUTE_SAKIKO_MOD_RELIC_MARACAS.flavor": "[b][blue]歌が上手だよ！もう一曲！[/blue][/b]",

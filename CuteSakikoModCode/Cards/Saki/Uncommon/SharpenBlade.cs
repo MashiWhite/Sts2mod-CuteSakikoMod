@@ -57,6 +57,5 @@ public class SharpenBlade() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Un
 
     protected override void OnUpgrade()
     {
-        // 升级效果在 OnPlay 中通过 IsUpgraded 处理
     }
 }

@@ -1,4 +1,8 @@
 ﻿{
+  "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.title": "Pressure into a Blade",
+  "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.description": "Play [gold]Knight's Sword[/gold] and consume all [gold]Pressure[/gold], causing it to deal additional damage equal to the amount consumed.",
+  "CUTE_SAKIKO_MOD_CARD_NO_LONGER_NAIVE.title": "The Me Who Is No Longer Naive",
+  "CUTE_SAKIKO_MOD_CARD_NO_LONGER_NAIVE.description": "Deal {CalculatedDamage:diff()} damage.\nFor each card in your [red]Forgotten Pile[/red], increase this card's damage by {ExtraDamage:diff()}.",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.title": "Naming Sense",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.description": "This run, change the displayed name of the targeted ally.\nWhen you draw this card, draw {Cards:diff()} card(s).",
   "CUTE_SAKIKO_MOD_CARD_ANON_NAME_SENSE.dialog.title": "Change {target}'s name",

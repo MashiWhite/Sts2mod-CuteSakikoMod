@@ -16,8 +16,25 @@ public static class GameplayConfigSync
 {
     public const string TopicId = "cute_sakiko_gameplay";
 
-    /// <summary>本机是否为权威（单机或房主）。</summary>
+    /// <summary>本机是否为权威（单机或房主）。用于广播和 snapshot 判定。</summary>
     public static bool IsHostAuthority { get; private set; }
+
+    /// <summary>
+    /// 是否锁定游戏性设置 UI（禁止修改）。
+    /// 只有"联机 + 客户端 + 跑局中"三件事同时满足才锁。
+    /// 大厅、主菜单、断连后均不锁，客户端可自由改自己的本地值。
+    /// </summary>
+    public static bool ShouldLockGameplaySettings
+    {
+        get
+        {
+            var rm = RunManager.Instance;
+            var ns = rm?.NetService;
+            if (ns == null) return false;
+            if (ns.Type != NetGameType.Client) return false;
+            return rm!.DebugOnlyGetState() != null;
+        }
+    }
 
     /// <summary>run snapshot 槽位；必须在 Init() 之前由 Entry 注册。</summary>
     public static RunSavedData<RunGameplayConfigData> RunConfigSlot = null!;
@@ -52,7 +69,7 @@ public static class GameplayConfigSync
 
         _topicChangedSub ??= RitsuLibSidecarEvents.OnConfigTopicChanged(OnTopicChanged);
 
-        // ⭐ 订阅会话绑定/解绑，实时更新权威状态
+        // 订阅会话绑定/解绑，实时更新权威状态
         _sessionBoundSub ??= RitsuLibSidecarEvents.OnSessionBound(evt =>
         {
             UpdateAuthority(evt.NetService);

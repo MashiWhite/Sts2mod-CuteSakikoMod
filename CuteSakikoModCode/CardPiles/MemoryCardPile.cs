@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 using Godot;
 using HarmonyLib;
@@ -80,11 +81,25 @@ public sealed class MemoryCardPile
 
             var seenIds = new HashSet<ModelId>();
             var count = 0;
-            // 关键：使用 Ordinal 排序，确保所有客户端顺序一致
-            var allMemoryCards = ModelDb.AllCards
+
+            // 【修正点1】使用 AllCardPools 替代不存在的 GetAll<CardPoolModel>()
+            var targetPool = ModelDb.AllCardPools
+                .OfType<CuteSakikoTokenCardPool>()
+                .FirstOrDefault();
+
+            if (targetPool == null)
+            {
+                Log.Error("[MemoryCardPile] Cannot find CuteSakikoTokenCardPool! Aborting population.");
+                return;
+            }
+
+            // 【修正点2】从目标卡池中筛选
+            // 查看反编译代码可知 CardPoolModel 有 AllCards 属性（见 Preload 方法中：allCard.Pool 和 p.AllCards）
+            var allMemoryCards = targetPool.AllCards
                 .Where(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
-                .OrderBy(c => c.Id.Entry, StringComparer.Ordinal)
+                .OrderBy(c => c.Id.Entry, StringComparer.Ordinal) // 必须保留 Ordinal 排序，确保联机一致性
                 .ToList();
+
             foreach (var template in allMemoryCards)
             {
                 if (!seenIds.Contains(template.Id))

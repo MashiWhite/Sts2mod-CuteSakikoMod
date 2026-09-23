@@ -26,7 +26,7 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
         var container = cardPlay.Target.GetVfxContainer() ?? NCombatRoom.Instance?.CombatVfxContainer;
 
         // 2. 使用 VFXUtil 实例化特效（已缓存，不会卡顿）
-        var vfx = VFXUtil.GenVFXNode("res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn");
+        var vfx = VfxUtil.GenVFXNode("res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn");
         if (vfx != null && container != null)
         {
             container.AddChildSafely(vfx);

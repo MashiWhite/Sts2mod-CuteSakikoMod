@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.TestSupport;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Others;
 
-public static class VFXUtil
+public static class VfxUtil
 {
     public static readonly ConcurrentDictionary<string, PackedScene> ModSceneCache = new();
 

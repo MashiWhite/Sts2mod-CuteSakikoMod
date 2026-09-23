@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
@@ -44,14 +43,14 @@ public sealed class BreakDownPower : CuteSakikoModPower
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
-        CardPlay? cardPlay)  // 补上缺失参数
+        CardPlay? cardPlay)
     {
         if (target != Owner) return 1m;
         if (Amount <= 0) return 1m;
         return 2m;
     }
 
-    // 记录是否受到过伤害（未格挡），跨回合累积
+    // 记录是否受到过伤害（未格挡）
     public override async Task AfterDamageReceived(
         PlayerChoiceContext choiceContext,
         Creature target,
@@ -61,14 +60,25 @@ public sealed class BreakDownPower : CuteSakikoModPower
         CardModel? cardSource)
     {
         if (target != Owner) return;
-        if (result.UnblockedDamage > 0)
-            _hasTakenDamageSinceLastOwnTurnEnd = true;
+        if (result.UnblockedDamage <= 0) return;
+
+        // 玩家崩溃：受到伤害时立即移除
+        if (Owner.IsPlayer)
+        {
+            if (Amount > 0)
+                await PowerCmd.Remove(this);
+            return;
+        }
+
+        // 敌人崩溃：标记，待自身回合结束时移除
+        _hasTakenDamageSinceLastOwnTurnEnd = true;
     }
 
-    // 在自己的回合结束时，如果期间受到过伤害，则移除该能力
+    // 敌人崩溃：在其回合结束时若期间受到过伤害，则移除
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
+        if (Owner.IsPlayer) return;
         if (side != Owner.Side) return;
         if (_hasTakenDamageSinceLastOwnTurnEnd && Amount > 0)
         {
@@ -76,5 +86,4 @@ public sealed class BreakDownPower : CuteSakikoModPower
             _hasTakenDamageSinceLastOwnTurnEnd = false;
         }
     }
-    
 }

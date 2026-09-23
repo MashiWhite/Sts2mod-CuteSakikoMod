@@ -1,4 +1,11 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.title": "The Grade-Topper's Notebook",
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.description": "Whenever you [gold]Forge[/gold], you may choose an additional card to upgrade.",
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.flavor": "Sweeter than a [green]Parfait[/green] are the memories of the [blue]two[/blue] [pink]of us[/pink] studying together.",
+  "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.selectionPrompt": "Choose a card to upgrade",
+  "CUTE_SAKIKO_MOD_RELIC_EMO_MASK.title": "Emo's Pink-and-Blue Mask",
+  "CUTE_SAKIKO_MOD_RELIC_EMO_MASK.description": "Each time you apply [gold]Pressure[/gold] or [gold]Perform[/gold] a [gold]Chord[/gold], increase the counter by 1. When the counter reaches [blue]7[/blue], add a random free [gold]Piano Performance[/gold] card with the [gold]Enchantment[/gold] [purple]Perform[/purple] to your [gold]hand[/gold] and reset the counter.",
+  "CUTE_SAKIKO_MOD_RELIC_EMO_MASK.flavor": "The [rainbow]harmony[/rainbow] of two phantoms—one [pink]pink[/pink], one [blue]black-blue[/blue]—still overlaps deep within the [gold]mask[/gold], never having ended...... [b][orange]So what exactly is Emo[/orange][/b]?",
   "CUTE_SAKIKO_MOD_RELIC_MARACAS.title": "Maracas",
   "CUTE_SAKIKO_MOD_RELIC_MARACAS.description": "[gold]Right-click[/gold] this relic to gain an extra turn at the end of your turn. Once per combat.",
   "CUTE_SAKIKO_MOD_RELIC_MARACAS.flavor": "[b][blue]You sang wonderfully! Encore![/blue][/b]",
