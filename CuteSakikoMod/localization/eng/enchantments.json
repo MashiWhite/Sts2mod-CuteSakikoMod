@@ -1,4 +1,7 @@
 ﻿{
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_MY_GO_ENCHANTMENT.title": "MyGo'd",
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_MY_GO_ENCHANTMENT.extraCardText": "After being played, randomly enters one of your [gold]piles[/gold].",
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_MY_GO_ENCHANTMENT.description": "After being played, randomly enters one of your [gold]piles[/gold].",
   "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.title": "Perform",
   "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.extraCardText": "When played, Perform the most recently stored [gold]Chord[/gold].",
   "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.description": "When you play this card, Perform the most recently stored [gold]Chord[/gold]."

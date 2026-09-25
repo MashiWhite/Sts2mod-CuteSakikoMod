@@ -1,5 +1,8 @@
 ﻿{
   "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.title": "演奏",
   "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.extraCardText": "プレイ時、ストックしている最新の[gold]コード[/gold]を演奏する。",
-  "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.description": "このカードをプレイした時、ストックしている最新の[gold]コード[/gold]を演奏する。"
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_PLAY_ENCHANTMENT.description": "このカードをプレイした時、ストックしている最新の[gold]コード[/gold]を演奏する。",
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_MY_GO_ENCHANTMENT.title": "MyGoった",
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_MY_GO_ENCHANTMENT.extraCardText": "プレイ後、ランダムな[gold]山[/gold]に入る。",
+  "CUTE_SAKIKO_MOD_ENCHANTMENT_MY_GO_ENCHANTMENT.description": "プレイ後、ランダムな[gold]山[/gold]に入る。"
 }

@@ -1,4 +1,12 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.title": "湯気の下の仮面",
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.description": "休憩所で休む時、全員の最大HPを追加で[green]20[/green]%回復する。",
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.flavor": "[pink]「この仮面、さきこちゃんの匂いがする...」[/pink]\n[blue]「...変なこと言わないでください」[/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.additionalRestSiteHealText": "湯気の下の仮面：パーティーの最大HPを追加で[green]{HealPercent}[/green]%回復する。",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.title": "抹茶キャンディの袋🍬",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.description": "[blue]2[/blue]枚のカードを選ぶ。それらのカードに[gold]エンチャント[/gold]：[purple]MyGoった[/purple]を付与する。",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.flavor": "[green]変なキャンディ......[/green]",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.selectionScreenPrompt": "[blue]2[/blue]枚のカードを選んでエンチャント：[purple]MyGoった[/purple]",
   "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.title": "学年一位のノート",
   "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.description": "[gold]鍛造[/gold]する時、追加でカードを1枚選んでアップグレードできる。",
   "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.flavor": "[green]パフェ[/green]よりも甘いのは、[blue]二[/blue][pink]人[/pink]で一緒に勉強した思い出。",

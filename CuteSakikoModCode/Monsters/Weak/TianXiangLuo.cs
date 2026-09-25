@@ -23,7 +23,7 @@ public class TianXiangLuo : ModMonsterTemplate
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 45, 40);
 
     public override MonsterAssetProfile AssetProfile => new(
-        "res://CuteSakikoMod/scenes/monster/tianxiangluo.tscn"
+        "res://CuteSakikoMod/scenes/monster/luo/tianxiangluo.tscn"
     );
 
     // 高进阶时伤害和格挡 +1

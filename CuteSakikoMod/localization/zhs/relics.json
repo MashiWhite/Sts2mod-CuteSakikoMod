@@ -1,4 +1,12 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.title": "水汽下的假面",
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.description": "在休息处休息时，为所有人额外回复[green]20[/green]%最大生命值。",
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.flavor": "[pink]「这个假面，有祥祥的味道...」[/pink]\n[blue]「...请不要说奇怪的话」[/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_MASK_IN_STEAM.additionalRestSiteHealText": "水汽下的假面：为队伍额外回复[green]{HealPercent}[/green]%最大生命值。",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.title": "一袋抹茶糖果🍬",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.description": "选择[blue]2[/blue]张牌。为这些牌[gold]附魔[/gold][purple]MyGo了[/purple]。",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.flavor": "[green]奇怪的糖果......[/green]",
+  "CUTE_SAKIKO_MOD_RELIC_BAG_OF_MATCHA_CANDY.selectionScreenPrompt": "选择[blue]2[/blue]张牌附魔：[purple]MyGo了[/purple]",
   "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.title": "年级第一的笔记",
   "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.description": "当你[gold]锻造[/gold]时，可以额外选择一张牌升级。",
   "CUTE_SAKIKO_MOD_RELIC_GRADE_FIRST_NOTEBOOK.flavor": "比[green]芭菲[/green]更甜的，是[blue]两[/blue][pink]人[/pink]一起学习的回忆。",

@@ -35,47 +35,28 @@ public class MemoryBurning : CuteSakikoModCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 播放施法动画
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
 
-        // 获取遗忘堆
         var forgetPile = ForgetCardPile.Get(Owner);
         if (forgetPile == null || forgetPile.Cards.Count == 0) return;
 
-        // 收集遗忘堆中的所有回忆牌
+        var memoryKeyword = CutesakiKeywords.Memory.GetModCardKeyword();
+        
         var memoryCards = forgetPile.Cards
-            .Where(c => c.Keywords.Contains(CutesakiKeywords.Memory.GetModCardKeyword()))
+            .Where(c => c.Keywords.Contains(memoryKeyword))
             .ToList();
 
         if (memoryCards.Count == 0) return;
 
-        // 获取随机敌人作为需要目标的牌的目标
         var target = GetRandomEnemy();
 
         foreach (var card in memoryCards)
         {
-            // 从遗忘堆移除
-            if (card.Pile == forgetPile)
-                forgetPile.RemoveInternal(card);
-            else
-                card.RemoveFromCurrentPile();
+            await CardCmd.AutoPlay(choiceContext, card, null);
 
-            // 加入手牌
-            await CardPileCmd.Add(card, PileType.Hand);
-
-            // 自动打出（如果需要目标但无敌人则跳过打出，直接消耗）
-            if (target != null)
-                await CardCmd.AutoPlay(choiceContext, card, target);
-            else
-                // 没有目标时，如果卡牌不需要目标，则尝试打出；如果需要目标则放弃打出
-                if (card.TargetType == TargetType.None || card.TargetType == TargetType.Self)
-                    await CardCmd.AutoPlay(choiceContext, card, null);
-
-            // 消耗该回忆牌
             await CardCmd.Exhaust(choiceContext, card);
         }
 
-        // 通知遗忘堆内容变化
         forgetPile.InvokeContentsChanged();
     }
 
@@ -83,7 +64,13 @@ public class MemoryBurning : CuteSakikoModCard
     {
         var enemies = CombatState?.HittableEnemies;
         if (enemies == null || enemies.Count == 0) return null;
-        return enemies[Owner.RunState.Rng.CombatCardSelection.NextInt(enemies.Count)];
+
+        // ★ 先排序再随机索引，保证两端随机池一致
+        var orderedEnemies = enemies
+            .OrderBy(e => e.CombatId ?? uint.MaxValue)
+            .ToList();
+
+        return orderedEnemies[Owner.RunState.Rng.CombatCardSelection.NextInt(orderedEnemies.Count)];
     }
 
     protected override void OnUpgrade()

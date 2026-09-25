@@ -23,7 +23,7 @@ public class Araluo : ModMonsterTemplate
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 45, 40);
 
     public override MonsterAssetProfile AssetProfile => new(
-        "res://CuteSakikoMod/scenes/monster/araluo.tscn"
+        "res://CuteSakikoMod/scenes/monster/luo/araluo.tscn"
     );
 
     // 数值（高进阶变化）

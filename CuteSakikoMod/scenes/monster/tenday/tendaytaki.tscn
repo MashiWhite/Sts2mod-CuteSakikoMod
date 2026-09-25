@@ -229,7 +229,7 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6666667),
+"times": PackedFloat32Array(0, 0.33333334),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [ExtResource("2_efubw"), ExtResource("3_gweal")]
@@ -305,7 +305,7 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6666667, 1.6333333),
+"times": PackedFloat32Array(0, 0.43333334, 1.6333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [ExtResource("2_efubw"), ExtResource("3_gweal"), ExtResource("2_efubw")]
@@ -463,15 +463,15 @@ script = ExtResource("1_6eunw")
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(18.330566, -345.46277)
+position = Vector2(1, -349)
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(15.851257, -185.95863)
+position = Vector2(-1.4545593, -148.54547)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-148.81815, -252.72728)
+position = Vector2(-133, -265)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
@@ -498,7 +498,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_esqhf")
 }
 autoplay = "idle_loop"
-speed_scale = 2.4301782
+speed_scale = 5.0
 next/attack = &"idle_loop"
 next/cast = &"idle_loop"
 next/hurt = &"idle_loop"

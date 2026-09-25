@@ -24,53 +24,51 @@ public sealed class BeGodPower : CuteSakikoModPower
         var forgetPile = ForgetCardPile.Get(Owner.Player);
         if (forgetPile == null || forgetPile.Cards.Count == 0) return;
 
-        // 当层数 >= 遗忘堆牌数时，自动处理全部牌（避免联机异步）
         if (Amount >= forgetPile.Cards.Count)
         {
-            var allCards = forgetPile.Cards.ToList();
+            // ★ 只按 Id.Entry 排序
+            var allCards = forgetPile.Cards
+                .OrderBy(c => c.Id.Entry, StringComparer.Ordinal)
+                .ToList();
+
             foreach (var card in allCards)
             {
-                if (card.Pile == forgetPile)
-                    forgetPile.RemoveInternal(card);
-                else
-                    card.RemoveFromCurrentPile();
-
-                await CardPileCmd.Add(card, PileType.Hand);
                 await CardCmd.AutoPlay(choiceContext, card, null);
 
-                if (card.Pile != null)
+                if (card.Pile != null && card.Pile != forgetPile)
                     await CardPileCmd.Add(card, forgetPile);
             }
+
             forgetPile.InvokeContentsChanged();
         }
         else
         {
-            // 层数不足时，保留原有的选择界面
             var toSelect = Math.Min(Amount, forgetPile.Cards.Count);
             var customPrompt = new LocString("powers", "CUTE_SAKIKO_MOD_TO_FORGET");
             var prefs = new CardSelectorPrefs(customPrompt, toSelect);
 
-            var candidates = forgetPile.Cards.ToList();
+            // ★ 只按 Id.Entry 排序
+            var candidates = forgetPile.Cards
+                .OrderBy(c => c.Id.Entry, StringComparer.Ordinal)
+                .ToList();
+
             var selected = await CardSelectCmd.FromSimpleGrid(
                 choiceContext,
                 candidates,
                 Owner.Player,
                 prefs
-
             );
 
-            var selectedList = selected.ToList();
+            // ★ 只按 Id.Entry 排序
+            var selectedList = selected
+                .OrderBy(c => c.Id.Entry, StringComparer.Ordinal)
+                .ToList();
+
             foreach (var card in selectedList)
             {
-                if (card.Pile == forgetPile)
-                    forgetPile.RemoveInternal(card);
-                else
-                    card.RemoveFromCurrentPile();
-
-                await CardPileCmd.Add(card, PileType.Hand);
                 await CardCmd.AutoPlay(choiceContext, card, null);
 
-                if (card.Pile != null)
+                if (card.Pile != null && card.Pile != forgetPile)
                     await CardPileCmd.Add(card, forgetPile);
             }
 

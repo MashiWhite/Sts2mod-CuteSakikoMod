@@ -46,8 +46,16 @@ public sealed class FriedShrimpEvent : CuteSakikoEvent
 
     private Task CrossBush()
     {
+        // ★ 把奖励交给战斗同步器统一管理
+        var extraRewards = new List<Reward>
+        {
+            new RelicReward(ModelDb.Relic<TianSuLuoDoll>().ToMutable(), Owner!),
+            new RelicReward(ModelDb.Relic<TianXiangLuoDoll>().ToMutable(), Owner!),
+            new RelicReward(ModelDb.Relic<AraluoDoll>().ToMutable(), Owner!)
+        };
+
         EnterCombatWithoutExitingEvent<LuoEncounterCrossBush>(
-            Array.Empty<Reward>(),
+            extraRewards,
             shouldResumeAfterCombat: true
         );
         return Task.CompletedTask;
@@ -88,26 +96,22 @@ public sealed class FriedShrimpEvent : CuteSakikoEvent
         SetEventFinished(PageDescription("DETOUR_DESC"));
     }
 
-    public override async Task Resume(AbstractRoom room)
+    public override Task Resume(AbstractRoom room)
     {
-        if (room is not CombatRoom combatRoom) return;
+        if (room is not CombatRoom combatRoom)
+            return Task.CompletedTask;
 
         if (combatRoom.Encounter is LuoEncounterCrossBush)
         {
-            // ★ 先标记事件完成，再展示奖励
+            // ★ 奖励已由 extraRewards 统一发放，这里只负责结束事件
             SetEventFinished(PageDescription("CROSS_BUSH_WIN"));
-
-            await RewardsCmd.OfferCustom(Owner!, new List<Reward>
-            {
-                new RelicReward(ModelDb.Relic<TianSuLuoDoll>().ToMutable(), Owner!),
-                new RelicReward(ModelDb.Relic<TianXiangLuoDoll>().ToMutable(), Owner!),
-                new RelicReward(ModelDb.Relic<AraluoDoll>().ToMutable(), Owner!)
-            });
         }
         else if (combatRoom.Encounter is LuoEncounterRestHere)
         {
             SetEventFinished(PageDescription("REST_HERE_WIN"));
         }
+
+        return Task.CompletedTask;
     }
 
     private LocString PageDescription(string pageKey) => L10NLookup($"{Id.Entry}.pages.{pageKey}.description");
