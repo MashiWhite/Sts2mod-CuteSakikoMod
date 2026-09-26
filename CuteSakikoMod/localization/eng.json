@@ -22,5 +22,12 @@
   "TELEMETRY.BASIC_USAGE.DESC": "Sends version, platform, language, and an anonymous install ID to estimate compatibility issues.",
   "TELEMETRY.BALANCE.DESC": "Sends this mod's balance events (character picks, card plays) for balance analysis.",
   "TELEMETRY.DIAGNOSTICS.DESC": "Sends exceptions and diagnostic context to help locate crashes.",
-  "TELEMETRY.RUN_HISTORY.DESC": "Sends finished runs' vanilla data for balance analysis."
+  "TELEMETRY.RUN_HISTORY.DESC": "Sends finished runs' vanilla data for balance analysis.",
+  "MOD_SETTINGS.SECTION.REACTION": "Reaction Stickers",
+  "MOD_SETTINGS.REACTION_REPLACEMENT.LABEL": "Enable Sticker Replacement",
+  "MOD_SETTINGS.REACTION_REPLACEMENT.DESC": "Replace vanilla reaction stickers with mod character portraits.",
+  "MOD_SETTINGS.REACTION_WHEEL_SCALE.LABEL": "Wheel Scale",
+  "MOD_SETTINGS.REACTION_WHEEL_SCALE.DESC": "Scale of the reaction wheel. 1.0 = vanilla size.",
+  "MOD_SETTINGS.REACTION_EMOTE_SCALE.LABEL": "Emote Scale",
+  "MOD_SETTINGS.REACTION_EMOTE_SCALE.DESC": "Scale of the popped-out reaction emote. 3.0 = default."
 }

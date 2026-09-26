@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://cxaigxt0v6c75"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_m3bke"]
-[ext_resource type="Texture2D" uid="uid://k3t34mejswrb" path="res://CuteSakikoMod/images/char/tenday/tendaytomori1.png" id="2_m3bke"]
-[ext_resource type="Texture2D" uid="uid://beuk7lf0s2pf0" path="res://CuteSakikoMod/images/char/tenday/tendaytomori2.png" id="3_xlxng"]
+[ext_resource type="Texture2D" uid="uid://k3t34mejswrb" path="res://CuteSakikoMod/images/monster/tenday/tendaytomori1.png" id="2_m3bke"]
+[ext_resource type="Texture2D" uid="uid://beuk7lf0s2pf0" path="res://CuteSakikoMod/images/monster/tenday/tendaytomori2.png" id="3_xlxng"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

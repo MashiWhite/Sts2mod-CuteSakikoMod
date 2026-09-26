@@ -43,7 +43,6 @@ public class Entry
 
     public static PlayerRunSavedData<PlayerParfaitData> ParfaitChargesSlot = null!;
 
-    // 通配音符类型（仅用于和弦序列识别）
     public static CardType AnyNote;
 
     private static I18N? _i18n;
@@ -58,7 +57,6 @@ public class Entry
         RitsuLibFramework.EnsureGodotScriptsRegistered(assembly, Logger);
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
 
-        // 注册通配音符类型
         var cardTypeMinter = new DynamicEnumValueMinter<CardType>();
         AnyNote = cardTypeMinter.Mint("cute_sakiko_mod:any_note");
 
@@ -72,8 +70,8 @@ public class Entry
         }
 
         // 2. 创建绑定
-        // 游戏性开关：只有"联机 + 客户端 + 跑局中"才锁定，其他情况（大厅/主菜单/断连后）可自由修改
-        // 音频：永远保持本地可改
+        // 游戏性开关：只有"联机 + 客户端 + 跑局中"才锁定
+        // 音频 / 表情贴纸：永远本地可改
         var eggBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
             ModId, "config",
             model => model.EggsCard,
@@ -130,6 +128,23 @@ public class Entry
             (model, value) => model.EnableAudio = value
         );
 
+        // ⭐ 表情贴纸相关绑定（本地视觉设置，不参与联机同步）
+        var reactionBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+            ModId, "config",
+            model => model.EnableReactionReplacement,
+            (model, value) => model.EnableReactionReplacement = value
+        );
+        var wheelScaleBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config",
+            model => (double)model.ReactionWheelScale,
+            (model, value) => model.ReactionWheelScale = (float)value
+        );
+        var emoteScaleBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config",
+            model => (double)model.ReactionEmoteScale,
+            (model, value) => model.ReactionEmoteScale = (float)value
+        );
+
         var i18n = I18n;
 
         // 3. 注册设置界面
@@ -138,7 +153,7 @@ public class Entry
             .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.TITLE", "Cute Sakiko Mod Settings"))
             .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DESCRIPTION", "Cute Sakiko Mod Settings"))
 
-            // 游戏内容 Section —— 只有跑局中的客户端会灰掉
+            // 游戏内容 Section
             .AddSection("game_content", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.GAME_CONTENT", "Game Content"))
                 .AddToggle("egg_toggle",
@@ -163,7 +178,30 @@ public class Entry
                 .WithEntryEnabledWhen("custom_event_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
             )
 
-            // 音频 Section —— 永远是本地设置，所有玩家可改
+            // ⭐ 表情贴纸 Section（独立分类，永远本地可改）
+            .AddSection("reaction", section => section
+                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.REACTION", "Reaction Stickers"))
+                .AddToggle("reaction_replacement_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_REPLACEMENT.LABEL", "Replace Stickers"),
+                    reactionBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_REPLACEMENT.DESC", "Replace vanilla reaction stickers with mod character portraits."))
+                .AddSlider("reaction_wheel_scale_slider",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_WHEEL_SCALE.LABEL", "Wheel Scale"),
+                    wheelScaleBinding,
+                    0.5, 3.0, 0.1,
+                    valueFormatter: value => $"{value:F1}x",
+                    description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_WHEEL_SCALE.DESC", "Scale of the reaction wheel (1.0 = vanilla size)."))
+                .WithEntryEnabledWhen("reaction_wheel_scale_slider", () => ModConfig.EnableReactionReplacement)
+                .AddSlider("reaction_emote_scale_slider",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_EMOTE_SCALE.LABEL", "Emote Scale"),
+                    emoteScaleBinding,
+                    1.0, 6.0, 0.5,
+                    valueFormatter: value => $"{value:F1}x",
+                    description: ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_EMOTE_SCALE.DESC", "Scale of the popped-out reaction emote (3.0 = vanilla 3x)."))
+                .WithEntryEnabledWhen("reaction_emote_scale_slider", () => ModConfig.EnableReactionReplacement)
+            )
+
+            // 音频 Section
             .AddSection("audio", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.AUDIO", "Audio"))
                 .AddToggle("audio_toggle",
@@ -220,8 +258,6 @@ public class Entry
 
         PlayerNameData.Init(runDataStore);
 
-        // ⭐ 6.5 注册 GameplayConfigSync 的 run snapshot 槽位
-        //     必须在 GameplayConfigSync.Init() 之前，否则 Init() 会抛异常
         GameplayConfigSync.RunConfigSlot = runDataStore.Register<RunGameplayConfigData>(
             "GameplayConfigSnapshot",
             defaultFactory: () => new RunGameplayConfigData(),
@@ -246,7 +282,6 @@ public class Entry
             {
                 var netService = RunManager.Instance.NetService;
 
-                // 让 GameplayConfigSync 拿到 NetService 做权威判定
                 GameplayConfigSync.OnNetServiceReady(netService);
 
                 if (netService != null)
@@ -282,7 +317,6 @@ public class Entry
                         guitar.SetLearnedChordsFromString(msg.LearnedChordsData);
                     }));
 
-                    // ⭐ EggsGrantMessage handler
                     netService.RegisterMessageHandler(new MessageHandlerDelegate<EggsGrantMessage>(async (msg, senderId) =>
                     {
                         try
@@ -333,7 +367,6 @@ public class Entry
                 "res://CuteSakikoMod/images/others/others/mod_token_card_pool_icon.png"
             );
 
-        // ⭐ 10. Eggs 遗物发放：章节切换完成时由房主统一发（每个玩家一条消息）
         RitsuLibFramework.SubscribeLifecycle<ActEnteredEvent>(async evt =>
         {
             try
@@ -354,7 +387,6 @@ public class Entry
                     var eggs = ModelDb.Relic<Eggs>().ToMutable();
                     await RelicCmd.Obtain(eggs, player);
 
-                    // 每个玩家单独广播一条消息
                     if (netService != null && netService.Type == NetGameType.Host)
                     {
                         netService.SendMessage(new EggsGrantMessage
@@ -371,7 +403,6 @@ public class Entry
             }
         });
 
-        // ⭐ 11. 战斗开始兜底：只校验不发放，避免与战斗状态机冲突
         RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(evt =>
         {
             if (!ModConfig.EggsCard) return;
@@ -387,13 +418,11 @@ public class Entry
             }
         });
 
-        // 离开房间时停止 Mod BGM
         RitsuLibFramework.SubscribeLifecycle<RoomExitedEvent>(_ =>
         {
             AudioManager.StopMusic();
         });
 
-        // 12. 战斗结束时自动停止 Mod BGM
         if (RunManager.Instance != null)
         {
             RunManager.Instance.RunStarted += _ =>
@@ -404,7 +433,6 @@ public class Entry
         }
         ObPopupHelper.PreloadButtonScene();
 
-        // 触发静态构造
         _ = ChordNoteSystem.MaxStoredChords;
     }
 

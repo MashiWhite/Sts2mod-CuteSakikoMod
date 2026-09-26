@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://b2b4oa1nva1lt"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_sgybf"]
-[ext_resource type="Texture2D" uid="uid://berax18gg0rck" path="res://CuteSakikoMod/images/char/greyanon/greyanonlive1.png" id="3_mc8t6"]
-[ext_resource type="Texture2D" uid="uid://buwfpu7v7i6vj" path="res://CuteSakikoMod/images/char/greyanon/greyanonlive2.png" id="4_2qndc"]
+[ext_resource type="Texture2D" uid="uid://berax18gg0rck" path="res://CuteSakikoMod/images/monster/greyanon/greyanonlive1.png" id="3_mc8t6"]
+[ext_resource type="Texture2D" uid="uid://buwfpu7v7i6vj" path="res://CuteSakikoMod/images/monster/greyanon/greyanonlive2.png" id="4_2qndc"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

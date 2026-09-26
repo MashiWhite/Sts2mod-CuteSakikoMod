@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://d30n4ix8tef7h"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_nyguk"]
-[ext_resource type="Texture2D" uid="uid://dbueqjldpupxf" path="res://CuteSakikoMod/images/char/chocolatesnail/giant_chocolate_snail.png" id="2_hb4fq"]
+[ext_resource type="Texture2D" uid="uid://dbueqjldpupxf" path="res://CuteSakikoMod/images/monster/chocolatesnail/giant_chocolate_snail.png" id="2_hb4fq"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

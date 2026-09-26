@@ -4,15 +4,15 @@ using STS2RitsuLib;
 namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
 
 // 配置数据类（持久化到 config.json）
-// CuteSakikoModCode/Others/CuteSakikoModConfigData.cs
+// CuteSakikoModCode/Others/Config/CuteSakikoModConfigData.cs
 public class CuteSakikoModConfigData
 {
     private float _modBgmVolume = 0.40f;
-    private float _modSfxVolume = 0.40f;   // 新增
+    private float _modSfxVolume = 0.40f;
 
     public bool EggsCard { get; set; }
     public bool EnableModMonsters { get; set; } = true;
-    
+
     private bool _enableAudio = true;
 
     public bool EnableAudio
@@ -25,7 +25,6 @@ public class CuteSakikoModConfigData
                 _enableAudio = value;
                 if (!value)
                 {
-                    // 关闭音频时立即停止当前模组音乐并恢复原 BGM
                     AudioManager.StopMusic();
                 }
             }
@@ -45,11 +44,26 @@ public class CuteSakikoModConfigData
     public float ModSfxVolume
     {
         get => _modSfxVolume;
-        set => _modSfxVolume = value;   // 即时生效，无需额外操作
+        set => _modSfxVolume = value;
     }
-    
+
     public bool EnableCustomAncients { get; set; } = true;
-    public bool EnableCustomEvents { get; set; } = true; // 新增：控制所有普通自定义事件
+    public bool EnableCustomEvents { get; set; } = true;
+
+    /// <summary>
+    /// 是否启用模组表情贴纸替换（本地视觉设置，不参与联机同步）。
+    /// </summary>
+    public bool EnableReactionReplacement { get; set; } = true;
+
+    /// <summary>
+    /// 反应轮盘整体放大倍数（1.0 = 原版大小）。
+    /// </summary>
+    public float ReactionWheelScale { get; set; } = 1.0f;
+
+    /// <summary>
+    /// 飘出表情的放大倍数（3.0 = 原版三倍）。
+    /// </summary>
+    public float ReactionEmoteScale { get; set; } = 3.0f;
 }
 
 // 统一配置访问入口
@@ -62,10 +76,14 @@ public static class ModConfig
     public static bool EggsCard => Load().EggsCard;
     public static bool EnableModMonsters => Load().EnableModMonsters;
     public static float ModBgmVolume => Load().ModBgmVolume;
-    public static float ModSfxVolume => Load().ModSfxVolume;   // 新增
-    
+    public static float ModSfxVolume => Load().ModSfxVolume;
+
     public static bool EnableCustomAncients => Load().EnableCustomAncients;
     public static bool EnableCustomEvents => Load().EnableCustomEvents;
+
+    public static bool EnableReactionReplacement => Load().EnableReactionReplacement;
+    public static float ReactionWheelScale => Load().ReactionWheelScale;
+    public static float ReactionEmoteScale => Load().ReactionEmoteScale;
 
     private static CuteSakikoModConfigData Load()
     {
@@ -73,12 +91,9 @@ public static class ModConfig
         lock (_lock)
         {
             if (_cached != null) return _cached;
-            // 使用添加的 using 后，RitsuLibFramework 可直接访问
             var store = RitsuLibFramework.GetDataStore(Entry.ModId);
             _cached = store.Get<CuteSakikoModConfigData>("config");
             return _cached;
         }
     }
-    
-    
 }

@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://cssgjp8sdxjcd"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_x7r2b"]
-[ext_resource type="Texture2D" uid="uid://cm75hnof0cyh6" path="res://CuteSakikoMod/images/char/tenday/tendayrana1.png" id="2_x7r2b"]
-[ext_resource type="Texture2D" uid="uid://4snawn14cyfx" path="res://CuteSakikoMod/images/char/tenday/tendayrana2.png" id="3_4ilch"]
+[ext_resource type="Texture2D" uid="uid://cm75hnof0cyh6" path="res://CuteSakikoMod/images/monster/tenday/tendayrana1.png" id="2_x7r2b"]
+[ext_resource type="Texture2D" uid="uid://4snawn14cyfx" path="res://CuteSakikoMod/images/monster/tenday/tendayrana2.png" id="3_4ilch"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001
