@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://bnqp1ykxyxgx4"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_d6d0j"]
-[ext_resource type="Texture2D" uid="uid://cem0by1mwqq00" path="res://CuteSakikoMod/images/char/araluo/araluo1.png" id="2_5r3ok"]
-[ext_resource type="Texture2D" uid="uid://dsyn2qo8ldj4n" path="res://CuteSakikoMod/images/char/araluo/araluo2.png" id="3_c3ljp"]
+[ext_resource type="Texture2D" uid="uid://cem0by1mwqq00" path="res://CuteSakikoMod/images/monster/araluo/araluo1.png" id="2_5r3ok"]
+[ext_resource type="Texture2D" uid="uid://dsyn2qo8ldj4n" path="res://CuteSakikoMod/images/monster/araluo/araluo2.png" id="3_c3ljp"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

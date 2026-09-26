@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://cyu6tdbwufpfo"]
 
 [ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_gcyr8"]
-[ext_resource type="Texture2D" uid="uid://cu1egvpstc45f" path="res://CuteSakikoMod/images/char/tianxiangluo/tianxiangluo.png" id="2_gcyr8"]
-[ext_resource type="Texture2D" uid="uid://dsi7r5nq7ndaw" path="res://CuteSakikoMod/images/char/tianxiangluo/tianxiangluo1.png" id="3_8q2ug"]
+[ext_resource type="Texture2D" uid="uid://cu1egvpstc45f" path="res://CuteSakikoMod/images/monster/tianxiangluo/tianxiangluo.png" id="2_gcyr8"]
+[ext_resource type="Texture2D" uid="uid://dsi7r5nq7ndaw" path="res://CuteSakikoMod/images/monster/tianxiangluo/tianxiangluo1.png" id="3_8q2ug"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

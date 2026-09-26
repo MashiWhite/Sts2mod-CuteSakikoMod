@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfrre0xnt58kd"]
+[gd_scene load_steps=10 format=3 uid="uid://df1qm5nmx1r0p"]
 
-[ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_6eunw"]
-[ext_resource type="Texture2D" uid="uid://6y36nq8ydm46" path="res://CuteSakikoMod/images/monster/tenday/tendaytaki1.png" id="2_efubw"]
-[ext_resource type="Texture2D" uid="uid://15ktfkkb642m" path="res://CuteSakikoMod/images/monster/tenday/tendaytaki2.png" id="3_gweal"]
+[ext_resource type="Texture2D" uid="uid://bwhr1h5w737o" path="res://CuteSakikoMod/images/skin/saki/ob/obSaki1.png" id="1_e8fbm"]
+[ext_resource type="Texture2D" uid="uid://cvrxyuntyp22i" path="res://CuteSakikoMod/images/skin/saki/ob/obSaki2.png" id="2_3d7tx"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001
@@ -16,7 +15,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("1_e8fbm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -80,7 +79,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("1_e8fbm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -156,7 +155,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("1_e8fbm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -229,10 +228,10 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.33333334),
+"times": PackedFloat32Array(0, 0.6666667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("2_efubw"), ExtResource("3_gweal")]
+"values": [ExtResource("1_e8fbm"), ExtResource("2_3d7tx")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -244,7 +243,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.8, 2.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [5.0, 3.0, 5.0]
+"values": [5.0, 6.5, 5.0]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -280,7 +279,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 1.1, 2.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(0.7077637, -2.664978), Vector2(86.903, -2.665), Vector2(200, -2.665)]
+"values": [Vector2(0.7077637, -2.664978), Vector2(-86.903, -2.665), Vector2(-200, -2.665)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -305,10 +304,10 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.43333334, 1.6333333),
+"times": PackedFloat32Array(0, 0.6666667, 1.6333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_efubw"), ExtResource("3_gweal"), ExtResource("2_efubw")]
+"values": [ExtResource("1_e8fbm"), ExtResource("2_3d7tx"), ExtResource("1_e8fbm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -356,7 +355,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 1.1, 1.25, 2.21),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0.7077637, -2.664978), Vector2(86.903, -2.665), Vector2(86.903, -2.665), Vector2(0.7077637, -2.664978)]
+"values": [Vector2(0.7077637, -2.664978), Vector2(-86.903, -2.665), Vector2(-86.903, -2.665), Vector2(0.7077637, -2.664978)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -385,7 +384,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("1_e8fbm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -458,29 +457,27 @@ _data = {
 &"idle_loop": SubResource("Animation_dn2tn")
 }
 
-[node name="tendaytaki" type="Node2D"]
-script = ExtResource("1_6eunw")
+[node name="Ob" type="Node2D"]
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(1, -349)
+position = Vector2(18.330566, -345.46277)
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-1.4545593, -148.54547)
+position = Vector2(15.851257, -185.95863)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-133, -265)
+position = Vector2(185, -259)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -97.0
-offset_top = -321.0
-offset_right = 102.0
-offset_bottom = 2.0
+offset_left = -104.0
+offset_top = -315.0
+offset_right = 127.0
 
 [node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -488,17 +485,18 @@ unique_name_in_owner = true
 [node name="Node2D" type="Node2D" parent="Visuals"]
 position = Vector2(0.7077637, -2.664978)
 
-[node name="tendaytaki" type="Sprite2D" parent="Visuals/Node2D"]
+[node name="Ob" type="Sprite2D" parent="Visuals/Node2D"]
 position = Vector2(8, -153)
-texture = ExtResource("2_efubw")
+texture = ExtResource("1_e8fbm")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
-root_node = NodePath("../tendaytaki")
+root_node = NodePath("../Ob")
 libraries = {
 &"": SubResource("AnimationLibrary_esqhf")
 }
 autoplay = "idle_loop"
-speed_scale = 5.0
+speed_scale = 2.9589198
+next/RESET = &"idle_loop"
 next/attack = &"idle_loop"
 next/cast = &"idle_loop"
 next/hurt = &"idle_loop"

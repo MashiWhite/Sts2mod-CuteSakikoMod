@@ -1,8 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfrre0xnt58kd"]
+[gd_scene load_steps=11 format=3 uid="uid://bmcrckbc2xc6q"]
 
-[ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_6eunw"]
-[ext_resource type="Texture2D" uid="uid://6y36nq8ydm46" path="res://CuteSakikoMod/images/monster/tenday/tendaytaki1.png" id="2_efubw"]
-[ext_resource type="Texture2D" uid="uid://15ktfkkb642m" path="res://CuteSakikoMod/images/monster/tenday/tendaytaki2.png" id="3_gweal"]
+[ext_resource type="Script" uid="uid://de8s6060xsbgv" path="res://CuteSakikoModCode/Nodes/SakiCreatureVisuals.cs" id="1_useky"]
+[ext_resource type="Texture2D" uid="uid://d3pq16fdjcq2k" path="res://CuteSakikoMod/images/monster/tenday/tendaysaki1.png" id="2_useky"]
+[ext_resource type="Texture2D" uid="uid://brhh6kuemsvrn" path="res://CuteSakikoMod/images/monster/tenday/tendaysaki2.png" id="3_8wihk"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001
@@ -16,7 +16,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("2_useky")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -80,7 +80,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("2_useky")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -156,7 +156,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("2_useky")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -232,7 +232,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.33333334),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("2_efubw"), ExtResource("3_gweal")]
+"values": [ExtResource("2_useky"), ExtResource("3_8wihk")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -305,10 +305,10 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.43333334, 1.6333333),
+"times": PackedFloat32Array(0, 0.3, 1.6333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_efubw"), ExtResource("3_gweal"), ExtResource("2_efubw")]
+"values": [ExtResource("2_useky"), ExtResource("3_8wihk"), ExtResource("2_useky")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -385,7 +385,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_efubw")]
+"values": [ExtResource("2_useky")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -458,27 +458,27 @@ _data = {
 &"idle_loop": SubResource("Animation_dn2tn")
 }
 
-[node name="tendaytaki" type="Node2D"]
-script = ExtResource("1_6eunw")
+[node name="tendaysaki" type="Node2D"]
+script = ExtResource("1_useky")
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(1, -349)
+position = Vector2(5, -353)
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-1.4545593, -148.54547)
+position = Vector2(-0.057739258, -160.29755)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-133, -265)
+position = Vector2(-135, -272)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -97.0
-offset_top = -321.0
+offset_left = -95.0
+offset_top = -329.0
 offset_right = 102.0
 offset_bottom = 2.0
 
@@ -488,12 +488,12 @@ unique_name_in_owner = true
 [node name="Node2D" type="Node2D" parent="Visuals"]
 position = Vector2(0.7077637, -2.664978)
 
-[node name="tendaytaki" type="Sprite2D" parent="Visuals/Node2D"]
+[node name="tendaysaki" type="Sprite2D" parent="Visuals/Node2D"]
 position = Vector2(8, -153)
-texture = ExtResource("2_efubw")
+texture = ExtResource("2_useky")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
-root_node = NodePath("../tendaytaki")
+root_node = NodePath("../tendaysaki")
 libraries = {
 &"": SubResource("AnimationLibrary_esqhf")
 }

@@ -28,27 +28,27 @@ public class CuteOb : CuteSakikoCharacter<CuteObCardPool, CuteSakiRelicPool, Cut
         new CharacterAssetProfile(
             new CharacterSceneAssetSet(
                 // 人物模型tscn路径。
-                "res://CuteSakikoMod/scenes/char/saki/ob.tscn",
+                "res://CuteSakikoMod/scenes/skin/saki/ob/ob.tscn",
                 // 能量表盘tscn路径。
                 "res://CuteSakikoMod/scenes/char/saki/saki_energy_counter.tscn",
                 // 商店人物场景。
-                "res://CuteSakikoMod/scenes/char/saki/ob_merchant.tscn",
+                "res://CuteSakikoMod/scenes/skin/saki/ob/ob_merchant.tscn",
                 // 篝火休息场景。
-                "res://CuteSakikoMod/scenes/char/saki/ob_rest_site.tscn"
+                "res://CuteSakikoMod/scenes/skin/saki/ob/ob_rest_site.tscn"
             ),
             
             new CharacterUiAssetSet(
                 // 人物头像路径。
-                "res://CuteSakikoMod/images/charui/oblivionis/character_icon_ob.png",
-                IconOutlineTexturePath:"res://CuteSakikoMod/images/charui/oblivionis/character_icon_ob_outline.png",
+                "res://CuteSakikoMod/images/skin/saki/ob/character_icon_ob.png",
+                IconOutlineTexturePath:"res://CuteSakikoMod/images/skin/saki/ob/character_icon_ob_outline.png",
                 // 人物头像2号。
-                IconPath: "res://CuteSakikoMod/scenes/char/saki/ob_icon.tscn",
+                IconPath: "res://CuteSakikoMod/scenes/skin/saki/ob/ob_icon.tscn",
                 // 人物选择背景。
-                CharacterSelectBgPath: "res://CuteSakikoMod/scenes/char/saki/ob_bg.tscn",
+                CharacterSelectBgPath: "res://CuteSakikoMod/scenes/skin/saki/ob/ob_bg.tscn",
                 // 人物选择图标。
-                CharacterSelectIconPath: "res://CuteSakikoMod/images/charui/oblivionis/char_select_ob.png",
+                CharacterSelectIconPath: "res://CuteSakikoMod/images/skin/saki/ob/char_select_ob.png",
                 // 人物选择图标-锁定状态。
-                CharacterSelectLockedIconPath: "res://CuteSakikoMod/images/charui/oblivionis/char_select_ob_locked.png",
+                CharacterSelectLockedIconPath: "res://CuteSakikoMod/images/skin/saki/ob/char_select_ob_locked.png",
                 // 人物选择过渡动画。
                 // CharacterSelectTransitionPath: "res://materials/transitions/ironclad_transition_mat.tres",
                 // 地图上的角色标记图标、表情轮盘上的角色头像
@@ -72,13 +72,13 @@ public class CuteOb : CuteSakikoCharacter<CuteObCardPool, CuteSakiRelicPool, Cut
             ),
             Multiplayer: new CharacterMultiplayerAssetSet(
                 // 多人模式-手指。
-                "res://CuteSakikoMod/images/charui/oblivionis/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/skin/saki/ob/multiplayer_hand_point.png",
                 // 多人模式剪刀石头布-石头。
-                "res://CuteSakikoMod/images/charui/oblivionis/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/skin/saki/ob/multiplayer_hand_rock.png",
                 // 多人模式剪刀石头布-布。
-                "res://CuteSakikoMod/images/charui/oblivionis/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/skin/saki/ob/multiplayer_hand_paper.png",
                 // 多人模式剪刀石头布-剪刀。
-                "res://CuteSakikoMod/images/charui/oblivionis/multiplayer_hand_scissors.png"
+                "res://CuteSakikoMod/images/skin/saki/ob/multiplayer_hand_scissors.png"
             )));
 
 

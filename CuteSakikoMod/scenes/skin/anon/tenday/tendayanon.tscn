@@ -1,7 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://df1qm5nmx1r0p"]
+[gd_scene load_steps=10 format=3 uid="uid://c5tgrhfcdm0m5"]
 
-[ext_resource type="Texture2D" uid="uid://bwhr1h5w737o" path="res://CuteSakikoMod/images/char/saki/obSaki1.png" id="1_e8fbm"]
-[ext_resource type="Texture2D" uid="uid://cvrxyuntyp22i" path="res://CuteSakikoMod/images/char/saki/obSaki2.png" id="2_3d7tx"]
+[ext_resource type="Texture2D" uid="uid://dlox3vt1k36vj" path="res://CuteSakikoMod/images/skin/anon/tendayanon1.png" id="1_xcyrm"]
+[ext_resource type="Texture2D" uid="uid://cev2lyh7lo7tl" path="res://CuteSakikoMod/images/skin/anon/tendayanon2.png" id="2_yha65"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001
@@ -15,7 +15,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_e8fbm")]
+"values": [ExtResource("1_xcyrm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -79,7 +79,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_e8fbm")]
+"values": [ExtResource("1_xcyrm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -155,7 +155,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_e8fbm")]
+"values": [ExtResource("1_xcyrm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -228,10 +228,10 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6666667),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("1_e8fbm"), ExtResource("2_3d7tx")]
+"values": [ExtResource("1_xcyrm"), ExtResource("2_yha65")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -304,10 +304,10 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6666667, 1.6333333),
+"times": PackedFloat32Array(0, 0.46666667, 1.6333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("1_e8fbm"), ExtResource("2_3d7tx"), ExtResource("1_e8fbm")]
+"values": [ExtResource("1_xcyrm"), ExtResource("2_yha65"), ExtResource("1_xcyrm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -384,7 +384,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_e8fbm")]
+"values": [ExtResource("1_xcyrm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -457,27 +457,27 @@ _data = {
 &"idle_loop": SubResource("Animation_dn2tn")
 }
 
-[node name="Ob" type="Node2D"]
+[node name="Anon" type="Node2D"]
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(18.330566, -345.46277)
+position = Vector2(2, -381)
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(15.851257, -185.95863)
+position = Vector2(1, -174)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(185, -259)
+position = Vector2(140, -291)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -104.0
-offset_top = -315.0
-offset_right = 127.0
+offset_left = -87.0
+offset_top = -340.0
+offset_right = 99.0
 
 [node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -485,18 +485,17 @@ unique_name_in_owner = true
 [node name="Node2D" type="Node2D" parent="Visuals"]
 position = Vector2(0.7077637, -2.664978)
 
-[node name="Ob" type="Sprite2D" parent="Visuals/Node2D"]
+[node name="Non" type="Sprite2D" parent="Visuals/Node2D"]
 position = Vector2(8, -153)
-texture = ExtResource("1_e8fbm")
+texture = ExtResource("1_xcyrm")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/Node2D"]
-root_node = NodePath("../Ob")
+root_node = NodePath("../Non")
 libraries = {
 &"": SubResource("AnimationLibrary_esqhf")
 }
 autoplay = "idle_loop"
-speed_scale = 2.9589198
-next/RESET = &"idle_loop"
+speed_scale = 2.4642155
 next/attack = &"idle_loop"
 next/cast = &"idle_loop"
 next/hurt = &"idle_loop"

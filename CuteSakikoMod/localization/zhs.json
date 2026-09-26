@@ -22,5 +22,12 @@
   "TELEMETRY.BASIC_USAGE.DESC": "发送版本、平台、语言和匿名安装 ID，用于统计兼容性问题范围。",
   "TELEMETRY.BALANCE.DESC": "发送本 Mod 的平衡性事件（角色选择、卡牌打出等），用于分析平衡性。",
   "TELEMETRY.DIAGNOSTICS.DESC": "发送异常和诊断上下文，用于定位崩溃。",
-  "TELEMETRY.RUN_HISTORY.DESC": "发送已结束跑局的原版数据，用于分析平衡性。"
+  "TELEMETRY.RUN_HISTORY.DESC": "发送已结束跑局的原版数据，用于分析平衡性。",
+  "MOD_SETTINGS.SECTION.REACTION": "表情贴纸",
+  "MOD_SETTINGS.REACTION_REPLACEMENT.LABEL": "表情贴纸替换",
+  "MOD_SETTINGS.REACTION_REPLACEMENT.DESC": "启用后，游戏内的表情贴纸会被替换为模组表情贴纸；关闭后使用原版贴纸。",
+  "MOD_SETTINGS.REACTION_WHEEL_SCALE.LABEL": "轮盘放大倍数",
+  "MOD_SETTINGS.REACTION_WHEEL_SCALE.DESC": "调整表情轮盘的整体大小，1.0 为原版尺寸。",
+  "MOD_SETTINGS.REACTION_EMOTE_SCALE.LABEL": "飘出表情放大倍数",
+  "MOD_SETTINGS.REACTION_EMOTE_SCALE.DESC": "调整发出表情后飘出图标的大小，3.0 为默认值。"
 }
