@@ -36,7 +36,7 @@ public sealed class VegetableJuice : CuteSakikoSharedPotion
             return;
 
         // 随机清除1个Debuff
-        var debuffs = target.Powers.Where(p => p.Type == PowerType.Debuff).ToList();
+        var debuffs = target.Powers.Where(p => p.TypeForCurrentAmount == PowerType.Debuff).ToList();
         if (debuffs.Count > 0)
         {
             var toRemove = debuffs[Owner.RunState.Rng.CombatCardSelection.NextInt(debuffs.Count)];

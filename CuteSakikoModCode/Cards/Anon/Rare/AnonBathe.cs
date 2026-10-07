@@ -20,7 +20,7 @@ public class AnonBathe() : CuteAnonCard(2, CardType.Skill, CardRarity.Rare, Targ
     {
         TriggerBanter();
 
-        var debuffs = Owner.Creature.Powers.Where(p => p.Type == PowerType.Debuff).ToList();
+        var debuffs = Owner.Creature.Powers.Where(p => p.TypeForCurrentAmount == PowerType.Debuff).ToList();
         if (debuffs.Any())
         {
             var toRemove = debuffs[Owner.RunState.Rng.CombatCardSelection.NextInt(debuffs.Count)];
