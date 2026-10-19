@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
@@ -15,22 +16,20 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
     public override PowerStackType StackType => PowerStackType.Single;
 
     /// <summary>
-    /// SmartDescription 本身在基类是 public 非 virtual，不可重写；
-    /// 但它内部的 key 来自 protected virtual string SmartDescriptionLocKey。
-    /// 重写 key 即可让悬浮提示随天数变化。
+    /// SmartDescription 本身不可重写；但它的 key 来自 protected virtual SmartDescriptionLocKey。
+    /// 按十日终焉层数切到 effect.N 词条。
     /// </summary>
     protected override string SmartDescriptionLocKey
     {
         get
         {
-            // Canonical（图鉴 / 卡池预览）时不能碰 Owner，必须短路
+            // Canonical（图鉴/预览）时不能碰 Owner，必须短路
             if (!IsMutable)
                 return base.SmartDescriptionLocKey;
 
             var day = Owner.GetPower<TenDayEndPower>()?.Amount ?? 10;
             var key = $"{Id.Entry}.effect.{day}";
 
-            // 词条缺失时回退到默认 smartDescription
             return LocString.Exists("powers", key) ? key : base.SmartDescriptionLocKey;
         }
     }
@@ -39,20 +38,16 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
     private bool _deathShieldAvailable;
     private bool _deathShieldUsed;
 
-    // ───────── 伤害减免 ─────────
+    // ───────── 伤害减免：每只存活小怪 5% ─────────
     private decimal GetDamageReduction()
     {
-        var days = Owner.GetPower<TenDayEndPower>()?.Amount ?? 0;
-        return days switch
-        {
-            <= 1 => 0.30m,
-            2 => 0.25m,
-            3 => 0.20m,
-            4 => 0.15m,
-            5 => 0.10m,
-            6 => 0.05m,
-            _ => 0m
-        };
+        var combatState = Owner.CombatState;
+        if (combatState == null) return 0m;
+
+        var aliveMinions = combatState.Enemies
+            .Count(e => e != Owner && e.IsAlive && e.HasPower<MinionPower>());
+
+        return 0.05m * aliveMinions;
     }
 
     public override Decimal ModifyHpLostBeforeOstyLate(
@@ -96,7 +91,6 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
         if (power is not TenDayEndPower endPower) return;
         if (endPower.Owner != Owner) return;
 
-        // 十日终焉层数变化 → 跳动的心跳的 Cap 也要刷新
         Owner.GetPower<BeatingHeartPower>()?.UpdateCap();
 
         int day = endPower.Amount;
@@ -112,13 +106,11 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
         switch (day)
         {
             case 10:
-                // 无效果
                 break;
 
             case 9:
                 await PowerCmd.Apply<BeatingHeartPower>(
                     new ThrowingPlayerChoiceContext(), Owner, 1, Owner, null);
-                // AfterApplied 里已经刷过一次，这里再保险一次
                 Owner.GetPower<BeatingHeartPower>()?.UpdateCap();
                 break;
 

@@ -227,7 +227,16 @@ public class ChordStorageCapability : RelicCapability
     {
         EnsureInitialized();
         if (string.IsNullOrEmpty(chordId)) return;
-        if (!ChordManager.AllChords.ContainsKey(chordId)) return;
+        if (!ChordManager.AllChords.TryGetValue(chordId, out var def)) return;
+
+        // ★ 过滤：
+        //   1. 临时专属和弦（AddTemporaryChord 时打标记）不进学习池
+        //      —— 例如 AnonCChord / AnonDChord / HekitenbansouChord / GreyAnonChord
+        //   2. 类别为 Anon 的和弦不进学习池（双保险）
+        //      —— 即使某个临时和弦忘了打 IsTemporaryOnly 标记，也能被拦住
+        if (def.IsTemporaryOnly) return;
+        if (def.Category == ChordCategory.Anon) return;
+
         AddToLearnedIfMissing(chordId);
         SyncToSaved();
         Flash();

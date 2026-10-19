@@ -11,13 +11,11 @@ public sealed class TenDayEndPower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    
     public override async Task AfterSideTurnEnd(
         PlayerChoiceContext choiceContext,
         CombatSide side,
         IEnumerable<Creature> participants)
     {
-        // 只在敌方（怪物）回合结束时倒计时
         if (side != CombatSide.Enemy) return;
         if (!participants.Contains(Owner)) return;
 

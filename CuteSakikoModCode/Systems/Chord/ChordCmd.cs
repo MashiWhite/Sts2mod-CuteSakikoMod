@@ -74,16 +74,15 @@ public static class ChordCmd
         return true;
     }
 
-    public static int AddRandomTemporaryChords(ChordStorageCapability chords, int targetCount)
+    /// <summary>
+    /// 添加 count 个随机临时和弦，返回实际添加的和弦 ID 列表。
+    /// 会调用 LearnChord 将选定和弦加入学习池（Anon/临时专属会被 LearnChord 自动过滤）。
+    /// </summary>
+    public static List<string> AddRandomTemporaryChords(ChordStorageCapability chords, int count)
     {
-        if (chords?.HostPlayer == null) return 0;
+        var added = new List<string>();
+        if (chords?.HostPlayer == null || count <= 0) return added;
 
-        var existing = chords.GetTemporaryChords().ToList();
-        var currentCount = existing.Count;
-        if (currentCount >= targetCount) return 0;
-
-        var needed = targetCount - currentCount;
-        var added = 0;
         var player = chords.HostPlayer;
         var rng = player.RunState.Rng.UpFront;
 
@@ -94,29 +93,31 @@ public static class ChordCmd
 
         var owned = new HashSet<string>(chords.GetAllEquippedChords());
         foreach (var id in chords.GetLearnedChords()) owned.Add(id);
-        foreach (var id in existing) owned.Add(id);
+        foreach (var id in chords.GetTemporaryChords()) owned.Add(id);
 
         var available = allPools.Where(id => !owned.Contains(id)).ToList();
 
-        while (added < needed && available.Count > 0)
+        // 优先从未学的池中取；这里取出的都是 Major/Minor/Dominant，LearnChord 会正常写入学习池
+        while (added.Count < count && available.Count > 0)
         {
             var chordId = rng.NextItem(available);
             chords.AddTemporaryChord(chordId);
-            chords.LearnChord(chordId);
+            chords.LearnChord(chordId);   // ★ 恢复：学习池里会得到这个和弦
             available.Remove(chordId);
-            added++;
+            added.Add(chordId);
         }
 
-        if (added < needed)
+        // 不足则从已学的池中取（允许重复）——已经是学习池里的，不用再 LearnChord
+        if (added.Count < count)
         {
             var learned = chords.GetLearnedChords().ToList();
             if (learned.Count == 0) return added;
 
-            while (added < needed)
+            while (added.Count < count)
             {
                 var chordId = rng.NextItem(learned);
                 chords.AddTemporaryChord(chordId);
-                added++;
+                added.Add(chordId);
             }
         }
 

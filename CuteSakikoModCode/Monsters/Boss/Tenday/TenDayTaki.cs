@@ -1,5 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Helpers;
+﻿
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -20,8 +21,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.TenDay;
 [RegisterMonster]
 public class TenDayTaki : ModMonsterTemplate
 {
-    public override int MinInitialHp => 1000;
-    public override int MaxInitialHp => 1000;
+    public override int MinInitialHp => 800;
+    public override int MaxInitialHp => 800;
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/tenday/tendaytaki.tscn"
@@ -42,12 +43,10 @@ public class TenDayTaki : ModMonsterTemplate
     {
         await base.AfterAddedToRoom();
         var ctx = new ThrowingPlayerChoiceContext();
-        // MovementNotFinished 先上，才能捕获 TenDayEnd 的初始数值变化
         await PowerCmd.Apply<MovementNotFinishedPower>(ctx, Creature, 1, Creature, null);
         await PowerCmd.Apply<TenDayEndPower>(ctx, Creature, 10, Creature, null);
     }
 
-    /// <summary>供 MovementNotFinishedPower 在对应日数召唤盟友。</summary>
     public async Task SummonAlly<T>(PlayerChoiceContext ctx, string slotName) where T : MonsterModel
     {
         var combatState = Creature.CombatState;

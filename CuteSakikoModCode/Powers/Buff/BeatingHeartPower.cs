@@ -13,8 +13,7 @@ public sealed class BeatingHeartPower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
 
-    // 基类是 protected virtual IEnumerable<DynamicVar> CanonicalVars
-    // 注册一个名为 "Cap" 的变量，供 powers.json 里的 {Cap} 使用
+    // 注册 "Cap" 变量，供 powers.json 里的 {Cap} 使用
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
         new DynamicVar("Cap", 0m)
@@ -27,23 +26,22 @@ public sealed class BeatingHeartPower : CuteSakikoModPower
         public decimal DamageReceivedThisTurn;
     }
 
-    /// <summary>上限 = 十日终焉当前层数 × 50。</summary>
+    /// <summary>上限 = 最大生命值 × 十日终焉层数 ÷ 10（每层 = 10% 血量）。</summary>
     private decimal GetCap()
     {
         var endPower = Owner.GetPower<TenDayEndPower>();
         int days = endPower?.Amount ?? 0;
-        return days * 50m;
+        return Owner.MaxHp * days / 10m;
     }
 
     /// <summary>
     /// 刷新 Cap 动态变量。
-    /// 调用时机：① 首次挂上时（AfterApplied）② 每个敌方回合开始时（BeforeSideTurnStart）
-    /// ③ 十日终焉层数变化时（MovementNotFinishedPower.AfterPowerAmountChanged 转发）。
+    /// 调用时机：① 首次挂上（AfterApplied）② 每回合开始（BeforeSideTurnStart）
+    /// ③ 十日终焉层数变化（MovementNotFinishedPower.AfterPowerAmountChanged 转发）。
     /// </summary>
     public void UpdateCap()
     {
-        // 图鉴 / 预览时为 Canonical 实例，Owner 会抛 CanonicalModelException
-        if (!IsMutable) return;
+        if (!IsMutable) return;   // 图鉴/预览时为 Canonical，碰 Owner 会抛
         DynamicVars["Cap"].BaseValue = GetCap();
     }
 
@@ -89,9 +87,7 @@ public sealed class BeatingHeartPower : CuteSakikoModPower
         IReadOnlyList<Creature> participants,
         ICombatState combatState)
     {
-        // 每次敌方回合开始清零，保证上限是“每回合”
         GetInternalData<Data>().DamageReceivedThisTurn = 0;
-        // 顺便刷新 Cap，保证悬浮提示显示最新值
         UpdateCap();
         return Task.CompletedTask;
     }

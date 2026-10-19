@@ -28,11 +28,11 @@ public class Shirk() : ModStatusCard(-1, CardType.Status, CardRarity.Status, Tar
 
         if (IsUpgraded)
         {
-            // 升级后：手动选择至少1张手牌丢弃（最多全部其他手牌）
+            // 升级后：手动选择至多 1 张手牌丢弃（可以选 0 张）
             var prefs = new CardSelectorPrefs(
                 CardSelectorPrefs.DiscardSelectionPrompt,
-                1,
-                otherCards.Count
+                0,
+                1
             );
 
             var selected = await CardSelectCmd.FromHand(

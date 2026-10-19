@@ -83,7 +83,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.6.5" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.6.7" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->

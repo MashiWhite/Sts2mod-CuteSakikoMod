@@ -1,8 +1,10 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Helpers;
+﻿
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
@@ -11,7 +13,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
-using MegaCrit.Sts2.Core.Helpers;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.TenDay;
 
@@ -51,7 +52,6 @@ public class TenDaySoyo : ModMonsterTemplate
 
     private async Task BlockTeamMove(IReadOnlyList<Creature> targets)
     {
-        // 2 点格挡 ×N 次
         for (int i = 0; i < BlockHits; i++)
         {
             foreach (var ally in Creature.CombatState.GetTeammatesOf(Creature).Where(c => c.IsAlive))

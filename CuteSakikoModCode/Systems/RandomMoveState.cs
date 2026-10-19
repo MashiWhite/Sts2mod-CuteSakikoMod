@@ -2,11 +2,8 @@
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Random;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Helpers;
+namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 /// <summary>
 /// 与 MoveState 用法完全一致，区别是 GetNextState 从一组候选 state id 里随机挑下一个意图。
