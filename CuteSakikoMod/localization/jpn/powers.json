@@ -1,4 +1,8 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.title": "目立ちたがり",
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.description": "毎ターン最初にプレイしたカードに応じて意図が変化する。",
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.smartDescription": "毎ターン最初にプレイしたカードに応じて意図が変化する。",
+  
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.title": "虹色の世界",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.description": "毎ターンあなたがプレイする最初のカードは、ランダムに[gold]同じレアリティ[/gold]・[gold]同じタイプ[/gold]の他キャラクターのカードに[gold]変化[/gold]する。",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.smartDescription": "毎ターンあなたがプレイする最初のカードは、ランダムに[gold]同じレアリティ[/gold]・[gold]同じタイプ[/gold]の他キャラクターのカードに[gold]変化[/gold]する。",

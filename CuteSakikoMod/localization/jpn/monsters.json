@@ -1,4 +1,9 @@
 ﻿{
+  "CUTE_SAKIKO_MOD_MONSTER_ANON_WANG.name": "アノンワン",
+  "CUTE_SAKIKO_MOD_MONSTER_ANON_WANG.moves.ATTACK.title": "飛びかかり噛みつき",
+  "CUTE_SAKIKO_MOD_MONSTER_ANON_WANG.moves.DEFEND.title": "おとなしく装う",
+  "CUTE_SAKIKO_MOD_MONSTER_ANON_WANG.moves.BUFF.title": "しっぽを振る",
+  
   "CUTE_SAKIKO_MOD_MONSTER_HOTARU.name": "汐見蛍",
   "CUTE_SAKIKO_MOD_MONSTER_HOTARU.moves.BLOCK_REPEAT.title": "虹鏡・盾",
   "CUTE_SAKIKO_MOD_MONSTER_HOTARU.moves.ATTACK_DEX.title": "流光・斬",

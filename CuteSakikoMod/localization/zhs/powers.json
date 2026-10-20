@@ -1,4 +1,8 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.title": "想出风头",
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.description": "根据你每回合打出的第一张牌改变意图。",
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.smartDescription": "根据你每回合打出的第一张牌改变意图。",
+  
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.title": "虹色的世界",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.description": "每回合你打出的第一张牌，会随机[gold]变化[/gold]为[gold]同稀有度[/gold]、[gold]同类型[/gold]的其他角色的牌。",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.smartDescription": "每回合你打出的第一张牌，会随机[gold]变化[/gold]为[gold]同稀有度[/gold]、[gold]同类型[/gold]的其他角色的牌。",

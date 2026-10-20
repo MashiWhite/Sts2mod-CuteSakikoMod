@@ -15,6 +15,9 @@ using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
+using System.Linq;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
+using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Elite;
 
@@ -88,12 +91,14 @@ public class Hotaru : ModMonsterTemplate
         await PowerCmd.Apply<DexterityPower>(
             new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
     }
-
+    
     // ───── 意图 3：获得力量 + 向玩家抽牌堆塞随机角色牌 ─────
     private async Task Move3BuffAndPollute(IReadOnlyList<Creature> targets)
     {
         await PowerCmd.Apply<StrengthPower>(
             new ThrowingPlayerChoiceContext(), Creature, StrengthAmount, Creature, null);
+
+        var addedResults = new List<CardPileAddResult>();
 
         foreach (var player in Creature.CombatState.Players)
         {
@@ -102,9 +107,19 @@ public class Hotaru : ModMonsterTemplate
                 var card = PickRandomOtherCharacterCard(player);
                 if (card == null) continue;
 
-                await CardPileCmd.AddGeneratedCardToCombat(
+                // 直接调用官方 API 
+                var result = await CardPileCmd.AddGeneratedCardToCombat(
                     card, PileType.Draw, player, CardPilePosition.Random);
+            
+                addedResults.Add(result);
             }
+        }
+
+        // 统一播放官方的预览特效，并飞向抽牌堆
+        if (addedResults.Count > 0)
+        {
+            CardCmd.PreviewCardPileAdd(addedResults);
+            await Cmd.Wait(0.3f);
         }
     }
 
@@ -114,21 +129,51 @@ public class Hotaru : ModMonsterTemplate
         if (combatState == null) return null;
 
         var myPool = player.Character.CardPool;
+        var rng = combatState.RunState.Rng.CombatCardGeneration;
 
-        // ★ ModelDb 遍历入口名字同上，请按项目实际调整
-        var candidates = ModelDb.AllCards
-            .Where(c => c.Pool != null
-                     && c.Pool != myPool
-                     && c.Type != CardType.Status
-                     && c.Type != CardType.Curse
-                     && c.Type != CardType.Skill   // 如不想塞技能可去掉这一行
-                     && c.Rarity != CardRarity.Basic)
+        // ★ 1. 预先获取所有候选并分组
+        var allCandidates = ModelDb.AllCards
+            .Where(c => c.Pool != null 
+                     && c.Pool != myPool 
+                     && c.Rarity != CardRarity.Ancient 
+                     && c.Rarity != CardRarity.Basic
+                     && c is not CuteSakikoModEggCard
+                     && c is not DeprecatedCard // ★ 新增：禁止洗出废弃占位卡
+                     && c.ShouldShowInCardLibrary) // ★ 新增：禁止洗出任何内部隐藏卡
             .ToList();
 
-        if (candidates.Count == 0) return null;
+        if (allCandidates.Count == 0) return null;
 
-        var rng = combatState.RunState.Rng.CombatCardGeneration;
-        var picked = candidates[rng.NextInt(candidates.Count)];
+        var commons = allCandidates.Where(c => c.Rarity == CardRarity.Common && c.Type != CardType.Status && c.Type != CardType.Curse).ToList();
+        var uncommons = allCandidates.Where(c => c.Rarity == CardRarity.Uncommon && c.Type != CardType.Status && c.Type != CardType.Curse).ToList();
+        var rares = allCandidates.Where(c => c.Rarity == CardRarity.Rare && c.Type != CardType.Status && c.Type != CardType.Curse).ToList();
+        var statuses = allCandidates.Where(c => c.Type == CardType.Status).ToList();
+        var curses = allCandidates.Where(c => c.Type == CardType.Curse).ToList();
+
+        // ★ 2. 动态计算总权重（如果某个列表为空，它的权重就为 0）
+        int weightCommon = commons.Count > 0 ? 45 : 0;
+        int weightUncommon = uncommons.Count > 0 ? 25 : 0;
+        int weightRare = rares.Count > 0 ? 15 : 0;
+        int weightStatus = statuses.Count > 0 ? 10 : 0;
+        int weightCurse = curses.Count > 0 ? 5 : 0;
+
+        int totalWeight = weightCommon + weightUncommon + weightRare + weightStatus + weightCurse;
+
+        if (totalWeight == 0) return null; // 极端保底
+
+        // ★ 3. 只消耗 1 次 RNG 决定落在哪个权重区间
+        int roll = rng.NextInt(totalWeight); 
+        List<CardModel> targetList = new List<CardModel>();
+
+        if (roll < weightCommon) targetList = commons;
+        else if (roll < weightCommon + weightUncommon) targetList = uncommons;
+        else if (roll < weightCommon + weightUncommon + weightRare) targetList = rares;
+        else if (roll < weightCommon + weightUncommon + weightRare + weightStatus) targetList = statuses;
+        else targetList = curses;
+
+        // ★ 4. 消耗第 2 次 RNG 抽具体的卡
+        var picked = targetList[rng.NextInt(targetList.Count)];
         return combatState.CreateCard(picked, player);
     }
+
 }

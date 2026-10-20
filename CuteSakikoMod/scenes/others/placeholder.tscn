@@ -228,7 +228,7 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6666667),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [ExtResource("2_gj5h1"), ExtResource("2_gj5h1")]
@@ -304,7 +304,7 @@ tracks/0/path = NodePath(".:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6666667, 1.6333333),
+"times": PackedFloat32Array(0, 0.36666667, 1.6333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [ExtResource("2_gj5h1"), ExtResource("2_gj5h1"), ExtResource("2_gj5h1")]
@@ -497,7 +497,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_esqhf")
 }
 autoplay = "idle_loop"
-speed_scale = 2.6020672
+speed_scale = 5.0
 next/attack = &"idle_loop"
 next/cast = &"idle_loop"
 next/hurt = &"idle_loop"

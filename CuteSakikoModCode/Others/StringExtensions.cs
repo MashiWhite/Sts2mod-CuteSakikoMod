@@ -74,10 +74,16 @@ public static class AssetHelper
     }
 
     // 卡片
-    public static CardAssetProfile CardAssetProfile(this CardModel card)
+    // 卡片
+    public static CardAssetProfile CardAssetProfile(this CardModel card, CardVisualStyle? style = null)
     {
         var snake = GetSnakeCaseName(card.GetType());
-        return new CardAssetProfile($"res://{Entry.ModId}/images/cards/{snake}.png");
+    
+        // 使用对象初始化器设置 VisualStyle（init 属性）
+        return new CardAssetProfile($"res://{Entry.ModId}/images/cards/{snake}.png")
+        {
+            VisualStyle = style ?? CardVisualStyle.Standard
+        };
     }
 
     // 能力

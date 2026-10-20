@@ -1,4 +1,8 @@
 {
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.title": "Want to Show Off",
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.description": "Changes intent based on the first card you play each turn.",
+  "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.smartDescription": "Changes intent based on the first card you play each turn.",
+  
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.title": "Rainbow World",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.description": "The first card you play each turn randomly [gold]Transforms[/gold] into a card of another character with the [gold]same rarity[/gold] and [gold]same type[/gold].",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.smartDescription": "The first card you play each turn randomly [gold]Transforms[/gold] into a card of another character with the [gold]same rarity[/gold] and [gold]same type[/gold].",
