@@ -44,7 +44,7 @@
   "CUTE_SAKIKO_MOD_CARD_MEMORY_BURNING.title": "メモリーを燃やす",
   "CUTE_SAKIKO_MOD_CARD_MEMORY_BURNING.description": "[red]忘却山[/red]にある[gold]メモリー[/gold]をプレイして[gold]廃棄[/gold]する。",
   "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.title": "メモリーを取り戻す",
-  "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.description": "[red]忘却山[/red]から最大{Cards:diff()}枚のカードを選び、[gold]手札[/gold]に加えてコスト0にする。",
+  "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.description": "[red]忘却山[/red]から最大{Cards:diff()}枚のカードを選び、[gold]手札[/gold]に加えてこのターンコスト0にする。",
   "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.selectionScreenPrompt": "取り戻すメモリーを選ぶ",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_CAT_POUNCE.title": "飢えた猫の飛びかかり",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_CAT_POUNCE.description": "すべての敵に{Damage:diff()}ダメージを与える。\n[gold]山札[/gold]から敵の数に等しい枚数の[gold]猫[/gold]をプレイする。",

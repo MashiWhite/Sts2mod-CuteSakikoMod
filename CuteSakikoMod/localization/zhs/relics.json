@@ -1,4 +1,20 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.title": "TGW 会员卡",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.description": "{Debt:cond:>0?金币收益减少[blue]{DebtPercent}%[/blue]。\n[gold]右键[/gold]此遗物可提前还款。|[blue]您是一位信用优良的用户。[/blue]}",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.flavor": "[b][blue]尊贵的丰川会员用户象征[/blue][/b]。",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_title": "高消费限制",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_countdown": "战斗[blue]{RemainingCombats}[/blue]场后，在商店累计消费不能超过欠款。",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_active": "欠款结清前，在商店累计消费不能超过欠款。",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.empty_title": "会员卡信息",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.debt_info": "当前欠款：[blue]{Debt}[/blue]\n等级：{LevelName}\n可贷：[blue]{LoanAmount}[/blue]。",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_0": "[color=#C5C8C9]白银会员[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_1": "[gold]黄金会员[/gold]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_2": "[color=#AEF8EC]铂金会员[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_3": "[rainbow]黑金至尊会员[/rainbow]",
+  
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.title": "爱音的沾沙湿袜子",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.description": "每场战斗开始时，回复[green]5[/green]点生命值。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.flavor": "[green]抹茶色[/green]的袜子，潮湿、沉重、硌脚。但这段回忆，比任何贝壳都珍贵。",

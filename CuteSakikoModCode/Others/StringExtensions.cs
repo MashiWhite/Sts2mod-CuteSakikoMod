@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -74,15 +75,18 @@ public static class AssetHelper
     }
 
     // 卡片
-    // 卡片
     public static CardAssetProfile CardAssetProfile(this CardModel card, CardVisualStyle? style = null)
     {
         var snake = GetSnakeCaseName(card.GetType());
     
-        // 使用对象初始化器设置 VisualStyle（init 属性）
+        // 如果没指定 style，根据稀有度自动推断：Ancient 稀有度 -> 先古样式，其他 -> 标准样式
+        var finalStyle = style ?? (card.Rarity == CardRarity.Ancient 
+            ? CardVisualStyle.Ancient 
+            : CardVisualStyle.Standard);
+
         return new CardAssetProfile($"res://{Entry.ModId}/images/cards/{snake}.png")
         {
-            VisualStyle = style ?? CardVisualStyle.Standard
+            VisualStyle = finalStyle
         };
     }
 

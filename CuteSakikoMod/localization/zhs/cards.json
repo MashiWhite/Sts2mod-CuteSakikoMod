@@ -40,7 +40,7 @@
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.dialog.confirm": "确定",
   "CUTE_SAKIKO_MOD_CARD_NAME_SENSE.dialog.cancel": "取消",
   "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.title": "重拾回忆",
-  "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.description": "从[red]遗忘堆[/red]中选择最多{Cards:diff()}张牌，将其加入[gold]手牌[/gold]并免费。",
+  "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.description": "从[red]遗忘堆[/red]中选择最多{Cards:diff()}张牌，将其加入[gold]手牌[/gold]且本回合免费。",
   "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.selectionScreenPrompt": "选择要重拾的回忆",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_CAT_POUNCE.title": "饿猫扑食",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_CAT_POUNCE.description": "对所有敌人造成{Damage:diff()}点伤害。\n从[gold]抽牌堆[/gold]内打出等同敌人数量的[gold]猫咪[/gold]。",

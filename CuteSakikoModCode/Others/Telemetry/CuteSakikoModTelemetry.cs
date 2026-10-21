@@ -230,6 +230,40 @@ public static class CuteSakikoModTelemetry
     }
 
     // ==================== 通用事件 ====================
+    
+    /// <summary>TGW 会员卡：还款（右键结清）事件。</summary>
+    public static void CaptureTgwRepaid(
+        string characterId, int floor,
+        int paid, int debtBefore, int debtAfter,
+        bool fullyRepaid, int levelBefore, int levelAfter)
+    {
+        Track("togawa_card.repaid", new Dictionary<string, object?>
+        {
+            ["character_id"] = characterId,
+            ["character_name"] = LocalizeCharacter(characterId),
+            ["floor"] = floor,
+            ["paid"] = paid,
+            ["debt_before"] = debtBefore,
+            ["debt_after"] = debtAfter,
+            ["fully_repaid"] = fullyRepaid,
+            ["level_before"] = levelBefore,
+            ["level_after"] = levelAfter
+        });
+    }
+
+    /// <summary>TGW 会员卡：高消费限制触发事件。</summary>
+    public static void CaptureTgwShopLimit(
+        string characterId, int floor, int debt, int consecutiveCombats)
+    {
+        Track("togawa_card.shop_limit", new Dictionary<string, object?>
+        {
+            ["character_id"] = characterId,
+            ["character_name"] = LocalizeCharacter(characterId),
+            ["floor"] = floor,
+            ["debt"] = debt,
+            ["consecutive_combats"] = consecutiveCombats
+        });
+    }
 
     public static void CaptureRunStarted(string characterId, int ascension, bool isMultiplayer)
     {

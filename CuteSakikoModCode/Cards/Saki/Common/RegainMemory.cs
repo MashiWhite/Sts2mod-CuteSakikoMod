@@ -54,7 +54,7 @@ public class RegainMemory : CuteSakikoModCard
         foreach (var card in selectedList)
         {
             await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Bottom, this);
-            card.SetToFreeThisCombat();
+            card.SetToFreeThisTurn();
         }
 
         // 刷新遗忘堆 UI

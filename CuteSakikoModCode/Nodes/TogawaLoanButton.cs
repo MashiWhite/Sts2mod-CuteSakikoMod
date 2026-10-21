@@ -1,7 +1,9 @@
+using System;
+using System.Collections.Generic;
 using CuteSakikoMod.CuteSakikoModCode.Others.Telemetry;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
@@ -14,207 +16,235 @@ namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
 
 public partial class TogawaLoanButton : NButton
 {
-	private static readonly int[] GoldAmounts = { 75, 60, 45, 30, 15 };
-	private bool _canClick = true;
-	private int _clickCount; // 已点击次数（0~5）
-	private LocString _descLoc;
-	private HoverTip _hoverTip;
-	private Player? _player;
-	private LocString _titleLoc;
+    private bool _canClick = true;
+    private LocString _descLoc;
+    private HoverTip _hoverTip;
+    private Player? _player;
+    private LocString _titleLoc;
 
-	public override void _Ready()
-	{
-		ConnectSignals();
+    public override void _Ready()
+    {
+        ConnectSignals();
 
-		var room = NMerchantRoom.Instance;
-		_player = room?.Room.GetLocalInventory()?.Player;
+        var room = NMerchantRoom.Instance;
+        _player = room?.Room.GetLocalInventory()?.Player;
 
-		// 按钮布局
-		var buttonWidth = 180f;
-		var buttonHeight = 180f;
-		AnchorLeft = 1.0f;
-		AnchorRight = 1.0f;
-		AnchorTop = 0.0f;
-		AnchorBottom = 0.0f;
-		OffsetRight = 0;
-		OffsetLeft = -buttonWidth;
-		OffsetTop = 750;
-		OffsetBottom = OffsetTop + buttonHeight;
+        // 按钮布局
+        var buttonWidth = 180f;
+        var buttonHeight = 180f;
+        AnchorLeft = 1.0f;
+        AnchorRight = 1.0f;
+        AnchorTop = 0.0f;
+        AnchorBottom = 0.0f;
+        OffsetRight = 0;
+        OffsetLeft = -buttonWidth;
+        OffsetTop = 750;
+        OffsetBottom = OffsetTop + buttonHeight;
 
-		// 图标
-		var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/togawa_group_icon.png");
-		var img = new TextureRect();
-		img.Texture = texture;
-		img.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
-		img.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
-		img.MouseFilter = MouseFilterEnum.Ignore;
-		img.AnchorRight = 1.0f;
-		img.AnchorBottom = 1.0f;
-		img.OffsetRight = 0;
-		img.OffsetLeft = 0;
-		img.OffsetTop = 0;
-		img.OffsetBottom = 0;
-		AddChild(img);
+        // 图标
+        var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/togawa_group_icon.png");
+        var img = new TextureRect();
+        img.Texture = texture;
+        img.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+        img.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
+        img.MouseFilter = MouseFilterEnum.Ignore;
+        img.AnchorRight = 1.0f;
+        img.AnchorBottom = 1.0f;
+        img.OffsetRight = 0;
+        img.OffsetLeft = 0;
+        img.OffsetTop = 0;
+        img.OffsetBottom = 0;
+        AddChild(img);
 
-		// 本地化字符串
-		_titleLoc = new LocString("events", "CUTE_SAKIKO_MOD_TOGAWA_GROUP.title");
-		_descLoc = new LocString("events", "CUTE_SAKIKO_MOD_TOGAWA_GROUP.description");
-		_descLoc.Add("amount", GoldAmounts[0]);
+        // 本地化字符串
+        _titleLoc = new LocString("events", "CUTE_SAKIKO_MOD_TOGAWA_GROUP.title");
+        _descLoc = new LocString("events", "CUTE_SAKIKO_MOD_TOGAWA_GROUP.description");
+        UpdateHoverTip();
 
-		// 初始化悬停提示
-		_hoverTip = new HoverTip(_titleLoc, _descLoc);
+        Visible = false;
+    }
 
-		Visible = false;
-	}
+    public void ResetForNewVisit()
+    {
+        _canClick = true;
+        UpdateVisualState();
+    }
 
-	public void ResetForNewVisit()
-	{
-		_clickCount = 0;
-		_canClick = true;
-		Enable();
-		Modulate = Colors.White;
-		UpdateHoverTip();
-	}
+    public void ShowButton()
+    {
+        Visible = true;
+        UpdateVisualState();
+    }
 
-	public void ShowButton()
-	{
-		Visible = true;
-		if (_clickCount >= GoldAmounts.Length)
-		{
-			Disable();
-			Modulate = new Color(0.1f, 0.1f, 0.1f);
-			_canClick = false;
-		}
-		else
-		{
-			Enable();
-			Modulate = Colors.White;
-			_canClick = true;
-		}
-	}
+    public void HideButton()
+    {
+        Visible = false;
+    }
 
-	public void HideButton()
-	{
-		Visible = false;
-	}
+    private void UpdateVisualState()
+    {
+        if (_player == null)
+        {
+            Disable();
+            _canClick = false;
+            UpdateHoverTip();
+            return;
+        }
 
-	protected override void OnFocus()
-	{
-		base.OnFocus();
-		UpdateHoverTip(); // 确保描述中的金币数最新
+        var relic = _player.GetRelic<TgwCard>();
+        bool canClick = relic == null || relic.CanLoan(_player);
 
-		var tips = new List<IHoverTip>
-		{
-			_hoverTip,
-			HoverTipFactory.FromCard<Debt>()
-		};
+        if (canClick)
+        {
+            Enable();
+            Modulate = Colors.White;
+            _canClick = true;
+        }
+        else
+        {
+            Disable();
+            Modulate = new Color(0.1f, 0.1f, 0.1f);
+            _canClick = false;
+        }
 
-		var tipSet = NHoverTipSet.CreateAndShow(this, tips);
-		if (tipSet == null) return;
+        UpdateHoverTip();
+    }
 
-		var alignment = GlobalPosition.X > GetViewportRect().Size.X * 0.6f
-			? HoverTipAlignment.Left
-			: HoverTipAlignment.Right;
-		tipSet.SetAlignment(this, alignment);
+    protected override void OnFocus()
+    {
+        base.OnFocus();
+        UpdateHoverTip();
 
-		var viewportRect = GetViewportRect();
-		var pos = tipSet.GlobalPosition;
-		if (pos.X < 0) pos.X = 10;
-		if (pos.X + tipSet.Size.X > viewportRect.Size.X)
-			pos.X = viewportRect.Size.X - tipSet.Size.X - 10;
-		if (pos.Y < 0) pos.Y = 10;
-		if (pos.Y + tipSet.Size.Y > viewportRect.Size.Y)
-			pos.Y = viewportRect.Size.Y - tipSet.Size.Y - 10;
-		tipSet.GlobalPosition = pos;
-	}
+        var tips = new List<IHoverTip>
+        {
+            _hoverTip,
+        };
 
-	protected override void OnUnfocus()
-	{
-		NHoverTipSet.Remove(this);
-		base.OnUnfocus();
-	}
+        var tipSet = NHoverTipSet.CreateAndShow(this, tips);
+        if (tipSet == null) return;
 
-	protected override void OnRelease()
-	{
-		base.OnRelease();
-		if (_player == null || !_canClick || _clickCount >= GoldAmounts.Length) return;
-		DoLoan();
-	}
+        var alignment = GlobalPosition.X > GetViewportRect().Size.X * 0.6f
+            ? HoverTipAlignment.Left
+            : HoverTipAlignment.Right;
+        tipSet.SetAlignment(this, alignment);
 
-	private async void DoLoan()
-	{
-		_canClick = false;
-		Disable();
+        var viewportRect = GetViewportRect();
+        var pos = tipSet.GlobalPosition;
+        if (pos.X < 0) pos.X = 10;
+        if (pos.X + tipSet.Size.X > viewportRect.Size.X)
+            pos.X = viewportRect.Size.X - tipSet.Size.X - 10;
+        if (pos.Y < 0) pos.Y = 10;
+        if (pos.Y + tipSet.Size.Y > viewportRect.Size.Y)
+            pos.Y = viewportRect.Size.Y - tipSet.Size.Y - 10;
+        tipSet.GlobalPosition = pos;
+    }
 
-		// 点击反馈：变灰
-		var tween = CreateTween();
-		tween.TweenProperty(this, "modulate", new Color(0.1f, 0.1f, 0.1f), 0.2f)
-			.SetEase(Tween.EaseType.Out);
-		await ToSignal(tween, Tween.SignalName.Finished);
+    protected override void OnUnfocus()
+    {
+        NHoverTipSet.Remove(this);
+        base.OnUnfocus();
+    }
 
-		try
-		{
-			var gold = GoldAmounts[_clickCount];
-			await PlayerCmd.GainGold(gold, _player);
+    protected override void OnRelease()
+    {
+        base.OnRelease();
+        if (_player == null || !_canClick) return;
+        DoLoan();
+    }
 
-			var debtCard = _player.RunState.CreateCard<Debt>(_player);
-			var addResult = await CardPileCmd.Add(debtCard, PileType.Deck);
-			CardCmd.PreviewCardPileAdd(addResult, 1.5f);
+    private async void DoLoan()
+{
+    _canClick = false;
+    Disable();
 
-			// ★ 上传遥测
-			try
-			{
-				CuteSakikoModTelemetry.CaptureRoomButtonClicked(
-					"shop",
-					"togawa_loan",
-					_player.Character.Id.Entry,
-					CuteSakikoModTelemetry.GetCurrentFloor(_player),
-					new Dictionary<string, object?>
-					{
-						["gold_amount"] = gold,
-						["click_index"] = _clickCount // 第几次点击
-					});
-			}
-			catch (Exception ex)
-			{
-				GD.PrintErr($"[TogawaLoan] Telemetry failed: {ex}");
-			}
+    var tween = CreateTween();
+    tween.TweenProperty(this, "modulate", new Color(0.1f, 0.1f, 0.1f), 0.2f)
+        .SetEase(Tween.EaseType.Out);
+    await ToSignal(tween, Tween.SignalName.Finished);
 
-			_clickCount++;
+    try
+    {
+        var player = _player!;
+        var relic = player.GetRelic<TgwCard>();
 
-			if (_clickCount >= GoldAmounts.Length)
-			{
-				// 全部用完，永久禁用并变黑
-				Disable();
-				Modulate = new Color(0.1f, 0.1f, 0.1f);
-				_canClick = false;
-				UpdateHoverTip(); // 更新显示为0金币或保持
-			}
-			else
-			{
-				Enable();
-				Modulate = Colors.White;
-				_canClick = true;
-				UpdateHoverTip();
-			}
-		}
-		catch (Exception e)
-		{
-			GD.PrintErr($"[TogawaLoan] {e}");
-			if (_clickCount < GoldAmounts.Length)
-			{
-				Enable();
-				Modulate = Colors.White;
-				_canClick = true;
-			}
-		}
-	}
+        string loanKind;
+        int principal;
+        int debt;
+        int level;
 
-	/// <summary>更新悬停提示中的金币变量并重建 HoverTip</summary>
-	private void UpdateHoverTip()
-	{
-		var gold = _clickCount < GoldAmounts.Length ? GoldAmounts[_clickCount] : 0;
-		_descLoc.Add("amount", gold); // 更新变量
-		_hoverTip = new HoverTip(_titleLoc, _descLoc); // 重新生成 HoverTip
-	}
+        if (relic == null)
+        {
+            // 首次：给遗物，借本金，欠应还总额
+            var obtained = await RelicCmd.Obtain<TgwCard>(player);
+            if (obtained == null) return;
+
+            loanKind = "first";
+            principal = obtained.LoanPrincipal;
+            debt = obtained.LoanDebt;
+            level = obtained.Level;
+
+            obtained.Debt = debt;
+            obtained.MarkLoaned(player);
+
+            obtained.SetLoaning(true);
+            try { await PlayerCmd.GainGold(principal, player); }
+            finally { obtained.SetLoaning(false); }
+            obtained.Flash();
+        }
+        else
+        {
+            if (!relic.CanLoan(player)) return;
+
+            loanKind = "repeat";
+            principal = relic.LoanPrincipal;
+            debt = relic.LoanDebt;
+            level = relic.Level;
+
+            relic.Debt = debt;
+            relic.MarkLoaned(player);
+
+            relic.SetLoaning(true);
+            try { await PlayerCmd.GainGold(principal, player); }
+            finally { relic.SetLoaning(false); }
+            relic.Flash();
+        }
+
+        // 遥测：贷款事件
+        try
+        {
+            CuteSakikoModTelemetry.CaptureRoomButtonClicked(
+                "shop", "togawa_loan", player.Character.Id.Entry,
+                CuteSakikoModTelemetry.GetCurrentFloor(player),
+                new Dictionary<string, object?>
+                {
+                    ["loan_kind"] = loanKind,
+                    ["principal"] = principal,
+                    ["debt"] = debt,
+                    ["level"] = level
+                });
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"[TogawaLoan] Telemetry failed: {ex}");
+        }
+    }
+    catch (Exception e)
+    {
+        GD.PrintErr($"[TogawaLoan] {e}");
+    }
+    finally
+    {
+        UpdateVisualState();
+    }
+}
+
+    private void UpdateHoverTip()
+    {
+        var relic = _player?.GetRelic<TgwCard>();
+        int amount = relic == null
+            ? 50
+            : (relic.Debt > 0 ? 0 : relic.LoanPrincipal);
+        _descLoc.Add("amount", amount);
+        _hoverTip = new HoverTip(_titleLoc, _descLoc);
+    }
 }

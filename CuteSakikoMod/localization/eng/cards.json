@@ -44,7 +44,7 @@
   "CUTE_SAKIKO_MOD_CARD_MEMORY_BURNING.title": "Burning Memories",
   "CUTE_SAKIKO_MOD_CARD_MEMORY_BURNING.description": "Play and [gold]Exhaust[/gold] [gold]Memories[/gold] in the [red]Forgotten Pile[/red].",
   "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.title": "Regain Memory",
-  "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.description": "Choose up to {Cards:diff()} card(s) from the [red]Forgotten Pile[/red], add them to your [gold]hand[/gold] and they cost 0.",
+  "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.description": "Choose up to {Cards:diff()} card(s) from the [red]Forgotten Pile[/red], add them to your [gold]hand[/gold] and they cost 0 this turn.",
   "CUTE_SAKIKO_MOD_CARD_REGAIN_MEMORY.selectionScreenPrompt": "Choose memories to regain",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_CAT_POUNCE.title": "Hungry Cat Pounce",
   "CUTE_SAKIKO_MOD_CARD_HUNGRY_CAT_POUNCE.description": "Deal {Damage:diff()} damage to ALL enemies.\nPlay [gold]Cats[/gold] from your [gold]draw pile[/gold] equal to the number of enemies.",

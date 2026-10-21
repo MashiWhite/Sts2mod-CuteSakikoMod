@@ -1,4 +1,19 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.title": "TGWメンバーズカード",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.description": "{Debt:cond:>0?ゴールド獲得量が[blue]{DebtPercent}%[/blue]減少する。\n[gold]このレリックを右クリック[/gold]すると繰り上げ返済できる。|[blue]あなたは信用良好なユーザーです。[/blue]}",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.flavor": "[b][blue]高貴な豊川メンバーである証[/blue][/b]。",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_title": "高額消費制限",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_countdown": "[blue]{RemainingCombats}[/blue]戦闘後、ショップでの累計消費額は借金を超えられなくなる。",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_active": "借金を返済するまで、ショップでの累計消費額は借金を超えられない。",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.empty_title": "メンバーズカード情報",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.debt_info": "現在の借金：[blue]{Debt}[/blue]\n等級：{LevelName}\n借入可能額：[blue]{LoanAmount}[/blue]。",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_0": "[color=#C5C8C9]シルバーメンバー[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_1": "[gold]ゴールドメンバー[/gold]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_2": "[color=#AEF8EC]プラチナメンバー[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_3": "[rainbow]ブラックゴールド至上メンバー[/rainbow]",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.title": "愛音の砂まみれの濡れ靴下",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.description": "各戦闘開始時、HPを[green]5[/green]回復する。",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.flavor": "[green]抹茶色[/green]の靴下、湿っていて、重くて、足に当たる。でもこの思い出は、どんな貝殻よりも大切。",

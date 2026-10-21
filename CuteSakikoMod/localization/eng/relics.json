@@ -1,4 +1,19 @@
 {
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.title": "TGW Membership Card",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.description": "{Debt:cond:>0?Gold earned is reduced by [blue]{DebtPercent}%[/blue].\n[gold]Right-click[/gold] this relic to repay early.|[blue]You are a user with excellent credit.[/blue]}",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.flavor": "[b][blue]The symbol of a distinguished Togawa member[/blue][/b].",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_title": "High Spending Limit",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_countdown": "After [blue]{RemainingCombats}[/blue] {RemainingCombats:plural:combat|combats}, your total shop spending cannot exceed your debt.",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.high_spend_active": "Until the debt is cleared, your total shop spending cannot exceed your debt.",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.empty_title": "Membership Card Info",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.debt_info": "Current debt: [blue]{Debt}[/blue]\nLevel: {LevelName}\nAvailable loan: [blue]{LoanAmount}[/blue].",
+
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_0": "[color=#C5C8C9]Silver Member[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_1": "[gold]Gold Member[/gold]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_2": "[color=#AEF8EC]Platinum Member[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_TGW_CARD.level_3": "[rainbow]Black Gold Supreme Member[/rainbow]",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.title": "Anon's Sandy Wet Socks",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.description": "At the start of each combat, heal [green]5[/green] HP.",
   "CUTE_SAKIKO_MOD_RELIC_ANON_SANDY_WET_SOCKS.flavor": "[green]Matcha-colored[/green] socks, damp, heavy, and gritty. But this memory is more precious than any seashell.",
