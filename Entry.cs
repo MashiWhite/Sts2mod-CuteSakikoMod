@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Weak;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Others.Config;
@@ -292,7 +293,7 @@ public class Entry
         Log.Debug("Mod initialized!");
 
         // 8. 预加载 VFX
-        VfxUtil.PreloadScenes(new List<string> { "res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
+        VfxUtil.PreloadScenes(new List<string> { Xiaoyin.BunVfxPath,"res://CuteSakikoMod/scenes/vfx/tokyo_tower.tscn" });
 
         // ===== 皮肤系统 =====
         // 8.1 数据槽 + 同步服务
