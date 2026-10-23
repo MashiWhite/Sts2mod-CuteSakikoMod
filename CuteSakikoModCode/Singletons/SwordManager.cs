@@ -136,29 +136,26 @@ public sealed class SwordManager : HookedSingletonModel
         var delta = (int)amount;
         if (delta <= 0) return;
 
+        // 如果这个压力是某个玩家身上的，记录下来
         var pressureOwner = power.Owner;
-        if (pressureOwner == null || !pressureOwner.IsPlayer) return;
+        Player? pressurePlayer = null;
+        if (pressureOwner != null && pressureOwner.IsPlayer)
+            pressurePlayer = combatState.Players.FirstOrDefault(p => p.Creature == pressureOwner);
 
-        var pressurePlayer = combatState.Players
-            .FirstOrDefault(p => p.Creature == pressureOwner);
-        if (pressurePlayer == null) return;
-
-        // 按玩家独立判断
         foreach (var targetPlayer in combatState.Players)
         {
             var hasRelic = targetPlayer.Relics.OfType<OblivionisSword>().Any();
 
             if (hasRelic)
             {
-                // 有遗物：任何人的压力增加，都为这个玩家的剑增伤
+                // 有遗物：任何人（玩家/敌人）压力增加，都为这个玩家的剑增伤
                 IncreasePlayerSwordDamage(targetPlayer, delta);
                 targetPlayer.Relics.OfType<OblivionisSword>().FirstOrDefault()?.Flash();
             }
-            else
+            else if (pressurePlayer != null && targetPlayer == pressurePlayer)
             {
-                // 无遗物：只有自己压力增加时才增伤
-                if (targetPlayer == pressurePlayer)
-                    IncreasePlayerSwordDamage(targetPlayer, delta);
+                // 无遗物：只有自己身上的压力增加时才增伤
+                IncreasePlayerSwordDamage(targetPlayer, delta);
             }
         }
     }
