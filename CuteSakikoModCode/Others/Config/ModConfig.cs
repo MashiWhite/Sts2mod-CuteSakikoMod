@@ -3,10 +3,23 @@ using STS2RitsuLib;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
 
+/// <summary>按钮触发方式。</summary>
+public enum ButtonClickMode
+{
+    SingleClick,
+    DoubleClick,
+    LongPress
+}
+
 public class CuteSakikoModConfigData
 {
     private bool _enableAudio = true;
     private float _modBgmVolume = 0.40f;
+
+    // ===== 按钮点击机制（本地设置，不参与联机同步） =====
+    public ButtonClickMode ButtonClickMode { get; set; } = ButtonClickMode.SingleClick;
+    public float DoubleClickInterval { get; set; } = 0.3f;   // 秒
+    public float LongPressDuration { get; set; } = 0.5f;     // 秒
 
     // ===== 游戏性开关（参与联机同步） =====
     public bool EggsCard { get; set; }
@@ -20,6 +33,7 @@ public class CuteSakikoModConfigData
     public bool ScalePressureInMultiplayer { get; set; } = false;
 
     // ===== 本地设置（不参与联机同步） =====
+
     public bool EnableAudio
     {
         get => _enableAudio;
@@ -55,6 +69,9 @@ public static class ModConfig
     private static CuteSakikoModConfigData? _cached;
     private static readonly object _lock = new();
 
+    public static ButtonClickMode ButtonClickMode => Load().ButtonClickMode;
+    public static float DoubleClickInterval => Load().DoubleClickInterval;
+    public static float LongPressDuration => Load().LongPressDuration;
     public static bool EnableAudio => Load().EnableAudio;
     public static bool EggsCard => Load().EggsCard;
     public static bool EnableModMonsters => Load().EnableModMonsters;

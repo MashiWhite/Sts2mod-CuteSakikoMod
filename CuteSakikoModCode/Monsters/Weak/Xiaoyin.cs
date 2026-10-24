@@ -96,7 +96,7 @@ public class Xiaoyin : ModMonsterTemplate
         // === 抛物线动画 ===
         float duration = 0.4f; 
         Vector2 controlPoint = (startPos + endPos) / 2f;
-        controlPoint.Y -= 150f; 
+        controlPoint.Y -= 300f; 
 
         var tween = bun.CreateTween();
         tween.TweenMethod(Callable.From<float>(t =>

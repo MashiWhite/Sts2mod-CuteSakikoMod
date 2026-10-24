@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.TenDay;
+﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.Tenday;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;

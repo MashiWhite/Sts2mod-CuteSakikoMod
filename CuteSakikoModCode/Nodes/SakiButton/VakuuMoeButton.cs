@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Character;
 using CuteSakikoMod.CuteSakikoModCode.Others.Telemetry;
@@ -7,27 +9,25 @@ using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Screens.Map;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
+namespace CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton;
 
-public partial class VakuuMoeButton : NButton
+public partial class VakuuMoeButton : ModActionButton
 {
-    // 反射缓存：AncientEventModel 的私有字段 _generatedOptions
     private static readonly FieldInfo? GeneratedOptionsField =
         typeof(AncientEventModel).GetField("_generatedOptions",
             BindingFlags.NonPublic | BindingFlags.Instance);
 
     private bool _alreadyUsed;
     private AncientEventModel? _eventModel;
+    private Texture2D? _iconTexture;
+    private bool _isValid;
 
-    public override void _Ready()
+    protected override void OnInit()
     {
-        ConnectSignals();
-
         var eventRoom = NEventRoom.Instance;
         if (eventRoom != null)
         {
@@ -35,12 +35,14 @@ public partial class VakuuMoeButton : NButton
             _eventModel = eventField?.GetValue(eventRoom) as AncientEventModel;
         }
 
-        // 不是自定义角色就不显示
         if (!IsModCharacter(_eventModel?.Owner?.Character))
         {
+            _isValid = false;
             QueueFree();
             return;
         }
+
+        _isValid = true;
 
         var buttonWidth = 180f;
         var buttonHeight = 180f;
@@ -53,9 +55,9 @@ public partial class VakuuMoeButton : NButton
         OffsetTop = 750;
         OffsetBottom = OffsetTop + buttonHeight;
 
-        var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/vakuu_love_icon.png");
+        _iconTexture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/vakuu_love_icon.png");
         var img = new TextureRect();
-        img.Texture = texture;
+        img.Texture = _iconTexture;
         img.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
         img.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
         img.MouseFilter = MouseFilterEnum.Ignore;
@@ -68,6 +70,61 @@ public partial class VakuuMoeButton : NButton
         AddChild(img);
 
         Visible = true;
+    }
+
+    protected override Texture2D? GetMaskTexture() => _iconTexture;
+
+    protected override bool CanTrigger => _isValid && _eventModel != null;
+
+    protected override void ExecuteAction()
+    {
+        if (_eventModel == null) return;
+
+        // 第一次点击：给予奖励 + 结束事件 + 上传遥测
+        if (!_alreadyUsed && !_eventModel.IsFinished)
+        {
+            _alreadyUsed = true;
+
+            var player = _eventModel.Owner;
+            if (player != null)
+            {
+                var creature = player.Creature;
+                creature.SetMaxHpInternal(creature.MaxHp + 5);
+                creature.SetCurrentHpInternal(creature.CurrentHp + 5);
+
+                var (skippedKeys, skippedNames) = CollectSkippedOptions();
+
+                try
+                {
+                    CuteSakikoModTelemetry.CaptureRoomButtonClicked(
+                        "event",
+                        "vakuu_moe",
+                        player.Character.Id.Entry,
+                        CuteSakikoModTelemetry.GetCurrentFloor(player),
+                        new Dictionary<string, object?>
+                        {
+                            ["hp_gain"] = 5,
+                            ["event_id"] = _eventModel.Id.Entry,
+                            ["event_name"] = CuteSakikoModTelemetry.LocalizeEvent(_eventModel.Id.Entry),
+                            ["skipped_keys"] = string.Join(",", skippedKeys),
+                            ["skipped_names"] = string.Join(",", skippedNames),
+                            ["skipped_count"] = skippedKeys.Count
+                        });
+                }
+                catch (Exception ex)
+                {
+                    GD.PrintErr($"[VakuuMoe] Telemetry failed: {ex}");
+                }
+            }
+
+            var doneMethod =
+                typeof(AncientEventModel).GetMethod("Done", BindingFlags.NonPublic | BindingFlags.Instance);
+            doneMethod?.Invoke(_eventModel, null);
+        }
+
+        // 每次点击都打开地图
+        NMapScreen.Instance.SetTravelEnabled(true);
+        NMapScreen.Instance.Open();
     }
 
     private static bool IsModCharacter(CharacterModel? character)
@@ -112,64 +169,6 @@ public partial class VakuuMoeButton : NButton
         base.OnUnfocus();
     }
 
-    protected override void OnRelease()
-    {
-        base.OnRelease();
-        if (_eventModel == null) return;
-
-        // 第一次点击：给予奖励 + 结束事件 + 上传遥测
-        if (!_alreadyUsed && !_eventModel.IsFinished)
-        {
-            _alreadyUsed = true;
-
-            var player = _eventModel.Owner;
-            if (player != null)
-            {
-                var creature = player.Creature;
-                creature.SetMaxHpInternal(creature.MaxHp + 5);
-                creature.SetCurrentHpInternal(creature.CurrentHp + 5);
-
-                // 抓取当前事件房里所有被跳过的选项
-                var (skippedKeys, skippedNames) = CollectSkippedOptions();
-
-                try
-                {
-                    CuteSakikoModTelemetry.CaptureRoomButtonClicked(
-                        "event",
-                        "vakuu_moe",
-                        player.Character.Id.Entry,
-                        CuteSakikoModTelemetry.GetCurrentFloor(player),
-                        new Dictionary<string, object?>
-                        {
-                            ["hp_gain"] = 5,
-                            ["event_id"] = _eventModel.Id.Entry,
-                            ["event_name"] = CuteSakikoModTelemetry.LocalizeEvent(_eventModel.Id.Entry),
-                            ["skipped_keys"] = string.Join(",", skippedKeys),
-                            ["skipped_names"] = string.Join(",", skippedNames),
-                            ["skipped_count"] = skippedKeys.Count
-                        });
-                }
-                catch (Exception ex)
-                {
-                    GD.PrintErr($"[VakuuMoe] Telemetry failed: {ex}");
-                }
-            }
-
-            // 正常结束事件
-            var doneMethod =
-                typeof(AncientEventModel).GetMethod("Done", BindingFlags.NonPublic | BindingFlags.Instance);
-            doneMethod?.Invoke(_eventModel, null);
-        }
-
-        // 每次点击都打开地图
-        NMapScreen.Instance.SetTravelEnabled(true);
-        NMapScreen.Instance.Open();
-    }
-
-    /// <summary>
-    ///     抓取当前古代事件房里的所有选项（点击按钮等于跳过整间）。
-    ///     返回 (本地化键列表, 显示名列表)。
-    /// </summary>
     private (List<string> keys, List<string> names) CollectSkippedOptions()
     {
         var keys = new List<string>();

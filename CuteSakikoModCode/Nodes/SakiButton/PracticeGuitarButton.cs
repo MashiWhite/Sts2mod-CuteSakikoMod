@@ -4,28 +4,26 @@ using Godot;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using MegaCrit.Sts2.Core.Runs;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Nodes;
+namespace CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton;
 
-public partial class PracticeGuitarButton : NButton
+public partial class PracticeGuitarButton : ModActionButton
 {
     private AnonGuitar? _guitar;
+    private Texture2D? _iconTexture;
 
-    public override void _Ready()
+    protected override void OnInit()
     {
-        ConnectSignals();
-
         var state = RunManager.Instance.DebugOnlyGetState();
         var player = state != null ? LocalContext.GetMe(state.Players) : null;
         _guitar = player?.Relics?.OfType<AnonGuitar>().FirstOrDefault();
         if (_guitar == null) return;
 
-        var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/practice_guitar_icon.png");
+        _iconTexture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/practice_guitar_icon.png");
         var img = new TextureRect();
-        img.Texture = texture;
+        img.Texture = _iconTexture;
         img.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
         img.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
         img.MouseFilter = MouseFilterEnum.Ignore;
@@ -41,6 +39,18 @@ public partial class PracticeGuitarButton : NButton
         OffsetTop = 600;
         OffsetBottom = OffsetTop + 180;
         Visible = true;
+    }
+
+    protected override Texture2D? GetMaskTexture() => _iconTexture;
+
+    protected override bool CanTrigger => _guitar != null;
+
+    protected override void ExecuteAction()
+    {
+        if (_guitar == null) return;
+        var screen = new ChordManagementScreen();
+        screen.SetChords(_guitar.GetOrCreateChords());
+        screen.ShowScreen();
     }
 
     protected override void OnFocus()
@@ -68,14 +78,5 @@ public partial class PracticeGuitarButton : NButton
     {
         NHoverTipSet.Remove(this);
         base.OnUnfocus();
-    }
-
-    protected override void OnRelease()
-    {
-        base.OnRelease();
-        if (_guitar == null) return;
-        var screen = new ChordManagementScreen();
-        screen.SetChords(_guitar.GetOrCreateChords());   // ← 唯一改动
-        screen.ShowScreen();
     }
 }

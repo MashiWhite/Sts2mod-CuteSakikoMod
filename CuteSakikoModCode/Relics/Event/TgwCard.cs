@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton;
 using CuteSakikoMod.CuteSakikoModCode.Others.Telemetry;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Gold;
 using MegaCrit.Sts2.Core.Entities.Merchant;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -12,6 +14,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using STS2RitsuLib.Interactions.RightClick;
@@ -32,6 +35,7 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
     private bool _shopLimitActive;
     private int _lastLoanFloor = -1;
     private bool _isLoaning;
+    private bool _isRepaying;
 
     public override RelicRarity Rarity => RelicRarity.Event;
     public override bool IsAllowedInShops => false;
@@ -65,8 +69,8 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
             _level = Math.Clamp(value, 0, 3);
             DynamicVars["Level"].BaseValue = _level;
             DynamicVars["LoanAmount"].BaseValue = LoanPrincipal;
-            RelicIconChanged();    // 清 big icon 缓存
-            RefreshInventoryIcon(); // 刷新遗物栏小图
+            RelicIconChanged();
+            RefreshInventoryIcon();
             InvokeDisplayAmountChanged();
         }
     }
@@ -168,10 +172,6 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
 
     // —— 遗物栏小图刷新 ——
 
-    /// <summary>
-    /// 等级变化后，找到本地玩家遗物栏中对应的 NRelic 节点，
-    /// 通过 Model setter 触发其 private Reload()，重新读取纹理。
-    /// </summary>
     private void RefreshInventoryIcon()
     {
         var inventory = NRun.Instance?.GlobalUi?.RelicInventory;
@@ -184,12 +184,10 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
 
             RelicModel model;
             try { model = nRelic.Model; }
-            catch (InvalidOperationException) { continue; } // _model 尚未设置
+            catch (InvalidOperationException) { continue; }
 
             if (!ReferenceEquals(model, this)) continue;
 
-            // NRelic.Model setter 无条件调用 private Reload()；
-            // 同一实例不会触发 ModelChanged 事件，因此不会重复订阅。
             nRelic.Model = model;
             break;
         }
@@ -244,51 +242,68 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
 
     public bool CanHandleRightClickLocal(ModRightClickContext context)
     {
-        var player = context.Player;
-        return player != null && Debt > 0 && player.Gold > 0;
+        var owner = Owner;
+        if (owner == null) return false;
+        if (!LocalContext.IsMe(owner)) return false;
+        return Debt > 0 && owner.Gold > 0;
     }
 
     public async Task OnRightClick(ModRightClickExecutionContext context)
     {
-        var player = context.Player;
-        if (player == null || Debt <= 0 || player.Gold <= 0) return;
-
-        int pay = Math.Min(player.Gold, Debt);
-        if (pay <= 0) return;
-
-        int debtBefore = Debt;
-        int levelBefore = Level;
-
-        await PlayerCmd.LoseGold(pay, player, GoldLossType.Spent);
-        Debt -= pay;
-
-        bool fullyRepaid = Debt == 0;
-
-        if (fullyRepaid)
-        {
-            if (Level < 3) Level++;
-            ConsecutiveCombats = 0;
-            ShopLimitActive = false;
-            Flash();
-        }
-        else
-        {
-            Flash();
-        }
-
-        // 遥测：还款事件（在升级之后调用，levelAfter 才是升级后的值）
+        if (_isRepaying) return;
+        _isRepaying = true;
         try
         {
-            CuteSakikoModTelemetry.CaptureTgwRepaid(
-                player.Character.Id.Entry,
-                CuteSakikoModTelemetry.GetCurrentFloor(player),
-                pay, debtBefore, Debt,
-                fullyRepaid, levelBefore, Level);
+            var owner = Owner;
+            if (owner == null) return;
+            if (!LocalContext.IsMe(owner)) return;
+            if (Debt <= 0 || owner.Gold <= 0) return;
+
+            int pay = Math.Min(owner.Gold, Debt);
+            if (pay <= 0) return;
+
+            int debtBefore = Debt;
+            int levelBefore = Level;
+
+            await PlayerCmd.LoseGold(pay, owner, GoldLossType.Spent);
+            Debt -= pay;
+
+            bool fullyRepaid = Debt == 0;
+            if (fullyRepaid)
+            {
+                if (Level < 3) Level++;
+                ConsecutiveCombats = 0;
+                ShopLimitActive = false;
+            }
+            Flash();
+
+            try
+            {
+                CuteSakikoModTelemetry.CaptureTgwRepaid(
+                    owner.Character.Id.Entry,
+                    CuteSakikoModTelemetry.GetCurrentFloor(owner),
+                    pay, debtBefore, Debt,
+                    fullyRepaid, levelBefore, Level);
+            }
+            catch (Exception ex)
+            {
+                Entry.Logger.Warn($"[TgwCard] Telemetry failed: {ex.Message}");
+            }
         }
-        catch (Exception ex)
+        finally
         {
-            Entry.Logger.Warn($"[TgwCard] Telemetry failed: {ex.Message}");
+            _isRepaying = false;
+            NotifyLoanButton();
         }
+    }
+
+    /// <summary>通知商店里的贷款按钮刷新可点击状态（不在商店时为 null 直接跳过）。</summary>
+    private void NotifyLoanButton()
+    {
+        var room = NMerchantRoom.Instance;
+        if (room == null) return;
+        var button = room.GetNodeOrNull<TogawaLoanButton>("TogawaLoanButton");
+        button?.RefreshState();
     }
 
     // —— 贷款资格 ——
@@ -317,7 +332,6 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
                 ShopLimitActive = true;
                 Flash();
 
-                // 遥测：高消费限制触发
                 try
                 {
                     var player = Owner;

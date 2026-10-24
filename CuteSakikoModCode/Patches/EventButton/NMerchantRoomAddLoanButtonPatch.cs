@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Screens.Shops;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
+using TogawaLoanButton = CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton.TogawaLoanButton;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches.EventButton;
 

@@ -1,5 +1,4 @@
-﻿
-using CuteSakikoMod.CuteSakikoModCode.Systems;
+﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -12,7 +11,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.TenDay;
+namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.Tenday;
 
 [RegisterMonster]
 public class TenDayAnon : ModMonsterTemplate

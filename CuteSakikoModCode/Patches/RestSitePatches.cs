@@ -4,6 +4,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Runs;
+using PracticeGuitarButton = CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton.PracticeGuitarButton;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 

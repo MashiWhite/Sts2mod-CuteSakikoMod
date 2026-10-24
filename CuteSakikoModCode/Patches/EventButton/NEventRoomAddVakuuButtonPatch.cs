@@ -1,6 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using VakuuMoeButton = CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton.VakuuMoeButton;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches.EventButton;
 

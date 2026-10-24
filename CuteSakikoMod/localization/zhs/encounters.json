@@ -1,11 +1,10 @@
 ﻿{
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.title": "小音",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.loss": "{character}被[purple]{encounter}[/purple]的小馒头噎住了。",
-
+  "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.loss": "{character}被[color=#C5C8C9]{encounter}[/color]的小馒头噎住了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.title": "阿侬汪",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.loss": "{character}被[purple]{encounter}[/purple]无情地扑倒了。",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.title": "虹色的世界",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.loss": "{character}在[purple]{encounter}[/purple]的虹光中失去了颜色。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]无情地扑倒了。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.title": "小萤",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.loss": "{character}在[color=#C5C8C9]{encounter}[/color]的[rainbow]虹光[/rainbow]中失去了颜色。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TEN_DAY_TAKI_ENCOUNTER.title": "椎名立希的余命十日",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TEN_DAY_TAKI_ENCOUNTER.loss": "{character}在[purple]{encounter}[/purple]的乐章中归于寂静。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.title": "星爱音",

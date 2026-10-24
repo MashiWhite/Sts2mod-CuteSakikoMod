@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.TenDay;
+﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.Tenday;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Rooms;

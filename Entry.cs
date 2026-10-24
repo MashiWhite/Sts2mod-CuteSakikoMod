@@ -222,6 +222,48 @@ public class Entry
                         "Scale of the popped-out reaction emote (3.0 = vanilla 3x)."))
                 .WithEntryEnabledWhen("reaction_emote_scale_slider", () => ModConfig.EnableReactionReplacement)
             )
+            .AddSection("button_click", section => section
+    .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.BUTTON_CLICK", "Button Click"))
+    .AddChoice("button_click_mode",
+        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LABEL", "Click Mode"),
+        new ModSettingsValueBinding<CuteSakikoModConfigData, ButtonClickMode>(
+            ModId, "config", SaveScope.Global,
+            model => model.ButtonClickMode,
+            (model, value) => model.ButtonClickMode = value),
+        new[]
+        {
+            new ModSettingsChoiceOption<ButtonClickMode>(
+                ButtonClickMode.SingleClick,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.SINGLE", "Single Click")),
+            new ModSettingsChoiceOption<ButtonClickMode>(
+                ButtonClickMode.DoubleClick,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.DOUBLE", "Double Click")),
+            new ModSettingsChoiceOption<ButtonClickMode>(
+                ButtonClickMode.LongPress,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LONG_PRESS", "Long Press"))
+        },
+        presentation: ModSettingsChoicePresentation.Dropdown)
+    .AddSlider("double_click_interval",
+        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.LABEL", "Double Click Interval"),
+        ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config",
+            model => model.DoubleClickInterval,
+            (model, value) => model.DoubleClickInterval = (float)value),
+        0.1, 1.0, 0.05,
+        value => $"{value:F2}s",
+        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.DESC",
+            "Maximum time between two clicks."))
+    .AddSlider("long_press_duration",
+        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.LABEL", "Long Press Duration"),
+        ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config",
+            model => model.LongPressDuration,
+            (model, value) => model.LongPressDuration = (float)value),
+        0.2, 2.0, 0.05,
+        value => $"{value:F2}s",
+        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.DESC",
+            "How long to hold before confirming."))
+)
             .AddSection("audio", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.AUDIO", "Audio"))
                 .AddToggle("audio_toggle",
