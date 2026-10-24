@@ -1,10 +1,15 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
+using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
@@ -43,24 +48,43 @@ public class HellBombOn() : OtherModTokenCard(1, CardType.Skill, CardRarity.Toke
         await CardPileCmd.RemoveFromCombat(this);
     }
 
-    // 回合结束在手牌中：爆炸
+    // 回合结束在手牌中：爆炸（对敌人和自己同时造成伤害）
     protected override async Task OnTurnEndInHand(PlayerChoiceContext choiceContext)
     {
-        // 先对敌人造成伤害
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, null)
-            .TargetingAllOpponents(CombatState)
-            .WithHitFx("vfx/vfx_attack_slash")
-            .Execute(choiceContext);
+        var targets = new List<Creature>();
+        
+        // 加入所有可攻击的敌人
+        if (CombatState.HittableEnemies != null)
+            targets.AddRange(CombatState.HittableEnemies);
+            
+        // 加入自己
+        if (Owner.Creature != null && Owner.Creature.IsAlive)
+            targets.Add(Owner.Creature);
 
-        // 再对自己造成伤害
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, null)
-            .Targeting(Owner.Creature)
-            .WithHitFx("vfx/vfx_attack_slash")
-            .Execute(choiceContext);
+        if (targets.Count == 0) return;
 
-        // 战斗未结束且卡牌仍在牌堆中才移除
+        // 1. 播放火焰烟雾特效（参考 ExplosiveAmpoule）
+        var room = NCombatRoom.Instance;
+        if (room != null)
+        {
+            foreach (var target in targets)
+            {
+                room.CombatVfxContainer.AddChildSafely(NFireSmokePuffVfx.Create(target));
+            }
+        }
+        await Cmd.CustomScaledWait(0.2f, 0.3f);
+
+        // 2. 对目标和自身同时造成伤害
+        await CreatureCmd.Damage(
+            choiceContext,
+            targets,
+            DynamicVars.Damage.BaseValue,
+            DynamicVars.Damage.Props,
+            Owner.Creature,
+            this, // cardSource 传入 this，确保能吃到相关的增伤/减伤效果
+            null);
+
+        // 3. 移除自身
         if (!CombatManager.Instance.IsEnding && Pile != null && Pile.IsCombatPile)
             await CardPileCmd.RemoveFromCombat(this);
     }

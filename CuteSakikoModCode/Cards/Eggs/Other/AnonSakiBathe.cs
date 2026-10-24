@@ -30,7 +30,7 @@ public class AnonSakiBathe() : OtherModTokenCard(0, CardType.Skill, CardRarity.T
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 清除一个随机Debuff
-        var debuffs = Owner.Creature.Powers.Where(p => p.Type == PowerType.Debuff).ToList();
+        var debuffs = Owner.Creature.Powers.Where(p => p.TypeForCurrentAmount == PowerType.Debuff).ToList();
         if (debuffs.Any())
         {
             var toRemove = debuffs[Owner.RunState.Rng.CombatCardSelection.NextInt(debuffs.Count)];

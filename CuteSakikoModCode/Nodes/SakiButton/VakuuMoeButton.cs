@@ -23,7 +23,6 @@ public partial class VakuuMoeButton : ModActionButton
 
     private bool _alreadyUsed;
     private AncientEventModel? _eventModel;
-    private Texture2D? _iconTexture;
     private bool _isValid;
 
     protected override void OnInit()
@@ -44,20 +43,12 @@ public partial class VakuuMoeButton : ModActionButton
 
         _isValid = true;
 
-        var buttonWidth = 180f;
-        var buttonHeight = 180f;
-        AnchorLeft = 1.0f;
-        AnchorRight = 1.0f;
-        AnchorTop = 0.0f;
-        AnchorBottom = 0.0f;
-        OffsetRight = 0;
-        OffsetLeft = -buttonWidth;
-        OffsetTop = 750;
-        OffsetBottom = OffsetTop + buttonHeight;
+        // 调用基类自适应布局
+        ApplyCustomLayout(180f, 180f);
 
-        _iconTexture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/vakuu_love_icon.png");
+        var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/vakuu_love_icon.png");
         var img = new TextureRect();
-        img.Texture = _iconTexture;
+        img.Texture = texture;
         img.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
         img.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
         img.MouseFilter = MouseFilterEnum.Ignore;
@@ -72,15 +63,12 @@ public partial class VakuuMoeButton : ModActionButton
         Visible = true;
     }
 
-    protected override Texture2D? GetMaskTexture() => _iconTexture;
-
     protected override bool CanTrigger => _isValid && _eventModel != null;
 
     protected override void ExecuteAction()
     {
         if (_eventModel == null) return;
 
-        // 第一次点击：给予奖励 + 结束事件 + 上传遥测
         if (!_alreadyUsed && !_eventModel.IsFinished)
         {
             _alreadyUsed = true;
@@ -122,7 +110,6 @@ public partial class VakuuMoeButton : ModActionButton
             doneMethod?.Invoke(_eventModel, null);
         }
 
-        // 每次点击都打开地图
         NMapScreen.Instance.SetTravelEnabled(true);
         NMapScreen.Instance.Open();
     }

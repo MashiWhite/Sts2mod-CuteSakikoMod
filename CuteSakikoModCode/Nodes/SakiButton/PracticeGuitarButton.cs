@@ -12,7 +12,6 @@ namespace CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton;
 public partial class PracticeGuitarButton : ModActionButton
 {
     private AnonGuitar? _guitar;
-    private Texture2D? _iconTexture;
 
     protected override void OnInit()
     {
@@ -21,27 +20,20 @@ public partial class PracticeGuitarButton : ModActionButton
         _guitar = player?.Relics?.OfType<AnonGuitar>().FirstOrDefault();
         if (_guitar == null) return;
 
-        _iconTexture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/practice_guitar_icon.png");
+        // 调用基类自适应布局
+        ApplyCustomLayout(180f, 180f);
+
+        var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/practice_guitar_icon.png");
         var img = new TextureRect();
-        img.Texture = _iconTexture;
+        img.Texture = texture;
         img.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
         img.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
         img.MouseFilter = MouseFilterEnum.Ignore;
         img.SetAnchorsPreset(LayoutPreset.FullRect);
         AddChild(img);
 
-        AnchorLeft = 1.0f;
-        AnchorRight = 1.0f;
-        AnchorTop = 0.0f;
-        AnchorBottom = 0.0f;
-        OffsetRight = 0;
-        OffsetLeft = -180;
-        OffsetTop = 600;
-        OffsetBottom = OffsetTop + 180;
         Visible = true;
     }
-
-    protected override Texture2D? GetMaskTexture() => _iconTexture;
 
     protected override bool CanTrigger => _guitar != null;
 

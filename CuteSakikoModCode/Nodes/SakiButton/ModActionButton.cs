@@ -8,110 +8,91 @@ public abstract partial class ModActionButton : NButton
 {
     private enum State { Idle, Pressing, WaitingDouble }
 
-    // 遮罩 shader：用图标 alpha 作蒙版，按 UV.x 从左到右填充
-    private const string OverlayShaderCode = @"
-shader_type canvas_item;
-
-uniform float progress : hint_range(0.0, 1.0) = 0.0;
-uniform vec4 tint : source_color = vec4(0.0, 0.0, 0.0, 0.55);
-
-void fragment() {
-    vec4 tex = texture(TEXTURE, UV);
-    float alphaMask = tex.a;
-    float fill = 1.0 - smoothstep(progress - 0.02, progress + 0.02, UV.x);
-    COLOR = vec4(tint.rgb, tint.a * alphaMask * fill);
-}
-";
+    // ★ 新增：全局位置变更事件
+    public static event Action? PositionChanged;
+    public static void NotifyPositionChanged() => PositionChanged?.Invoke();
 
     private State _state = State.Idle;
     private float _pressTimer;
     private float _doubleTimer;
-    private Control? _progressOverlay;
-    private ShaderMaterial? _overlayMaterial;
+    private ColorRect? _progressOverlay;
+
+    // ★ 新增：缓存当前按钮的尺寸，以便刷新时使用
+    private float _btnWidth = 180f;
+    private float _btnHeight = 180f;
 
     protected abstract bool CanTrigger { get; }
     protected abstract void ExecuteAction();
 
-    /// <summary>子类在这里做初始化（布局、图标、本地化等）。不要重写 _Ready。</summary>
     protected virtual void OnInit() { }
-
-    /// <summary>
-    /// 返回按钮图标纹理，用作长按遮罩的 alpha 蒙版。
-    /// 返回 null 则回退到圆角矩形遮罩。
-    /// </summary>
-    protected virtual Texture2D? GetMaskTexture() => null;
 
     public sealed override void _Ready()
     {
-        // 绝对不能调 base._Ready()：NButton 会检测运行时类型并抛异常。
         ConnectSignals();
-        OnInit();
-
-        // 子类可能在 OnInit 里 QueueFree（例如不满足显示条件）
-        if (IsQueuedForDeletion()) return;
-
         CreateProgressOverlay();
+        OnInit();
 
         if (_progressOverlay != null)
             MoveChild(_progressOverlay, GetChildCount() - 1);
+
+        // ★ 订阅事件
+        PositionChanged += UpdateLayout;
+    }
+
+    public override void _ExitTree()
+    {
+        // ★ 取消订阅
+        PositionChanged -= UpdateLayout;
+        base._ExitTree();
+    }
+
+    // ★ 新增：当收到通知时重新排版
+    private void UpdateLayout()
+    {
+        if (IsInsideTree() && !IsQueuedForDeletion())
+        {
+            ApplyCustomLayout(_btnWidth, _btnHeight);
+        }
+    }
+
+    /// <summary>
+    /// 贴右边缘，并允许垂直位置 (Y轴) 根据用户设置动态居中。
+    /// </summary>
+    protected void ApplyCustomLayout(float buttonWidth = 180f, float buttonHeight = 180f)
+    {
+        // 缓存尺寸
+        _btnWidth = buttonWidth;
+        _btnHeight = buttonHeight;
+
+        // 固定 X 轴：贴最右侧边缘
+        AnchorLeft = 1.0f;
+        AnchorRight = 1.0f;
+        OffsetLeft = -buttonWidth;
+        OffsetRight = 0f;
+
+        // 动态 Y 轴：根据配置的百分比定位，中心点对齐
+        var y = ModConfig.ButtonPositionY;
+        AnchorTop = y;
+        AnchorBottom = y;
+        OffsetTop = -buttonHeight / 2f;
+        OffsetBottom = buttonHeight / 2f;
     }
 
     private void CreateProgressOverlay()
     {
-        var maskTexture = GetMaskTexture();
-
-        if (maskTexture != null)
+        _progressOverlay = new ColorRect
         {
-            var shader = new Shader { Code = OverlayShaderCode };
-            _overlayMaterial = new ShaderMaterial { Shader = shader };
-
-            var texRect = new TextureRect
-            {
-                Texture = maskTexture,
-                Material = _overlayMaterial,
-                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
-                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                MouseFilter = Control.MouseFilterEnum.Ignore,
-                Visible = false,
-                AnchorLeft = 0,
-                AnchorTop = 0,
-                AnchorRight = 1,
-                AnchorBottom = 1,
-                OffsetLeft = 0,
-                OffsetRight = 0,
-                OffsetTop = 0,
-                OffsetBottom = 0
-            };
-            AddChild(texRect);
-            _progressOverlay = texRect;
-        }
-        else
-        {
-            var panel = new Panel
-            {
-                MouseFilter = Control.MouseFilterEnum.Ignore,
-                Visible = false,
-                AnchorLeft = 0,
-                AnchorTop = 0,
-                AnchorRight = 0,
-                AnchorBottom = 0,
-                Position = Vector2.Zero,
-                Size = Vector2.Zero
-            };
-
-            var style = new StyleBoxFlat
-            {
-                BgColor = new Color(0, 0, 0, 0.45f),
-                CornerRadiusTopLeft = 8,
-                CornerRadiusTopRight = 8,
-                CornerRadiusBottomLeft = 8,
-                CornerRadiusBottomRight = 8
-            };
-            panel.AddThemeStyleboxOverride("panel", style);
-
-            AddChild(panel);
-            _progressOverlay = panel;
-        }
+            Color = new Color(0, 0, 0, 0.45f),
+            MouseFilter = Control.MouseFilterEnum.Ignore,
+            Visible = false,
+            AnchorLeft = 0,
+            AnchorTop = 0,
+            AnchorRight = 0,
+            AnchorBottom = 0,
+            Position = Vector2.Zero,
+            Size = Vector2.Zero
+        };
+        AddChild(_progressOverlay);
     }
 
     public override void _Process(double delta)
@@ -123,7 +104,7 @@ void fragment() {
             _doubleTimer -= (float)delta;
             if (_doubleTimer <= 0)
             {
-                // 双击模式超时 → 放弃，不触发
+                // 双击模式下超时 → 放弃，不触发
                 ResetPressState();
             }
         }
@@ -145,29 +126,17 @@ void fragment() {
         var duration = Mathf.Max(0.01f, ModConfig.LongPressDuration);
         var progress = Mathf.Clamp(_pressTimer / duration, 0f, 1f);
 
-        ApplyProgress(progress);
+        if (_progressOverlay != null)
+        {
+            _progressOverlay.Visible = true;
+            _progressOverlay.Position = Vector2.Zero;
+            _progressOverlay.Size = new Vector2(Size.X * progress, Size.Y);
+        }
 
         if (_pressTimer >= duration)
         {
             ResetPressState();
             TryExecute();
-        }
-    }
-
-    private void ApplyProgress(float progress)
-    {
-        if (_progressOverlay == null) return;
-
-        if (_overlayMaterial != null)
-        {
-            _overlayMaterial.SetShaderParameter("progress", progress);
-            _progressOverlay.Visible = true;
-        }
-        else if (_progressOverlay is Panel panel)
-        {
-            panel.Visible = true;
-            panel.Position = Vector2.Zero;
-            panel.Size = new Vector2(Size.X * progress, Size.Y);
         }
     }
 
@@ -181,7 +150,12 @@ void fragment() {
         {
             _state = State.Pressing;
             _pressTimer = 0f;
-            ApplyProgress(0f);
+            if (_progressOverlay != null)
+            {
+                _progressOverlay.Visible = true;
+                _progressOverlay.Position = Vector2.Zero;
+                _progressOverlay.Size = new Vector2(0, Size.Y);
+            }
         }
     }
 
@@ -225,18 +199,11 @@ void fragment() {
         _state = State.Idle;
         _pressTimer = 0f;
         _doubleTimer = 0f;
-
-        if (_overlayMaterial != null)
-            _overlayMaterial.SetShaderParameter("progress", 0f);
-
         if (_progressOverlay != null)
         {
             _progressOverlay.Visible = false;
-            if (_progressOverlay is Panel panel)
-            {
-                panel.Position = Vector2.Zero;
-                panel.Size = Vector2.Zero;
-            }
+            _progressOverlay.Position = Vector2.Zero;
+            _progressOverlay.Size = Vector2.Zero;
         }
     }
 

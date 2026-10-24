@@ -15,7 +15,6 @@ public partial class TogawaLoanButton : ModActionButton
     private LocString _descLoc = null!;
     private HoverTip _hoverTip;
     private Player? _player;
-    private Texture2D? _iconTexture;
     private TgwCard? _subscribedRelic;
     private LocString _titleLoc = null!;
 
@@ -24,22 +23,13 @@ public partial class TogawaLoanButton : ModActionButton
         var room = NMerchantRoom.Instance;
         _player = room?.Room.GetLocalInventory()?.Player;
 
-        // 按钮布局
-        var buttonWidth = 180f;
-        var buttonHeight = 180f;
-        AnchorLeft = 1.0f;
-        AnchorRight = 1.0f;
-        AnchorTop = 0.0f;
-        AnchorBottom = 0.0f;
-        OffsetRight = 0;
-        OffsetLeft = -buttonWidth;
-        OffsetTop = 750;
-        OffsetBottom = OffsetTop + buttonHeight;
+        // 调用基类自适应布局
+        ApplyCustomLayout(180f, 180f);
 
         // 图标
-        _iconTexture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/togawa_group_icon.png");
+        var texture = GD.Load<Texture2D>("res://CuteSakikoMod/images/others/others/togawa_group_icon.png");
         var img = new TextureRect();
-        img.Texture = _iconTexture;
+        img.Texture = texture;
         img.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
         img.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
         img.MouseFilter = MouseFilterEnum.Ignore;
@@ -60,11 +50,8 @@ public partial class TogawaLoanButton : ModActionButton
         Visible = false;
     }
 
-    protected override Texture2D? GetMaskTexture() => _iconTexture;
-
     public void ResetForNewVisit()
     {
-        // 读档后遗物可能是新实例，重新订阅一次
         TrySubscribe();
         UpdateVisualState();
     }
@@ -118,7 +105,6 @@ public partial class TogawaLoanButton : ModActionButton
         UpdateVisualState();
     }
 
-    /// <summary>公开刷新入口，供 TgwCard 右键还款后主动调用。</summary>
     public void RefreshState()
     {
         TrySubscribe();

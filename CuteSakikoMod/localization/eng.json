@@ -1,4 +1,7 @@
 ﻿{
+  "MOD_SETTINGS.SECTION.BUTTON_POSITION": "Button Position",
+  "MOD_SETTINGS.BUTTON_CLICK.POS_Y.LABEL": "Vertical Position (Y)",
+  "MOD_SETTINGS.BUTTON_CLICK.POS_Y.DESC": "Adjusts the vertical position of the mod's custom button on screen. The horizontal position is fixed to the right edge.",
   "MOD_SETTINGS.SECTION.BUTTON_CLICK": "Button Click",
   "MOD_SETTINGS.BUTTON_CLICK.MODE.LABEL": "Click Mode",
   "MOD_SETTINGS.BUTTON_CLICK.MODE.SINGLE": "Single Click",

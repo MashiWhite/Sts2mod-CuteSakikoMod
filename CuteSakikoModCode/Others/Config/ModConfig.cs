@@ -21,6 +21,9 @@ public class CuteSakikoModConfigData
     public float DoubleClickInterval { get; set; } = 0.3f;   // 秒
     public float LongPressDuration { get; set; } = 0.5f;     // 秒
 
+    // ===== 自定义按钮位置（仅垂直位置，0.0 ~ 1.0） =====
+    public float ButtonPositionY { get; set; } = 0.75f; // 默认靠下 75%
+
     // ===== 游戏性开关（参与联机同步） =====
     public bool EggsCard { get; set; }
     public bool EnableModMonsters { get; set; } = true;
@@ -72,6 +75,7 @@ public static class ModConfig
     public static ButtonClickMode ButtonClickMode => Load().ButtonClickMode;
     public static float DoubleClickInterval => Load().DoubleClickInterval;
     public static float LongPressDuration => Load().LongPressDuration;
+    public static float ButtonPositionY => Load().ButtonPositionY;
     public static bool EnableAudio => Load().EnableAudio;
     public static bool EggsCard => Load().EggsCard;
     public static bool EnableModMonsters => Load().EnableModMonsters;

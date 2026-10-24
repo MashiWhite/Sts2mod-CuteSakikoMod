@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Monsters.Weak;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
+using CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using CuteSakikoMod.CuteSakikoModCode.Others.Telemetry;
@@ -159,6 +160,16 @@ public class Entry
             (model, value) => model.ReactionEmoteScale = (float)value
         );
         
+        var buttonPosYBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config",
+            model => model.ButtonPositionY,
+            (model, value) => 
+            {
+                model.ButtonPositionY = (float)value;
+                // ★ 新增：通知已存在的按钮实时刷新位置
+                ModActionButton.NotifyPositionChanged();
+            }
+        );
 
         var i18n = I18n;
 
@@ -223,47 +234,54 @@ public class Entry
                 .WithEntryEnabledWhen("reaction_emote_scale_slider", () => ModConfig.EnableReactionReplacement)
             )
             .AddSection("button_click", section => section
-    .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.BUTTON_CLICK", "Button Click"))
-    .AddChoice("button_click_mode",
-        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LABEL", "Click Mode"),
-        new ModSettingsValueBinding<CuteSakikoModConfigData, ButtonClickMode>(
-            ModId, "config", SaveScope.Global,
-            model => model.ButtonClickMode,
-            (model, value) => model.ButtonClickMode = value),
-        new[]
-        {
-            new ModSettingsChoiceOption<ButtonClickMode>(
-                ButtonClickMode.SingleClick,
-                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.SINGLE", "Single Click")),
-            new ModSettingsChoiceOption<ButtonClickMode>(
-                ButtonClickMode.DoubleClick,
-                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.DOUBLE", "Double Click")),
-            new ModSettingsChoiceOption<ButtonClickMode>(
-                ButtonClickMode.LongPress,
-                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LONG_PRESS", "Long Press"))
-        },
-        presentation: ModSettingsChoicePresentation.Dropdown)
-    .AddSlider("double_click_interval",
-        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.LABEL", "Double Click Interval"),
-        ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
-            ModId, "config",
-            model => model.DoubleClickInterval,
-            (model, value) => model.DoubleClickInterval = (float)value),
-        0.1, 1.0, 0.05,
-        value => $"{value:F2}s",
-        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.DESC",
-            "Maximum time between two clicks."))
-    .AddSlider("long_press_duration",
-        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.LABEL", "Long Press Duration"),
-        ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
-            ModId, "config",
-            model => model.LongPressDuration,
-            (model, value) => model.LongPressDuration = (float)value),
-        0.2, 2.0, 0.05,
-        value => $"{value:F2}s",
-        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.DESC",
-            "How long to hold before confirming."))
-)
+                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.BUTTON_CLICK", "Button Click"))
+                .AddChoice("button_click_mode",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LABEL", "Click Mode"),
+                    new ModSettingsValueBinding<CuteSakikoModConfigData, ButtonClickMode>(
+                        ModId, "config", SaveScope.Global,
+                        model => model.ButtonClickMode,
+                        (model, value) => model.ButtonClickMode = value),
+                    new[]
+                    {
+                        new ModSettingsChoiceOption<ButtonClickMode>(
+                            ButtonClickMode.SingleClick,
+                            ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.SINGLE", "Single Click")),
+                        new ModSettingsChoiceOption<ButtonClickMode>(
+                            ButtonClickMode.DoubleClick,
+                            ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.DOUBLE", "Double Click")),
+                        new ModSettingsChoiceOption<ButtonClickMode>(
+                            ButtonClickMode.LongPress,
+                            ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LONG_PRESS", "Long Press"))
+                    },
+                    presentation: ModSettingsChoicePresentation.Dropdown)
+                .AddSlider("double_click_interval",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.LABEL", "Double Click Interval"),
+                    ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+                        ModId, "config",
+                        model => model.DoubleClickInterval,
+                        (model, value) => model.DoubleClickInterval = (float)value),
+                    0.1, 1.0, 0.05,
+                    value => $"{value:F2}s",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.DESC",
+                        "Maximum time between two clicks."))
+                .AddSlider("long_press_duration",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.LABEL", "Long Press Duration"),
+                    ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+                        ModId, "config",
+                        model => model.LongPressDuration,
+                        (model, value) => model.LongPressDuration = (float)value),
+                    0.2, 2.0, 0.05,
+                    value => $"{value:F2}s",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.DESC",
+                        "How long to hold before confirming."))
+                .AddSlider("button_pos_y",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.POS_Y.LABEL", "Vertical Position (Y)"),
+                    buttonPosYBinding,
+                    0.1, 0.9, 0.01,
+                    value => $"{value:P0}",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.POS_Y.DESC", 
+                        "Adjust the vertical position of mod buttons. (X-axis is fixed to right edge)"))
+            )
             .AddSection("audio", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.AUDIO", "Audio"))
                 .AddToggle("audio_toggle",
@@ -378,7 +396,6 @@ public class Entry
                 Name = "RelicSwitch", DuplicatePolicy = NodeAttachmentDuplicatePolicy.ReuseExistingByName, Order = 22
             });
 
-        // 8.4 生命周期：大厅贡献合并后刷新
         // 8.4 生命周期：大厅贡献合并后刷新
         RitsuLibFramework.SubscribeLifecycle<RunSavedDataLobbyStagingEvent>(evt =>
         {
