@@ -1,5 +1,7 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
+using CuteSakikoMod.CuteSakikoModCode.Encounters;
 using CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
+using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -11,6 +13,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -116,25 +119,40 @@ public class TimeWatch : CuteSakikoEventRelic
         var starAnonEncounter = ModelDb.GetById<EncounterModel>(
             ModelDb.GetId<StarAnonEncounter>());
 
+        // 1. 绝对强制第一 Boss 为星爱音
+        if (gloryAct.BossEncounter.Id != starAnonEncounter.Id)
+            gloryAct.SetBossEncounter(starAnonEncounter);
+
+        // 2. 处理第二 Boss（如果有）
         if (gloryAct.HasSecondBoss)
         {
-            // 将第二个 Boss 固定为星爱音
-            if (gloryAct.SecondBossEncounter?.Id != starAnonEncounter.Id)
-                gloryAct.SetSecondBossEncounter(starAnonEncounter);
+            var modBosses = gloryAct.AllBossEncounters
+                .Where(e => e is CuteEncounters && e.RoomType == RoomType.Boss)
+                .ToList();
 
-            // 如果第一个 Boss 也变成了星爱音，则随机替换为其他 Boss，避免重复
-            if (gloryAct.BossEncounter.Id == starAnonEncounter.Id)
+            bool setByWeight = false;
+
+            // ★ 先看能不能按权重抽到 Mod Boss
+            if (ModConfig.UseModBossWeight && ModConfig.ModBossWeight > 0)
             {
-                var otherBoss = Owner.RunState.Rng.UpFront.NextItem(
-                    gloryAct.AllBossEncounters.Where(e => e.Id != starAnonEncounter.Id));
-                gloryAct.SetBossEncounter(otherBoss);
+                var availableForSecond = modBosses.Where(b => b.Id != starAnonEncounter.Id).ToList();
+                if (availableForSecond.Count > 0 && Owner.RunState.Rng.UpFront.NextFloat() < ModConfig.ModBossWeight)
+                {
+                    gloryAct.SetSecondBossEncounter(availableForSecond[Owner.RunState.Rng.UpFront.NextInt(availableForSecond.Count)]);
+                    setByWeight = true;
+                }
             }
-        }
-        else
-        {
-            // 只有一个 Boss，固定为星爱音
-            if (gloryAct.BossEncounter.Id != starAnonEncounter.Id)
-                gloryAct.SetBossEncounter(starAnonEncounter);
+
+            // ★ 如果没有命中权重，或者当前第二 Boss 和第一 Boss 重复了（都是星爱音）
+            if (!setByWeight)
+            {
+                if (gloryAct.SecondBossEncounter?.Id == starAnonEncounter.Id || gloryAct.SecondBossEncounter == null)
+                {
+                    var otherBoss = Owner.RunState.Rng.UpFront.NextItem(
+                        gloryAct.AllBossEncounters.Where(e => e.Id != starAnonEncounter.Id));
+                    gloryAct.SetSecondBossEncounter(otherBoss);
+                }
+            }
         }
     }
 }

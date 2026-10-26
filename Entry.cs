@@ -170,6 +170,19 @@ public class Entry
                 ModActionButton.NotifyPositionChanged();
             }
         );
+        // 绑定逻辑 (在创建 reactionBinding 之前)
+        var modAncientWeightBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config", model => model.ModAncientWeight,
+            (model, value) => { if (!GameplayConfigSync.ShouldLockGameplaySettings) { model.ModAncientWeight = (float)value; GameplayConfigSync.OnLocalConfigChanged(); } }
+        );
+        var modBossWeightBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config", model => model.ModBossWeight,
+            (model, value) => { if (!GameplayConfigSync.ShouldLockGameplaySettings) { model.ModBossWeight = (float)value; GameplayConfigSync.OnLocalConfigChanged(); } }
+        );
+        var modEventWeightBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config", model => model.ModEventWeight,
+            (model, value) => { if (!GameplayConfigSync.ShouldLockGameplaySettings) { model.ModEventWeight = (float)value; GameplayConfigSync.OnLocalConfigChanged(); } }
+        );
 
         var i18n = I18n;
 
@@ -208,6 +221,23 @@ public class Entry
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.SCALE_PRESSURE.DESC",
                         "Scale Pressure stacks applied to enemies based on player count in multiplayer. Host-authoritative."))
                 .WithEntryEnabledWhen("scale_pressure_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+                .AddSlider("mod_ancient_weight_slider",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL", "自定义先古之民出现权重"),
+                    modAncientWeightBinding, 0.0, 1.0, 0.05, value => $"{value:P0}",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC", "决定先古之民生成时，由你的 mod 替换原版先古的概率。"))
+                .WithEntryEnabledWhen("mod_ancient_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+
+                .AddSlider("mod_boss_weight_slider",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL", "自定义 Boss 出现权重"),
+                    modBossWeightBinding, 0.0, 1.0, 0.05, value => $"{value:P0}",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BOSS_WEIGHT.DESC", "决定关底 Boss 生成时，由你的 mod 替换原版 Boss 的概率。"))
+                .WithEntryEnabledWhen("mod_boss_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+
+                .AddSlider("mod_event_weight_slider",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_EVENT_WEIGHT.LABEL", "自定义事件占比"),
+                    modEventWeightBinding, 0.0, 1.0, 0.05, value => $"{value:P0}",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_EVENT_WEIGHT.DESC", "生成事件池时，优先抽取 mod 事件的比例。"))
+                .WithEntryEnabledWhen("mod_event_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings)
             )
             .AddSection("reaction", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.REACTION", "Reaction Stickers"))

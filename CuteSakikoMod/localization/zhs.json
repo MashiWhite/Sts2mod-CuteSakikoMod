@@ -1,4 +1,10 @@
 ﻿{
+  "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL": "自定义先古之民出现权重",
+  "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC": "决定先古之民生成时，由你的 mod 替换原版先古的概率。",
+  "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL": "自定义 Boss 出现权重",
+  "MOD_SETTINGS.MOD_BOSS_WEIGHT.DESC": "决定关底 Boss 生成时，由你的 mod 替换原版 Boss 的概率。",
+  "MOD_SETTINGS.MOD_EVENT_WEIGHT.LABEL": "自定义事件占比",
+  "MOD_SETTINGS.MOD_EVENT_WEIGHT.DESC": "生成事件池时，优先抽取 mod 事件的比例。",
   "MOD_SETTINGS.SECTION.BUTTON_POSITION": "按钮位置",
   "MOD_SETTINGS.BUTTON_CLICK.POS_Y.LABEL": "垂直位置 (Y)",
   "MOD_SETTINGS.BUTTON_CLICK.POS_Y.DESC": "调整模组自定义按钮在屏幕上的垂直位置。水平位置固定为贴右边缘。",

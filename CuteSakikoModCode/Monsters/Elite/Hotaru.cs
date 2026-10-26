@@ -47,16 +47,16 @@ public class Hotaru : ModMonsterTemplate
     );
 
     private int BlockTimes =>
-        AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 3, 2);
+        AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 4, 3);
 
     private int Damage =>
-        AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 17, 15);
+        AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 19, 17);
 
     private int StrengthAmount =>
         AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 4, 3);
 
     private int PolluteCount =>
-        AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 2, 1);
+        AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 3, 2);
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
         => RitsuGodotNodeFactories.CreateFromScenePath<NCreatureVisuals>(AssetProfile.VisualsScenePath!);

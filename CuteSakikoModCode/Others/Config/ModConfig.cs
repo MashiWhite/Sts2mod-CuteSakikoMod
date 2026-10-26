@@ -3,7 +3,6 @@ using STS2RitsuLib;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
 
-/// <summary>按钮触发方式。</summary>
 public enum ButtonClickMode
 {
     SingleClick,
@@ -16,27 +15,30 @@ public class CuteSakikoModConfigData
     private bool _enableAudio = true;
     private float _modBgmVolume = 0.40f;
 
-    // ===== 按钮点击机制（本地设置，不参与联机同步） =====
+    // ===== 按钮点击机制（本地设置） =====
     public ButtonClickMode ButtonClickMode { get; set; } = ButtonClickMode.SingleClick;
-    public float DoubleClickInterval { get; set; } = 0.3f;   // 秒
-    public float LongPressDuration { get; set; } = 0.5f;     // 秒
-
-    // ===== 自定义按钮位置（仅垂直位置，0.0 ~ 1.0） =====
-    public float ButtonPositionY { get; set; } = 0.75f; // 默认靠下 75%
+    public float DoubleClickInterval { get; set; } = 0.3f;
+    public float LongPressDuration { get; set; } = 0.5f;
+    public float ButtonPositionY { get; set; } = 0.75f;
 
     // ===== 游戏性开关（参与联机同步） =====
     public bool EggsCard { get; set; }
     public bool EnableModMonsters { get; set; } = true;
     public bool EnableCustomAncients { get; set; } = true;
     public bool EnableCustomEvents { get; set; } = true;
-
-    /// <summary>
-    ///     多人模式下是否缩放压力层数（房主权威开关，默认关闭）。
-    /// </summary>
     public bool ScalePressureInMultiplayer { get; set; } = false;
 
-    // ===== 本地设置（不参与联机同步） =====
+    // ===== 权重设置（参与联机同步） =====
+    public bool UseModAncientWeight { get; set; } = true;
+    public float ModAncientWeight { get; set; } = 0.5f;
 
+    public bool UseModBossWeight { get; set; } = true;
+    public float ModBossWeight { get; set; } = 0.5f;
+
+    public bool UseModEventWeight { get; set; } = true;
+    public float ModEventWeight { get; set; } = 0.8f;
+
+    // ===== 本地设置 =====
     public bool EnableAudio
     {
         get => _enableAudio;
@@ -61,7 +63,6 @@ public class CuteSakikoModConfigData
     }
 
     public float ModSfxVolume { get; set; } = 0.40f;
-
     public bool EnableReactionReplacement { get; set; } = true;
     public float ReactionWheelScale { get; set; } = 1.0f;
     public float ReactionEmoteScale { get; set; } = 3.0f;
@@ -87,6 +88,14 @@ public static class ModConfig
     public static bool EnableReactionReplacement => Load().EnableReactionReplacement;
     public static float ReactionWheelScale => Load().ReactionWheelScale;
     public static float ReactionEmoteScale => Load().ReactionEmoteScale;
+    
+    // 新增权重读取
+    public static bool UseModAncientWeight => Load().UseModAncientWeight;
+    public static float ModAncientWeight => Load().ModAncientWeight;
+    public static bool UseModBossWeight => Load().UseModBossWeight;
+    public static float ModBossWeight => Load().ModBossWeight;
+    public static bool UseModEventWeight => Load().UseModEventWeight;
+    public static float ModEventWeight => Load().ModEventWeight;
 
     private static CuteSakikoModConfigData Load()
     {

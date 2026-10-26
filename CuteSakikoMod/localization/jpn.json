@@ -1,4 +1,10 @@
 ﻿{
+  "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL": "カスタム古代の民の出現重み",
+  "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC": "古代の民が生成される際、あなたのMODの古代の民がバニラの古代の民を置き換える確率を決定します。",
+  "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL": "カスタムボスの出現重み",
+  "MOD_SETTINGS.MOD_BOSS_WEIGHT.DESC": "各層のボスが生成される際、あなたのMODのボスがバニラのボスを置き換える確率を決定します。",
+  "MOD_SETTINGS.MOD_EVENT_WEIGHT.LABEL": "カスタムイベントの比率",
+  "MOD_SETTINGS.MOD_EVENT_WEIGHT.DESC": "イベントプールを生成する際に、MODイベントが優先的に抽選される割合。",
   "MOD_SETTINGS.SECTION.BUTTON_POSITION": "ボタン位置",
   "MOD_SETTINGS.BUTTON_CLICK.POS_Y.LABEL": "縦位置 (Y)",
   "MOD_SETTINGS.BUTTON_CLICK.POS_Y.DESC": "MODのカスタムボタンの画面上の縦位置を調整します。横位置は右端に固定されます。",

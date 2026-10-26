@@ -197,6 +197,14 @@ public static class GameplayConfigSync
         if (delta.EnableCustomAncients.HasValue) next.EnableCustomAncients = delta.EnableCustomAncients.Value;
         if (delta.EnableCustomEvents.HasValue) next.EnableCustomEvents = delta.EnableCustomEvents.Value;
         if (delta.ScalePressureInMultiplayer.HasValue) next.ScalePressureInMultiplayer = delta.ScalePressureInMultiplayer.Value;
+    
+        if (delta.UseModAncientWeight.HasValue) next.UseModAncientWeight = delta.UseModAncientWeight.Value;
+        if (delta.ModAncientWeight.HasValue) next.ModAncientWeight = delta.ModAncientWeight.Value;
+        if (delta.UseModBossWeight.HasValue) next.UseModBossWeight = delta.UseModBossWeight.Value;
+        if (delta.ModBossWeight.HasValue) next.ModBossWeight = delta.ModBossWeight.Value;
+        if (delta.UseModEventWeight.HasValue) next.UseModEventWeight = delta.UseModEventWeight.Value;
+        if (delta.ModEventWeight.HasValue) next.ModEventWeight = delta.ModEventWeight.Value;
+
         return next;
     }
 

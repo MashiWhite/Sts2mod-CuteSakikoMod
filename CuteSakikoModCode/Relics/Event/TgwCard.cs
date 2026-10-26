@@ -244,6 +244,7 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
     {
         var owner = Owner;
         if (owner == null) return false;
+        // 这里保留本地判断是没问题的，确保只有发起者自己的 UI 能够触发右键
         if (!LocalContext.IsMe(owner)) return false;
         return Debt > 0 && owner.Gold > 0;
     }
@@ -256,7 +257,9 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
         {
             var owner = Owner;
             if (owner == null) return;
-            if (!LocalContext.IsMe(owner)) return;
+            
+            // ★ 关键修改：移除 !LocalContext.IsMe(owner) 拦截，让所有端同步执行状态变更
+            
             if (Debt <= 0 || owner.Gold <= 0) return;
 
             int pay = Math.Min(owner.Gold, Debt);
@@ -265,7 +268,10 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
             int debtBefore = Debt;
             int levelBefore = Level;
 
+            // 两端各自扣除本地的金币状态，因为 PlayerCmd.LoseGold 只是纯本地计算修改，不会发包
             await PlayerCmd.LoseGold(pay, owner, GoldLossType.Spent);
+            
+            // 两端各自扣减遗物属性
             Debt -= pay;
 
             bool fullyRepaid = Debt == 0;
@@ -275,19 +281,24 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
                 ConsecutiveCombats = 0;
                 ShopLimitActive = false;
             }
-            Flash();
 
-            try
+            // 仅本地端负责反馈特效和上传遥测
+            if (LocalContext.IsMe(owner))
             {
-                CuteSakikoModTelemetry.CaptureTgwRepaid(
-                    owner.Character.Id.Entry,
-                    CuteSakikoModTelemetry.GetCurrentFloor(owner),
-                    pay, debtBefore, Debt,
-                    fullyRepaid, levelBefore, Level);
-            }
-            catch (Exception ex)
-            {
-                Entry.Logger.Warn($"[TgwCard] Telemetry failed: {ex.Message}");
+                Flash();
+
+                try
+                {
+                    CuteSakikoModTelemetry.CaptureTgwRepaid(
+                        owner.Character.Id.Entry,
+                        CuteSakikoModTelemetry.GetCurrentFloor(owner),
+                        pay, debtBefore, Debt,
+                        fullyRepaid, levelBefore, Level);
+                }
+                catch (Exception ex)
+                {
+                    Entry.Logger.Warn($"[TgwCard] Telemetry failed: {ex.Message}");
+                }
             }
         }
         finally
@@ -330,24 +341,22 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
             if (ConsecutiveCombats >= ShopLimitCombatThreshold && !ShopLimitActive)
             {
                 ShopLimitActive = true;
-                Flash();
-
-                try
+                
+                if (LocalContext.IsMe(Owner))
                 {
-                    var player = Owner;
-                    if (player != null)
-                    {
-                        CuteSakikoModTelemetry.CaptureTgwShopLimit(
-                            player.Character.Id.Entry,
-                            CuteSakikoModTelemetry.GetCurrentFloor(player),
-                            Debt,
-                            ConsecutiveCombats);
-                    }
+                    Flash();
                 }
-                catch (Exception ex)
+              
+                var player = Owner;
+                if (player != null && LocalContext.IsMe(player))
                 {
-                    Entry.Logger.Warn($"[TgwCard] Telemetry failed: {ex.Message}");
+                    CuteSakikoModTelemetry.CaptureTgwShopLimit(
+                        player.Character.Id.Entry,
+                        CuteSakikoModTelemetry.GetCurrentFloor(player),
+                        Debt,
+                        ConsecutiveCombats);
                 }
+     
             }
         }
         return Task.CompletedTask;

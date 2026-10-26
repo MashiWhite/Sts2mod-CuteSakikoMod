@@ -1,4 +1,10 @@
 ﻿{
+  "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL": "Custom Ancient Spawn Weight",
+  "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC": "Determines the chance that, when an Ancient is generated, your mod's Ancient replaces the vanilla one.",
+  "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL": "Custom Boss Spawn Weight",
+  "MOD_SETTINGS.MOD_BOSS_WEIGHT.DESC": "Determines the chance that, when the Act Boss is generated, your mod's Boss replaces the vanilla one.",
+  "MOD_SETTINGS.MOD_EVENT_WEIGHT.LABEL": "Custom Event Ratio",
+  "MOD_SETTINGS.MOD_EVENT_WEIGHT.DESC": "The proportion of mod events preferentially drawn when generating the event pool.",
   "MOD_SETTINGS.SECTION.BUTTON_POSITION": "Button Position",
   "MOD_SETTINGS.BUTTON_CLICK.POS_Y.LABEL": "Vertical Position (Y)",
   "MOD_SETTINGS.BUTTON_CLICK.POS_Y.DESC": "Adjusts the vertical position of the mod's custom button on screen. The horizontal position is fixed to the right edge.",
