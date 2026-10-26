@@ -1,4 +1,4 @@
-﻿{
+{
   "CUTE_SAKIKO_MOD_MONSTER_XIAOYIN.name": "Tiny Hotaru",
   "CUTE_SAKIKO_MOD_MONSTER_XIAOYIN.moves.THROW_BUN.title": "Throw Small Bun",
   "CUTE_SAKIKO_MOD_MONSTER_XIAOYIN.moves.EAT_BUN.title": "Eat Small Bun",
@@ -317,5 +317,13 @@
   "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT.title": "What",
   "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.UNKNOWN.title": "Unknown",
   "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.HMM.title": "Hmm...",
-  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT_THE.title": "What the"
+  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT_THE.title": "What the",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.name": "Fuji Miyako",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.THROW_SOMETHING.title": "Throw Something",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.SCOLD.title": "Scold",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.PUPPET_SHOW.title": "Puppet Show",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.RAGE.title": "Misplaced Anger",
+  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.name": "Maru-kun",
+  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.moves.MARU_HIT.title": "Pat",
+  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.moves.MARU_GENTLE_HIT.title": "Gentle Pat"
 }

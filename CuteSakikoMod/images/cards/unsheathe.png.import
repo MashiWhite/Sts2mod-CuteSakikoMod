@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cxipw8lnijlvk"
-path="res://.godot/imported/unsheathe.png-753c7f6cf52bf93b67e335e037a9e9f0.ctex"
+path="res://.godot/imported/Unsheathe.png-75c79405a568049f7e15f0b650862d4f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/unsheathe.png"
-dest_files=["res://.godot/imported/unsheathe.png-753c7f6cf52bf93b67e335e037a9e9f0.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Unsheathe.png"
+dest_files=["res://.godot/imported/Unsheathe.png-75c79405a568049f7e15f0b650862d4f.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1elkam6dn13k"
-path="res://.godot/imported/intermission.png-e2d7cba6f71b4f1e59e22f793209b73c.ctex"
+path="res://.godot/imported/Intermission.png-3c08d81b356fbad089fc28f1e2c671af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/intermission.png"
-dest_files=["res://.godot/imported/intermission.png-e2d7cba6f71b4f1e59e22f793209b73c.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Intermission.png"
+dest_files=["res://.godot/imported/Intermission.png-3c08d81b356fbad089fc28f1e2c671af.ctex"]
 
 [params]
 

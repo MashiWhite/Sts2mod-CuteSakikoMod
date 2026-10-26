@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://0b80g64bedsy"
-path="res://.godot/imported/chord.png-60c52362185674c66663507fd0123a95.ctex"
+path="res://.godot/imported/Chord.png-96806a90b900d3b355f655c56c84d7f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/chord.png"
-dest_files=["res://.godot/imported/chord.png-60c52362185674c66663507fd0123a95.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Chord.png"
+dest_files=["res://.godot/imported/Chord.png-96806a90b900d3b355f655c56c84d7f0.ctex"]
 
 [params]
 

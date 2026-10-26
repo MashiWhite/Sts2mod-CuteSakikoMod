@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using Godot;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
@@ -60,7 +60,7 @@ public partial class ChordSlotDropTarget : Control
 
     private void DropImpl(Vector2 atPosition, Variant data)
     {
-        if (_screen.Chords == null || _screen._readOnly) return;
+        if (_screen.Chords == null || _screen.IsReadOnly) return;
         var newChordId = (string)data;
         _screen.SetTempSlot(_slotCategory, _slotIndex, newChordId);
     }

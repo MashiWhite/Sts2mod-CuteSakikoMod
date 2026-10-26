@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.ChocolateSnail;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.ChocolateSnail;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Monsters;
 using MegaCrit.Sts2.Core.Rooms;
@@ -44,16 +44,24 @@ public class Act1DoubleBossEncounter : ModEncounterTemplate
     }
 
     /// <summary>
-    ///     判断怪物是否为爪牙（拥有 MinionPower 的怪物）
-    ///     目前第一幕唯一的爪牙是 KinFollower，如有新增可在此添加
+    ///     爪牙名单（拥有 MinionPower、被召唤出来、不能当 Boss 抽的类型）。
+    ///     ⚠️ 游戏新增爪牙时必须加到这里，否则会被当作 Boss 抽中。
+    /// </summary>
+    private static readonly Type[] MinionMonsterTypes =
+    {
+        typeof(KinFollower),
+        typeof(SmallChocolateSnail)
+    };
+
+    /// <summary>
+    ///     判断怪物是否为爪牙（拥有 MinionPower 的怪物）。
     /// </summary>
     private static bool IsMinionMonster(MonsterModel monster)
     {
-        // 爪牙怪物，不能作为 Boss 参与双 Boss 事件
-        if (monster is KinFollower) return true;
-        if (monster is SmallChocolateSnail) return true;
+        foreach (var t in MinionMonsterTypes)
+            if (t.IsInstanceOfType(monster))
+                return true;
 
-        // 未来如有其他爪牙，继续添加
         return false;
     }
 

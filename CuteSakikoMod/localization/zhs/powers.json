@@ -57,7 +57,7 @@
   "CUTE_SAKIKO_MOD_POWER_PARFAIT_TREAT_POWER.smartDescription": "本场战斗中，用卡牌食用[gold]抹茶芭菲[/gold]不再减少存量。",
   "CUTE_SAKIKO_MOD_POWER_WANT_BOTH_POWER.title": "两者皆要",
   "CUTE_SAKIKO_MOD_POWER_WANT_BOTH_POWER.description": "食用[gold]抹茶芭菲[/gold]时，每食用一杯，获得层数等量的能量并抽等量牌。",
-  "CUTE_SAKIKO_MOD_POWER_WANT_BOTH_POWER.smartDescription": "食用[gold]抹茶芭菲[/gold]时，每食用一杯额外获得{Amount}点能量并抽{Amount}张牌。",
+  "CUTE_SAKIKO_MOD_POWER_WANT_BOTH_POWER.smartDescription": "食用[gold]抹茶芭菲[/gold]时，每食用一杯额外获得[blue]{Amount}[/blue]点能量并抽[blue]{Amount}[/blue]张牌。",
   "CUTE_SAKIKO_MOD_POWER_RAINFALL_OMEN_POWER.title": "雨前征兆",
   "CUTE_SAKIKO_MOD_POWER_RAINFALL_OMEN_POWER.description": "回合结束时，若敌人意图为攻击，获得等于层数的[gold]格挡[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_RAINFALL_OMEN_POWER.smartDescription": "回合结束时，若敌人意图为攻击，获得[blue]{Amount}[/blue]点[gold]格挡[/gold]。",
@@ -275,5 +275,17 @@
   "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.smartDescription": "回合结束时消耗牌，可选择至多[blue]{Amount}[/blue]张牌堆里的牌[gold]消耗[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.title": "下回合莱芜爽",
   "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.description": "下回合开始时获得[gold]莱芜爽[/gold]。",
-  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.smartDescription": "在接下来{Amount}个回合开始时，获得[gold]莱芜爽[/gold]。"
+  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.smartDescription": "在接下来[blue]{Amount}[/blue]个回合开始时，获得[gold]莱芜爽[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.title": "男子禁止",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.description": "[purple]藤都子[/purple]讨厌百合破坏。根据场上不同性别玩家数量，改变她受到的[gold]伤害[/gold]与造成的[gold]伤害[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescription": "根据场上不同性别玩家数量，[purple]{OwnerName}[/purple]获得[blue]{DamageBonus}%[/blue]伤害加成，[blue]{DamageReduction}%[/blue]减伤效果。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionBonus": "根据场上不同性别玩家数量，[purple]{OwnerName}[/purple]获得[blue]{DamageBonus}%[/blue]伤害加成。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionReduction": "根据场上不同性别玩家数量，[purple]{OwnerName}[/purple]获得[blue]{DamageReduction}%[/blue]减伤效果。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleMale": "当你是[gold]男性[/gold]角色时，[purple]{OwnerName}[/purple]获得[blue]{DamageBonus}%[/blue]伤害加成。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleFemale": "当你是[gold]女性[/gold]角色时，[purple]{OwnerName}[/purple]获得[blue]{DamageReduction}%[/blue]减伤效果。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleNeutral": "当你是非男非女角色时，[purple]{OwnerName}[/purple]获得[blue]{DamageBonus}%[/blue]伤害加成与[blue]{DamageReduction}%[/blue]减伤效果。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.title": "最好的朋友",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.description": "[purple]藤都子[/purple]最好的朋友是[pink]丸君[/pink]。[pink]丸君[/pink]在场时[green]回复生命[/green]；被打败后，每回合结束时获得[gold]力量[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruAlive": "[pink]丸君[/pink]在场时，[purple]{OwnerName}[/purple]每回合开始[green]回复[/green][green]{HealPercent}%[/green]最大生命。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]丸君[/pink]被打败后，[purple]{OwnerName}[/purple]每回合结束时获得[blue]{StrengthGain}[/blue]点[gold]力量[/gold]。"
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton;
@@ -132,13 +132,13 @@ public class TgwCard : CuteSakikoEventRelic, IModRightClickableRelic
     // —— 动态贴图 ——
 
     public override string? CustomIconPath =>
-        $"res://{Entry.ModId}/images/relics/tgw_card{Level}.png";
+        $"res://{Entry.ModId}/images/relics/TgwCard{Level}.png";
 
     public override string? CustomIconOutlinePath =>
-        $"res://{Entry.ModId}/images/relics/tgw_card{Level}.png";
+        $"res://{Entry.ModId}/images/relics/TgwCard{Level}.png";
 
     public override string? CustomBigIconPath =>
-        $"res://{Entry.ModId}/images/relics/big/tgw_card{Level}.png";
+        $"res://{Entry.ModId}/images/relics/big/TgwCard{Level}.png";
 
     // —— 动态描述变量 ——
 

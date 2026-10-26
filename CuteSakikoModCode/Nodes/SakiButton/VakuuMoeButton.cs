@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -94,6 +94,8 @@ public partial class VakuuMoeButton : ModActionButton
                             ["hp_gain"] = 5,
                             ["event_id"] = _eventModel.Id.Entry,
                             ["event_name"] = CuteSakikoModTelemetry.LocalizeEvent(_eventModel.Id.Entry),
+                            // 与跑局侧 acts[].rooms.ancient_key 对齐用：两边都写归一化 key
+                            ["event_key"] = CuteSakikoModTelemetry.NormalizeModelKey(_eventModel.Id.ToString()),
                             ["skipped_keys"] = string.Join(",", skippedKeys),
                             ["skipped_names"] = string.Join(",", skippedNames),
                             ["skipped_count"] = skippedKeys.Count

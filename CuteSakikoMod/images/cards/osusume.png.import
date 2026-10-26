@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ccrrdjxe4gofw"
-path="res://.godot/imported/osusume.png-ae01a0b8bebdc5bfcca67a59cea5c4b1.ctex"
+path="res://.godot/imported/Osusume.png-e13f91246b3d9ebc4fe9606b8ba240a4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/osusume.png"
-dest_files=["res://.godot/imported/osusume.png-ae01a0b8bebdc5bfcca67a59cea5c4b1.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Osusume.png"
+dest_files=["res://.godot/imported/Osusume.png-e13f91246b3d9ebc4fe9606b8ba240a4.ctex"]
 
 [params]
 

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+using System.Collections.Concurrent;
+using System.Reflection;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 
@@ -6,22 +7,29 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 public static class MonsterMoveHelper
 {
+    /// <summary>兜底时优先选择的状态（按顺序）。随怪物改动维护。</summary>
+    private static readonly string[] PreferredFallbackStates =
+    {
+        "HEAVY_ATTACK_1", "PERFORM", "MONOLOGUE", "HEAVY_ATTACK_2"
+    };
+
+    /// <summary>按类型缓存反射结果，避免每次调用都取 FieldInfo。</summary>
+    private static readonly ConcurrentDictionary<Type, FieldInfo?> StateMachineFields = new();
+
     /// <summary>
     ///     原始方法保持不变（可能用于其他场景）。
     /// </summary>
     public static string? GetEffectiveFollowUpId(MonsterModel monster)
     {
         var move = monster.NextMove;
-        for (var i = 0; i < 5 && move != null; i++)
-        {
-            if (move.Id != "STUNNED")
-                return move.Id;
-            if (!string.IsNullOrEmpty(move.FollowUpStateId) && move.FollowUpStateId != "STUNNED")
-                return move.FollowUpStateId;
-            break;
-        }
+        if (move == null) return null;
 
-        return null;
+        if (move.Id != "STUNNED")
+            return move.Id;
+
+        return !string.IsNullOrEmpty(move.FollowUpStateId) && move.FollowUpStateId != "STUNNED"
+            ? move.FollowUpStateId
+            : null;
     }
 
     /// <summary>
@@ -44,9 +52,7 @@ public static class MonsterMoveHelper
         if (machine != null)
         {
             var states = machine.States.Keys;
-            // 首选状态列表（可根据怪物类型调整）
-            string[] preferred = { "HEAVY_ATTACK_1", "PERFORM", "MONOLOGUE", "HEAVY_ATTACK_2" };
-            foreach (var pref in preferred)
+            foreach (var pref in PreferredFallbackStates)
                 if (states.Contains(pref))
                     return pref;
             // 返回第一个非 STUNNED 且非 HA_ATTACK 的状态
@@ -57,19 +63,17 @@ public static class MonsterMoveHelper
         return null;
     }
 
-    // 辅助方法：通过反射获取 MonsterMoveStateMachine
+    // 辅助方法：通过反射获取 MonsterMoveStateMachine（字段结果按类型缓存）
     private static MonsterMoveStateMachine? GetMoveStateMachine(MonsterModel monster)
     {
         // 尝试直接访问公共属性
         var prop = monster.GetType().GetProperty("MoveStateMachine");
-        if (prop != null && prop.CanRead)
+        if (prop is { CanRead: true })
             return prop.GetValue(monster) as MonsterMoveStateMachine;
 
-        // 尝试访问字段
-        var field = monster.GetType().GetField("_moveStateMachine", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (field != null)
-            return field.GetValue(monster) as MonsterMoveStateMachine;
-
-        return null;
+        // 尝试访问字段（缓存 FieldInfo；null 也缓存，避免反复反射）
+        var field = StateMachineFields.GetOrAdd(monster.GetType(), static t =>
+            t.GetField("_moveStateMachine", BindingFlags.NonPublic | BindingFlags.Instance));
+        return field?.GetValue(monster) as MonsterMoveStateMachine;
     }
 }

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d1u7x5vfprjbq"
-path="res://.godot/imported/hekitenbansou.png-00e27699dc27df3c1a7e7e10e1ed5edb.ctex"
+path="res://.godot/imported/Hekitenbansou.png-265a8e366eab38873a70d150e49e7121.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/hekitenbansou.png"
-dest_files=["res://.godot/imported/hekitenbansou.png-00e27699dc27df3c1a7e7e10e1ed5edb.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Hekitenbansou.png"
+dest_files=["res://.godot/imported/Hekitenbansou.png-265a8e366eab38873a70d150e49e7121.ctex"]
 
 [params]
 

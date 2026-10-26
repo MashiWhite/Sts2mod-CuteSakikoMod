@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://clufnxi7hsk7m"
-path="res://.godot/imported/marionette.png-7ad0ed282984f7b0d580c660c7817b00.ctex"
+path="res://.godot/imported/Marionette.png-6ad8dae02bf44acaf72a947713c1d107.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/marionette.png"
-dest_files=["res://.godot/imported/marionette.png-7ad0ed282984f7b0d580c660c7817b00.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Marionette.png"
+dest_files=["res://.godot/imported/Marionette.png-6ad8dae02bf44acaf72a947713c1d107.ctex"]
 
 [params]
 

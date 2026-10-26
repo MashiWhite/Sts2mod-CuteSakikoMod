@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbdjukg7p10d0"
-path="res://.godot/imported/glare.png-4261f6328ed4004b3102976a9090d064.ctex"
+path="res://.godot/imported/Glare.png-f21850c1ae049921bdde8e038701ea28.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/glare.png"
-dest_files=["res://.godot/imported/glare.png-4261f6328ed4004b3102976a9090d064.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Glare.png"
+dest_files=["res://.godot/imported/Glare.png-f21850c1ae049921bdde8e038701ea28.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dwahepniehybg"
-path="res://.godot/imported/shirk.png-ff7620496ea04e87f06a183a7f87c970.ctex"
+path="res://.godot/imported/Shirk.png-e428d095e50c23bd10f96dedb3e17cba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/shirk.png"
-dest_files=["res://.godot/imported/shirk.png-ff7620496ea04e87f06a183a7f87c970.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Shirk.png"
+dest_files=["res://.godot/imported/Shirk.png-e428d095e50c23bd10f96dedb3e17cba.ctex"]
 
 [params]
 

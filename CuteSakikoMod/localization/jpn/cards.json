@@ -394,6 +394,7 @@
   "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.selectionScreenPrompt": "再び励ます",
   "CUTE_SAKIKO_MOD_CARD_FORGET.title": "忘却",
   "CUTE_SAKIKO_MOD_CARD_FORGET.description": "{Block:diff()}の[gold]ブロック[/gold]を得る。\n手札からカードを1枚選び[red]忘却[/red]する。",
+  "CUTE_SAKIKO_MOD_CARD_FORGET.selectionScreenPrompt": "手札から[red]忘却[/red]するカードを1枚選ぶ",
   "CUTE_SAKIKO_MOD_CARD_NEED_PRACTICE.title": "練習が必要",
   "CUTE_SAKIKO_MOD_CARD_NEED_PRACTICE.description": "{Damage:diff()}ダメージを与える。\n対象の[gold]重圧[/gold]の半分を他の敵に均等に配る。",
   "CUTE_SAKIKO_MOD_CARD_SAKI_BATHE.title": "お風呂",

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
@@ -69,7 +69,10 @@ public static class RelicSwapCoordinator
         if (_choices.Count < _expectedCount)
         {
             var timeout = Task.Delay(timeoutMs);
-            await Task.WhenAny(_tcs.Task, timeout);
+            var completed = await Task.WhenAny(_tcs.Task, timeout);
+            if (completed != _tcs.Task)
+                Entry.Logger.Warn(
+                    $"[RelicSwap] 收集选择超时（{_choices.Count}/{_expectedCount}），将按已收到的继续");
         }
 
         _collecting = false;
@@ -115,7 +118,16 @@ public static class RelicSwapCoordinator
         if (_executeReceived) return;
         _executeReceived = true;
 
-        await ExecuteMoves(msg.Moves);
+        try
+        {
+            await ExecuteMoves(msg.Moves);
+        }
+        catch (Exception ex)
+        {
+            // async void 里异常不会有人接，必须自己兜住；失败后复位标志，允许重发
+            _executeReceived = false;
+            Entry.Logger.Warn($"[RelicSwap] 执行交换失败: {ex}");
+        }
     }
 
     private static async Task ExecuteMoves(List<string> moveStrings)

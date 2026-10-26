@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhlxrhkkyuox1"
-path="res://.godot/imported/masquerade.png-7212be7450fe5e5db11d477a7e09eaff.ctex"
+path="res://.godot/imported/Masquerade.png-a9e81677971500709de28114228f8c98.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/masquerade.png"
-dest_files=["res://.godot/imported/masquerade.png-7212be7450fe5e5db11d477a7e09eaff.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Masquerade.png"
+dest_files=["res://.godot/imported/Masquerade.png-a9e81677971500709de28114228f8c98.ctex"]
 
 [params]
 

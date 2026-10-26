@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
@@ -40,7 +40,7 @@ public class Forget() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, 
             choiceContext,
             Owner,
             new CardSelectorPrefs(
-                new LocString("cards", "CUTE_SAKIKO_MOD_CARD_MY_BAD.selectionScreenPrompt"),
+                new LocString("cards", "CUTE_SAKIKO_MOD_CARD_FORGET.selectionScreenPrompt"),
                 1,
                 1
             ),

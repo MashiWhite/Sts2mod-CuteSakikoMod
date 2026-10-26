@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://stnwakwg365l"
-path="res://.godot/imported/huh.png-dfa84bbe43c066b90b0f2adb872dd104.ctex"
+path="res://.godot/imported/Huh.png-ca8893f71cdece7ef8e7eb9a0859638c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/huh.png"
-dest_files=["res://.godot/imported/huh.png-dfa84bbe43c066b90b0f2adb872dd104.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Huh.png"
+dest_files=["res://.godot/imported/Huh.png-ca8893f71cdece7ef8e7eb9a0859638c.ctex"]
 
 [params]
 

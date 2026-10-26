@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves;
@@ -23,9 +23,9 @@ public static class RunManagerOnEndedPatch
             var netType = RunManager.Instance?.NetService?.Type;
             if (netType == NetGameType.Client) return;
 
-            // isVictory 单独记一下，因为 SerializableRun 里没有直接字段
-            // （WinTime > 0 只是近似判断，这里直接传参更准确）
-            CuteSakikoModTelemetry.CaptureLocalizedRun(__result);
+            // isVictory 直接透传给遥测：SerializableRun 里没有胜利标记，
+            // 用 run.WinTime > 0 近似会漏掉"超时失败/中途退出"等情况。
+            CuteSakikoModTelemetry.CaptureLocalizedRun(__result, isVictory);
         }
         catch (Exception ex)
         {

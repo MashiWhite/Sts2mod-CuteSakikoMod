@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://uoh5ayds0oxe"
-path="res://.godot/imported/lifetime.png-6cb8ce22f7a66469bc3d81bbca3df857.ctex"
+path="res://.godot/imported/Lifetime.png-06006690a0fd8a030231ec6854749492.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/lifetime.png"
-dest_files=["res://.godot/imported/lifetime.png-6cb8ce22f7a66469bc3d81bbca3df857.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Lifetime.png"
+dest_files=["res://.godot/imported/Lifetime.png-06006690a0fd8a030231ec6854749492.ctex"]
 
 [params]
 

@@ -1,4 +1,4 @@
-﻿{
+{
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.title": "Tiny Hotaru",
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.loss": "{character} choked on [color=#C5C8C9]{encounter}[/color]'s small bun.",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.title": "Anon Wang",
@@ -24,5 +24,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_ARALUO_ENCOUNTER.title": "Alaro",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ARALUO_ENCOUNTER.loss": "{character} was overwhelmed by [gold]{encounter}[/gold]'s cuteness.",
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.title": "A Bunch of Fried Shrimp",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character} was overwhelmed by [gold]{encounter}[/gold]'s cuteness."
+  "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character} was overwhelmed by [gold]{encounter}[/gold]'s cuteness.",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.title": "Miyako",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character} was knocked out by a mooncake thrown by [pink]{encounter}[/pink]."
 }

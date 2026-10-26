@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Audio.Debug;
 using MegaCrit.Sts2.Core.Commands;
@@ -35,35 +35,74 @@ public static class RelicTransfer
         relic.AssertMutable();
         var runState = target.RunState;
 
-        // 与 RelicCmd.Obtain 相同的注册流程，仅去掉最后的 AfterObtained()
-        runState.CurrentMapPointHistoryEntry?
-            .GetEntry(target.NetId).RelicChoices
-            .Add(new ModelChoiceHistoryEntry(relic.Id, true));
+        // 与 RelicCmd.Obtain 相同的注册流程，仅去掉最后的 AfterObtained()。
+        // 历史记录 / 抓宝袋 / UI 都是"锦上添花"的步骤：单独兜住，任何一步失败都不影响遗物真正挂到玩家身上。
+        TryRun(() =>
+        {
+            runState.CurrentMapPointHistoryEntry?
+                .GetEntry(target.NetId).RelicChoices
+                .Add(new ModelChoiceHistoryEntry(relic.Id, true));
+        }, "记录遗物选择历史");
 
         target.AddRelicInternal(relic, -1);
 
-        if (!relic.IsStackable)
+        TryRun(() =>
         {
+            if (relic.IsStackable) return;
             target.RelicGrabBag.Remove(relic);
             runState.SharedRelicGrabBag.Remove(relic);
-        }
+        }, "从抓宝袋移除");
 
-        if (LocalContext.IsMe(target))
+        TryRun(() =>
         {
+            if (!LocalContext.IsMe(target)) return;
             NRun.Instance?.GlobalUi.RelicInventory.AnimateRelic(relic);
             NDebugAudioManager.Instance?.Play("relic_get.mp3");
             SaveManager.Instance.MarkRelicAsSeen(relic);
-        }
+        }, "遗物 UI 动画");
 
-        relic.FloorAddedToDeck = runState.TotalFloor;
+        TryRun(() => relic.FloorAddedToDeck = runState.TotalFloor, "记录获得楼层");
 
         return Task.CompletedTask;
     }
 
+    private static void TryRun(Action action, string step)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception ex)
+        {
+            Entry.Logger.Warn($"[RelicTransfer] {step} 失败（不影响转移本身）: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    ///     清空遗物的 owner。游戏 <c>RelicModel.Owner</c> 的 setter 在"已有 owner 且换人"时会抛
+    ///     "Cannot move relic from one owner to another"，而 RemoveInternal 只置 HasBeenRemovedFromState、
+    ///     不清 owner，所以只能反射置 null。失败时打 Warn，后续 Obtain 会因此抛错，便于尽早暴露版本变动。
+    /// </summary>
     private static void ClearOwner(RelicModel relic)
     {
-        var field = typeof(RelicModel).GetField("_owner",
-            BindingFlags.NonPublic | BindingFlags.Instance);
-        field?.SetValue(relic, null);
+        try
+        {
+            _ownerField ??= typeof(RelicModel).GetField("_owner",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (_ownerField == null)
+            {
+                Entry.Logger.Warn("[RelicTransfer] 找不到 RelicModel._owner 字段，遗物转移会失败（游戏字段可能改名）");
+                return;
+            }
+
+            _ownerField.SetValue(relic, null);
+        }
+        catch (Exception ex)
+        {
+            Entry.Logger.Warn($"[RelicTransfer] 清空 relic.Owner 失败: {ex.Message}");
+        }
     }
+
+    private static FieldInfo? _ownerField;
 }

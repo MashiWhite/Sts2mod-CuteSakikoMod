@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://tf0uy2dugow5"
-path="res://.godot/imported/ether.png-12a89522c515188c1a51b931a0edad38.ctex"
+path="res://.godot/imported/Ether.png-527f45345df71324d8f8944f5d4981b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/ether.png"
-dest_files=["res://.godot/imported/ether.png-12a89522c515188c1a51b931a0edad38.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Ether.png"
+dest_files=["res://.godot/imported/Ether.png-527f45345df71324d8f8944f5d4981b9.ctex"]
 
 [params]
 

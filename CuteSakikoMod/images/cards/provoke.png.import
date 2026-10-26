@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://y6gw6da82hu"
-path="res://.godot/imported/provoke.png-adecbbbd672566bd1fd5429a25a38a46.ctex"
+path="res://.godot/imported/Provoke.png-498ef3889d3322d2252ef34fe8f4ade0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/provoke.png"
-dest_files=["res://.godot/imported/provoke.png-adecbbbd672566bd1fd5429a25a38a46.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Provoke.png"
+dest_files=["res://.godot/imported/Provoke.png-498ef3889d3322d2252ef34fe8f4ade0.ctex"]
 
 [params]
 

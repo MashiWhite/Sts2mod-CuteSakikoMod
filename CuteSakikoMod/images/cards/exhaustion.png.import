@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bcvnakvqxlrbv"
-path="res://.godot/imported/exhaustion.png-5c4b892061a4302b27c65a95182cf623.ctex"
+path="res://.godot/imported/Exhaustion.png-203068792fae1d127216d1750719add2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/exhaustion.png"
-dest_files=["res://.godot/imported/exhaustion.png-5c4b892061a4302b27c65a95182cf623.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Exhaustion.png"
+dest_files=["res://.godot/imported/Exhaustion.png-203068792fae1d127216d1750719add2.ctex"]
 
 [params]
 

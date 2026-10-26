@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c471mxejvomua"
-path="res://.godot/imported/legato.png-307dbc003ee605a771fa641457823a63.ctex"
+path="res://.godot/imported/Legato.png-a0fc91c30086d5f5bdba1dbc4232a456.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/legato.png"
-dest_files=["res://.godot/imported/legato.png-307dbc003ee605a771fa641457823a63.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Legato.png"
+dest_files=["res://.godot/imported/Legato.png-a0fc91c30086d5f5bdba1dbc4232a456.ctex"]
 
 [params]
 

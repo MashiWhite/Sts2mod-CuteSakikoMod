@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ds3cxalb0assm"
-path="res://.godot/imported/mask.png-e268300e5a2bae9bc496e0ddc35bda39.ctex"
+path="res://.godot/imported/Mask.png-a3717d81b5d2d0269963e1cb7d990e33.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/relics/mask.png"
-dest_files=["res://.godot/imported/mask.png-e268300e5a2bae9bc496e0ddc35bda39.ctex"]
+source_file="res://CuteSakikoMod/images/relics/Mask.png"
+dest_files=["res://.godot/imported/Mask.png-a3717d81b5d2d0269963e1cb7d990e33.ctex"]
 
 [params]
 

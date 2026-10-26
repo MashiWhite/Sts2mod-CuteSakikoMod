@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cubgo7t6gfyon"
-path="res://.godot/imported/eggs.png-3f78a211f6c1cb6bc02b17035de5cb3a.ctex"
+path="res://.godot/imported/Eggs.png-359d51999cffe1aa5c72c8de9fee6f36.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/relics/big/eggs.png"
-dest_files=["res://.godot/imported/eggs.png-3f78a211f6c1cb6bc02b17035de5cb3a.ctex"]
+source_file="res://CuteSakikoMod/images/relics/big/Eggs.png"
+dest_files=["res://.godot/imported/Eggs.png-359d51999cffe1aa5c72c8de9fee6f36.ctex"]
 
 [params]
 

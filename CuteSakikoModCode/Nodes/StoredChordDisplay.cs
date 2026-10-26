@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using Godot;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
@@ -17,9 +17,12 @@ public partial class StoredChordDisplay : Control
 
     public void UpdateChords(List<string> chords, int bonus)
     {
-        // 清空现有子节点
+        // 清空现有子节点（QueueFree 是延迟的，先 RemoveChild 立刻摘掉，避免同帧新旧重叠）
         foreach (var child in _vbox.GetChildren())
+        {
+            _vbox.RemoveChild(child);
             child.QueueFree();
+        }
 
         foreach (var chord in chords)
         {

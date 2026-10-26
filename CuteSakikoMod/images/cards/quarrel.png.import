@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dul416a4q8god"
-path="res://.godot/imported/quarrel.png-4d40b3a6beb6a10ae8ea34ce688704ba.ctex"
+path="res://.godot/imported/Quarrel.png-9e791beab76774e3888605680c085bd4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/quarrel.png"
-dest_files=["res://.godot/imported/quarrel.png-4d40b3a6beb6a10ae8ea34ce688704ba.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Quarrel.png"
+dest_files=["res://.godot/imported/Quarrel.png-9e791beab76774e3888605680c085bd4.ctex"]
 
 [params]
 

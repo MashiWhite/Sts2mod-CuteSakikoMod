@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cm5gb8k5iokvq"
-path="res://.godot/imported/strum.png-24912ab8fadfbc9791e34ad973258626.ctex"
+path="res://.godot/imported/Strum.png-b832cf43ed869017d907e17ca5022165.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/strum.png"
-dest_files=["res://.godot/imported/strum.png-24912ab8fadfbc9791e34ad973258626.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Strum.png"
+dest_files=["res://.godot/imported/Strum.png-b832cf43ed869017d907e17ca5022165.ctex"]
 
 [params]
 

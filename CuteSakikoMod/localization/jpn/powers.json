@@ -271,5 +271,17 @@
   "CUTE_SAKIKO_MOD_POWER_JENNIFER_POWER.smartDescription": "その正体がまったくわからない…… 次に何をするのかも……",
   "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.title": "コードの力",
   "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.description": "ターン終了時、層数と同じ枚数まで、自分の山にあるカードを選んで[gold]廃棄[/gold]できる。",
-  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.smartDescription": "ターン終了時にカードを廃棄する：自分の山から最大[blue]{Amount}[/blue]枚選んで[gold]廃棄[/gold]できる。"
+  "CUTE_SAKIKO_MOD_POWER_CHORD_END_OF_TURN_EXHAUST_POWER.smartDescription": "ターン終了時にカードを廃棄する：自分の山から最大[blue]{Amount}[/blue]枚選んで[gold]廃棄[/gold]できる。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.title": "男子禁止",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.description": "[purple]藤都子[/purple]は百合破壊が嫌い。場のプレイヤーの性別に応じて、彼女が受ける[gold]ダメージ[/gold]と与える[gold]ダメージ[/gold]が変化する。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescription": "場のプレイヤーの性別に応じて、[purple]{OwnerName}[/purple]は[blue]{DamageBonus}%[/blue]のダメージ増加と[blue]{DamageReduction}%[/blue]のダメージ減少を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionBonus": "場のプレイヤーの性別に応じて、[blue]{DamageBonus}%[/blue]のダメージ増加を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionReduction": "場のプレイヤーの性別に応じて、[blue]{DamageReduction}%[/blue]のダメージ減少を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleMale": "あなたが[gold]男性[/gold]キャラクターの間、[purple]{OwnerName}[/purple]は[blue]{DamageBonus}%[/blue]のダメージ増加を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleFemale": "あなたが[gold]女性[/gold]キャラクターの間、[purple]{OwnerName}[/purple]は[blue]{DamageReduction}%[/blue]のダメージ減少を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleNeutral": "あなたが男女どちらでもない間、[purple]{OwnerName}[/purple]は[blue]{DamageBonus}%[/blue]のダメージ増加と[blue]{DamageReduction}%[/blue]のダメージ減少を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.title": "最高の友達",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.description": "[purple]藤都子[/purple]の親友は[pink]丸くん[/pink]。[pink]丸くん[/pink]がいる間は[green]回復[/green]し、倒された後は毎ターン終了時に[gold]筋力[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruAlive": "[pink]丸くん[/pink]がいる間、[purple]{OwnerName}[/purple]は毎ターン開始時に最大HPの[green]{HealPercent}%[/green]を[green]回復[/green]する。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]丸くん[/pink]が倒された後、[purple]{OwnerName}[/purple]は毎ターン終了時に[blue]{StrengthGain}[/blue]の[gold]筋力[/gold]を得る。"
 }

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text.Json.Nodes;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Localization;
@@ -83,6 +83,18 @@ public static class CuteSakikoModTelemetry
     }
 
     // ==================== 本地化工具 ====================
+
+    /// <summary>
+    ///     归一化模型 ID：去掉 "EVENT." / "CARD." / "RELIC." 等类目前缀，只保留条目名。
+    ///     用于跨事件关联（按钮点击侧的 event_key 与跑局侧的 ancient_key 必须是同一形态）。
+    /// </summary>
+    public static string NormalizeModelKey(string? id)
+    {
+        if (string.IsNullOrEmpty(id)) return id ?? "";
+
+        var dot = id.IndexOf('.');
+        return dot >= 0 && dot < id.Length - 1 ? id[(dot + 1)..] : id;
+    }
 
     public static string LocalizeOrId(string locTable, string id)
     {
@@ -392,7 +404,7 @@ public static class CuteSakikoModTelemetry
 
     // ==================== 本地化跑局上传 ====================
 
-    public static void CaptureLocalizedRun(SerializableRun run)
+    public static void CaptureLocalizedRun(SerializableRun run, bool? isVictory = null)
     {
         if (run == null) return;
         try
@@ -562,10 +574,16 @@ public static class CuteSakikoModTelemetry
                     if (act["id"] is JsonValue idv)
                         act["name"] = LocalizeAct(idv.ToString());
 
-                    // 新增：给 acts[].rooms 补古代事件中文名
+                    // 给 acts[].rooms 补古代事件名与归一化 key
+                    // ancient_id 在存档里可能带 "EVENT." 前缀，而按钮点击侧用的是最终 key，
+                    // 所以两边都写一份 NormalizeModelKey 之后的 ancient_key / event_key，SQL 直接按 key 关联。
                     if (act["rooms"] is JsonObject rooms
                         && rooms["ancient_id"] is JsonValue aid)
-                        rooms["ancient_name"] = LocalizeEvent(aid.ToString());
+                    {
+                        var ancientId = aid.ToString();
+                        rooms["ancient_name"] = LocalizeEvent(ancientId);
+                        rooms["ancient_key"] = NormalizeModelKey(ancientId);
+                    }
                 }
 
             TrackPayload(
@@ -578,7 +596,7 @@ public static class CuteSakikoModTelemetry
                     ["num_reloads"] = run.NumReloads,
                     ["game_mode"] = run.GameMode.ToString(),
                     ["current_act_index"] = run.CurrentActIndex,
-                    ["is_victory"] = run.WinTime > 0
+                    ["is_victory"] = isVictory ?? (run.WinTime > 0)
                 });
 
             Entry.Logger.Info($"[Telemetry] Localized run uploaded (mod={ModVersion}, asc={run.Ascension}).");

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib;
@@ -164,7 +164,8 @@ public static class GameplayConfigSync
             {
                 var cfg = LoadConfig();
                 data.ApplyTo(cfg);
-                SaveConfig();
+                // 只改内存，不落盘：客机的 config.json 属于玩家自己，
+                // 联机时临时采用房主配置，下次单机仍用玩家原来的设置。
                 Entry.Logger.Info(
                     $"[ConfigSync] 从 run snapshot 应用房主配置: Eggs={cfg.EggsCard} Monsters={cfg.EnableModMonsters} " +
                     $"ScalePressure={cfg.ScalePressureInMultiplayer}");
@@ -276,9 +277,9 @@ public static class GameplayConfigSync
         {
             var cfg = LoadConfig();
             dto.ApplyTo(cfg);
-            SaveConfig();
+            // 同 TryApplyRunSnapshotConfig：只改内存，不覆盖客机自己的 config.json
 
-            // ★ Sidecar 收到后也写一次 snapshot，保持一致性
+            // Sidecar 收到后也写一次 snapshot，保持两端一致
             var state = RunManager.Instance?.DebugOnlyGetState();
             if (state != null)
                 RunConfigSlot.Modify(state, data => data.CopyFrom(cfg));

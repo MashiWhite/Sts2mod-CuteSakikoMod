@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dfadg6xdjutxe"
-path="res://.godot/imported/disheartened.png-9c5af4ca8b98e3663133a5fa2ff99d65.ctex"
+path="res://.godot/imported/Disheartened.png-35048c2edd5d6d69e9aed3f543c1f6af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/disheartened.png"
-dest_files=["res://.godot/imported/disheartened.png-9c5af4ca8b98e3663133a5fa2ff99d65.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Disheartened.png"
+dest_files=["res://.godot/imported/Disheartened.png-35048c2edd5d6d69e9aed3f543c1f6af.ctex"]
 
 [params]
 

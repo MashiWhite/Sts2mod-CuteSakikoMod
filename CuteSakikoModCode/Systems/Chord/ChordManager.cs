@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -889,17 +889,6 @@ public static class ChordManager
                         && !c.IsTemporaryOnly)
             .Select(c => c.Id)
             .ToList();
-    }
-
-    public static string GetBaseChordId(ChordCategory category)
-    {
-        return category switch
-        {
-            ChordCategory.Major => "C",
-            ChordCategory.Minor => "Am",
-            ChordCategory.Dominant => "G7",
-            _ => throw new ArgumentOutOfRangeException()
-        };
     }
 
     public static bool MatchesChord(IReadOnlyList<CardType> pattern, IReadOnlyList<CardType> sequence)

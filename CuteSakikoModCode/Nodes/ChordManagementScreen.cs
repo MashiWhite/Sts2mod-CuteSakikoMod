@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.NetMessage;
+using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using Godot;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -20,13 +20,13 @@ public partial class ChordManagementScreen : Control
     private Button _equipTabButton;
     private VBoxContainer _leftSlotsContainer;
     private Button _libraryTabButton;
-    public bool _readOnly;
+    public bool IsReadOnly { get; private set; }
     private ScrollContainer _rightScroll;
     private VBoxContainer _rightWarehouseContainer;
     private List<string> _tempBonusChords = new();
     private Dictionary<ChordCategory, List<string>> _tempCategorySlots = new();
 
-    public ChordStorageCapability Chords { get; private set; }
+    public ChordStorageCapability Chords { get; private set; } = null!;
 
     public void SetChords(ChordStorageCapability chords)
     {
@@ -37,7 +37,7 @@ public partial class ChordManagementScreen : Control
             foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
             {
                 var slots = chords.GetCategorySlots(cat).ToList();
-                if (!_readOnly)
+                if (!IsReadOnly)
                     while (slots.Count < chords.GetMaxChordsPerCategory())
                         slots.Add("");
                 _tempCategorySlots[cat] = slots;
@@ -49,7 +49,7 @@ public partial class ChordManagementScreen : Control
 
     public void SetReadOnly(bool readOnly)
     {
-        _readOnly = readOnly;
+        IsReadOnly = readOnly;
     }
 
     public void ShowScreen()
@@ -150,7 +150,7 @@ public partial class ChordManagementScreen : Control
             ContentMarginBottom = 5
         };
 
-        if (_readOnly)
+        if (IsReadOnly)
         {
             var backButton = new Button
             {
@@ -261,7 +261,7 @@ public partial class ChordManagementScreen : Control
 
     public void SetTempSlot(ChordCategory slotCategory, int index, string newChordId)
     {
-        if (_readOnly) return;
+        if (IsReadOnly) return;
         if (slotCategory == ChordCategory.Bonus)
         {
             if (index >= 0 && index < _tempBonusChords.Count)
@@ -328,11 +328,11 @@ public partial class ChordManagementScreen : Control
 
         foreach (var cat in new[] { ChordCategory.Major, ChordCategory.Minor, ChordCategory.Dominant })
         {
-            var slots = _readOnly
+            var slots = IsReadOnly
                 ? Chords.GetCategorySlots(cat).Select(id => string.IsNullOrEmpty(id) ? "" : id).ToList()
                 : _tempCategorySlots.GetValueOrDefault(cat, new List<string>());
 
-            if (_readOnly)
+            if (IsReadOnly)
                 for (var i = 0; i < slots.Count; i++)
                 {
                     var label = $"{new LocString(LocTable, GetSlotLocKey(cat)).GetFormattedText()} {i + 1}";
@@ -346,8 +346,8 @@ public partial class ChordManagementScreen : Control
                 }
         }
 
-        var bonusChords = _readOnly ? Chords.GetBonusChords() : _tempBonusChords;
-        if (_readOnly)
+        var bonusChords = IsReadOnly ? Chords.GetBonusChords() : _tempBonusChords;
+        if (IsReadOnly)
             for (var i = 0; i < bonusChords.Count; i++)
             {
                 var baseText = new LocString(LocTable, "CUTE_SAKIKO_MOD_SLOT_BONUS").GetFormattedText();
@@ -454,7 +454,7 @@ public partial class ChordManagementScreen : Control
 
                 var grid = new GridContainer { Columns = CalculateColumns() };
                 foreach (var chord in group)
-                    if (_readOnly)
+                    if (IsReadOnly)
                     {
                         var iconControl = new Control { CustomMinimumSize = new Vector2(80, 80) };
                         var texture = ChordDisplayHelper.GetChordTexture(chord.Id);

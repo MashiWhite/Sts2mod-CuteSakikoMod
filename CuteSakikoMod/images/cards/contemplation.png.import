@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://igg65bv50ac0"
-path="res://.godot/imported/contemplation.png-fe79957db44e55d821d2fb407ab1ab05.ctex"
+path="res://.godot/imported/Contemplation.png-cab9dfa774aa42160fc3b7e026e301e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/contemplation.png"
-dest_files=["res://.godot/imported/contemplation.png-fe79957db44e55d821d2fb407ab1ab05.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Contemplation.png"
+dest_files=["res://.godot/imported/Contemplation.png-cab9dfa774aa42160fc3b7e026e301e9.ctex"]
 
 [params]
 

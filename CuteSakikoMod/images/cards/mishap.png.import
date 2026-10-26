@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://beli2arxfsqhk"
-path="res://.godot/imported/mishap.png-3d3e2dca07faa27e9850a720410f4b0a.ctex"
+path="res://.godot/imported/Mishap.png-b87548e3bc4dc239b515324338254bcf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/mishap.png"
-dest_files=["res://.godot/imported/mishap.png-3d3e2dca07faa27e9850a720410f4b0a.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Mishap.png"
+dest_files=["res://.godot/imported/Mishap.png-b87548e3bc4dc239b515324338254bcf.ctex"]
 
 [params]
 

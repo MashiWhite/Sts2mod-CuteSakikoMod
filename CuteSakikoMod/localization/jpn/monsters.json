@@ -1,4 +1,4 @@
-﻿{
+{
   "CUTE_SAKIKO_MOD_MONSTER_XIAOYIN.name": "小さな蛍ちゃん",
   "CUTE_SAKIKO_MOD_MONSTER_XIAOYIN.moves.THROW_BUN.title": "小饅頭を投げる",
   "CUTE_SAKIKO_MOD_MONSTER_XIAOYIN.moves.EAT_BUN.title": "小饅頭を食べる",
@@ -317,5 +317,13 @@
   "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT.title": "何",
   "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.UNKNOWN.title": "未知",
   "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.HMM.title": "うーん...",
-  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT_THE.title": "なんだよ"
+  "CUTE_SAKIKO_MOD_MONSTER_JENNIFER.moves.WHAT_THE.title": "なんだよ",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.name": "藤都子",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.THROW_SOMETHING.title": "とりあえず投げる",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.SCOLD.title": "説教",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.PUPPET_SHOW.title": "人形劇",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.RAGE.title": "八つ当たり",
+  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.name": "丸くん",
+  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.moves.MARU_HIT.title": "ぺちぺち",
+  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.moves.MARU_GENTLE_HIT.title": "やさしくぺちぺち"
 }

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Anon;
 using CuteSakikoMod.CuteSakikoModCode.Others;
@@ -23,7 +24,8 @@ public sealed class ChordCardManager : HookedSingletonModel
     public ChordCardManager() : base(HookType.Combat) { }
 
     // ★ 幂等保护：以 CombatState 为 key，记录本场战斗已处理的玩家
-    private static readonly Dictionary<ICombatState, HashSet<ulong>> _processed = new();
+    // 用 ConditionalWeakTable：CombatState 被回收时条目自动消失，不会跨战斗累积
+    private static readonly ConditionalWeakTable<ICombatState, HashSet<ulong>> _processed = new();
 
     public static async Task ProcessPlayerChordCardsAsync(Player player)
     {
@@ -32,11 +34,7 @@ public sealed class ChordCardManager : HookedSingletonModel
         var combat = player.Creature?.CombatState;
         if (combat == null) return;
 
-        if (!_processed.TryGetValue(combat, out var set))
-        {
-            set = new HashSet<ulong>();
-            _processed[combat] = set;
-        }
+        var set = _processed.GetOrCreateValue(combat);
         if (!set.Add(player.NetId)) return; // 本场已处理，跳过
 
         var chords = player.GetChords();

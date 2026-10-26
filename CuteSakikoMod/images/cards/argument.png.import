@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d02dam8yab8qp"
-path="res://.godot/imported/argument.png-77c4f415ff52c202547cc3fb1a41725d.ctex"
+path="res://.godot/imported/Argument.png-2614b9012911c26e69b5bcfb2743cdab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/argument.png"
-dest_files=["res://.godot/imported/argument.png-77c4f415ff52c202547cc3fb1a41725d.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Argument.png"
+dest_files=["res://.godot/imported/Argument.png-2614b9012911c26e69b5bcfb2743cdab.ctex"]
 
 [params]
 

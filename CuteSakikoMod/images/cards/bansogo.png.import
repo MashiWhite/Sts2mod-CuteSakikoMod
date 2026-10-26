@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://blxe83pjwd7um"
-path="res://.godot/imported/bansogo.png-0d296578c73201d761fd2a64d416febb.ctex"
+path="res://.godot/imported/Bansogo.png-5d4a7184eed8c809d57ee6b50701aded.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/bansogo.png"
-dest_files=["res://.godot/imported/bansogo.png-0d296578c73201d761fd2a64d416febb.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Bansogo.png"
+dest_files=["res://.godot/imported/Bansogo.png-5d4a7184eed8c809d57ee6b50701aded.ctex"]
 
 [params]
 

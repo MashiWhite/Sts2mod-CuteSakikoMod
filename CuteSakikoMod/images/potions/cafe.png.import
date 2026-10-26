@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b8vvofcbmunro"
-path="res://.godot/imported/cafe.png-88184f5c85f4a95f1dbb21f675716009.ctex"
+path="res://.godot/imported/Cafe.png-ba72637aaa70fde67107db534cea8b85.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/potions/cafe.png"
-dest_files=["res://.godot/imported/cafe.png-88184f5c85f4a95f1dbb21f675716009.ctex"]
+source_file="res://CuteSakikoMod/images/potions/Cafe.png"
+dest_files=["res://.godot/imported/Cafe.png-ba72637aaa70fde67107db534cea8b85.ctex"]
 
 [params]
 

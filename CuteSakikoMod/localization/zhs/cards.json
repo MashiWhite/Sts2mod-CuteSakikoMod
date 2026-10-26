@@ -388,6 +388,7 @@
   "CUTE_SAKIKO_MOD_CARD_ENCOURAGE_AGAIN.selectionScreenPrompt": "选择1张[gold]回忆[/gold]",
   "CUTE_SAKIKO_MOD_CARD_FORGET.title": "遗忘",
   "CUTE_SAKIKO_MOD_CARD_FORGET.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n从[gold]手牌[/gold]中选择一张牌[red]遗忘[/red]。",
+  "CUTE_SAKIKO_MOD_CARD_FORGET.selectionScreenPrompt": "从[gold]手牌[/gold]中选择一张牌[red]遗忘[/red]",
   "CUTE_SAKIKO_MOD_CARD_NEED_PRACTICE.title": "需要练习",
   "CUTE_SAKIKO_MOD_CARD_NEED_PRACTICE.description": "造成{Damage:diff()}点伤害。\n使其他敌人获得目标身上的一半[gold]压力[/gold]的平均值。",
   "CUTE_SAKIKO_MOD_CARD_SAKI_BATHE.title": "泡澡",

@@ -1,4 +1,3 @@
-﻿using System.Text.RegularExpressions;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Scaffolding.Content;
@@ -67,24 +66,21 @@ public static class StringExtensions
 
 public static class AssetHelper
 {
-    public static string GetSnakeCaseName(Type type)
-    {
-        var name = type.Name;
-        var snake = Regex.Replace(name, "([a-z0-9])([A-Z])", "$1_$2").ToLower();
-        return snake;
-    }
+    // 资产命名规则：直接用类名（PascalCase），不做 snake_case 转换
+    //   例：AnonStrike → images/cards/AnonStrike.png
+    // 之前的 snake 版本（anon_strike.png）已废弃，图片文件已同步改名。
 
     // 卡片
     public static CardAssetProfile CardAssetProfile(this CardModel card, CardVisualStyle? style = null)
     {
-        var snake = GetSnakeCaseName(card.GetType());
-    
+        var typeName = card.GetType().Name;
+
         // 如果没指定 style，根据稀有度自动推断：Ancient 稀有度 -> 先古样式，其他 -> 标准样式
         var finalStyle = style ?? (card.Rarity == CardRarity.Ancient 
             ? CardVisualStyle.Ancient 
             : CardVisualStyle.Standard);
 
-        return new CardAssetProfile($"res://{Entry.ModId}/images/cards/{snake}.png")
+        return new CardAssetProfile($"res://{Entry.ModId}/images/cards/{typeName}.png")
         {
             VisualStyle = finalStyle
         };
@@ -93,31 +89,31 @@ public static class AssetHelper
     // 能力
     public static PowerAssetProfile PowerAssetProfile(this PowerModel power)
     {
-        var snake = GetSnakeCaseName(power.GetType());
+        var typeName = power.GetType().Name;
         return new PowerAssetProfile(
-            $"res://{Entry.ModId}/images/powers/{snake}.png",
-            $"res://{Entry.ModId}/images/powers/{snake}.png"
+            $"res://{Entry.ModId}/images/powers/{typeName}.png",
+            $"res://{Entry.ModId}/images/powers/{typeName}.png"
         );
     }
 
     // 遗物
     public static RelicAssetProfile RelicAssetProfile(this RelicModel relic)
     {
-        var snake = GetSnakeCaseName(relic.GetType());
+        var typeName = relic.GetType().Name;
         return new RelicAssetProfile(
-            $"res://{Entry.ModId}/images/relics/{snake}.png",
-            $"res://{Entry.ModId}/images/relics/{snake}.png",
-            $"res://{Entry.ModId}/images/relics/big/{snake}.png"
+            $"res://{Entry.ModId}/images/relics/{typeName}.png",
+            $"res://{Entry.ModId}/images/relics/{typeName}.png",
+            $"res://{Entry.ModId}/images/relics/big/{typeName}.png"
         );
     }
 
     // 药水
     public static PotionAssetProfile PotionAssetProfile(this PotionModel potion)
     {
-        var snake = GetSnakeCaseName(potion.GetType());
+        var typeName = potion.GetType().Name;
         return new PotionAssetProfile(
-            $"res://{Entry.ModId}/images/potions/{snake}.png",
-            $"res://{Entry.ModId}/images/potions/{snake}.png"
+            $"res://{Entry.ModId}/images/potions/{typeName}.png",
+            $"res://{Entry.ModId}/images/potions/{typeName}.png"
         );
     }
 }

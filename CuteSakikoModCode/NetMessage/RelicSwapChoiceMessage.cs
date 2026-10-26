@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Logging;
+using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Multiplayer.Serialization;
 using MegaCrit.Sts2.Core.Multiplayer.Transport;
 
@@ -29,8 +29,10 @@ public sealed class RelicSwapChoiceMessage : INetMessage
             : raw.Split('|').ToList();
     }
 
+    // 注意：游戏的 INetMessage 接口没有 ToId，路由由 NetTypeCache 按类型分配；
+    // 这里保留手写 ID 只为自描述与排查。改成 205 是为了不和 SkinSyncMessage 的 204 撞号。
     public int ToId()
     {
-        return 204;
+        return 205;
     }
 }

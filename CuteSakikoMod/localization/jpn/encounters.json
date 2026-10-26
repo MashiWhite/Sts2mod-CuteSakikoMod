@@ -1,4 +1,4 @@
-﻿{
+{
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.title": "小さな蛍ちゃん",
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.loss": "{character}は[color=#C5C8C9]{encounter}[/color]の小饅頭に喉を詰まらせた。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.title": "アノンワン",
@@ -24,5 +24,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_ARALUO_ENCOUNTER.title": "アラロ",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ARALUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.title": "エビフライの群れ",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.title": "藤都子",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]の投げた月餅に倒された。"
 }
