@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -42,17 +42,29 @@ public class TenDayTaki : ModMonsterTemplate
     {
         await base.AfterAddedToRoom();
         var ctx = new ThrowingPlayerChoiceContext();
+
         await PowerCmd.Apply<MovementNotFinishedPower>(ctx, Creature, 1, Creature, null);
         await PowerCmd.Apply<TenDayEndPower>(ctx, Creature, 10, Creature, null);
+
+        // 不管是第一次进战斗还是 SL 重进，天数都从 10 重新倒计时；
+        // 同时清掉复用 power 实例里残留的"已触发天数"，否则 9/8/7 日效果会被跳过。
+        Creature.GetPower<MovementNotFinishedPower>()?.ResetRuntimeState();
     }
 
     public async Task SummonAlly<T>(PlayerChoiceContext ctx, string slotName) where T : MonsterModel
     {
         var combatState = Creature.CombatState;
         if (combatState == null) return;
-        if (combatState.Enemies.Any(e => e.SlotName == slotName)) return;
 
-        var ally = await CreatureCmd.Add<T>(combatState, slotName);
+        // 只按"活着的同类"去重：死掉的爪牙已经被游戏从 Enemies 里移除，
+        // 不能因为它曾经占过槽位就不再召唤（读档后丢失爪牙就是因为这个）。
+        if (combatState.Enemies.Any(e => e.IsAlive && e.Monster is T)) return;
+
+        // 槽位被活着的别的怪占着时退回无槽位召唤，避免两只怪叠在一起
+        var slotFree = !combatState.Enemies.Any(e => e.IsAlive && e.SlotName == slotName);
+        var ally = slotFree
+            ? await CreatureCmd.Add<T>(combatState, slotName)
+            : await CreatureCmd.Add<T>(combatState);
         await PowerCmd.Apply<MinionPower>(
             new ThrowingPlayerChoiceContext(), ally, 1, Creature, null);
     }

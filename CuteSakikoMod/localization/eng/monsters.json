@@ -325,5 +325,11 @@
   "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.moves.RAGE.title": "Misplaced Anger",
   "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.name": "Maru-kun",
   "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.moves.MARU_HIT.title": "Pat",
-  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.moves.MARU_GENTLE_HIT.title": "Gentle Pat"
+  "CUTE_SAKIKO_MOD_MONSTER_MARU_KUN.moves.MARU_GENTLE_HIT.title": "Gentle Pat",
+  "CUTE_SAKIKO_MOD_MONSTER_MIYAKO.maruDeathSpeakLine": "Maru!!!!",
+  "CUTE_SAKIKO_MOD_MONSTER_VIOLA.name": "Viola",
+  "CUTE_SAKIKO_MOD_MONSTER_VIOLA.moves.SERPENT_GAZE.title": "Serpent's Gaze",
+  "CUTE_SAKIKO_MOD_MONSTER_VIOLA.moves.FRAUDULENT_SERPENT.title": "Fraudulent Serpent",
+  "CUTE_SAKIKO_MOD_MONSTER_VIOLA.moves.DISSONANCE.title": "Dissonance",
+  "CUTE_SAKIKO_MOD_MONSTER_VIOLA.moves.MOLT.title": "Molt"
 }

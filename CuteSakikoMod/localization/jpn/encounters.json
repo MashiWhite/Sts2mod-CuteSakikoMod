@@ -26,5 +26,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.title": "エビフライの群れ",
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.title": "藤都子",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]の投げた月餅に倒された。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]の投げた月餅に倒された。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.title": "ヴィオラ",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]の嘘に飲み込まれた。"
 }

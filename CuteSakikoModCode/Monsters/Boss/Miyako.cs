@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Nodes.Vfx.Utilities;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -146,6 +147,22 @@ public class Miyako : ModMonsterTemplate
             : Creature.CombatState?.Players.Select(p => p.Creature).ToList() ?? [];
 
         return list.Where(t => t is { IsDead: false });
+    }
+
+    /// <summary>丸君被打败时，藤都子喊一声（参考 QUEEN 的 amalgamDeathSpeakLine）。</summary>
+    public override Task AfterDeath(
+        PlayerChoiceContext choiceContext,
+        Creature creature,
+        bool wasRemovalPrevented,
+        float deathAnimLength)
+    {
+        if (creature.Monster is MaruKun && Creature.IsAlive)
+        {
+            var line = MonsterModel.L10NMonsterLookup(Id.Entry + ".maruDeathSpeakLine");
+            TalkCmd.Play(line, Creature, VfxColor.Purple);
+        }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>把随机的一样东西（月饼/壶/鸭子）抛向目标，落点砸碎并结算伤害。</summary>

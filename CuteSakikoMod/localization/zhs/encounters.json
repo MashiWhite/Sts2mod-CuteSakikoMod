@@ -26,5 +26,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.title": "一群炸虾",
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.title": "藤都子",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]扔出的月饼砸晕了。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]扔出的月饼砸晕了。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.title": "薇欧拉",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]的谎言吞没了。"
 }

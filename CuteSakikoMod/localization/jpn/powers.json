@@ -281,7 +281,10 @@
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleFemale": "あなたが[gold]女性[/gold]キャラクターの間、[purple]{OwnerName}[/purple]は[blue]{DamageReduction}%[/blue]のダメージ減少を得る。",
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_NO_BOYS_POWER.smartDescriptionSingleNeutral": "あなたが男女どちらでもない間、[purple]{OwnerName}[/purple]は[blue]{DamageBonus}%[/blue]のダメージ増加と[blue]{DamageReduction}%[/blue]のダメージ減少を得る。",
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.title": "最高の友達",
-  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.description": "[purple]藤都子[/purple]の親友は[pink]丸くん[/pink]。[pink]丸くん[/pink]がいる間は[green]回復[/green]し、倒された後は毎ターン終了時に[gold]筋力[/gold]を得る。",
-  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruAlive": "[pink]丸くん[/pink]がいる間、[purple]{OwnerName}[/purple]は毎ターン開始時に最大HPの[green]{HealPercent}%[/green]を[green]回復[/green]する。",
-  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]丸くん[/pink]が倒された後、[purple]{OwnerName}[/purple]は毎ターン終了時に[blue]{StrengthGain}[/blue]の[gold]筋力[/gold]を得る。"
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.description": "[purple]藤都子[/purple]の親友は[pink]まるくん[/pink]。[pink]まるくん[/pink]がいる間は[green]回復[/green]し、倒された後は毎ターン終了時に[gold]筋力[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruAlive": "[pink]まるくん[/pink]がいる間、[purple]{OwnerName}[/purple]は毎ターン開始時に最大HPの[green]{HealPercent}%[/green]を[green]回復[/green]する。",
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]まるくん[/pink]が倒された後、[purple]{OwnerName}[/purple]は毎ターン終了時に[blue]{StrengthGain}[/blue]の[gold]筋力[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.title": "詐欺の蛇",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。"
 }

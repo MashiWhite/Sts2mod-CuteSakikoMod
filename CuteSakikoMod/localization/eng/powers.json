@@ -283,5 +283,8 @@
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.title": "Best Friend",
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.description": "[pink]Maru[/pink] is [purple]Miyako[/purple]'s best friend. While [pink]Maru[/pink] is present, she [green]heals[/green]; after [pink]Maru[/pink] is defeated, she gains [gold]Strength[/gold] at the end of each turn.",
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruAlive": "While [pink]Maru[/pink] is present, [purple]{OwnerName}[/purple] [green]heals[/green] [green]{HealPercent}%[/green] max HP at the start of each turn.",
-  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "After [pink]Maru[/pink] is defeated, [purple]{OwnerName}[/purple] gains [blue]{StrengthGain}[/blue] [gold]Strength[/gold] at the end of each turn."
+  "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "After [pink]Maru[/pink] is defeated, [purple]{OwnerName}[/purple] gains [blue]{StrengthGain}[/blue] [gold]Strength[/gold] at the end of each turn.",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.title": "Fraudulent Serpent",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "The first [blue]{Amount}[/blue] cards you draw each turn cannot be recognized.",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "The first [blue]{Amount}[/blue] cards you draw each turn cannot be recognized."
 }

@@ -1,5 +1,7 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.Tenday;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.Tenday;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -37,6 +39,7 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
     private readonly HashSet<int> _triggeredDays = new();
     private bool _deathShieldAvailable;
     private bool _deathShieldUsed;
+    private bool _reconciled;
 
     // ───────── 伤害减免：每只存活小怪 5% ─────────
     private decimal GetDamageReduction()
@@ -80,6 +83,34 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
         await CreatureCmd.Heal(creature, heal);
     }
 
+    // ───────── 运行时状态清理（SL / 重进战斗的关键） ─────────
+    /// <summary>
+    ///     一场战斗结束时清空所有纯运行时状态。
+    ///     SL 不重启进程，power 实例会被复用；如果 _triggeredDays 留到下一场，
+    ///     天数重新走到 9/8/7… 时会被判成"已触发"而跳过，导致越 SL Boss 越弱。
+    /// </summary>
+    public override Task AfterCombatEnd(CombatRoom room)
+    {
+        ResetRuntimeState();
+        return Task.CompletedTask;
+    }
+
+    /// <summary>power 被重新挂上时也清一次，防止复用旧状态。</summary>
+    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
+    {
+        await base.AfterApplied(applier, cardSource);
+        ResetRuntimeState();
+    }
+
+    /// <summary>供 TenDayTaki 在进入战斗时显式调用，确保天数从 10 重新计时。</summary>
+    public void ResetRuntimeState()
+    {
+        _triggeredDays.Clear();
+        _deathShieldAvailable = false;
+        _deathShieldUsed = false;
+        _reconciled = false;
+    }
+
     // ───────── 日数变化时触发 ─────────
     public override async Task AfterPowerAmountChanged(
         PlayerChoiceContext choiceContext,
@@ -94,6 +125,7 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
         Owner.GetPower<BeatingHeartPower>()?.UpdateCap();
 
         int day = endPower.Amount;
+
         if (!_triggeredDays.Add(day)) return;
 
         await TriggerDayEffect(choiceContext, day);

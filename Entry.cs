@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Monsters.Weak;

@@ -26,5 +26,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.title": "A Bunch of Fried Shrimp",
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character} was overwhelmed by [gold]{encounter}[/gold]'s cuteness.",
   "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.title": "Miyako",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character} was knocked out by a mooncake thrown by [pink]{encounter}[/pink]."
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character} was knocked out by a mooncake thrown by [pink]{encounter}[/pink].",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.title": "Viola",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.loss": "{character} was swallowed by [pink]{encounter}[/pink]'s lies."
 }
