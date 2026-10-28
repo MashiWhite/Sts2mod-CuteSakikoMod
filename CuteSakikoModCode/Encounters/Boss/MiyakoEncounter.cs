@@ -8,8 +8,8 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 
-/// <summary>藤都子的 Boss 遭遇（第 2 幕 Underdocks）：藤都子 + 手偶丸君。</summary>
-[RegisterActEncounter(typeof(Underdocks))]
+/// <summary>藤都子的 Boss 遭遇：藤都子 + 手偶丸君。</summary>
+[RegisterActEncounter(typeof(Hive))]
 public class MiyakoEncounter : CuteEncounters
 {
     public override IEnumerable<MonsterModel> AllPossibleMonsters =>

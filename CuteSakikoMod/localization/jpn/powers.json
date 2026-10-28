@@ -285,6 +285,6 @@
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruAlive": "[pink]まるくん[/pink]がいる間、[purple]{OwnerName}[/purple]は毎ターン開始時に最大HPの[green]{HealPercent}%[/green]を[green]回復[/green]する。",
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]まるくん[/pink]が倒された後、[purple]{OwnerName}[/purple]は毎ターン終了時に[blue]{StrengthGain}[/blue]の[gold]筋力[/gold]を得る。",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.title": "詐欺の蛇",
-  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。",
-  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。"
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。侵食されたカードはプレイすると元に戻る。",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。侵食されたカードはプレイすると元に戻る。"
 }

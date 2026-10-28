@@ -289,6 +289,6 @@
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruAlive": "[pink]丸君[/pink]在场时，[purple]{OwnerName}[/purple]每回合开始[green]回复[/green][green]{HealPercent}%[/green]最大生命。",
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]丸君[/pink]被打败后，[purple]{OwnerName}[/purple]每回合结束时获得[blue]{StrengthGain}[/blue]点[gold]力量[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.title": "欺诈之蛇",
-  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "你每回合抽到的前[blue]{Amount}[/blue]张牌无法辨认。​",
-  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "你每回合抽到的前[blue]{Amount}[/blue]张牌无法辨认。​"
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "你每回合抽到的前[blue]{Amount}[/blue]张牌无法辨认，被侵蚀的牌打出后才会恢复原状。",
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "你每回合抽到的前[blue]{Amount}[/blue]张牌无法辨认，被侵蚀的牌打出后才会恢复原状。"
 }
