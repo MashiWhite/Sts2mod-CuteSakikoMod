@@ -23,7 +23,7 @@ public class ColdStare() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon,
         TriggerBanter();
 
         var damage = DynamicVars.Damage.BaseValue;
-        var hits = DynamicVars.Repeat.IntValue;
+        var hits = DynamicVars["Repeat"].IntValue;
 
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
@@ -32,7 +32,7 @@ public class ColdStare() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon,
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 
     protected override void OnUpgrade()

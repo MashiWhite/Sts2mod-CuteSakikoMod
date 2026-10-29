@@ -13,6 +13,8 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new DynamicVar("DrawCount", 1),
+        new DynamicVar("PressureGain", 8),
         new DamageVar(10m, ValueProp.Move)
     ];
 
@@ -53,11 +55,11 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
         // 若敌人意图不是攻击，则抽牌并施加压力
         if (cardPlay.Target.Monster != null && !cardPlay.Target.Monster.IntendsToAttack)
         {
-            var drawCount = IsUpgraded ? 2 : 1;
-            var pressureAmount = IsUpgraded ? 10 : 8;
+            var read = DynamicVars["DrawCount"].IntValue;
+            var pressureAmount = DynamicVars["PressureGain"].IntValue;
 
             // 抽牌
-            await CardPileCmd.Draw(choiceContext, drawCount, Owner);
+            await CardPileCmd.Draw(choiceContext, read, Owner);
 
             // 给敌人施加压力
             await PressureCmd.Apply(choiceContext, cardPlay.Target, pressureAmount, Owner.Creature, this);
@@ -67,6 +69,8 @@ public class VentAngry() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Comm
 
     protected override void OnUpgrade()
     {
+        DynamicVars["DrawCount"].UpgradeValueBy(1m);
+        DynamicVars["PressureGain"].UpgradeValueBy(2m);
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }*/

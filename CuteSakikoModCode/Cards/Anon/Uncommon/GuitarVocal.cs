@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -8,6 +9,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
 public class GuitarVocal() : CuteAnonCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("Amount", 1)
+    ];
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<GuitarVocalPower>(); }
@@ -17,12 +23,13 @@ public class GuitarVocal() : CuteAnonCard(1, CardType.Power, CardRarity.Uncommon
     {
         TriggerBanter();
         // 未升级给予 1 层，升级给予 2 层（因每层造成 1 点伤害）
-        var amount = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<GuitarVocalPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        var read = DynamicVars["Amount"].IntValue;
+        await PowerCmd.Apply<GuitarVocalPower>(choiceContext, Owner.Creature, read, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Amount"].UpgradeValueBy(1m);
         // 层数在 OnPlay 中根据 IsUpgraded 决定
     }
 }

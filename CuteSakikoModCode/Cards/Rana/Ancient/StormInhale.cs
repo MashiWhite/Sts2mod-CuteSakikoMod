@@ -21,12 +21,13 @@ public class StormInhale()
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new HealVar(5m), new CardsVar(2), new EnergyVar(1)
+        new HealVar(5m), new CardsVar(2), new EnergyVar(1),
+        new DynamicVar("ParfaitCount", 2)
     ];
 
     public int GetParfaitConsumeCount()
     {
-        return IsUpgraded ? 1 : 2;
+        return DynamicVars["ParfaitCount"].IntValue;
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -46,5 +47,6 @@ public class StormInhale()
         RemoveKeyword(CardKeyword.Exhaust);
         DynamicVars.Cards.UpgradeValueBy(1);
         DynamicVars.Energy.UpgradeValueBy(1);
+        DynamicVars["ParfaitCount"].UpgradeValueBy(-1);
     }
 }

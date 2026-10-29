@@ -14,6 +14,7 @@ public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new PowerVar<ShrinkPower>(1m),
         new DamageVar(10m, ValueProp.Move)
     ];
 
@@ -62,13 +63,14 @@ public class HighHigh() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Uncom
         // 若目标压力大于自己，给予缩小效果（升级后2层，否则1层）
         if (targetPressure > selfPressure)
         {
-            var shrinkAmount = IsUpgraded ? 2 : 1;
+            var shrinkAmount = DynamicVars["ShrinkPower"].IntValue;
             await PowerCmd.Apply<ShrinkPower>(choiceContext, target, shrinkAmount, Owner.Creature, this);
         }
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["ShrinkPower"].UpgradeValueBy(1m);
         // 升级：伤害 10 → 13
         DynamicVars["Damage"].UpgradeValueBy(3m);
     }

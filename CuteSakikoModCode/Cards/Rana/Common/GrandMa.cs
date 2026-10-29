@@ -38,7 +38,7 @@ public class GrandMa : CuteRanaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var counts = DynamicVars.Repeat.IntValue;
+        var counts = DynamicVars["Repeat"].IntValue;
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)
@@ -50,6 +50,6 @@ public class GrandMa : CuteRanaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

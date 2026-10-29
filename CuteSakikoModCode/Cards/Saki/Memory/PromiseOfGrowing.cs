@@ -10,6 +10,7 @@ public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new DynamicVar("ExtraHits", 2),
         new DamageVar(3m, ValueProp.Move)
     ];
 
@@ -17,13 +18,13 @@ public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.
     {
         if (cardPlay.Target == null) return;
 
-        var extraHits = IsUpgraded ? 3 : 2;
+        var read = DynamicVars["ExtraHits"].IntValue;
         ; // 攻击2次，升级3次
         var damage = DynamicVars.Damage.BaseValue;
 
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
-            .WithHitCount(extraHits)
+            .WithHitCount(read)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
@@ -31,5 +32,6 @@ public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.
 
     protected override void OnUpgrade()
     {
+        DynamicVars["ExtraHits"].UpgradeValueBy(1m);
     }
 }

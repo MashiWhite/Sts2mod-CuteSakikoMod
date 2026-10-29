@@ -1,4 +1,6 @@
-﻿{
+{
+  "MOD_SETTINGS.MOD_WEIGHT.LABEL": "MOD内容の重み設定を有効化",
+  "MOD_SETTINGS.MOD_WEIGHT.DESC": "マスタースイッチ（既定はオフ）。オフの間は部屋生成に一切干渉しません。オンにした時のみ下の各重みが有効になります。",
   "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL": "カスタム古代の民の出現重み",
   "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC": "古代の民が生成される際、あなたのMODの古代の民がバニラの古代の民を置き換える確率を決定します。",
   "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL": "カスタムボスの出現重み",

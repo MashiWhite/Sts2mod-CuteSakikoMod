@@ -50,7 +50,7 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Com
         var pressure = Owner.Creature.GetPower<PressurePower>();
         if (pressure != null && pressure.Amount > 0)
         {
-            extraHits = DynamicVars.Repeat.IntValue;
+            extraHits = DynamicVars["Repeat"].IntValue;
             await PowerCmd.ModifyAmount(choiceContext, pressure, -1, Owner.Creature, this);
         }
 

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Status;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
@@ -200,18 +200,26 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             {
                 if (choiceContext != null)
                 {
-                    var combatState = Owner.Creature.CombatState;
-                    if (combatState != null)
+                    // 海克斯符文"忘却之味"可抑制头疼
+                    if (!ShouldSuppressBrainFreeze(Owner))
                     {
-                        var brainFreeze = combatState.CreateCard<BrainFreeze>(Owner);
-                        var result = await CardPileCmd.AddGeneratedCardToCombat(
-                            brainFreeze, PileType.Draw, Owner, CardPilePosition.Random);
-                        CardCmd.PreviewCardPileAdd(result);
-                        Entry.Logger.Info("[芭菲] 添加吃到头疼并预览");
+                        var combatState = Owner.Creature.CombatState;
+                        if (combatState != null)
+                        {
+                            var brainFreeze = combatState.CreateCard<BrainFreeze>(Owner);
+                            var result = await CardPileCmd.AddGeneratedCardToCombat(
+                                brainFreeze, PileType.Draw, Owner, CardPilePosition.Random);
+                            CardCmd.PreviewCardPileAdd(result);
+                            Entry.Logger.Info("[芭菲] 添加吃到头疼并预览");
+                        }
+                        else
+                        {
+                            Entry.Logger.Warn("[芭菲] combatState 为 null，无法添加 BrainFreeze");
+                        }
                     }
                     else
                     {
-                        Entry.Logger.Warn("[芭菲] combatState 为 null，无法添加 BrainFreeze");
+                        Entry.Logger.Info("[芭菲] 头疼被海克斯符文抑制");
                     }
                 }
                 else
@@ -224,6 +232,15 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             }
         }
     }
+
+    /// <summary>
+    ///     扩展点：外部模组（海克斯符文）可设置此委托来抑制"吃到头疼"。
+    ///     参数为持有者玩家，返回 true 表示本杯不塞头疼。
+    /// </summary>
+    public static Func<Player, bool>? BrainFreezeSuppressor { get; set; }
+
+    private static bool ShouldSuppressBrainFreeze(Player player)
+        => BrainFreezeSuppressor?.Invoke(player) == true;
 
     public static async Task SimulateParfaitEaten(
         Player player,

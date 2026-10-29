@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using STS2RitsuLib;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
@@ -29,6 +29,13 @@ public class CuteSakikoModConfigData
     public bool ScalePressureInMultiplayer { get; set; } = false;
 
     // ===== 权重设置（参与联机同步） =====
+    /// <summary>
+    ///     权重系统总开关，**默认关闭**。
+    ///     关闭时 RoomGenerationWeightPatch 直接 return，不消耗任何 RNG、不改任何 rooms，
+    ///     保证不影响原版/其他 mod 的生成结果（用户要求默认关闭）。
+    /// </summary>
+    public bool UseModWeight { get; set; } = false;
+
     public bool UseModAncientWeight { get; set; } = true;
     public float ModAncientWeight { get; set; } = 0.5f;
 
@@ -90,6 +97,7 @@ public static class ModConfig
     public static float ReactionEmoteScale => Load().ReactionEmoteScale;
     
     // 新增权重读取
+    public static bool UseModWeight => Load().UseModWeight;
     public static bool UseModAncientWeight => Load().UseModAncientWeight;
     public static float ModAncientWeight => Load().ModAncientWeight;
     public static bool UseModBossWeight => Load().UseModBossWeight;

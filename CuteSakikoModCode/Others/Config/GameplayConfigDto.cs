@@ -1,4 +1,4 @@
-﻿namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
+namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
 
 public sealed class GameplayConfigDto
 {
@@ -8,6 +8,8 @@ public sealed class GameplayConfigDto
     public bool EnableCustomEvents { get; set; } = true;
     public bool ScalePressureInMultiplayer { get; set; }
     
+    /// <summary>权重系统总开关，默认关闭。</summary>
+    public bool UseModWeight { get; set; }
     public bool UseModAncientWeight { get; set; } = true;
     public float ModAncientWeight { get; set; } = 0.5f;
     public bool UseModBossWeight { get; set; } = true;
@@ -24,6 +26,7 @@ public sealed class GameplayConfigDto
             EnableCustomAncients = cfg.EnableCustomAncients,
             EnableCustomEvents = cfg.EnableCustomEvents,
             ScalePressureInMultiplayer = cfg.ScalePressureInMultiplayer,
+            UseModWeight = cfg.UseModWeight,
             UseModAncientWeight = cfg.UseModAncientWeight,
             ModAncientWeight = cfg.ModAncientWeight,
             UseModBossWeight = cfg.UseModBossWeight,
@@ -40,6 +43,7 @@ public sealed class GameplayConfigDto
         cfg.EnableCustomAncients = EnableCustomAncients;
         cfg.EnableCustomEvents = EnableCustomEvents;
         cfg.ScalePressureInMultiplayer = ScalePressureInMultiplayer;
+        cfg.UseModWeight = UseModWeight;
         cfg.UseModAncientWeight = UseModAncientWeight;
         cfg.ModAncientWeight = ModAncientWeight;
         cfg.UseModBossWeight = UseModBossWeight;
@@ -57,6 +61,7 @@ public sealed class GameplayConfigDto
             EnableCustomAncients = EnableCustomAncients,
             EnableCustomEvents = EnableCustomEvents,
             ScalePressureInMultiplayer = ScalePressureInMultiplayer,
+            UseModWeight = UseModWeight,
             UseModAncientWeight = UseModAncientWeight,
             ModAncientWeight = ModAncientWeight,
             UseModBossWeight = UseModBossWeight,
@@ -75,6 +80,7 @@ public sealed class GameplayConfigDelta
     public bool? EnableCustomEvents { get; set; }
     public bool? ScalePressureInMultiplayer { get; set; }
     
+    public bool? UseModWeight { get; set; }
     public bool? UseModAncientWeight { get; set; }
     public float? ModAncientWeight { get; set; }
     public bool? UseModBossWeight { get; set; }

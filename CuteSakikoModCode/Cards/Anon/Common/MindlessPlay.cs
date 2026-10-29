@@ -29,7 +29,7 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
         await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
 
         // 演奏最新储存的和弦
-        var count = DynamicVars.Repeat.IntValue;
+        var count = DynamicVars["Repeat"].IntValue;
         ChordNoteSystem.Activate(Owner);
         await ChordNoteSystem.PlayLastStoredChordAsync(Owner, choiceContext, count);
     }
@@ -37,6 +37,6 @@ public class MindlessPlay() : CuteAnonCard(1, CardType.Skill, CardRarity.Common,
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(4m);
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,6 +11,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 
 public class PlayTogether() : CuteAnonCard(-1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("ExtraTimes", 2)
+    ];
+
     protected override bool HasEnergyCostX => true;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
@@ -30,7 +36,7 @@ public class PlayTogether() : CuteAnonCard(-1, CardType.Skill, CardRarity.Rare, 
         if (chords == null) return;
 
         var x = ResolveEnergyXValue();
-        var times = IsUpgraded ? x + 4 : x + 2;
+        var times = x + DynamicVars["ExtraTimes"].IntValue;
         if (times <= 0) return;
 
         var equipped = chords.GetEquippedChordIds();
@@ -48,5 +54,6 @@ public class PlayTogether() : CuteAnonCard(-1, CardType.Skill, CardRarity.Rare, 
 
     protected override void OnUpgrade()
     {
+        DynamicVars["ExtraTimes"].UpgradeValueBy(2m);
     }
 }

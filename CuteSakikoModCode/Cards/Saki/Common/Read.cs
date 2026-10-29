@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,6 +11,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 public class Read() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new MaxHpVar(1m)
+    ];
 
     protected override bool ShouldGlowGoldInternal
     {
@@ -39,12 +45,13 @@ public class Read() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Common, Ta
         // 消耗5层压力
         await PowerCmd.ModifyAmount(choiceContext, pressure, -5, Owner.Creature, this);
 
-        var maxHpGain = IsUpgraded ? 2 : 1;
+        var maxHpGain = DynamicVars.MaxHp.IntValue;
         await CreatureCmd.GainMaxHp(Owner.Creature, maxHpGain);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars.MaxHp.UpgradeValueBy(1m);
         // 升级效果在逻辑中已处理
     }
 }

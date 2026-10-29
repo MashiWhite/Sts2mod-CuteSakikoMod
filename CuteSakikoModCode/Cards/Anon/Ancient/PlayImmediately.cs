@@ -29,7 +29,7 @@ public class PlayImmediately() : CuteAnonCard(0, CardType.Skill, CardRarity.Anci
     {
         TriggerBanter();
 
-        var count = DynamicVars.Repeat.IntValue;
+        var count = DynamicVars["Repeat"].IntValue;
         // 激活音符系统（即使没有吉他）
         ChordNoteSystem.Activate(Owner);
 
@@ -43,6 +43,6 @@ public class PlayImmediately() : CuteAnonCard(0, CardType.Skill, CardRarity.Anci
     protected override void OnUpgrade()
     {
         DynamicVars["Chords"].UpgradeValueBy(2);
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

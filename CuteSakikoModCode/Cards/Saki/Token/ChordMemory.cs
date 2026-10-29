@@ -23,7 +23,7 @@ public class ChordMemory() : ModTokenCard(1, CardType.Attack, CardRarity.Token, 
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var hitCount = DynamicVars.Repeat.IntValue;
+        var hitCount = DynamicVars["Repeat"].IntValue;
         var damage = DynamicVars.Damage.IntValue;
         var block = DynamicVars.Block;
 
@@ -42,6 +42,6 @@ public class ChordMemory() : ModTokenCard(1, CardType.Attack, CardRarity.Token, 
     {
         DynamicVars.Damage.UpgradeValueBy(2);
         DynamicVars.Block.UpgradeValueBy(2);
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

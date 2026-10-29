@@ -1,4 +1,5 @@
 ﻿using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,6 +14,11 @@ public class Contemplation() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncomm
         get { yield return CardKeyword.Exhaust; }
     }
 
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new CardsVar(1)
+    ];
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         TriggerBanter();
@@ -23,7 +29,7 @@ public class Contemplation() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncomm
         var availableCards = exhaustPile.Cards.Where(c => c.Id != Id).ToList();
         if (availableCards.Count == 0) return;
 
-        var pickCount = IsUpgraded ? 2 : 1;
+        var pickCount = DynamicVars.Cards.IntValue;
         var maxCount = availableCards.Count;
         if (maxCount < pickCount) pickCount = maxCount;
 
@@ -55,5 +61,6 @@ public class Contemplation() : CuteAnonCard(2, CardType.Skill, CardRarity.Uncomm
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Cards.UpgradeValueBy(1m);
     }
 }

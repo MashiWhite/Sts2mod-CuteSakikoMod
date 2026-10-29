@@ -12,13 +12,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Playpiano.GetModCardKeyword()];
-
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
+            yield return new DynamicVar("PlayCount", 1);
             yield return new CalculationBaseVar(7);
             yield return new ExtraDamageVar(4);
             yield return new CalculatedDamageVar(ValueProp.Move).WithMultiplier((card, target) =>
@@ -43,8 +43,8 @@ public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, T
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        var playCount = IsUpgraded ? 2 : 1;
-        for (var i = 0; i < playCount; i++)
+        var read = DynamicVars["PlayCount"].IntValue;
+        for (var i = 0; i < read; i++)
         {
             var qinCard = GetNextQinCard();
             if (qinCard == null) break;
@@ -78,6 +78,7 @@ public class Legato() : CuteSakikoModCard(2, CardType.Attack, CardRarity.Rare, T
 
     protected override void OnUpgrade()
     {
+        DynamicVars["PlayCount"].UpgradeValueBy(1m);
         DynamicVars.ExtraDamage.UpgradeValueBy(2);
     }
 }

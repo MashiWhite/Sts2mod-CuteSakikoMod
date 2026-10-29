@@ -35,7 +35,7 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        var hitCount = DynamicVars.Repeat.IntValue;
+        var hitCount = DynamicVars["Repeat"].IntValue;
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)

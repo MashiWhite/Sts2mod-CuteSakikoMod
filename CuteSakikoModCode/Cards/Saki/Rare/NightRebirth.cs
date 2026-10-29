@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,11 +10,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class NightRebirth() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    private int _threshold = 4; // 升级前：8层压力换1能量
-
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    // 升级前 4 层压力换 1 能量，升级后 2 层换 1（数值与描述一致，旧注释"8层/5层"是笔误）
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("Threshold", 4)
+    ];
 
     // 金闪闪提示：当有压力时卡牌高亮
     protected override bool ShouldGlowGoldInternal
@@ -41,7 +43,7 @@ public class NightRebirth() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Ra
         if (pressure == null || pressure.Amount <= 0) return;
 
         var pressureAmount = pressure.Amount;
-        var energyGain = pressureAmount / _threshold; // 整数除法，向下取整
+        var energyGain = (int)(pressureAmount / DynamicVars["Threshold"].BaseValue); // 整数除法，向下取整
         if (energyGain > 0) await PlayerCmd.GainEnergy(energyGain, Owner);
         // 消耗所有压力
         await PowerCmd.ModifyAmount(choiceContext, pressure, -pressureAmount, Owner.Creature, this);
@@ -49,6 +51,6 @@ public class NightRebirth() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Ra
 
     protected override void OnUpgrade()
     {
-        _threshold = 2; // 升级后：5层压力换1能量
+        DynamicVars["Threshold"].UpgradeValueBy(-2m); // 4 → 2
     }
 }

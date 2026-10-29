@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -30,14 +30,17 @@ public class BoringWoman : CuteRanaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars.Strength.BaseValue,
+        // ⚠️ PowerVar<T> 的 key 是**类型名全称**（DexterityPower / StrengthPower），
+        //    不是属性短名（Dexterity / Strength）。写成短名会 KeyNotFoundException，
+        //    图鉴渲染升级预览时就会崩（2026-10-29 实测）。
+        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars["StrengthPower"].BaseValue,
             Owner.Creature, this);
-        await PowerCmd.Apply<DexterityPower>(choiceContext, Owner.Creature, DynamicVars.Dexterity.BaseValue,
+        await PowerCmd.Apply<DexterityPower>(choiceContext, Owner.Creature, DynamicVars["DexterityPower"].BaseValue,
             Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Dexterity.UpgradeValueBy(2M); // 敏捷 1 → 3
+        DynamicVars["DexterityPower"].UpgradeValueBy(2M); // 敏捷 1 → 3
     }
 }

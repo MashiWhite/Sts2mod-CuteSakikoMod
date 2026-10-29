@@ -30,7 +30,7 @@ public class Intermission : CuteSakikoModCard
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)
             .Targeting(cardPlay.Target)
-            .WithHitCount(DynamicVars.Repeat.IntValue)
+            .WithHitCount(DynamicVars["Repeat"].IntValue)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
@@ -40,6 +40,6 @@ public class Intermission : CuteSakikoModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Repeat.UpgradeValueBy(3);
+        DynamicVars["Repeat"].UpgradeValueBy(3);
     }
 }

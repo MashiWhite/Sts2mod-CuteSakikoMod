@@ -1,4 +1,6 @@
-﻿{
+{
+  "MOD_SETTINGS.MOD_WEIGHT.LABEL": "Enable Mod Content Weights",
+  "MOD_SETTINGS.MOD_WEIGHT.DESC": "Master switch, off by default. While off, room generation is never touched; the weights below only take effect when this is on.",
   "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL": "Custom Ancient Spawn Weight",
   "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC": "Determines the chance that, when an Ancient is generated, your mod's Ancient replaces the vanilla one.",
   "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL": "Custom Boss Spawn Weight",

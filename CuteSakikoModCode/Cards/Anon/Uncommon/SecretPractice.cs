@@ -26,7 +26,7 @@ public class SecretPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncom
 
         // 演奏所有储存的和弦
         ChordNoteSystem.Activate(Owner);
-        var count = DynamicVars.Repeat.IntValue;
+        var count = DynamicVars["Repeat"].IntValue;
         await ChordNoteSystem.PlayAllStoredChordsAsync(Owner, choiceContext, count);
 
         // 获得格挡
@@ -37,6 +37,6 @@ public class SecretPractice() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncom
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(4m); // 10 → 14
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

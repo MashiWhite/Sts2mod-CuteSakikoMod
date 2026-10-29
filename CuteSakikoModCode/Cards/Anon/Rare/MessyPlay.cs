@@ -16,7 +16,11 @@ public class MessyPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, Targ
 
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new PowerVar<MessyPlayPower>(1m); } // 未升级每次额外1个音符
+        get
+        {
+            yield return new PowerVar<MessyPlayPower>(1m); // 未升级每次额外1个音符
+            yield return new DynamicVar("Threshold", 3);
+        }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -34,7 +38,7 @@ public class MessyPlay() : CuteAnonCard(2, CardType.Power, CardRarity.Rare, Targ
         if (existing != null)
         {
             // 已存在能力：增加层数（额外音符数），并更新阈值（如果升级版则缩短间隔）
-            existing.UpdateThreshold(IsUpgraded ? 2 : 3);
+            existing.UpdateThreshold(DynamicVars["Threshold"].IntValue);
             await PowerCmd.ModifyAmount(choiceContext, existing, amount, Owner.Creature, this);
         }
         else

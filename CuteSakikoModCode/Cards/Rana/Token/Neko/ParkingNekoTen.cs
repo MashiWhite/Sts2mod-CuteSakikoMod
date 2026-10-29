@@ -20,7 +20,7 @@ public class ParkingNekoTen : NekoCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var times = DynamicVars.Repeat.IntValue;
+        var times = DynamicVars["Repeat"].IntValue;
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .WithHitCount(times)
             .FromCard(this, cardPlay)
@@ -31,6 +31,6 @@ public class ParkingNekoTen : NekoCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Repeat.UpgradeValueBy(2);
+        DynamicVars["Repeat"].UpgradeValueBy(2);
     }
 }

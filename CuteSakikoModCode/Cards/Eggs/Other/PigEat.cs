@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -8,6 +9,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 public class PigEat() : OtherModTokenCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal, CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("Increase", 1)
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -23,13 +29,14 @@ public class PigEat() : OtherModTokenCard(0, CardType.Skill, CardRarity.Common, 
         foreach (var card in cardsInHand) await CardPileCmd.RemoveFromCombat(card);
 
         // 每移除一张增加最大生命值（基础1，升级2）
-        var increasePerCard = IsUpgraded ? 2 : 1;
-        var totalIncrease = removeCount * increasePerCard;
+        var read = DynamicVars["Increase"].IntValue;
+        var totalIncrease = removeCount * read;
         if (totalIncrease > 0) await CreatureCmd.GainMaxHp(Owner.Creature, totalIncrease);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Increase"].UpgradeValueBy(1m);
 
     }
 }

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -21,8 +21,9 @@ public class CatchNeko : CuteRanaCard
 
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => new[]
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
+        new CardsVar(1),
         new DamageVar(8m, ValueProp.Move)
     };
 
@@ -44,7 +45,7 @@ public class CatchNeko : CuteRanaCard
         }
 
         // 从所有牌堆中打出猫咪（升级前1只，升级后2只）
-        var catCount = IsUpgraded ? 2 : 1;
+        var catCount = DynamicVars.Cards.IntValue;
         await PlayCatsFromAllPiles(choiceContext, Owner, catCount);
     }
 
@@ -104,6 +105,7 @@ public class CatchNeko : CuteRanaCard
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Cards.UpgradeValueBy(1m);
         DynamicVars.Damage.UpgradeValueBy(2m); // 8 -> 10
     }
 }

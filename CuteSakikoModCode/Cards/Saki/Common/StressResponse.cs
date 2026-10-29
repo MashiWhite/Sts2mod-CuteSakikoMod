@@ -15,11 +15,11 @@ public class StressResponse : CuteSakikoModCard
     public StressResponse() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
-
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
         {
+            yield return new DynamicVar("Multiplier", 2);
             yield return new PowerVar<PressurePower>("Pressure", 0m);
             yield return new PressureDamageVar();
         }
@@ -43,8 +43,8 @@ public class StressResponse : CuteSakikoModCard
         if (layers <= 0) return;
 
         // 基础 2 倍，升级后 3 倍
-        var multiplier = IsUpgraded ? 3 : 2;
-        var damage = layers * multiplier;
+        var read = DynamicVars["Multiplier"].IntValue;
+        var damage = layers * read;
 
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
@@ -55,6 +55,7 @@ public class StressResponse : CuteSakikoModCard
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Multiplier"].UpgradeValueBy(1m);
         // 费用不变，伤害倍数提升，在 OnPlay 和预览中通过 IsUpgraded 控制
     }
 

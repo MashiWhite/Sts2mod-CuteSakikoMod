@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -13,7 +13,8 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(8m, ValueProp.Move)
+        new DamageVar(8m, ValueProp.Move),
+        new DynamicVar("NeedPressure", 8)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -29,11 +30,12 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
     {
         get
         {
-            // 存在任意可命中的敌人拥有至少 5 层压力时，卡牌高亮
+            // 存在任意可命中的敌人拥有压力达到阈值时，卡牌高亮
+            var need = DynamicVars["NeedPressure"].IntValue;
             var combat = Owner?.Creature?.CombatState;
             if (combat == null) return false;
             return combat.HittableEnemies.Any(e =>
-                e.GetPower<PressurePower>() is PressurePower p && p.Amount >= 5);
+                e.GetPower<PressurePower>() is PressurePower p && p.Amount >= need);
         }
     }
 
@@ -46,10 +48,10 @@ public class AngrySaki() : CuteSakikoModCard(0, CardType.Attack, CardRarity.Rare
 
         // 检查目标身上的压力，计算额外攻击次数
         var targetPressure = cardPlay.Target.GetPower<PressurePower>();
-        var needPressure = IsUpgradable ? 5 : 8;
+        var needPressure = DynamicVars["NeedPressure"].IntValue;
         if (targetPressure != null && targetPressure.Amount >= needPressure)
         {
-            extraHits = targetPressure.Amount / needPressure; // 每5层一次
+            extraHits = targetPressure.Amount / needPressure; // 每 N 层一次
             var consumeAmount = extraHits * needPressure; // 需要消耗的层数
             await PowerCmd.ModifyAmount(choiceContext, targetPressure, -consumeAmount, Owner.Creature, this);
         }

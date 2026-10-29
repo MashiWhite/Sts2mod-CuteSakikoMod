@@ -1,4 +1,4 @@
-﻿namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
+namespace CuteSakikoMod.CuteSakikoModCode.Others.Config;
 
 public sealed class RunGameplayConfigData
 {
@@ -8,6 +8,8 @@ public sealed class RunGameplayConfigData
     public bool EnableCustomEvents { get; set; } = true;
     public bool ScalePressureInMultiplayer { get; set; }
     
+    /// <summary>权重系统总开关，默认关闭。</summary>
+    public bool UseModWeight { get; set; }
     public bool UseModAncientWeight { get; set; } = true;
     public float ModAncientWeight { get; set; } = 0.5f;
     public bool UseModBossWeight { get; set; } = true;
@@ -22,6 +24,7 @@ public sealed class RunGameplayConfigData
         EnableCustomAncients = cfg.EnableCustomAncients;
         EnableCustomEvents = cfg.EnableCustomEvents;
         ScalePressureInMultiplayer = cfg.ScalePressureInMultiplayer;
+        UseModWeight = cfg.UseModWeight;
         UseModAncientWeight = cfg.UseModAncientWeight;
         ModAncientWeight = cfg.ModAncientWeight;
         UseModBossWeight = cfg.UseModBossWeight;
@@ -37,6 +40,7 @@ public sealed class RunGameplayConfigData
         cfg.EnableCustomAncients = EnableCustomAncients;
         cfg.EnableCustomEvents = EnableCustomEvents;
         cfg.ScalePressureInMultiplayer = ScalePressureInMultiplayer;
+        cfg.UseModWeight = UseModWeight;
         cfg.UseModAncientWeight = UseModAncientWeight;
         cfg.ModAncientWeight = ModAncientWeight;
         cfg.UseModBossWeight = UseModBossWeight;

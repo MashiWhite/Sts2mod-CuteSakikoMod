@@ -1,4 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -12,6 +13,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class BeGod() : CuteSakikoModCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("Layers", 1)
+    ];
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get
@@ -25,11 +31,12 @@ public class BeGod() : CuteSakikoModCard(3, CardType.Power, CardRarity.Rare, Tar
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var layers = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<BeGodPower>(choiceContext, Owner.Creature, layers, Owner.Creature, this);
+        var read = DynamicVars["Layers"].IntValue;
+        await PowerCmd.Apply<BeGodPower>(choiceContext, Owner.Creature, read, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Layers"].UpgradeValueBy(1m);
     }
 }

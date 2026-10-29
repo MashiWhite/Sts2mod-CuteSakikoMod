@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -16,6 +17,11 @@ public class WatchNeko : CuteRanaCard
     {
     }
 
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("AddCount", 1)
+    ];
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromKeyword(CutesakiKeywords.Neko.GetModCardKeyword()); }
@@ -23,7 +29,7 @@ public class WatchNeko : CuteRanaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var addCount = IsUpgraded ? 2 : 1;
+        var read = DynamicVars["AddCount"].IntValue;
 
         // 从卡池中获取所有“猫咪”卡
         var allNekoCards = ModelDb.CardPool<CuteSakikoTokenCardPool>()
@@ -37,7 +43,7 @@ public class WatchNeko : CuteRanaCard
         var rng = Owner.RunState.Rng.CombatCardGeneration;
 
         // 随机生成猫咪卡并加入手牌（本场战斗 0 费）
-        for (var i = 0; i < addCount; i++)
+        for (var i = 0; i < read; i++)
         {
             var template = rng.NextItem(allNekoCards);
             var newCard = combatState.CreateCard(template, Owner);
@@ -51,6 +57,7 @@ public class WatchNeko : CuteRanaCard
 
     protected override void OnUpgrade()
     {
+        DynamicVars["AddCount"].UpgradeValueBy(1m);
         // 升级效果（猫咪数量）在 OnPlay 中通过 IsUpgraded 判断
     }
 }

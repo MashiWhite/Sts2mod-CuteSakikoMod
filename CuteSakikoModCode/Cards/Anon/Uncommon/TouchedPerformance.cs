@@ -26,13 +26,13 @@ public class TouchedPerformance() : CuteAnonCard(1, CardType.Skill, CardRarity.U
         await CardPileCmd.Draw(choiceContext, drawCount, Owner);
 
         // 演奏最新储存的和弦
-        var count = DynamicVars.Repeat.IntValue;
+        var count = DynamicVars["Repeat"].IntValue;
         ChordNoteSystem.Activate(Owner);
         await ChordNoteSystem.PlayLastStoredChordAsync(Owner, choiceContext, count);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

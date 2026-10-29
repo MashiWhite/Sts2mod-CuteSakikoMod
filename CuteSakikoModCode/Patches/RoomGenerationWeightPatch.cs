@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Models;
@@ -19,6 +19,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
     {
         public static void Postfix(RunManager __instance)
         {
+            // 总开关：默认关闭。关闭时直接返回，不消耗 RNG、不改任何 rooms，
+            // 保证完全不干预原版/其他 mod 的房间生成。
+            if (!ModConfig.UseModWeight) return;
+
             var state = __instance.DebugOnlyGetState();
             if (state == null) return;
 
@@ -64,10 +68,24 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
 
                     if (modBosses.Count > 0)
                     {
+                        // ⚠️ 先记录原版已经抽出的 SecondBoss。
+                        // 原版 ActModel.cs:399 是"先定 Boss，再在排除原版 Boss 的前提下抽 SecondBoss"，
+                        // 而模组遭遇本就在 AllBossEncounters 里，所以原版可能已经把某个模组 Boss 抽成 SecondBoss。
+                        // 若改 Boss 时仍只按原版 Boss 排除，新 Boss 就会和 SecondBoss 撞成同一个 → 第三幕出现两个相同 Boss。
+                        var originalSecondBoss = rooms.HasSecondBoss ? rooms.SecondBoss : null;
+                        var originalSecondBossId = originalSecondBoss?.Id;
+
+                        var bossCandidates = originalSecondBossId == null
+                            ? modBosses
+                            : modBosses.Where(b => b.Id != originalSecondBossId).ToList();
+
+                        // 模组只有一个 Boss 且它已经是 SecondBoss 时，没有可换的候选，保持原样
+                        if (bossCandidates.Count == 0) bossCandidates = modBosses;
+
                         // 处理第一个 Boss
                         if (rngState.NextFloat() < ModConfig.ModBossWeight)
                         {
-                            rooms.Boss = modBosses[rngState.NextInt(modBosses.Count)];
+                            rooms.Boss = bossCandidates[rngState.NextInt(bossCandidates.Count)];
                         }
 
                         // 处理第二个 Boss（只有在进阶 10 且是最后一幕时，原版才会生成 SecondBoss）
@@ -85,6 +103,19 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
                                 // 模组只有一个 Boss，且第一个 Boss 没抽中我们，第二个 Boss 就给模组
                                 rooms.SecondBoss = modBosses[0];
                             }
+                        }
+
+                        // 兜底：任何分支都不允许两个 Boss 变成同一个（实测第三幕会撞）
+                        if (rooms.HasSecondBoss && rooms.SecondBoss != null && rooms.SecondBoss.Id == rooms.Boss.Id)
+                        {
+                            // 优先换成另一个模组 Boss；没有就退回原版抽出的那个。
+                            // ⚠️ 绝不能置空 —— SecondBoss 置 null 会让"进阶10双 Boss"走单 Boss 分支而出 bug。
+                            // 两者都不可用时保持相同 Boss（一般不会出现），由玩家自行重开。
+                            var alternative = modBosses.FirstOrDefault(b => b.Id != rooms.Boss.Id);
+                            if (alternative == null && originalSecondBossId != rooms.Boss.Id)
+                                alternative = originalSecondBoss;
+
+                            if (alternative != null) rooms.SecondBoss = alternative;
                         }
                     }
                 }

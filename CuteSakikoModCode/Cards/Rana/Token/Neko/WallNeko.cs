@@ -11,18 +11,18 @@ public class WallNeko : NekoCard
     public WallNeko() : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
     {
     }
-
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
+        new DynamicVar("Times", 3),
         new DamageVar(1m, ValueProp.Move)
     };
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var times = IsUpgraded ? 6 : 3;
+        var read = DynamicVars["Times"].IntValue;
         await DamageCmd.Attack(DynamicVars.Damage.IntValue)
             .FromCard(this, cardPlay)
-            .WithHitCount(times)
+            .WithHitCount(read)
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
@@ -30,5 +30,6 @@ public class WallNeko : NekoCard
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Times"].UpgradeValueBy(3m);
     }
 }

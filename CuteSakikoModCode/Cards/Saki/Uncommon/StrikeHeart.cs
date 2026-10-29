@@ -42,7 +42,7 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
                 this);
 
         // 造成多次1点伤害（使用动态伤害值，受力量加成）
-        var hitCount = DynamicVars.Repeat.IntValue;
+        var hitCount = DynamicVars["Repeat"].IntValue;
         var damage = DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
@@ -54,6 +54,6 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Repeat.UpgradeValueBy(2);
+        DynamicVars["Repeat"].UpgradeValueBy(2);
     }
 }

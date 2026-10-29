@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -14,7 +14,29 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 
 public static class ChordNoteSystem
 {
+    /// <summary>
+    ///     可扩展的储存和弦容量提供者（遗物/符文实现它来提高上限，如海克斯"四重奏"）。
+    /// </summary>
+    public interface IStoredChordCapacityProvider
+    {
+        /// <summary>额外储存位数，叠加在默认 MaxStoredChords 之上。</summary>
+        int ExtraStoredChordCapacity { get; }
+    }
+
     public const int MaxStoredChords = 3;
+
+    /// <summary>
+    ///     当前玩家实际可用的储存上限 = MaxStoredChords + 所有提供者叠加的额外容量。
+    /// </summary>
+    public static int GetMaxStoredChords(Player player)
+    {
+        if (player?.Relics == null) return MaxStoredChords;
+        var extra = 0;
+        foreach (var relic in player.Relics)
+            if (relic is IStoredChordCapacityProvider provider)
+                extra += provider.ExtraStoredChordCapacity;
+        return MaxStoredChords + extra;
+    }
 
     private static readonly SavedAttachedState<Player, string> _savedState =
         new("chord_note_state", () => "");
@@ -264,7 +286,7 @@ public static class ChordNoteSystem
             state.StoredChords.Add(chordId);
 
         string? overflowChord = null;
-        while (state.StoredChords.Count > MaxStoredChords)
+        while (state.StoredChords.Count > GetMaxStoredChords(player))
         {
             overflowChord ??= state.StoredChords[0];
             state.StoredChords.RemoveAt(0);
@@ -544,7 +566,7 @@ public static class ChordNoteSystem
 
             state.StoredChords.Add(chordId);
 
-            while (state.StoredChords.Count > MaxStoredChords)
+            while (state.StoredChords.Count > GetMaxStoredChords(player))
             {
                 var overflow = state.StoredChords[0];
                 state.StoredChords.RemoveAt(0);

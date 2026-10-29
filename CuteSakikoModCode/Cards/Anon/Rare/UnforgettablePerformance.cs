@@ -36,7 +36,7 @@ public class UnforgettablePerformance : CuteAnonCard
         if (existing != null)
         {
             // 如果能力已存在，更新阈值并叠加层数
-            existing.UpdateThreshold(IsUpgraded ? 2 : 3);
+            existing.UpdateThreshold(DynamicVars["Threshold"].IntValue);
             await PowerCmd.ModifyAmount(choiceContext, existing, 1, Owner.Creature, this);
         }
         else

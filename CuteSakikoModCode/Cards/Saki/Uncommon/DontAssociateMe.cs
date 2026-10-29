@@ -17,6 +17,7 @@ public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity
     // 动态变量：格挡值（基础13，升级17）
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new DynamicVar("PowerAmount", 4),
         new BlockVar(13m, ValueProp.Move)
     ];
 
@@ -37,12 +38,13 @@ public class DontAssociateMe() : CuteSakikoModCard(2, CardType.Skill, CardRarity
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
 
         // 施加能力：基础4层，升级6层
-        var powerAmount = IsUpgraded ? 6 : 4;
-        await PowerCmd.Apply<DontAssociateMePower>(choiceContext, Owner.Creature, powerAmount, Owner.Creature, this);
+        var read = DynamicVars["PowerAmount"].IntValue;
+        await PowerCmd.Apply<DontAssociateMePower>(choiceContext, Owner.Creature, read, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["PowerAmount"].UpgradeValueBy(2m);
         // 升级：格挡增加4点（13→17）
         DynamicVars.Block.UpgradeValueBy(4m);
     }

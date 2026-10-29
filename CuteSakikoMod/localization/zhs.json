@@ -1,4 +1,6 @@
-﻿{
+{
+  "MOD_SETTINGS.MOD_WEIGHT.LABEL": "启用 mod 内容权重设置",
+  "MOD_SETTINGS.MOD_WEIGHT.DESC": "总开关，默认关闭。关闭时完全不干预房间生成；打开后下面的各项权重才会生效。",
   "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL": "自定义先古之民出现权重",
   "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC": "决定先古之民生成时，由你的 mod 替换原版先古的概率。",
   "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL": "自定义 Boss 出现权重",

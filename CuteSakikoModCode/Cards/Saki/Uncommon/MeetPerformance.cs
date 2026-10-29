@@ -13,6 +13,7 @@ public class MeetPerformance() : CuteSakikoModCard(2, CardType.Power, CardRarity
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new DynamicVar("Layers", 2),
         new("Power", 1m) // 占位变量
     ];
 
@@ -29,12 +30,13 @@ public class MeetPerformance() : CuteSakikoModCard(2, CardType.Power, CardRarity
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        var layers = IsUpgraded ? 3 : 2;
-        await PowerCmd.Apply<MeetPerformancePower>(choiceContext, Owner.Creature, layers, Owner.Creature, this);
+        var read = DynamicVars["Layers"].IntValue;
+        await PowerCmd.Apply<MeetPerformancePower>(choiceContext, Owner.Creature, read, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Layers"].UpgradeValueBy(1m);
         // 升级效果在层数中体现
     }
 }

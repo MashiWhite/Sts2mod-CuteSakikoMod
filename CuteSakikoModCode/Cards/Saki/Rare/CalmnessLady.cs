@@ -9,8 +9,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Rare;
 
 public class CalmnessLady() : CuteSakikoModCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
-
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("Layers", 1)
+    ];
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get { yield return HoverTipFactory.FromPower<CalmnessLadyPower>(); }
@@ -18,11 +20,12 @@ public class CalmnessLady() : CuteSakikoModCard(1, CardType.Power, CardRarity.Ra
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var layers = IsUpgraded ? 2 : 1;
-        await PowerCmd.Apply<CalmnessLadyPower>(choiceContext, Owner.Creature, layers, Owner.Creature, this);
+        var read = DynamicVars["Layers"].IntValue;
+        await PowerCmd.Apply<CalmnessLadyPower>(choiceContext, Owner.Creature, read, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Layers"].UpgradeValueBy(1m);
     }
 }

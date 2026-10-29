@@ -1,4 +1,5 @@
 ﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -11,6 +12,11 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
 public class SongOfStrength() : CuteAnonCard(-1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("PerN", 4)
+    ];
+
     protected override bool HasEnergyCostX => true;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
@@ -45,7 +51,7 @@ public class SongOfStrength() : CuteAnonCard(-1, CardType.Power, CardRarity.Unco
         var x = ResolveEnergyXValue();
         if (x <= 0) return;
 
-        var perN = IsUpgraded ? 3 : 4;
+        var perN = DynamicVars["PerN"].IntValue;
 
         var strengthAmount = attackCount / perN * x;
         var dexterityAmount = skillCount / perN * x;
@@ -58,5 +64,6 @@ public class SongOfStrength() : CuteAnonCard(-1, CardType.Power, CardRarity.Unco
 
     protected override void OnUpgrade()
     {
+        DynamicVars["PerN"].UpgradeValueBy(-1m);
     }
 }

@@ -31,7 +31,7 @@ public class PlayedTerribly() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        var hitCount = DynamicVars.Repeat.IntValue;
+        var hitCount = DynamicVars["Repeat"].IntValue;
         var damage = DynamicVars.Damage.BaseValue;
 
         // 一次多段随机攻击
@@ -55,6 +55,6 @@ public class PlayedTerribly() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

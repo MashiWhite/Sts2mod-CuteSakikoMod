@@ -128,6 +128,17 @@ public class Entry
                 GameplayConfigSync.OnLocalConfigChanged();
             }
         );
+        // 权重系统总开关（默认关闭）——关闭时不干预任何房间生成
+        var modWeightBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+            ModId, "config",
+            model => model.UseModWeight,
+            (model, value) =>
+            {
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
+                model.UseModWeight = value;
+                GameplayConfigSync.OnLocalConfigChanged();
+            }
+        );
         var volumeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
             ModId, "config",
             model => model.ModBgmVolume,
@@ -221,23 +232,29 @@ public class Entry
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.SCALE_PRESSURE.DESC",
                         "Scale Pressure stacks applied to enemies based on player count in multiplayer. Host-authoritative."))
                 .WithEntryEnabledWhen("scale_pressure_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+                .AddToggle("mod_weight_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_WEIGHT.LABEL", "启用 mod 内容权重设置"),
+                    modWeightBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_WEIGHT.DESC",
+                        "总开关，默认关闭。关闭时完全不影响房间生成；打开后下面的三项权重才会生效。"))
+                .WithEntryEnabledWhen("mod_weight_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
                 .AddSlider("mod_ancient_weight_slider",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.LABEL", "自定义先古之民出现权重"),
                     modAncientWeightBinding, 0.0, 1.0, 0.05, value => $"{value:P0}",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_ANCIENT_WEIGHT.DESC", "决定先古之民生成时，由你的 mod 替换原版先古的概率。"))
-                .WithEntryEnabledWhen("mod_ancient_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+                .WithEntryEnabledWhen("mod_ancient_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings && ModConfig.UseModWeight)
 
                 .AddSlider("mod_boss_weight_slider",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BOSS_WEIGHT.LABEL", "自定义 Boss 出现权重"),
                     modBossWeightBinding, 0.0, 1.0, 0.05, value => $"{value:P0}",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BOSS_WEIGHT.DESC", "决定关底 Boss 生成时，由你的 mod 替换原版 Boss 的概率。"))
-                .WithEntryEnabledWhen("mod_boss_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+                .WithEntryEnabledWhen("mod_boss_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings && ModConfig.UseModWeight)
 
                 .AddSlider("mod_event_weight_slider",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_EVENT_WEIGHT.LABEL", "自定义事件占比"),
                     modEventWeightBinding, 0.0, 1.0, 0.05, value => $"{value:P0}",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_EVENT_WEIGHT.DESC", "生成事件池时，优先抽取 mod 事件的比例。"))
-                .WithEntryEnabledWhen("mod_event_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+                .WithEntryEnabledWhen("mod_event_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings && ModConfig.UseModWeight)
             )
             .AddSection("reaction", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.REACTION", "Reaction Stickers"))
@@ -524,14 +541,15 @@ public class Entry
         else
             Logger.Warn("RunManager.Instance is null, RunStarted event not subscribed.");
 
+        // 图鉴入口：只保留两个聚合池（彩蛋 / 非彩蛋杂项），stable id 带 mod 前缀防撞车。
         ModContentRegistry.For(ModId)
-            .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoModCardPool>(
-                "cute_sakiko_mod_card_pool",
+            .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoCompendiumEggPool>(
+                "cute_sakiko_compendium_egg_pool",
                 "res://CuteSakikoMod/images/others/others/mod_card_pool_icon.png"
             );
         ModContentRegistry.For(ModId)
-            .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoTokenCardPool>(
-                "cute_sakiko_token_card_pool",
+            .RegisterCardLibraryCompendiumSharedPoolFilter<CuteSakikoCompendiumJunkPool>(
+                "cute_sakiko_compendium_junk_pool",
                 "res://CuteSakikoMod/images/others/others/mod_token_card_pool_icon.png"
             );
 

@@ -15,6 +15,7 @@ public class Disheartened() : CuteSakikoModCard(0, CardType.Attack, CardRarity.C
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new PowerVar<VulnerablePower>(1m),
         new DamageVar(5m, ValueProp.Move)
     ];
 
@@ -35,12 +36,13 @@ public class Disheartened() : CuteSakikoModCard(0, CardType.Attack, CardRarity.C
             .Execute(choiceContext);
 
         // 给予易伤
-        var vulnerableAmount = IsUpgraded ? 2 : 1;
+        var vulnerableAmount = DynamicVars["VulnerablePower"].IntValue;
         await PowerCmd.Apply<VulnerablePower>(choiceContext, cardPlay.Target, vulnerableAmount, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["VulnerablePower"].UpgradeValueBy(1m);
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

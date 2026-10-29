@@ -16,6 +16,7 @@ public class SymbolThree() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Unc
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new DynamicVar("Weak", 1),
         new BlockVar(14m, ValueProp.Move)
     ];
 
@@ -48,14 +49,15 @@ public class SymbolThree() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Unc
             // 消耗2层压力
             await PowerCmd.ModifyAmount(choiceContext, pressure, -2, Owner.Creature, this);
 
-            var weakAmount = IsUpgraded ? 2 : 1;
-            await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies, weakAmount, Owner.Creature,
+            var read = DynamicVars["Weak"].IntValue;
+            await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies, read, Owner.Creature,
                 this);
         }
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Weak"].UpgradeValueBy(1m);
         DynamicVars.Block.UpgradeValueBy(4m);
     }
 }
