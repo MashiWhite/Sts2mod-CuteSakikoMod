@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,6 +10,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Ancient;
 
 public class ParfaitTreat() : CuteRanaCard(2, CardType.Power, CardRarity.Ancient, TargetType.Self)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {
         get

@@ -10,6 +10,20 @@ public enum ButtonClickMode
     LongPress
 }
 
+/// <summary>
+///     「多人事件」（锁定选项刚需多人才能解锁的事件）的出现三态。
+///     滑条三档：0=关闭 1=仅多人 2=开启（从左到右，语义递进）。
+/// </summary>
+public enum MultiplayerEventMode
+{
+    /// <summary>最左：这些事件完全不出现（单人多人都不出现）。</summary>
+    Off = 0,
+    /// <summary>中间：只在多人跑局中出现，单人模式不生成（默认）。</summary>
+    MultiplayerOnly = 1,
+    /// <summary>最右：单人模式也照常出现（缺角色时锁定选项显示为锁定态）。</summary>
+    On = 2
+}
+
 public class CuteSakikoModConfigData
 {
     private bool _enableAudio = true;
@@ -33,6 +47,12 @@ public class CuteSakikoModConfigData
 
     /// <summary>不需要 mod 角色、单人也能体验全部内容的事件（金狗、炒虾、暗巷影猫、星之爱音等）。</summary>
     public bool EnablePlainEvents { get; set; } = true;
+
+    /// <summary>
+    ///     多人事件（锁定选项刚需多人解锁）的出现三态：关闭／仅多人／开启（默认仅多人）。
+    ///     参与联机同步（决定事件能否进池，必须与房主一致）。
+    /// </summary>
+    public MultiplayerEventMode MultiplayerEventMode { get; set; } = MultiplayerEventMode.MultiplayerOnly;
 
     public bool ScalePressureInMultiplayer { get; set; } = false;
 
@@ -101,6 +121,7 @@ public static class ModConfig
     public static bool EnableCustomEvents => Load().EnableCustomEvents;
     public static bool EnableCharacterLockedEvents => Load().EnableCharacterLockedEvents;
     public static bool EnablePlainEvents => Load().EnablePlainEvents;
+    public static MultiplayerEventMode MultiplayerEventMode => Load().MultiplayerEventMode;
     public static bool ScalePressureInMultiplayer => Load().ScalePressureInMultiplayer;
     public static bool EnableReactionReplacement => Load().EnableReactionReplacement;
     public static float ReactionWheelScale => Load().ReactionWheelScale;

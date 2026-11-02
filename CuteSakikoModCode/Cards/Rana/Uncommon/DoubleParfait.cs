@@ -15,7 +15,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 /// </summary>
 public class DoubleParfait : CuteRanaCard
 {
-    public DoubleParfait() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public DoubleParfait() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

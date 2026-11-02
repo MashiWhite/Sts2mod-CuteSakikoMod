@@ -8,6 +8,7 @@ public sealed class GameplayConfigDto
     public bool EnableCustomEvents { get; set; } = true;
     public bool EnableCharacterLockedEvents { get; set; } = true;
     public bool EnablePlainEvents { get; set; } = true;
+    public MultiplayerEventMode MultiplayerEventMode { get; set; } = MultiplayerEventMode.MultiplayerOnly;
     public bool ScalePressureInMultiplayer { get; set; }
     
     /// <summary>权重系统总开关，默认关闭。</summary>
@@ -29,6 +30,7 @@ public sealed class GameplayConfigDto
             EnableCustomEvents = cfg.EnableCustomEvents,
             EnableCharacterLockedEvents = cfg.EnableCharacterLockedEvents,
             EnablePlainEvents = cfg.EnablePlainEvents,
+            MultiplayerEventMode = cfg.MultiplayerEventMode,
             ScalePressureInMultiplayer = cfg.ScalePressureInMultiplayer,
             UseModWeight = cfg.UseModWeight,
             UseModAncientWeight = cfg.UseModAncientWeight,
@@ -48,6 +50,7 @@ public sealed class GameplayConfigDto
         cfg.EnableCustomEvents = EnableCustomEvents;
         cfg.EnableCharacterLockedEvents = EnableCharacterLockedEvents;
         cfg.EnablePlainEvents = EnablePlainEvents;
+        cfg.MultiplayerEventMode = MultiplayerEventMode;
         cfg.ScalePressureInMultiplayer = ScalePressureInMultiplayer;
         cfg.UseModWeight = UseModWeight;
         cfg.UseModAncientWeight = UseModAncientWeight;
@@ -66,6 +69,9 @@ public sealed class GameplayConfigDto
             EnableModMonsters = EnableModMonsters,
             EnableCustomAncients = EnableCustomAncients,
             EnableCustomEvents = EnableCustomEvents,
+            EnableCharacterLockedEvents = EnableCharacterLockedEvents,
+            EnablePlainEvents = EnablePlainEvents,
+            MultiplayerEventMode = MultiplayerEventMode,
             ScalePressureInMultiplayer = ScalePressureInMultiplayer,
             UseModWeight = UseModWeight,
             UseModAncientWeight = UseModAncientWeight,
@@ -86,6 +92,7 @@ public sealed class GameplayConfigDelta
     public bool? EnableCustomEvents { get; set; }
     public bool? EnableCharacterLockedEvents { get; set; }
     public bool? EnablePlainEvents { get; set; }
+    public MultiplayerEventMode? MultiplayerEventMode { get; set; }
     public bool? ScalePressureInMultiplayer { get; set; }
     
     public bool? UseModWeight { get; set; }

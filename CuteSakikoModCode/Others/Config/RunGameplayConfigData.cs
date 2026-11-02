@@ -8,6 +8,7 @@ public sealed class RunGameplayConfigData
     public bool EnableCustomEvents { get; set; } = true;
     public bool EnableCharacterLockedEvents { get; set; } = true;
     public bool EnablePlainEvents { get; set; } = true;
+    public MultiplayerEventMode MultiplayerEventMode { get; set; } = MultiplayerEventMode.MultiplayerOnly;
     public bool ScalePressureInMultiplayer { get; set; }
     
     /// <summary>权重系统总开关，默认关闭。</summary>
@@ -27,6 +28,7 @@ public sealed class RunGameplayConfigData
         EnableCustomEvents = cfg.EnableCustomEvents;
         EnableCharacterLockedEvents = cfg.EnableCharacterLockedEvents;
         EnablePlainEvents = cfg.EnablePlainEvents;
+        MultiplayerEventMode = cfg.MultiplayerEventMode;
         ScalePressureInMultiplayer = cfg.ScalePressureInMultiplayer;
         UseModWeight = cfg.UseModWeight;
         UseModAncientWeight = cfg.UseModAncientWeight;
@@ -45,6 +47,7 @@ public sealed class RunGameplayConfigData
         cfg.EnableCustomEvents = EnableCustomEvents;
         cfg.EnableCharacterLockedEvents = EnableCharacterLockedEvents;
         cfg.EnablePlainEvents = EnablePlainEvents;
+        cfg.MultiplayerEventMode = MultiplayerEventMode;
         cfg.ScalePressureInMultiplayer = ScalePressureInMultiplayer;
         cfg.UseModWeight = UseModWeight;
         cfg.UseModAncientWeight = UseModAncientWeight;

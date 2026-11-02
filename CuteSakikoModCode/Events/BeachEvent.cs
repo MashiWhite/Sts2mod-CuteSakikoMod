@@ -33,6 +33,9 @@ public sealed class BeachEvent : CuteSakikoEvent
     /// <summary>需要爱音+祥子才能解锁第三个选项，归“需要 mod 角色的事件”。</summary>
     protected override bool NeedsModCharacter => true;
 
+    /// <summary>锁定选项需两名玩家（各持对应 mod 角色）才能解锁，属多人刚需，受「多人事件」三态设置控制。</summary>
+    protected override bool RequiresMultiplayerToUnlock => true;
+
     protected override bool IsAllowedInternal(IRunState runState) => true;
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()

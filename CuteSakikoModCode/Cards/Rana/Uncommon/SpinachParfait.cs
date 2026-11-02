@@ -26,7 +26,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 /// </summary>
 public class SpinachParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
-    public SpinachParfait() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public SpinachParfait() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,7 +10,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 public class WantBoth : CuteRanaCard
 {
-    public WantBoth() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public WantBoth() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

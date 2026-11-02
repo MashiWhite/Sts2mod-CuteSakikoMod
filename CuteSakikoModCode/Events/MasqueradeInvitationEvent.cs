@@ -27,6 +27,8 @@ public sealed class MasqueradeInvitationEvent : CuteSakikoEvent
     /// <summary>需要祥子才能解锁专属分支，归“需要 mod 角色的事件”。</summary>
     protected override bool NeedsModCharacter => true;
 
+
+
     protected override bool IsAllowedInternal(IRunState runState)
     {
         return true;

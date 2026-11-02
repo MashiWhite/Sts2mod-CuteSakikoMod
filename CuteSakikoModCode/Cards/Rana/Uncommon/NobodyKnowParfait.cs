@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,7 +12,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 public class NobodyKnowParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
-    public NobodyKnowParfait() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public NobodyKnowParfait() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

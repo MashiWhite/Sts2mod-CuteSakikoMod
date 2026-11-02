@@ -21,7 +21,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 /// </summary>
 public class ParfaitDeliveryNeko : CuteRanaCard
 {
-    public ParfaitDeliveryNeko() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public ParfaitDeliveryNeko() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

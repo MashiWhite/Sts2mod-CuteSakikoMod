@@ -20,6 +20,17 @@ public abstract class CuteSakikoEvent : ModEventTemplate
     /// </summary>
     protected abstract bool NeedsModCharacter { get; }
 
+    /// <summary>
+    ///     本事件的锁定选项是否「刚需多人才能解锁」——即解锁条件要求
+    ///     **至少两名玩家**（当前=两名特定 mod 角色；日后做更多角色/更多玩家数时，
+    ///     凡"单人无论如何凑不齐解锁条件"的事件都算这一类）。
+    ///     true  → 受「多人事件」三态设置控制：关闭=不出现 / 仅多人=只在多人跑局出现（默认）/
+    ///             开启=单人也出现（锁定项照常显示锁定态）。
+    ///     false → 不是多人刚需事件（缺一个角色单人也能解锁），不受该设置影响（默认）。
+    ///     判定与 IsAllowedInternal 一样禁止调用 RNG（生成期反复调用）。
+    /// </summary>
+    protected virtual bool RequiresMultiplayerToUnlock => false;
+
     public sealed override bool IsAllowed(IRunState runState)
     {
         if (!ModConfig.EnableCustomEvents)
@@ -31,8 +42,22 @@ public abstract class CuteSakikoEvent : ModEventTemplate
         if (!typeEnabled)
             return false;
 
+        // ★ 多人事件三态（2026-11-03 用户定义）：关闭=从不出现；仅多人=单人模式不生成；
+        //   开启=单人也出现。多人跑局下恒出现（三态只约束单人）。
+        //   判定用 runState 而非 RunManager.Instance：生成期各端必须用同一输入。
+        if (RequiresMultiplayerToUnlock && !IsMultiplayerRun(runState))
+        {
+            var mode = ModConfig.MultiplayerEventMode;
+            if (mode == MultiplayerEventMode.Off || mode == MultiplayerEventMode.MultiplayerOnly)
+                return false;
+        }
+
         return IsAllowedInternal(runState);
     }
+
+    /// <summary>单人=false / 多人=true。只看玩家数：多人跑局 Players 恒 ≥ 2，且各端一致。</summary>
+    private static bool IsMultiplayerRun(IRunState runState)
+        => runState?.Players != null && runState.Players.Count >= 2;
 
     /// <summary>
     ///     子类可重写此方法，添加除全局开关外的自定义出现条件。

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,7 +12,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 public class HummingParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
-    public HummingParfait() : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public HummingParfait() : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
     {
     }
 

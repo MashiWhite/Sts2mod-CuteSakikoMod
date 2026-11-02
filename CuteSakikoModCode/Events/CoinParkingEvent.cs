@@ -25,6 +25,8 @@ public sealed class CoinParkingEvent : CuteSakikoEvent
     /// <summary>需要乐奈才能解锁“进入Space”，归“需要 mod 角色的事件”。</summary>
     protected override bool NeedsModCharacter => true;
 
+
+
     public override EventAssetProfile AssetProfile => new(
         InitialPortraitPath: "res://CuteSakikoMod/images/events/coin_parking.png"
     );

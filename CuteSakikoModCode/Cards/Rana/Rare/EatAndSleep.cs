@@ -18,7 +18,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 /// </summary>
 public class EatAndSleep : CuteRanaCard
 {
-    public EatAndSleep() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public EatAndSleep() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
     }
 

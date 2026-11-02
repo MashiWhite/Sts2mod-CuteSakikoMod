@@ -139,6 +139,17 @@ public class Entry
                 GameplayConfigSync.OnLocalConfigChanged();
             }
         );
+        // 多人事件三态：0=关闭（从不出现） 1=仅多人（单人不出，默认） 2=开启（单人也出现）
+        var multiplayerEventModeBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+            ModId, "config",
+            model => (double)model.MultiplayerEventMode,
+            (model, value) =>
+            {
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
+                model.MultiplayerEventMode = (MultiplayerEventMode)(int)Math.Round(value);
+                GameplayConfigSync.OnLocalConfigChanged();
+            }
+        );
         var scalePressureBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
             ModId, "config",
             model => model.ScalePressureInMultiplayer,
@@ -469,6 +480,19 @@ public class Entry
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.PLAIN_EVENT.DESC",
                         "不需要 mod 角色即可完整体验的事件，单人游玩也能拿到全部内容。"))
                 .WithEntryEnabledWhen("plain_event_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+                .AddSlider("multiplayer_event_mode_slider",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MULTIPLAYER_EVENT_MODE.LABEL", "多人事件"),
+                    multiplayerEventModeBinding,
+                    0, 2, 1,
+                    value => value switch
+                    {
+                        0 => ModSettingsText.I18N(i18n, "MOD_SETTINGS.MULTIPLAYER_EVENT_MODE.OPTION0", "关闭").Resolve(),
+                        1 => ModSettingsText.I18N(i18n, "MOD_SETTINGS.MULTIPLAYER_EVENT_MODE.OPTION1", "仅多人").Resolve(),
+                        _ => ModSettingsText.I18N(i18n, "MOD_SETTINGS.MULTIPLAYER_EVENT_MODE.OPTION2", "开启").Resolve()
+                    },
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MULTIPLAYER_EVENT_MODE.DESC",
+                        "「多人事件」指锁定选项至少需要两名玩家才能解锁的事件（如需两名玩家各持对应 mod 角色）。关闭=从不出现；仅多人=只在多人模式出现；开启=单人模式也出现（选项仍会锁定）。联机时以房主为准。"))
+                .WithEntryEnabledWhen("multiplayer_event_mode_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings)
             ),
             "event_settings"
         );

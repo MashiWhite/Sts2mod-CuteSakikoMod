@@ -19,7 +19,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 /// </summary>
 public class ParfaitBigBang : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
-    public ParfaitBigBang() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public ParfaitBigBang() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
     {
     }
 

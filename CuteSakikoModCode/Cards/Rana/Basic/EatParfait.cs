@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Ancient;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Ancient;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using MegaCrit.Sts2.Core.Commands;
@@ -15,7 +15,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Basic;
 public class EatParfait()
     : CuteRanaCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self), CuteRanaCard.IEatParfaitCard
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword(), CardKeyword.Exhaust];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips
     {

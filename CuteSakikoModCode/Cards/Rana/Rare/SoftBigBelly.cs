@@ -16,7 +16,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 /// </summary>
 public class SoftBigBelly : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
-    public SoftBigBelly() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public SoftBigBelly() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
     }
 

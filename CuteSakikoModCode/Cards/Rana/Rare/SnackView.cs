@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,7 +12,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 
 public class SnackView : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 {
-    public SnackView() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public SnackView() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
 

@@ -13,7 +13,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 /// </summary>
 public class PickyEater : CuteRanaCard
 {
-    public PickyEater() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
+
+        public PickyEater() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
