@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
@@ -27,6 +27,9 @@ public sealed class EmoDuetEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => false;
+
+    /// <summary>需要祥子+爱音才能解锁“问什么是Emo”，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override bool IsAllowedInternal(IRunState runState)
     {

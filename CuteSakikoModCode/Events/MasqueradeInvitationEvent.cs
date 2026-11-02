@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -23,6 +23,9 @@ public sealed class MasqueradeInvitationEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => false;
+
+    /// <summary>需要祥子才能解锁专属分支，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override bool IsAllowedInternal(IRunState runState)
     {

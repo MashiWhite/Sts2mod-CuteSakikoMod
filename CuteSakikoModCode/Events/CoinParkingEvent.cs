@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -21,6 +21,9 @@ public sealed class CoinParkingEvent : CuteSakikoEvent
     private IHoverTip[]? _relicHoverTips; // 缓存遗物提示
 
     public override bool IsShared => false;
+
+    /// <summary>需要乐奈才能解锁“进入Space”，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     public override EventAssetProfile AssetProfile => new(
         InitialPortraitPath: "res://CuteSakikoMod/images/events/coin_parking.png"

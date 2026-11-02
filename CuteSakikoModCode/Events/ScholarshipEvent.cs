@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
@@ -26,6 +26,9 @@ public sealed class ScholarshipEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => true;
+
+    /// <summary>需要爱音+祥子，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     // 基础 60，CalculateVars 里 ±10，最终范围 50~70
     protected override IEnumerable<DynamicVar> CanonicalVars =>

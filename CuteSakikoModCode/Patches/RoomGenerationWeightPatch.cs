@@ -125,8 +125,13 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
                 // ==========================================
                 if (ModConfig.UseModEventWeight && ModConfig.ModEventWeight >= 0)
                 {
-                    var modEvents = rooms.events.Where(e => e is CuteSakikoEvent).ToList();
-                    var otherEvents = rooms.events.Where(e => e is not CuteSakikoEvent).ToList();
+                    // ★ 只把“本次配置下确实可用”的 mod 事件算进 mod 一侧。
+                    // 被开关排除的事件留在池里交给 RoomSet.EnsureNextEventIsValid 跳过，
+                    // 绝不能直接 RemoveRange —— 那会改变抽签次数，破坏联机 RNG 一致性。
+                    bool IsActiveModEvent(EventModel e) => e is CuteSakikoEvent && e.IsAllowed(state);
+
+                    var modEvents = rooms.events.Where(IsActiveModEvent).ToList();
+                    var otherEvents = rooms.events.Where(e => !IsActiveModEvent(e)).ToList();
 
                     if (modEvents.Count > 0 && otherEvents.Count > 0)
                     {

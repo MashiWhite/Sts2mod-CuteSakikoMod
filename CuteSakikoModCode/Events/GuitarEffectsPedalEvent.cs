@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Enchantments;
+using CuteSakikoMod.CuteSakikoModCode.Enchantments;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -22,6 +22,9 @@ public sealed class GuitarEffectsPedalEvent : CuteSakikoEvent
 
     public override string? CustomInitialPortraitPath =>
         "CuteSakikoMod/images/events/guitar_effects_pedal.png";
+
+    /// <summary>爱音专属内容（需要全员持有爱音的吉他），归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

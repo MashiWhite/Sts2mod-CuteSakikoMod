@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
@@ -29,6 +29,9 @@ public sealed class MysteriousMallEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => true;
+
+    /// <summary>需要乐奈才能解锁专属选项，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

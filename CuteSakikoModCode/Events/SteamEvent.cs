@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
@@ -25,6 +25,9 @@ public sealed class SteamEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => false;
+
+    /// <summary>需要爱音+祥子，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override bool IsAllowedInternal(IRunState runState)
     {

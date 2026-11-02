@@ -118,6 +118,27 @@ public class Entry
                 GameplayConfigSync.OnLocalConfigChanged();
             }
         );
+        // 事件分类子开关：需要 mod 角色 / 普通事件
+        var characterLockedEventBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+            ModId, "config",
+            model => model.EnableCharacterLockedEvents,
+            (model, value) =>
+            {
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
+                model.EnableCharacterLockedEvents = value;
+                GameplayConfigSync.OnLocalConfigChanged();
+            }
+        );
+        var plainEventBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
+            ModId, "config",
+            model => model.EnablePlainEvents,
+            (model, value) =>
+            {
+                if (GameplayConfigSync.ShouldLockGameplaySettings) return;
+                model.EnablePlainEvents = value;
+                GameplayConfigSync.OnLocalConfigChanged();
+            }
+        );
         var scalePressureBinding = ModSettingsBindings.Global<CuteSakikoModConfigData, bool>(
             ModId, "config",
             model => model.ScalePressureInMultiplayer,
@@ -198,10 +219,60 @@ public class Entry
         var i18n = I18n;
 
         // 3. 注册设置界面
+        //    ── 2026-11-02 重构：主页面只保留「分类导航」，具体设置全部下沉到 5 个子页
+        //       （游戏内容 / 事件 / 视听 / 按钮 / 音频）。
+        //       子页由下方 4 段 RegisterModSettings(...).AsChildOf(ModId) 注册，
+        //       主页面用 AddSubpage("xxx_entry", 标签, "子页 id", 按钮文字, 说明) 挂上去。
+        //       ⚠️ AddSubpage 的第 3 个参数必须是已注册子页的 pageId，写错会点不开。
         RitsuLibFramework.RegisterModSettings(ModId, page => page
             .WithModDisplayName(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DISPLAY_NAME", "Cute Sakiko Mod"))
             .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.TITLE", "Cute Sakiko Mod Settings"))
             .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.DESCRIPTION", "Cute Sakiko Mod Settings"))
+            .AddSection("nav", section => section
+                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.NAV", "设置分类"))
+                .AddSubpage("game_content_entry",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.GAME_CONTENT_PAGE.LABEL", "游戏内容"),
+                    "game_content_page",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.GAME_CONTENT_PAGE.BUTTON", "打开"),
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.GAME_CONTENT_PAGE.DESC",
+                        "彩蛋卡、怪物、先古之民、联机压力缩放，以及 mod 内容权重。"))
+                .AddSubpage("event_settings_entry",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.EVENT_SETTINGS.LABEL", "事件设置"),
+                    "event_settings",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.EVENT_SETTINGS.BUTTON", "打开"),
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.EVENT_SETTINGS.DESC",
+                        "总开关与分类开关：需要 mod 角色的事件 / 普通事件。"))
+                .AddSubpage("visual_entry",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.VISUAL_PAGE.LABEL", "视听表现"),
+                    "visual_page",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.VISUAL_PAGE.BUTTON", "打开"),
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.VISUAL_PAGE.DESC",
+                        "贴图表情替换、转盘与表情尺寸。"))
+                .AddSubpage("button_click_entry",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_PAGE.LABEL", "按钮设置"),
+                    "button_click_page",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_PAGE.BUTTON", "打开"),
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_PAGE.DESC",
+                        "按钮点击方式、双击间隔、长按时长与垂直位置。"))
+                .AddSubpage("audio_entry",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_PAGE.LABEL", "音频"),
+                    "audio_page",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_PAGE.BUTTON", "打开"),
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_PAGE.DESC",
+                        "mod 音效与背景音乐音量。"))
+            ),
+            // ★ 必须显式给 pageId：不传时默认用 ModId 作 pageId，
+            //   而子页若不传也会撞上同一个 key，导致「后注册的整页替换前面的」（见 配置存档联机.txt §6.4）
+            ModId
+        );
+
+        // 3.1 子页：游戏内容（彩蛋 / 怪物 / 先古 / 压力缩放 / 内容权重）
+        RitsuLibFramework.RegisterModSettings(ModId, page => page
+            .AsChildOf(ModId)
+            .WithSortOrder(10)
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.GAME_CONTENT_PAGE.TITLE", "游戏内容"))
+            .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.GAME_CONTENT_PAGE.TITLE_DESC",
+                "控制 mod 的卡牌彩蛋、怪物、先古之民、联机压力缩放与内容权重。"))
             .AddSection("game_content", section => section
                 .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.GAME_CONTENT", "Game Content"))
                 .AddToggle("egg_toggle",
@@ -220,12 +291,6 @@ public class Entry
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.ANCIENT_TOGGLE.DESC",
                         "Allow custom ancient events to appear naturally."))
                 .WithEntryEnabledWhen("ancient_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
-                .AddToggle("custom_event_toggle",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL", "Custom Events"),
-                    customEventBinding,
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC",
-                        "Allow custom events to appear naturally."))
-                .WithEntryEnabledWhen("custom_event_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
                 .AddToggle("scale_pressure_toggle",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.SCALE_PRESSURE.LABEL", "Multiplayer Pressure Scaling"),
                     scalePressureBinding,
@@ -255,99 +320,157 @@ public class Entry
                     modEventWeightBinding, 0.0, 1.0, 0.05, value => $"{value:P0}",
                     ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_EVENT_WEIGHT.DESC", "生成事件池时，优先抽取 mod 事件的比例。"))
                 .WithEntryEnabledWhen("mod_event_weight_slider", () => !GameplayConfigSync.ShouldLockGameplaySettings && ModConfig.UseModWeight)
-            )
+            ), "game_content_page");
+
+        // 3.2 子页：视听表现（表情贴图替换 / 转盘与表情尺寸）
+        RitsuLibFramework.RegisterModSettings(ModId, page => page
+            .AsChildOf(ModId)
+            .WithSortOrder(20)
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.VISUAL_PAGE.TITLE", "视听表现"))
+            .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.VISUAL_PAGE.TITLE_DESC",
+                "控制 mod 表情贴图替换，以及反应转盘与弹出表情的尺寸。"))
             .AddSection("reaction", section => section
-                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.REACTION", "Reaction Stickers"))
-                .AddToggle("reaction_replacement_toggle",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_REPLACEMENT.LABEL", "Replace Stickers"),
-                    reactionBinding,
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_REPLACEMENT.DESC",
-                        "Replace vanilla reaction stickers with mod character portraits."))
-                .AddSlider("reaction_wheel_scale_slider",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_WHEEL_SCALE.LABEL", "Wheel Scale"),
-                    wheelScaleBinding,
-                    0.5, 3.0, 0.1,
-                    value => $"{value:F1}x",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_WHEEL_SCALE.DESC",
-                        "Scale of the reaction wheel (1.0 = vanilla size)."))
-                .WithEntryEnabledWhen("reaction_wheel_scale_slider", () => ModConfig.EnableReactionReplacement)
-                .AddSlider("reaction_emote_scale_slider",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_EMOTE_SCALE.LABEL", "Emote Scale"),
-                    emoteScaleBinding,
-                    1.0, 6.0, 0.5,
-                    value => $"{value:F1}x",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_EMOTE_SCALE.DESC",
-                        "Scale of the popped-out reaction emote (3.0 = vanilla 3x)."))
-                .WithEntryEnabledWhen("reaction_emote_scale_slider", () => ModConfig.EnableReactionReplacement)
-            )
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.REACTION", "Reaction Stickers"))
+            .AddToggle("reaction_replacement_toggle",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_REPLACEMENT.LABEL", "Replace Stickers"),
+                reactionBinding,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_REPLACEMENT.DESC",
+                    "Replace vanilla reaction stickers with mod character portraits."))
+            .AddSlider("reaction_wheel_scale_slider",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_WHEEL_SCALE.LABEL", "Wheel Scale"),
+                wheelScaleBinding,
+                0.5, 3.0, 0.1,
+                value => $"{value:F1}x",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_WHEEL_SCALE.DESC",
+                    "Scale of the reaction wheel (1.0 = vanilla size)."))
+            .WithEntryEnabledWhen("reaction_wheel_scale_slider", () => ModConfig.EnableReactionReplacement)
+            .AddSlider("reaction_emote_scale_slider",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_EMOTE_SCALE.LABEL", "Emote Scale"),
+                emoteScaleBinding,
+                1.0, 6.0, 0.5,
+                value => $"{value:F1}x",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.REACTION_EMOTE_SCALE.DESC",
+                    "Scale of the popped-out reaction emote (3.0 = vanilla 3x)."))
+            .WithEntryEnabledWhen("reaction_emote_scale_slider", () => ModConfig.EnableReactionReplacement)
+            ), "visual_page");
+
+        // 3.3 子页：按钮设置（点击方式 / 双击间隔 / 长按 / 垂直位置）
+        RitsuLibFramework.RegisterModSettings(ModId, page => page
+            .AsChildOf(ModId)
+            .WithSortOrder(30)
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_PAGE.TITLE", "按钮设置"))
+            .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_PAGE.TITLE_DESC",
+                "控制 mod 按钮的点击方式、双击判定间隔、长按时长与垂直位置。"))
             .AddSection("button_click", section => section
-                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.BUTTON_CLICK", "Button Click"))
-                .AddChoice("button_click_mode",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LABEL", "Click Mode"),
-                    new ModSettingsValueBinding<CuteSakikoModConfigData, ButtonClickMode>(
-                        ModId, "config", SaveScope.Global,
-                        model => model.ButtonClickMode,
-                        (model, value) => model.ButtonClickMode = value),
-                    new[]
-                    {
-                        new ModSettingsChoiceOption<ButtonClickMode>(
-                            ButtonClickMode.SingleClick,
-                            ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.SINGLE", "Single Click")),
-                        new ModSettingsChoiceOption<ButtonClickMode>(
-                            ButtonClickMode.DoubleClick,
-                            ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.DOUBLE", "Double Click")),
-                        new ModSettingsChoiceOption<ButtonClickMode>(
-                            ButtonClickMode.LongPress,
-                            ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LONG_PRESS", "Long Press"))
-                    },
-                    presentation: ModSettingsChoicePresentation.Dropdown)
-                .AddSlider("double_click_interval",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.LABEL", "Double Click Interval"),
-                    ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
-                        ModId, "config",
-                        model => model.DoubleClickInterval,
-                        (model, value) => model.DoubleClickInterval = (float)value),
-                    0.1, 1.0, 0.05,
-                    value => $"{value:F2}s",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.DESC",
-                        "Maximum time between two clicks."))
-                .AddSlider("long_press_duration",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.LABEL", "Long Press Duration"),
-                    ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
-                        ModId, "config",
-                        model => model.LongPressDuration,
-                        (model, value) => model.LongPressDuration = (float)value),
-                    0.2, 2.0, 0.05,
-                    value => $"{value:F2}s",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.DESC",
-                        "How long to hold before confirming."))
-                .AddSlider("button_pos_y",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.POS_Y.LABEL", "Vertical Position (Y)"),
-                    buttonPosYBinding,
-                    0.1, 0.9, 0.01,
-                    value => $"{value:P0}",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.POS_Y.DESC", 
-                        "Adjust the vertical position of mod buttons. (X-axis is fixed to right edge)"))
-            )
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.BUTTON_CLICK", "Button Click"))
+            .AddChoice("button_click_mode",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LABEL", "Click Mode"),
+                new ModSettingsValueBinding<CuteSakikoModConfigData, ButtonClickMode>(
+                    ModId, "config", SaveScope.Global,
+                    model => model.ButtonClickMode,
+                    (model, value) => model.ButtonClickMode = value),
+                new[]
+                {
+                    new ModSettingsChoiceOption<ButtonClickMode>(
+                        ButtonClickMode.SingleClick,
+                        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.SINGLE", "Single Click")),
+                    new ModSettingsChoiceOption<ButtonClickMode>(
+                        ButtonClickMode.DoubleClick,
+                        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.DOUBLE", "Double Click")),
+                    new ModSettingsChoiceOption<ButtonClickMode>(
+                        ButtonClickMode.LongPress,
+                        ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.MODE.LONG_PRESS", "Long Press"))
+                },
+                presentation: ModSettingsChoicePresentation.Dropdown)
+            .AddSlider("double_click_interval",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.LABEL", "Double Click Interval"),
+                ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+                    ModId, "config",
+                    model => model.DoubleClickInterval,
+                    (model, value) => model.DoubleClickInterval = (float)value),
+                0.1, 1.0, 0.05,
+                value => $"{value:F2}s",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.DOUBLE_INTERVAL.DESC",
+                    "Maximum time between two clicks."))
+            .AddSlider("long_press_duration",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.LABEL", "Long Press Duration"),
+                ModSettingsBindings.Global<CuteSakikoModConfigData, double>(
+                    ModId, "config",
+                    model => model.LongPressDuration,
+                    (model, value) => model.LongPressDuration = (float)value),
+                0.2, 2.0, 0.05,
+                value => $"{value:F2}s",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.LONG_PRESS.DESC",
+                    "How long to hold before confirming."))
+            .AddSlider("button_pos_y",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.POS_Y.LABEL", "Vertical Position (Y)"),
+                buttonPosYBinding,
+                0.1, 0.9, 0.01,
+                value => $"{value:P0}",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.BUTTON_CLICK.POS_Y.DESC", 
+                    "Adjust the vertical position of mod buttons. (X-axis is fixed to right edge)"))
+            ), "button_click_page");
+
+        // 3.4 子页：音频（mod 音效 / 背景音乐音量）
+        RitsuLibFramework.RegisterModSettings(ModId, page => page
+            .AsChildOf(ModId)
+            .WithSortOrder(40)
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_PAGE.TITLE", "音频"))
+            .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_PAGE.TITLE_DESC",
+                "控制 mod 音效与背景音乐的音量。"))
             .AddSection("audio", section => section
-                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.AUDIO", "Audio"))
-                .AddToggle("audio_toggle",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.LABEL", "Enable Mod Audio"),
-                    audioBinding,
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.DESC", "..."))
-                .AddSlider("mod_bgm_volume_slider",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL", "Mod BGM Volume"),
-                    volumeBinding,
-                    0.0, 1.0, 0.01,
-                    value => $"{value:P0}",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.DESC", "..."))
-                .AddSlider("mod_sfx_volume_slider",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL", "Mod SFX Volume"),
-                    sfxVolumeBinding,
-                    0.0, 1.0, 0.01,
-                    value => $"{value:P0}",
-                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.DESC", "..."))
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.AUDIO", "Audio"))
+            .AddToggle("audio_toggle",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.LABEL", "Enable Mod Audio"),
+                audioBinding,
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.AUDIO_TOGGLE.DESC", "..."))
+            .AddSlider("mod_bgm_volume_slider",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.LABEL", "Mod BGM Volume"),
+                volumeBinding,
+                0.0, 1.0, 0.01,
+                value => $"{value:P0}",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_BGM_VOLUME.DESC", "..."))
+            .AddSlider("mod_sfx_volume_slider",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.LABEL", "Mod SFX Volume"),
+                sfxVolumeBinding,
+                0.0, 1.0, 0.01,
+                value => $"{value:P0}",
+                ModSettingsText.I18N(i18n, "MOD_SETTINGS.MOD_SFX_VOLUME.DESC", "..."))
+            ), "audio_page");
+
+        // 3.5 事件设置子页面：总开关 + 两个分类开关
+        RitsuLibFramework.RegisterModSettings(ModId, page => page
+            .AsChildOf(ModId)
+            .WithSortOrder(15)
+            .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.EVENT_SETTINGS.TITLE", "事件设置"))
+            .WithDescription(ModSettingsText.I18N(i18n, "MOD_SETTINGS.EVENT_SETTINGS.TITLE_DESC",
+                "配置 Mod 事件的总体开关，以及按“是否需要 mod 角色”划分的分类开关。"))
+            .AddSection("event_master", section => section
+                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.EVENT_MASTER", "总开关"))
+                .AddToggle("custom_event_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.LABEL", "事件总开关"),
+                    customEventBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.CUSTOM_EVENT_TOGGLE.DESC",
+                        "关闭后，本 mod 的所有事件都不会出现；下面的分类开关也随之失效。"))
+                .WithEntryEnabledWhen("custom_event_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
             )
+            .AddSection("event_types", section => section
+                .WithTitle(ModSettingsText.I18N(i18n, "MOD_SETTINGS.SECTION.EVENT_TYPES", "分类开关"))
+                .WithEnabledWhen(() => ModConfig.EnableCustomEvents)
+                .AddToggle("character_locked_event_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.CHARACTER_LOCKED_EVENT.LABEL", "需要 mod 角色的事件"),
+                    characterLockedEventBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.CHARACTER_LOCKED_EVENT.DESC",
+                        "仅在拥有对应 mod 角色（爱音 / 祥子 / 乐奈）时才能解锁全部选项的事件。单人游玩时会因缺少角色而出现锁定选项。"))
+                .WithEntryEnabledWhen("character_locked_event_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+                .AddToggle("plain_event_toggle",
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.PLAIN_EVENT.LABEL", "普通事件"),
+                    plainEventBinding,
+                    ModSettingsText.I18N(i18n, "MOD_SETTINGS.PLAIN_EVENT.DESC",
+                        "不需要 mod 角色即可完整体验的事件，单人游玩也能拿到全部内容。"))
+                .WithEntryEnabledWhen("plain_event_toggle", () => !GameplayConfigSync.ShouldLockGameplaySettings)
+            ),
+            "event_settings"
         );
 
         // 4. Harmony 补丁

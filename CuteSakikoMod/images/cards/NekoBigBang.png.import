@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckw66uql2sp1q"
-path="res://.godot/imported/neko_pile_icon.png-dd74e5134c230c1d5919f3757ffaa47b.ctex"
+uid="uid://cdpq41rq5fdyn"
+path="res://.godot/imported/NekoBigBang.png-fca2da2a1334eed694eb774556df9e83.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/ui/cardpiles/neko_pile_icon.png"
-dest_files=["res://.godot/imported/neko_pile_icon.png-dd74e5134c230c1d5919f3757ffaa47b.ctex"]
+source_file="res://CuteSakikoMod/images/cards/NekoBigBang.png"
+dest_files=["res://.godot/imported/NekoBigBang.png-fca2da2a1334eed694eb774556df9e83.ctex"]
 
 [params]
 

@@ -25,7 +25,15 @@ public class CuteSakikoModConfigData
     public bool EggsCard { get; set; }
     public bool EnableModMonsters { get; set; } = true;
     public bool EnableCustomAncients { get; set; } = true;
+    /// <summary>事件总开关。关闭时所有 mod 事件都不生成（子开关无论勾选与否都失效）。</summary>
     public bool EnableCustomEvents { get; set; } = true;
+
+    /// <summary>需要 mod 角色才能解锁全部选项的事件（沙滩、情感二重奏、错位、学园祭等）。</summary>
+    public bool EnableCharacterLockedEvents { get; set; } = true;
+
+    /// <summary>不需要 mod 角色、单人也能体验全部内容的事件（金狗、炒虾、暗巷影猫、星之爱音等）。</summary>
+    public bool EnablePlainEvents { get; set; } = true;
+
     public bool ScalePressureInMultiplayer { get; set; } = false;
 
     // ===== 权重设置（参与联机同步） =====
@@ -91,6 +99,8 @@ public static class ModConfig
     public static float ModSfxVolume => Load().ModSfxVolume;
     public static bool EnableCustomAncients => Load().EnableCustomAncients;
     public static bool EnableCustomEvents => Load().EnableCustomEvents;
+    public static bool EnableCharacterLockedEvents => Load().EnableCharacterLockedEvents;
+    public static bool EnablePlainEvents => Load().EnablePlainEvents;
     public static bool ScalePressureInMultiplayer => Load().ScalePressureInMultiplayer;
     public static bool EnableReactionReplacement => Load().EnableReactionReplacement;
     public static float ReactionWheelScale => Load().ReactionWheelScale;

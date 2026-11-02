@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Networking;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -29,7 +29,10 @@ public sealed partial class DeckPresetPanel : Control
     {
         GD.Print("[DeckPresetPanel] _Ready");
 
-        Size = new Vector2(380, 110);
+        // ★ 高度 110 → 148：原 110 高时「默认卡组」文字距底边只剩 8px，
+        //   再叠上九宫格 42px 的切角，视觉上像要从面板里掉出去。
+        //   加高后底部留白 30px，切角区域不再压住文字。
+        Size = new Vector2(380, 148);
         MouseFilter = MouseFilterEnum.Pass;
 
         BuildUi();
@@ -67,25 +70,22 @@ public sealed partial class DeckPresetPanel : Control
 
     private void BuildUi()
     {
-        var bg = new ColorRect
-        {
-            Color = new Color(0, 0, 0, 0.55f),
-            Position = Vector2.Zero,
-            Size = new Vector2(380, 110),
-            MouseFilter = MouseFilterEnum.Ignore
-        };
-        AddChild(bg);
+        const float panelH = 148f;
+        AddChild(SkinPreviewPanel.MakePanelBackdrop(new Vector2(380, panelH)));
 
+        // 行 1（y 22..86）：左右箭头 + 查看卡组按钮
+        // 行 2（y 96..130）：默认卡组
+        // 底部还剩 18px 到切角起点（42），文字不会被切到。
         _prevBtn = SkinPreviewPanel.MakeArrowButton(
             "res://images/atlases/ui_atlas.sprites/settings_tiny_left_arrow.tres");
-        _prevBtn.Position = new Vector2(8, 20);
+        _prevBtn.Position = new Vector2(8, 22);
         _prevBtn.Size = new Vector2(48, 64);
         AddChild(_prevBtn);
         _prevBtn.Connect(NClickableControl.SignalName.Released, Callable.From<NClickableControl>(_ => Shift(-1)));
 
         var viewBtn = new Button
         {
-            Position = new Vector2(72, 20),
+            Position = new Vector2(72, 30),
             Size = new Vector2(236, 48)
         };
         var viewLabel = new Label
@@ -109,15 +109,18 @@ public sealed partial class DeckPresetPanel : Control
 
         _nextBtn = SkinPreviewPanel.MakeArrowButton(
             "res://images/atlases/ui_atlas.sprites/settings_tiny_right_arrow.tres");
-        _nextBtn.Position = new Vector2(324, 20);
+        _nextBtn.Position = new Vector2(324, 22);
         _nextBtn.Size = new Vector2(48, 64);
         AddChild(_nextBtn);
         _nextBtn.Connect(NClickableControl.SignalName.Released, Callable.From<NClickableControl>(_ => Shift(1)));
 
         _deckNameLabel = new Label
         {
-            Position = new Vector2(0, 76),
-            Size = new Vector2(380, 26),
+            // ★ 原 110 高时这一行在 y=76、高 26，底边 102，距面板底只剩 8px；
+            //   九宫格 42px 切角一压，「默认卡组」看着像要掉出去。
+            //   现在 148 高，文字 y 96..130，底边距面板底 18px、距切角起点 24px。
+            Position = new Vector2(0, 96),
+            Size = new Vector2(380, 34),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center
         };
@@ -304,9 +307,11 @@ public sealed partial class DeckPresetPanel : Control
         modalRoot.MouseFilter = MouseFilterEnum.Stop;
 
         // 全屏半透明黑色遮罩，拦截所有下层点击
+        // ★ 透明度对齐原版 capstone 遮罩：run.tscn 的 CapstoneBackstop 是 Color(0,0,0,0.85098)
+        //   我们原来是 0.75，比原版浅，底下角色立绘透出来太多。
         var dim = new ColorRect
         {
-            Color = new Color(0, 0, 0, 0.75f),
+            Color = new Color(0, 0, 0, 0.85098f),
             Position = Vector2.Zero,
             Size = viewportSize,
             MouseFilter = MouseFilterEnum.Stop
@@ -318,7 +323,16 @@ public sealed partial class DeckPresetPanel : Control
         var panelLeft = (viewportSize.X - panelW) / 2f;
         var panelTop = (viewportSize.Y - panelH) / 2f;
 
-        var panel = new PanelContainer
+        // ★ 面板底板换成原版同款九宫格切角（和两个小面板同一张图、同一份 margin），
+        //   原来是默认 PanelContainer 的直角灰框，跟原版风格差得远。
+        //   这里单独做一个不透明一点的版本：原版 capstone 面板是压在 85% 黑遮罩上的，
+        //   所以只要形状对、压暗程度跟着新遮罩走就行。
+        var panelBg = SkinPreviewPanel.MakePanelBackdrop(new Vector2(panelW, panelH));
+        panelBg.Position = new Vector2(panelLeft, panelTop);
+        panelBg.MouseFilter = MouseFilterEnum.Stop;
+        modalRoot.AddChild(panelBg);
+
+        var panel = new Control
         {
             Position = new Vector2(panelLeft, panelTop),
             Size = new Vector2(panelW, panelH),
@@ -327,6 +341,9 @@ public sealed partial class DeckPresetPanel : Control
         modalRoot.AddChild(panel);
 
         var margin = new MarginContainer();
+        // ★ panel 从 PanelContainer 换成普通 Control 后不再自动排布子节点，
+        //   margin 必须自己铺满（用 anchor 而不是 Size，窗口尺寸变了也跟着走）
+        margin.SetAnchorsPreset(LayoutPreset.FullRect);
         margin.AddThemeConstantOverride("margin_left", 20);
         margin.AddThemeConstantOverride("margin_right", 20);
         margin.AddThemeConstantOverride("margin_top", 14);
@@ -397,46 +414,22 @@ public sealed partial class DeckPresetPanel : Control
                 Callable.From<NCardHolder>(_ => ShowInspect(cards, capturedIndex)));
         }
 
-        // ── 关闭按钮：面板底部下方居中，方形圆角，白底黑字 ──
-        const float closeBtnW = 140f;
-        const float closeBtnH = 50f;
-        var close = new Button
-        {
-            // ★ 走本地化
-            Text = new LocString("characters", "SKIN_CLOSE").GetFormattedText(),
-            Size = new Vector2(closeBtnW, closeBtnH),
-            MouseFilter = MouseFilterEnum.Stop
-        };
-        var closeX = panelLeft + (panelW - closeBtnW) / 2f;
-        var closeY = panelTop + panelH + 20f;
-        if (closeY + closeBtnH > viewportSize.Y - 8f)
-            closeY = viewportSize.Y - closeBtnH - 8f;
-        close.Position = new Vector2(closeX, closeY);
-
-        StyleBoxFlat MakeCloseStyle(Color bgColor)
-        {
-            var sb = new StyleBoxFlat { BgColor = bgColor };
-            const int radius = 10;
-            sb.CornerRadiusTopLeft = radius;
-            sb.CornerRadiusTopRight = radius;
-            sb.CornerRadiusBottomLeft = radius;
-            sb.CornerRadiusBottomRight = radius;
-            return sb;
-        }
-
-        close.AddThemeStyleboxOverride("normal", MakeCloseStyle(new Color(1f, 1f, 1f)));
-        close.AddThemeStyleboxOverride("hover", MakeCloseStyle(new Color(0.95f, 0.95f, 0.95f)));
-        close.AddThemeStyleboxOverride("pressed", MakeCloseStyle(new Color(0.85f, 0.85f, 0.85f)));
-        close.AddThemeStyleboxOverride("focus", MakeCloseStyle(new Color(1f, 1f, 1f)));
-
-        close.AddThemeColorOverride("font_color", Colors.Black);
-        close.AddThemeColorOverride("font_hover_color", Colors.Black);
-        close.AddThemeColorOverride("font_pressed_color", new Color(0.15f, 0.15f, 0.15f));
-        close.AddThemeColorOverride("font_focus_color", Colors.Black);
-        close.AddThemeFontSizeOverride("font_size", 22);
-
-        close.Pressed += () => modalRoot.CloseSelf();
-        modalRoot.AddChild(close);
+        // ── 关闭按钮：原版同款红色返回旗（贴图取自原版 ui_atlas） ──
+        //   见 SkinPreviewPanel.MakeBackButton 的注释：原版场景加载几条路都失败，
+        //   所以改成用原版贴图自建（Shadow/Outline/Image/Icon 四层，顺序与 offset 全照原版）。
+        //   ★ 尺寸必须用 SkinPreviewPanel.BackButtonSize（200×110）：
+        //     那套 offset 是原版按 200×110 调好的，私自改高度会把红旗压扁（踩过）。
+        //   ★ 位置：贴屏幕左下角但抬高到安全线以上。
+        //     注意 Shadow 的 offset 是 B+39、Outline B+30，所以**视觉底边**会超出容器底部，
+        //     容器摆放时要把这 39px 算进去，否则贴边时阴影和金边会被裁掉。
+        var backSize = SkinPreviewPanel.BackButtonSize;
+        var backButton = SkinPreviewPanel.MakeBackButton();
+        // 容器底边离屏幕底 96px，阴影会在其下再伸出 39px，仍有余量
+        backButton.Position = new Vector2(24f, viewportSize.Y - backSize.Y - 96f);
+        backButton.Size = backSize;
+        backButton.Connect(NClickableControl.SignalName.Released,
+            Callable.From<NClickableControl>(_ => modalRoot.CloseSelf()));
+        modalRoot.AddChild(backButton);
 
         GD.Print($"[DeckPresetPanel] Opened deck view: {preset.DisplayNameKey} ({cards.Count} cards)");
     }

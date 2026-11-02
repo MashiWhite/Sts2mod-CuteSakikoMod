@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bkltjeptu77sl"
-path="res://.godot/imported/Maracas.png-52dd493f1d919b266f9fe364059cec6e.ctex"
+path="res://.godot/imported/maracas.png-2b20228faf6e6d4e7326c10fb20e2c73.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/relics/Maracas.png"
-dest_files=["res://.godot/imported/Maracas.png-52dd493f1d919b266f9fe364059cec6e.ctex"]
+source_file="res://CuteSakikoMod/images/relics/maracas.png"
+dest_files=["res://.godot/imported/maracas.png-2b20228faf6e6d4e7326c10fb20e2c73.ctex"]
 
 [params]
 

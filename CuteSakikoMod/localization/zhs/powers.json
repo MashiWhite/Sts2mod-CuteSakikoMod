@@ -2,15 +2,12 @@
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.title": "想出风头",
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.description": "根据你每回合打出的第一张牌改变意图。",
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.smartDescription": "根据你每回合打出的第一张牌改变意图。",
-  
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.title": "虹色的世界",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.description": "每回合你打出的第一张牌，会随机[gold]变化[/gold]为[gold]同稀有度[/gold]、[gold]同类型[/gold]的其他角色的牌。",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.smartDescription": "每回合你打出的第一张牌，会随机[gold]变化[/gold]为[gold]同稀有度[/gold]、[gold]同类型[/gold]的其他角色的牌。",
-  
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.title": "十日终焉",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.description": "回合开始时减少1层。\n计数为0时，持有者死亡。",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.smartDescription": "[purple]{OwnerName}[/purple]回合结束时，减少1层。\n计数为0时，[purple]{OwnerName}[/purple]死亡。",
-
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.title": "乐章未尽",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.description": "随着[gold]十日终焉[/gold]的[red]倒计时[/red]，逐渐产生效果。\n每有[blue]1[/blue]只存活的余命，持有者受到的伤害减少[blue]5[/blue]%。",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.smartDescription": "随着[gold]十日终焉[/gold]的[red]倒计时[/red]，逐渐产生效果。\n每有[blue]1[/blue]只存活的余命，[purple]{OwnerName}[/purple]受到的伤害减少[blue]5[/blue]%。",
@@ -24,19 +21,15 @@
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.3": "剩余[red]3[/red]日-召唤[color=#FFDD88]长崎素世[/color]。",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.2": "剩余[red]2[/red]日-召唤[color=#7799CC]丰川祥子[/color]。",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.1": "剩余[red]1[/red]日-减少所有玩家[red]10[/red]点最大生命值。",
-
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.title": "跳动的心跳",
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.description": "随着[gold]十日终焉[/gold]的[red]倒计时[/red]，逐渐变化。\n每回合最多受到[gold]十日终焉[/gold]层数×[blue]最大生命值÷10[/blue]点伤害。",
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.smartDescription": "每回合最多受到[blue]{Cap}[/blue]点伤害。",
-
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.title": "动摇",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.description": "本回合结束时归还被临时扣除的力量。",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.smartDescription": "本回合结束时归还[blue]{Amount}[/blue]点力量。",
-
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.title": "迟滞",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.description": "本回合结束时归还被临时扣除的敏捷。",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.smartDescription": "本回合结束时归还[blue]{Amount}[/blue]点敏捷。",
-  
   "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.title": "向我俯首",
   "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.description": "你的[gold]骑士之剑[/gold]造成伤害时，给予敌人等量[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_BOW_TO_ME_POWER.smartDescription": "你的[gold]骑士之剑[/gold]造成伤害时，给予敌人等量[gold]压力[/gold]。",
@@ -290,5 +283,17 @@
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]丸君[/pink]被打败后，[purple]{OwnerName}[/purple]每回合结束时获得[blue]{StrengthGain}[/blue]点[gold]力量[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.title": "欺诈之蛇",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "你每回合抽到的前[blue]{Amount}[/blue]张牌无法辨认，被侵蚀的牌打出后才会恢复原状。",
-  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "你每回合抽到的前[blue]{Amount}[/blue]张牌无法辨认，被侵蚀的牌打出后才会恢复原状。"
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "你每回合抽到的前[blue]{Amount}[/blue]张牌无法辨认，被侵蚀的牌打出后才会恢复原状。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.title": "挠！挠！",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.description": "你每打出一张[gold]猫咪[/gold]，对随机敌人造成层数等量伤害。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.smartDescription": "你每打出一张[gold]猫咪[/gold]，对随机敌人造成[blue]{Amount}[/blue]点伤害。",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.title": "我还要吃",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.description": "每回合你第一次食用[gold]抹茶芭菲[/gold]时，抽层数等量的牌。",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.smartDescription": "每回合你第一次食用[gold]抹茶芭菲[/gold]时，抽[blue]{Amount}[/blue]张牌。",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.title": "送芭菲的猫",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.description": "你每打出一张[gold]猫咪[/gold]，获得层数等量[gold]莱芜[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.smartDescription": "你每打出一张[gold]猫咪[/gold]，获得[blue]{Amount}[/blue]层[gold]莱芜[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.title": "猫咪！还有猫咪！",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.description": "你每打出一张[gold]猫咪[/gold]，抽层数等量的牌。",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.smartDescription": "你每打出一张[gold]猫咪[/gold]，抽[blue]{Amount}[/blue]张牌。"
 }

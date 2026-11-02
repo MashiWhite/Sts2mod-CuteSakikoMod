@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Networking;
 using Godot;
 using MegaCrit.Sts2.Core.Localization;
@@ -64,14 +64,7 @@ public sealed partial class SkinPreviewPanel : Control
         const float viewportH = 320f;
         const float nameH = 28f;
 
-        var bg = new ColorRect
-        {
-            Color = new Color(0, 0, 0, 0.55f),
-            Position = Vector2.Zero,
-            Size = new Vector2(panelW, panelH),
-            MouseFilter = MouseFilterEnum.Ignore
-        };
-        AddChild(bg);
+        AddChild(MakePanelBackdrop(new Vector2(panelW, panelH)));
 
         var viewportX = padX + btnW + 8f;
         var viewportY = padY;
@@ -119,6 +112,168 @@ public sealed partial class SkinPreviewPanel : Control
         };
         _nameLabel.AddThemeFontSizeOverride("font_size", 20);
         AddChild(_nameLabel);
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // 面板底板：与原版 InfoPanel 完全同款
+    //   原版 scenes/screens/character_select_screen.tscn 的 InfoPanel/NinePatchRect 就是
+    //   texture = images/ui/fuzzy_nine_patch_char_select.png + patch_margin 42 + modulate(0,0,0,0.5)，
+    //   四个角的切角正是这张九宫格自带的形状。用同一张图、同一份 margin，
+    //   切角尺寸与斜率就和原版一模一样，不再是我们自己画的直角 ColorRect。
+    //   这里的 alpha 沿用面板原来的 0.55，只换形状不改压暗程度。
+    // ─────────────────────────────────────────────────────────
+    internal const string PanelBackdropTexture = "res://images/ui/fuzzy_nine_patch_char_select.png";
+    private const int PanelBackdropPatchMargin = 42;
+
+    internal static NinePatchRect MakePanelBackdrop(Vector2 size)
+    {
+        var bg = new NinePatchRect
+        {
+            Texture = ResourceLoader.Load<Texture2D>(PanelBackdropTexture),
+            Position = Vector2.Zero,
+            Size = size,
+            PatchMarginLeft = PanelBackdropPatchMargin,
+            PatchMarginTop = PanelBackdropPatchMargin,
+            PatchMarginRight = PanelBackdropPatchMargin,
+            PatchMarginBottom = PanelBackdropPatchMargin,
+            // ★ 与原版一致：把白色底图整体乘成半透明黑
+            Modulate = new Color(0, 0, 0, 0.55f),
+            // ★ 底板不吃鼠标，点击要落到底下的按钮
+            MouseFilter = MouseFilterEnum.Ignore
+        };
+        return bg;
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // 原版返回按钮（红底 + 奶白回箭头 + 金描边）
+    //
+    //   ❌ 2026-11-02 两次踩坑记录，别再走回头路：
+    //     ① RitsuGodotNodeFactories.CreateFromScenePath<NBackButton>()
+    //        → System.InvalidOperationException: No node factory registered for NBackButton
+    //          RitsuLib 只给 NCreatureVisuals 这类认识它自己工厂的类型注册了 factory，
+    //          NBackButton 没有。而且异常从 OpenDeckView 中途抛出，后面的代码全不执行，
+    //          表现就是「弹窗卡死、没有返回键、ESC 也没反应」。
+    //     ② PreloadManager.Cache.GetScene("res://scenes/ui/back_button.tscn")
+    //        → 同样失败：这个场景不在 AssetCache 的预载集合里（日志：Asset not cached）。
+    //
+    //   ✅ 最终方案：不用原版场景，用原版**贴图**自己拼一个按钮（DeckViewBackButton : NButton），
+    //      贴图来自原版图集（和 back_button.tscn 引用的是同一批，肉眼完全一致）：
+    //        底     res://images/atlases/ui_atlas.sprites/back_button.tres
+    //        箭头   res://images/atlases/compressed.sprites/back_button_arrow.tres
+    //        描边   res://images/atlases/compressed.sprites/back_button_outline.tres
+    //      hover 金色描边 / 按下变灰 / 音效全部照 NBackButton.cs 复刻（见 DeckViewBackButton）。
+    //      位置完全由我们控制（原版那套 _showPos tween 只会在左下角，反而摆不到弹窗旁边）。
+    //
+    //   图层顺序（★ 这就是「只亮一圈边」的全部秘密，照抄原版 back_button.tscn）：
+    //     Shadow  (黑，最底，错位偏移做出投影)
+    //     Outline (金，加色，**比 Image 大一圈**，垫在 Image 下面)
+    //     Image   (红底)
+    //       └ Icon (奶白回箭头)
+    //   阴影 → 金边 → 红底 三层叠起来，金边只在四周露出一圈，所以 hover 是「描边发光」而不是「整面发光」。
+    //   ❌ 2026-11-02 踩过：小祥一开始把 Outline 加到 Image **上面**，而且几乎同尺寸，
+    //      结果整面旗全被金色实心图盖住 → 「整个按钮都发光」，和原版完全不是一回事。
+    //      贴图 back_button_outline.tres 是**整块实心旗形**（alpha 满、RGB 纯白），
+    //      没有任何"只描边"的信息，全靠下面这层盖住中间。
+    //
+    //   几何完全照原版 back_button.tscn（★ 尺寸必须用原版的 200×110，不能自己改成 200×104）：
+    //     容器 200×110
+    //     Shadow  L-9  T-1  R+58 B+39
+    //     Outline L-24 T-16 R+49 B+30   ← 每边比 Image 多 3px，露出的正好是一圈金边
+    //     Image   L-21 T-13 R+46 B+27   → 实际 267×150
+    //     Icon    在 Image 内绝对坐标 (88,28)-(168,108)，即 80×80
+    //   ❌ 2026-11-02 踩过：容器高度从 110 改成 104，横向 offset 没变，
+    //      Image 变成 267×144 → 红旗被横向拉长、看起来「扁扁的」；
+    //      Icon 又用了 anchor 比例而不是原版的绝对 80×80，箭头位置也歪了。
+    //      结论：这套 offset 是原版按 200×110 调好的，改高度必须整套等比换算，否则就别动。
+    // ─────────────────────────────────────────────────────────
+    internal const string BackButtonBgPath = "res://images/atlases/ui_atlas.sprites/back_button.tres";
+    internal const string BackButtonArrowPath =
+        "res://images/atlases/compressed.sprites/back_button_arrow.tres";
+    internal const string BackButtonOutlinePath =
+        "res://images/atlases/compressed.sprites/back_button_outline.tres";
+
+    /// <summary>原版返回按钮的容器尺寸，几何 offset 都是按这个调的，别改。</summary>
+    internal static readonly Vector2 BackButtonSize = new(200f, 110f);
+
+    /// <summary>做一个卡组弹窗专用的原版同款返回按钮（hover 金边 / 按下变灰 / 原版音效）。</summary>
+    internal static DeckViewBackButton MakeBackButton()
+    {
+        var btn = new DeckViewBackButton { Name = "DeckViewBackButton" };
+        // 缩放要以中心为轴，否则 hover 放大时会往右下飘
+        btn.PivotOffset = BackButtonSize / 2f;
+
+        var bgTex = ResourceLoader.Load<Texture2D>(BackButtonBgPath);
+        var outlineTex = ResourceLoader.Load<Texture2D>(BackButtonOutlinePath);
+
+        // ── ① Shadow：黑色投影，垫在最底 ──
+        var shadow = new TextureRect
+        {
+            Name = "Shadow",
+            Texture = bgTex,
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.Scale,
+            MouseFilter = MouseFilterEnum.Ignore,
+            Modulate = new Color(0f, 0f, 0f, 0.25098f)
+        };
+        shadow.SetAnchorsPreset(LayoutPreset.FullRect);
+        shadow.OffsetLeft = -9f;
+        shadow.OffsetTop = -1f;
+        shadow.OffsetRight = 58f;
+        shadow.OffsetBottom = 39f;
+        btn.AddChild(shadow);
+
+        // ── ② Outline：金色加色描边，比 Image 大一圈，**在 Image 下面** ──
+        //   原版挂 themes/canvas_item_material_additive_shared.tres（blend_mode = 1 加色）。
+        //   平时 Modulate 全透明（交给 DeckViewBackButton.Init 置），hover 才淡入金色。
+        var outline = new TextureRect
+        {
+            Name = "Outline",
+            Texture = outlineTex,
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.Scale,
+            MouseFilter = MouseFilterEnum.Ignore,
+            Material = new CanvasItemMaterial { BlendMode = CanvasItemMaterial.BlendModeEnum.Add }
+        };
+        outline.SetAnchorsPreset(LayoutPreset.FullRect);
+        outline.OffsetLeft = -24f;
+        outline.OffsetTop = -16f;
+        outline.OffsetRight = 49f;
+        outline.OffsetBottom = 30f;
+        btn.AddChild(outline);
+
+        // ── ③ Image：红底 ──
+        var image = new TextureRect
+        {
+            Name = "Image",
+            Texture = bgTex,
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.Scale,
+            MouseFilter = MouseFilterEnum.Ignore
+        };
+        image.SetAnchorsPreset(LayoutPreset.FullRect);
+        image.OffsetLeft = -21f;
+        image.OffsetTop = -13f;
+        image.OffsetRight = 46f;
+        image.OffsetBottom = 27f;
+        btn.AddChild(image);
+
+        // ── ④ Icon：奶白回箭头，挂在 Image 下，**绝对坐标 80×80**（照原版 layout_mode = 0） ──
+        var arrow = new TextureRect
+        {
+            Name = "Icon",
+            Texture = ResourceLoader.Load<Texture2D>(BackButtonArrowPath),
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.Scale,
+            MouseFilter = MouseFilterEnum.Ignore,
+            Modulate = new Color(1f, 0.964706f, 0.886275f),
+            Position = new Vector2(88f, 28f),
+            Size = new Vector2(80f, 80f)
+        };
+        image.AddChild(arrow);
+
+        // 把图层交给按钮，由它管理 hover / 按下动画
+        btn.Init(image, outline);
+        return btn;
     }
 
     internal static NGoldArrowButton MakeArrowButton(string texturePath)

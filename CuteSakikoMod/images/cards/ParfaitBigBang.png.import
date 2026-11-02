@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwlmlxl1ldfri"
-path="res://.godot/imported/percussive_fingerstyle.png-8b9fa40d938760803806a982616c91a8.ctex"
+uid="uid://cp0dvtkuew6mp"
+path="res://.godot/imported/ParfaitBigBang.png-63a8dfce886e8d0711734adab8495c32.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/percussive_fingerstyle.png"
-dest_files=["res://.godot/imported/percussive_fingerstyle.png-8b9fa40d938760803806a982616c91a8.ctex"]
+source_file="res://CuteSakikoMod/images/cards/ParfaitBigBang.png"
+dest_files=["res://.godot/imported/ParfaitBigBang.png-63a8dfce886e8d0711734adab8495c32.ctex"]
 
 [params]
 

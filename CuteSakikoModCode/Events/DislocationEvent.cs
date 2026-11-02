@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
@@ -26,6 +26,9 @@ public sealed class DislocationEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => true;
+
+    /// <summary>需要爱音+祥子才能触发（事件核心就是这两人的互换），归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override bool IsAllowedInternal(IRunState runState)
     {

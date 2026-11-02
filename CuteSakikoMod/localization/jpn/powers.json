@@ -2,15 +2,12 @@
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.title": "目立ちたがり",
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.description": "毎ターン最初にプレイしたカードに応じて意図が変化する。",
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.smartDescription": "毎ターン最初にプレイしたカードに応じて意図が変化する。",
-  
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.title": "虹色の世界",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.description": "毎ターンあなたがプレイする最初のカードは、ランダムに[gold]同じレアリティ[/gold]・[gold]同じタイプ[/gold]の他キャラクターのカードに[gold]変化[/gold]する。",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.smartDescription": "毎ターンあなたがプレイする最初のカードは、ランダムに[gold]同じレアリティ[/gold]・[gold]同じタイプ[/gold]の他キャラクターのカードに[gold]変化[/gold]する。",
-  
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.title": "十日終焉",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.description": "ターン開始時に1層減少する。\nカウントが0になると、保持者は死亡する。",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.smartDescription": "[purple]{OwnerName}[/purple]のターン終了時に、1層減少する。\nカウントが0になると、[purple]{OwnerName}[/purple]は死亡する。",
-
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.title": "未完の楽章",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.description": "[gold]十日終焉[/gold]の[red]カウントダウン[/red]に従い、徐々に効果を発揮する。\n生存している余命1体につき、保持者の受けるダメージが[blue]5[/blue]%減少する。",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.smartDescription": "[gold]十日終焉[/gold]の[red]カウントダウン[/red]に従い、徐々に効果を発揮する。\n生存している余命1体につき、[purple]{OwnerName}[/purple]の受けるダメージが[blue]5[/blue]%減少する。",
@@ -24,15 +21,12 @@
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.3": "残り[red]3[/red]日-[color=#FFDD88]長崎そよ[/color]を召喚する。",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.2": "残り[red]2[/red]日-[color=#7799CC]豊川祥子[/color]を召喚する。",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.1": "残り[red]1[/red]日-すべてのプレイヤーの最大HPを[red]10[/red]減少させる。",
-
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.title": "鼓動する心臓",
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.description": "[gold]十日終焉[/gold]の[red]カウントダウン[/red]に従って徐々に変化する。\n毎ターン、最大で[gold]十日終焉[/gold]の層数×[blue]最大HP÷10[/blue]のダメージを受ける。",
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.smartDescription": "毎ターン、最大で[blue]{Cap}[/blue]のダメージを受ける。",
-
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.title": "動揺",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.description": "このターン終了時に、一時的に減少した筋力を返却する。",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.smartDescription": "このターン終了時に[blue]{Amount}[/blue]の筋力を返却する。",
-
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.title": "遅滞",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.description": "このターン終了時に、一時的に減少した敏捷を返却する。",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.smartDescription": "このターン終了時に[blue]{Amount}[/blue]の敏捷を返却する。",
@@ -192,9 +186,6 @@
   "CUTE_SAKIKO_MOD_POWER_MASQUERADE_POWER.title": "仮面舞踏会",
   "CUTE_SAKIKO_MOD_POWER_MASQUERADE_POWER.description": "除去されたパワーを記録し、次のターン開始時に戻す。[sine][red]仮面舞台の上では敵は真に死ぬことはない。[/red][/sine]",
   "CUTE_SAKIKO_MOD_POWER_MASQUERADE_POWER.smartDescription": "次のターン開始時、前のターンに除去されたすべてのパワーを戻す。[sine][red]仮面舞台の上では敵は真に死ぬことはない。[/red][/sine]",
-  "CUTE_SAKIKO_MOD_POWER_BEAR_MEMORY_POWER.title": "メモリーを背負う",
-  "CUTE_SAKIKO_MOD_POWER_BEAR_MEMORY_POWER.description": "1層につき、メモリーカードを追加で1回プレイし、[gold]重圧[/gold]を1得る。",
-  "CUTE_SAKIKO_MOD_POWER_BEAR_MEMORY_POWER.smartDescription": "メモリーカードを追加で[blue]{Amount}[/blue]回プレイし、[blue]{Amount}[/blue]層の[gold]重圧[/gold]を得る。",
   "CUTE_SAKIKO_MOD_POWER_OBLIVIONIS_POWER.title": "忘却の力",
   "CUTE_SAKIKO_MOD_POWER_OBLIVIONIS_POWER.description": "カードが[red]忘却[/red]されるたび、すべての敵に層数に等しいダメージを与える。",
   "CUTE_SAKIKO_MOD_POWER_OBLIVIONIS_POWER.smartDescription": "カードが[red]忘却[/red]されるたび、すべての敵に[blue]{Amount}[/blue]ダメージを与える。",
@@ -286,5 +277,23 @@
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "[pink]まるくん[/pink]が倒された後、[purple]{OwnerName}[/purple]は毎ターン終了時に[blue]{StrengthGain}[/blue]の[gold]筋力[/gold]を得る。",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.title": "詐欺の蛇",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。侵食されたカードはプレイすると元に戻る。",
-  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。侵食されたカードはプレイすると元に戻る。"
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "毎ターン引く最初の[blue]{Amount}[/blue]枚のカードは見分けがつかない。侵食されたカードはプレイすると元に戻る。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.title": "ひっかき！ひっかき！",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.description": "[gold]猫[/gold]をプレイするたび、ランダムな敵に層数と等量のダメージを与える。",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.smartDescription": "[gold]猫[/gold]をプレイするたび、ランダムな敵に[blue]{Amount}[/blue]ダメージを与える。",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.title": "もっと食べたい",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.description": "各ターン初めて[gold]抹茶パフェ[/gold]を食べた時、層数と等量のカードを引く。",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.smartDescription": "各ターン初めて[gold]抹茶パフェ[/gold]を食べた時、カードを[blue]{Amount}[/blue]枚引く。",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.title": "パフェ届け猫",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.description": "[gold]猫[/gold]をプレイするたび、層数と等量の[gold]ライブ[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.smartDescription": "[gold]猫[/gold]をプレイするたび、[blue]{Amount}[/blue]層の[gold]ライブ[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.title": "猫！まだ猫！",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.description": "[gold]猫[/gold]をプレイするたび、層数と等量のカードを引く。",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.smartDescription": "[gold]猫[/gold]をプレイするたび、カードを[blue]{Amount}[/blue]枚引く。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.title": "今ターンのコード増幅",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.description": "このターン中、1層ごとに次の演奏のすべての[gold]コード[/gold]の数値+1。",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.smartDescription": "このターン中、次の[blue]{Amount}[/blue]回、演奏するすべての[gold]コード[/gold]の数値+1。",
+  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.title": "次ターンライブ爽",
+  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.description": "次のターン開始時に[gold]ライブ爽[/gold]を得る。",
+  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.smartDescription": "次の[blue]{Amount}[/blue]ターンの開始時に[gold]ライブ爽[/gold]を得る。"
 }

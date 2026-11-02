@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dn6kc80ibbsrv"
-path="res://.godot/imported/trail3.png-60a4158da07c71f299b68dbcd1ce838e.ctex"
+uid="uid://hlmmyhuawx31"
+path="res://.godot/imported/PickyEater.png-f562fae0425a0bc846de48d782952413.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/others/vfx/trail3.png"
-dest_files=["res://.godot/imported/trail3.png-60a4158da07c71f299b68dbcd1ce838e.ctex"]
+source_file="res://CuteSakikoMod/images/cards/PickyEater.png"
+dest_files=["res://.godot/imported/PickyEater.png-f562fae0425a0bc846de48d782952413.ctex"]
 
 [params]
 

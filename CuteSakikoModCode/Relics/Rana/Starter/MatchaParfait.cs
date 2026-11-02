@@ -242,6 +242,10 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     private static bool ShouldSuppressBrainFreeze(Player player)
         => BrainFreezeSuppressor?.Invoke(player) == true;
 
+    /// <summary>
+    ///     食用芭菲的统一入口：扣杯 + 触发所有「吃杯时」监听。
+    ///     新增监听就在这里挂，**不要在卡牌里直接调 RemoveCharges**（会绕过全部钩子）。
+    /// </summary>
     public static async Task SimulateParfaitEaten(
         Player player,
         int amount,
@@ -255,10 +259,14 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
 
             if (player.Creature.HasPower<WantBothPower>()) await ApplyWantBothEffect(player, amount, choiceContext);
+            await WantMoreParfaitPower.OnParfaitConsumedAsync(choiceContext, player, null);
+            await ParfaitDeliveryNekoPower.OnParfaitConsumedAsync(choiceContext, player, amount);
         }
         else
         {
             if (player.Creature.HasPower<WantBothPower>()) await ApplyWantBothEffect(player, amount, choiceContext);
+            await WantMoreParfaitPower.OnParfaitConsumedAsync(choiceContext, player, null);
+            await ParfaitDeliveryNekoPower.OnParfaitConsumedAsync(choiceContext, player, amount);
         }
     }
 
@@ -287,6 +295,10 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
 
             if (relic.Owner.Creature.HasPower<WantBothPower>())
                 await ApplyWantBothEffect(relic.Owner, amount, choiceContext);
+            // ⚠️ 食用监听必须与 SimulateParfaitEaten 保持一致，否则「右键遗物吃杯」这条路
+            //    会漏掉「我还要吃」「送芭菲的猫」等所有挂在食用入口上的效果。
+            await WantMoreParfaitPower.OnParfaitConsumedAsync(choiceContext, relic.Owner, null);
+            await ParfaitDeliveryNekoPower.OnParfaitConsumedAsync(choiceContext, relic.Owner, amount);
             return;
         }
 
@@ -301,6 +313,8 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
 
             if (relic.Owner.Creature.HasPower<WantBothPower>())
                 await ApplyWantBothEffect(relic.Owner, removed, choiceContext);
+            await WantMoreParfaitPower.OnParfaitConsumedAsync(choiceContext, relic.Owner, null);
+            await ParfaitDeliveryNekoPower.OnParfaitConsumedAsync(choiceContext, relic.Owner, removed);
         }
     }
 

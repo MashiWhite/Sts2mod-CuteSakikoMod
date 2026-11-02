@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Others;
@@ -28,6 +28,9 @@ public sealed class HaneokaCorridorEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => true;
+
+    /// <summary>需要祥子／祥子+爱音才能解锁两个隐藏选项，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override bool IsAllowedInternal(IRunState runState)
     {

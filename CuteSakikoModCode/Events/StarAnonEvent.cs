@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others.Config;
+using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -19,6 +19,9 @@ public sealed class StarAnonEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => true;
+
+    /// <summary>无角色门槛，归“普通事件”。</summary>
+    protected override bool NeedsModCharacter => false;
 
     protected override bool IsAllowedInternal(IRunState runState)
     {

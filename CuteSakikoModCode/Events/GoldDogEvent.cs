@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
+using CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -18,6 +18,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Events;
 public sealed class GoldDogEvent : CuteSakikoEvent
 {
     public override bool IsShared => true;
+
+    /// <summary>无角色门槛，单人可完整体验，归“普通事件”。</summary>
+    protected override bool NeedsModCharacter => false;
 
 
     public override EventAssetProfile AssetProfile => new(

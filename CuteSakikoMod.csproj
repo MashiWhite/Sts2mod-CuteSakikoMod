@@ -100,6 +100,11 @@
         <Compile Remove="CuteSakikoModCode\Cards\Rana\Common\AllAreCats.cs"/>
         <Compile Remove="CuteSakikoModCode\Cards\Rana\Common\WatchCats.cs"/>
         <Compile Remove="CuteSakikoModCode\Cards\Rana\Common\CatPet.cs"/>
+        <!-- 0.4.0 下一批次：卡图由朋友代画、工期较晚，本批不放出。
+             代码与三语文案已存档到 E:\SLJT2\待发布内容\下一批次-蓝卡金卡\，
+             下批发版时删掉这两行 Remove 即可恢复（记得同时恢复本地化键）。 -->
+        <Compile Remove="CuteSakikoModCode\Cards\Rana\Uncommon\DoubleParfait.cs"/>
+        <Compile Remove="CuteSakikoModCode\Cards\Rana\Rare\EatAndSleep.cs"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -154,19 +159,51 @@
               SkipUnchangedFiles="true"/>
     </Target>
 
+    <!-- GodotPublishOnBuild / GodotPublish —— 两段式：Godot 只写暂存区，MSBuild 负责搬运
+         这一段踩过三个坑，改之前先读完：
+         ① 路径含空格：Steam 库 "Slay the Spire 2" 有空格，旧写法把整串丢给 export-pack 时
+            Godot 只解析到 "Slay" 就断掉，报
+              Export path "...\common\Slay" doesn't end with a supported extension
+            所以必须显式传工程路径参数（path）、pck 用绝对路径。
+            （注意：XML 注释里不能出现连续两个减号，写参数名时别带前缀。）
+         ② 子进程写权限：在受限环境（如 DSH agent 沙箱）里，Godot 作为孙进程写不进
+            E:\SLJT2\Rider\ 整棵子树，也写不进游戏 mods 目录；但 MSBuild（dotnet/Rider 本体）能写。
+            实测 Godot 可写范围（2026-11-02）：E:\SLJT2\.build-check、E:\SLJT2 根 → 通过；
+                                              E:\SLJT2\Rider\** → 全部被拦。
+            因此暂存目录默认放 E:\SLJT2\.build-check（可用 PckStagingDir 属性覆盖），
+            Godot 只写那里，再由 MSBuild 的 Copy 任务搬进 mods。两个进程各干权限内的事。
+         ③ 暂存失败不覆盖旧 pck：导出失败时只发 warning，mods 里保留上一次成功的 pck，
+            避免把半成品推给玩家。 -->
+    <PropertyGroup>
+        <!-- 默认走 DSH 沙箱可写区；Rider 本地也可改回 $(MSBuildProjectDirectory)\..\_pck_staging -->
+        <PckStagingDir Condition="'$(PckStagingDir)' == ''">E:\SLJT2\.build-check</PckStagingDir>
+    </PropertyGroup>
+
     <Target Name="GodotPublishOnBuild" AfterTargets="Build"
             Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
-        <Message Text="Exporting Godot .pck to mods folder (from Build)" Importance="high"/>
-        <Exec Command="&quot;$(GodotPath)&quot; --headless --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
+        <Message Text="Exporting Godot .pck to staging (from Build)" Importance="high"/>
+        <MakeDir Directories="$(PckStagingDir)"/>
+        <Exec Command="&quot;$(GodotPath)&quot; --headless --path &quot;$(MSBuildProjectDirectory)&quot; --export-pack &quot;BasicExport&quot; &quot;$(PckStagingDir)\$(MSBuildProjectName).pck&quot;"
               EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
               ContinueOnError="WarnAndContinue"/>
+        <Copy SourceFiles="$(PckStagingDir)\$(MSBuildProjectName).pck"
+              DestinationFolder="$(ModsPath)$(MSBuildProjectName)"
+              Condition="Exists('$(PckStagingDir)\$(MSBuildProjectName).pck')"/>
+        <Message Text="Pck copied to $(ModsPath)$(MSBuildProjectName) via MSBuild." Importance="high"
+                 Condition="Exists('$(PckStagingDir)\$(MSBuildProjectName).pck')"/>
+        <Warning Text="pck staging failed; the mods folder keeps the previous pck. Check the Godot export output above."
+                 Condition="!Exists('$(PckStagingDir)\$(MSBuildProjectName).pck')"/>
     </Target>
 
     <Target Name="GodotPublish" AfterTargets="Publish" Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
-        <Message Text="Exporting Godot .pck to mods folder" Importance="high"/>
-        <Exec Command="&quot;$(GodotPath)&quot; --headless --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
+        <Message Text="Exporting Godot .pck to staging (from Publish)" Importance="high"/>
+        <MakeDir Directories="$(PckStagingDir)"/>
+        <Exec Command="&quot;$(GodotPath)&quot; --headless --path &quot;$(MSBuildProjectDirectory)&quot; --export-pack &quot;BasicExport&quot; &quot;$(PckStagingDir)\$(MSBuildProjectName).pck&quot;"
               EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
               ContinueOnError="WarnAndContinue"/>
+        <Copy SourceFiles="$(PckStagingDir)\$(MSBuildProjectName).pck"
+              DestinationFolder="$(ModsPath)$(MSBuildProjectName)"
+              Condition="Exists('$(PckStagingDir)\$(MSBuildProjectName).pck')"/>
     </Target>
 
     <!-- 路径检查 -->

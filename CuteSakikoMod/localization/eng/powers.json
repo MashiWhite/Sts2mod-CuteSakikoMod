@@ -2,15 +2,12 @@
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.title": "Want to Show Off",
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.description": "Changes intent based on the first card you play each turn.",
   "CUTE_SAKIKO_MOD_POWER_SHOW_OFF_POWER.smartDescription": "Changes intent based on the first card you play each turn.",
-  
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.title": "Rainbow World",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.description": "The first card you play each turn randomly [gold]Transforms[/gold] into a card of another character with the [gold]same rarity[/gold] and [gold]same type[/gold].",
   "CUTE_SAKIKO_MOD_POWER_RAINBOW_WORLD_POWER.smartDescription": "The first card you play each turn randomly [gold]Transforms[/gold] into a card of another character with the [gold]same rarity[/gold] and [gold]same type[/gold].",
-  
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.title": "Ten Days' End",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.description": "At the start of the turn, reduce stacks by 1.\nWhen the count reaches 0, the owner dies.",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_END_POWER.smartDescription": "At the end of [purple]{OwnerName}[/purple]'s turn, reduce stacks by 1.\nWhen the count reaches 0, [purple]{OwnerName}[/purple] dies.",
-
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.title": "Unfinished Movement",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.description": "As the [red]countdown[/red] of [gold]Ten Days' End[/gold] progresses, effects are gradually produced.\nFor each surviving Ten Days unit, the owner takes [blue]5[/blue]% less damage.",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.smartDescription": "As the [red]countdown[/red] of [gold]Ten Days' End[/gold] progresses, effects are gradually produced.\nFor each surviving Ten Days unit, [purple]{OwnerName}[/purple] takes [blue]5[/blue]% less damage.",
@@ -24,15 +21,12 @@
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.3": "[red]3[/red] days remaining - Summon [color=#FFDD88]Soyo Nagasaki[/color].",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.2": "[red]2[/red] days remaining - Summon [color=#7799CC]Sakiko Togawa[/color].",
   "CUTE_SAKIKO_MOD_POWER_MOVEMENT_NOT_FINISHED_POWER.effect.1": "[red]1[/red] day remaining - Reduce all players' Max HP by [red]10[/red].",
-
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.title": "Beating Heart",
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.description": "Gradually changes with the [red]countdown[/red] of [gold]Ten Days' End[/gold].\nEach turn, take at most ([gold]Ten Days' End[/gold] stacks × [blue]Max HP ÷ 10[/blue]) damage.",
   "CUTE_SAKIKO_MOD_POWER_BEATING_HEART_POWER.smartDescription": "Each turn, take at most [blue]{Cap}[/blue] damage.",
-
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.title": "Wavering",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.description": "At the end of this turn, return the temporarily reduced Strength.",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_STRENGTH_DOWN_POWER.smartDescription": "At the end of this turn, return [blue]{Amount}[/blue] Strength.",
-
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.title": "Sluggish",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.description": "At the end of this turn, return the temporarily reduced Dexterity.",
   "CUTE_SAKIKO_MOD_POWER_TEN_DAY_TEMP_DEXTERITY_DOWN_POWER.smartDescription": "At the end of this turn, return [blue]{Amount}[/blue] Dexterity.",
@@ -192,9 +186,6 @@
   "CUTE_SAKIKO_MOD_POWER_MASQUERADE_POWER.title": "Masquerade",
   "CUTE_SAKIKO_MOD_POWER_MASQUERADE_POWER.description": "Records removed powers; they return at the start of your next turn. [sine][red]On this masked stage, enemies cannot truly die.[/red][/sine]",
   "CUTE_SAKIKO_MOD_POWER_MASQUERADE_POWER.smartDescription": "At the start of your next turn, return all powers removed last turn. [sine][red]On this masked stage, enemies cannot truly die.[/red][/sine]",
-  "CUTE_SAKIKO_MOD_POWER_BEAR_MEMORY_POWER.title": "Bear Memory",
-  "CUTE_SAKIKO_MOD_POWER_BEAR_MEMORY_POWER.description": "Each stack causes Memory cards to be played an additional time and gain 1 Pressure.",
-  "CUTE_SAKIKO_MOD_POWER_BEAR_MEMORY_POWER.smartDescription": "Memory cards are played [blue]{Amount}[/blue] additional {Amount:plural:time|times} and gain [blue]{Amount}[/blue] Pressure.",
   "CUTE_SAKIKO_MOD_POWER_OBLIVIONIS_POWER.title": "Oblivionis",
   "CUTE_SAKIKO_MOD_POWER_OBLIVIONIS_POWER.description": "Whenever a card is [red]Forgotten[/red], deal damage equal to the number of stacks to ALL enemies.",
   "CUTE_SAKIKO_MOD_POWER_OBLIVIONIS_POWER.smartDescription": "Whenever a card is [red]Forgotten[/red], deal [blue]{Amount}[/blue] damage to ALL enemies.",
@@ -286,5 +277,23 @@
   "CUTE_SAKIKO_MOD_POWER_MIYAKO_BEST_FRIEND_POWER.smartDescriptionMaruDead": "After [pink]Maru[/pink] is defeated, [purple]{OwnerName}[/purple] gains [blue]{StrengthGain}[/blue] [gold]Strength[/gold] at the end of each turn.",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.title": "Fraudulent Serpent",
   "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.description": "The first [blue]{Amount}[/blue] cards you draw each turn cannot be recognized. An eroded card only returns to normal after you play it.",
-  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "The first [blue]{Amount}[/blue] cards you draw each turn cannot be recognized. An eroded card only returns to normal after you play it."
+  "CUTE_SAKIKO_MOD_POWER_FRAUDULENT_SERPENT_POWER.smartDescription": "The first [blue]{Amount}[/blue] cards you draw each turn cannot be recognized. An eroded card only returns to normal after you play it.",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.title": "Scratch! Scratch!",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.description": "Whenever you play a [gold]Cat[/gold], deal damage equal to stacks to a random enemy.",
+  "CUTE_SAKIKO_MOD_POWER_NEKO_SCRATCH_POWER.smartDescription": "Whenever you play a [gold]Cat[/gold], deal [blue]{Amount}[/blue] damage to a random enemy.",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.title": "I Want More",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.description": "The first time you eat a [gold]Matcha Parfait[/gold] each turn, draw cards equal to stacks.",
+  "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.smartDescription": "The first time you eat a [gold]Matcha Parfait[/gold] each turn, draw [blue]{Amount}[/blue] cards.",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.title": "Parfait Delivery Cat",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.description": "Whenever you play a [gold]Cat[/gold], gain stacks of [gold]Live[/gold].",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.smartDescription": "Whenever you play a [gold]Cat[/gold], gain [blue]{Amount}[/blue] stack of [gold]Live[/gold].",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.title": "Cats! More Cats!",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.description": "Whenever you play a [gold]Cat[/gold], draw cards equal to stacks.",
+  "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.smartDescription": "Whenever you play a [gold]Cat[/gold], draw [blue]{Amount}[/blue] cards.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.title": "Chord Boost This Turn",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.description": "This turn, each stack increases the value of all [gold]Chords[/gold] from your next perform by 1.",
+  "CUTE_SAKIKO_MOD_POWER_CHORD_BONUS_THIS_TURN_POWER.smartDescription": "This turn, the next [blue]{Amount}[/blue] performs increase the value of all [gold]Chords[/gold] by 1.",
+  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.title": "Live Rush Next Turn",
+  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.description": "At the start of your next turn, gain [gold]Live Rush[/gold].",
+  "CUTE_SAKIKO_MOD_POWER_ENCORE_NEXT_TURN_POWER.smartDescription": "At the start of each of the next [blue]{Amount}[/blue] turns, gain [gold]Live Rush[/gold]."
 }

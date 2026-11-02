@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
@@ -29,6 +29,9 @@ public sealed class BeachEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => false;
+
+    /// <summary>需要爱音+祥子才能解锁第三个选项，归“需要 mod 角色的事件”。</summary>
+    protected override bool NeedsModCharacter => true;
 
     protected override bool IsAllowedInternal(IRunState runState) => true;
 

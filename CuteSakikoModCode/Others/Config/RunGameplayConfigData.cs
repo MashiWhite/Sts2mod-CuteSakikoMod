@@ -6,6 +6,8 @@ public sealed class RunGameplayConfigData
     public bool EnableModMonsters { get; set; } = true;
     public bool EnableCustomAncients { get; set; } = true;
     public bool EnableCustomEvents { get; set; } = true;
+    public bool EnableCharacterLockedEvents { get; set; } = true;
+    public bool EnablePlainEvents { get; set; } = true;
     public bool ScalePressureInMultiplayer { get; set; }
     
     /// <summary>权重系统总开关，默认关闭。</summary>
@@ -23,6 +25,8 @@ public sealed class RunGameplayConfigData
         EnableModMonsters = cfg.EnableModMonsters;
         EnableCustomAncients = cfg.EnableCustomAncients;
         EnableCustomEvents = cfg.EnableCustomEvents;
+        EnableCharacterLockedEvents = cfg.EnableCharacterLockedEvents;
+        EnablePlainEvents = cfg.EnablePlainEvents;
         ScalePressureInMultiplayer = cfg.ScalePressureInMultiplayer;
         UseModWeight = cfg.UseModWeight;
         UseModAncientWeight = cfg.UseModAncientWeight;
@@ -39,6 +43,8 @@ public sealed class RunGameplayConfigData
         cfg.EnableModMonsters = EnableModMonsters;
         cfg.EnableCustomAncients = EnableCustomAncients;
         cfg.EnableCustomEvents = EnableCustomEvents;
+        cfg.EnableCharacterLockedEvents = EnableCharacterLockedEvents;
+        cfg.EnablePlainEvents = EnablePlainEvents;
         cfg.ScalePressureInMultiplayer = ScalePressureInMultiplayer;
         cfg.UseModWeight = UseModWeight;
         cfg.UseModAncientWeight = UseModAncientWeight;

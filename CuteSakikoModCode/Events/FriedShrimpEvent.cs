@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
+using CuteSakikoMod.CuteSakikoModCode.Encounters.Event;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Event.Doll;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -26,6 +26,9 @@ public sealed class FriedShrimpEvent : CuteSakikoEvent
     );
 
     public override bool IsShared => true;
+
+    /// <summary>无角色门槛（仅有章节门槛），归“普通事件”。</summary>
+    protected override bool NeedsModCharacter => false;
 
     protected override bool IsAllowedInternal(IRunState runState)
     {

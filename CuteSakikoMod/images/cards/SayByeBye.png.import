@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1keysv0ie82i"
-path="res://.godot/imported/memory_burning_power.png-59772f8d4c9fec38c84f60c5a577eb8b.ctex"
+uid="uid://dnoeu5mq64jnk"
+path="res://.godot/imported/SayByeBye.png-4bf09a97b810fabd71b98f78390cf54b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/powers/memory_burning_power.png"
-dest_files=["res://.godot/imported/memory_burning_power.png-59772f8d4c9fec38c84f60c5a577eb8b.ctex"]
+source_file="res://CuteSakikoMod/images/cards/SayByeBye.png"
+dest_files=["res://.godot/imported/SayByeBye.png-4bf09a97b810fabd71b98f78390cf54b.ctex"]
 
 [params]
 

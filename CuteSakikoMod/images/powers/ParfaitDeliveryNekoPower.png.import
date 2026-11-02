@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcma5fbu4r7pp"
-path="res://.godot/imported/kabuto_note_outline.png-d26aa5df307ba7fecb65f3592a945b76.ctex"
+uid="uid://drds8x43xh1qw"
+path="res://.godot/imported/ParfaitDeliveryNekoPower.png-76269a7c2df310994b5dfba77da5b9c9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/relics/big/kabuto_note_outline.png"
-dest_files=["res://.godot/imported/kabuto_note_outline.png-d26aa5df307ba7fecb65f3592a945b76.ctex"]
+source_file="res://CuteSakikoMod/images/powers/ParfaitDeliveryNekoPower.png"
+dest_files=["res://.godot/imported/ParfaitDeliveryNekoPower.png-76269a7c2df310994b5dfba77da5b9c9.ctex"]
 
 [params]
 
