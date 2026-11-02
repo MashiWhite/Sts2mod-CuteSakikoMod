@@ -291,8 +291,8 @@
   "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.description": "每回合你第一次食用[gold]抹茶芭菲[/gold]时，抽层数等量的牌。",
   "CUTE_SAKIKO_MOD_POWER_WANT_MORE_PARFAIT_POWER.smartDescription": "每回合你第一次食用[gold]抹茶芭菲[/gold]时，抽[blue]{Amount}[/blue]张牌。",
   "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.title": "送芭菲的猫",
-  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.description": "你每打出一张[gold]猫咪[/gold]，获得层数等量[gold]莱芜[/gold]。",
-  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.smartDescription": "你每打出一张[gold]猫咪[/gold]，获得[blue]{Amount}[/blue]层[gold]莱芜[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.description": "你每食用1杯[gold]抹茶芭菲[/gold]，就将[blue]{Amount}[/blue]张[gold]猫咪[/gold]加入[gold]手牌[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_PARFAIT_DELIVERY_NEKO_POWER.smartDescription": "你每食用1杯[gold]抹茶芭菲[/gold]，就将[blue]{Amount}[/blue]张[gold]猫咪[/gold]加入[gold]手牌[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.title": "猫咪！还有猫咪！",
   "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.description": "你每打出一张[gold]猫咪[/gold]，抽层数等量的牌。",
   "CUTE_SAKIKO_MOD_POWER_CATS_MORE_CATS_POWER.smartDescription": "你每打出一张[gold]猫咪[/gold]，抽[blue]{Amount}[/blue]张牌。"

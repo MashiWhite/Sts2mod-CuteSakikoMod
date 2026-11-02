@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Multiplayer;
+using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 using STS2RitsuLib.Models;
@@ -70,6 +71,20 @@ public sealed class NekoCounterManager : HookedSingletonModel
 
         _nekoPlayed[player.NetId] = GetCount(player) + 1;
         _nekoThisTurn[player.NetId] = (_nekoThisTurn.TryGetValue(player.NetId, out var t) ? t : 0) + 1;
+        await Task.CompletedTask;
+    }
+
+    /// <summary>
+    ///     战斗结束必须清空全部计数：HookedSingletonModel 的 HookType.Combat 只控制钩子转发，
+    ///     单例实例本身跨战斗存活——不清理的话「本场战斗」计数会累积到下一场
+    ///     （猫抓完就撒盐开局伤害虚高，2026-11-02 用户实测发现）。
+    ///     写法照抄 MemoryCardPileManager.AfterCombatEnd。
+    /// </summary>
+    public override async Task AfterCombatEnd(CombatRoom room)
+    {
+        _nekoPlayed.Clear();
+        _nekoThisTurn.Clear();
+        _lastRound.Clear();
         await Task.CompletedTask;
     }
 }

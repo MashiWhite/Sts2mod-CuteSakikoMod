@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
@@ -613,7 +613,10 @@ public class ChordStorageCapability : RelicCapability
     {
         if (!ChordManager.AllChords.TryGetValue(chordId, out var def)) return;
         var title = new LocString("card_keywords", def.TitleKey).GetFormattedText();
-        var text = ChordDisplayHelper.GetFormattedDescription(def, GetDisplayBonus());
+        // 遗物侧悬浮提示只显示「基础值」，不加战斗内加成（加成后的数值在角色旁边
+        // 悬浮的储存和弦图标提示上显示，见 ChordNoteUIManager.UpdateStoredChordDisplay；
+        // 2026-11-02 用户要求两者分离）。
+        var text = ChordDisplayHelper.GetFormattedDescription(def, Config.BaseChordBonus);
         var owner = HostPlayer?.Creature;
         var condition = owner != null
             ? ChordSequenceModifierHelper.GetModifiedConditionText(def, owner)

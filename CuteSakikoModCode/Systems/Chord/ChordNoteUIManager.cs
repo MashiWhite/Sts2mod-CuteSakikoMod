@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
+using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
@@ -55,7 +55,10 @@ public static class ChordNoteUIManager
         if (data.StoredChordDisplay != null && GodotObject.IsInstanceValid(data.StoredChordDisplay))
         {
             var chords = ChordNoteSystem.GetStoredChords(player).ToList();
-            data.StoredChordDisplay.UpdateChords(chords, 0);
+            // 悬浮储存和弦图标显示「加成后」数值（含遗物/能力/首演等全部加成）；
+            // 遗物侧的悬浮提示（ChordStorageCapability.BuildHoverTips）则只显示基础值，
+            // 两者分离（2026-11-02 用户要求）。
+            data.StoredChordDisplay.UpdateChords(chords, ChordNoteSystem.GetDisplayBonus(player));
         }
     }
 

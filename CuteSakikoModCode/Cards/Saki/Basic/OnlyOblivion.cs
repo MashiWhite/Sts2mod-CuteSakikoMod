@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.CardPiles;
+using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -64,8 +64,14 @@ public class OnlyOblivion : CuteSakikoModCard
 
         if (allCards.Count == 0) return;
 
+        // 选牌界面的 prompt 是裸 LocString，不带卡牌 DynamicVar 上下文——
+        // {Cards:diff()} 无法格式化会原样显示。照 WhatMemory 的写法手动注入：
+        // 文案用 {Cards}（裸占位符），这里 Add 注入实际张数。
+        var prompt = new LocString("cards", "CUTE_SAKIKO_MOD_CARD_ONLY_OBLIVION.selectionScreenPrompt");
+        prompt.Add("Cards", cards);
+
         var prefs = new CardSelectorPrefs(
-            new LocString("cards", "CUTE_SAKIKO_MOD_CARD_ONLY_OBLIVION.selectionScreenPrompt"),
+            prompt,
             cards,
             cards
         );

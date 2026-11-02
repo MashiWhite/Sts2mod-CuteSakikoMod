@@ -591,6 +591,34 @@ public static class ChordNoteSystem
         PlayerNotesChanged?.Invoke(player);
     }
 
+    // ==================== 静默回填（海克斯"共鸣回响"专用） ====================
+
+    /// <summary>
+    ///     把一根和弦静默加回储存位。与 AddStoredChordAsync 的区别：
+    ///     ① 不重置 FirstPlayBonusAppliedThisOperation / ChordBonusConsumedThisOperation
+    ///       （否则批量演奏中途回填会让后续和弦丢首演加成、充能被多扣）；
+    ///     ② 不触发 Before/AfterChordMatched 钩子；
+    ///     ③ 储存位满时顶掉最旧的一根（2026-11-02 用户最终确认，不做余味溢出播放）。
+    ///     仅供演奏流程结束后的回填使用（调用方：海克斯 HexRunePatches.ResonanceEchoPatch），
+    ///     必须在 PlaySingleChordInternalAsync 尾部 SaveState 之后执行，否则会被旧快照覆盖。
+    /// </summary>
+    public static async Task RefillStoredChordSilentAsync(Player player, string chordId)
+    {
+        if (player == null || string.IsNullOrEmpty(chordId)) return;
+        if (player.Creature?.CombatState == null) return;
+
+        var state = GetState(player);
+        if (!state.IsActive) return;
+
+        state.StoredChords.Add(chordId);
+        while (state.StoredChords.Count > GetMaxStoredChords(player))
+            state.StoredChords.RemoveAt(0);
+
+        SaveState(player, state);
+        PlayerNotesChanged?.Invoke(player);
+        await Task.CompletedTask;
+    }
+
     // ==================== 查询方法 ====================
 
     public static int ClearNotesAndGetCount(Player player)
