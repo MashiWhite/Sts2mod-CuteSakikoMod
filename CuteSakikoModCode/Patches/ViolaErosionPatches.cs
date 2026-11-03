@@ -19,7 +19,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches;
 /// </summary>
 internal static class ViolaErosionText
 {
-    public const string CardImagePath = "res://CuteSakikoMod/images/cards/viola.png";
+    public const string CardImagePath = "res://CuteSakikoMod/images/cards/Viola.png";
     public const string GarbledTitleKey = "CUTE_SAKIKO_MOD_CARD_VIOLA_GARBLED.title";
     public const string GarbledDescriptionKey = "CUTE_SAKIKO_MOD_CARD_VIOLA_GARBLED.description";
     public const string GarbageVariable = "Garbage";

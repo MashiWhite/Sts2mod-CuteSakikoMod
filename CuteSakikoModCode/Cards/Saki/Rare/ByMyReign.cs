@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
@@ -46,7 +46,7 @@ public class ByMyReign() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare,
             var hand = PileType.Hand.GetPile(player);
             if (hand == null) continue;
 
-            var swords = hand.Cards.Where(c => c is KnightSword).ToList();
+            var swords = hand.Cards.OfType<KnightSword>().ToList();
 
             if (swords.Count > 0)
                 foreach (var sword in swords)
@@ -54,11 +54,18 @@ public class ByMyReign() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Rare,
                     var target = GetRandomEnemy();
                     if (target == null) continue;
 
-                    if (IsUpgraded) sword.BaseReplayCount += 1;
-
-                    await CardCmd.AutoPlay(choiceContext, sword, target);
-
-                    if (IsUpgraded) sword.BaseReplayCount -= 1;
+                    // ★ 升级版：让这把剑本次额外重放 1 次。
+                    //   走官方 ModifyCardPlayCount（剑自己实现），不改 BaseReplayCount，
+                    //   因此即使打出过程异常也不会留下永久 +1 的脏数据。
+                    if (IsUpgraded) sword.QueueExtraPlays(1);
+                    try
+                    {
+                        await CardCmd.AutoPlay(choiceContext, sword, target);
+                    }
+                    finally
+                    {
+                        if (IsUpgraded) sword.ClearExtraPlays();
+                    }
                 }
             else
                 // 为所有人出鞘：若手牌/抽牌堆/弃牌堆中没有骑士之剑，补一把

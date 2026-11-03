@@ -1,4 +1,7 @@
-﻿using Godot;
+using Godot;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -95,7 +98,10 @@ public sealed class RainbowWorldPower : CuteSakikoModPower
             .Where(c => c.Rarity == original.Rarity
                      && c.Type == original.Type
                      && c.Pool != null
-                     && c.Pool != myPool)
+                     && c.Pool != myPool
+                     && c.Pool is not CuteSakikoEggCardPool // 不变到彩蛋卡池（2026-11-03 用户指令）
+                     && c is not CuteSakikoModEggCard
+                     && c is not OtherModTokenCard)
             .ToList();
 
         if (candidates.Count == 0) return null;

@@ -6,13 +6,13 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Keywords;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 
 public class WantBoth : CuteRanaCard
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Parfait.GetModCardKeyword()];
 
-        public WantBoth() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+        public WantBoth() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
 

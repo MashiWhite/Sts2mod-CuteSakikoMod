@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://by4dpc58w4o7s"
-path="res://.godot/imported/a.png-d6410fcc1f1181cbaeb10ec9db2f69e8.ctex"
+uid="uid://d1n1shojysbrq"
+path="res://.godot/imported/viola.png-7bfce4e6b532318fc8387027636fb13e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/cards/a.png"
-dest_files=["res://.godot/imported/a.png-d6410fcc1f1181cbaeb10ec9db2f69e8.ctex"]
+source_file="res://CuteSakikoMod/images/cards/Viola.png"
+dest_files=["res://.godot/imported/viola.png-7bfce4e6b532318fc8387027636fb13e.ctex"]
 
 [params]
 
@@ -23,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

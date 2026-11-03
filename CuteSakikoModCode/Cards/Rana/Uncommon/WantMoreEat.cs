@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
-namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
+namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Uncommon;
 
 /// <summary>
 ///     我还要吃：每回合你第一次食用抹茶芭菲时，抽 N 张牌（N = 层数）。
@@ -15,7 +15,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Rare;
 /// </summary>
 public class WantMoreEat : CuteRanaCard
 {
-    public WantMoreEat() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public WantMoreEat() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

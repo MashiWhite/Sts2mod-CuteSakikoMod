@@ -1,6 +1,8 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
 using CuteSakikoMod.CuteSakikoModCode.Others; // ★ 引入 VfxUtil
+using CuteSakikoMod.CuteSakikoModCode.Pools;
 using Godot; // ★ 需要用到 Tween 和 Vector2
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -228,13 +230,15 @@ public class Hotaru : ModMonsterTemplate
         var rng = combatState.RunState.Rng.CombatCardGeneration;
 
         var allCandidates = ModelDb.AllCards
-            .Where(c => c.Pool != null 
-                     && c.Pool != myPool 
-                     && c.Rarity != CardRarity.Ancient 
+            .Where(c => c.Pool != null
+                     && c.Pool != myPool
+                     && c.Rarity != CardRarity.Ancient
                      && c.Rarity != CardRarity.Basic
                      && c is not CuteSakikoModEggCard
-                     && c is not DeprecatedCard 
-                     && c.ShouldShowInCardLibrary) 
+                     && c is not OtherModTokenCard      // 彩蛋池第二注册入口（2026-11-03 补）
+                     && c.Pool is not CuteSakikoEggCardPool // 兜底：凡彩蛋池成员一律不塞（2026-11-03 用户指令）
+                     && c is not DeprecatedCard
+                     && c.ShouldShowInCardLibrary)
             .ToList();
 
         if (allCandidates.Count == 0) return null;
@@ -243,6 +247,8 @@ public class Hotaru : ModMonsterTemplate
         var uncommons = allCandidates.Where(c => c.Rarity == CardRarity.Uncommon && c.Type != CardType.Status && c.Type != CardType.Curse).ToList();
         var rares = allCandidates.Where(c => c.Rarity == CardRarity.Rare && c.Type != CardType.Status && c.Type != CardType.Curse).ToList();
         var statuses = allCandidates.Where(c => c.Type == CardType.Status).ToList();
+        // 2026-11-03 用户澄清：诅咒行为不变——官方诅咒/mod 诅咒都照塞，
+        // 仅 Ancient 全局排除（Regreted=Ancient 不中）+ 彩蛋池排除（见上）。
         var curses = allCandidates.Where(c => c.Type == CardType.Curse).ToList();
 
         int weightCommon = commons.Count > 0 ? 45 : 0;

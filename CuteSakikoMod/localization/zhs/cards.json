@@ -568,8 +568,6 @@
   "CUTE_SAKIKO_MOD_CARD_BANSOGO.description": "获得{Energy:energyIcons()}。\n若有则消耗1层[gold]压力[/gold]，并抽1张牌。",
   "CUTE_SAKIKO_MOD_CARD_SHIRK.title": "逃避",
   "CUTE_SAKIKO_MOD_CARD_SHIRK.description": "抽到这张牌时，{IfUpgraded:show:选择|随机}丢弃1张[gold]手牌[/gold]。",
-  "CUTE_SAKIKO_MOD_CARD_VENT_ANGRY.title": "迁怒",
-  "CUTE_SAKIKO_MOD_CARD_VENT_ANGRY.description": "造成{Damage:diff()}点伤害。\n若敌人意图不是攻击，则抽{Cards:diff()}张牌并给予{PressureGain:diff()}层[gold]压力[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_BE_GOD.title": "我来成神",
   "CUTE_SAKIKO_MOD_CARD_BE_GOD.description": "回合结束时，从[red]遗忘牌堆[/red]中选择{Layers:diff()}张牌打出并[red]遗忘[/red]。",
   "CUTE_SAKIKO_MOD_CARD_HEART_SHIELD.title": "心之壁",
