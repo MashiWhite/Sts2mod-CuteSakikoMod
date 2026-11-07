@@ -27,7 +27,7 @@
   "CUTE_SAKIKO_MOD_CARD_HUH.title": "啊嘞嘞？",
   "CUTE_SAKIKO_MOD_CARD_HUH.description": "随机造成{Damage:diff()}点伤害{Repeat:diff()}次。\n获得{notes:diff()}个随机[img]CuteSakikoMod/images/ui/text/text_note.png[/img]，并触发对应效果。",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.title": "化为音符",
-  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.description": "选择{Cards:diff()}张手牌[gold]消耗[/gold]，获得对应[pink]音符[/pink]并造成对应效果。",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.description": "至多选择{Cards:diff()}张手牌[gold]消耗[/gold]，获得对应[pink]音符[/pink]并造成对应效果。",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.selectionScreenPrompt": "选择要化为音符的牌",
   "CUTE_SAKIKO_MOD_CARD_NO_LONGER_NAIVE.title": "不再幼稚的我",
   "CUTE_SAKIKO_MOD_CARD_NO_LONGER_NAIVE.description": "造成{CalculatedDamage:diff()}点伤害。\n你的[red]遗忘堆[/red]里每有1张牌，伤害提升{ExtraDamage:diff()}点。",

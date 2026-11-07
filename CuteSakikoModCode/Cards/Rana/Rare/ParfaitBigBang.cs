@@ -37,8 +37,12 @@ public class ParfaitBigBang : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 先扣芭菲（不足按关键词定义无法打出——费用校验由关键词系统承担）
-        await MatchaParfait.SimulateParfaitEaten(Owner, 2, choiceContext);
+        // 先扣芭菲：必须走 RemoveCharges（真正扣杯 + 触发食用监听）。
+        // ⚠️ SimulateParfaitEaten 只做"记账/触发监听"、**不扣杯**，误用会导致白嫖
+        //    （2026-11-07 用户实机发现，同批修了 SpinachParfait / SoftBigBelly）
+        var parfait = Owner.Relics.OfType<MatchaParfait>().FirstOrDefault();
+        if (parfait != null)
+            await MatchaParfait.RemoveCharges(parfait, GetParfaitConsumeCount(), choiceContext);
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)

@@ -27,7 +27,7 @@
   "CUTE_SAKIKO_MOD_CARD_HUH.title": "あれれ？",
   "CUTE_SAKIKO_MOD_CARD_HUH.description": "ランダムに{Damage:diff()}ダメージを{Repeat:diff()}回与える。\nランダムな[img]CuteSakikoMod/images/ui/text/text_note.png[/img]を{notes:diff()}個得て、対応する効果を発動する。",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.title": "音符に変わる",
-  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.description": "手札から{Cards:diff()}枚のカードを選んで[gold]廃棄[/gold]し、対応する[pink]音符[/pink]を得て対応する効果を発動する。",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.description": "手札から最大{Cards:diff()}枚のカードを選んで[gold]廃棄[/gold]し、対応する[pink]音符[/pink]を得て対応する効果を発動する。",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.selectionScreenPrompt": "音符に変えるカードを選ぶ",
   "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.title": "重圧を刃に変えて",
   "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.description": "手札の[gold]騎士の剣[/gold]をプレイし、すべての[gold]重圧[/gold]を消費して、その分の追加ダメージを与える。",

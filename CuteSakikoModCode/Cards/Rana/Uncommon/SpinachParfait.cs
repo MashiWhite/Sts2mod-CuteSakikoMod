@@ -49,7 +49,10 @@ public class SpinachParfait : CuteRanaCard, CuteRanaCard.IEatParfaitCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await MatchaParfait.SimulateParfaitEaten(Owner, 1, choiceContext);
+        // 走 RemoveCharges 才真正扣杯（SimulateParfaitEaten 只记账不扣杯，2026-11-07 修）
+        var parfait = Owner.Relics.OfType<MatchaParfait>().FirstOrDefault();
+        if (parfait != null)
+            await MatchaParfait.RemoveCharges(parfait, GetParfaitConsumeCount(), choiceContext);
 
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         await PowerCmd.Apply<VigorPower>(
