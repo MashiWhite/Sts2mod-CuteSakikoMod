@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Keywords;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Basic;
@@ -38,13 +39,32 @@ public class TurnIntoNote() : CuteAnonCard(1, CardType.Skill, CardRarity.Basic, 
         int selectCount = Math.Min(DynamicVars.Cards.IntValue, candidates.Count);
         if (selectCount <= 0) return;
 
-        var prefs = new CardSelectorPrefs(
-            new LocString("cards", "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.selectionScreenPrompt"),
-            selectCount,
-            selectCount);
+        // ★ 顺序敏感（2026-11-07 用户反馈）：
+        //   音符的产生顺序决定能否凑出想要的和弦，因此**剩 2 张以上必须让玩家亲自点选**，
+        //   否则自动全选会造成强烈挫败感。只有剩 1 张（没得选）时才自动通过。
+        //
+        //   原写法 CardSelectorPrefs(prompt, selectCount, selectCount) 的 min==max，
+        //   会让 RequireManualConfirmation=false，而 CardSelectCmd.FromHand 里：
+        //       if (!prefs.RequireManualConfirmation && list.Count <= prefs.MinSelect) → 直接全给
+        //   于是候选数恰好等于所需数时连选择界面都不弹（就是"自动全选"的根因）。
+        //   ⇒ 改成 min=0 / max=selectCount：min≠max → RequireManualConfirmation=true，
+        //     必定弹窗且要求手动确认；返回顺序 = 玩家点击顺序
+        //     （NPlayerHand._selectedCards 是 List，按点击顺序追加）。
+        //     min=0 让玩家可以少选，描述相应改成「至多选择 N 张」。
+        var prompt = new LocString("cards", "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.selectionScreenPrompt");
+        IEnumerable<CardModel> selected;
 
-        var selected = await CardSelectCmd.FromHand(
-            choiceContext, Owner, prefs, c => c != this, this);
+        if (candidates.Count == 1)
+        {
+            // 只剩一张，没得选：直接取，不用弹窗
+            selected = candidates;
+        }
+        else
+        {
+            var prefs = new CardSelectorPrefs(prompt, 0, selectCount);
+            selected = await CardSelectCmd.FromHand(
+                choiceContext, Owner, prefs, c => c != this, this);
+        }
 
         var selectedList = selected.ToList();
         if (selectedList.Count == 0) return;

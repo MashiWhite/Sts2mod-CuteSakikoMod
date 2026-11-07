@@ -27,7 +27,7 @@
   "CUTE_SAKIKO_MOD_CARD_HUH.title": "Ehh?",
   "CUTE_SAKIKO_MOD_CARD_HUH.description": "Deal {Damage:diff()} damage {Repeat:diff()} times randomly.\nGain {notes:diff()} random [img]CuteSakikoMod/images/ui/text/text_note.png[/img] and trigger their effects.",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.title": "Turn into Notes",
-  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.description": "Choose {Cards:diff()} {Cards:plural:card|cards} in your hand to [gold]Exhaust[/gold], gain the corresponding [pink]Notes[/pink] and trigger their effects.",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.description": "Choose up to {Cards:diff()} {Cards:plural:card|cards} in your hand to [gold]Exhaust[/gold], gain the corresponding [pink]Notes[/pink] and trigger their effects.",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_NOTE.selectionScreenPrompt": "Choose cards to turn into Notes",
   "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.title": "Pressure into a Blade",
   "CUTE_SAKIKO_MOD_CARD_PRESSURE_INTO_BLADE.description": "Play [gold]Knight's Sword[/gold] from your hand, and consume all [gold]Pressure[/gold] to deal additional damage equal to the amount consumed.",
