@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://d18drovp4pxol"]
+
+[ext_resource type="Texture2D" uid="uid://b2rg5qudmbxq1" path="res://CuteSakikoMod/images/skin/anon/anonwang/character_icon_anon.png" id="1_nj5r2"]
+
+[node name="Icon" type="TextureRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_nj5r2")
+expand_mode = 1
+stretch_mode = 5

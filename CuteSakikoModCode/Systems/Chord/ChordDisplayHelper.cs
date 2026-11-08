@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -52,14 +52,14 @@ public static class ChordDisplayHelper
     {
         string key;
         if (type == Entry.AnyNote)
-            key = "CUTESAKIKOMOD_NOTE_ANY";
+            key = "CUTE_SAKIKO_MOD_NOTE_ANY";
         else
             switch (type)
             {
-                case CardType.Attack: key = "CUTESAKIKOMOD_NOTE_ATTACK"; break;
-                case CardType.Skill: key = "CUTESAKIKOMOD_NOTE_SKILL"; break;
-                case CardType.Power: key = "CUTESAKIKOMOD_NOTE_POWER"; break;
-                default: key = "CUTESAKIKOMOD_NOTE_SPECIAL"; break;
+                case CardType.Attack: key = "CUTE_SAKIKO_MOD_NOTE_ATTACK"; break;
+                case CardType.Skill: key = "CUTE_SAKIKO_MOD_NOTE_SKILL"; break;
+                case CardType.Power: key = "CUTE_SAKIKO_MOD_NOTE_POWER"; break;
+                default: key = "CUTE_SAKIKO_MOD_NOTE_SPECIAL"; break;
             }
 
         var title = new LocString("static_hover_tips", $"{key}.title");

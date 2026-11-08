@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
@@ -12,13 +12,13 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
     // ─────────────────────────────────────────────────────────
     private static readonly CharacterPresetSet SharedPresets = new(
         [
-            new DeckPreset("saki_default", "SAKI_DECK_DEFAULT",
+            new DeckPreset("saki_default", "CUTE_SAKIKO_MOD_SAKI_DECK_DEFAULT",
             [
                 (typeof(PianoStrike), 4),
                 (typeof(DefendSaki), 4),
                 (typeof(GoWork), 1)
             ]),
-            new DeckPreset("ob_default", "SAKI_DECK_OB",
+            new DeckPreset("ob_default", "CUTE_SAKIKO_MOD_SAKI_DECK_OB",
             [
                 (typeof(PianoStrike), 4),
                 (typeof(DefendSaki), 4),
@@ -26,8 +26,8 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
             ])
         ],
         [
-            new RelicPreset("saki_starter", "SAKI_RELIC_DEFAULT", 80, 88, [typeof(KabutoNote)]),
-            new RelicPreset("ob_starter", "SAKI_RELIC_OB", 70, 111, [typeof(ObMask)])
+            new RelicPreset("saki_starter", "CUTE_SAKIKO_MOD_SAKI_RELIC_DEFAULT", 80, 88, [typeof(KabutoNote)]),
+            new RelicPreset("ob_starter", "CUTE_SAKIKO_MOD_SAKI_RELIC_OB", 70, 111, [typeof(ObMask)])
         ]);
 
     public Type CharacterType => typeof(CuteSaki);
@@ -39,7 +39,7 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
     [
         CharacterSkinDefinition.FromPresets(
             "saki",
-            "SAKI_SKIN_DEFAULT",
+            "CUTE_SAKIKO_MOD_SAKI_SKIN_DEFAULT",
             new SkinAssets(
                 "res://CuteSakikoMod/scenes/char/saki/sakiko.tscn",
                 "res://CuteSakikoMod/scenes/char/saki/saki_energy_counter.tscn",
@@ -57,7 +57,7 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
 
         CharacterSkinDefinition.FromPresets(
             "ob",
-            "SAKI_SKIN_OB",
+            "CUTE_SAKIKO_MOD_SAKI_SKIN_OB",
             new SkinAssets(
                 "res://CuteSakikoMod/scenes/skin/saki/ob/ob.tscn",
                 "res://CuteSakikoMod/scenes/char/saki/saki_energy_counter.tscn",
@@ -75,7 +75,7 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
         
         CharacterSkinDefinition.FromPresets(
         "tenday_saki",
-        "SAKI_SKIN_TENDAY",
+        "CUTE_SAKIKO_MOD_SAKI_SKIN_TENDAY",
         new SkinAssets(
             "res://CuteSakikoMod/scenes/skin/saki/tenday/tendaysaki.tscn",
             "res://CuteSakikoMod/scenes/char/saki/saki_energy_counter.tscn",

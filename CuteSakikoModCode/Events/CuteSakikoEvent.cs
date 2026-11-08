@@ -1,4 +1,5 @@
 using CuteSakikoMod.CuteSakikoModCode.Others.Config;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -58,6 +59,45 @@ public abstract class CuteSakikoEvent : ModEventTemplate
     /// <summary>单人=false / 多人=true。只看玩家数：多人跑局 Players 恒 ≥ 2，且各端一致。</summary>
     private static bool IsMultiplayerRun(IRunState runState)
         => runState?.Players != null && runState.Players.Count >= 2;
+
+    /// <summary>
+    ///     该玩家当前是否被 DirectConnectIP（第三方直连 mod）的"离线托管"接管。
+    ///
+    ///     背景（2026-11-08 修复多人卡死）：DirectConnectIP 的
+    ///     AutoPassRemoteChoiceForGhostsPatch 对托管玩家的所有远程选择
+    ///     一律回 `PlayerChoiceResult.FromIndex(0)`（硬编码 Index 类型）。
+    ///     于是事件里任何"从牌组选牌"（CardSelectCmd.FromDeck*）都会在
+    ///     CardSelectCmd 内部 `WaitForRemoteChoice(...).AsDeckCards()` 抛
+    ///     InvalidOperationException → 事件状态机卡死。
+    ///
+    ///     兼容方式：反射调用它的公开判定 API，**对托管玩家跳过选牌**。
+    ///     ⚠️ 完全松耦合：
+    ///       · 未安装该 mod → Type.GetType 返回 null（不抛异常）→ 恒 false
+    ///       · 该 mod 改版删了方法 → GetMethod 返回 null → 恒 false
+    ///       · 任何异常都被 catch → 恒 false
+    ///     恒 false 意味着走原本的正常路径，**对没装该 mod 的玩家零影响**。
+    /// </summary>
+    protected static bool IsTakenOverByDirectConnect(Player? player)
+    {
+        if (player == null) return false;
+        try
+        {
+            var type = Type.GetType(
+                "DirectConnectIP.Patches.Network.OfflineTakeoverCore, DirectConnectIP");
+            if (type == null) return false;
+
+            var method = type.GetMethod(
+                "IsGhost",
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+            if (method == null) return false;
+
+            return method.Invoke(null, new object[] { player.NetId }) is true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     /// <summary>
     ///     子类可重写此方法，添加除全局开关外的自定义出现条件。

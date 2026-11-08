@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Rana.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
@@ -12,7 +12,7 @@ public sealed class RanaSkinRegistry : ICharacterSkinRegistry
     // ─────────────────────────────────────────────────────────
     private static readonly CharacterPresetSet SharedPresets = new(
         [
-            new DeckPreset("rana_default", "RANA_DECK_DEFAULT",
+            new DeckPreset("rana_default", "CUTE_SAKIKO_MOD_RANA_DECK_DEFAULT",
             [
                 (typeof(RanaStrike), 4),
                 (typeof(RanaDefend), 4),
@@ -21,7 +21,7 @@ public sealed class RanaSkinRegistry : ICharacterSkinRegistry
             ])
         ],
         [
-            new RelicPreset("rana_starter", "RANA_RELIC_DEFAULT", 70, 99, [typeof(MatchaParfait)])
+            new RelicPreset("rana_starter", "CUTE_SAKIKO_MOD_RANA_RELIC_DEFAULT", 70, 99, [typeof(MatchaParfait)])
         ]);
 
     public Type CharacterType => typeof(CuteRana);
@@ -33,7 +33,7 @@ public sealed class RanaSkinRegistry : ICharacterSkinRegistry
     [
         CharacterSkinDefinition.FromPresets(
             "rana",
-            "RANA_SKIN_DEFAULT",
+            "CUTE_SAKIKO_MOD_RANA_SKIN_DEFAULT",
             new SkinAssets(
                 "res://CuteSakikoMod/scenes/char/rana/rana.tscn",
                 "res://CuteSakikoMod/scenes/char/anon/anon_energy_counter.tscn",
@@ -51,7 +51,7 @@ public sealed class RanaSkinRegistry : ICharacterSkinRegistry
 
         CharacterSkinDefinition.FromPresets(
             "tenday_rana",
-            "RANA_SKIN_TENDAY",
+            "CUTE_SAKIKO_MOD_RANA_SKIN_TENDAY",
             new SkinAssets(
                 "res://CuteSakikoMod/scenes/skin/rana/tenday/tendayrana.tscn",
                 "res://CuteSakikoMod/scenes/char/anon/anon_energy_counter.tscn",

@@ -91,7 +91,7 @@ public sealed partial class DeckPresetPanel : Control
         var viewLabel = new Label
         {
             // ★ 走本地化
-            Text = new LocString("characters", "SKIN_VIEW_DECK").GetFormattedText(),
+            Text = new LocString("characters", "CUTE_SAKIKO_MOD_SKIN_VIEW_DECK").GetFormattedText(),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             AnchorRight = 1.0f,
