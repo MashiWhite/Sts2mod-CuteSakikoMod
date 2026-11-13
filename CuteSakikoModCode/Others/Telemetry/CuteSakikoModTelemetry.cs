@@ -404,7 +404,9 @@ public static class CuteSakikoModTelemetry
 
     // ==================== 本地化跑局上传 ====================
 
-    public static void CaptureLocalizedRun(SerializableRun run, bool? isVictory = null)
+    public static void CaptureLocalizedRun(SerializableRun run, bool? isVictory = null,
+        bool? progressSuccess = null, bool? isSingleplayer = null,
+        int? oldMaxAscension = null, int? newMaxAscension = null)
     {
         if (run == null) return;
         try
@@ -596,7 +598,12 @@ public static class CuteSakikoModTelemetry
                     ["num_reloads"] = run.NumReloads,
                     ["game_mode"] = run.GameMode.ToString(),
                     ["current_act_index"] = run.CurrentActIndex,
-                    ["is_victory"] = isVictory ?? (run.WinTime > 0)
+                    ["is_victory"] = isVictory ?? (run.WinTime > 0),
+                    // 0.113：PostRunProgressUpdateResult 带来的字段（0.111 分支传 null）
+                    ["progress_success"] = progressSuccess,
+                    ["is_singleplayer_run"] = isSingleplayer,
+                    ["old_max_ascension"] = oldMaxAscension,
+                    ["new_max_ascension"] = newMaxAscension
                 });
 
             Entry.Logger.Info($"[Telemetry] Localized run uploaded (mod={ModVersion}, asc={run.Ascension}).");

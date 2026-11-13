@@ -1,5 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,6 +14,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
 public class Flyback : OtherModTokenCard
 {
     // 记录升级加成的总量（不受 reloads 影响）
+    /// <summary>恐惧模式：Flyback 的伤害与抽牌数减半（最低 1）。</summary>
+    private static int ApplyDreadHalving(int value)
+    {
+#if STS2_AT_LEAST_0_113_0
+        return AscensionHelper.IsDread() ? Math.Max(1, value / 2) : value;
+#else
+        return value;
+#endif
+    }
     private int _upgradeDamageBonus;
     private int _upgradeDrawBonus;
 
@@ -32,8 +42,8 @@ public class Flyback : OtherModTokenCard
             var baseDamage = Math.Max(3, 10 - reloads);
             var baseDraw = Math.Max(1, 2 - reloads / 3);
 
-            yield return new DamageVar(baseDamage, ValueProp.Move);
-            yield return new CardsVar(baseDraw);
+            yield return new DamageVar(ApplyDreadHalving(baseDamage), ValueProp.Move);
+            yield return new CardsVar(ApplyDreadHalving(baseDraw));
         }
     }
 
@@ -101,8 +111,8 @@ public class Flyback : OtherModTokenCard
     internal void RefreshDynamicVars()
     {
         var reloads = GetReloadCount();
-        var finalDamage = Math.Max(3, 10 - reloads) + _upgradeDamageBonus;
-        var finalDraw = Math.Max(1, 2 - reloads / 3) + _upgradeDrawBonus;
+        var finalDamage = ApplyDreadHalving(Math.Max(3, 10 - reloads) + _upgradeDamageBonus);
+        var finalDraw = ApplyDreadHalving(Math.Max(1, 2 - reloads / 3) + _upgradeDrawBonus);
 
         if (DynamicVars.TryGetValue("Damage", out var dmgVar))
             dmgVar.BaseValue = finalDamage;

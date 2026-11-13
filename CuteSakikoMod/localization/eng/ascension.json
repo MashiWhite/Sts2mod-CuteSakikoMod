@@ -1,0 +1,7 @@
+{
+  "DREAD.GREY_ANON.description": "Each card can damage enemies up to [blue]3[/blue] times per turn.",
+  "DREAD.MIYAKO.description": "Damage dealt and taken by all enemies changes with the genders of the players on the field.",
+  "DREAD.TEN_DAY.description": "Enemies gain a buff each day.",
+  "DREAD.CHOCOLATE_SNAIL.description": "All enemies in this act gain [blue]4[/blue] [gold]Regeneration[/gold].",
+  "DREAD.STAR_ANON.description": "At the end of each enemy turn, global [gold]Flyback plays[/gold] +[blue]3[/blue]; all enemies gain [blue]1 + Flyback plays%[/blue] [gold]Strength[/gold]."
+}

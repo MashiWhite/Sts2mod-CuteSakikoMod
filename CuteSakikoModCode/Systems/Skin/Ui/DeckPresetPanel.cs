@@ -131,12 +131,7 @@ public sealed partial class DeckPresetPanel : Control
     // ─────────────────────────────────────────────────────────
     // 定位：左边缘和 InfoPanel 对齐，紧贴其上，避开顶部头像
     // ─────────────────────────────────────────────────────────
-    private NCharacterSelectScreen? FindScreen()
-    {
-        Node? n = this;
-        while (n != null && n is not NCharacterSelectScreen) n = n.GetParent();
-        return n as NCharacterSelectScreen;
-    }
+    private Control? FindScreen() => SkinScreenLocator.FindSelectScreen(this);
 
     private void RepositionToInfoPanel()
     {
@@ -147,7 +142,7 @@ public sealed partial class DeckPresetPanel : Control
             return;
         }
 
-        var infoPanel = screen.GetNodeOrNull<Control>("InfoPanel");
+        var infoPanel = SkinScreenLocator.FindInfoPanel(screen);
         if (infoPanel == null)
         {
             GD.PrintErr("[DeckPresetPanel] RepositionToInfoPanel: InfoPanel null");

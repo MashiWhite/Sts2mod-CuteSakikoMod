@@ -28,6 +28,13 @@ public class CuteRana : CuteSakikoCharacter<CuteRanaCardPool, CuteRanaRelicPool,
     public override Color EnergyLabelOutlineColor => new(0f, 0.2f, 0.4f);
 
     public override Color NameColor => Color;
+#if STS2_AT_LEAST_0_113_0
+    // 0.113 Dread 模式：名字颜色 / 背景亮度与对比度（默认 0.7 / 1.1 / 金色）
+    public override Godot.Color DreadNameColor => new(Color.R, Color.G, Color.B, 0.85f);
+    public override float DreadBgBrightness => 0.70f;
+    public override float DreadBgContrast => 1.12f;
+#endif
+
     public override CharacterGender Gender => CharacterGender.Feminine;
 
     public override Color DialogueColor => new("#4a704a");

@@ -30,6 +30,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.pronounPossessive": "她的",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.pronounSubject": "她",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "丰川祥子",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.shortTitle": "祥子",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.titleObject": "可爱小祥",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.aromaPrinciple": "[pink]...呜，这是哪儿？[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.alive.endTurnPing": "现在打牌的应该是[pink]我[/pink]才对！",
@@ -44,6 +45,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.pronounPossessive": "她的",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.pronounSubject": "她",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "千早爱音",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.shortTitle": "爱音",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.titleObject": "小小爱音",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.attack.1": "[pink]看我这招！[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.attack.2": "[pink]尝尝这个！[/pink]",
@@ -70,5 +72,6 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounPossessive": "她的",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounSubject": "她",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "要乐奈",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.shortTitle": "乐奈",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.titleObject": "可爱乐奈"
 }

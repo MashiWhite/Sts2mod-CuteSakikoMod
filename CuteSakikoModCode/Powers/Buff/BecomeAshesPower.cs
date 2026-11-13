@@ -1,3 +1,4 @@
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -74,7 +75,13 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
         if (side != Owner.Side) return;
 
         var lostPercent = (float)(_initialMaxHp - Owner.CurrentHp) / _initialMaxHp * 100f;
-        var strength = Math.Max(1, (int)Math.Floor(lostPercent / 20f));
+        // 恐惧模式：原本「每 20% 已损生命 +1 力量」改为「每 10%」
+#if STS2_AT_LEAST_0_113_0
+        var divisor = AscensionHelper.IsDread() ? 10f : 20f;
+#else
+        const float divisor = 20f;
+#endif
+        var strength = Math.Max(1, (int)Math.Floor(lostPercent / divisor));
 
         // 二阶段条件：当前生命值低于初始最大生命值的 85%
         if (Owner.CurrentHp < _initialMaxHp * 0.85)
@@ -106,7 +113,13 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
         if (Owner != null)
         {
             var lostPercent = (float)(_initialMaxHp - Owner.CurrentHp) / _initialMaxHp * 100f;
-            var strength = Math.Max(2, (int)Math.Floor(lostPercent / 20f));
+            // 恐惧模式：显示值与实际结算保持一致（每 10% 已损生命 +1 力量）
+#if STS2_AT_LEAST_0_113_0
+            var divisor = AscensionHelper.IsDread() ? 10f : 20f;
+#else
+            const float divisor = 20f;
+#endif
+            var strength = Math.Max(2, (int)Math.Floor(lostPercent / divisor));
             if (Owner.CurrentHp < _initialMaxHp * 0.85)
                 strength *= 2;
             DynamicVars["StrengthGain"].BaseValue = strength;

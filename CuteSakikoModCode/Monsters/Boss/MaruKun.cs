@@ -29,9 +29,16 @@ public class MaruKun : ModMonsterTemplate
         "res://CuteSakikoMod/scenes/monster/maru_kun.tscn"
     );
 
-    private int HitDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8);
-    private int GentleHitDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 7, 6);
+    private int HitDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8) + DreadBonus(2);
+    private int GentleHitDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 7, 6) + DreadBonus(2);
     private const int VulnerableAmount = 1;
+#if STS2_AT_LEAST_0_113_0
+    private static bool IsDread => AscensionHelper.IsDread();
+#else
+    private static bool IsDread => false;
+#endif
+
+    private static int DreadBonus(int amount) => IsDread ? amount : 0;
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
@@ -50,6 +57,23 @@ public class MaruKun : ModMonsterTemplate
         var hit = new MoveState("MARU_HIT", HitMove, new SingleAttackIntent(HitDamage));
         var gentleHit = new MoveState("MARU_GENTLE_HIT", GentleHitMove,
             new SingleAttackIntent(GentleHitDamage), new DebuffIntent());
+
+        var cheer = new MoveState("MARU_CHEER", CheerMove,
+            new SingleAttackIntent(HitDamage), new BuffIntent());
+
+        if (IsDread)
+        {
+            // 恐惧模式：去掉普通攻击，改为「攻击 + 易伤」与「攻击 + 2 力量」两个意图
+            var dreadRandom = new RandomBranchState("MARU_RANDOM_DREAD");
+            dreadRandom.AddBranch(gentleHit, MoveRepeatType.CanRepeatForever, 0.5f);
+            dreadRandom.AddBranch(cheer, MoveRepeatType.CanRepeatForever, 0.5f);
+
+            gentleHit.FollowUpState = dreadRandom;
+            cheer.FollowUpState = dreadRandom;
+
+            var dreadStates = new List<MonsterState> { dreadRandom, gentleHit, cheer };
+            return new MonsterMoveStateMachine(dreadStates, dreadRandom);
+        }
 
         var random = new RandomBranchState("MARU_RANDOM");
         random.AddBranch(hit, MoveRepeatType.CanRepeatForever, 0.5f);
@@ -70,6 +94,15 @@ public class MaruKun : ModMonsterTemplate
             .Execute(null);
     }
 
+    private async Task CheerMove(IReadOnlyList<Creature> targets)
+    {
+        await DamageCmd.Attack(HitDamage)
+            .FromMonster(this)
+            .WithAttackerAnim("Attack", 0.3f)
+            .Execute(null);
+        await PowerCmd.Apply<StrengthPower>(
+            new ThrowingPlayerChoiceContext(), Creature, 2, Creature, null);
+    }
     private async Task GentleHitMove(IReadOnlyList<Creature> targets)
     {
         await DamageCmd.Attack(GentleHitDamage)

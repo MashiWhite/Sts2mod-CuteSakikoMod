@@ -11,7 +11,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 /// <summary>
 ///     男子禁止：藤都子是百合党，讨厌百合破坏。
-///     只挂在藤都子身上：按场上玩家性别，改她受到的伤害（男性加成）与她造成的伤害（女性减伤）。
+///     只挂在藤都子身上：按场上玩家性别，改她造成的伤害（男性加成，打男性玩家更疼）
+///     与她受到的伤害（女性减伤，女性玩家打她更轻）。
 ///     单人 25% / 25% / 10%+10%；联机每人 7.5% / 7.5% / 4%+4%，且全队共享。
 /// </summary>
 public sealed class MiyakoNoBoysPower : CuteSakikoModPower
@@ -96,13 +97,13 @@ public sealed class MiyakoNoBoysPower : CuteSakikoModPower
 
         var (bonus, reduction) = Compute();
 
-        // 玩家打藤都子：男性/中性让伤害变高
+        // 玩家打藤都子：女性/中性让她受到的伤害变低（减伤）
         if (target == owner && dealer is { IsPlayer: true })
-            return 1m + bonus / 100m;
-
-        // 藤都子打玩家：女性/中性让伤害变低
-        if (dealer == owner && target is { IsPlayer: true })
             return 1m - reduction / 100m;
+
+        // 藤都子打玩家：男性/中性让她造成的伤害变高（伤害加成）
+        if (dealer == owner && target is { IsPlayer: true })
+            return 1m + bonus / 100m;
 
         return 1m;
     }

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
@@ -11,6 +11,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Common;
 
 public class Work() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+#if STS2_AT_LEAST_0_113_0
+    // 0.113 Blitz（闪局）禁用：金币类卡牌在原版也被排除（Debt / Royalties / HandOfGreed / MyShinies）
+    public override bool IsAllowedInBlitz => false;
+#endif
     // 始终添加消耗关键词（基础版本）
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

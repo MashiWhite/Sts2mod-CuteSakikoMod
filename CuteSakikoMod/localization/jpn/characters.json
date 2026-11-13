@@ -30,6 +30,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.pronounPossessive": "彼女の",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.pronounSubject": "彼女",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "豊川祥子",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.shortTitle": "祥子",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.titleObject": "可愛い祥子",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.aromaPrinciple": "[pink]...うーん、ここはどこ？[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.alive.endTurnPing": "今カードをプレイするのは[pink]私[/pink]のはずでしょ！",
@@ -44,6 +45,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.pronounPossessive": "彼女の",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.pronounSubject": "彼女",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "千早愛音",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.shortTitle": "愛音",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.titleObject": "小さな愛音",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.attack.1": "[pink]これを見て！[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.attack.2": "[pink]これを食らえ！[/pink]",
@@ -70,5 +72,6 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounPossessive": "彼女の",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounSubject": "彼女",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "要楽奈",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.shortTitle": "楽奈",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.titleObject": "可愛い楽奈"
 }

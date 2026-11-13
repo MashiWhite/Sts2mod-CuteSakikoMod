@@ -30,6 +30,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.pronounPossessive": "hers",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.pronounSubject": "she",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.title": "Sakiko Togawa",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.shortTitle": "Sakiko",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_SAKI.titleObject": "Cute Sakiko",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.aromaPrinciple": "[pink]...Ugh, where is this?[/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.alive.endTurnPing": "It should be [pink]me[/pink] playing cards now!",
@@ -44,6 +45,7 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.pronounPossessive": "hers",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.pronounSubject": "she",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.title": "Anon Chihaya",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.shortTitle": "Anon",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.titleObject": "Little Anon",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.attack.1": "[pink]Take this![/pink]",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_ANON.banter.attack.2": "[pink]Try this![/pink]",
@@ -70,5 +72,6 @@
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounPossessive": "hers",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.pronounSubject": "she",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.title": "Rana Kaname",
+  "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.shortTitle": "Rana",
   "CUTE_SAKIKO_MOD_CHARACTER_CUTE_RANA.titleObject": "Cute Rana"
 }

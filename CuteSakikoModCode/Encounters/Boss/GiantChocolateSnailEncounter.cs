@@ -1,4 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.ChocolateSnail;
+using MegaCrit.Sts2.Core.Models.Dread;
+using CuteSakikoMod.CuteSakikoModCode.Dominion.Dominions;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.ChocolateSnail;
 using Godot;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
@@ -12,6 +14,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 [RegisterActEncounter(typeof(Underdocks))]
 public class GiantChocolateSnailEncounter : CuteEncounters
 {
+    /// <summary>恐惧模式：本幕统御（dominion）。</summary>
+    public override DominionModel? GetDominion() => ModelDb.Dominion<ChocolateSnailDominion>();
+
     public override bool HasScene => true;
 
     public override string BossNodePath => "res://CuteSakikoMod/images/ui/map/ChocolateSnail";

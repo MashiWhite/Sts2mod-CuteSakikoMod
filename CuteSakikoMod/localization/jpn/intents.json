@@ -1,0 +1,9 @@
+{
+"FORMAT_COUNT": "{Count}",
+"FLYBACK_COUNT.title": "飛返プレイ回数",
+"FLYBACK_COUNT.description": "この敵はあなたの[gold]飛返プレイ回数[/gold]を[blue]{Count}[/blue]増やす。",
+"RELOAD_COUNT.title": "リロード回数",
+"RELOAD_COUNT.description": "この敵はあなたの[gold]リロード回数[/gold]を[blue]{Count}[/blue]増やす。",
+"FLYBACK_DOUBLE.title": "飛返プレイ回数倍化",
+"FLYBACK_DOUBLE.description": "この敵はあなたの[gold]飛返プレイ回数[/gold]を2倍にする。"
+}

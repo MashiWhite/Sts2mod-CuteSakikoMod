@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Status;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Status;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -24,17 +24,25 @@ public class GiantChocolateSnail : ModMonsterTemplate
 {
     private const int MaxSnails = 5;
 
+#if STS2_AT_LEAST_0_113_0
+    private static bool IsDread => AscensionHelper.IsDread();
+#else
+    private static bool IsDread => false;
+#endif
+
+    private static int DreadBonus(int amount) => IsDread ? amount : 0;
+
     private MoveState _summonState = null!;
 
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 170, 155);
-    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 180, 165);
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 170, 155) + DreadBonus(20);
+    public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 180, 165) + DreadBonus(20);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/giant_chocolate_snail.tscn"
     );
 
-    private int BlockAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 30, 20);
-    private int StrengthAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 3, 2);
+    private int BlockAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 30, 20) + DreadBonus(5);
+    private int StrengthAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 3, 2) + DreadBonus(1);
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
@@ -191,10 +199,14 @@ public class GiantChocolateSnail : ModMonsterTemplate
 
     private async Task AddCardMove(IReadOnlyList<Creature> targets)
     {
+        var cardsPerPlayer = IsDread ? 2 : 1;
         foreach (var player in Creature.CombatState.Players)
         {
-            var card = Creature.CombatState.CreateCard<ChocolateSnailCard>(player);
-            await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, player);
+            for (var i = 0; i < cardsPerPlayer; i++)
+            {
+                var card = Creature.CombatState.CreateCard<ChocolateSnailCard>(player);
+                await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, player);
+            }
         }
     }
 }

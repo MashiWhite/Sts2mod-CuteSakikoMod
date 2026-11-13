@@ -1,0 +1,7 @@
+{
+  "DREAD.GREY_ANON.description": "同一张牌每回合最多对敌人造成[blue]3[/blue]次伤害。",
+  "DREAD.MIYAKO.description": "根据场上不同性别玩家数量，所有敌人受到的[gold]伤害[/gold]与造成的[gold]伤害[/gold]发生变化。",
+  "DREAD.TEN_DAY.description": "使敌人按天数获得增益。",
+  "DREAD.CHOCOLATE_SNAIL.description": "本幕所有敌人获得[blue]4[/blue]层[gold]再生[/gold]。",
+  "DREAD.STAR_ANON.description": "每个敌方回合结束时，全局[gold]飞返打出次数[/gold]+[blue]3[/blue]，所有敌人获得[blue]1+飞返打出次数%[/blue]点[gold]力量[/gold]。"
+}

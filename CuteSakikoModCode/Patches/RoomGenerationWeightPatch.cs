@@ -34,9 +34,15 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
             {
                 var act = state.Acts[i];
                 
-                // 反射获取 Act 内部的 RoomSet
+                // 取 Act 内部的 RoomSet
+#if STS2_AT_LEAST_0_113_0
+                // 0.113 起有公开 GetRoomsDebug()，不再反射私有字段
+                var rooms = act.GetRoomsDebug();
+                if (rooms == null) continue;
+#else
                 var roomsField = AccessTools.Field(typeof(ActModel), "_rooms");
                 if (roomsField?.GetValue(act) is not RoomSet rooms) continue;
+#endif
 
                 // ==========================================
                 // 1. 先古之民权重

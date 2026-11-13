@@ -20,18 +20,25 @@ namespace CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.Tenday;
 [RegisterMonster]
 public class TenDayTaki : ModMonsterTemplate
 {
-    public override int MinInitialHp => 800;
-    public override int MaxInitialHp => 800;
+    public override int MinInitialHp => 800 + DreadBonus(100);
+    public override int MaxInitialHp => 800 + DreadBonus(100);
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/tenday/tendaytaki.tscn"
     );
 
-    private int Damage1 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 20, 16);
-    private int Damage2 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 7, 5);
-    private int Damage3 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 15, 10);
-    private int Block3 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 35, 30);
-    private int Block4 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 60, 50);
+#if STS2_AT_LEAST_0_113_0
+    private static bool IsDread => AscensionHelper.IsDread();
+#else
+    private static bool IsDread => false;
+#endif
+
+    private static int DreadBonus(int amount) => IsDread ? amount : 0;
+    private int Damage1 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 20, 16) + DreadBonus(2);
+    private int Damage2 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 7, 5) + DreadBonus(2);
+    private int Damage3 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 15, 10) + DreadBonus(2);
+    private int Block3 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 35, 30) + DreadBonus(5);
+    private int Block4 => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 60, 50) + DreadBonus(5);
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Status;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -9,6 +9,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Uncommon;
 
 public class RedTea() : CuteSakikoModCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+#if STS2_AT_LEAST_0_113_0
+    // 0.113 Blitz（闪局）禁用：闪局没有金币经济（商店改成免费 6 选 3），金币类卡牌无意义
+    public override bool IsAllowedInBlitz => false;
+#endif
     public override IEnumerable<CardKeyword> CanonicalKeywords => [];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

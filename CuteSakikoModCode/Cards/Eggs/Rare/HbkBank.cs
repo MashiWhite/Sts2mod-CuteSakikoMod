@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,6 +9,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Rare;
 
 public class HbkBank() : CuteSakikoModEggCard(0, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
+#if STS2_AT_LEAST_0_113_0
+    // 0.113 Blitz（闪局）禁用：闪局没有金币经济（商店改成免费 6 选 3），金币/黄金交易类卡牌无意义
+    public override bool IsAllowedInBlitz => false;
+#endif
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Innate];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

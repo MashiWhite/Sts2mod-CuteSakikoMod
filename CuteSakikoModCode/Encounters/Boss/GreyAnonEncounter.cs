@@ -1,4 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
+using MegaCrit.Sts2.Core.Models.Dread;
+using CuteSakikoMod.CuteSakikoModCode.Dominion.Dominions;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Rooms;
@@ -11,6 +13,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 [RegisterActEncounter(typeof(Glory))]
 public class GreyAnonEncounter : CuteEncounters
 {
+    /// <summary>恐惧模式：本幕统御（dominion）。</summary>
+    public override DominionModel? GetDominion() => ModelDb.Dominion<GreyAnonDominion>();
+
     public override IEnumerable<MonsterModel> AllPossibleMonsters => [ModelDb.Monster<GreyAnon>()];
     public override RoomType RoomType => RoomType.Boss;
     public override bool IsWeak => false;

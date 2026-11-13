@@ -1,0 +1,9 @@
+{
+"FORMAT_COUNT": "{Count}",
+"FLYBACK_COUNT.title": "Flyback Plays",
+"FLYBACK_COUNT.description": "This enemy will increase your [gold]Flyback plays[/gold] by [blue]{Count}[/blue].",
+"RELOAD_COUNT.title": "Reloads",
+"RELOAD_COUNT.description": "This enemy will increase your [gold]Reloads[/gold] by [blue]{Count}[/blue].",
+"FLYBACK_DOUBLE.title": "Flyback Plays Doubled",
+"FLYBACK_DOUBLE.description": "This enemy will double your [gold]Flyback plays[/gold]."
+}

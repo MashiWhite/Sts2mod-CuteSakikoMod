@@ -1,0 +1,9 @@
+{
+"FORMAT_COUNT": "{Count}",
+"FLYBACK_COUNT.title": "飞返打出次数",
+"FLYBACK_COUNT.description": "这个敌人将使你的[gold]飞返打出次数[/gold]增加[blue]{Count}[/blue]。",
+"RELOAD_COUNT.title": "读档次数",
+"RELOAD_COUNT.description": "这个敌人将使你的[gold]读档次数[/gold]增加[blue]{Count}[/blue]。",
+"FLYBACK_DOUBLE.title": "飞返打出次数翻倍",
+"FLYBACK_DOUBLE.description": "这个敌人将使你的[gold]飞返打出次数[/gold]翻倍。"
+}

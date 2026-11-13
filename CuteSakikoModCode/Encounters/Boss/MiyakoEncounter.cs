@@ -1,3 +1,5 @@
+using MegaCrit.Sts2.Core.Models.Dread;
+using CuteSakikoMod.CuteSakikoModCode.Dominion.Dominions;
 using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using Godot;
 using MegaCrit.Sts2.Core.Models;
@@ -12,6 +14,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
 [RegisterActEncounter(typeof(Hive))]
 public class MiyakoEncounter : CuteEncounters
 {
+    /// <summary>恐惧模式：本幕统御（dominion）。</summary>
+    public override DominionModel? GetDominion() => ModelDb.Dominion<MiyakoDominion>();
+
     public override IEnumerable<MonsterModel> AllPossibleMonsters =>
     [
         ModelDb.Monster<Miyako>(),

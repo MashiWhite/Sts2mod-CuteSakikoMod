@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
+using CuteSakikoMod.CuteSakikoModCode.Pools.Saki;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Nodes.Combat;
@@ -28,6 +28,13 @@ public class CuteSaki : CuteSakikoCharacter<CuteSakiCardPool, CuteSakiRelicPool,
 
     public override Color EnergyLabelOutlineColor => new(1f, 0f, 0f);
     public override Color NameColor => Color;
+#if STS2_AT_LEAST_0_113_0
+    // 0.113 Dread 模式：名字颜色 / 背景亮度与对比度（默认 0.7 / 1.1 / 金色）
+    public override Godot.Color DreadNameColor => new(Color.R, Color.G, Color.B, 0.85f);
+    public override float DreadBgBrightness => 0.66f;
+    public override float DreadBgContrast => 1.15f;
+#endif
+
     public override CharacterGender Gender => CharacterGender.Feminine;
 
     public override Color DialogueColor => Color;

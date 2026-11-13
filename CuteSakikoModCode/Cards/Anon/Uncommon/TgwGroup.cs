@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -11,6 +11,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Uncommon;
 
 public class TgwGroup() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+#if STS2_AT_LEAST_0_113_0
+    // 0.113 Blitz（闪局）禁用：金币类卡牌在原版也被排除（Debt / Royalties / HandOfGreed / MyShinies）
+    public override bool IsAllowedInBlitz => false;
+#endif
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
         get { yield return CardKeyword.Exhaust; }

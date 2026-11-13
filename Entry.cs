@@ -544,6 +544,21 @@ public class Entry
         // 7. 初始化游戏性配置的房主权威同步
         GameplayConfigSync.Init();
 
+        // 恐惧模式 dominion：注册后打印真实 ModelId，用于确认本地化键前缀
+#if STS2_AT_LEAST_0_113_0
+        foreach (var dominionType in new[]
+                 {
+                     typeof(CuteSakikoModCode.Dominion.Dominions.GreyAnonDominion),
+                     typeof(CuteSakikoModCode.Dominion.Dominions.MiyakoDominion),
+                     typeof(CuteSakikoModCode.Dominion.Dominions.TenDayDominion),
+                     typeof(CuteSakikoModCode.Dominion.Dominions.ChocolateSnailDominion),
+                     typeof(CuteSakikoModCode.Dominion.Dominions.StarAnonDominion)
+                 })
+        {
+            var id = MegaCrit.Sts2.Core.Models.ModelDb.GetId(dominionType);
+            Logger.Info($"[Dread] dominion {dominionType.Name} -> {id}");
+        }
+#endif
         Log.Debug("Mod initialized!");
 
         // 8. 预加载 VFX
@@ -589,6 +604,42 @@ public class Entry
             {
                 Name = "RelicSwitch", DuplicatePolicy = NodeAttachmentDuplicatePolicy.ReuseExistingByName, Order = 22
             });
+#if STS2_AT_LEAST_0_113_0
+        // 8.3b 闪电战 / 恐惧模式的角色选择界面（NBlitzScreen / NDreadScreen）也要挂同一套皮肤 UI
+        RegisterSkinUiFor<MegaCrit.Sts2.Core.Nodes.Screens.Blitz.NBlitzScreen>(skinReg, "blitz");
+        RegisterSkinUiFor<MegaCrit.Sts2.Core.Nodes.Screens.Dread.NDreadScreen>(skinReg, "dread");
+#endif
+
+        // 给一个「选择角色界面」类型挂三件套（预览 / 卡组预设 / 遗物切换）
+        static void RegisterSkinUiFor<TScreen>(STS2RitsuLib.Scaffolding.Godot.NodeAttachments.ModNodeAttachmentRegistry skinReg, string suffix) where TScreen : Godot.Control
+        {
+            skinReg.RegisterReadyChild<TScreen, SkinPreviewPanel>(
+                $"skin_preview_{suffix}",
+                static _ => new SkinPreviewPanel(),
+                static (parent, node) => { },
+                new NodeAttachmentOptions
+                {
+                    Name = "SkinPreview", DuplicatePolicy = NodeAttachmentDuplicatePolicy.ReuseExistingByName, Order = 20
+                });
+
+            skinReg.RegisterReadyChild<TScreen, DeckPresetPanel>(
+                $"deck_preset_{suffix}",
+                static _ => new DeckPresetPanel(),
+                static (parent, node) => { },
+                new NodeAttachmentOptions
+                {
+                    Name = "DeckPreset", DuplicatePolicy = NodeAttachmentDuplicatePolicy.ReuseExistingByName, Order = 21
+                });
+
+            skinReg.RegisterReadyChild<TScreen, RelicSwitchPanel>(
+                $"relic_switch_{suffix}",
+                static _ => new RelicSwitchPanel(),
+                static (parent, node) => { },
+                new NodeAttachmentOptions
+                {
+                    Name = "RelicSwitch", DuplicatePolicy = NodeAttachmentDuplicatePolicy.ReuseExistingByName, Order = 22
+                });
+        }
 
         // 8.4 生命周期：大厅贡献合并后刷新
         RitsuLibFramework.SubscribeLifecycle<RunSavedDataLobbyStagingEvent>(evt =>

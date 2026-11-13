@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+using System.Runtime.CompilerServices;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -11,44 +12,63 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 
 public sealed class HeartWallPower : CuteSakikoModPower
 {
-    private readonly HashSet<ModelId> _damagingCardsThisPlay = new();
-    private readonly HashSet<ModelId> _immuneCardIds = new();
+    // ★ 按 owner 生物实例分别记录：每只怪自己的状态，绝不跨怪物共享。
+    //   用 ConditionalWeakTable 挂在 Creature 上，避免生物释放后泄漏。
+    private static readonly ConditionalWeakTable<Creature, WallState> States = new();
 
+    /// <summary>层数 = 本回合内同一张卡造成多少次伤害后免疫；默认 1（灰爱音本体），恐惧 dominion 给小怪 3。</summary>
+    private int MaxHitsPerCard => Math.Max(1, (int)Amount);
 
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single;
+    public override PowerStackType StackType => PowerStackType.Counter;
 
-    // 动态变量：用于在描述中显示已免疫的卡牌列表
+    private WallState State => States.GetOrCreateValue(Owner);
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
-        get { yield return new StringVar("ImmuneCards"); }
+        get
+        {
+            yield return new StringVar("ImmuneCards");
+            yield return new DynamicVar("MaxHits", 1);
+        }
     }
 
     private void UpdateImmuneCardsDisplay()
     {
-        var cardTitles = string.Join("\n", _immuneCardIds.Select(id =>
+        var immune = State.ImmuneCardIds;
+        var cardTitles = string.Join("\n", immune.Select(id =>
         {
             var card = ModelDb.GetById<CardModel>(id);
             return card != null ? "- " + card.Title : "- " + id.Entry;
         }));
-        // 若列表为空，显示“无”
         if (string.IsNullOrEmpty(cardTitles))
             cardTitles = "- 无";
+
         ((StringVar)DynamicVars["ImmuneCards"]).StringValue = cardTitles;
+        DynamicVars["MaxHits"].BaseValue = MaxHitsPerCard;
+        InvokeDisplayAmountChanged();
     }
 
-    // 伤害结算时检查是否免疫
+    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
+    {
+        await base.AfterApplied(applier, cardSource);
+        Entry.Logger.Info($"[HeartWall] applied owner={Owner?.Name} amount={Amount} instance={RuntimeHelpers.GetHashCode(this)}");
+        DynamicVars["MaxHits"].BaseValue = MaxHitsPerCard;
+        UpdateImmuneCardsDisplay();
+    }
+
+    // 免疫判定：只对 Owner 自己生效，只看 Owner 自己的免疫表
     public override decimal ModifyHpLostAfterOsty(
         Creature target, decimal amount, ValueProp props,
         Creature? dealer, CardModel? cardSource)
     {
         if (target != Owner || amount <= 0) return amount;
-        if (cardSource != null && _immuneCardIds.Contains(cardSource.Id))
+        if (cardSource != null && State.ImmuneCardIds.Contains(cardSource.Id))
             return 0;
         return amount;
     }
 
-    // 只要受到来自卡牌的未格挡伤害，就记录该卡牌为本轮造成过伤害
+    // 按「实际受到的未格挡伤害」给 Owner 自己计数，达到上限后把这张卡加入自己的免疫表
     public override async Task AfterDamageReceived(
         PlayerChoiceContext choiceContext,
         Creature target,
@@ -57,25 +77,20 @@ public sealed class HeartWallPower : CuteSakikoModPower
         Creature? dealer,
         CardModel? cardSource)
     {
-        if (target != Owner || result.UnblockedDamage == 0) return;
-        if (cardSource != null)
-            _damagingCardsThisPlay.Add(cardSource.Id);
-    }
+        if (target != Owner || result.UnblockedDamage == 0 || cardSource == null) return;
 
-    // 卡牌完全结算后，将造成过伤害的卡牌 ID 加入免疫列表
-    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-    {
-        var card = cardPlay.Card;
-        if (card != null && _damagingCardsThisPlay.Contains(card.Id))
+        var state = State;
+        var hits = state.Hits.GetValueOrDefault(cardSource.Id) + 1;
+        state.Hits[cardSource.Id] = hits;
+
+        if (hits >= MaxHitsPerCard && state.ImmuneCardIds.Add(cardSource.Id))
         {
-            _immuneCardIds.Add(card.Id);
+            Entry.Logger.Info($"[HeartWall] owner={Owner?.Name} immune card={cardSource.Id.Entry} after {hits} hits");
             UpdateImmuneCardsDisplay();
         }
-
-        _damagingCardsThisPlay.Remove(card.Id); // 清理当前卡牌标记
     }
 
-    // 回合开始时清空记录
+    // 回合开始时清空记录（只清 Owner 自己的）
     public override async Task AfterSideTurnStart(
         CombatSide side,
         IReadOnlyList<Creature> participants,
@@ -83,9 +98,16 @@ public sealed class HeartWallPower : CuteSakikoModPower
     {
         if (side == CombatSide.Player)
         {
-            _immuneCardIds.Clear();
-            _damagingCardsThisPlay.Clear();
+            var state = State;
+            state.ImmuneCardIds.Clear();
+            state.Hits.Clear();
             UpdateImmuneCardsDisplay();
         }
+    }
+
+    private sealed class WallState
+    {
+        public readonly Dictionary<ModelId, int> Hits = new();
+        public readonly HashSet<ModelId> ImmuneCardIds = new();
     }
 }

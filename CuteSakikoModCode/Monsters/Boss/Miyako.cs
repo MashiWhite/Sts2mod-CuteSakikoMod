@@ -34,20 +34,27 @@ public class Miyako : ModMonsterTemplate
 {
     public const string ThrowVfxPath = "res://CuteSakikoMod/scenes/vfx/miyako_throw.tscn";
 
-    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 352, 320);
+    public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 352, 320) + DreadBonus(30);
     public override int MaxInitialHp => MinInitialHp;
 
     public override MonsterAssetProfile AssetProfile => new(
         "res://CuteSakikoMod/scenes/monster/miyako.tscn"
     );
 
-    private int AttackDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 14, 12);
-    private int ScoldDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8);
-    private int RageDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8);
-    private int BlockAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 12, 10);
+    private int AttackDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 14, 12) + DreadBonus(2);
+    private int ScoldDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8) + DreadBonus(2);
+    private int RageDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8) + DreadBonus(2);
+    private int BlockAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 12, 10) + DreadBonus(2);
 
     private const int VulnerableAmount = 2;
     private const int StrengthAmount = 2;
+#if STS2_AT_LEAST_0_113_0
+    private static bool IsDread => AscensionHelper.IsDread();
+#else
+    private static bool IsDread => false;
+#endif
+
+    private static int DreadBonus(int amount) => IsDread ? amount : 0;
 
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
@@ -67,8 +74,10 @@ public class Miyako : ModMonsterTemplate
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
     {
-        var throwSomething = new MoveState("THROW_SOMETHING", ThrowSomethingMove,
-            new SingleAttackIntent(AttackDamage));
+        AbstractIntent throwIntent = IsDread
+            ? new MultiAttackIntent(AttackDamage, 2)
+            : new SingleAttackIntent(AttackDamage);
+        var throwSomething = new MoveState("THROW_SOMETHING", ThrowSomethingMove, throwIntent);
         var scold = new MoveState("SCOLD", ScoldMove,
             new SingleAttackIntent(ScoldDamage), new DebuffIntent());
         var puppetShow = new MoveState("PUPPET_SHOW", PuppetShowMove,
@@ -97,8 +106,10 @@ public class Miyako : ModMonsterTemplate
     {
         await CreatureCmd.TriggerAnim(Creature, "Attack", 0.3f);
 
+        var hits = IsDread ? 2 : 1;
         foreach (var target in AliveTargets(targets))
-            await ThrowAtTarget(target, AttackDamage);
+            for (var hit = 0; hit < hits; hit++)
+                await ThrowAtTarget(target, AttackDamage);
     }
 
     private async Task ScoldMove(IReadOnlyList<Creature> targets)

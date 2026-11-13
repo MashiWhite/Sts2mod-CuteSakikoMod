@@ -1,4 +1,5 @@
 using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss.Tenday;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Rooms;
@@ -134,6 +135,11 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
     private async Task TriggerDayEffect(PlayerChoiceContext choiceContext, int day)
     {
         if (Owner.Monster is not TenDayTaki boss) return;
+
+        // 恐惧模式：十日事件整体前移一天（第 10 天触发原本第 9 天的效果……第 2 天触发原本第 1 天）
+#if STS2_AT_LEAST_0_113_0
+        if (AscensionHelper.IsDread()) day += 1;
+#endif
 
         switch (day)
         {

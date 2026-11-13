@@ -1,0 +1,7 @@
+{
+  "DREAD.GREY_ANON.description": "同じカードは1ターンに最大[blue]3[/blue]回まで敵にダメージを与えられる。",
+  "DREAD.MIYAKO.description": "場のプレイヤーの性別に応じて、全ての敵が受ける[gold]ダメージ[/gold]と与える[gold]ダメージ[/gold]が変化する。",
+  "DREAD.TEN_DAY.description": "敵は日数に応じて強化を得る。",
+  "DREAD.CHOCOLATE_SNAIL.description": "この幕の全ての敵は[blue]4[/blue]層の[gold]再生[/gold]を得る。",
+  "DREAD.STAR_ANON.description": "敵ターン終了ごとに、グローバル[gold]飛返プレイ回数[/gold]+[blue]3[/blue]、全ての敵は[blue]1+飛返プレイ回数%[/blue]の[gold]力[/gold]を得る。"
+}

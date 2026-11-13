@@ -21,7 +21,8 @@ public static class RunManagerOnEndedPatch
     [HarmonyPostfix]
     public static void Postfix(PostRunProgressUpdateResult __result, bool isVictory)
     {
-        Handle(__result.run, isVictory);
+        Handle(__result.run, isVictory, __result.success, __result.isSingleplayer,
+            __result.oldMaxAscension, __result.newMaxAscension);
     }
 #else
     [HarmonyPostfix]
@@ -31,7 +32,9 @@ public static class RunManagerOnEndedPatch
     }
 #endif
 
-    private static void Handle(SerializableRun? run, bool isVictory)
+    private static void Handle(SerializableRun? run, bool isVictory,
+        bool? progressSuccess = null, bool? isSingleplayer = null,
+        int? oldMaxAscension = null, int? newMaxAscension = null)
     {
         if (run == null) return;
 
@@ -43,7 +46,8 @@ public static class RunManagerOnEndedPatch
 
             // isVictory 直接透传给遥测：SerializableRun 里没有胜利标记，
             // 用 run.WinTime > 0 近似会漏掉"超时失败/中途退出"等情况。
-            CuteSakikoModTelemetry.CaptureLocalizedRun(run, isVictory);
+            CuteSakikoModTelemetry.CaptureLocalizedRun(run, isVictory, progressSuccess, isSingleplayer,
+                oldMaxAscension, newMaxAscension);
         }
         catch (Exception ex)
         {

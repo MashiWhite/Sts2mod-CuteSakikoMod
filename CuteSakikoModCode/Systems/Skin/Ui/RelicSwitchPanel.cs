@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Networking;
 using Godot;
 using MegaCrit.Sts2.addons.mega_text;
@@ -79,14 +79,7 @@ public sealed partial class RelicSwitchPanel : Control
 
     private void AttachToRelicBox()
     {
-        var screen = FindScreen();
-        if (screen == null)
-        {
-            GD.PrintErr("[RelicSwitchPanel] FindScreen() null");
-            return;
-        }
-
-        var relicBox = screen.GetNodeOrNull<Control>("InfoPanel/VBoxContainer/Relic");
+        var relicBox = GetRelicBox();
         if (relicBox == null)
         {
             GD.PrintErr("[RelicSwitchPanel] Relic box not found");
@@ -94,23 +87,40 @@ public sealed partial class RelicSwitchPanel : Control
         }
 
         relicBox.ClipContents = false;
-        _prevBtn.GetParent()?.RemoveChild(_prevBtn);
-        _nextBtn.GetParent()?.RemoveChild(_nextBtn);
-        relicBox.AddChild(_prevBtn);
-        relicBox.AddChild(_nextBtn);
-
+        ReattachTo(relicBox);
         RepositionToRelicBox();
+    }
+
+    private Control? GetRelicBox()
+    {
+        var screen = FindScreen();
+        return screen == null ? null : SkinScreenLocator.FindRelicBox(screen);
+    }
+
+    /// <summary>面板可能晚于本组件创建（恐惧模式的复刻 InfoPanel），每次定位时按需重新挂载。</summary>
+    private void ReattachTo(Control relicBox)
+    {
+        if (_prevBtn.GetParent() != relicBox)
+        {
+            _prevBtn.GetParent()?.RemoveChild(_prevBtn);
+            relicBox.AddChild(_prevBtn);
+        }
+
+        if (_nextBtn.GetParent() != relicBox)
+        {
+            _nextBtn.GetParent()?.RemoveChild(_nextBtn);
+            relicBox.AddChild(_nextBtn);
+        }
     }
 
     private void RepositionToRelicBox()
     {
-        var screen = FindScreen();
-        if (screen == null) return;
-
-        var relicBox = screen.GetNodeOrNull<Control>("InfoPanel/VBoxContainer/Relic");
+        var relicBox = GetRelicBox();
         var icon = relicBox?.GetNodeOrNull<Control>("Icon");
         var desc = relicBox?.GetNodeOrNull<Control>("Description");
         if (relicBox == null || icon == null || desc == null) return;
+
+        ReattachTo(relicBox);
 
         var iconRect = icon.GetRect();
         var descRect = desc.GetRect();
@@ -196,10 +206,13 @@ public sealed partial class RelicSwitchPanel : Control
 
         var relic = ModelDb.GetById<RelicModel>(ModelDb.GetId(preset.RelicTypes[0]));
 
-        var title = screen.GetNode<MegaRichTextLabel>("InfoPanel/VBoxContainer/Relic/Name/RichTextLabel");
-        var desc = screen.GetNode<MegaRichTextLabel>("InfoPanel/VBoxContainer/Relic/Description");
-        var icon = screen.GetNode<TextureRect>("InfoPanel/VBoxContainer/Relic/Icon");
-        var outline = screen.GetNode<TextureRect>("InfoPanel/VBoxContainer/Relic/Icon/Outline");
+        var infoPanel = SkinScreenLocator.FindInfoPanel(screen);
+        if (infoPanel == null) return;
+        var title = infoPanel.GetNodeOrNull<MegaRichTextLabel>("VBoxContainer/Relic/Name/RichTextLabel");
+        var desc = infoPanel.GetNodeOrNull<MegaRichTextLabel>("VBoxContainer/Relic/Description");
+        var icon = infoPanel.GetNodeOrNull<TextureRect>("VBoxContainer/Relic/Icon");
+        var outline = infoPanel.GetNodeOrNull<TextureRect>("VBoxContainer/Relic/Icon/Outline");
+        if (title == null || desc == null || icon == null || outline == null) return;
 
         title.Text = relic.Title.GetFormattedText();
         desc.Text = relic.DynamicDescription.GetFormattedText();
@@ -211,10 +224,5 @@ public sealed partial class RelicSwitchPanel : Control
         Callable.From(RepositionToRelicBox).CallDeferred();
     }
 
-    private NCharacterSelectScreen? FindScreen()
-    {
-        Node? n = this;
-        while (n != null && n is not NCharacterSelectScreen) n = n.GetParent();
-        return n as NCharacterSelectScreen;
-    }
+    private Control? FindScreen() => SkinScreenLocator.FindSelectScreen(this);
 }

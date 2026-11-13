@@ -47,6 +47,7 @@ public class FlybackManager : HookedSingletonModel
             var total = 0;
             foreach (var player in runState.Players)
                 total += PlayerDataSlot.Get(runState, player.NetId).PlayCount;
+            if (RunDataSlot != null) total += RunDataSlot.Get(runState).GlobalBonusPlayCount;
             return total;
         }
     }
@@ -123,6 +124,16 @@ public class FlybackManager : HookedSingletonModel
         foreach (var player in runState.Players)
             PlayerDataSlot.Modify(player, data => data.PlayCount *= 2);
         Instance.NotifyDataChanged();
+    }
+
+    /// <summary>恐惧模式星爱音 dominion：给全局飞返计数加一笔（不计入任何玩家的打出次数）。</summary>
+    public void AddGlobalBonusPlayCount(int amount)
+    {
+        if (amount == 0) return;
+        var runState = GetCurrentRunState();
+        if (runState == null || RunDataSlot == null) return;
+        RunDataSlot.Modify(runState, data => data.GlobalBonusPlayCount += amount);
+        NotifyDataChanged();
     }
 
     // ---------- 内部工具 ----------

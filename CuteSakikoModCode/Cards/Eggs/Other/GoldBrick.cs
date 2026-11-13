@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -11,6 +11,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 
 public class GoldBrick() : OtherModTokenCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy)
 {
+#if STS2_AT_LEAST_0_113_0
+    // 0.113 Blitz（闪局）禁用：闪局没有金币经济，黄金层数也无从积累
+    public override bool IsAllowedInBlitz => false;
+#endif
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Ethereal];
 
     protected override IEnumerable<DynamicVar> CanonicalVars

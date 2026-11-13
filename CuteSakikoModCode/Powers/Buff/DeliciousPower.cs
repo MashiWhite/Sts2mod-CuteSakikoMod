@@ -1,3 +1,4 @@
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -31,7 +32,12 @@ public sealed class DeliciousPower : CuteSakikoModPower
         foreach (var c in allCreatures)
         {
             if (c.IsDead) continue;
-            await CreatureCmd.Heal(c, healAmount);
+            var amount = healAmount;
+#if STS2_AT_LEAST_0_113_0
+            // 恐惧模式：对玩家的回血减半
+            if (c.Player != null && AscensionHelper.IsDread()) amount = Math.Max(1, healAmount / 2);
+#endif
+            await CreatureCmd.Heal(c, amount);
         }
     }
 }

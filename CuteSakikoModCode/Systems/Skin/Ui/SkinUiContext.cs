@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using Godot;
 using MegaCrit.Sts2.Core.Multiplayer.Game.Lobby;
 using MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect;
@@ -22,7 +22,16 @@ public static class SkinUiContext
     public static StartRunLobby? GetLobby(Node node)
     {
         var n = node;
-        while (n != null && n is not NCharacterSelectScreen) n = n.GetParent();
-        return (n as NCharacterSelectScreen)?.Lobby;
+        while (n != null)
+        {
+            if (n is NCharacterSelectScreen select) return select.Lobby;
+#if STS2_AT_LEAST_0_113_0
+            // 闪电战 / 恐惧模式：角色选择界面是 NBlitzScreen / NDreadScreen，同样能提供 Lobby
+            if (n is MegaCrit.Sts2.Core.Nodes.Screens.Blitz.NBlitzScreen blitz) return blitz.Lobby;
+            if (n is MegaCrit.Sts2.Core.Nodes.Screens.Dread.NDreadScreen dread) return dread.Lobby;
+#endif
+            n = n.GetParent();
+        }
+        return null;
     }
 }
