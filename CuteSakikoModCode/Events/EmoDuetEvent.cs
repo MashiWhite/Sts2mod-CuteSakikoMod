@@ -104,7 +104,7 @@ public sealed class EmoDuetEvent : CuteSakikoEvent
     // 选项2：趁乱溜走 → 受伤 8 点，移除 1 张牌
     private async Task SlipAway()
     {
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
             8m,

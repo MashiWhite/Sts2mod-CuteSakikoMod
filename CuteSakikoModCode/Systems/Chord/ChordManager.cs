@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -26,6 +27,18 @@ public static class ChordManager
     public static Dictionary<string, ChordDefinition> AllChords { get; } = new();
     public static List<ChordDefinition> AllChordsList { get; } = new();
 
+    /// <summary>
+    ///     取 owner 同侧的存活友方；避免任何情况下把增益甩到敌对方。
+    /// </summary>
+    private static IEnumerable<Creature> GetSideAllies(Creature owner)
+    {
+        var combat = owner.CombatState;
+        if (combat == null) return new[] { owner };
+
+        var candidates = owner.IsPlayer ? combat.PlayerCreatures : combat.Enemies;
+        var allies = candidates.Where(c => c.Side == owner.Side && c.IsAlive).ToList();
+        return allies.Count > 0 ? allies : new[] { owner };
+    }
     private static void AddChord(string id, ChordCategory cat, CardType[] seq,
         string titleKey, string descKey, string iconName,
         int[] baseValues,
@@ -84,7 +97,11 @@ public static class ChordManager
                 if (enemies.Any())
                 {
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                    await CreatureCmd.Damage(ctx, target, new DamageVar(6 + bonus, ValueProp.Move), owner, null, null);
+                    #if CSK_GAME_111_OR_NEWER
+                     await DamageCompat.Damage(ctx, target, new DamageVar(6 + bonus, ValueProp.Move), owner, null, null);
+                    #else
+                     await DamageCompat.Damage(ctx, target, new DamageVar(6 + bonus, ValueProp.Move), owner);
+                    #endif
                 }
             });
 
@@ -97,7 +114,11 @@ public static class ChordManager
             {
                 var enemies = owner.CombatState?.Enemies;
                 if (enemies != null)
-                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(4 + bonus, ValueProp.Move), owner, null, null);
+                    #if CSK_GAME_111_OR_NEWER
+                     await DamageCompat.Damage(ctx, enemies, new DamageVar(4 + bonus, ValueProp.Move), owner, null, null);
+                    #else
+                     await DamageCompat.Damage(ctx, enemies, new DamageVar(4 + bonus, ValueProp.Move), owner);
+                    #endif
             });
 
         // E【技攻攻】所有友方本回合获得2点临时力量
@@ -107,8 +128,7 @@ public static class ChordManager
             new[] { 2 },
             async (ctx, owner, bonus) =>
             {
-                var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
-                foreach (var ally in allies)
+                foreach (var ally in GetSideAllies(owner))
                     await PowerCmd.Apply<ChordTempStrengthPower>(ctx, ally, 2 + bonus, owner, null);
             });
 
@@ -134,7 +154,11 @@ public static class ChordManager
             {
                 var enemies = owner.CombatState?.Enemies;
                 if (enemies != null)
-                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(9 + bonus, ValueProp.Move), owner, null, null);
+                    #if CSK_GAME_111_OR_NEWER
+                     await DamageCompat.Damage(ctx, enemies, new DamageVar(9 + bonus, ValueProp.Move), owner, null, null);
+                    #else
+                     await DamageCompat.Damage(ctx, enemies, new DamageVar(9 + bonus, ValueProp.Move), owner);
+                    #endif
             });
 
         // A【攻攻攻技】所有友方获得5层活力
@@ -163,7 +187,11 @@ public static class ChordManager
                 for (var i = 0; i < 5; i++)
                 {
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                    await CreatureCmd.Damage(ctx, target, new DamageVar(3 + bonus, ValueProp.Move), owner, null, null);
+                    #if CSK_GAME_111_OR_NEWER
+                     await DamageCompat.Damage(ctx, target, new DamageVar(3 + bonus, ValueProp.Move), owner, null, null);
+                    #else
+                     await DamageCompat.Damage(ctx, target, new DamageVar(3 + bonus, ValueProp.Move), owner);
+                    #endif
                 }
             });
 
@@ -180,7 +208,11 @@ public static class ChordManager
                 if (enemies.Any())
                 {
                     var target = combat.RunState.Rng.CombatCardSelection.NextItem(enemies);
-                    await CreatureCmd.Damage(ctx, target, new DamageVar(13 + bonus, ValueProp.Move), owner, null, null);
+                    #if CSK_GAME_111_OR_NEWER
+                     await DamageCompat.Damage(ctx, target, new DamageVar(13 + bonus, ValueProp.Move), owner, null, null);
+                    #else
+                     await DamageCompat.Damage(ctx, target, new DamageVar(13 + bonus, ValueProp.Move), owner);
+                    #endif
                 }
             });
 
@@ -200,7 +232,11 @@ public static class ChordManager
                     var percent = 5 + bonus;
                     var dmg = (int)(target.MaxHp * percent / 100.0);
                     if (dmg < 1) dmg = 1;
-                    await CreatureCmd.Damage(ctx, target, new DamageVar(dmg, ValueProp.Unblockable), owner, null, null);
+                    #if CSK_GAME_111_OR_NEWER
+                     await DamageCompat.Damage(ctx, target, new DamageVar(dmg, ValueProp.Unblockable), owner, null, null);
+                    #else
+                     await DamageCompat.Damage(ctx, target, new DamageVar(dmg, ValueProp.Unblockable), owner);
+                    #endif
                 }
             });
 
@@ -211,8 +247,7 @@ public static class ChordManager
             new[] { 2 },
             async (ctx, owner, bonus) =>
             {
-                var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
-                foreach (var ally in allies)
+                foreach (var ally in GetSideAllies(owner))
                     await PowerCmd.Apply<StrengthPower>(ctx, ally, 2 + bonus, owner, null);
             });
 
@@ -609,18 +644,24 @@ public static class ChordManager
                 if (enemies != null)
                     foreach (var enemy in enemies)
                     {
+                        // ★ 先移除「临时扣力量」的包装：否则它回合结束会把被扣的力量加回来，
+                        //   和「移除敌人力量」叠在一起就变成给敌人加力量（2026-11-13 用户定位）。
+                        foreach (var tempDown in enemy.Powers.OfType<ChordTempStrengthDownPower>().ToList())
+                            tempDown.RemoveInternal();
+
                         var strPower = enemy.Powers.OfType<StrengthPower>().FirstOrDefault();
                         if (strPower != null)
                         {
-                            totalStr += strPower.Amount;
+                            // 只偷正数力量；负数力量（临时扣力量造成的）不应转成友方的负增益。
+                            if (strPower.Amount > 0)
+                                totalStr += strPower.Amount;
                             strPower.RemoveInternal();
                         }
                     }
 
                 if (totalStr > 0)
                 {
-                    var allies = owner.CombatState?.Players.Select(p => p.Creature) ?? new[] { owner };
-                    foreach (var ally in allies)
+                    foreach (var ally in GetSideAllies(owner))
                         await PowerCmd.Apply<StrengthPower>(ctx, ally, totalStr + bonus, owner, null);
                 }
             });
@@ -778,8 +819,12 @@ public static class ChordManager
                 if (combat == null) return;
                 var enemies = combat.Enemies;
                 if (enemies != null && enemies.Any())
-                    await CreatureCmd.Damage(ctx, enemies, new DamageVar(15 + bonus, ValueProp.Move), owner, null,
+#if CSK_GAME_111_OR_NEWER
+                    await DamageCompat.Damage(ctx, enemies, new DamageVar(15 + bonus, ValueProp.Move), owner, null,
                         null);
+#else
+                    await DamageCompat.Damage(ctx, enemies, new DamageVar(15 + bonus, ValueProp.Move), owner);
+#endif
                 var allies = combat.Players.Select(p => p.Creature) ?? new[] { owner };
                 foreach (var ally in allies)
                 {
@@ -815,7 +860,8 @@ public static class ChordManager
                 if (combat == null) return;
 
                 // 固定自伤不加成（避免自杀），抽牌和能量受加成
-                await CreatureCmd.Damage(
+#if CSK_GAME_111_OR_NEWER
+                await DamageCompat.Damage(
                     ctx,
                     owner,
                     new DamageVar(2, ValueProp.Unblockable | ValueProp.Unpowered),
@@ -823,6 +869,15 @@ public static class ChordManager
                     null,
                     null
                 );
+#else
+                await DamageCompat.Damage(
+                    ctx,
+                    owner,
+                    new DamageVar(2, ValueProp.Unblockable | ValueProp.Unpowered),
+                    owner,
+                    null
+                );
+#endif
 
                 foreach (var player in combat.Players)
                 {

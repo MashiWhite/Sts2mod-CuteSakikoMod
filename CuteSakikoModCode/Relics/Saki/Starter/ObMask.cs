@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -65,7 +65,7 @@ public class ObMask : CuteSakiRelic, IForgetHookHandler // 实现接口
             var enemies = combat.HittableEnemies;
             if (enemies.Count == 0) break;
 
-            await CreatureCmd.Damage(
+            await DamageCompat.Damage(
                 choiceContext,
                 enemies,
                 new DamageVar(DamagePerForgottenCard, ValueProp.Unpowered),

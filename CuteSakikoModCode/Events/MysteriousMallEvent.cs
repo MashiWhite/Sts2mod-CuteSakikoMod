@@ -136,7 +136,9 @@ public sealed class MysteriousMallEvent : CuteSakikoEvent
                     cardAdded = c,
                     success = true,
                     oldPile = deck,
+#if CSK_GAME_111_OR_NEWER
                     targetPile = PileType.Deck,
+#endif
                 })
                 .ToList();
 

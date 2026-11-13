@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
@@ -76,6 +76,31 @@ public sealed class MyGoEnchantment : ModEnchantmentTemplate
         if (chosen.Player == Card.Owner)
             await CardPileCmd.Add(Card, chosen.Pile);
         else
+        {
+#if CSK_GAME_111_OR_NEWER
             await CardPileCmd.GiveToAnotherPlayer(Card, chosen.Player, chosen.Pile);
+#else
+            // 0.107 没有跨玩家给牌 API：复制一张（保留升级/附魔）交给目标玩家，再移除原卡。
+            var canonical = ModelDb.GetById<CardModel>(Card.Id);
+            var newCard = chosen.Player.RunState.CreateCard(canonical, chosen.Player);
+
+            var upgradeCount = Math.Min(Card.CurrentUpgradeLevel, newCard.MaxUpgradeLevel);
+            for (var i = 0; i < upgradeCount; i++)
+                CardCmd.Upgrade(newCard);
+
+            if (Card.Enchantment != null)
+            {
+                var ench = (EnchantmentModel)Card.Enchantment.MutableClone();
+                if (ench.CanEnchant(newCard))
+                    CardCmd.Enchant(ench, newCard, ench.Amount);
+            }
+
+            var targetPile = chosen.Pile.GetPile(chosen.Player);
+            await CardPileCmd.Add(newCard, targetPile);
+            targetPile.InvokeCardAddFinished();
+
+            await CardPileCmd.RemoveFromCombat(Card);
+#endif
+        }
     }
 }

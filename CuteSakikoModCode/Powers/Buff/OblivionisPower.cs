@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Memory;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -39,7 +39,8 @@ public sealed class OblivionisPower : CuteSakikoModPower, IForgetHookHandler
             var enemies = combatState.HittableEnemies;
             if (enemies.Count == 0) break;
 
-            await CreatureCmd.Damage(
+#if CSK_GAME_111_OR_NEWER
+            await DamageCompat.Damage(
                 choiceContext,
                 enemies,
                 new DamageVar(damagePerCard, ValueProp.Unpowered),
@@ -47,6 +48,14 @@ public sealed class OblivionisPower : CuteSakikoModPower, IForgetHookHandler
                 null,
                 null
             );
+#else
+            await DamageCompat.Damage(
+                choiceContext,
+                enemies,
+                new DamageVar(damagePerCard, ValueProp.Unpowered),
+                owner.Creature
+            );
+#endif
         }
     }
 

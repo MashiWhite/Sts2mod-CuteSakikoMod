@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
+using CuteSakikoMod.CuteSakikoModCode.Relics.Event;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -19,13 +19,22 @@ public sealed class BreakDownPower : CuteSakikoModPower
     public override bool AllowNegative => false;
 
     // 自身造成伤害减少 50%
-    public override decimal ModifyDamageAdditive(
+    #if CSK_GAME_108_OR_NEWER
+public override decimal ModifyDamageAdditive(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
         CardPlay? cardPlay)
+#else
+public override decimal ModifyDamageAdditive(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+#endif
     {
         if (dealer != Owner) return 0m;
 
@@ -37,13 +46,22 @@ public sealed class BreakDownPower : CuteSakikoModPower
     }
 
     // 自身受到的伤害翻倍
-    public override decimal ModifyDamageMultiplicative(
+    #if CSK_GAME_108_OR_NEWER
+public override decimal ModifyDamageMultiplicative(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
         CardPlay? cardPlay)
+#else
+public override decimal ModifyDamageMultiplicative(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+#endif
     {
         if (target != Owner) return 1m;
         if (Amount <= 0) return 1m;

@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -37,7 +37,7 @@ public class CutClothes : CuteRanaCard
             // 升级后：清除所有敌人的全部格挡
             foreach (var enemy in CombatState.Enemies.Where(e => e.IsAlive))
                 if (enemy.Block > 0)
-                    await CreatureCmd.LoseBlock(choiceContext, enemy, enemy.Block, enemy);
+                    await DamageCompat.LoseBlock(choiceContext, enemy, enemy.Block, null);
         }
         else
         {
@@ -51,7 +51,7 @@ public class CutClothes : CuteRanaCard
             {
                 var loseAmount = creature.Block / 2;
                 if (loseAmount > 0)
-                    await CreatureCmd.LoseBlock(choiceContext, creature, loseAmount, creature);
+                    await DamageCompat.LoseBlock(choiceContext, creature, loseAmount, creature);
             }
         }
 

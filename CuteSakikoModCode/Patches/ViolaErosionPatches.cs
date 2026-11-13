@@ -485,8 +485,10 @@ public static class CardBannerMaterialErosionPatch
     }
 }
 
+#if CSK_GAME_111_OR_NEWER
 /// <summary>
 ///     卡图纹理与先古/普通节点显隐：只能用 Postfix 追加（不跳过原方法，兼容其他 mod）。
+///     0.107 的 NCard 没有 UpdatePortrait，整段补丁跳过。
 /// </summary>
 [HarmonyPatch(typeof(NCard), "UpdatePortrait")]
 public static class CardFrameTintPatch
@@ -498,6 +500,7 @@ public static class CardFrameTintPatch
         ViolaErosionVisual.ApplyErodedPortrait(__instance);
     }
 }
+#endif
 
 /// <summary>
 ///     侵蚀视觉必须在所有"重置型"方法之后应用，否则会被覆盖。

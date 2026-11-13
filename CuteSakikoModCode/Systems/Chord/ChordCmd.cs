@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
+using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions;
@@ -20,7 +20,11 @@ public static class ChordCmd
         var sync = runManager.PlayerChoiceSynchronizer;
         var choiceId = sync.ReserveChoiceId(player);
 
+#if CSK_GAME_111_OR_NEWER
         await context.SignalPlayerChoiceBegun(player, PlayerChoiceOptions.CancelPlayCardActions);
+#else
+        await context.SignalPlayerChoiceBegun(PlayerChoiceOptions.CancelPlayCardActions);
+#endif
 
         List<int> chordIndexes = null;
 

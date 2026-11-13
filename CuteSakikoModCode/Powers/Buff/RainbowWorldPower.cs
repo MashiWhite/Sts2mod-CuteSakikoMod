@@ -31,8 +31,9 @@ public sealed class RainbowWorldPower : CuteSakikoModPower
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var original = cardPlay.Card;
-        if (original == null || cardPlay.Player == null) return;
-        if (!_triggeredThisTurn.Add(cardPlay.Player.NetId)) return;
+        var player = cardPlay.Card.Owner;
+        if (original == null || player == null) return;
+        if (!_triggeredThisTurn.Add(player.NetId)) return;
 
         var combatState = Owner.CombatState;
         if (combatState == null) return;
@@ -41,7 +42,7 @@ public sealed class RainbowWorldPower : CuteSakikoModPower
         if (!original.IsTransformable) return;
         if (original.Pile?.Type != PileType.Play) return;
 
-        var replacement = PickReplacement(original, cardPlay.Player);
+        var replacement = PickReplacement(original, cardPlay.Card.Owner);
         if (replacement == null) return;
 
         // 1. 将新卡静默加入目标牌堆（不播放动画）

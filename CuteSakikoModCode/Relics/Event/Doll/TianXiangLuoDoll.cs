@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -37,7 +37,7 @@ public class TianXiangLuoDoll : CuteSakikoEventRelic, IModRightClickableRelic
         if (Owner.PlayerCombatState.TurnNumber > 1) return;
 
         Flash();
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             choiceContext,
             combatState.HittableEnemies,
             3m,

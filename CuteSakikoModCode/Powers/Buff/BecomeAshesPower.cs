@@ -61,7 +61,11 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
         // 减少最大生命值（当前最大生命值的 5%），而不是造成伤害
         var maxHpLoss = (int)Math.Ceiling(Owner.MaxHp * 0.05);
         if (maxHpLoss > 0)
+#if STS2_AT_LEAST_0_113_0
             await CreatureCmd.LoseMaxHp(choiceContext, Owner, maxHpLoss, null);
+#else
+            await CreatureCmd.LoseMaxHp(choiceContext, Owner, maxHpLoss, false);
+#endif
 
         UpdateStrengthGain();
         UpdateSelfDamage(); // 最大生命值改变后，下次损失的值也会变化

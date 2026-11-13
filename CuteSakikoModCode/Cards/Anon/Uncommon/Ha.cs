@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems;
+using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -52,7 +52,7 @@ public class Ha() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon, Target
             {
                 var players = Owner.Creature.CombatState?.Players.Select(p => p.Creature).ToList();
                 if (players != null && players.Any())
-                    await CreatureCmd.Damage(
+                    await DamageCompat.Damage(
                         choiceContext,
                         players,
                         new DamageVar(15, ValueProp.Move),

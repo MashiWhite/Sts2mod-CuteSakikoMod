@@ -44,7 +44,7 @@ public sealed class NekoScratchPower : CuteSakikoModPower
         var rng = Owner.Player.RunState.Rng.CombatCardGeneration;
         var target = enemies[rng.NextInt(enemies.Count)];
 
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             choiceContext,
             target,
             new DamageVar(damage, ValueProp.Unpowered),

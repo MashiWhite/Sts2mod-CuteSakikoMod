@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Saki.Token;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -65,13 +65,22 @@ public class PressureIntoBlade() : CuteSakikoModCard(1, CardType.Skill, CardRari
         _bonusAmount = 0;
     }
 
-    public override decimal ModifyDamageAdditive(
+    #if CSK_GAME_108_OR_NEWER
+public override decimal ModifyDamageAdditive(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
         CardPlay? cardPlay)
+#else
+public override decimal ModifyDamageAdditive(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+#endif
     {
         // 只对本次指定的那把剑生效
         if (_bonusAmount > 0 && cardSource == _bonusTarget)

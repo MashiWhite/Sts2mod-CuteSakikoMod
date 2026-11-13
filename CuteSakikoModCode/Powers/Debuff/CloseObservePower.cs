@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -26,13 +26,22 @@ public class CloseObservePower : CuteSakikoModPower
     }
 
     // 补上缺失的 CardPlay? cardPlay 参数
-    public override decimal ModifyDamageMultiplicative(
+    #if CSK_GAME_108_OR_NEWER
+public override decimal ModifyDamageMultiplicative(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
-        CardPlay? cardPlay) // 已修正
+        CardPlay? cardPlay)
+#else
+public override decimal ModifyDamageMultiplicative(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+#endif // 已修正
     {
         if (target != Owner || !props.IsPoweredAttack())
             return 1m;

@@ -161,12 +161,20 @@ public class Miyako : ModMonsterTemplate
     }
 
     /// <summary>丸君被打败时，藤都子喊一声（参考 QUEEN 的 amalgamDeathSpeakLine）。</summary>
+#if STS2_AT_LEAST_0_113_0
     public override Task AfterDeath(
         PlayerChoiceContext choiceContext,
         Creature creature,
         CardModel? source,
         bool wasRemovalPrevented,
         float deathAnimLength)
+#else
+    public override Task AfterDeath(
+        PlayerChoiceContext choiceContext,
+        Creature creature,
+        bool wasRemovalPrevented,
+        float deathAnimLength)
+#endif
     {
         if (creature.Monster is MaruKun && Creature.IsAlive)
         {
@@ -268,7 +276,7 @@ public class Miyako : ModMonsterTemplate
 
     private Task DealDamage(Creature target, int damage)
     {
-        return CreatureCmd.Damage(
+        return DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             target,
             damage,

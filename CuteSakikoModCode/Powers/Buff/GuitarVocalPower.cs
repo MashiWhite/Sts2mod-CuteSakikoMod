@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -26,7 +26,7 @@ public class GuitarVocalPower : CuteSakikoModPower
 
         Flash();
 
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             context,
             target,
             totalDamage,

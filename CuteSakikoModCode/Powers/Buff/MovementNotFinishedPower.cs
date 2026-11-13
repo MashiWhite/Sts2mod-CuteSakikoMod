@@ -184,8 +184,13 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
             case 1:
                 foreach (var player in Owner.CombatState.Players)
                 {
+#if STS2_AT_LEAST_0_113_0
                     await CreatureCmd.LoseMaxHp(
                         new ThrowingPlayerChoiceContext(), player.Creature, 10m, null);
+#else
+                    await CreatureCmd.LoseMaxHp(
+                        new ThrowingPlayerChoiceContext(), player.Creature, 10m, false);
+#endif
                 }
                 break;
         }

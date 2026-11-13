@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -150,7 +150,7 @@ public class Xiaoyin : ModMonsterTemplate
         }
 
         // ★ 5. 造成伤害（补全了第 7 个参数 CardPlay? cardPlay 传 null）
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             target,
             Damage,

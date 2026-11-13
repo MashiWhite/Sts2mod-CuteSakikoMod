@@ -88,13 +88,22 @@ public sealed class WeakenedMiyakoNoBoysPower : CuteSakikoModPower
         return Task.CompletedTask;
     }
 
-    public override decimal ModifyDamageMultiplicative(
+    #if CSK_GAME_108_OR_NEWER
+public override decimal ModifyDamageMultiplicative(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
         CardPlay? cardPlay)
+#else
+public override decimal ModifyDamageMultiplicative(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+#endif
     {
         var owner = Owner;
         if (owner == null || amount <= 0m) return 1m;

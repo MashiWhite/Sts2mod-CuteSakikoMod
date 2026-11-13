@@ -21,8 +21,13 @@ public partial class TogawaLoanButton : ModActionButton
 
     protected override void OnInit()
     {
-        // 0.113 起 NMerchantRoom.Room 被移除，本地商店库存改从 MerchantSynchronizer 取
+        // 0.113 起 NMerchantRoom.Room 被移除，本地商店库存改从 MerchantSynchronizer 取；
+        // 0.111 / 0.107 仍走 NMerchantRoom.Instance.Room。
+#if STS2_AT_LEAST_0_113_0
         _player = RunManager.Instance?.MerchantSynchronizer?.GetLocalInventory()?.Player;
+#else
+        _player = NMerchantRoom.Instance?.Room.GetLocalInventory()?.Player;
+#endif
 
         // 调用基类自适应布局
         ApplyCustomLayout(180f, 180f);

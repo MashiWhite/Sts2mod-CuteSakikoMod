@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -28,13 +28,22 @@ public class BrainFreeze : ModStatusCard
         if (card != this) return;
         await Cmd.Wait(0.25f);
         var damage = DynamicVars.Damage.IntValue;
-        await CreatureCmd.Damage(
+#if CSK_GAME_111_OR_NEWER
+        await DamageCompat.Damage(
             choiceContext,
             Owner.Creature,
             new DamageVar(damage, ValueProp.Unpowered | ValueProp.Move),
             Owner.Creature,
             this,
             null);
+#else
+        await DamageCompat.Damage(
+            choiceContext,
+            Owner.Creature,
+            new DamageVar(damage, ValueProp.Unpowered | ValueProp.Move),
+            Owner.Creature,
+            this);
+#endif
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

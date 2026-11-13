@@ -1,6 +1,8 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
 using CuteSakikoMod.CuteSakikoModCode.Encounters;
+#if STS2_AT_LEAST_0_113_0
 using CuteSakikoMod.CuteSakikoModCode.Encounters.Boss;
+#endif
 using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Commands;
@@ -107,8 +109,12 @@ public class TimeWatch : CuteSakikoEventRelic
             Flash();
         }
 
+#if STS2_AT_LEAST_0_113_0
         SetGloryBossEncounter();
+#endif
     }
+
+#if STS2_AT_LEAST_0_113_0
 
     private void SetGloryBossEncounter()
     {
@@ -155,4 +161,5 @@ public class TimeWatch : CuteSakikoEventRelic
             }
         }
     }
+#endif
 }

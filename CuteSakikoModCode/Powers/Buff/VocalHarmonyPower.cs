@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -30,7 +30,7 @@ public class VocalHarmonyPower : CuteSakikoModPower
         Flash();
 
         // 对所有敌人造成伤害
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             choiceContext,
             enemies,
             new DamageVar(damagePerEnemy, ValueProp.Unpowered),

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mod;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -75,7 +75,7 @@ public class HellBombOn() : OtherModTokenCard(1, CardType.Skill, CardRarity.Toke
         await Cmd.CustomScaledWait(0.2f, 0.3f);
 
         // 2. 对目标和自身同时造成伤害
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             choiceContext,
             targets,
             DynamicVars.Damage.BaseValue,

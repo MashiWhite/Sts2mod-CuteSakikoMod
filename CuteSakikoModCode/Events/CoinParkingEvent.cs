@@ -96,7 +96,7 @@ public sealed class CoinParkingEvent : CuteSakikoEvent
     // 选项3：离开 - 失去5点生命，移除1张牌
     private async Task Leave()
     {
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
             5m,

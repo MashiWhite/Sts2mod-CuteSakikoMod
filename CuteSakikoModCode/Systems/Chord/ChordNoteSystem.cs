@@ -652,7 +652,7 @@ public static class ChordNoteSystem
             {
                 var enemies = combat.HittableEnemies;
                 if (enemies.Count > 0)
-                    await CreatureCmd.Damage(
+                    await DamageCompat.Damage(
                         context,
                         enemies,
                         new DamageVar(4m, ValueProp.Move),

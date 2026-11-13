@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -34,7 +34,7 @@ public sealed class AsahiBeer : CuteSakikoModPotion
             return;
 
         // 造成 15 点伤害
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             choiceContext,
             target,
             DynamicVars["Damage"].BaseValue,

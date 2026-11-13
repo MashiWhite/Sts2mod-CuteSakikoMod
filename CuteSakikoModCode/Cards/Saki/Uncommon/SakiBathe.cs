@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Anon.Rare;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
@@ -35,6 +35,7 @@ public class SakiBathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
         }
     }
 
+#if CSK_GAME_111_OR_NEWER
     protected override CardLocation GetResultLocationForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
@@ -50,6 +51,7 @@ public class SakiBathe() : CuteSakikoModCard(1, CardType.Skill, CardRarity.Uncom
         // 消耗关键词被移除 → 进入弃牌堆
         return new CardLocation(Owner, PileType.Discard, CardPilePosition.Bottom);
     }
+#endif
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

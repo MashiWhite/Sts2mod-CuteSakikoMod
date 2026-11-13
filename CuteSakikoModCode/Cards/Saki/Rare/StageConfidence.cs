@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -27,6 +27,7 @@ public class StageConfidence() : CuteSakikoModCard(0, CardType.Skill, CardRarity
         }
     }
 
+#if CSK_GAME_111_OR_NEWER
     protected override CardLocation GetResultLocationForCardPlay()
     {
         var pressure = Owner.Creature.GetPower<PressurePower>();
@@ -34,6 +35,7 @@ public class StageConfidence() : CuteSakikoModCard(0, CardType.Skill, CardRarity
             return new CardLocation(Owner, PileType.Hand, CardPilePosition.Bottom);
         return new CardLocation(Owner, PileType.Discard, CardPilePosition.Bottom);
     }
+#endif
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

@@ -53,7 +53,7 @@ public sealed class AlleyShadowCat : CuteSakikoEvent
 
     private async Task Leave()
     {
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
             8m,

@@ -12,12 +12,20 @@ public sealed class DeliciousPower : CuteSakikoModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
+#if STS2_AT_LEAST_0_113_0
     public override async Task AfterDeath(
         PlayerChoiceContext choiceContext,
         Creature creature,
         CardModel? source,
         bool wasRemovalPrevented,
         float deathAnimLength)
+#else
+    public override async Task AfterDeath(
+        PlayerChoiceContext choiceContext,
+        Creature creature,
+        bool wasRemovalPrevented,
+        float deathAnimLength)
+#endif
     {
         if (creature != Owner) return;
 

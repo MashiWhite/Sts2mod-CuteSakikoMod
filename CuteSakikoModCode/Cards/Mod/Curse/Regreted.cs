@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -32,8 +32,14 @@ public class Regreted : ModCurseCard
     {
         await CardPileCmd.Draw(choiceContext, 1, Owner);
         VfxCmd.PlayOnCreatureCenter(Owner.Creature, "vfx/vfx_bloody_impact");
-        await CreatureCmd.Damage(choiceContext, Owner.Creature,
+#if CSK_GAME_111_OR_NEWER
+        await DamageCompat.Damage(choiceContext, Owner.Creature,
             new DamageVar(DynamicVars.Damage.BaseValue, ValueProp.Unpowered | ValueProp.Move),
             this, null);
+#else
+        await DamageCompat.Damage(choiceContext, Owner.Creature,
+            new DamageVar(DynamicVars.Damage.BaseValue, ValueProp.Unpowered | ValueProp.Move),
+            this);
+#endif
     }
 }

@@ -34,12 +34,21 @@ public class BlackCatEyes : CuteSakikoEventRelic
         // 计算实际扣除量：最多扣除3点，但确保剩余至少1点
         var loss = Math.Min(3m, maxHp - 1);
 
+#if STS2_AT_LEAST_0_113_0
         await CreatureCmd.LoseMaxHp(
             new ThrowingPlayerChoiceContext(),
             creature,
             loss,
             null // 0.113 起第 4 参由 bool isFromCard 改为 CardModel? cardSource
         );
+#else
+        await CreatureCmd.LoseMaxHp(
+            new ThrowingPlayerChoiceContext(),
+            creature,
+            loss,
+            false // 0.111 / 0.107：bool isFromCard
+        );
+#endif
     }
 
     // 每回合开始时获得1点能量，抽1张牌

@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -52,7 +52,8 @@ public sealed class CalmnessLadyPower : CuteSakikoModPower
         await PowerCmd.ModifyAmount(choiceContext, this, -1, null, null);
 
         // 反弹伤害
-        await CreatureCmd.Damage(
+#if CSK_GAME_111_OR_NEWER
+        await DamageCompat.Damage(
             choiceContext,
             _pendingDealer,
             new DamageVar(_pendingDamage, ValueProp.Unpowered),
@@ -60,6 +61,15 @@ public sealed class CalmnessLadyPower : CuteSakikoModPower
             null, // 没有卡牌来源
             null // 没有 CardPlay
         );
+#else
+        await DamageCompat.Damage(
+            choiceContext,
+            _pendingDealer,
+            new DamageVar(_pendingDamage, ValueProp.Unpowered),
+            Owner,
+            null
+        );
+#endif
 
         // 清理记录
         _pendingDealer = null;

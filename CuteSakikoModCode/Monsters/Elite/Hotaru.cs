@@ -181,7 +181,7 @@ public class Hotaru : ModMonsterTemplate
             }
         }
 
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             target,
             Damage,

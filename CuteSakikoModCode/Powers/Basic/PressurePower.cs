@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -84,13 +84,22 @@ public sealed class PressurePower : CuteSakikoModPower, IHealthBarForecastSource
         }
     }
 
-    public override decimal ModifyDamageAdditive(
+    #if CSK_GAME_108_OR_NEWER
+public override decimal ModifyDamageAdditive(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
         CardPlay? cardPlay)
+#else
+public override decimal ModifyDamageAdditive(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+#endif
     {
         if (Owner != target) return 0m;
         return amount * (Amount / 100m);

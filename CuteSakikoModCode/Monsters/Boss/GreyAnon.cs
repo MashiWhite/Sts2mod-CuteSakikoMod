@@ -197,12 +197,21 @@ public class GreyAnon : ModMonsterTemplate
         return newPos;
     }
 
+#if STS2_AT_LEAST_0_113_0
     public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature,
         CardModel? source, bool wasRemovalPrevented, float deathAnimLength)
     {
         StopGreyTextTimer();
         await base.AfterDeath(choiceContext, creature, source, wasRemovalPrevented, deathAnimLength);
     }
+#else
+    public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature,
+        bool wasRemovalPrevented, float deathAnimLength)
+    {
+        StopGreyTextTimer();
+        await base.AfterDeath(choiceContext, creature, wasRemovalPrevented, deathAnimLength);
+    }
+#endif
 
     public override async Task AfterCombatEnd(CombatRoom room)
     {

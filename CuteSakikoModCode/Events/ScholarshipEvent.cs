@@ -95,7 +95,7 @@ public sealed class ScholarshipEvent : CuteSakikoEvent
     // 选项2：幸灾乐祸地吹口哨 → 失去 8 点生命，移除 1 张牌
     private async Task Schadenfreude()
     {
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
             8m,

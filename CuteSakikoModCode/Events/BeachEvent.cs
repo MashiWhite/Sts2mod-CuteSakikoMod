@@ -99,7 +99,7 @@ public sealed class BeachEvent : CuteSakikoEvent
     // 选项2：找棵椰子树睡午觉 → 失去 8 点生命值，移除 1 张牌
     private async Task TakeNap()
     {
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
             8m,

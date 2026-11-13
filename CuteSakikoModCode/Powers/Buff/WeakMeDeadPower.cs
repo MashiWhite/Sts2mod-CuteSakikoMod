@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -17,13 +17,22 @@ public sealed class WeakMeDeadPower : CuteSakikoModPower
     public override PowerStackType StackType => PowerStackType.Counter;
 
     // 对拥有崩溃的敌人造成的伤害翻倍
-    public override decimal ModifyDamageMultiplicative(
+    #if CSK_GAME_108_OR_NEWER
+public override decimal ModifyDamageMultiplicative(
         Creature? target,
         decimal amount,
         ValueProp props,
         Creature? dealer,
         CardModel? cardSource,
-        CardPlay? cardPlay) // 补上缺失的参数
+        CardPlay? cardPlay)
+#else
+public override decimal ModifyDamageMultiplicative(
+        Creature? target,
+        decimal amount,
+        ValueProp props,
+        Creature? dealer,
+        CardModel? cardSource)
+#endif // 补上缺失的参数
     {
         if (dealer == Owner && target != null && target.GetPower<BreakDownPower>() != null) return 2m;
         return 1m;

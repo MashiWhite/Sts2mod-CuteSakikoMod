@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>CuteSakikoMod.Loader</AssemblyName>
+        <RootNamespace>CuteSakikoMod.Loader</RootNamespace>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <GenerateDependencyFile>false</GenerateDependencyFile>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+        <!-- 加载器对最低支持版本（0.107.1）编译，保证三个版本都能加载。 -->
+        <Sts2RefsDir Condition="'$(Sts2RefsDir)' == ''">E:\SLJT2\anti\Sts2Recover-0.107.1\game-refs</Sts2RefsDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="sts2">
+            <HintPath>$(Sts2RefsDir)\sts2.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="0Harmony">
+            <HintPath>$(Sts2RefsDir)\0Harmony.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+</Project>

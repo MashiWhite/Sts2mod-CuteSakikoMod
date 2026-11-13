@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -67,7 +67,7 @@ public class FlaxenHairedGirl : CuteSakikoEventRelic
         }).ToList();
 
         // 选择提示
-        var prompt = new LocString("relics", "FLAXEN_HAIRED_GIRL.selectionPrompt");
+        var prompt = new LocString("relics", "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.selectionPrompt");
         var prefs = new CardSelectorPrefs(prompt, 1, 1)
         {
             Cancelable = false

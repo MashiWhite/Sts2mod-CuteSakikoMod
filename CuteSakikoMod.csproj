@@ -72,13 +72,27 @@
     <PropertyGroup>
         <_Sts2ReleaseInfoPath>$(Sts2Path)/release_info.json</_Sts2ReleaseInfoPath>
         <_Sts2ReleaseInfo Condition="Exists('$(_Sts2ReleaseInfoPath)')">$([System.IO.File]::ReadAllText('$(_Sts2ReleaseInfoPath)'))</_Sts2ReleaseInfo>
-        <_Sts2GameVersion Condition="'$(_Sts2ReleaseInfo)' != ''">$([System.Text.RegularExpressions.Regex]::Match($(_Sts2ReleaseInfo), '"version"\s*:\s*"v?([0-9]+\.[0-9]+\.[0-9]+)"').Groups[1].Value)</_Sts2GameVersion>
+        <_Sts2GameVersion Condition="'$(Sts2GameVersion)' != ''">$(Sts2GameVersion)</_Sts2GameVersion>
+        <_Sts2GameVersion Condition="'$(_Sts2GameVersion)' == '' and '$(_Sts2ReleaseInfo)' != ''">$([System.Text.RegularExpressions.Regex]::Match($(_Sts2ReleaseInfo), '"version"\s*:\s*"v?([0-9]+\.[0-9]+\.[0-9]+)"').Groups[1].Value)</_Sts2GameVersion>
         <_Sts2HasNewSingletonApi>false</_Sts2HasNewSingletonApi>
+        <!-- RitsuLib 包按版本切换：0.113+ 用主包，0.111 用 Compat 包（二者 API 面一致）。
+             变体构建时可用 -p:RitsuLibPackageId=... 覆盖。 -->
+        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == '' and '$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">STS2.RitsuLib</RitsuLibPackageId>
+        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == ''">STS2.RitsuLib.Compat.0.111.0</RitsuLibPackageId>
+        <RitsuLibPackageVersion Condition="'$(RitsuLibPackageVersion)' == ''">0.6.11</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">
         <DefineConstants>$(DefineConstants);STS2_AT_LEAST_0_113_0</DefineConstants>
         <_Sts2HasNewSingletonApi>true</_Sts2HasNewSingletonApi>
+    </PropertyGroup>
+
+    <!-- 0.108 起伤害管线带 CardPlay；0.109/0.111 起有 CardLocation。 -->
+    <PropertyGroup Condition="'$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.108.0'))">
+        <DefineConstants>$(DefineConstants);CSK_GAME_108_OR_NEWER</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.111.0'))">
+        <DefineConstants>$(DefineConstants);CSK_GAME_111_OR_NEWER</DefineConstants>
     </PropertyGroup>
 
     <Target Name="LogGameApiCompat" BeforeTargets="CoreCompile">
@@ -103,7 +117,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.6.11" />
+        <PackageReference Include="$(RitsuLibPackageId)" Version="$(RitsuLibPackageVersion)" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->
@@ -125,6 +139,23 @@
              下批发版时删掉这两行 Remove 即可恢复（记得同时恢复本地化键）。 -->
         <Compile Remove="CuteSakikoModCode\Cards\Rana\Uncommon\DoubleParfait.cs"/>
         <Compile Remove="CuteSakikoModCode\Cards\Rana\Rare\EatAndSleep.cs"/>
+    </ItemGroup>
+
+    <!-- 0.113 专属：恐惧模式（Dread）的 5 个支配 + 5 个 Boss 遭遇；0.111 / 0.107 没有这些类型。 -->
+    <ItemGroup Condition="'$(_Sts2GameVersion)' != '' and !$([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">
+        <Compile Remove="CuteSakikoModCode\Dominion\Dominions\*.cs" />
+        <Compile Remove="CuteSakikoModCode\Encounters\Boss\GiantChocolateSnailEncounter.cs" />
+        <Compile Remove="CuteSakikoModCode\Encounters\Boss\GreyAnonEncounter.cs" />
+        <Compile Remove="CuteSakikoModCode\Encounters\Boss\MiyakoEncounter.cs" />
+        <Compile Remove="CuteSakikoModCode\Encounters\Boss\StarAnonEncounter.cs" />
+        <Compile Remove="CuteSakikoModCode\Encounters\Boss\TenDayTakiEncounter.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- 加载器工程在 loader/ 下，不能编进变体程序集。 -->
+        <Compile Remove="loader/**" />
+        <EmbeddedResource Remove="loader/**" />
+        <None Remove="loader/**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -156,16 +187,23 @@
         <Content Include="audio\look_cchord.mp3"/>
     </ItemGroup>
 
-    <!-- 构建后复制你自己的 Mod -->
-    <Target Name="CopyToModsFolderOnBuild" AfterTargets="Build">
+    <!-- 构建后复制你自己的 Mod（变体构建用 -p:SkipDeploy=true 跳过） -->
+    <Target Name="CopyToModsFolderOnBuild" AfterTargets="Build" Condition="'$(SkipDeploy)' != 'true'">
+        <PropertyGroup>
+            <_MainBundleDeployed Condition="Exists('$(ModsPath)$(MSBuildProjectName)\csk-variants.manifest')">true</_MainBundleDeployed>
+            <_MainIsSingleDll Condition="'$(AssemblyName)' == '$(MSBuildProjectName)'">true</_MainIsSingleDll>
+        </PropertyGroup>
+        <Warning Condition="'$(_MainBundleDeployed)' == 'true' and '$(_MainIsSingleDll)' == 'true'"
+                 Text="mods 里已是加载器结构，裸 dotnet build 不覆盖加载器；更新请用 tools\build-bundle.ps1。" />
         <Message Text="Copying mod files to game mods folder." Importance="high"/>
         <MakeDir Directories="$(ModsPath)$(MSBuildProjectName)" Condition="!Exists('$(ModsPath)$(MSBuildProjectName)')"/>
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"
+              Condition="'$(_MainBundleDeployed)' != 'true' or '$(_MainIsSingleDll)' != 'true'"/>
         <Copy SourceFiles="CuteSakikoMod.json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)"/>
     </Target>
 
     <!-- 把 audio 目录下的文件原样复制到模组文件夹 -->
-    <Target Name="CopyAudioToModsFolder" AfterTargets="CopyToModsFolderOnBuild">
+    <Target Name="CopyAudioToModsFolder" AfterTargets="CopyToModsFolderOnBuild" Condition="'$(SkipDeploy)' != 'true'">
         <Message Text="Copying audio files to game mods folder." Importance="high"/>
         <ItemGroup>
             <AudioFilesToCopy Include="@(None)"
@@ -200,7 +238,7 @@
     </PropertyGroup>
 
     <Target Name="GodotPublishOnBuild" AfterTargets="Build"
-            Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
+            Condition="'$(SkipPck)' != 'true' and '$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
         <Message Text="Exporting Godot .pck to staging (from Build)" Importance="high"/>
         <MakeDir Directories="$(PckStagingDir)"/>
         <Exec Command="&quot;$(GodotPath)&quot; --headless --path &quot;$(MSBuildProjectDirectory)&quot; --export-pack &quot;BasicExport&quot; &quot;$(PckStagingDir)\$(MSBuildProjectName).pck&quot;"

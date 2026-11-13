@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -42,7 +42,8 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
         await Cmd.CustomScaledWait(0.25f, 0.8f);
 
         // 4. 对主目标造成伤害（使用多目标重载，传入单元素列表）
-        var damageResults = (await CreatureCmd.Damage(
+#if CSK_GAME_111_OR_NEWER
+        var damageResults = (await DamageCompat.Damage(
             choiceContext,
             new[] { cardPlay.Target },
             new DamageVar(DynamicVars.Damage.BaseValue, ValueProp.Move),
@@ -50,6 +51,14 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
             this,
             null
         )).ToList();
+#else
+        var damageResults = (await DamageCompat.Damage(
+            choiceContext,
+            new[] { cardPlay.Target },
+            new DamageVar(DynamicVars.Damage.BaseValue, ValueProp.Move),
+            Owner.Creature
+        )).ToList();
+#endif
 
         // 5. 对其他敌方队友造成同等伤害
         var primary = damageResults.FirstOrDefault();
@@ -63,7 +72,7 @@ public class TokyoTower() : CuteSakikoModEggCard(3, CardType.Attack, CardRarity.
                 .ToList();
 
             if (otherEnemies.Count > 0)
-                await CreatureCmd.Damage(
+                await DamageCompat.Damage(
                     choiceContext,
                     otherEnemies,
                     new DamageVar(totalDamage, ValueProp.Unpowered | ValueProp.Move),

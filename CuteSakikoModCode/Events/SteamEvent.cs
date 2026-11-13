@@ -96,7 +96,7 @@ public sealed class SteamEvent : CuteSakikoEvent
     // 选项2：掏出相机 → 失去 8 点生命值，移除 1 张牌
     private async Task TakePhoto()
     {
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
             8m,

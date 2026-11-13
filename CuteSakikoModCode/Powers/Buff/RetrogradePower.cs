@@ -117,12 +117,20 @@ public sealed class RetrogradePower : CuteSakikoModPower
         return true;
     }
 
+#if STS2_AT_LEAST_0_113_0
     public override async Task AfterDeath(
         PlayerChoiceContext choiceContext,
         Creature creature,
         CardModel? source,
         bool wasRemovalPrevented,
         float deathAnimLength)
+#else
+    public override async Task AfterDeath(
+        PlayerChoiceContext choiceContext,
+        Creature creature,
+        bool wasRemovalPrevented,
+        float deathAnimLength)
+#endif
     {
         if (wasRemovalPrevented || creature != Owner) return;
 

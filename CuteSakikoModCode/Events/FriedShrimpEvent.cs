@@ -80,7 +80,7 @@ public sealed class FriedShrimpEvent : CuteSakikoEvent
 
     private async Task Detour()
     {
-        await CreatureCmd.Damage(
+        await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
             8m,
