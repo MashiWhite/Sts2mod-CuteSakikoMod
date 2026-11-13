@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
+using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Singletons;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -120,6 +120,7 @@ public sealed class RetrogradePower : CuteSakikoModPower
     public override async Task AfterDeath(
         PlayerChoiceContext choiceContext,
         Creature creature,
+        CardModel? source,
         bool wasRemovalPrevented,
         float deathAnimLength)
     {

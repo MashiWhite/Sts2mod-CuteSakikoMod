@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Nodes.SakiButton;
 
@@ -20,8 +21,8 @@ public partial class TogawaLoanButton : ModActionButton
 
     protected override void OnInit()
     {
-        var room = NMerchantRoom.Instance;
-        _player = room?.Room.GetLocalInventory()?.Player;
+        // 0.113 起 NMerchantRoom.Room 被移除，本地商店库存改从 MerchantSynchronizer 取
+        _player = RunManager.Instance?.MerchantSynchronizer?.GetLocalInventory()?.Player;
 
         // 调用基类自适应布局
         ApplyCustomLayout(180f, 180f);

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Ui;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Models;
@@ -9,8 +9,16 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches.Skin;
 [HarmonyPatch(typeof(NCharacterSelectScreen), nameof(NCharacterSelectScreen.SelectCharacter))]
 public static class SkinSelectCharacterPatch
 {
+#if STS2_AT_LEAST_0_113_0
+    // 0.113：SelectCharacter(NCharacterSelectButton) —— characterModel 参数被删，
+    //      角色模型改从按钮的 Character 属性取
+    private static void Postfix(NCharacterSelectButton charSelectButton)
+    {
+        var characterModel = charSelectButton.Character;
+#else
     private static void Postfix(CharacterModel characterModel)
     {
+#endif
         var type = characterModel.GetType();
         var hasSkins = CharacterSkinRegistry.HasSkins(type);
         SkinUiContext.SetCurrentCharacter(hasSkins ? type : null);

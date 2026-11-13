@@ -1,10 +1,9 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others.Config;
+using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Singleton;
 using MegaCrit.Sts2.Core.Runs;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;

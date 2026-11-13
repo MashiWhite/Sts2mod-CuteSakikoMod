@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Event;
 using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -30,7 +30,12 @@ public class FlybackManager : HookedSingletonModel
     private static bool IsClient =>
         RunManager.Instance.NetService?.Type == NetGameType.Client;
 
-    public static FlybackManager Instance => ModelDb.Singleton<FlybackManager>();
+    public static FlybackManager Instance =>
+#if STS2_AT_LEAST_0_113_0
+        ModelDb.RunModel<FlybackManager>();
+#else
+        ModelDb.Singleton<FlybackManager>();
+#endif
 
     // ---------- TotalPlayCount ----------
     public int TotalPlayCount

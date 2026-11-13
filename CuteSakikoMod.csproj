@@ -65,6 +65,26 @@
         <NoWarn>$(NoWarn);MSB3270</NoWarn>
     </PropertyGroup>
 
+    <!-- ★ 游戏版本检测：0.113 起游戏删除了 SingletonModel（改用 RunModel），
+         需要给源码提供 STS2_AT_LEAST_0_113_0 条件编译符号，才能一份代码同时兼容
+         beta（0.113+）与正式版（0.111）。版本号读游戏目录 release_info.json，
+         读不到就不定义（等同旧版）。 -->
+    <PropertyGroup>
+        <_Sts2ReleaseInfoPath>$(Sts2Path)/release_info.json</_Sts2ReleaseInfoPath>
+        <_Sts2ReleaseInfo Condition="Exists('$(_Sts2ReleaseInfoPath)')">$([System.IO.File]::ReadAllText('$(_Sts2ReleaseInfoPath)'))</_Sts2ReleaseInfo>
+        <_Sts2GameVersion Condition="'$(_Sts2ReleaseInfo)' != ''">$([System.Text.RegularExpressions.Regex]::Match($(_Sts2ReleaseInfo), '"version"\s*:\s*"v?([0-9]+\.[0-9]+\.[0-9]+)"').Groups[1].Value)</_Sts2GameVersion>
+        <_Sts2HasNewSingletonApi>false</_Sts2HasNewSingletonApi>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">
+        <DefineConstants>$(DefineConstants);STS2_AT_LEAST_0_113_0</DefineConstants>
+        <_Sts2HasNewSingletonApi>true</_Sts2HasNewSingletonApi>
+    </PropertyGroup>
+
+    <Target Name="LogGameApiCompat" BeforeTargets="CoreCompile">
+        <Message Text="[CuteSakikoMod] Detected game version: '$(_Sts2GameVersion)' (STS2_AT_LEAST_0_113_0 = $(_Sts2HasNewSingletonApi))" Importance="high" />
+    </Target>
+
     <!-- 引用 -->
     <ItemGroup Condition="Exists('$(Sts2DataDir)')">
         <Reference Include="0Harmony">
@@ -83,7 +103,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="CuteSakikoMod/localization/**/*.json"/>
-        <PackageReference Include="STS2.RitsuLib" Version="0.6.10" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.6.11" />
     </ItemGroup>
 
     <!-- 资源排除与包含 -->

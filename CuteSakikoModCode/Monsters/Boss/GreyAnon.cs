@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
@@ -178,10 +178,10 @@ public class GreyAnon : ModMonsterTemplate
     }
 
     public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature,
-        bool wasRemovalPrevented, float deathAnimLength)
+        CardModel? source, bool wasRemovalPrevented, float deathAnimLength)
     {
         StopGreyTextTimer();
-        await base.AfterDeath(choiceContext, creature, wasRemovalPrevented, deathAnimLength);
+        await base.AfterDeath(choiceContext, creature, source, wasRemovalPrevented, deathAnimLength);
     }
 
     public override async Task AfterCombatEnd(CombatRoom room)

@@ -179,7 +179,7 @@ public sealed class MovementNotFinishedPower : CuteSakikoModPower
                 foreach (var player in Owner.CombatState.Players)
                 {
                     await CreatureCmd.LoseMaxHp(
-                        new ThrowingPlayerChoiceContext(), player.Creature, 10m, false);
+                        new ThrowingPlayerChoiceContext(), player.Creature, 10m, null);
                 }
                 break;
         }

@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -38,7 +38,7 @@ public class BlackCatEyes : CuteSakikoEventRelic
             new ThrowingPlayerChoiceContext(),
             creature,
             loss,
-            false // 不是来自卡牌
+            null // 0.113 起第 4 参由 bool isFromCard 改为 CardModel? cardSource
         );
     }
 

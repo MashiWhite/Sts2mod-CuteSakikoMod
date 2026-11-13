@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -60,7 +60,7 @@ public sealed class BecomeAshesPower : CuteSakikoModPower
         // 减少最大生命值（当前最大生命值的 5%），而不是造成伤害
         var maxHpLoss = (int)Math.Ceiling(Owner.MaxHp * 0.05);
         if (maxHpLoss > 0)
-            await CreatureCmd.LoseMaxHp(choiceContext, Owner, maxHpLoss, false);
+            await CreatureCmd.LoseMaxHp(choiceContext, Owner, maxHpLoss, null);
 
         UpdateStrengthGain();
         UpdateSelfDamage(); // 最大生命值改变后，下次损失的值也会变化

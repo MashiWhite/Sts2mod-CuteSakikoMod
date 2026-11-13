@@ -25,7 +25,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Singletons;
 [RegisterSingleton]
 public sealed class NekoCounterManager : HookedSingletonModel
 {
-    public static NekoCounterManager Instance => ModelDb.Singleton<NekoCounterManager>();
+    public static NekoCounterManager Instance =>
+#if STS2_AT_LEAST_0_113_0
+        ModelDb.RunModel<NekoCounterManager>();
+#else
+        ModelDb.Singleton<NekoCounterManager>();
+#endif
 
     /// <summary>本场战斗累计打出猫咪数。</summary>
     private readonly Dictionary<ulong, int> _nekoPlayed = new();

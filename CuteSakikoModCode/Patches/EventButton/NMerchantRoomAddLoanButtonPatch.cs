@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Nodes;
+using CuteSakikoMod.CuteSakikoModCode.Nodes;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
@@ -24,6 +24,29 @@ public static class NMerchantRoomAddTogawaButtonPatch
 }
 
 // 打开库存时显示按钮
+#if STS2_AT_LEAST_0_113_0
+// 0.113：NMerchantRoom 变 abstract，OpenInventory 下沉到两个具体子类（普通商店 / 闪店）
+internal static class TogawaLoanButtonShowHelper
+{
+    internal static void Show(NMerchantRoom room)
+    {
+        var button = room.GetNodeOrNull<TogawaLoanButton>("TogawaLoanButton");
+        button?.ShowButton();
+    }
+}
+
+[HarmonyPatch(typeof(NStandardMerchantRoom), nameof(NStandardMerchantRoom.OpenInventory))]
+public static class NStandardMerchantRoom_OpenInventory_Patch
+{
+    private static void Postfix(NMerchantRoom __instance) => TogawaLoanButtonShowHelper.Show(__instance);
+}
+
+[HarmonyPatch(typeof(NBlitzMerchantRoom), nameof(NBlitzMerchantRoom.OpenInventory))]
+public static class NBlitzMerchantRoom_OpenInventory_Patch
+{
+    private static void Postfix(NMerchantRoom __instance) => TogawaLoanButtonShowHelper.Show(__instance);
+}
+#else
 [HarmonyPatch(typeof(NMerchantRoom), "OpenInventory")]
 public static class NMerchantRoom_OpenInventory_Patch
 {
@@ -33,6 +56,7 @@ public static class NMerchantRoom_OpenInventory_Patch
         button?.ShowButton();
     }
 }
+#endif
 
 // 关闭库存时隐藏按钮
 [HarmonyPatch(typeof(NMerchantInventory), "Close")]

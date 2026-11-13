@@ -1,4 +1,4 @@
-﻿
+
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -48,7 +48,7 @@ public class AnonWang : ModMonsterTemplate
     {
         await base.AfterAddedToRoom();
         var ctx = new ThrowingPlayerChoiceContext();
-        await PowerCmd.Apply<ShowOffPower>(ctx, Creature, 1, Creature, null);
+        await PowerCmd.Apply<CuteSakikoMod.CuteSakikoModCode.Powers.Buff.ShowOffPower>(ctx, Creature, 1, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
