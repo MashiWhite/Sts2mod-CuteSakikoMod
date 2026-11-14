@@ -48,7 +48,7 @@ public class AnonWang : ModMonsterTemplate
     {
         await base.AfterAddedToRoom();
         var ctx = new ThrowingPlayerChoiceContext();
-        await PowerCmd.Apply<CuteSakikoMod.CuteSakikoModCode.Powers.Buff.ShowOffPower>(ctx, Creature, 1, Creature, null);
+        await PowerCmd.Apply<CuteSakikoMod.CuteSakikoModCode.Powers.Buff.AnonWangShowOffPower>(ctx, Creature, 1, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -69,7 +69,7 @@ public class AnonWang : ModMonsterTemplate
     }
 
     /// <summary>
-    /// 供 ShowOffPower 调用，根据玩家打出的卡牌类型强制改变意图。
+    /// 供 AnonWangShowOffPower 调用，根据玩家打出的卡牌类型强制改变意图。
     /// </summary>
     public void ReactToCard(CardType type)
     {

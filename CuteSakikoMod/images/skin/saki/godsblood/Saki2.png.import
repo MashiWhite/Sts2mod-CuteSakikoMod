@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbq3e1skg4i11"
-path="res://.godot/imported/ShowOffPower.png-3791965e1d5d076dd2e743770ec78c65.ctex"
+uid="uid://oekkq0pcwe1u"
+path="res://.godot/imported/Saki2.png-888f308f900ca6e4b1afb063caf4d904.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/powers/ShowOffPower.png"
-dest_files=["res://.godot/imported/ShowOffPower.png-3791965e1d5d076dd2e743770ec78c65.ctex"]
+source_file="res://CuteSakikoMod/images/skin/saki/godsblood/Saki2.png"
+dest_files=["res://.godot/imported/Saki2.png-888f308f900ca6e4b1afb063caf4d904.ctex"]
 
 [params]
 
@@ -23,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

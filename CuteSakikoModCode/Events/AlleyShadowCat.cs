@@ -46,6 +46,8 @@ public sealed class AlleyShadowCat : CuteSakikoEvent
 
     private async Task ApproachCat()
     {
+        if (IsFinished) return;
+
         var relic = ModelDb.Relic<BlackCatEyes>().ToMutable();
         await RelicCmd.Obtain(relic, Owner!);
         SetEventFinished(PageDescription("APPROACH_SUCCESS"));
@@ -53,6 +55,8 @@ public sealed class AlleyShadowCat : CuteSakikoEvent
 
     private async Task Leave()
     {
+        if (IsFinished) return;
+
         await DamageCompat.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner!.Creature,
@@ -62,13 +66,18 @@ public sealed class AlleyShadowCat : CuteSakikoEvent
             null
         );
 
-        var prefs = new CardSelectorPrefs(CardSelectorPrefs.UpgradeSelectionPrompt, 1);
-        var selected = await CardSelectCmd.FromDeckForUpgrade(Owner, prefs);
-        if (selected.Any())
+        // DirectConnectIP 的离线托管会把远程选择硬编码成 Index(0)，CardSelectCmd 内部
+        // AsDeckCards() 会抛异常并卡死事件；对托管玩家跳过选牌（未装该 mod 时恒 false）。
+        if (!IsTakenOverByDirectConnect(Owner))
         {
-            var card = selected.First();
-            card.UpgradeInternal();
-            card.FinalizeUpgradeInternal();
+            var prefs = new CardSelectorPrefs(CardSelectorPrefs.UpgradeSelectionPrompt, 1);
+            var selected = await CardSelectCmd.FromDeckForUpgrade(Owner, prefs);
+            if (selected.Any())
+            {
+                var card = selected.First();
+                card.UpgradeInternal();
+                card.FinalizeUpgradeInternal();
+            }
         }
 
         SetEventFinished(PageDescription("LEAVE_SUCCESS"));

@@ -19,7 +19,7 @@ public sealed class AsahiBeer : CuteSakikoModPotion
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(15m, ValueProp.Move),
+        new DamageVar(15m, ValueProp.Unpowered),
         new PowerVar<PressurePower>(15m)
     ];
 
@@ -34,13 +34,17 @@ public sealed class AsahiBeer : CuteSakikoModPotion
             return;
 
         // 造成 15 点伤害
+        // ★ 药水伤害：算玩家来源（dealer = Owner.Creature），但不吃加成。
+        //   ValueProp.Unpowered = 药水/遗物/能力伤害（原生 FirePotion 同款），
+        //   不会被力量、易伤等 IsPoweredAttack 加成影响。
         await DamageCompat.Damage(
             choiceContext,
             target,
             DynamicVars["Damage"].BaseValue,
-            ValueProp.Move,
-            null, // 药水没有 CardModel，传 null
-            null // 药水没有 CardPlay，传 null
+            ValueProp.Unpowered,
+            Owner.Creature, // dealer：算玩家来源
+            null,           // 药水没有 CardModel
+            null            // 药水没有 CardPlay
         );
 
         // 给予 15 层压力

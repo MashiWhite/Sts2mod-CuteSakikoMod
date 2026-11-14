@@ -89,7 +89,25 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
             "res://CuteSakikoMod/images/skin/saki/tenday/multiplayer_hand_rock.png",
             "res://CuteSakikoMod/images/skin/saki/tenday/multiplayer_hand_paper.png",
             "res://CuteSakikoMod/images/skin/saki/tenday/multiplayer_hand_scissors.png"),
-        SharedPresets)
+        SharedPresets),
+
+        CharacterSkinDefinition.FromPresets(
+            "godsblood",
+            "CUTE_SAKIKO_MOD_SAKI_SKIN_GODSBLOOD",
+            new SkinAssets(
+                "res://CuteSakikoMod/scenes/skin/saki/godsblood/saki.tscn",
+                "res://CuteSakikoMod/scenes/char/saki/saki_energy_counter.tscn",
+                "res://CuteSakikoMod/scenes/skin/saki/godsblood/saki_merchant.tscn",
+                "res://CuteSakikoMod/scenes/skin/saki/godsblood/saki_rest_site.tscn",
+                "res://CuteSakikoMod/images/skin/saki/godsblood/character_icon_saki.png",
+                "res://CuteSakikoMod/images/skin/saki/godsblood/character_icon_saki_outline.png",
+                "res://CuteSakikoMod/scenes/skin/saki/godsblood/saki_icon.tscn",
+                "res://CuteSakikoMod/scenes/ui/card_trail_sakiko.tscn",
+                "res://CuteSakikoMod/images/skin/saki/godsblood/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/skin/saki/godsblood/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/skin/saki/godsblood/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/skin/saki/godsblood/multiplayer_hand_scissors.png"),
+            SharedPresets)
         
     ];
 }

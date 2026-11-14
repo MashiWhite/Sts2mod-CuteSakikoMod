@@ -10,9 +10,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Compat;
 
 /// <summary>
 /// 伤害指令的跨版本包装。
-/// 0.107：Damage 没有 CardPlay 参数（最多 dealer + cardSource），多目标只有 dealer 版本；
-/// 0.111+：支持 dealer + cardSource + cardPlay，多目标也支持。
-/// 调用点统一走这里，避免每个文件里写 #if。
+/// 0.107：Damage 最多 dealer + cardSource；
+/// 0.111+：支持 dealer + cardSource + cardPlay。
+/// ★ 两版都有「dealer / cardSource 均可为 null」的重载；事件伤害（如暗巷影猫的离开）
+///   就是 dealer = null + cardSource = null，调用点统一走这里，避免每个文件里写 #if。
 /// </summary>
 internal static class DamageCompat
 {
@@ -45,17 +46,9 @@ internal static class DamageCompat
     {
         var (dealer, card, play) = Split(extras);
 #if CSK_GAME_111_OR_NEWER
-        if (play != null || card != null)
-            return CreatureCmd.Damage(ctx, target, damageVar, dealer, card, play);
-        if (dealer != null)
-            return CreatureCmd.Damage(ctx, target, damageVar, dealer);
-        throw new InvalidOperationException("Damage 需要 dealer 或 cardSource");
+        return CreatureCmd.Damage(ctx, target, damageVar, dealer, card, play);
 #else
-        if (card != null)
-            return CreatureCmd.Damage(ctx, target, damageVar, dealer, card);
-        if (dealer != null)
-            return CreatureCmd.Damage(ctx, target, damageVar, dealer);
-        throw new InvalidOperationException("0.107 Damage 需要 dealer 或 cardSource");
+        return CreatureCmd.Damage(ctx, target, damageVar, dealer, card);
 #endif
     }
 
@@ -64,15 +57,9 @@ internal static class DamageCompat
     {
         var (dealer, card, play) = Split(extras);
 #if CSK_GAME_111_OR_NEWER
-        if (play != null || card != null)
-            return CreatureCmd.Damage(ctx, targets, damageVar, dealer, card, play);
-        return CreatureCmd.Damage(ctx, targets, damageVar, dealer);
+        return CreatureCmd.Damage(ctx, targets, damageVar, dealer, card, play);
 #else
-        if (dealer != null)
-            return CreatureCmd.Damage(ctx, targets, damageVar, dealer);
-        if (card != null)
-            return DamageEach(ctx, targets, damageVar, card);
-        throw new InvalidOperationException("0.107 多目标 Damage 需要 dealer");
+        return CreatureCmd.Damage(ctx, targets, damageVar, dealer, card);
 #endif
     }
 
@@ -81,17 +68,9 @@ internal static class DamageCompat
     {
         var (dealer, card, play) = Split(extras);
 #if CSK_GAME_111_OR_NEWER
-        if (play != null || card != null)
-            return CreatureCmd.Damage(ctx, target, amount, props, dealer, card, play);
-        if (dealer != null)
-            return CreatureCmd.Damage(ctx, target, amount, props, dealer);
-        throw new InvalidOperationException("Damage 需要 dealer 或 cardSource");
+        return CreatureCmd.Damage(ctx, target, amount, props, dealer, card, play);
 #else
-        if (card != null)
-            return CreatureCmd.Damage(ctx, target, amount, props, dealer, card);
-        if (dealer != null)
-            return CreatureCmd.Damage(ctx, target, amount, props, dealer);
-        throw new InvalidOperationException("0.107 Damage 需要 dealer 或 cardSource");
+        return CreatureCmd.Damage(ctx, target, amount, props, dealer, card);
 #endif
     }
 
@@ -100,15 +79,9 @@ internal static class DamageCompat
     {
         var (dealer, card, play) = Split(extras);
 #if CSK_GAME_111_OR_NEWER
-        if (play != null || card != null)
-            return CreatureCmd.Damage(ctx, targets, amount, props, dealer, card, play);
-        return CreatureCmd.Damage(ctx, targets, amount, props, dealer);
+        return CreatureCmd.Damage(ctx, targets, amount, props, dealer, card, play);
 #else
-        if (dealer != null)
-            return CreatureCmd.Damage(ctx, targets, amount, props, dealer);
-        if (card != null)
-            return DamageEach(ctx, targets, amount, props, card);
-        throw new InvalidOperationException("0.107 多目标 Damage 需要 dealer");
+        return CreatureCmd.Damage(ctx, targets, amount, props, dealer, card);
 #endif
     }
 
@@ -120,24 +93,4 @@ internal static class DamageCompat
         return CreatureCmd.LoseBlock(creature, amount);
 #endif
     }
-
-#if !CSK_GAME_111_OR_NEWER
-    private static async Task<IEnumerable<DamageResult>> DamageEach(
-        PlayerChoiceContext ctx, IEnumerable<Creature> targets, DamageVar damageVar, CardModel card)
-    {
-        var results = new List<DamageResult>();
-        foreach (var target in targets)
-            results.AddRange(await CreatureCmd.Damage(ctx, target, damageVar, card));
-        return results;
-    }
-
-    private static async Task<IEnumerable<DamageResult>> DamageEach(
-        PlayerChoiceContext ctx, IEnumerable<Creature> targets, decimal amount, ValueProp props, CardModel card)
-    {
-        var results = new List<DamageResult>();
-        foreach (var target in targets)
-            results.AddRange(await CreatureCmd.Damage(ctx, target, amount, props, card));
-        return results;
-    }
-#endif
 }

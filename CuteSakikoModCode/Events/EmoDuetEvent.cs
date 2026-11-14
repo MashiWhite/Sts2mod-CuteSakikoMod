@@ -113,12 +113,18 @@ public sealed class EmoDuetEvent : CuteSakikoEvent
             null
         );
 
-        var selected = await CardSelectCmd.FromDeckForRemoval(
-            Owner,
-            new CardSelectorPrefs(CardSelectorPrefs.RemoveSelectionPrompt, 1)
-        );
-        var card = selected.FirstOrDefault();
-        if (card != null) await CardPileCmd.RemoveFromDeck(card);
+        // ⚠️ 兼容 DirectConnectIP 离线托管（2026-11-08）：托管玩家的远程选择固定返回
+        //    Index 类型，FromDeckForRemoval 会抛异常卡死事件 → 对托管玩家跳过选牌。
+        //    未装该 mod 时恒 false，行为完全不变。
+        if (!IsTakenOverByDirectConnect(Owner))
+        {
+            var selected = await CardSelectCmd.FromDeckForRemoval(
+                Owner,
+                new CardSelectorPrefs(CardSelectorPrefs.RemoveSelectionPrompt, 1)
+            );
+            var card = selected.FirstOrDefault();
+            if (card != null) await CardPileCmd.RemoveFromDeck(card);
+        }
 
         SetEventFinished(PageDescription("SLIP_AWAY_DESC"));
     }
