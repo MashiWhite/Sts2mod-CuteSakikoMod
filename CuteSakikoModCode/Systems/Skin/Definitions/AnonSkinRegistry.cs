@@ -32,21 +32,21 @@ public sealed class AnonSkinRegistry : ICharacterSkinRegistry
     public IReadOnlyList<CharacterSkinDefinition> AllSkins { get; } =
     [
         CharacterSkinDefinition.FromPresets(
-            "anon",
+            "haneoka_1st_winter",
             "CUTE_SAKIKO_MOD_ANON_SKIN_DEFAULT",
             new SkinAssets(
                 "res://CuteSakikoMod/scenes/char/anon/anon.tscn",
                 "res://CuteSakikoMod/scenes/char/anon/anon_energy_counter.tscn",
                 "res://CuteSakikoMod/scenes/char/anon/anon_merchant.tscn",
                 "res://CuteSakikoMod/scenes/char/anon/anon_rest_site.tscn",
-                "res://CuteSakikoMod/images/charui/anon/character_icon_anon.png",
-                "res://CuteSakikoMod/images/charui/anon/character_icon_anon_outline.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_1st_winter/character_icon_anon.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_1st_winter/character_icon_anon_outline.png",
                 "res://CuteSakikoMod/scenes/char/anon/anon_icon.tscn",
                 "res://CuteSakikoMod/scenes/ui/card_trail_anon.tscn",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_point.png",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_rock.png",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_paper.png",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_scissors.png"),
+                "res://CuteSakikoMod/images/skin/anon/haneoka_1st_winter/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_1st_winter/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_1st_winter/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_1st_winter/multiplayer_hand_scissors.png"),
             SharedPresets),
 
         CharacterSkinDefinition.FromPresets(
@@ -85,6 +85,22 @@ public sealed class AnonSkinRegistry : ICharacterSkinRegistry
                 "res://CuteSakikoMod/images/skin/anon/anonwang/multiplayer_hand_rock.png",
                 "res://CuteSakikoMod/images/skin/anon/anonwang/multiplayer_hand_paper.png",
                 "res://CuteSakikoMod/images/skin/anon/anonwang/multiplayer_hand_scissors.png"),
+            SharedPresets),
+        CharacterSkinDefinition.FromPresets("haneoka_2nd_winter",
+            "CUTE_SAKIKO_MOD_ANON_SKIN_HANEOKA_2ND_WINTER",
+            new SkinAssets(
+                "res://CuteSakikoMod/scenes/skin/anon/haneoka_2nd_winter/anon.tscn",
+                "res://CuteSakikoMod/scenes/char/anon/anon_energy_counter.tscn",
+                "res://CuteSakikoMod/scenes/skin/anon/haneoka_2nd_winter/anon_merchant.tscn",
+                "res://CuteSakikoMod/scenes/skin/anon/haneoka_2nd_winter/anon_rest_site.tscn",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/character_icon_anon.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/character_icon_anon_outline.png",
+                "res://CuteSakikoMod/scenes/skin/anon/haneoka_2nd_winter/anon_icon.tscn",
+                "res://CuteSakikoMod/scenes/ui/card_trail_anon.tscn",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/multiplayer_hand_scissors.png"),
             SharedPresets)
     ];
 }

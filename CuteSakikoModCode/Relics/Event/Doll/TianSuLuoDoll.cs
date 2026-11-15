@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -27,8 +27,7 @@ public class TianSuLuoDoll : CuteSakikoEventRelic, IModRightClickableRelic
 
     public Task OnRightClick(ModRightClickExecutionContext context)
     {
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var fullPath = Path.Combine(dir, "audio", "ohyeah.mp3");
+        var fullPath = AudioManager.ResolveAudioPath("ohyeah.mp3");
         AudioManager.PlaySound(fullPath);
         return Task.CompletedTask;
     }

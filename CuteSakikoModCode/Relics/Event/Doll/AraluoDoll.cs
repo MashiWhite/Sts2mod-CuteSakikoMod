@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -36,8 +36,7 @@ public class AraluoDoll : CuteSakikoEventRelic, IModRightClickableRelic
     public Task OnRightClick(ModRightClickExecutionContext context)
     {
         var file = UmePowerFiles[_rand.Next(UmePowerFiles.Length)];
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var fullPath = Path.Combine(dir, "audio", file);
+        var fullPath = AudioManager.ResolveAudioPath(file);
         AudioManager.PlaySound(fullPath);
         return Task.CompletedTask;
     }

@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://25gh5j6hntv"]
 
-[ext_resource type="Texture2D" uid="uid://8mv712p2btax" path="res://CuteSakikoMod/images/char/rana/rana.png" id="2_yskw7"]
-[ext_resource type="Texture2D" uid="uid://dmn83f731trws" path="res://CuteSakikoMod/images/char/rana/ranahurt.png" id="3_7t2as"]
+[ext_resource type="Texture2D" uid="uid://8mv712p2btax" path="res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/rana.png" id="2_yskw7"]
+[ext_resource type="Texture2D" uid="uid://dmn83f731trws" path="res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/ranahurt.png" id="3_7t2as"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

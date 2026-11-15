@@ -1,4 +1,6 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others.Config;
+using System.IO;
+using System.Reflection;
+using CuteSakikoMod.CuteSakikoModCode.Others.Config;
 using Godot;
 using MegaCrit.Sts2.Core.Nodes.Audio;
 using MegaCrit.Sts2.Core.Saves;
@@ -10,6 +12,36 @@ public static class AudioManager
 {
     // ---- 内部节点 ----
     private static Node? _audioRoot;
+
+    private static string? _audioDir;
+
+    /// <summary>
+    /// 加载器结构下程序集位于 compat/&lt;游戏版本&gt;/，而音频固定在 mod 根目录的 audio/。
+    /// 因此从程序集目录向上逐层查找第一个真实存在的 audio 目录。
+    /// </summary>
+    public static string AudioDirectory
+    {
+        get
+        {
+            if (_audioDir != null) return _audioDir;
+            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            for (var i = 0; i < 5 && !string.IsNullOrEmpty(dir); i++)
+            {
+                var candidate = Path.Combine(dir, "audio");
+                if (Directory.Exists(candidate))
+                {
+                    _audioDir = candidate;
+                    return candidate;
+                }
+                dir = Path.GetDirectoryName(dir);
+            }
+            _audioDir = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "audio");
+            return _audioDir;
+        }
+    }
+
+    public static string ResolveAudioPath(string fileName) => Path.Combine(AudioDirectory, fileName);
 
     // ---- 音乐播放器 ----
     private static AudioStreamPlayer? _musicPlayer;
@@ -104,7 +136,11 @@ public static class AudioManager
     private static void PlaySoundInternal(string filePath, float baseVolume)
     {
         var stream = LoadAudioStream(filePath);
-        if (stream == null) return;
+        if (stream == null)
+        {
+            GD.PushWarning($"[CuteSakikoMod] 音效加载失败: {filePath}");
+            return;
+        }
         EnsureAudioRoot();
         if (_audioRoot == null) return;
 
@@ -139,7 +175,11 @@ public static class AudioManager
         if (_currentMusicPath == filePath && _musicPlayer?.Playing == true)
             return _musicPlayer;
         var stream = LoadAudioStream(filePath);
-        if (stream == null) return null;
+        if (stream == null)
+        {
+            GD.PushWarning($"[CuteSakikoMod] 音乐加载失败: {filePath}");
+            return null;
+        }
         EnsureAudioRoot();
         if (_audioRoot == null) return null;
 

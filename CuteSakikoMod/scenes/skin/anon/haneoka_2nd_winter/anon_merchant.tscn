@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://01h0s5amsitq"]
+
+[ext_resource type="Script" uid="uid://rv4wc0qdy764" path="res://CuteSakikoModCode/Nodes/SakiMerchantCharacter.cs" id="1_kyint"]
+[ext_resource type="Texture2D" uid="uid://g1e5g03qb942e" path="res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/Anonnon.png" id="2_dabqb"]
+
+[node name="Merchant" type="Node2D"]
+script = ExtResource("1_kyint")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1, -160)
+texture = ExtResource("2_dabqb")

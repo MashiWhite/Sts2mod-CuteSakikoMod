@@ -32,21 +32,21 @@ public sealed class RanaSkinRegistry : ICharacterSkinRegistry
     public IReadOnlyList<CharacterSkinDefinition> AllSkins { get; } =
     [
         CharacterSkinDefinition.FromPresets(
-            "rana",
+            "hanasakigawa_3rd_winter",
             "CUTE_SAKIKO_MOD_RANA_SKIN_DEFAULT",
             new SkinAssets(
                 "res://CuteSakikoMod/scenes/char/rana/rana.tscn",
                 "res://CuteSakikoMod/scenes/char/anon/anon_energy_counter.tscn",
                 "res://CuteSakikoMod/scenes/char/rana/rana_merchant.tscn",
                 "res://CuteSakikoMod/scenes/char/rana/rana_rest_site.tscn",
-                "res://CuteSakikoMod/images/charui/rana/character_icon_rana.png",
-                "res://CuteSakikoMod/images/charui/rana/character_icon_rana_outline.png",
+                "res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/character_icon_rana.png",
+                "res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/character_icon_rana_outline.png",
                 "res://CuteSakikoMod/scenes/char/rana/rana_icon.tscn",
                 "res://CuteSakikoMod/scenes/ui/card_trail_anon.tscn",
-                "res://CuteSakikoMod/images/charui/rana/multiplayer_hand_point.png",
-                "res://CuteSakikoMod/images/charui/rana/multiplayer_hand_rock.png",
-                "res://CuteSakikoMod/images/charui/rana/multiplayer_hand_paper.png",
-                "res://CuteSakikoMod/images/charui/rana/multiplayer_hand_scissors.png"),
+                "res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/skin/rana/hanasakigawa_3rd_winter/multiplayer_hand_scissors.png"),
             SharedPresets),
 
         CharacterSkinDefinition.FromPresets(

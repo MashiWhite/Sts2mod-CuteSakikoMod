@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using Godot;
@@ -114,14 +114,7 @@ public class Jennifer : ModMonsterTemplate
         var file = index == 0 ? "jennifer1.mp3" : "jennifer2.mp3";
 
         // 2. 拼接绝对路径（与 AnonGuitar 完全一致）
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        if (string.IsNullOrEmpty(dir))
-        {
-            GD.PrintErr("[Jennifer] 无法获取程序集目录，音频播放失败");
-            return;
-        }
-
-        var fullPath = Path.Combine(dir, "audio", file);
+        var fullPath = AudioManager.ResolveAudioPath(file);
         GD.Print($"[Jennifer] 即将播放音效: {fullPath}");
 
         // 3. 调用 AudioManager（内部已处理主线程安全、音量计算等）

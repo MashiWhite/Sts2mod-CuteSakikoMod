@@ -46,8 +46,7 @@ public class TgwGroup() : CuteAnonCard(1, CardType.Skill, CardRarity.Uncommon, T
             await PlayerCmd.GainGold(totalGold, Owner);
 
         // 播放特定和弦音效
-        var sfxPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio",
-            "tgw_group.mp3");
+        var sfxPath = AudioManager.ResolveAudioPath("tgw_group.mp3");
         AudioManager.PlaySound(sfxPath); // 1.0 是基础音量
     }
 

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -89,8 +89,7 @@ public class TianSuLuo : ModMonsterTemplate
 
     private static void PlayOhYeahSound()
     {
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var fullPath = Path.Combine(dir, "audio", "ohyeah.mp3");
+        var fullPath = AudioManager.ResolveAudioPath("ohyeah.mp3");
         AudioManager.PlaySound(fullPath);
     }
 }

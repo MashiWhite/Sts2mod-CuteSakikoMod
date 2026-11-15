@@ -53,6 +53,10 @@ public sealed class HeartWallPower : CuteSakikoModPower
     {
         await base.AfterApplied(applier, cardSource);
         Entry.Logger.Info($"[HeartWall] applied owner={Owner?.Name} amount={Amount} instance={RuntimeHelpers.GetHashCode(this)}");
+        var state = State;
+        state.ImmuneCardIds.Clear();
+        state.Attacks.Clear();
+        state.CurrentPlayDamaged = false;
         DynamicVars["MaxHits"].BaseValue = MaxHitsPerCard;
         UpdateImmuneCardsDisplay();
     }
@@ -68,8 +72,16 @@ public sealed class HeartWallPower : CuteSakikoModPower
         return amount;
     }
 
-    // 按「实际受到的未格挡伤害」给 Owner 自己计数，达到上限后把这张卡加入自己的免疫表
-    public override async Task AfterDamageReceived(
+    // 一次「攻击行为」= 打出一张牌并造成伤害；这张牌有多少段伤害都只记 1 次。
+    // BeforeCardPlayed 先清当前标记，AfterDamageReceived 只标记「本张牌造成过伤害」，
+    // AfterCardPlayed 时再 +1；达到上限后，这张牌之后的攻击才免疫。
+    public override Task BeforeCardPlayed(CardPlay cardPlay)
+    {
+        State.CurrentPlayDamaged = false;
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterDamageReceived(
         PlayerChoiceContext choiceContext,
         Creature target,
         DamageResult result,
@@ -77,17 +89,28 @@ public sealed class HeartWallPower : CuteSakikoModPower
         Creature? dealer,
         CardModel? cardSource)
     {
-        if (target != Owner || result.UnblockedDamage == 0 || cardSource == null) return;
+        if (target == Owner && result.UnblockedDamage > 0 && cardSource != null)
+            State.CurrentPlayDamaged = true;
+        return Task.CompletedTask;
+    }
 
+    public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
         var state = State;
-        var hits = state.Hits.GetValueOrDefault(cardSource.Id) + 1;
-        state.Hits[cardSource.Id] = hits;
+        var damaged = state.CurrentPlayDamaged;
+        state.CurrentPlayDamaged = false;
+        if (!damaged || cardPlay.Card == null) return Task.CompletedTask;
 
-        if (hits >= MaxHitsPerCard && state.ImmuneCardIds.Add(cardSource.Id))
+        var id = cardPlay.Card.Id;
+        var attacks = state.Attacks.GetValueOrDefault(id) + 1;
+        state.Attacks[id] = attacks;
+
+        if (attacks >= MaxHitsPerCard && state.ImmuneCardIds.Add(id))
         {
-            Entry.Logger.Info($"[HeartWall] owner={Owner?.Name} immune card={cardSource.Id.Entry} after {hits} hits");
+            Entry.Logger.Info($"[HeartWall] owner={Owner?.Name} immune card={id.Entry} after {attacks} attacks");
             UpdateImmuneCardsDisplay();
         }
+        return Task.CompletedTask;
     }
 
     // 回合开始时清空记录（只清 Owner 自己的）
@@ -100,14 +123,16 @@ public sealed class HeartWallPower : CuteSakikoModPower
         {
             var state = State;
             state.ImmuneCardIds.Clear();
-            state.Hits.Clear();
+            state.Attacks.Clear();
+            state.CurrentPlayDamaged = false;
             UpdateImmuneCardsDisplay();
         }
     }
 
     private sealed class WallState
     {
-        public readonly Dictionary<ModelId, int> Hits = new();
+        public readonly Dictionary<ModelId, int> Attacks = new();
         public readonly HashSet<ModelId> ImmuneCardIds = new();
+        public bool CurrentPlayDamaged;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
@@ -55,8 +55,7 @@ public class LookCchord() : CuteAnonCard(0, CardType.Skill, CardRarity.Uncommon,
         else
             chords.AddTemporaryChord(ChordId);
 
-        var sfxPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio",
-            "look_cchord.mp3");
+        var sfxPath = AudioManager.ResolveAudioPath("look_cchord.mp3");
         AudioManager.PlaySound(sfxPath);
     }
 

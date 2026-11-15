@@ -21,8 +21,7 @@ public class TianXiangLuoDoll : CuteSakikoEventRelic, IModRightClickableRelic
 
     public Task OnRightClick(ModRightClickExecutionContext context)
     {
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var fullPath = Path.Combine(dir, "audio", "desuwa.mp3");
+        var fullPath = AudioManager.ResolveAudioPath("desuwa.mp3");
         AudioManager.PlaySound(fullPath);
         return Task.CompletedTask;
     }

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cgy1v68p0k4di"]
 
 [ext_resource type="Script" uid="uid://jf6sgq0tgliu" path="res://CuteSakikoModCode/Nodes/SakiRestSiteCharacter.cs" id="1_1rtv3"]
-[ext_resource type="Texture2D" uid="uid://bvd4sb1dniqfo" path="res://CuteSakikoMod/images/charui/saki/saki_sitting.png" id="2_cmy2x"]
+[ext_resource type="Texture2D" uid="uid://bvd4sb1dniqfo" path="res://CuteSakikoMod/images/skin/saki/haneoka_1st_winter/saki_sitting.png" id="2_cmy2x"]
 [ext_resource type="PackedScene" uid="uid://bgy88bk44xxvk" path="res://CuteSakikoMod/scenes/ui/Sakiselection_reticle.tscn" id="3_rtca5"]
 [ext_resource type="Texture2D" uid="uid://e5evnohj125t" path="res://CuteSakikoMod/images/skin/rana/tenday/rana_sitting.png" id="4_f3t1w"]
 

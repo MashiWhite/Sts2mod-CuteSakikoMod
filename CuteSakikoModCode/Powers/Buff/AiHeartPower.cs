@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mod.Curse;
 using CuteSakikoMod.CuteSakikoModCode.Monsters.Boss;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Anon.Starter;
@@ -154,8 +154,7 @@ public sealed class AiHeartPower : CuteSakikoModPower
 
     private void PlayMusic()
     {
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var fullPath = Path.Combine(dir, "audio", MusicFileName);
+        var fullPath = AudioManager.ResolveAudioPath(MusicFileName);
         AudioManager.PlayMusic(fullPath);
     }
 }

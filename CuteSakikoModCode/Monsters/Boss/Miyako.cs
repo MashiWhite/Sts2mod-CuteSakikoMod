@@ -41,7 +41,11 @@ public class Miyako : ModMonsterTemplate
         "res://CuteSakikoMod/scenes/monster/miyako.tscn"
     );
 
-    private int AttackDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 14, 12) + DreadBonus(2);
+    // 恐惧模式保留 2 段投掷，但单段伤害下调：A10 合计 16（普通单段 14，+2），
+    // 与非恐惧模式及其他 Boss 的 Dread 增幅（约 +2 伤害）保持一致。
+    private int AttackDamage => IsDread
+        ? AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 8, 7)
+        : AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 14, 12);
     private int ScoldDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8) + DreadBonus(2);
     private int RageDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8) + DreadBonus(2);
     private int BlockAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 12, 10) + DreadBonus(2);

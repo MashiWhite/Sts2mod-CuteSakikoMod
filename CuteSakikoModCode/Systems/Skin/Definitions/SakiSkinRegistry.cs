@@ -38,21 +38,21 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
     public IReadOnlyList<CharacterSkinDefinition> AllSkins { get; } =
     [
         CharacterSkinDefinition.FromPresets(
-            "saki",
+            "haneoka_1st_winter",
             "CUTE_SAKIKO_MOD_SAKI_SKIN_DEFAULT",
             new SkinAssets(
                 "res://CuteSakikoMod/scenes/char/saki/sakiko.tscn",
                 "res://CuteSakikoMod/scenes/char/saki/saki_energy_counter.tscn",
                 "res://CuteSakikoMod/scenes/char/saki/saki_merchant.tscn",
                 "res://CuteSakikoMod/scenes/char/saki/saki_rest_site.tscn",
-                "res://CuteSakikoMod/images/charui/saki/character_icon_saki.png",
-                "res://CuteSakikoMod/images/charui/saki/character_icon_saki_outline.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_1st_winter/character_icon_saki.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_1st_winter/character_icon_saki_outline.png",
                 "res://CuteSakikoMod/scenes/char/saki/saki_icon.tscn",
                 "res://CuteSakikoMod/scenes/ui/card_trail_sakiko.tscn",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_point.png",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_rock.png",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_paper.png",
-                "res://CuteSakikoMod/images/charui/saki/multiplayer_hand_scissors.png"),
+                "res://CuteSakikoMod/images/skin/saki/haneoka_1st_winter/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_1st_winter/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_1st_winter/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_1st_winter/multiplayer_hand_scissors.png"),
             SharedPresets),
 
         CharacterSkinDefinition.FromPresets(
@@ -107,7 +107,23 @@ public sealed class SakiSkinRegistry : ICharacterSkinRegistry
                 "res://CuteSakikoMod/images/skin/saki/godsblood/multiplayer_hand_rock.png",
                 "res://CuteSakikoMod/images/skin/saki/godsblood/multiplayer_hand_paper.png",
                 "res://CuteSakikoMod/images/skin/saki/godsblood/multiplayer_hand_scissors.png"),
-            SharedPresets)
+            SharedPresets),
         
+        CharacterSkinDefinition.FromPresets("haneoka_2nd_winter",
+            "CUTE_SAKIKO_MOD_SAKI_SKIN_HANEOKA_2ND_WINTER",
+            new SkinAssets(
+                "res://CuteSakikoMod/scenes/skin/saki/haneoka_2nd_winter/saki.tscn",
+                "res://CuteSakikoMod/scenes/char/saki/saki_energy_counter.tscn",
+                "res://CuteSakikoMod/scenes/skin/saki/haneoka_2nd_winter/saki_merchant.tscn",
+                "res://CuteSakikoMod/scenes/skin/saki/haneoka_2nd_winter/saki_rest_site.tscn",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/character_icon_saki.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/character_icon_saki_outline.png",
+                "res://CuteSakikoMod/scenes/skin/saki/haneoka_2nd_winter/saki_icon.tscn",
+                "res://CuteSakikoMod/scenes/ui/card_trail_sakiko.tscn",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/multiplayer_hand_point.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/multiplayer_hand_rock.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/multiplayer_hand_paper.png",
+                "res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/multiplayer_hand_scissors.png"),
+            SharedPresets)
     ];
 }

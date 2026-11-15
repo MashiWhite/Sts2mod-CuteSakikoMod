@@ -10,13 +10,13 @@ using MegaCrit.Sts2.Core.Models.Powers;
 namespace CuteSakikoMod.CuteSakikoModCode.Dominion.Dominions;
 
 /// <summary>
-///     星爱音的统御（恐惧模式）：敌方回合结束时，全局飞返打出次数 +3，
+///     星爱音的统御（恐惧模式）：敌方回合结束时，全局飞返打出次数 +1，
 ///     并让本幕全体小怪获得「1 + 飞返打出次数%」点力量。
 ///     小怪身上挂 <see cref="StarAnonDominionPower" /> 展示实时数值。
 /// </summary>
 public class StarAnonDominion : DominionModel
 {
-    private const int FlybackBonusPerTurn = 3;
+    private const int FlybackBonusPerTurn = 1;
 
     protected override Task AfterEnemiesEnteredCombat(IEnumerable<Creature> creatures)
     {

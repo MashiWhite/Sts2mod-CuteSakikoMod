@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -94,8 +94,7 @@ public class Araluo : ModMonsterTemplate
     private static void PlayRandomUmePower()
     {
         var file = UmePowerFiles[_rand.Next(UmePowerFiles.Length)];
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var fullPath = Path.Combine(dir, "audio", file);
+        var fullPath = AudioManager.ResolveAudioPath(file);
         AudioManager.PlaySound(fullPath);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 // AudioManager 所在命名空间，按你项目实际路径调整
 
@@ -9,8 +9,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Systems.Chord;
 /// </summary>
 public static class ChordAudioHelper
 {
-    private static readonly string AudioDir =
-        Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio");
+    private static readonly string AudioDir = AudioManager.AudioDirectory;
 
     private static readonly string[] StrumFiles =
         { "guitar_strum1.mp3", "guitar_strum2.mp3", "guitar_strum3.mp3", "guitar_strum4.mp3", "guitar_strum5.mp3" };

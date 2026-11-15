@@ -23,8 +23,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Rana.Starter;
 public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
     IRelicExtraIconAmountLabelSpecsProvider, IRelicExtraIconAmountLabelsChangeSource
 {
-    private static readonly string AudioDir =
-        Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "audio");
+    private static readonly string AudioDir = AudioManager.AudioDirectory;
 
     private static readonly string[] ParfaitSfxFiles =
     {
