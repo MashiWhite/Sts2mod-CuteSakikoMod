@@ -79,7 +79,7 @@
              变体构建时可用 -p:RitsuLibPackageId=... 覆盖。 -->
         <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == '' and '$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">STS2.RitsuLib</RitsuLibPackageId>
         <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == ''">STS2.RitsuLib.Compat.0.111.0</RitsuLibPackageId>
-        <RitsuLibPackageVersion Condition="'$(RitsuLibPackageVersion)' == ''">0.6.11</RitsuLibPackageVersion>
+        <RitsuLibPackageVersion Condition="'$(RitsuLibPackageVersion)' == ''">0.6.13</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">

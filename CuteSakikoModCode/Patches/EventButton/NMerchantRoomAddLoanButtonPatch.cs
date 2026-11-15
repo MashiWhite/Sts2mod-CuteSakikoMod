@@ -15,6 +15,10 @@ public static class NMerchantRoomAddTogawaButtonPatch
 {
     private static void Postfix(NMerchantRoom __instance)
     {
+#if STS2_AT_LEAST_0_113_0
+        // 闪局（Blitz）商店没有金币经济（免费 6 选 3），不创建贷款按钮
+        if (__instance is NBlitzMerchantRoom) return;
+#endif
         if (__instance.HasNode("TogawaLoanButton")) return;
 
         var button = new TogawaLoanButton();
@@ -25,7 +29,8 @@ public static class NMerchantRoomAddTogawaButtonPatch
 
 // 打开库存时显示按钮
 #if STS2_AT_LEAST_0_113_0
-// 0.113：NMerchantRoom 变 abstract，OpenInventory 下沉到两个具体子类（普通商店 / 闪店）
+// 0.113：NMerchantRoom 变 abstract，OpenInventory 下沉到两个具体子类（普通商店 / 闪店）；
+// 闪店不挂按钮（见上方 Postfix 的 NBlitzMerchantRoom 早退），这里只补普通商店。
 internal static class TogawaLoanButtonShowHelper
 {
     internal static void Show(NMerchantRoom room)
@@ -41,11 +46,6 @@ public static class NStandardMerchantRoom_OpenInventory_Patch
     private static void Postfix(NMerchantRoom __instance) => TogawaLoanButtonShowHelper.Show(__instance);
 }
 
-[HarmonyPatch(typeof(NBlitzMerchantRoom), nameof(NBlitzMerchantRoom.OpenInventory))]
-public static class NBlitzMerchantRoom_OpenInventory_Patch
-{
-    private static void Postfix(NMerchantRoom __instance) => TogawaLoanButtonShowHelper.Show(__instance);
-}
 #else
 [HarmonyPatch(typeof(NMerchantRoom), "OpenInventory")]
 public static class NMerchantRoom_OpenInventory_Patch

@@ -37,16 +37,16 @@ function Resolve-RitsuLib([string]$Version) {
     if ([version]$Version -ge [version]'0.113.0') {
         return @{
             Id = 'STS2.RitsuLib'
-            Version = '0.6.11'
-            Runtime = 'E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\sts2.ritsulib\0.6.11\lib\net9.0\STS2-RitsuLib.Runtime.dll'
+            Version = '0.6.13'
+            Runtime = 'E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\sts2.ritsulib\0.6.13\lib\net9.0\STS2-RitsuLib.Runtime.dll'
         }
     }
     $compatVersion = if ([version]$Version -ge [version]'0.111.0') { '0.111.0' } else { '0.107.1' }
     $pkgName = "sts2.ritsulib.compat.$compatVersion"
-    $runtime = "E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\$pkgName\0.6.11\lib\net9.0\STS2-RitsuLib.Runtime.dll"
+    $runtime = "E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\$pkgName\0.6.13\lib\net9.0\STS2-RitsuLib.Runtime.dll"
     return @{
         Id = "STS2.RitsuLib.Compat.$compatVersion"
-        Version = '0.6.11'
+        Version = '0.6.13'
         Runtime = $runtime
     }
 }

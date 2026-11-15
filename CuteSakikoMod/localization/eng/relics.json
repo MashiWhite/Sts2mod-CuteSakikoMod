@@ -130,5 +130,8 @@
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.selectionPrompt": "Choose [blue]1[/blue] card to add to your [gold]deck[/gold] and upgrade it.",
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.title": "The Girl with Flaxen Hair",
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.description": "Choose [blue]1[/blue] card from all allies' [gold]decks[/gold], add it to your [gold]deck[/gold], and upgrade it.",
-  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.flavor": "[pink]\"Sakiko-chan plays so well~\"[/pink]\n[blue]\"Really, you only need to say it once.\"[/blue]"
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.flavor": "[pink]\"Sakiko-chan plays so well~\"[/pink]\n[blue]\"Really, you only need to say it once.\"[/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.title": "Fallen Flower",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.description": "The first time your Energy becomes [blue]0[/blue] each turn, gain {energyPrefix:energyIcons(1)}.",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.flavor": "[blue]Fallen flowers have lives too, you know......[/blue]"
 }

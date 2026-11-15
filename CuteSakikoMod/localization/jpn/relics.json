@@ -130,5 +130,8 @@
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.selectionPrompt": "自分の[gold]デッキ[/gold]に加えてアップグレードするカードを[blue]1[/blue]枚選ぶ。",
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.title": "亜麻色の髪の乙女",
   "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.description": "すべての味方の[gold]デッキ[/gold]から[blue]1[/blue]枚を選び、自分の[gold]デッキ[/gold]に加えてアップグレードする。",
-  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.flavor": "[pink]「さきこちゃん、演奏上手だね～」[/pink]\n[blue]「本当に、一度で十分だよ。」[/blue]"
+  "CUTE_SAKIKO_MOD_RELIC_FLAXEN_HAIRED_GIRL.flavor": "[pink]「さきこちゃん、演奏上手だね～」[/pink]\n[blue]「本当に、一度で十分だよ。」[/blue]",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.title": "落ちた花",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.description": "毎ターン最初にエネルギーが[blue]0[/blue]になった時、{energyPrefix:energyIcons(1)}を得る。",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.flavor": "[blue]落ちた花にも、命はあるんだよ......[/blue]"
 }

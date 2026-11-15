@@ -131,5 +131,8 @@
   "CUTE_SAKIKO_MOD_RELIC_OB_MASK.flavor": "[sine][red]Primo die in scaena, omnia incerta[/red][/sine]",
   "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.title": "遗忘发带",
   "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.description": "每当有一张牌被[red]遗忘[/red]时，抽1张牌，并对所有敌人造成6点伤害。",
-  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]"
+  "CUTE_SAKIKO_MOD_RELIC_OB_HAIR_BAND.flavor": "[sine][red]Ulterius Procedere[/red][/sine]",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.title": "落下的花",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.description": "每回合第一次能量变为[blue]0[/blue]时，获得{energyPrefix:energyIcons(1)}。",
+  "CUTE_SAKIKO_MOD_RELIC_FALLEN_FLOWER.flavor": "[blue]落下的花，也是有生命的呢......[/blue]"
 }
