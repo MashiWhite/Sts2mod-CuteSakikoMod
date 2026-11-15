@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dcv05i5aag4y4"]
 
-[ext_resource type="Texture2D" uid="uid://89gfyjzmvfxuu" path="res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/character_icon_saki.png" id="1_kss5l"]
+[ext_resource type="Texture2D" uid="uid://dc6g83nmdsxsq" path="res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/character_icon_saki.png" id="1_kss5l"]
 
 [node name="SakiIcon" type="TextureRect"]
 anchors_preset = 15

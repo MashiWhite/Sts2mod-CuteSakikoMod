@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://c558foq7nchio"]
 
-[ext_resource type="Texture2D" uid="uid://yyow5up2455ew" path="res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/Saki1.png" id="1_mekin"]
-[ext_resource type="Texture2D" uid="uid://l3kqnirl5vu87" path="res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/Saki2.png" id="2_faw0b"]
+[ext_resource type="Texture2D" uid="uid://br8pmi7kqxvuc" path="res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/Saki1.png" id="1_mekin"]
+[ext_resource type="Texture2D" uid="uid://ic4vc0uha8yw" path="res://CuteSakikoMod/images/skin/saki/haneoka_2nd_winter/Saki2.png" id="2_faw0b"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001

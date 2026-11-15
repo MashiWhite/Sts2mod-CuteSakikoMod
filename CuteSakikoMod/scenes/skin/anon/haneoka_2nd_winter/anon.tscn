@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://3gt2gqfpgsjd"]
 
-[ext_resource type="Texture2D" uid="uid://g1e5g03qb942e" path="res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/Anonnon.png" id="1_irdki"]
-[ext_resource type="Texture2D" uid="uid://nss3ir7aw3np4" path="res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/Anonhurt.png" id="2_n05df"]
+[ext_resource type="Texture2D" uid="uid://c50aux6hq3abm" path="res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/Anonnon.png" id="1_irdki"]
+[ext_resource type="Texture2D" uid="uid://b7lhqmgi8h1gt" path="res://CuteSakikoMod/images/skin/anon/haneoka_2nd_winter/Anonhurt.png" id="2_n05df"]
 
 [sub_resource type="Animation" id="Animation_tfnbe"]
 length = 0.001
