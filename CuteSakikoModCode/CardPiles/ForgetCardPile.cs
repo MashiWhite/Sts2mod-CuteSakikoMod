@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -35,10 +35,9 @@ public sealed class ForgetCardPile
             Style = ModCardPileUiStyle.BottomRight,
             IconPath = "res://CuteSakikoMod/images/ui/cardpiles/forget_pile_icon.png",
             VisibleWhen = ctx => ctx.Pile?.Cards.Count > 0,
-            Anchor = new ModCardPileAnchor(
-                ModCardPileAnchorKind.BottomRightPrimary,
-                new Vector2(98f, 98f)
-            )
+            // 默认槽位 + 固定偏移：布局仍按 Id 序数、100px 间距自动排队，
+            // 偏移只负责把整行挪到设计位置。同 Style 的多个堆必须用同一个偏移。
+            Anchor = new ModCardPileAnchor(ModCardPileAnchorKind.StyleDefault, new Vector2(98f, 98f))
         });
     }
 

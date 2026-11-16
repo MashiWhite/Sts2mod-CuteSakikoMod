@@ -81,8 +81,13 @@ public sealed class MyGoEnchantment : ModEnchantmentTemplate
             await CardPileCmd.GiveToAnotherPlayer(Card, chosen.Player, chosen.Pile);
 #else
             // 0.107 没有跨玩家给牌 API：复制一张（保留升级/附魔）交给目标玩家，再移除原卡。
+            // ★ 必须用 CombatState.CreateCard：RunState.CreateCard 只登记 RunState，
+            //   卡片不在 CombatState 里，CardPileCmd.Add 会抛 "must be added to a CombatState"，
+            //   整个 flush 钩子失败 → 联机回合卡死（B-35）。
             var canonical = ModelDb.GetById<CardModel>(Card.Id);
-            var newCard = chosen.Player.RunState.CreateCard(canonical, chosen.Player);
+            var targetCombatState = chosen.Player.Creature.CombatState;
+            if (targetCombatState == null) return;
+            var newCard = targetCombatState.CreateCard(canonical, chosen.Player);
 
             var upgradeCount = Math.Min(Card.CurrentUpgradeLevel, newCard.MaxUpgradeLevel);
             for (var i = 0; i < upgradeCount; i++)

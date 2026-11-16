@@ -1,8 +1,9 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -11,6 +12,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 public sealed class BreakDefendPower : CuteSakikoModPower
 {
     private int _pendingHits;
+    private bool _applyingHpLoss;
     public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override bool AllowNegative => false;
@@ -27,12 +29,47 @@ public sealed class BreakDefendPower : CuteSakikoModPower
         CardModel? cardSource)
     {
         if (target != Owner || Amount <= 0) return;
+        if (_applyingHpLoss) return;
 
         _pendingHits++;
 
-        // 直接扣减生命值，不触发额外伤害/动画
-        var newHp = Math.Max(0, Owner.CurrentHp - 2);
-        await CreatureCmd.SetCurrentHp(Owner, newHp);
+        // 生命流逝：破格挡/力量/虚弱/易伤/限伤，且不会再次触发本能力的 AfterDamageReceived
+        _applyingHpLoss = true;
+        try
+        {
+#if STS2_AT_LEAST_0_113_0
+            await CreatureCmd.Damage(
+                choiceContext,
+                new[] { Owner },
+                2m,
+                ValueProp.Unblockable | ValueProp.Unpowered,
+                null,
+                null,
+                null,
+                ModifyDamageHookType.None);
+#elif CSK_GAME_111_OR_NEWER
+            await CreatureCmd.Damage(
+                choiceContext,
+                new[] { Owner },
+                2m,
+                ValueProp.Unblockable | ValueProp.Unpowered,
+                null,
+                null,
+                null);
+#else
+            await CreatureCmd.Damage(
+                choiceContext,
+                new[] { Owner },
+                2m,
+                ValueProp.Unblockable | ValueProp.Unpowered,
+                null,
+                null);
+#endif
+        }
+        finally
+        {
+            _applyingHpLoss = false;
+        }
     }
 
     /// <summary>

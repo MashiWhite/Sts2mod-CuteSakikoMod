@@ -15,16 +15,16 @@ public class CuteSaki : CuteSakikoCharacter<CuteSakiCardPool, CuteSakiRelicPool,
 
     // ★ 皮肤系统入口
     protected override string? CharacterSelectBgPath =>
-        "res://CuteSakikoMod/scenes/char/saki/saki_bg.tscn";
+        "res://CuteSakikoMod/scenes/skin/mujica/saki/saki_bg.tscn";
 
     protected override string? CharacterSelectIconPath =>
-        "res://CuteSakikoMod/images/charui/saki/char_select_saki.png";
+        "res://CuteSakikoMod/images/charui/mujica/saki/char_select_saki.png";
 
     protected override string? CharacterSelectLockedIconPath =>
-        "res://CuteSakikoMod/images/charui/saki/char_select_saki_locked.png";
+        "res://CuteSakikoMod/images/charui/mujica/saki/char_select_saki_locked.png";
 
     protected override string? MapMarkerPath =>
-        "res://CuteSakikoMod/images/charui/saki/map_marker_saki.png";
+        "res://CuteSakikoMod/images/charui/mujica/saki/map_marker_saki.png";
 
     public override Color EnergyLabelOutlineColor => new(1f, 0f, 0f);
     public override Color NameColor => Color;

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
+using CuteSakikoMod.CuteSakikoModCode.Cards.Eggs.Other;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
@@ -25,7 +25,7 @@ public sealed class PigPower : CuteSakikoModPower
 
     public PigPower()
     {
-        _pigScene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/char/Pig/pig.tscn");
+        _pigScene = GD.Load<PackedScene>("res://CuteSakikoMod/scenes/pig/pig.tscn");
     }
 
     public override PowerType Type => PowerType.Buff;

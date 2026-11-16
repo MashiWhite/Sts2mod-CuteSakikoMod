@@ -1,8 +1,8 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using Godot;
 using CuteSakikoMod.CuteSakikoModCode.Pools;
 using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Starter;
-using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -42,7 +42,9 @@ public sealed class MemoryCardPile
             Style = ModCardPileUiStyle.BottomLeft,
             IconPath = "res://CuteSakikoMod/images/ui/cardpiles/memory_pile_icon.png",
             VisibleWhen = ctx => ctx.Player?.GetRelic<KabutoNote>() != null,
-            Anchor = new ModCardPileAnchor(ModCardPileAnchorKind.BottomLeftPrimary, new Vector2(-98f, -98f))
+            // 默认槽位 + 固定偏移：布局仍按 Id 序数、100px 间距自动排队，
+            // 偏移只负责把整行挪到设计位置。同 Style 的多个堆必须用同一个偏移。
+            Anchor = new ModCardPileAnchor(ModCardPileAnchorKind.StyleDefault, new Vector2(-98f, -98f))
         });
     }
 

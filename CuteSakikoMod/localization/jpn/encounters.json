@@ -2,15 +2,15 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.title": "小さな蛍ちゃん",
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.loss": "{character}は[color=#C5C8C9]{encounter}[/color]の小饅頭に喉を詰まらせた。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.title": "アノンワン",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]に容赦なく飛びかかられた。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.loss": "{character}は[color=#FF8899]{encounter}[/color]に容赦なく飛びかかられた。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.title": "小さな蛍",
   "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.loss": "{character}は[color=#C5C8C9]{encounter}[/color]の[rainbow]虹の光[/rainbow]の中で色を失った。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TEN_DAY_TAKI_ENCOUNTER.title": "椎名立希の余命十日",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TEN_DAY_TAKI_ENCOUNTER.loss": "{character}は[purple]{encounter}[/purple]の楽章の中で静寂に帰した。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.title": "スター愛音",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]によって再び輪廻へと送られた。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.loss": "{character}は[color=#FF8899]{encounter}[/color]によって再び輪廻へと送られた。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.title": "灰愛音",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]が灰燼に帰すのを止められなかった。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.loss": "{character}は[color=#FF8899]{encounter}[/color]が灰燼に帰すのを止められなかった。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.title": "天素羅",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "天祥羅",
@@ -26,7 +26,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.title": "エビフライの群れ",
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character}は[gold]{encounter}[/gold]の愛嬌にやられてしまった。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.title": "藤都子",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]の投げた月餅に倒された。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}は[color=#FF8899]{encounter}[/color]の投げた月餅に倒された。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.title": "ヴィオラ",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.loss": "{character}は[pink]{encounter}[/pink]の嘘に飲み込まれた。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.loss": "{character}は[color=#FF8899]{encounter}[/color]の嘘に飲み込まれた。"
 }

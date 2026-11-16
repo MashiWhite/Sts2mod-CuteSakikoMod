@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Reflection;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
@@ -25,7 +25,7 @@ public sealed class ObCardPower : CuteSakikoModPower
 
     // ────────── 视觉替换相关字段 ──────────
     internal static readonly Dictionary<Creature, AnimationPlayer> ObAnimPlayers = new();
-    private static readonly string ObScenePath = "res://CuteSakikoMod/scenes/skin/saki/ob/ob.tscn";
+    private static readonly string ObScenePath = "res://CuteSakikoMod/scenes/skin/mujica/saki/ob/ob.tscn";
     private readonly Dictionary<CardModel, bool> _hadExhaustKeyword = new();
     private readonly HashSet<CardModel> _modifiedCards = new();
     private readonly Dictionary<CardModel, int> _originalCosts = new();

@@ -23,5 +23,8 @@
   "CUTE_SAKIKO_MOD_CONDITION_SKILL": "[img]CuteSakikoMod/images/ui/text/text_skill.png[/img]",
   "CUTE_SAKIKO_MOD_CONDITION_POWER": "[img]CuteSakikoMod/images/ui/text/text_power.png[/img]",
   "CUTE_SAKIKO_MOD_CONDITION_ANY": "[img]CuteSakikoMod/images/ui/text/text_anon.png[/img]",
-  "CUTE_SAKIKO_MOD_CONDITION_STATUS": "[img]CuteSakikoMod/images/ui/text/text_special.png[/img]"
+  "CUTE_SAKIKO_MOD_CONDITION_STATUS": "[img]CuteSakikoMod/images/ui/text/text_special.png[/img]",
+  "CUTE_SAKIKO_MOD_CARDPILE_PLANTING.title": "种植",
+  "CUTE_SAKIKO_MOD_CARDPILE_PLANTING.description": "种植卡会放在这里，每经过1个玩家回合成长1个阶段。满3张时不能继续种植。",
+  "CUTE_SAKIKO_MOD_CARDPILE_PLANTING.empty": "种植堆里还没有卡牌。"
 }

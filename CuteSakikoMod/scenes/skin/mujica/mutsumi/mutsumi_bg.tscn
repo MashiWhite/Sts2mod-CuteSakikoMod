@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://djl0xfto6hvrb"]
+
+[ext_resource type="Texture2D" uid="uid://b70m5dp428pqj" path="res://CuteSakikoMod/images/charui/mujica/mutsumi/mutsumi_bg.png" id="1_qra76"]
+
+[node name="MutsumiBg" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 247.0
+offset_top = 166.0
+offset_right = 2425.2205
+offset_bottom = 1415.0
+texture = ExtResource("1_qra76")

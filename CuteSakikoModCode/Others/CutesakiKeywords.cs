@@ -1,4 +1,4 @@
-﻿using STS2RitsuLib.Content;
+using STS2RitsuLib.Content;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
 

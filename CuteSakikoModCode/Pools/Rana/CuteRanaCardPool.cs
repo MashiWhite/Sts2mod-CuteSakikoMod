@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mygo;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using STS2RitsuLib.Scaffolding.Characters;
@@ -14,8 +14,8 @@ public class CuteRanaCardPool : TypeListCardPoolModel, IModColorfulPhilosophersC
 
     public override string Title => CuteRana.CharacterId; //This is not a display name.
     public override string EnergyColorName => CuteRana.CharacterId;
-    public override string? BigEnergyIconPath => "charui/anon/anon_big_energy.png".ImagePath();
-    public override string? TextEnergyIconPath => "charui/anon/anon_text_energy.png".ImagePath();
+    public override string? BigEnergyIconPath => "charui/mygo/mygo_big_energy.png".ImagePath();
+    public override string? TextEnergyIconPath => "charui/mygo/mygo_text_energy.png".ImagePath();
     public override Color EnergyOutlineColor => new(0f, 0.2f, 0.4f);
     public override Material? PoolFrameMaterial => _poolFrameMaterial;
 

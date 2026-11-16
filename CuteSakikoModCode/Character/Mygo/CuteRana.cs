@@ -14,16 +14,16 @@ public class CuteRana : CuteSakikoCharacter<CuteRanaCardPool, CuteRanaRelicPool,
     public static readonly Color Color = new("#77DD77");
 
     protected override string? CharacterSelectBgPath =>
-        "res://CuteSakikoMod/scenes/char/rana/rana_bg.tscn";
+        "res://CuteSakikoMod/scenes/skin/mygo/rana/rana_bg.tscn";
 
     protected override string? CharacterSelectIconPath =>
-        "res://CuteSakikoMod/images/charui/rana/char_select_rana.png";
+        "res://CuteSakikoMod/images/charui/mygo/rana/char_select_rana.png";
 
     protected override string? CharacterSelectLockedIconPath =>
-        "res://CuteSakikoMod/images/charui/rana/char_select_rana_locked.png";
+        "res://CuteSakikoMod/images/charui/mygo/rana/char_select_rana_locked.png";
 
     protected override string? MapMarkerPath =>
-        "res://CuteSakikoMod/images/charui/rana/map_marker_rana.png";
+        "res://CuteSakikoMod/images/charui/mygo/rana/map_marker_rana.png";
 
     public override Color EnergyLabelOutlineColor => new(0f, 0.2f, 0.4f);
 

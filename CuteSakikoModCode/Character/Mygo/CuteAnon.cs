@@ -14,16 +14,16 @@ public class CuteAnon : CuteSakikoCharacter<CuteAnonCardPool, CuteAnonRelicPool,
     public static readonly Color Color = new("#ff8899");
 
     protected override string? CharacterSelectBgPath =>
-        "res://CuteSakikoMod/scenes/char/anon/anon_bg.tscn";
+        "res://CuteSakikoMod/scenes/skin/mygo/anon/anon_bg.tscn";
 
     protected override string? CharacterSelectIconPath =>
-        "res://CuteSakikoMod/images/charui/anon/char_select_anon.png";
+        "res://CuteSakikoMod/images/charui/mygo/anon/char_select_anon.png";
 
     protected override string? CharacterSelectLockedIconPath =>
-        "res://CuteSakikoMod/images/charui/anon/char_select_anon_locked.png";
+        "res://CuteSakikoMod/images/charui/mygo/anon/char_select_anon_locked.png";
 
     protected override string? MapMarkerPath =>
-        "res://CuteSakikoMod/images/charui/anon/map_marker_anon.png";
+        "res://CuteSakikoMod/images/charui/mygo/anon/map_marker_anon.png";
 
     public override Color EnergyLabelOutlineColor => new(0f, 0.2f, 0.4f);
 

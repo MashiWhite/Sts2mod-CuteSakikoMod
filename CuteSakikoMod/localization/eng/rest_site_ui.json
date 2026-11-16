@@ -1,7 +1,7 @@
 {
   "CUTE_SAKIKO_MOD_OPTION_PRACTICE_GUITAR_NAME": "Practice Guitar",
   "CUTE_SAKIKO_MOD_OPTION_SMITH_EXTRA_DESC": "[gold]Forge[/gold]: Upgrade 2 cards.",
-  "CUTE_SAKIKO_MOD_PRACTICE_GUITAR_DESC": "Allows you to change your sequence of [pink]Memorized Chords[/pink].",
+  "CUTE_SAKIKO_MOD_PRACTICE_GUITAR_DESC": "Allows you to change your sequence of [color=#FF8899]Memorized Chords[/color].",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_BROWSE_TITLE": "Chord Library",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_SELECT_TITLE": "Select {Count} {Count:plural:Chord|Chords}",
   "CUTE_SAKIKO_MOD_CHORD_LIBRARY_FREE_SELECT_TITLE": "{Prompt}",

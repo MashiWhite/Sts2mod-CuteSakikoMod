@@ -23,5 +23,8 @@
   "CUTE_SAKIKO_MOD_CONDITION_SKILL": "[img]CuteSakikoMod/images/ui/text/text_skill.png[/img]",
   "CUTE_SAKIKO_MOD_CONDITION_POWER": "[img]CuteSakikoMod/images/ui/text/text_power.png[/img]",
   "CUTE_SAKIKO_MOD_CONDITION_ANY": "[img]CuteSakikoMod/images/ui/text/text_anon.png[/img]",
-  "CUTE_SAKIKO_MOD_CONDITION_STATUS": "[img]CuteSakikoMod/images/ui/text/text_special.png[/img]"
+  "CUTE_SAKIKO_MOD_CONDITION_STATUS": "[img]CuteSakikoMod/images/ui/text/text_special.png[/img]",
+  "CUTE_SAKIKO_MOD_CARDPILE_PLANTING.title": "Planting",
+  "CUTE_SAKIKO_MOD_CARDPILE_PLANTING.description": "Planting cards live here and grow 1 stage each turn. Max 3.",
+  "CUTE_SAKIKO_MOD_CARDPILE_PLANTING.empty": "Nothing is planted yet."
 }

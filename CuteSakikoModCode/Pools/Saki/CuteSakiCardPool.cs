@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using STS2RitsuLib.Scaffolding.Characters;
@@ -14,8 +14,8 @@ public class CuteSakiCardPool : TypeListCardPoolModel, IModColorfulPhilosophersC
 
     public override string Title => CuteSaki.CharacterId; //This is not a display name.
     public override string EnergyColorName => CuteSaki.CharacterId;
-    public override string BigEnergyIconPath => "charui/saki/saki_big_energy.png".ImagePath();
-    public override string TextEnergyIconPath => "charui/saki/saki_text_energy.png".ImagePath();
+    public override string BigEnergyIconPath => "charui/mujica/mujica_big_energy.png".ImagePath();
+    public override string TextEnergyIconPath => "charui/mujica/mujica_text_energy.png".ImagePath();
     public override Color EnergyOutlineColor => new("#420000");
     public override Material? PoolFrameMaterial => _poolFrameMaterial;
 

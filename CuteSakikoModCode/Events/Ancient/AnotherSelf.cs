@@ -17,7 +17,7 @@ public class AnotherSelf : CuteSakikoAncientEvent
     public override Color DialogueColor => new(0.39f, 0.64f, 0.75f);
 
     public override EventAssetProfile AssetProfile => new(
-        BackgroundScenePath: "res://CuteSakikoMod/scenes/Ancient/another_self.tscn");
+        BackgroundScenePath: "res://CuteSakikoMod/scenes/ancient/another_self.tscn");
 
     public override string? CustomMapIconPath => "res://CuteSakikoMod/images/ui/anotherself_icon.png";
     public override string? CustomMapIconOutlinePath => "res://CuteSakikoMod/images/ui/anotherself_icon_outline.png";

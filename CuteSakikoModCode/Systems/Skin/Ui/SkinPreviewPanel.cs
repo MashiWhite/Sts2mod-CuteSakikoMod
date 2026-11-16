@@ -1,6 +1,7 @@
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Networking;
 using Godot;
+using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
@@ -159,8 +160,8 @@ public sealed partial class SkinPreviewPanel : Control
     //   ✅ 最终方案：不用原版场景，用原版**贴图**自己拼一个按钮（DeckViewBackButton : NButton），
     //      贴图来自原版图集（和 back_button.tscn 引用的是同一批，肉眼完全一致）：
     //        底     res://images/atlases/ui_atlas.sprites/back_button.tres
-    //        箭头   res://images/atlases/compressed.sprites/back_button_arrow.tres
-    //        描边   res://images/atlases/compressed.sprites/back_button_outline.tres
+    //        箭头   res://images/atlases/compressed_atlas.sprites/back_button_arrow.tres
+    //        描边   res://images/atlases/compressed_atlas.sprites/back_button_outline.tres
     //      hover 金色描边 / 按下变灰 / 音效全部照 NBackButton.cs 复刻（见 DeckViewBackButton）。
     //      位置完全由我们控制（原版那套 _showPos tween 只会在左下角，反而摆不到弹窗旁边）。
     //
@@ -188,9 +189,9 @@ public sealed partial class SkinPreviewPanel : Control
     // ─────────────────────────────────────────────────────────
     internal const string BackButtonBgPath = "res://images/atlases/ui_atlas.sprites/back_button.tres";
     internal const string BackButtonArrowPath =
-        "res://images/atlases/compressed.sprites/back_button_arrow.tres";
+        "res://images/atlases/compressed_atlas.sprites/back_button_arrow.tres";
     internal const string BackButtonOutlinePath =
-        "res://images/atlases/compressed.sprites/back_button_outline.tres";
+        "res://images/atlases/compressed_atlas.sprites/back_button_outline.tres";
 
     /// <summary>原版返回按钮的容器尺寸，几何 offset 都是按这个调的，别改。</summary>
     internal static readonly Vector2 BackButtonSize = new(200f, 110f);
@@ -202,8 +203,8 @@ public sealed partial class SkinPreviewPanel : Control
         // 缩放要以中心为轴，否则 hover 放大时会往右下飘
         btn.PivotOffset = BackButtonSize / 2f;
 
-        var bgTex = ResourceLoader.Load<Texture2D>(BackButtonBgPath);
-        var outlineTex = ResourceLoader.Load<Texture2D>(BackButtonOutlinePath);
+        var bgTex = PreloadManager.Cache.GetTexture2D(BackButtonBgPath);
+        var outlineTex = PreloadManager.Cache.GetTexture2D(BackButtonOutlinePath);
 
         // ── ① Shadow：黑色投影，垫在最底 ──
         var shadow = new TextureRect
@@ -261,7 +262,7 @@ public sealed partial class SkinPreviewPanel : Control
         var arrow = new TextureRect
         {
             Name = "Icon",
-            Texture = ResourceLoader.Load<Texture2D>(BackButtonArrowPath),
+            Texture = PreloadManager.Cache.GetTexture2D(BackButtonArrowPath),
             ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
             StretchMode = TextureRect.StretchModeEnum.Scale,
             MouseFilter = MouseFilterEnum.Ignore,
@@ -288,7 +289,7 @@ public sealed partial class SkinPreviewPanel : Control
         var icon = new TextureRect
         {
             Name = "TextureRect",
-            Texture = ResourceLoader.Load<Texture2D>(texturePath),
+            Texture = PreloadManager.Cache.GetTexture2D(texturePath),
             ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
             StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
             MouseFilter = MouseFilterEnum.Ignore,

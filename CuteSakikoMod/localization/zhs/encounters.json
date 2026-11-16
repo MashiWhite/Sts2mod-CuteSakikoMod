@@ -2,15 +2,15 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.title": "小小萤",
   "CUTE_SAKIKO_MOD_ENCOUNTER_XIAOYIN_ENCOUNTER.loss": "{character}被[color=#C5C8C9]{encounter}[/color]的小馒头噎住了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.title": "阿侬汪",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]无情地扑倒了。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_ANON_WANG_ENCOUNTER.loss": "{character}被[color=#FF8899]{encounter}[/color]无情地扑倒了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.title": "小萤",
   "CUTE_SAKIKO_MOD_ENCOUNTER_HOTARU_ENCOUNTER.loss": "{character}在[color=#C5C8C9]{encounter}[/color]的[rainbow]虹光[/rainbow]中失去了颜色。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TEN_DAY_TAKI_ENCOUNTER.title": "椎名立希的余命十日",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TEN_DAY_TAKI_ENCOUNTER.loss": "{character}在[purple]{encounter}[/purple]的乐章中归于寂静。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.title": "星爱音",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]又一次送入轮回。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_STAR_ANON_ENCOUNTER.loss": "{character}被[color=#FF8899]{encounter}[/color]又一次送入轮回。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.title": "灰爱音",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.loss": "{character}没能阻止[pink]{encounter}[/pink]燃为灰烬。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_GREY_ANON_ENCOUNTER.loss": "{character}没能阻止[color=#FF8899]{encounter}[/color]燃为灰烬。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.title": "天素罗",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_SU_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_TIAN_XIANG_LUO_ENCOUNTER.title": "天祥罗",
@@ -26,7 +26,7 @@
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.title": "一群炸虾",
   "CUTE_SAKIKO_MOD_ENCOUNTER_LUO_ENCOUNTER.loss": "{character}被[gold]{encounter}[/gold]的卖萌可爱死了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.title": "藤都子",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]扔出的月饼砸晕了。",
+  "CUTE_SAKIKO_MOD_ENCOUNTER_MIYAKO_ENCOUNTER.loss": "{character}被[color=#FF8899]{encounter}[/color]扔出的月饼砸晕了。",
   "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.title": "薇欧拉",
-  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.loss": "{character}被[pink]{encounter}[/pink]的谎言吞没了。"
+  "CUTE_SAKIKO_MOD_ENCOUNTER_VIOLA_ENCOUNTER.loss": "{character}被[color=#FF8899]{encounter}[/color]的谎言吞没了。"
 }

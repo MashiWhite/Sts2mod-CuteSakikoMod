@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dd0fomxkukr2i"]
+
+[ext_resource type="Script" uid="uid://rv4wc0qdy764" path="res://CuteSakikoModCode/Nodes/SakiMerchantCharacter.cs" id="1_1ufee"]
+[ext_resource type="Texture2D" uid="uid://cii3wlw6ynieo" path="res://CuteSakikoMod/images/skin/mujica/saki/tenday_saki/tendaysaki1.png" id="2_omn1o"]
+
+[node name="SakiMerchant" type="Node2D"]
+script = ExtResource("1_1ufee")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1, -160)
+texture = ExtResource("2_omn1o")
