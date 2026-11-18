@@ -142,5 +142,6 @@
   "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.title": "碧天伴走",
   "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.description": "すべての味方の[red]脆弱[/red]を[blue]{0}[/blue]の[img]CuteSakikoMod/images/ui/text/text_dexterity.png[/img]に、[red]弱体[/red]を[blue]{0}[/blue]の[img]CuteSakikoMod/images/ui/text/text_strength.png[/img]に変換する。",
   "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.title": "植える",
-  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.description": "植え込みの山では、1ターンごとに1段階成長する。\n植え込みスロット上限：[blue]{Slots}[/blue]。"
+  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.description": "植え込みの山では、1ターンごとに1段階成長する。",
+  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.full": "植え込みの山では、1ターンごとに1段階成長する。\n植え込みスロット上限：[blue]{Slots}[/blue]。"
 }

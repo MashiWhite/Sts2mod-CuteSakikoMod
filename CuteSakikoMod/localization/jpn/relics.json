@@ -135,9 +135,9 @@
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.description": "戦闘の最初のターン開始時、[gold]きゅうり[/gold]1枚を[gold]植え込みの山[/gold]に植える。",
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.flavor": "土に埋めれば、育つ。",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.title": "沈黙",
-  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "ターンに1回まで：そのターン攻撃カードを出していないなら、ターン終了時に[gold]一语驚人[/gold]3スタックを得る。",
+  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "そのターン攻撃カードを出していないなら、ターン終了時に[gold]言刃[/gold]3スタックを得る。",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.flavor": "沈黙が彼女の言葉。",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.title": "多弁",
-  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "攻撃カードを出すたびに[gold]一语驚人[/gold]1スタックを得る。",
+  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "攻撃カードを出すたびに[gold]言刃[/gold]1スタックを得る。",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.flavor": "舞台の上の彼女は、よく喋る。"
 }

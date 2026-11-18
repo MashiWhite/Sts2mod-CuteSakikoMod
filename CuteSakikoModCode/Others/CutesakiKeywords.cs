@@ -30,6 +30,7 @@ namespace CuteSakikoMod.CuteSakikoModCode.Others;
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
 [RegisterOwnedCardKeyword(nameof(Pancake))]
 [RegisterOwnedCardKeyword(nameof(Noteify))]
+[RegisterOwnedCardKeyword(nameof(Planting), IncludeInCardHoverTip = false)]
 
 
 public class CutesakiKeywords
@@ -83,4 +84,6 @@ public class CutesakiKeywords
 
     public static readonly string
         AnonNote = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(AnonNote));
+
+    public static readonly string Planting = ModContentRegistry.GetQualifiedKeywordId(Entry.ModId, nameof(Planting));
 }

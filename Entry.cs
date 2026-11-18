@@ -505,6 +505,7 @@ public class Entry
         // 5. 提前注册自定义牌堆
         MemoryCardPile.Register(ModId);
         ForgetCardPile.Register(ModId);
+        PlantingCardPile.Register(ModId);
 
         // 6. 注册 RunSavedData 槽位
         var runDataStore = RunSavedDataStore.For(ModId);
@@ -574,6 +575,7 @@ public class Entry
         CharacterSkinRegistry.Register(new SakiSkinRegistry());
         CharacterSkinRegistry.Register(new AnonSkinRegistry());
         CharacterSkinRegistry.Register(new RanaSkinRegistry());
+        CharacterSkinRegistry.Register(new MutsumiSkinRegistry());
 
         // 8.3 挂三个 UI 面板
         var skinReg = ModNodeAttachmentRegistry.For(ModId);

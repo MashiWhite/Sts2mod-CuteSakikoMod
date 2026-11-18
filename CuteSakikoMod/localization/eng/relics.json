@@ -135,9 +135,9 @@
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.description": "At the start of the first turn of each combat, plant 1 [gold]Cucumber[/gold] into the [gold]Planting pile[/gold].",
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.flavor": "Bury it, and it will grow.",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.title": "Silence",
-  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "Once per turn: if you played no Attack cards this turn, gain 3 stacks of [gold]One-Line Wonder[/gold] at end of turn.",
+  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "If you played no Attack cards this turn, gain 3 stacks of [gold]Word Blade[/gold] at end of turn.",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.flavor": "Silence is her language.",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.title": "Talkative",
-  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "Whenever you play an Attack card, gain 1 stack of [gold]One-Line Wonder[/gold].",
+  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "Whenever you play an Attack card, gain 1 stack of [gold]Word Blade[/gold].",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.flavor": "On stage, she has a lot to say."
 }

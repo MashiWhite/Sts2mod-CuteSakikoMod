@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -33,10 +34,11 @@ public sealed class BreakDefendPower : CuteSakikoModPower
 
         _pendingHits++;
 
-        // 生命流逝：破格挡/力量/虚弱/易伤/限伤，且不会再次触发本能力的 AfterDamageReceived
+        // 固定真实伤害：破格挡/力量/虚弱/易伤/限伤，且不会再次触发本能力的 AfterDamageReceived
         _applyingHpLoss = true;
         try
         {
+            using var _ = WordBladeDamageScope.Enter();
 #if STS2_AT_LEAST_0_113_0
             await CreatureCmd.Damage(
                 choiceContext,

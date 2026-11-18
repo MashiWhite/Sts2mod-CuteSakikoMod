@@ -142,5 +142,6 @@
   "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.title": "Azure Sky Companion",
   "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.description": "Convert all allies' [red]Vulnerable[/red] into [blue]{0}[/blue] [img]CuteSakikoMod/images/ui/text/text_dexterity.png[/img], and [red]Weak[/red] into [blue]{0}[/blue] [img]CuteSakikoMod/images/ui/text/text_strength.png[/img].",
   "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.title": "Planting",
-  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.description": "In the Planting pile, grows 1 stage every turn.\nPlanting slots: [blue]{Slots}[/blue]."
+  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.description": "In the Planting pile, grows 1 stage every turn.",
+  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.full": "In the Planting pile, grows 1 stage every turn.\nPlanting slots: [blue]{Slots}[/blue]."
 }
