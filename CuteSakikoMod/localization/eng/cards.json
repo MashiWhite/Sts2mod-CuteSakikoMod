@@ -644,9 +644,18 @@
   "CUTE_SAKIKO_MOD_CARD_PLANT_CUCUMBER.title": "Plant a Cucumber",
   "CUTE_SAKIKO_MOD_CARD_PLANT_CUCUMBER.description": "[gold]Plant[/gold] {Cards:diff()} [gold]Cucumber[/gold].",
   "CUTE_SAKIKO_MOD_CARD_CUCUMBER.title": "Cucumber",
-  "CUTE_SAKIKO_MOD_CARD_CUCUMBER.description": "[gold]Planting[/gold]: [blue]{StageName}[/blue].\nDeal {Damage:diff()} damage.",
+  "CUTE_SAKIKO_MOD_CARD_CUCUMBER.description": "[gold]Planting[/gold]: [blue]{StageName}[/blue].\nDeal {Damage:diff()} damage {Repeat:diff()} times.",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_STRIKE.title": "Strike",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_STRIKE.description": "Deal {Damage:diff()} damage.",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.title": "Defend",
-  "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.description": "Gain {Block:diff()} [gold]Block[/gold]."
+  "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.description": "Gain {Block:diff()} [gold]Block[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_AGGRESSIVE.title": "Overbearing",
+  "CUTE_SAKIKO_MOD_CARD_AGGRESSIVE.description": "Deal {Damage:diff()} damage.\nRefund the [gold]Word Blade[/gold] stacks consumed by this card{IfUpgraded:show:, then gain [blue]2[/blue] extra stacks|}.",
+  "CUTE_SAKIKO_MOD_CARD_DETACHED.title": "Detached",
+  "CUTE_SAKIKO_MOD_CARD_DETACHED.description": "Gain {Block:diff()} [gold]Block[/gold].\nGain {WordBladePower:diff()} stack(s) of [gold]Word Blade[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.title": "Turn Into Eggplant",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.description": "Choose 1 card other than this one.\nPlant 1 [gold]{IfUpgraded:show:Eggplant+|Eggplant}[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.selectionScreenPrompt": "Choose 1 card other than this one",
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.title": "Eggplant",
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.description": "[gold]Planting[/gold]: [blue]{StageName}[/blue].\nWhen played, play the chosen card {Plays:diff()} time(s)."
 }

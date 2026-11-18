@@ -644,9 +644,18 @@
   "CUTE_SAKIKO_MOD_CARD_PLANT_CUCUMBER.title": "种小黄瓜",
   "CUTE_SAKIKO_MOD_CARD_PLANT_CUCUMBER.description": "[gold]种植[/gold]{Cards:diff()}张[gold]黄瓜[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_CUCUMBER.title": "黄瓜",
-  "CUTE_SAKIKO_MOD_CARD_CUCUMBER.description": "[gold]种植[/gold]：[blue]{StageName}[/blue]。\n造成{Damage:diff()}点伤害。",
+  "CUTE_SAKIKO_MOD_CARD_CUCUMBER.description": "[gold]种植[/gold]：[blue]{StageName}[/blue]。\n造成{Damage:diff()}点伤害{Repeat:diff()}次。",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_STRIKE.title": "打击",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_STRIKE.description": "造成{Damage:diff()}点伤害。",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.title": "防御",
-  "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.description": "获得{Block:diff()}点[gold]格挡[/gold]。"
+  "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.description": "获得{Block:diff()}点[gold]格挡[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_AGGRESSIVE.title": "咄咄逼人",
+  "CUTE_SAKIKO_MOD_CARD_AGGRESSIVE.description": "造成{Damage:diff()}点伤害。\n返还本张牌消耗的[gold]言刃[/gold]{IfUpgraded:show:，并额外获得[blue]2[/blue]层[gold]言刃[/gold]|}。",
+  "CUTE_SAKIKO_MOD_CARD_DETACHED.title": "置身事外",
+  "CUTE_SAKIKO_MOD_CARD_DETACHED.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n获得{WordBladePower:diff()}层[gold]言刃[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.title": "变身茄子",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.description": "选择除此卡外的1张牌。\n种植1张[gold]{IfUpgraded:show:茄子+|茄子}[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.selectionScreenPrompt": "选择除此卡外的1张牌",
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.title": "茄子",
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.description": "[gold]种植[/gold]：[blue]{StageName}[/blue]。\n打出时，将选中的牌打出{Plays:diff()}次。"
 }

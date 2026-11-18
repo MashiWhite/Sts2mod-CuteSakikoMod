@@ -644,9 +644,18 @@
   "CUTE_SAKIKO_MOD_CARD_PLANT_CUCUMBER.title": "きゅうりを植える",
   "CUTE_SAKIKO_MOD_CARD_PLANT_CUCUMBER.description": "[gold]植える[/gold]：[gold]きゅうり[/gold]{Cards:diff()}枚。",
   "CUTE_SAKIKO_MOD_CARD_CUCUMBER.title": "きゅうり",
-  "CUTE_SAKIKO_MOD_CARD_CUCUMBER.description": "[gold]植える[/gold]：[blue]{StageName}[/blue]。\n{Damage:diff()}ダメージを与える。",
+  "CUTE_SAKIKO_MOD_CARD_CUCUMBER.description": "[gold]植える[/gold]：[blue]{StageName}[/blue]。\n{Damage:diff()}ダメージを{Repeat:diff()}回与える。",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_STRIKE.title": "打撃",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_STRIKE.description": "{Damage:diff()}ダメージを与える。",
   "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.title": "防御",
-  "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.description": "{Block:diff()}ブロックを得る。"
+  "CUTE_SAKIKO_MOD_CARD_MUTSUMI_DEFEND.description": "{Block:diff()}ブロックを得る。",
+  "CUTE_SAKIKO_MOD_CARD_AGGRESSIVE.title": "威圧的",
+  "CUTE_SAKIKO_MOD_CARD_AGGRESSIVE.description": "{Damage:diff()}ダメージを与える。\nこのカードが消費した[gold]言刃[/gold]を返還する{IfUpgraded:show:。さらに[blue]2[/blue]スタック獲得する|}。",
+  "CUTE_SAKIKO_MOD_CARD_DETACHED.title": "傍観",
+  "CUTE_SAKIKO_MOD_CARD_DETACHED.description": "{Block:diff()}の[gold]ブロック[/gold]を得る。\n[gold]言刃[/gold]を{WordBladePower:diff()}スタック得る。",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.title": "変身ナス",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.description": "このカード以外のカードを1枚選ぶ。\n[gold]{IfUpgraded:show:ナス+|ナス}[/gold]を1枚植える。",
+  "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.selectionScreenPrompt": "このカード以外のカードを1枚選ぶ",
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.title": "ナス",
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.description": "[gold]植える[/gold]：[blue]{StageName}[/blue]。\n打出時、選んだカードを{Plays:diff()}回プレイする。"
 }

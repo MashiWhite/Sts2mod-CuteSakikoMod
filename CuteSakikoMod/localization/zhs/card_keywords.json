@@ -142,5 +142,6 @@
   "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.title": "碧天伴走",
   "CUTE_SAKIKO_MOD_HEKITENBANSOUCHORD.description": "将所有友方的[red]脆弱[/red]转化为[blue]{0}[/blue][img]CuteSakikoMod/images/ui/text/text_dexterity.png[/img]，[red]虚弱[/red]转化为[blue]{0}[/blue][img]CuteSakikoMod/images/ui/text/text_strength.png[/img]。",
   "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.title": "种植",
-  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.description": "在种植牌堆内，每经过1个回合成长1个阶段。\n种植槽上限为[blue]{Slots}[/blue]。"
+  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.description": "在种植牌堆内，每经过1个回合成长1个阶段。",
+  "CUTE_SAKIKO_MOD_KEYWORD_PLANTING.full": "在种植牌堆内，每经过1个回合成长1个阶段。\n种植槽上限为[blue]{Slots}[/blue]。"
 }

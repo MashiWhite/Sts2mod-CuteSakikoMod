@@ -160,8 +160,8 @@
   "CUTE_SAKIKO_MOD_POWER_MEET_PERFORMANCE_POWER.description": "[gold]重圧[/gold]が1減るたび、層数に等しい[gold]ブロック[/gold]を得る。",
   "CUTE_SAKIKO_MOD_POWER_MEET_PERFORMANCE_POWER.smartDescription": "[gold]重圧[/gold]が1減るたび、{Amount}の[gold]ブロック[/gold]を得る。",
   "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.title": "防御破壊",
-  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.description": "攻撃を受けるたびに1スタック消費し、[gold]ライフ喪失[/gold]2。",
-  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.smartDescription": "攻撃を受けるたびに[blue]1[/blue]スタック消費し、[gold]ライフ喪失[/gold][blue]2[/blue]。",
+  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.description": "あなたが攻撃を受けるたびに1スタック消費し、追加で固定[gold]トゥルーダメージ[/gold]2を受ける。",
+  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.smartDescription": "あなたが攻撃を受けるたびに[blue]1[/blue]スタック消費し、追加で固定[gold]トゥルーダメージ[/gold][blue]2[/blue]を受ける。",
   "CUTE_SAKIKO_MOD_POWER_DONT_ASSOCIATE_ME_POWER.title": "私に関わらないで",
   "CUTE_SAKIKO_MOD_POWER_DONT_ASSOCIATE_ME_POWER.description": "攻撃を受けるたび、攻撃者に層数に等しい[gold]重圧[/gold]を付与する。",
   "CUTE_SAKIKO_MOD_POWER_DONT_ASSOCIATE_ME_POWER.smartDescription": "攻撃を受けるたび、攻撃者に[blue]{Amount}[/blue]層の[gold]重圧[/gold]を付与する。",
@@ -320,7 +320,7 @@
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.title": "星愛音の支配",
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.description": "敵ターン終了ごとにグローバル飛返プレイ回数が増え、自身は力を得る。",
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.smartDescription": "敵ターン終了ごとに、グローバル[color=#FF8899]飛返[/color]プレイ回数+[blue]3[/blue]、[purple]{OwnerName}[/purple]は[blue]{StrengthGain}[/blue]の[gold]力[/gold]を得る。",
-  "CUTE_SAKIKO_MOD_POWER_SPEECH_POWER.title": "一语驚人",
-  "CUTE_SAKIKO_MOD_POWER_SPEECH_POWER.description": "次の攻撃カードの各ヒットで、対象にスタック数と等しい[gold]ライフ喪失[/gold]を与え、その後スタックを全て消費する。",
-  "CUTE_SAKIKO_MOD_POWER_SPEECH_POWER.smartDescription": "次の攻撃カードの各ヒットで、対象に[gold]ライフ喪失[/gold]をスタック数分与え、その後スタックを消費する。"
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.title": "言刃",
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.description": "次の攻撃カードが命中するたび、1ヒットにつき追加でスタック数と等しい固定[gold]トゥルーダメージ[/gold]を与える。",
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "次の攻撃カードが命中するたび、1ヒットにつき追加で[blue]{Amount}[/blue]の[gold]トゥルーダメージ[/gold]を与える。"
 }

@@ -135,9 +135,9 @@
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.description": "每场战斗的第一回合开始时，将1张[gold]黄瓜[/gold]种入[gold]种植牌堆[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.flavor": "埋在土里，就会长出来。",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.title": "缄默",
-  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "每回合最多一次：若本回合没有打出攻击牌，则在回合结束时获得3层[gold]一语惊人[/gold]。",
+  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "若本回合没有打出攻击牌，则在回合结束时获得3层[gold]言刃[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.flavor": "沉默是她的语言。",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.title": "多言",
-  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "每打出一张攻击牌，获得1层[gold]一语惊人[/gold]。",
+  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "每打出一张攻击牌，获得1层[gold]言刃[/gold]。",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.flavor": "舞台上的她，话很多。"
 }

@@ -160,8 +160,8 @@
   "CUTE_SAKIKO_MOD_POWER_MEET_PERFORMANCE_POWER.description": "Whenever you lose 1 [gold]Pressure[/gold], gain Block equal to the number of stacks.",
   "CUTE_SAKIKO_MOD_POWER_MEET_PERFORMANCE_POWER.smartDescription": "Whenever you lose 1 [gold]Pressure[/gold], gain {Amount} [gold]Block[/gold].",
   "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.title": "Armor Break",
-  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.description": "Whenever you are attacked, lose 1 stack and suffer [gold]HP loss[/gold] of 2.",
-  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.smartDescription": "Whenever you are attacked, lose [blue]1[/blue] stack and suffer [gold]HP loss[/gold] of [blue]2[/blue].",
+  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.description": "When you are attacked, lose 1 stack and take an additional 2 fixed [gold]true damage[/gold].",
+  "CUTE_SAKIKO_MOD_POWER_BREAK_DEFEND_POWER.smartDescription": "When you are attacked, lose [blue]1[/blue] stack and take an additional [blue]2[/blue] fixed [gold]true damage[/gold].",
   "CUTE_SAKIKO_MOD_POWER_DONT_ASSOCIATE_ME_POWER.title": "Don't Associate With Me",
   "CUTE_SAKIKO_MOD_POWER_DONT_ASSOCIATE_ME_POWER.description": "Whenever you are attacked, apply stacks of [gold]Pressure[/gold] to the attacker equal to the number of stacks.",
   "CUTE_SAKIKO_MOD_POWER_DONT_ASSOCIATE_ME_POWER.smartDescription": "Whenever you are attacked, apply [blue]{Amount}[/blue] [gold]Pressure[/gold] to the attacker.",
@@ -320,7 +320,7 @@
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.title": "Star Anon's Dominion",
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.description": "At the end of each enemy turn, global Flyback plays increase and this enemy gains Strength.",
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.smartDescription": "At the end of each enemy turn, global [color=#FF8899]Flyback[/color] plays +[blue]3[/blue]; [purple]{OwnerName}[/purple] gains [blue]{StrengthGain}[/blue] [gold]Strength[/gold].",
-  "CUTE_SAKIKO_MOD_POWER_SPEECH_POWER.title": "One-Line Wonder",
-  "CUTE_SAKIKO_MOD_POWER_SPEECH_POWER.description": "The next Attack card makes each hit cause [gold]HP loss[/gold] equal to the stacks to each target, then clears all stacks.",
-  "CUTE_SAKIKO_MOD_POWER_SPEECH_POWER.smartDescription": "The next Attack card makes each hit cause [gold]HP loss[/gold] equal to the stacks, then clears all stacks."
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.title": "Word Blade",
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.description": "The next Attack card deals an additional fixed [gold]true damage[/gold] equal to the stacks per hit.",
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "The next Attack card deals an additional [blue]{Amount}[/blue] [gold]true damage[/gold] per hit."
 }
