@@ -1,9 +1,11 @@
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Archetypes;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Planting;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 
@@ -13,8 +15,12 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Rare;
 ///     变身茄子（通用金卡）：2c 技能，选择除此卡外的 1 张手牌，
 ///     把它的当前状态复制进「茄子」并种下；升级后种下茄子+（基础重放次数 +1）。
 /// </summary>
-public class TurnIntoEggplant() : CuteMutsumiCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class TurnIntoEggplant() : CuteMutsumiCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self), IMutsumiArchetypeCard
 {
+    public MutsumiArchetype Archetype => MutsumiArchetype.Cucumber;
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
     protected override bool IsPlayable
     {
         get
@@ -24,6 +30,28 @@ public class TurnIntoEggplant() : CuteMutsumiCard(2, CardType.Skill, CardRarity.
 
             var hand = PileType.Hand.GetPile(Owner);
             return hand != null && hand.Cards.Any(c => c is not TurnIntoEggplant);
+        }
+    }
+
+    /// <summary>悬浮提示里展示会种下的茄子（茄苗阶段）。</summary>
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips
+    {
+        get
+        {
+            if (IsCanonical || Owner == null) yield break;
+
+            Eggplant? preview = null;
+            try
+            {
+                preview = Owner.RunState.CreateCard<Eggplant>(Owner);
+            }
+            catch
+            {
+                preview = null;
+            }
+
+            if (preview == null) yield break;
+            yield return HoverTipFactory.FromCard(preview);
         }
     }
 

@@ -657,5 +657,13 @@
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.description": "Choose 1 card other than this one.\nPlant 1 [gold]{IfUpgraded:show:Eggplant+|Eggplant}[/gold].",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.selectionScreenPrompt": "Choose 1 card other than this one",
   "CUTE_SAKIKO_MOD_CARD_EGGPLANT.title": "Eggplant",
-  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.description": "[gold]Planting[/gold]: [blue]{StageName}[/blue].\nWhen played, play the chosen card {Plays:diff()} time(s)."
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.description": "[gold]Planting[/gold]: [blue]{StageName}[/blue].\nWhen played, play the chosen card {Plays:diff()} time(s).",
+  "CUTE_SAKIKO_MOD_CARD_NO_MORE_MESSENGER_PIGEON.title": "No More Messenger Pigeon",
+  "CUTE_SAKIKO_MOD_CARD_NO_MORE_MESSENGER_PIGEON.description": "Apply {WeakPower:diff()} [gold]Weak[/gold].\nIf you have [gold]Weak[/gold], transfer it to the target as well.",
+  "CUTE_SAKIKO_MOD_CARD_THATS_NICE.title": "That's Nice",
+  "CUTE_SAKIKO_MOD_CARD_THATS_NICE.description": "Gain {WordBladePower:diff()} [gold]Word Blade[/gold].\nTake 1 damage (increased by [gold]Word Blade[/gold]).\nDeal {Damage:diff()} damage {Repeat:diff()} times.",
+  "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.title": "So Lowly",
+  "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.description": "Gain {Block:diff()} [gold]Block[/gold].\nGain {ShrinkPower:diff()} [gold]Shrink[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_MAKEUP.title": "Makeup",
+  "CUTE_SAKIKO_MOD_CARD_MAKEUP.description": "Gain {MakeupTemporaryDexterity:diff()} temporary [gold]Dexterity[/gold]."
 }

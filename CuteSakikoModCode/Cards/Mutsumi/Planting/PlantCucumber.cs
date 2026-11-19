@@ -1,3 +1,4 @@
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Archetypes;
 using CuteSakikoMod.CuteSakikoModCode.CardPiles;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
@@ -13,8 +14,10 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Planting;
 ///     种小黄瓜：1c 技能，向种植牌堆种下 1 张黄瓜（升级 2 张）。
 ///     种植堆满 3 张时不可打出（容量不足则该卡不可打出）。
 /// </summary>
-public class PlantCucumber() : CuteMutsumiCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
+public class PlantCucumber() : CuteMutsumiCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self), IMutsumiArchetypeCard
 {
+    public MutsumiArchetype Archetype => MutsumiArchetype.Cucumber;
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CutesakiKeywords.Planting.GetModCardKeyword()];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

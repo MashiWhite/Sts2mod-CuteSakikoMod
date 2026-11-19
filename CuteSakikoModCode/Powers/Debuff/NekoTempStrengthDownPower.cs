@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -13,7 +13,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 public class NekoTempStrengthDownPower : ModTemporaryPowerTemplate
 {
     public override LocString Title => new("powers", Id.Entry + ".title");
-    public override PowerAssetProfile AssetProfile => this.PowerAssetProfile();
+    public override PowerAssetProfile AssetProfile =>
+        new(TempStatIcons.StrengthDown, TempStatIcons.StrengthDown);
 
     public override PowerModel InternallyAppliedPower =>
         ModelDb.Power<StrengthPower>().ToMutable();

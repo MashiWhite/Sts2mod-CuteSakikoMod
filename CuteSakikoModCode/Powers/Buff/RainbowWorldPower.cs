@@ -33,7 +33,11 @@ public sealed class RainbowWorldPower : CuteSakikoModPower
         var original = cardPlay.Card;
         var player = cardPlay.Card.Owner;
         if (original == null || player == null) return;
-        if (!_triggeredThisTurn.Add(player.NetId)) return;
+
+        // 注意：不能在检查牌堆/可变形之前就占用本回合次数。
+        // 读档后的第一张牌可能 Pile/ResultPile 尚未恢复，提前 Add 会让整回合被动失效。
+        if (_triggeredThisTurn.Contains(player.NetId))
+            return;
 
         var combatState = Owner.CombatState;
         if (combatState == null) return;
@@ -44,6 +48,8 @@ public sealed class RainbowWorldPower : CuteSakikoModPower
 
         var replacement = PickReplacement(original, cardPlay.Card.Owner);
         if (replacement == null) return;
+
+        _triggeredThisTurn.Add(player.NetId);
 
         // 1. 将新卡静默加入目标牌堆（不播放动画）
         await CardPileCmd.Add(replacement, cardPlay.ResultPile, skipVisuals: true);
@@ -81,6 +87,13 @@ public sealed class RainbowWorldPower : CuteSakikoModPower
                 }
             }
         }
+    }
+
+    public override Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+    {
+        // 新回合开始时也清一次；读档回到玩家回合时不会继承旧的节流状态。
+        if (side == CombatSide.Player) _triggeredThisTurn.Clear();
+        return Task.CompletedTask;
     }
 
     public override Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)

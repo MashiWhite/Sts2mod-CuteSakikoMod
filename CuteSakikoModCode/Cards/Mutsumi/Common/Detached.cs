@@ -1,3 +1,4 @@
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Archetypes;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,10 +10,12 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Common;
 
 /// <summary>
-///     置身事外（通用卡）：1c 技能，获得 8 格挡并 1 层言刃；升级 10 格挡 / 2 层言刃。
+///     置身事外（小睦/Cucumber 白卡）：1c 技能，获得 8 格挡并 1 层言刃；升级 10 格挡 / 2 层言刃。
 /// </summary>
-public class Detached() : CuteMutsumiCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class Detached() : CuteMutsumiCard(1, CardType.Skill, CardRarity.Common, TargetType.Self), IMutsumiArchetypeCard
 {
+    public MutsumiArchetype Archetype => MutsumiArchetype.Cucumber;
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(8m, ValueProp.Move),

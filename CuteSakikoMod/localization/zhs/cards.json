@@ -657,5 +657,13 @@
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.description": "选择除此卡外的1张牌。\n种植1张[gold]{IfUpgraded:show:茄子+|茄子}[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_TURN_INTO_EGGPLANT.selectionScreenPrompt": "选择除此卡外的1张牌",
   "CUTE_SAKIKO_MOD_CARD_EGGPLANT.title": "茄子",
-  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.description": "[gold]种植[/gold]：[blue]{StageName}[/blue]。\n打出时，将选中的牌打出{Plays:diff()}次。"
+  "CUTE_SAKIKO_MOD_CARD_EGGPLANT.description": "[gold]种植[/gold]：[blue]{StageName}[/blue]。\n打出时，将选中的牌打出{Plays:diff()}次。",
+  "CUTE_SAKIKO_MOD_CARD_NO_MORE_MESSENGER_PIGEON.title": "我不会再当传信鸽",
+  "CUTE_SAKIKO_MOD_CARD_NO_MORE_MESSENGER_PIGEON.description": "给予{WeakPower:diff()}层[gold]虚弱[/gold]。\n若你拥有[gold]虚弱[/gold]，将其一并转移给目标。",
+  "CUTE_SAKIKO_MOD_CARD_THATS_NICE.title": "真好呢",
+  "CUTE_SAKIKO_MOD_CARD_THATS_NICE.description": "获得{WordBladePower:diff()}层[gold]言刃[/gold]。\n对自己造成1点伤害（受[gold]言刃[/gold]加成）。\n造成{Damage:diff()}点伤害{Repeat:diff()}次。",
+  "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.title": "真是低低在下",
+  "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n获得{ShrinkPower:diff()}层[gold]缩小[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_MAKEUP.title": "妆造",
+  "CUTE_SAKIKO_MOD_CARD_MAKEUP.description": "获得{MakeupTemporaryDexterity:diff()}层临时[gold]敏捷[/gold]。"
 }

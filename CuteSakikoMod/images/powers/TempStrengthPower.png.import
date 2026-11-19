@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpk0xjyp0wp70"
-path="res://.godot/imported/NekoTempStrengthDownPower.png-29e51d32b49051ccbc75c025f11a776d.ctex"
+uid="uid://c3uu1e82j2103"
+path="res://.godot/imported/TempStrengthPower.png-0b6e295ef0ca77767e23c27df6479fb5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/powers/NekoTempStrengthDownPower.png"
-dest_files=["res://.godot/imported/NekoTempStrengthDownPower.png-29e51d32b49051ccbc75c025f11a776d.ctex"]
+source_file="res://CuteSakikoMod/images/powers/TempStrengthPower.png"
+dest_files=["res://.godot/imported/TempStrengthPower.png-0b6e295ef0ca77767e23c27df6479fb5.ctex"]
 
 [params]
 
@@ -23,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

@@ -33,11 +33,15 @@ public class MeowRampage : CuteRanaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Target == null) return;
+        // 两只猫可能先把原目标打死；此时自动改打仍存活的敌人，避免对死亡目标结算崩溃。
+        var target = cardPlay.Target;
+        if (target == null || target.IsDead)
+            target = CombatState.HittableEnemies.FirstOrDefault();
+        if (target == null) return;
 
         await DamageCmd.Attack(DynamicVars.CalculatedDamage)
             .FromCard(this, cardPlay)
-            .Targeting(cardPlay.Target)
+            .Targeting(target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
     }

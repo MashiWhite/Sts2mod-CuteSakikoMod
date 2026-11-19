@@ -1,3 +1,4 @@
+using CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Archetypes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -27,8 +28,11 @@ public static class PlantStages
 ///     或用 <see cref="CardPiles.PlantingCardPile.GetPlantsAtStage" /> 按阶段筛选。
 /// </summary>
 public abstract class PlantingCardBase(int cost, CardType type, CardRarity rarity, TargetType target)
-    : CuteMutsumiCard(cost, type, rarity, target)
+    : CuteMutsumiCard(cost, type, rarity, target), IMutsumiArchetypeCard
 {
+    /// <summary>种植系列统一归黄瓜睦流派（小睦专属），Mortis 奖励不出现。</summary>
+    public MutsumiArchetype Archetype => MutsumiArchetype.Cucumber;
+
     private static readonly string[] DefaultStageNames = ["幼苗", "抽蔓", "开花", "结果", "成熟"];
 
     private int _stage = PlantStages.Seedling;

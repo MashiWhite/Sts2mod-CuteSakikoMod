@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ojafgkqnaueb"
-path="res://.godot/imported/PickedStoneTemporaryDexterity.png-cf1b465313f01da9f0439556c6d0334f.ctex"
+uid="uid://bbvn5aahfckoy"
+path="res://.godot/imported/TempDexterityDownPower.png-13785e013cfc8a1aa316247b3a2ce668.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/powers/PickedStoneTemporaryDexterity.png"
-dest_files=["res://.godot/imported/PickedStoneTemporaryDexterity.png-cf1b465313f01da9f0439556c6d0334f.ctex"]
+source_file="res://CuteSakikoMod/images/powers/TempDexterityDownPower.png"
+dest_files=["res://.godot/imported/TempDexterityDownPower.png-13785e013cfc8a1aa316247b3a2ce668.ctex"]
 
 [params]
 
@@ -23,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

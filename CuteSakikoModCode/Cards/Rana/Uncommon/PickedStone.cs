@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -45,6 +45,7 @@ public class PickedStone : CuteRanaCard
     {
         public override AbstractModel OriginModel => ModelDb.Card<PickedStone>();
         public override PowerModel InternallyAppliedPower => ModelDb.Power<DexterityPower>();
-        public override PowerAssetProfile AssetProfile => this.PowerAssetProfile();
+        public override PowerAssetProfile AssetProfile =>
+            new(TempStatIcons.Dexterity, TempStatIcons.Dexterity);
     }
 }

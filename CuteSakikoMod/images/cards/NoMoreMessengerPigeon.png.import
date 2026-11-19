@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dahu4h0wn62r2"
-path="res://.godot/imported/ChordTempStrengthPower.png-6cfe9045b25a6d2a9d17dfd26017eae4.ctex"
+uid="uid://k41ng4npubpn"
+path="res://.godot/imported/NoMoreMessengerPigeon.png-cf800f66d420eca1f781f143ff52f54b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CuteSakikoMod/images/powers/ChordTempStrengthPower.png"
-dest_files=["res://.godot/imported/ChordTempStrengthPower.png-6cfe9045b25a6d2a9d17dfd26017eae4.ctex"]
+source_file="res://CuteSakikoMod/images/cards/NoMoreMessengerPigeon.png"
+dest_files=["res://.godot/imported/NoMoreMessengerPigeon.png-cf800f66d420eca1f781f143ff52f54b.ctex"]
 
 [params]
 
@@ -23,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
