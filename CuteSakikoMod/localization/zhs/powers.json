@@ -325,5 +325,8 @@
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "下一次攻击牌命中时，每段额外造成[blue]{Amount}[/blue]点[gold]真实伤害[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.title": "妆造",
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.description": "本回合获得层数等量临时敏捷。",
-  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "本回合[img]CuteSakikoMod/images/ui/text/text_dexterity.png[/img]增加[blue]{Amount}[/blue]层。"
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "本回合[img]CuteSakikoMod/images/ui/text/text_dexterity.png[/img]增加[blue]{Amount}[/blue]层。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.title": "面具",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "下回合开始前若格挡耗尽，受到[blue]{Amount}[/blue]点伤害。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "下回合开始前若格挡耗尽，受到[blue]{Amount}[/blue]点伤害。"
 }

@@ -665,5 +665,7 @@
   "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.title": "So Lowly",
   "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.description": "Gain {Block:diff()} [gold]Block[/gold].\nGain {ShrinkPower:diff()} [gold]Shrink[/gold].",
   "CUTE_SAKIKO_MOD_CARD_MAKEUP.title": "Makeup",
-  "CUTE_SAKIKO_MOD_CARD_MAKEUP.description": "Gain {MakeupTemporaryDexterity:diff()} temporary [gold]Dexterity[/gold]."
+  "CUTE_SAKIKO_MOD_CARD_MAKEUP.description": "Gain {MakeupTemporaryDexterity:diff()} temporary [gold]Dexterity[/gold].",
+  "CUTE_SAKIKO_MOD_CARD_PUT_ON_MASK.title": "Put On a Mask",
+  "CUTE_SAKIKO_MOD_CARD_PUT_ON_MASK.description": "Gain {Block:diff()} [gold]Block[/gold].\nIf your Block is depleted before your next turn, take {MaskBlockWatchPower:diff()} damage."
 }

@@ -325,5 +325,8 @@
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "次の攻撃カードが命中するたび、1ヒットにつき追加で[blue]{Amount}[/blue]の[gold]トゥルーダメージ[/gold]を与える。",
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.title": "メイク",
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.description": "このターン、層数分の一時的な敏捷を得る。",
-  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "このターン[blue]{Amount}[/blue]層の敏捷を得る。"
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "このターン[blue]{Amount}[/blue]層の敏捷を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.title": "仮面",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "次のターン開始までにブロックが尽きた場合、[blue]{Amount}[/blue]ダメージを受ける。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "次のターン開始までにブロックが尽きた場合、[blue]{Amount}[/blue]ダメージを受ける。"
 }

@@ -325,5 +325,8 @@
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "The next Attack card deals an additional [blue]{Amount}[/blue] [gold]true damage[/gold] per hit.",
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.title": "Makeup",
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.description": "Gain temporary Dexterity this turn.",
-  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "Gain [blue]{Amount}[/blue] Dexterity this turn."
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "Gain [blue]{Amount}[/blue] Dexterity this turn.",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.title": "Mask",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "If your Block is depleted before your next turn, take [blue]{Amount}[/blue] damage.",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "If your Block is depleted before your next turn, take [blue]{Amount}[/blue] damage."
 }

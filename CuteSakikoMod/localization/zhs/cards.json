@@ -665,5 +665,7 @@
   "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.title": "真是低低在下",
   "CUTE_SAKIKO_MOD_CARD_SO_LOWLY.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n获得{ShrinkPower:diff()}层[gold]缩小[/gold]。",
   "CUTE_SAKIKO_MOD_CARD_MAKEUP.title": "妆造",
-  "CUTE_SAKIKO_MOD_CARD_MAKEUP.description": "获得{MakeupTemporaryDexterity:diff()}层临时[gold]敏捷[/gold]。"
+  "CUTE_SAKIKO_MOD_CARD_MAKEUP.description": "获得{MakeupTemporaryDexterity:diff()}层临时[gold]敏捷[/gold]。",
+  "CUTE_SAKIKO_MOD_CARD_PUT_ON_MASK.title": "戴上面具",
+  "CUTE_SAKIKO_MOD_CARD_PUT_ON_MASK.description": "获得{Block:diff()}点[gold]格挡[/gold]。\n下回合开始前若格挡耗尽，受到{MaskBlockWatchPower:diff()}点伤害。"
 }
