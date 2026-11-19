@@ -1,4 +1,4 @@
-// 5. 罕见攻击：造成 4 点伤害，给予 1 层 VulnerablePower，升级后造成 8 点伤害
+﻿// 5. 罕见攻击：造成 4 点伤害，给予 1 层 VulnerablePower，升级后造成 8 点伤害
 
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -23,16 +23,11 @@ public class ParkingNekoFive : NekoCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Target == null || cardPlay.Target.IsDead) return;
-
         var damage = (int)DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
             .Targeting(cardPlay.Target)
             .Execute(choiceContext);
-
-        // 目标可能被这一下打死，死亡目标不再挂易伤。
-        if (cardPlay.Target.IsDead) return;
 
         var vulnerablePower = DynamicVars["VulnerablePower"].IntValue;
         await PowerCmd.Apply<VulnerablePower>(choiceContext, cardPlay.Target, vulnerablePower, Owner.Creature, this);
