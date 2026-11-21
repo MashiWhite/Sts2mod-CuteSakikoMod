@@ -21,6 +21,7 @@ public static class GameplayConfigSync
     private static IDisposable? _sessionUnboundSub;
     private static IDisposable? _runDataPreparingSub;
     private static bool _runStartedSubscribed;
+    private static bool _runLoadedSubscribed;
 
     public static bool IsHostAuthority { get; private set; }
 
@@ -71,6 +72,12 @@ public static class GameplayConfigSync
             RitsuLibFramework.SubscribeLifecycle<RunStartedEvent>(OnRunStarted);
             _runDataPreparingSub ??= RitsuLibFramework.SubscribeLifecycle<RunSavedDataPreparingEvent>(OnRunSavedDataPreparing);
         }
+
+        if (!_runLoadedSubscribed)
+        {
+            _runLoadedSubscribed = true;
+            RitsuLibFramework.SubscribeLifecycle<RunLoadedEvent>(OnRunLoaded);
+        }
     }
 
     public static void OnNetServiceReady(INetGameService? netService)
@@ -114,6 +121,22 @@ public static class GameplayConfigSync
 
         TryWriteRunSnapshotConfig(evt.RunState);
         BroadcastHostState("run_started");
+    }
+
+    private static void OnRunLoaded(RunLoadedEvent evt)
+    {
+        // 读档不会触发 RunStartedEvent；必须在这里用“当前设置”覆盖存档里的旧 snapshot，
+        // 否则房主改过关 MOD 怪物后读档，客机仍会应用旧 snapshot（Monsters=True）。
+        if (IsHostAuthority)
+        {
+            Entry.Logger.Info($"[ConfigSync] RunLoadedEvent: IsMultiplayer={evt.IsMultiplayer}");
+            TryWriteRunSnapshotConfig(evt.RunState);
+            BroadcastHostState("run_loaded");
+        }
+        else
+        {
+            TryApplyRunSnapshotConfig();
+        }
     }
 
     private static void TryWriteRunSnapshotConfig(RunState state)

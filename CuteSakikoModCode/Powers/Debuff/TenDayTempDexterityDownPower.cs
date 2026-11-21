@@ -1,13 +1,18 @@
-﻿using MegaCrit.Sts2.Core.HoverTips;
+using CuteSakikoMod.CuteSakikoModCode.Others;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 
 [RegisterPower]
 public sealed class TenDayTempDexterityDownPower : CuteSakikoTemporaryPower
 {
+    public override PowerAssetProfile AssetProfile =>
+        new(TempStatIcons.DexterityDown, TempStatIcons.DexterityDown);
+
     public override PowerModel InternallyAppliedPower =>
         ModelDb.Power<DexterityPower>().ToMutable();
 

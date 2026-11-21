@@ -19,6 +19,9 @@ namespace CuteSakikoMod.CuteSakikoModCode.Patches
     {
         public static void Postfix(RunManager __instance)
         {
+            // 关闭 mod 怪物时，权重补丁也不能再往 Boss/Ancient 列表里替换 mod 内容。
+            if (!ModConfig.EnableModMonsters) return;
+
             // 总开关：默认关闭。关闭时直接返回，不消耗 RNG、不改任何 rooms，
             // 保证完全不干预原版/其他 mod 的房间生成。
             if (!ModConfig.UseModWeight) return;
