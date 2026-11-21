@@ -1,6 +1,8 @@
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Archetypes;
 using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Pools;
 using Godot;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -8,7 +10,9 @@ using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Keywords;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Planting;
 
@@ -26,12 +30,17 @@ public static class PlantStages
 ///     种植卡基类：放在种植牌堆里，随玩家回合成长；卡面关键词行、伤害、卡图都随阶段变化。
 ///     其他效果可以查询 <see cref="Stage" />、<see cref="IsFullyGrown" />，
 ///     或用 <see cref="CardPiles.PlantingCardPile.GetPlantsAtStage" /> 按阶段筛选。
+///     衍生卡：与 NekoCard / SakiMemoryCard 一样直接继承 ModCardTemplate，
+///     在基类统一注册到 Token 池，避免被睦角色卡池的 Inherit 注册带进去。
 /// </summary>
+[RegisterCard(typeof(CuteSakikoTokenCardPool), Inherit = true)]
 public abstract class PlantingCardBase(int cost, CardType type, CardRarity rarity, TargetType target)
-    : CuteMutsumiCard(cost, type, rarity, target), IMutsumiArchetypeCard
+    : ModCardTemplate(cost, type, rarity, target), IMutsumiArchetypeCard
 {
     /// <summary>种植系列统一归黄瓜睦流派（小睦专属），Mortis 奖励不出现。</summary>
     public MutsumiArchetype Archetype => MutsumiArchetype.Cucumber;
+
+    public override CardAssetProfile AssetProfile => this.CardAssetProfile();
 
     private static readonly string[] DefaultStageNames = ["幼苗", "抽蔓", "开花", "结果", "成熟"];
 
@@ -139,12 +148,9 @@ public abstract class PlantingCardBase(int cost, CardType type, CardRarity rarit
             IHoverTip? tip = null;
             try
             {
-                var preview = CreatePreviewCard();
+                var preview = CreateDisplayPreview(next);
                 if (preview != null)
-                {
-                    preview.ApplyPreviewStage(next);
                     tip = HoverTipFactory.FromCard(preview);
-                }
             }
             catch (Exception ex)
             {
@@ -162,6 +168,33 @@ public abstract class PlantingCardBase(int cost, CardType type, CardRarity rarit
 
     /// <summary>子类提供一张用于「下一阶段预览」的临时卡；返回 null 表示不显示预览。</summary>
     protected virtual PlantingCardBase? CreatePreviewCard() => null;
+
+    /// <summary>
+    ///     生成显示用预览卡：继承主卡的升级状态，再切到指定阶段。
+    ///     所有种植卡的悬浮预览统一走这里，避免子类各自漏传升级。
+    /// </summary>
+    protected PlantingCardBase? CreateDisplayPreview(int? stage = null)
+    {
+        return PrepareDisplayPreview(CreatePreviewCard(), IsUpgraded, stage);
+    }
+
+    /// <summary>
+    ///     把一张临时预览卡对齐主卡状态：主卡已升级时同步升级预览卡，再按需切阶段。
+    ///     TurnIntoEggplant 这种非 PlantingCardBase 的“主卡”也调用这里统一处理。
+    /// </summary>
+    public static T? PrepareDisplayPreview<T>(T? preview, bool upgraded, int? stage = null)
+        where T : PlantingCardBase
+    {
+        if (preview == null) return null;
+
+        if (upgraded)
+            CardCmd.Upgrade(preview);
+
+        if (stage.HasValue)
+            preview.ApplyPreviewStage(stage.Value);
+
+        return preview;
+    }
 
     /// <summary>把预览卡切到指定阶段（不触发卡面刷新，避免动到真实卡）。</summary>
     internal void ApplyPreviewStage(int stage)

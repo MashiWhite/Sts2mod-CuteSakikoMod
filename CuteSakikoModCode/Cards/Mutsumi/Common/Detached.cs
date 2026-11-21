@@ -23,7 +23,10 @@ public class Detached() : CuteMutsumiCard(1, CardType.Skill, CardRarity.Common, 
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
-        [HoverTipFactory.FromPower<WordBladePower>()];
+    [
+        HoverTipFactory.Static(StaticHoverTip.Block),
+        HoverTipFactory.FromPower<WordBladePower>()
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

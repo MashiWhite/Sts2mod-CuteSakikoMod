@@ -2,6 +2,7 @@ using CuteSakikoMod.CuteSakikoModCode.Powers.Buff;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -9,16 +10,19 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Common;
 
 /// <summary>
 ///     真好呢（通用白卡）：0c 攻击，获得 1 层言刃，对自己造成 1 点伤害，
-///     再造成 1 点伤害 2 次；升级后言刃 2 层、攻击 3 次。
+///     再造成 1 点伤害 3 次；升级后言刃 2 层、攻击 4 次。
 /// </summary>
 public class ThatsNice() : CuteMutsumiCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(1m, ValueProp.Move),
-        new RepeatVar(2),
+        new RepeatVar(3),
         new PowerVar<WordBladePower>(1m)
     ];
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+        [HoverTipFactory.FromPower<WordBladePower>()];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

@@ -327,6 +327,9 @@
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.description": "Gain temporary Dexterity this turn.",
   "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "Gain [blue]{Amount}[/blue] Dexterity this turn.",
   "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.title": "Mask",
-  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "If your Block is depleted before your next turn, take [blue]{Amount}[/blue] damage.",
-  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "If your Block is depleted before your next turn, take [blue]{Amount}[/blue] damage."
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "If your [gold]Block[/gold] is depleted before your next turn, take damage equal to the number of stacks.",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "If your [gold]Block[/gold] is depleted before your next turn, take [blue]{Amount}[/blue] damage.",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.title": "Withered Melon Field",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.description": "Lose [gold]Planting slots[/gold] equal to the number of stacks.",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.smartDescription": "Lose [blue]{Amount}[/blue] [gold]Planting slots[/gold]."
 }

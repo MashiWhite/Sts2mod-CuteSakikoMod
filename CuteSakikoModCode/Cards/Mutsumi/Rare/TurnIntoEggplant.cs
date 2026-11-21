@@ -38,20 +38,8 @@ public class TurnIntoEggplant() : CuteMutsumiCard(2, CardType.Skill, CardRarity.
     {
         get
         {
-            if (IsCanonical || Owner == null) yield break;
-
-            Eggplant? preview = null;
-            try
-            {
-                preview = Owner.RunState.CreateCard<Eggplant>(Owner);
-            }
-            catch
-            {
-                preview = null;
-            }
-
-            if (preview == null) yield break;
-            yield return HoverTipFactory.FromCard(preview);
+            // 图鉴/预览里 IsCanonical=true 也要显示茄子卡，所以不能用 Owner 做门槛。
+            yield return HoverTipFactory.FromCard<Eggplant>(IsUpgraded);
         }
     }
 

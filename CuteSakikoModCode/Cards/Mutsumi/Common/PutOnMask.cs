@@ -21,7 +21,10 @@ public class PutOnMask() : CuteMutsumiCard(0, CardType.Skill, CardRarity.Common,
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
-        [HoverTipFactory.FromPower<MaskBlockWatchPower>()];
+    [
+        HoverTipFactory.Static(StaticHoverTip.Block),
+        HoverTipFactory.FromPower<MaskBlockWatchPower>()
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
