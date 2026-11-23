@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Nodes.Cards;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Patches;
@@ -219,14 +220,13 @@ public static class CardHoverTipsErosionPatch
 }
 
 /// <summary>
-///     卡面视觉：能量数字乱码 + 卡框染成薇欧拉的绿（#384433）。
-///     UpdateEnergyCostVisuals / UpdatePortrait 都是 NCard 的私有方法，只能 patch + 反射改私有字段。
+///     卡面视觉：把被侵蚀的牌完整伪装成原生诅咒卡（skill 框型/头像框、诅咒材质、
+///     colorless 费用图标、中性费用文字、诅咒类型牌匾，并隐藏稀有度光效）。
+///     UpdateEnergyCostVisuals / UpdatePortrait 等都是 NCard 的私有方法，只能 patch + 反射改私有字段。
 ///     先古卡走的是另一套节点（_ancientPortrait / _ancientBorder / _ancientTextBg），要单独处理。
 /// </summary>
 internal static class ViolaErosionVisual
 {
-    private static readonly Color FrameModulate = new("#384433");
-
     private static System.Reflection.FieldInfo? Field(string name) =>
         typeof(NCard).GetField(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
 
@@ -239,80 +239,162 @@ internal static class ViolaErosionVisual
     private static readonly System.Reflection.FieldInfo? PortraitField = Field("_portrait");
     private static readonly System.Reflection.FieldInfo? PortraitBorderField = Field("_portraitBorder");
     private static readonly System.Reflection.FieldInfo? BannerField = Field("_banner");
+    private static readonly System.Reflection.FieldInfo? TypePlaqueField = Field("_typePlaque");
+    private static readonly System.Reflection.FieldInfo? EnergyIconField = Field("_energyIcon");
+    private static readonly System.Reflection.FieldInfo? StarIconField = Field("_starIcon");
+    private static readonly System.Reflection.FieldInfo? UnplayableEnergyIconField = Field("_unplayableEnergyIcon");
+    private static readonly System.Reflection.FieldInfo? UnplayableStarIconField = Field("_unplayableStarIcon");
+    private static readonly System.Reflection.FieldInfo? RareGlowField = Field("_rareGlow");
+    private static readonly System.Reflection.FieldInfo? UncommonGlowField = Field("_uncommonGlow");
+    private static readonly System.Reflection.FieldInfo? SparklesField = Field("_sparkles");
     private static readonly System.Reflection.FieldInfo? AncientPortraitField = Field("_ancientPortrait");
     private static readonly System.Reflection.FieldInfo? AncientBorderField = Field("_ancientBorder");
     private static readonly System.Reflection.FieldInfo? AncientTextBgField = Field("_ancientTextBg");
     private static readonly System.Reflection.FieldInfo? AncientBannerField = Field("_ancientBanner");
+    private static readonly System.Reflection.FieldInfo? AncientHighlightField = Field("_ancientHighlight");
     private static readonly System.Reflection.FieldInfo? AncientGlassField = Field("_ancientBorderGlassOverlay");
 
+    private static Texture2D? LoadNativeTexture(string path) =>
+        GD.Load<Texture2D>(ImageHelper.GetImagePath(path));
+
+    // 原生诅咒卡的 FramePath / PortraitBorderPath 都把 Curse 映射到 Skill。
+    // 所以被侵蚀的牌也必须用 skill 框型，否则攻击/能力框型会直接泄露原牌类型。
+    private static readonly Texture2D? SkillFrameTexture =
+        LoadNativeTexture("atlases/ui_atlas.sprites/card/card_frame_skill_s.tres");
+
+    private static readonly Texture2D? SkillPortraitBorderTexture =
+        LoadNativeTexture("atlases/ui_atlas.sprites/card/card_portrait_border_skill_s.tres");
+
+    private static readonly Texture2D? NormalBannerTexture =
+        LoadNativeTexture("atlases/ui_atlas.sprites/card/card_banner.tres");
+
+    private static Texture2D? _curseEnergyIcon;
+
+    private static Texture2D? CurseEnergyIcon =>
+        _curseEnergyIcon ??= ResourceLoader.Load<Texture2D>(
+            ModelDb.CardPool<CurseCardPool>().EnergyIconPath,
+            null,
+            ResourceLoader.CacheMode.Reuse);
+
+    private static Color CurseEnergyOutline =>
+        ModelDb.CardPool<CurseCardPool>().EnergyOutlineColor;
+
     /// <summary>
-    ///     被侵蚀时的完整卡面：贴 viola 图、隐藏先古节点、显示普通节点、写入诅咒材质。
-    ///     与 ApplyFrameTint 的区别是它同时负责纹理（因为跳过原 UpdatePortrait 后纹理不会再被设置）。
+    ///     被侵蚀时的完整卡面：贴 viola 图、隐藏先古节点、显示普通节点，并把卡面所有
+    ///     可能泄露原牌信息的颜色/纹理统一成原生诅咒卡样式。
     /// </summary>
-    public static void ApplyErodedPortrait(NCard node)
-    {
-        var texture = GD.Load<Texture2D>(ViolaErosionText.CardImagePath);
-        var curseFrame = CurseFrameMaterial;
-        var curseBanner = CurseBannerMaterial;
+    public static void ApplyErodedPortrait(NCard node) => ApplyFrameTint(node);
 
-        // 先古节点全部隐藏
-        if (AncientPortraitField?.GetValue(node) is TextureRect ancientPortrait) ancientPortrait.Visible = false;
-        if (AncientBorderField?.GetValue(node) is TextureRect ancientBorder) ancientBorder.Visible = false;
-        if (AncientTextBgField?.GetValue(node) is TextureRect ancientTextBg) ancientTextBg.Visible = false;
-        if (AncientGlassField?.GetValue(node) is TextureRect ancientGlass) ancientGlass.Visible = false;
-        if (AncientBannerField?.GetValue(node) is Control ancientBanner) ancientBanner.Visible = false;
-
-        // 普通卡节点：显示 + viola 图 + 诅咒材质
-        if (PortraitField?.GetValue(node) is TextureRect portrait)
-        {
-            portrait.Visible = true;
-            portrait.Texture = texture;
-        }
-
-        if (PortraitBorderField?.GetValue(node) is TextureRect border)
-        {
-            border.Visible = true;
-            border.Modulate = Colors.White;
-            if (curseBanner != null) border.Material = curseBanner;
-        }
-
-        if (FrameField?.GetValue(node) is TextureRect frame)
-        {
-            frame.Visible = true;
-            frame.Modulate = Colors.White;
-            if (curseFrame != null) frame.Material = curseFrame;
-        }
-
-        if (BannerField?.GetValue(node) is TextureRect banner)
-        {
-            banner.Visible = true;
-            if (curseBanner != null) banner.Material = curseBanner;
-        }
-    }
     /// <summary>把全部侵蚀视觉一次性贴好（卡图/卡框/稀有度/标题/能量星辉/描述）。</summary>
     public static void ApplyAll(NCard node)
     {
-        if (node.Model is not { } card || !ViolaErosionText.IsEroded(card)) return;
+        if (node.Model is not { } card) return;
+
+        if (!ViolaErosionText.IsEroded(card))
+        {
+            // NCard 会复用；旧侵蚀节点留下的类型标签颜色覆盖必须恢复成原生黑色，
+            // 否则普通卡（例如黄瓜）的“攻击”会一直泛白。
+            ResetTypeLabelColor(node);
+            return;
+        }
 
         ApplyFrameTint(node);
-        ApplyCurseRarity(node);
         ApplyTitle(node);
+        ApplyCurseTitleColor(node);
         ApplyEnergyGarbage(node);
 
         if (DescriptionLabelField?.GetValue(node) is MegaRichTextLabel description)
             description.SetTextAutoSize("[center]" + ViolaErosionText.BuildDescriptionText() + "[/center]");
     }
+
+    /// <summary>类型标签只换文字，不改颜色；原生 card.tscn 的 TypeLabel 是黑色。</summary>
+    public static void RefreshTypePlaque(NCard node)
+    {
+        if (node.Model is not { } card) return;
+
+        if (!ViolaErosionText.IsEroded(card))
+        {
+            ResetTypeLabelColor(node);
+            return;
+        }
+
+        ApplyCurseRarity(node);
+    }
+
+    // card.tscn: TypeLabel.theme_override_colors/font_color = Color(0, 0, 0, 0.752941)
+    private static readonly Color NativeTypeLabelColor = new(0f, 0f, 0f, 0.752941f);
+
+    private static void ResetTypeLabelColor(NCard node)
+    {
+        if (TypeLabelField?.GetValue(node) is not MegaLabel typeLabel) return;
+
+        // 不能 RemoveThemeColorOverride(font_color)：场景里的黑色本身就是 override，
+        // 删掉会回退成主题白色，导致正常卡“攻击”泛白。
+        typeLabel.RemoveThemeColorOverride(ThemeConstants.Label.FontOutlineColor);
+        typeLabel.AddThemeColorOverride(ThemeConstants.Label.FontColor, NativeTypeLabelColor);
+    }
+
+    /// <summary>能量/星辉数字乱码，并把费用图标、数字颜色改成诅咒卡的中性色。</summary>
     public static void ApplyEnergyGarbage(NCard node)
     {
         if (node.Model is not { } card || !ViolaErosionText.IsEroded(card)) return;
 
-        // 能量数字
-        if (EnergyLabelField?.GetValue(node) is MegaLabel label)
-            GarbageNumber(label);
+        ApplyCurseCostVisuals(node);
+    }
 
-        // 星辉数字（同样要乱码，否则能看出这张牌花多少星）
+    /// <summary>
+    ///     诅咒卡的能源图标是 colorless，数字描边也走 curse/colorless 的中性色。
+    ///     这里同时处理能量和星辉，避免手牌费用颜色/角色池颜色泄露原牌归属。
+    /// </summary>
+    public static void ApplyCurseCostVisuals(NCard node)
+    {
+        if (node.Model is not { } card || !ViolaErosionText.IsEroded(card)) return;
+
+        var outline = CurseEnergyOutline;
+
+        if (EnergyIconField?.GetValue(node) is TextureRect energyIcon && CurseEnergyIcon is { } curseIcon)
+        {
+            energyIcon.Texture = curseIcon;
+            energyIcon.Modulate = Colors.White;
+            energyIcon.SelfModulate = Colors.White;
+        }
+
+        if (EnergyLabelField?.GetValue(node) is MegaLabel energyLabel)
+        {
+            energyLabel.AddThemeColorOverride(ThemeConstants.Label.FontColor, StsColors.cream);
+            energyLabel.AddThemeColorOverride(ThemeConstants.Label.FontOutlineColor, outline);
+            GarbageNumber(energyLabel);
+        }
+
+        if (StarIconField?.GetValue(node) is TextureRect starIcon)
+        {
+            starIcon.Modulate = Colors.White;
+            starIcon.SelfModulate = Colors.White;
+        }
+
         if (StarLabelField?.GetValue(node) is MegaLabel starLabel)
+        {
+            starLabel.AddThemeColorOverride(ThemeConstants.Label.FontColor, StsColors.cream);
+            starLabel.AddThemeColorOverride(ThemeConstants.Label.FontOutlineColor, outline);
             GarbageNumber(starLabel);
+        }
+
+        // 不可打出标记会泄露“这张牌能不能打”，侵蚀状态下统一隐藏。
+        if (UnplayableEnergyIconField?.GetValue(node) is CanvasItem unplayableEnergy)
+            unplayableEnergy.Visible = false;
+        if (UnplayableStarIconField?.GetValue(node) is CanvasItem unplayableStar)
+            unplayableStar.Visible = false;
+    }
+
+    /// <summary>稀有度光效/粒子会按原稀有度着色，侵蚀后直接隐藏。</summary>
+    private static void HideRarityLeaks(NCard node)
+    {
+        if (RareGlowField?.GetValue(node) is CanvasItem rareGlow)
+            rareGlow.Visible = false;
+        if (UncommonGlowField?.GetValue(node) is CanvasItem uncommonGlow)
+            uncommonGlow.Visible = false;
+        if (SparklesField?.GetValue(node) is CanvasItem sparkles)
+            sparkles.Visible = false;
     }
 
     /// <summary>把纯数字的 Label 换成短乱码；X / ? / 空 保留原样。</summary>
@@ -348,9 +430,8 @@ internal static class ViolaErosionVisual
         if (node.Model is not { } card || !ViolaErosionText.IsEroded(card)) return;
 
         ApplyTitle(node);
-        ApplyEnergyGarbage(node);
-        ApplyCurseTitleColor(node);
         ApplyCurseRarity(node);
+        ApplyCurseTitleColor(node);
 
         if (DescriptionLabelField?.GetValue(node) is MegaRichTextLabel description)
         {
@@ -361,9 +442,8 @@ internal static class ViolaErosionVisual
 
 
     /// <summary>
-    ///     稀有度伪装成"诅咒"（紫卡）：游戏里稀有度不体现在 Frame 纹理上（Frame 按 CardType 取），
-    ///     而是体现在卡框材质（card_frame_curse_mat）和标题横幅材质（card_banner_curse_mat）。
-    ///     这里把 _frame 的材质换成诅咒版，并把类型标签改成"诅咒"。
+    ///     把卡框材质、类型牌匾、费用图标/颜色、稀有度光效统一伪装成原生诅咒卡。
+    ///     纹理（skill 框型、skill 边框、Viola 卡图）由 ApplyFrameTint 负责。
     /// </summary>
     public static void ApplyCurseRarity(NCard node)
     {
@@ -378,8 +458,25 @@ internal static class ViolaErosionVisual
         if (BannerField?.GetValue(node) is TextureRect banner && curseBanner != null)
             banner.Material = curseBanner;
 
+        if (PortraitBorderField?.GetValue(node) is TextureRect border && curseBanner != null)
+            border.Material = curseBanner;
+
+        if (TypePlaqueField?.GetValue(node) is NinePatchRect typePlaque && curseBanner != null)
+        {
+            typePlaque.Material = curseBanner;
+            typePlaque.Modulate = Colors.White;
+            typePlaque.SelfModulate = Colors.White;
+        }
+
         if (TypeLabelField?.GetValue(node) is MegaLabel typeLabel)
+        {
+            // 类型文字保持原生黑色；不要和侵蚀卡专属的 cream 描边混在一起。
+            ResetTypeLabelColor(node);
             typeLabel.SetTextAutoSize(CurseTypeText);
+        }
+
+        ApplyCurseCostVisuals(node);
+        HideRarityLeaks(node);
     }
 
     public static Material? CurseFrameMaterial { get; } =
@@ -405,9 +502,9 @@ internal static class ViolaErosionVisual
     }
 
     /// <summary>
-    ///     卡图与卡框：被侵蚀时伪装成"普通卡样式"。
-    ///     做法逆向自 RitsuLib 的 CardVisualOverrides.ApplyStyle——它靠切换节点显隐实现先古↔普通，
-    ///     而不是改 Rarity。这里照做：隐藏先古节点、显示普通节点、贴 viola 图并染绿。
+    ///     卡图与卡框：被侵蚀时伪装成原生诅咒卡。
+    ///     原生诅咒卡不是单独一套"诅咒框型"：CardModel.FramePath 会把 Curse 映射成 Skill，
+    ///     所以这里也强制用 skill 框型 + skill 头像边框 + 诅咒材质，彻底消掉原牌类型。
     /// </summary>
     public static void ApplyFrameTint(NCard node)
     {
@@ -438,10 +535,15 @@ internal static class ViolaErosionVisual
         if (AncientBannerField?.GetValue(node) is Control ancientBanner)
             ancientBanner.Visible = false;
 
-        // 强制显示普通节点，形成"普通卡外观"
+        if (AncientHighlightField?.GetValue(node) is CanvasItem ancientHighlight)
+            ancientHighlight.Visible = false;
+
+        // 普通节点：Viola 卡图 + skill 框型/头像框 + 诅咒材质
         if (PortraitField?.GetValue(node) is TextureRect portrait)
         {
             portrait.Visible = true;
+            portrait.Modulate = Colors.White;
+            portrait.SelfModulate = Colors.White;
             if (texture != null) portrait.Texture = texture;
         }
 
@@ -449,6 +551,8 @@ internal static class ViolaErosionVisual
         {
             border.Visible = true;
             border.Modulate = Colors.White;
+            border.SelfModulate = Colors.White;
+            if (SkillPortraitBorderTexture != null) border.Texture = SkillPortraitBorderTexture;
             if (curseBanner != null) border.Material = curseBanner;
         }
 
@@ -456,11 +560,22 @@ internal static class ViolaErosionVisual
         {
             frame.Visible = true;
             frame.Modulate = Colors.White;
+            frame.SelfModulate = Colors.White;
+            if (SkillFrameTexture != null) frame.Texture = SkillFrameTexture;
             if (curseFrame != null) frame.Material = curseFrame;
         }
 
         if (BannerField?.GetValue(node) is TextureRect banner)
+        {
             banner.Visible = true;
+            banner.Modulate = Colors.White;
+            banner.SelfModulate = Colors.White;
+            if (NormalBannerTexture != null) banner.Texture = NormalBannerTexture;
+            if (curseBanner != null) banner.Material = curseBanner;
+        }
+
+        ApplyCurseRarity(node);
+        ApplyCurseTitleColor(node);
     }
 }
 
@@ -468,6 +583,28 @@ internal static class ViolaErosionVisual
 public static class CardEnergyGarbagePatch
 {
     public static void Postfix(NCard __instance) => ViolaErosionVisual.ApplyEnergyGarbage(__instance);
+}
+
+[HarmonyPatch(typeof(NCard), "UpdateStarCostVisuals")]
+public static class CardStarGarbagePatch
+{
+    public static void Postfix(NCard __instance) => ViolaErosionVisual.ApplyCurseCostVisuals(__instance);
+}
+
+[HarmonyPatch(typeof(NCard), "UpdateTitleLabel")]
+public static class CardErosionTitleVisualPatch
+{
+    public static void Postfix(NCard __instance)
+    {
+        ViolaErosionVisual.ApplyTitle(__instance);
+        ViolaErosionVisual.ApplyCurseTitleColor(__instance);
+    }
+}
+
+[HarmonyPatch(typeof(NCard), "UpdateTypePlaque")]
+public static class CardErosionTypePlaquePatch
+{
+    public static void Postfix(NCard __instance) => ViolaErosionVisual.RefreshTypePlaque(__instance);
 }
 
 /// <summary>
