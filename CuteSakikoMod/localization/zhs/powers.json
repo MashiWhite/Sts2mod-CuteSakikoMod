@@ -322,5 +322,14 @@
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.smartDescription": "每个敌方回合结束时，全局[color=#FF8899]飞返[/color]打出次数+[blue]3[/blue]，[purple]{OwnerName}[/purple]获得[blue]{StrengthGain}[/blue]点[gold]力量[/gold]。",
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.title": "言刃",
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.description": "下一次攻击牌命中时，每段额外造成层数等量固定[gold]真实伤害[/gold]。",
-  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "下一次攻击牌命中时，每段额外造成[blue]{Amount}[/blue]点[gold]真实伤害[/gold]。"
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "下一次攻击牌命中时，每段额外造成[blue]{Amount}[/blue]点[gold]真实伤害[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.title": "妆造",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.description": "本回合获得层数等量临时敏捷。",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "本回合[img]CuteSakikoMod/images/ui/text/text_dexterity.png[/img]增加[blue]{Amount}[/blue]层。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.title": "面具",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "下回合开始前若[gold]格挡[/gold]耗尽，受到等同于层数的伤害。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "下回合开始前若[gold]格挡[/gold]耗尽，受到[blue]{Amount}[/blue]点伤害。",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.title": "枯萎的瓜田",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.description": "失去等同于层数的[gold]种植槽[/gold]。",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.smartDescription": "失去[blue]{Amount}[/blue]个[gold]种植槽[/gold]。"
 }

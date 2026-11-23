@@ -322,5 +322,14 @@
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.smartDescription": "At the end of each enemy turn, global [color=#FF8899]Flyback[/color] plays +[blue]3[/blue]; [purple]{OwnerName}[/purple] gains [blue]{StrengthGain}[/blue] [gold]Strength[/gold].",
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.title": "Word Blade",
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.description": "The next Attack card deals an additional fixed [gold]true damage[/gold] equal to the stacks per hit.",
-  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "The next Attack card deals an additional [blue]{Amount}[/blue] [gold]true damage[/gold] per hit."
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "The next Attack card deals an additional [blue]{Amount}[/blue] [gold]true damage[/gold] per hit.",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.title": "Makeup",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.description": "Gain temporary Dexterity this turn.",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "Gain [blue]{Amount}[/blue] Dexterity this turn.",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.title": "Mask",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "If your [gold]Block[/gold] is depleted before your next turn, take damage equal to the number of stacks.",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "If your [gold]Block[/gold] is depleted before your next turn, take [blue]{Amount}[/blue] damage.",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.title": "Withered Melon Field",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.description": "Lose [gold]Planting slots[/gold] equal to the number of stacks.",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.smartDescription": "Lose [blue]{Amount}[/blue] [gold]Planting slots[/gold]."
 }

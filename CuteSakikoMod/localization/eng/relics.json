@@ -136,8 +136,14 @@
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.flavor": "Bury it, and it will grow.",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.title": "Silence",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "If you played no Attack cards this turn, gain 3 stacks of [gold]Word Blade[/gold] at end of turn.",
-  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.flavor": "Silence is her language.",
+  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.flavor": "[color=#779977]The moment I speak, things go wrong......[/color]",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.title": "Talkative",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "Whenever you play an Attack card, gain 1 stack of [gold]Word Blade[/gold].",
-  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.flavor": "On stage, she has a lot to say."
+  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.flavor": "[color=#779977]Because [color=#7799CC]Sakiko[/color] wanted Mutsumi to talk more, [red]I[/red] showed up.[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_SHEATHED_WORDS.title": "Sheathed Words",
+  "CUTE_SAKIKO_MOD_RELIC_SHEATHED_WORDS.description": "If you played no Attack cards this turn, gain 6 stacks of [gold]Word Blade[/gold] at end of turn.",
+  "CUTE_SAKIKO_MOD_RELIC_SHEATHED_WORDS.flavor": "[color=#779977]The moment I speak, things go wrong......[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_BARBED_CHATTER.title": "Barbed Chatter",
+  "CUTE_SAKIKO_MOD_RELIC_BARBED_CHATTER.description": "Whenever you play an Attack card, gain 3 stacks of [gold]Word Blade[/gold].",
+  "CUTE_SAKIKO_MOD_RELIC_BARBED_CHATTER.flavor": "[color=#779977]Because [color=#7799CC]Sakiko[/color] wanted Mutsumi to talk more, [red]I[/red] showed up.[/color]"
 }

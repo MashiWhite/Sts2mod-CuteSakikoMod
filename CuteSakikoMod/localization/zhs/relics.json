@@ -136,8 +136,14 @@
   "CUTE_SAKIKO_MOD_RELIC_CUCUMBER_SEED.flavor": "埋在土里，就会长出来。",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.title": "缄默",
   "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.description": "若本回合没有打出攻击牌，则在回合结束时获得3层[gold]言刃[/gold]。",
-  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.flavor": "沉默是她的语言。",
+  "CUTE_SAKIKO_MOD_RELIC_SILENCE_RELIC.flavor": "[color=#779977]我一说话，事情就会变坏......[/color]",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.title": "多言",
   "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.description": "每打出一张攻击牌，获得1层[gold]言刃[/gold]。",
-  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.flavor": "舞台上的她，话很多。"
+  "CUTE_SAKIKO_MOD_RELIC_TALKATIVE_RELIC.flavor": "[color=#779977]因为[color=#7799CC]小祥子[/color]想要小睦多说话，[red]我[/red]才出现的哦[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_SHEATHED_WORDS.title": "缄口藏锋",
+  "CUTE_SAKIKO_MOD_RELIC_SHEATHED_WORDS.description": "若本回合没有打出攻击牌，则在回合结束时获得6层[gold]言刃[/gold]。",
+  "CUTE_SAKIKO_MOD_RELIC_SHEATHED_WORDS.flavor": "[color=#779977]我一说话，事情就会变坏......[/color]",
+  "CUTE_SAKIKO_MOD_RELIC_BARBED_CHATTER.title": "怪话连篇",
+  "CUTE_SAKIKO_MOD_RELIC_BARBED_CHATTER.description": "每打出一张攻击牌，获得3层[gold]言刃[/gold]。",
+  "CUTE_SAKIKO_MOD_RELIC_BARBED_CHATTER.flavor": "[color=#779977]因为[color=#7799CC]小祥子[/color]想要小睦多说话，[red]我[/red]才出现的哦[/color]"
 }

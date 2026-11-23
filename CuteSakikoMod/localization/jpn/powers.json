@@ -322,5 +322,14 @@
   "CUTE_SAKIKO_MOD_POWER_STAR_ANON_DOMINION_POWER.smartDescription": "敵ターン終了ごとに、グローバル[color=#FF8899]飛返[/color]プレイ回数+[blue]3[/blue]、[purple]{OwnerName}[/purple]は[blue]{StrengthGain}[/blue]の[gold]力[/gold]を得る。",
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.title": "言刃",
   "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.description": "次の攻撃カードが命中するたび、1ヒットにつき追加でスタック数と等しい固定[gold]トゥルーダメージ[/gold]を与える。",
-  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "次の攻撃カードが命中するたび、1ヒットにつき追加で[blue]{Amount}[/blue]の[gold]トゥルーダメージ[/gold]を与える。"
+  "CUTE_SAKIKO_MOD_POWER_WORD_BLADE_POWER.smartDescription": "次の攻撃カードが命中するたび、1ヒットにつき追加で[blue]{Amount}[/blue]の[gold]トゥルーダメージ[/gold]を与える。",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.title": "メイク",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.description": "このターン、層数分の一時的な敏捷を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MAKEUP_TEMPORARY_DEXTERITY.smartDescription": "このターン[blue]{Amount}[/blue]層の敏捷を得る。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.title": "仮面",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.description": "次のターン開始までに[gold]ブロック[/gold]が尽きた場合、スタック数に等しいダメージを受ける。",
+  "CUTE_SAKIKO_MOD_POWER_MASK_BLOCK_WATCH_POWER.smartDescription": "次のターン開始までに[gold]ブロック[/gold]が尽きた場合、[blue]{Amount}[/blue]ダメージを受ける。",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.title": "枯れた瓜畑",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.description": "スタック数に等しい[gold]植え付けスロット[/gold]を失う。",
+  "CUTE_SAKIKO_MOD_POWER_WITHERED_MELON_FIELD_POWER.smartDescription": "[gold]植え付けスロット[/gold]を[blue]{Amount}[/blue]つ失う。"
 }
