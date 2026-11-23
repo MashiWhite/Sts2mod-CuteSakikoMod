@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -10,7 +10,7 @@ public class PromiseOfGrowing() : SakiMemoryCard(0, CardType.Attack, CardRarity.
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("ExtraHits", 2),
+        AttackHitCountVar.Create("ExtraHits", 2),
         new DamageVar(3m, ValueProp.Move)
     ];
 

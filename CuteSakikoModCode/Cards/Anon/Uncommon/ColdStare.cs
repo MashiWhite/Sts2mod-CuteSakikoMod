@@ -13,7 +13,7 @@ public class ColdStare() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommon,
         get
         {
             yield return new DamageVar(6m, ValueProp.Move);
-            yield return new RepeatVar(1);
+            yield return AttackHitCountVar.Create(1);
         }
     }
 

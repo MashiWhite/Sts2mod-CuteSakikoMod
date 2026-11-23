@@ -18,7 +18,7 @@ public class ChordMemory() : ModTokenCard(1, CardType.Attack, CardRarity.Token, 
         new DamageVar(2m, ValueProp.Move),
         new BlockVar(4m, ValueProp.Move),
         new CardsVar(1),
-        new RepeatVar(2)
+        AttackHitCountVar.Create(2)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

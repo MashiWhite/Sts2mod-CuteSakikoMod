@@ -33,6 +33,18 @@ public static class StringExtensions
         return Path.Join(Entry.ModId, "images", "card_portraits", "big", path);
     }
 
+    /// <summary>阶段卡图：images/cards/&lt;类名&gt;_&lt;阶段&gt;.png，带 res:// 前缀。</summary>
+    public static string CardStageImagePath(this CardModel card, int stage)
+    {
+        var path = Path.Join(
+            Entry.ModId,
+            "images",
+            "cards",
+            $"{card.GetType().Name}_{stage}.png"
+        ).Replace('\\', '/');
+        return $"res://{path}";
+    }
+
     public static string PowerImagePath(this string path)
     {
         return Path.Join(Entry.ModId, "images", "powers", path);
@@ -97,13 +109,17 @@ public static class AssetHelper
     }
 
     // 遗物
-    public static RelicAssetProfile RelicAssetProfile(this RelicModel relic)
+    // assetName 留空 = 用当前类名；升级遗物复用旧图时显式传旧类名，
+    // 不要在业务类里手拼 res://...。
+    public static RelicAssetProfile RelicAssetProfile(this RelicModel relic, string? assetName = null)
     {
-        var typeName = relic.GetType().Name;
+        var typeName = assetName ?? relic.GetType().Name;
+        var icon = $"{typeName}.png".RelicImagePath().Replace('\\', '/');
+        var bigIcon = $"{typeName}.png".BigRelicImagePath().Replace('\\', '/');
         return new RelicAssetProfile(
-            $"res://{Entry.ModId}/images/relics/{typeName}.png",
-            $"res://{Entry.ModId}/images/relics/{typeName}.png",
-            $"res://{Entry.ModId}/images/relics/big/{typeName}.png"
+            $"res://{icon}",
+            $"res://{icon}",
+            $"res://{bigIcon}"
         );
     }
 

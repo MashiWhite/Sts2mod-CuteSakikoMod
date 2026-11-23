@@ -15,7 +15,7 @@ public class StrikeHeart() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Un
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(1m, ValueProp.Move),
-        new RepeatVar(6)
+        AttackHitCountVar.Create(6)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

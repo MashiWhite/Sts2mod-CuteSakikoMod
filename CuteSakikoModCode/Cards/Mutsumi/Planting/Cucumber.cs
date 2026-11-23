@@ -36,7 +36,7 @@ public class Cucumber() : PlantingCardBase(0, CardType.Attack, CardRarity.Token,
         get
         {
             foreach (var v in base.CanonicalVars) yield return v;
-            yield return new RepeatVar(1);
+            yield return AttackHitCountVar.Create(1);
         }
     }
 

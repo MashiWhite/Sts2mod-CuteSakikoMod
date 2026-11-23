@@ -15,7 +15,7 @@ public class ParkingNekoTen : NekoCard
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
         new DamageVar(3m, ValueProp.Move),
-        new RepeatVar(3)
+        AttackHitCountVar.Create(3)
     };
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

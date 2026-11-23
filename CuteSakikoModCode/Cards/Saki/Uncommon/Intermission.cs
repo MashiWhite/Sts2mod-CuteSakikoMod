@@ -18,7 +18,7 @@ public class Intermission : CuteSakikoModCard
         get
         {
             yield return new DamageVar(2, ValueProp.Move);
-            yield return new RepeatVar(3);
+            yield return AttackHitCountVar.Create(3);
         }
     }
 

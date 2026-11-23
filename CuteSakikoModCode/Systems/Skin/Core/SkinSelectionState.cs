@@ -1,4 +1,4 @@
-﻿namespace CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
+namespace CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 
 public sealed class SkinSelectionState
 {
@@ -12,13 +12,17 @@ public sealed class CharacterSkinChoice
     public int DeckPresetIndex { get; set; }
     public int RelicPresetIndex { get; set; }
 
+    /// <summary>睦的卡池流派：0=Cucumber/小睦，1=Mortis/莫提斯。其他角色忽略。</summary>
+    public int MutsumiArchetypeIndex { get; set; }
+
     public CharacterSkinChoice Clone()
     {
         return new CharacterSkinChoice
         {
             ArtSkinIndex = ArtSkinIndex,
             DeckPresetIndex = DeckPresetIndex,
-            RelicPresetIndex = RelicPresetIndex
+            RelicPresetIndex = RelicPresetIndex,
+            MutsumiArchetypeIndex = MutsumiArchetypeIndex
         };
     }
 }

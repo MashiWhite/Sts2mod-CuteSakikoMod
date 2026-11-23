@@ -18,7 +18,7 @@ public class Huh() : CuteAnonCard(2, CardType.Attack, CardRarity.Common, TargetT
         get
         {
             yield return new DamageVar(5m, ValueProp.Move);
-            yield return new RepeatVar(4);
+            yield return AttackHitCountVar.Create(4);
             yield return new DynamicVar("notes", 1);
         }
     }

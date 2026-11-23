@@ -24,7 +24,7 @@ public class GrandMa : CuteRanaCard
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(4m, ValueProp.Move),
-        new RepeatVar(2)
+        AttackHitCountVar.Create(2)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips

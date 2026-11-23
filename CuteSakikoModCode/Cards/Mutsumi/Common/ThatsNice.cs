@@ -17,7 +17,7 @@ public class ThatsNice() : CuteMutsumiCard(0, CardType.Attack, CardRarity.Common
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(1m, ValueProp.Move),
-        new RepeatVar(3),
+        AttackHitCountVar.Create(3),
         new PowerVar<WordBladePower>(1m)
     ];
 

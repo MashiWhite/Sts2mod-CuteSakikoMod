@@ -1,27 +1,34 @@
 using CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Archetypes;
+using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using MegaCrit.Sts2.Core.Entities.Players;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Systems;
 
 /// <summary>
-///     睦的流派选择（骨架版）：目前只存在内存里，默认黄瓜睦。
-///     TODO：接入皮肤系统的 PlayerChoice 存档 + SkinSyncService 联机同步。
+///     睦的流派/卡池选择。实际值存在皮肤系统的 CharacterSkinChoice 里，
+///     跟随大厅/跑局存档，并通过 SkinSyncService 同步给其他玩家。
 /// </summary>
 public static class MutsumiArchetypeChoice
 {
-    private static readonly Dictionary<ulong, MutsumiArchetype> Choices = new();
-
     public static MutsumiArchetype Get(Player? player)
     {
         if (player == null) return MutsumiArchetype.Cucumber;
-        return Choices.TryGetValue(player.NetId, out var value) ? value : MutsumiArchetype.Cucumber;
+
+        var choice = SkinResolver.GetChoiceForPlayer(
+            player.NetId,
+            player.Character.GetType());
+
+        return choice.MutsumiArchetypeIndex == (int)MutsumiArchetype.Mortis
+            ? MutsumiArchetype.Mortis
+            : MutsumiArchetype.Cucumber;
     }
 
     public static void Set(Player player, MutsumiArchetype archetype)
     {
         if (player == null) return;
-        Choices[player.NetId] = archetype;
-    }
 
-    public static void Clear() => Choices.Clear();
+        SkinResolver.ModifyLocalChoice(
+            player.Character.GetType(),
+            c => c.MutsumiArchetypeIndex = (int)archetype);
+    }
 }

@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Mutsumi.Starter;
 
@@ -14,11 +15,14 @@ namespace CuteSakikoMod.CuteSakikoModCode.Relics.Mutsumi.Starter;
 ///     缄默（黄瓜睦初始遗物）：每回合最多一次，若本回合没有打出任何攻击牌，
 ///     在己方回合结束时获得 3 层「言刃」。
 /// </summary>
+[RegisterTouchOfOrobasRefinement(typeof(SheathedWords))]
 public class SilenceRelic : CuteMutsumiRelic
 {
     private bool _playedAttackThisTurn;
 
     public override RelicRarity Rarity => RelicRarity.Starter;
+
+    protected virtual int WordBladeOnSilence => 3;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromPower<WordBladePower>()];
 
@@ -42,7 +46,7 @@ public class SilenceRelic : CuteMutsumiRelic
         if (!shouldGrant) return;
         if (!participants.Contains(Owner.Creature)) return;
 
-        await PowerCmd.Apply<WordBladePower>(choiceContext, Owner.Creature, 3m, Owner.Creature, null);
+        await PowerCmd.Apply<WordBladePower>(choiceContext, Owner.Creature, WordBladeOnSilence, Owner.Creature, null);
         Flash();
     }
 }

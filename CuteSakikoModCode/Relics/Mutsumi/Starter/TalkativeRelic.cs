@@ -6,17 +6,21 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace CuteSakikoMod.CuteSakikoModCode.Relics.Mutsumi.Starter;
 
 /// <summary>
 ///     多言（Mortis 初始遗物）：每打出一张攻击牌，获得 1 层「言刃」。
 /// </summary>
+[RegisterTouchOfOrobasRefinement(typeof(BarbedChatter))]
 public class TalkativeRelic : CuteMutsumiRelic
 {
     private readonly HashSet<CardModel> _creditedCards = new();
 
     public override RelicRarity Rarity => RelicRarity.Starter;
+
+    protected virtual int WordBladePerAttack => 1;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromPower<WordBladePower>()];
 
@@ -29,7 +33,7 @@ public class TalkativeRelic : CuteMutsumiRelic
         // 同一张攻击牌可能有多个 AttackCommand；只算“打出一张攻击牌”一次。
         if (!_creditedCards.Add(card)) return;
 
-        await PowerCmd.Apply<WordBladePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, null);
+        await PowerCmd.Apply<WordBladePower>(choiceContext, Owner.Creature, WordBladePerAttack, Owner.Creature, null);
         Flash();
     }
 

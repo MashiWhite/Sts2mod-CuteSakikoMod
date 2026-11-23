@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Logging;
+using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Multiplayer.Serialization;
 using MegaCrit.Sts2.Core.Multiplayer.Transport;
 
@@ -11,6 +11,7 @@ public sealed class SkinSyncMessage : INetMessage
     public int ArtSkinIndex { get; set; }
     public int DeckPresetIndex { get; set; }
     public int RelicPresetIndex { get; set; }
+    public int MutsumiArchetypeIndex { get; set; }
 
     public NetTransferMode Mode => NetTransferMode.Reliable;
     public LogLevel LogLevel => LogLevel.Info;
@@ -24,6 +25,7 @@ public sealed class SkinSyncMessage : INetMessage
         writer.WriteInt(ArtSkinIndex);
         writer.WriteInt(DeckPresetIndex);
         writer.WriteInt(RelicPresetIndex);
+        writer.WriteInt(MutsumiArchetypeIndex);
     }
 
     public void Deserialize(PacketReader reader)
@@ -33,6 +35,7 @@ public sealed class SkinSyncMessage : INetMessage
         ArtSkinIndex = reader.ReadInt();
         DeckPresetIndex = reader.ReadInt();
         RelicPresetIndex = reader.ReadInt();
+        MutsumiArchetypeIndex = reader.ReadInt();
     }
 
     public int ToId()

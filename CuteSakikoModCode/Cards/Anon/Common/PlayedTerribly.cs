@@ -15,7 +15,7 @@ public class PlayedTerribly() : CuteAnonCard(0, CardType.Attack, CardRarity.Comm
         get
         {
             yield return new DamageVar(5m, ValueProp.Move);
-            yield return new RepeatVar(2);
+            yield return AttackHitCountVar.Create(2);
         }
     }
 

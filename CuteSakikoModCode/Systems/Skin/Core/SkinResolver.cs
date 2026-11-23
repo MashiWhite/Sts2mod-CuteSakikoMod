@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 using MegaCrit.Sts2.Core.Multiplayer.Game.Lobby;
 using MegaCrit.Sts2.Core.Runs;
 
@@ -19,6 +19,19 @@ public static class SkinResolver
     public static CharacterSkinChoice GetLocalChoice(Type characterType)
     {
         return _localCache.TryGetValue(characterType, out var c) ? c : new CharacterSkinChoice();
+    }
+
+    /// <summary>取任意玩家（本机或远端缓存）的完整皮肤/预设选择。</summary>
+    public static CharacterSkinChoice GetChoiceForPlayer(ulong netId, Type characterType)
+    {
+        if (netId == LocalNetId)
+            return GetLocalChoice(characterType);
+
+        if (_remoteCache.TryGetValue(netId, out var perChar)
+            && perChar.TryGetValue(characterType, out var choice))
+            return choice.Clone();
+
+        return new CharacterSkinChoice();
     }
 
     public static CharacterSkinDefinition? GetLocalSkin(Type characterType)

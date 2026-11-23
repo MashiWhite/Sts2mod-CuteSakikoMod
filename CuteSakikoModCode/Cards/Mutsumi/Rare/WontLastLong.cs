@@ -9,8 +9,8 @@ namespace CuteSakikoMod.CuteSakikoModCode.Cards.Mutsumi.Rare;
 
 /// <summary>
 ///     不会长久的（小睦/Cucumber 金卡）：1c 攻击。
-///     消耗手牌中所有攻击牌，然后按实际消耗数量打出 15 点伤害；
-///     升级后每次 20 点。
+///     消耗手牌中所有攻击牌，然后按实际消耗数量打出 10 点伤害；
+///     升级后每次 13 点。
 /// </summary>
 public class WontLastLong()
     : CuteMutsumiCard(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy), IMutsumiArchetypeCard
@@ -18,7 +18,7 @@ public class WontLastLong()
     public MutsumiArchetype Archetype => MutsumiArchetype.Cucumber;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(15m, ValueProp.Move)];
+        [new DamageVar(10m, ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -56,6 +56,6 @@ public class WontLastLong()
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

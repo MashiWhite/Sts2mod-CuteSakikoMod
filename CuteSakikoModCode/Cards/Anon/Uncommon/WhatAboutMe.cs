@@ -16,7 +16,13 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
         get
         {
             yield return new DamageVar(4m, ValueProp.Move);
-            yield return new TotalHitsVar();
+            yield return new CalculationBaseVar(1m);
+            yield return new CalculationExtraVar(1m);
+            yield return AttackHitCountVar.CreateCalculated("TotalHits", (card, _) =>
+            {
+                var owner = card.Owner;
+                return owner == null ? 0m : ChordNoteSystem.GetNotesGainedThisTurn(owner);
+            });
         }
     }
 
@@ -44,41 +50,5 @@ public class WhatAboutMe() : CuteAnonCard(1, CardType.Attack, CardRarity.Uncommo
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(2m); // 4 → 6
-    }
-
-    private class TotalHitsVar : DynamicVar
-    {
-        public TotalHitsVar() : base("TotalHits", 1m)
-        {
-        }
-
-        /// <summary>
-        ///     命中数 = 1 + 本回合获得音符数。
-        ///
-        ///     ★ 变色规则（2026-11-09 修「数值提升但不变绿」）：
-        ///     `:diff()` 走 HighlightDifferencesFormatter → DynamicVar.ToHighlightedString，
-        ///     它比较的是 **PreviewValue（当前显示值） vs EnchantedValue（卡牌本身的值）**：
-        ///         int value  = (int)PreviewValue;     // 显示出来的数
-        ///         int value2 = (int)EnchantedValue;   // 基准（升级/附魔后"这张卡本来的值"）
-        ///         CompareTo(value2) → 0=白 / 正=绿 / 负=红
-        ///     旧写法直接改 BaseValue，导致 PreviewValue 与 EnchantedValue 恒等
-        ///     → CompareTo 恒为 0 → 永远白色。而且 BaseValue 被覆盖后升级基准也丢失。
-        ///     ⇒ 正确做法：EnchantedValue 留在"卡牌本来的值"（1 或升级后的值），
-        ///        只把实时加总写进 PreviewValue，两者不等时才会变绿。
-        /// </summary>
-        public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target,
-            bool runGlobalHooks)
-        {
-            base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
-
-            // 基准 = 卡牌本来的命中数（本卡未升级，恒为 1）
-            EnchantedValue = BaseValue;
-
-            if (card.Owner == null) return;
-
-            var notesGained = ChordNoteSystem.GetNotesGainedThisTurn(card.Owner);
-            // 显示值 = 基准 + 本回合音符数（只影响 PreviewValue，不动 BaseValue）
-            PreviewValue = BaseValue + notesGained;
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.NetMessage;
+using CuteSakikoMod.CuteSakikoModCode.NetMessage;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using Godot;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
@@ -31,7 +31,8 @@ public static class SkinSyncService
             CharacterTypeName = characterType.FullName ?? characterType.Name,
             ArtSkinIndex = choice.ArtSkinIndex,
             DeckPresetIndex = choice.DeckPresetIndex,
-            RelicPresetIndex = choice.RelicPresetIndex
+            RelicPresetIndex = choice.RelicPresetIndex,
+            MutsumiArchetypeIndex = choice.MutsumiArchetypeIndex
         };
 
         if (net.Type == NetGameType.Client)
@@ -55,7 +56,8 @@ public static class SkinSyncService
         {
             ArtSkinIndex = msg.ArtSkinIndex,
             DeckPresetIndex = msg.DeckPresetIndex,
-            RelicPresetIndex = msg.RelicPresetIndex
+            RelicPresetIndex = msg.RelicPresetIndex,
+            MutsumiArchetypeIndex = msg.MutsumiArchetypeIndex
         });
 
         SkinSystemEvents.RaiseArtSkinChanged(type);

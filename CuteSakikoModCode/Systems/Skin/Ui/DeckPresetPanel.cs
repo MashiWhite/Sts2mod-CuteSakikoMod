@@ -1,5 +1,6 @@
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Core;
 using CuteSakikoMod.CuteSakikoModCode.Systems.Skin.Networking;
+using CuteSakikoMod.CuteSakikoModCode.Character.Mujica;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Localization;
@@ -20,6 +21,11 @@ public sealed partial class DeckPresetPanel : Control
     private static DeckViewModal? _currentDeckModal;
 
     private Label _deckNameLabel = null!;
+    private Button _poolBtn = null!;
+    private Label _poolLabel = null!;
+
+    private const int PoolCucumber = 0;
+    private const int PoolMortis = 1;
 
     private bool _logicalVisible;
     private NGoldArrowButton _nextBtn = null!;
@@ -29,10 +35,10 @@ public sealed partial class DeckPresetPanel : Control
     {
         GD.Print("[DeckPresetPanel] _Ready");
 
-        // ★ 高度 110 → 148：原 110 高时「默认卡组」文字距底边只剩 8px，
-        //   再叠上九宫格 42px 的切角，视觉上像要从面板里掉出去。
-        //   加高后底部留白 30px，切角区域不再压住文字。
-        Size = new Vector2(380, 148);
+        // ★ 高度 148 → 214：上方新增独立的睦卡池切换按钮。
+        //   行 0（y 10..58）：卡池按钮；行 1（y 74..138）：左右箭头 + 查看卡组；
+        //   行 2（y 158..192）：卡组名。
+        Size = new Vector2(380, 214);
         MouseFilter = MouseFilterEnum.Pass;
 
         BuildUi();
@@ -70,22 +76,44 @@ public sealed partial class DeckPresetPanel : Control
 
     private void BuildUi()
     {
-        const float panelH = 148f;
+        const float panelH = 214f;
         AddChild(SkinPreviewPanel.MakePanelBackdrop(new Vector2(380, panelH)));
 
-        // 行 1（y 22..86）：左右箭头 + 查看卡组按钮
-        // 行 2（y 96..130）：默认卡组
-        // 底部还剩 18px 到切角起点（42），文字不会被切到。
+        // 行 0（y 10..58）：独立卡池按钮。只对睦显示，点击在黄瓜睦/莫提斯之间切换。
+        _poolBtn = new Button
+        {
+            Position = new Vector2(8, 10),
+            Size = new Vector2(364, 48),
+            Visible = false
+        };
+        _poolLabel = new Label
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            AnchorRight = 1.0f,
+            AnchorBottom = 1.0f,
+            OffsetLeft = 0,
+            OffsetTop = 0,
+            OffsetRight = 0,
+            OffsetBottom = 0,
+            MouseFilter = MouseFilterEnum.Ignore
+        };
+        _poolLabel.AddThemeFontSizeOverride("font_size", 19);
+        _poolBtn.AddChild(_poolLabel);
+        _poolBtn.Pressed += ToggleCardPool;
+        AddChild(_poolBtn);
+
+        // 行 1（y 74..138）：左右箭头 + 查看卡组按钮
         _prevBtn = SkinPreviewPanel.MakeArrowButton(
             "res://images/atlases/ui_atlas.sprites/settings_tiny_left_arrow.tres");
-        _prevBtn.Position = new Vector2(8, 22);
+        _prevBtn.Position = new Vector2(8, 74);
         _prevBtn.Size = new Vector2(48, 64);
         AddChild(_prevBtn);
         _prevBtn.Connect(NClickableControl.SignalName.Released, Callable.From<NClickableControl>(_ => Shift(-1)));
 
         var viewBtn = new Button
         {
-            Position = new Vector2(72, 30),
+            Position = new Vector2(72, 82),
             Size = new Vector2(236, 48)
         };
         var viewLabel = new Label
@@ -109,17 +137,14 @@ public sealed partial class DeckPresetPanel : Control
 
         _nextBtn = SkinPreviewPanel.MakeArrowButton(
             "res://images/atlases/ui_atlas.sprites/settings_tiny_right_arrow.tres");
-        _nextBtn.Position = new Vector2(324, 22);
+        _nextBtn.Position = new Vector2(324, 74);
         _nextBtn.Size = new Vector2(48, 64);
         AddChild(_nextBtn);
         _nextBtn.Connect(NClickableControl.SignalName.Released, Callable.From<NClickableControl>(_ => Shift(1)));
 
         _deckNameLabel = new Label
         {
-            // ★ 原 110 高时这一行在 y=76、高 26，底边 102，距面板底只剩 8px；
-            //   九宫格 42px 切角一压，「默认卡组」看着像要掉出去。
-            //   现在 148 高，文字 y 96..130，底边距面板底 18px、距切角起点 24px。
-            Position = new Vector2(0, 96),
+            Position = new Vector2(0, 158),
             Size = new Vector2(380, 34),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center
@@ -198,13 +223,51 @@ public sealed partial class DeckPresetPanel : Control
         else if (RunManager.Instance?.DebugOnlyGetState() != null) SkinSyncService.Broadcast(characterType);
 
         SkinSystemEvents.RaiseDeckPresetChanged(characterType);
+        Refresh();
+    }
+
+    /// <summary>独立卡池按钮：只切换睦的奖励卡池，不改起始卡组。</summary>
+    private void ToggleCardPool()
+    {
+        if (SkinUiContext.CurrentCharacterType is not { } characterType) return;
+        if (characterType != typeof(CuteMutsumi)) return;
+
+        var current = SkinResolver.GetLocalChoice(characterType).MutsumiArchetypeIndex;
+        var next = current == PoolMortis ? PoolCucumber : PoolMortis;
+
+        SkinResolver.ModifyLocalChoice(characterType, c => c.MutsumiArchetypeIndex = next);
+
+        if (SkinUiContext.GetLobby(this) is { } lobby)
+            SkinDataStore.ModifyLobbyChoice(lobby, characterType,
+                c => c.MutsumiArchetypeIndex = next);
+        else if (RunManager.Instance?.DebugOnlyGetState() != null) SkinSyncService.Broadcast(characterType);
+
+        Refresh();
     }
 
     private void Refresh()
     {
         if (SkinUiContext.CurrentCharacterType is not { } characterType) return;
         var skin = SkinResolver.GetLocalSkin(characterType);
-        if (skin == null || skin.DeckPresets.Count == 0) return;
+        if (skin == null || skin.DeckPresets.Count == 0)
+        {
+            if (_poolBtn != null) _poolBtn.Visible = false;
+            return;
+        }
+
+        var isMutsumi = characterType == typeof(CuteMutsumi);
+        _poolBtn.Visible = isMutsumi;
+        if (isMutsumi)
+        {
+            var poolIndex = Math.Clamp(
+                SkinResolver.GetLocalChoice(characterType).MutsumiArchetypeIndex,
+                PoolCucumber,
+                PoolMortis);
+            var poolKey = poolIndex == PoolMortis
+                ? "CUTE_SAKIKO_MOD_MUTSUMI_POOL_MORTIS"
+                : "CUTE_SAKIKO_MOD_MUTSUMI_POOL_CUCUMBER";
+            _poolLabel.Text = new LocString("characters", poolKey).GetFormattedText();
+        }
 
         var canSwitch = skin.DeckPresets.Count > 1;
         _prevBtn.Visible = canSwitch;

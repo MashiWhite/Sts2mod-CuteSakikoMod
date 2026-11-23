@@ -94,8 +94,8 @@ public abstract class PlantingCardBase(int cost, CardType type, CardRarity rarit
     protected void SyncStageVars()
     {
         DynamicVars.Damage.BaseValue = DamageForStage(_stage);
-        if (DynamicVars.TryGetValue("Repeat", out var repeatVar) && repeatVar is RepeatVar repeats)
-            repeats.BaseValue = HitsForStage(_stage);
+        if (DynamicVars.TryGetValue("Repeat", out var repeatVar))
+            repeatVar.BaseValue = HitsForStage(_stage);
         if (DynamicVars.TryGetValue("StageName", out var stageVar) && stageVar is StringVar stringVar)
             stringVar.StringValue = StageName;
         SyncExtraVars();
@@ -124,7 +124,7 @@ public abstract class PlantingCardBase(int cost, CardType type, CardRarity rarit
     {
         get
         {
-            var path = $"res://CuteSakikoMod/images/cards/{GetType().Name}_{_stage}.png";
+            var path = this.CardStageImagePath(_stage);
             return ResourceLoader.Exists(path) ? path : CardModel.MissingPortraitPath;
         }
     }
