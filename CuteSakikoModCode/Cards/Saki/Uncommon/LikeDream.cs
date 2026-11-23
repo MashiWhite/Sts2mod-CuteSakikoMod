@@ -1,6 +1,5 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
+using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
-using CuteSakikoMod.CuteSakikoModCode.Relics.Saki.Rare;
 using CuteSakikoMod.CuteSakikoModCode.Systems;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -33,29 +32,17 @@ public class LikeDream() : CuteSakikoModCard(2, CardType.Skill, CardRarity.Uncom
         var currentAmount = pressure?.Amount ?? 0;
         if (currentAmount <= 0) return;
 
-        // 有面具时崩溃会被移除，需用另一套判断
-        var hasMask = Owner.Relics.OfType<Mask>().Any();
         var preHp = Owner.Creature.CurrentHp;
 
-        // 翻倍前记录崩溃层数
-        var previousBreakDownAmount = Owner.Creature.GetPower<BreakDownPower>()?.Amount ?? 0;
+        // 崩溃是 Single 层数，已有崩溃时再触发不会让层数变大；
+        // 面具还会直接把崩溃移除，所以不能比较崩溃层数。
+        // 翻倍后压力达到当前生命值，就是本次会触发崩溃。
+        var willCollapse = currentAmount * 2 >= preHp;
 
         // 翻倍
         await PressureCmd.Apply(choiceContext, Owner.Creature, currentAmount, Owner.Creature, this);
 
-        bool triggeredCollapse;
-        if (hasMask)
-        {
-            // 有面具：崩溃不会出现，用"翻倍后压力 >= 当前生命值"判定本该触发崩溃
-            triggeredCollapse = currentAmount * 2 >= preHp;
-        }
-        else
-        {
-            var newBreakDownAmount = Owner.Creature.GetPower<BreakDownPower>()?.Amount ?? 0;
-            triggeredCollapse = newBreakDownAmount > previousBreakDownAmount;
-        }
-
-        if (triggeredCollapse)
+        if (willCollapse)
         {
             await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner);
             await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
