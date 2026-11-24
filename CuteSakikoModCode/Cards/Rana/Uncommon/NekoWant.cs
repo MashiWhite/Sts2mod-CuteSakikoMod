@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -30,10 +30,16 @@ public class NekoWant : CuteRanaCard
         var original = chosen.FirstOrDefault();
         if (original == null) return;
 
+        var combatState = Owner.Creature?.CombatState;
+        if (combatState == null) return;
+
         var copies = DynamicVars.Cards.IntValue;
         for (var i = 0; i < copies; i++)
         {
             var clone = original.CreateClone(); // 完美克隆：保留升级、附魔等所有状态
+            // CreateClone 不会登记 CombatState；不登记的话 CoopDesyncContinue 会报
+            // "Combat card missing creation identity"，联机后续动作直接失步。
+            combatState.AddCard(clone, Owner);
             clone.AddKeyword(CardKeyword.Exhaust); // 额外赋予消耗
             await CardPileCmd.AddGeneratedCardToCombat(clone, PileType.Hand, Owner);
         }

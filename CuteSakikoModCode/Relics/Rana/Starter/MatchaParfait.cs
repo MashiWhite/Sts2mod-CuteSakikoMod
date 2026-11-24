@@ -255,7 +255,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         {
             relic.TotalConsumedThisCombat += amount;
             relic.ChargesRemoved?.Invoke(player, amount, choiceContext);
-            _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+            await relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
 
             if (player.Creature.HasPower<WantBothPower>()) await ApplyWantBothEffect(player, amount, choiceContext);
             await WantMoreParfaitPower.OnParfaitConsumedAsync(choiceContext, player, null);
@@ -290,7 +290,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
             Entry.Logger.Info($"[芭菲] 有人请客，不扣除杯数，但计数{amount}次");
             relic.TotalConsumedThisCombat += amount;
             relic.ChargesRemoved?.Invoke(relic.Owner, amount, choiceContext);
-            _ = relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
+            await relic.OnParfaitConsumedInstanceAsync(amount, choiceContext);
 
             if (relic.Owner.Creature.HasPower<WantBothPower>())
                 await ApplyWantBothEffect(relic.Owner, amount, choiceContext);
@@ -308,7 +308,7 @@ public class MatchaParfait : CuteRanaRelic, IModRightClickableRelic,
         {
             relic.TotalConsumedThisCombat += removed;
             relic.ChargesRemoved?.Invoke(relic.Owner, removed, choiceContext);
-            _ = relic.OnParfaitConsumedInstanceAsync(removed, choiceContext);
+            await relic.OnParfaitConsumedInstanceAsync(removed, choiceContext);
 
             if (relic.Owner.Creature.HasPower<WantBothPower>())
                 await ApplyWantBothEffect(relic.Owner, removed, choiceContext);
