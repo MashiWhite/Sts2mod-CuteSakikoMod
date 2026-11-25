@@ -67,24 +67,35 @@
 
     <!-- ★ 游戏版本检测：0.113 起游戏删除了 SingletonModel（改用 RunModel），
          需要给源码提供 STS2_AT_LEAST_0_113_0 条件编译符号，才能一份代码同时兼容
-         beta（0.113+）与正式版（0.111）。版本号读游戏目录 release_info.json，
-         读不到就不定义（等同旧版）。 -->
+         beta（0.113 / 0.114）与正式版（0.111 / 0.107）。版本号读游戏目录 release_info.json，
+         读不到就不定义（等同旧版）。0.114 另加 STS2_AT_LEAST_0_114_0，见下方。 -->
     <PropertyGroup>
         <_Sts2ReleaseInfoPath>$(Sts2Path)/release_info.json</_Sts2ReleaseInfoPath>
         <_Sts2ReleaseInfo Condition="Exists('$(_Sts2ReleaseInfoPath)')">$([System.IO.File]::ReadAllText('$(_Sts2ReleaseInfoPath)'))</_Sts2ReleaseInfo>
         <_Sts2GameVersion Condition="'$(Sts2GameVersion)' != ''">$(Sts2GameVersion)</_Sts2GameVersion>
         <_Sts2GameVersion Condition="'$(_Sts2GameVersion)' == '' and '$(_Sts2ReleaseInfo)' != ''">$([System.Text.RegularExpressions.Regex]::Match($(_Sts2ReleaseInfo), '"version"\s*:\s*"v?([0-9]+\.[0-9]+\.[0-9]+)"').Groups[1].Value)</_Sts2GameVersion>
         <_Sts2HasNewSingletonApi>false</_Sts2HasNewSingletonApi>
-        <!-- RitsuLib 包按版本切换：0.113+ 用主包，0.111 用 Compat 包（二者 API 面一致）。
+        <!-- RitsuLib 包按版本切换（2026-11-25 起 0.6.16）：
+             0.114+ 用主包（主包按最新 0.114 API 编译）；
+             0.113 用 Compat.0.113.0；0.111 用 Compat.0.111.0；0.107 用 Compat.0.107.1。
              变体构建时可用 -p:RitsuLibPackageId=... 覆盖。 -->
-        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == '' and '$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">STS2.RitsuLib</RitsuLibPackageId>
-        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == ''">STS2.RitsuLib.Compat.0.111.0</RitsuLibPackageId>
-        <RitsuLibPackageVersion Condition="'$(RitsuLibPackageVersion)' == ''">0.6.13</RitsuLibPackageVersion>
+        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == '' and '$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.114.0'))">STS2.RitsuLib</RitsuLibPackageId>
+        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == '' and '$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">STS2.RitsuLib.Compat.0.113.0</RitsuLibPackageId>
+        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == '' and '$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.111.0'))">STS2.RitsuLib.Compat.0.111.0</RitsuLibPackageId>
+        <RitsuLibPackageId Condition="'$(RitsuLibPackageId)' == ''">STS2.RitsuLib.Compat.0.107.1</RitsuLibPackageId>
+        <RitsuLibPackageVersion Condition="'$(RitsuLibPackageVersion)' == ''">0.6.16</RitsuLibPackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.113.0'))">
         <DefineConstants>$(DefineConstants);STS2_AT_LEAST_0_113_0</DefineConstants>
         <_Sts2HasNewSingletonApi>true</_Sts2HasNewSingletonApi>
+    </PropertyGroup>
+
+    <!-- 0.114 起：RapidShot→TwinShot、伤害结果改 DamageResults/HpLossResult（含 dryRun）、
+         CardModel.UpgradeInternal(bool silent)/DowngradeInternal(int)。
+         需要按版本分叉时用 STS2_AT_LEAST_0_114_0（RitsuLib 0.6.16 同名符号）。 -->
+    <PropertyGroup Condition="'$(_Sts2GameVersion)' != '' and $([MSBuild]::VersionGreaterThanOrEquals('$(_Sts2GameVersion)', '0.114.0'))">
+        <DefineConstants>$(DefineConstants);STS2_AT_LEAST_0_114_0</DefineConstants>
     </PropertyGroup>
 
     <!-- 0.108 起伤害管线带 CardPlay；0.109/0.111 起有 CardLocation。 -->
@@ -96,7 +107,7 @@
     </PropertyGroup>
 
     <Target Name="LogGameApiCompat" BeforeTargets="CoreCompile">
-        <Message Text="[CuteSakikoMod] Detected game version: '$(_Sts2GameVersion)' (STS2_AT_LEAST_0_113_0 = $(_Sts2HasNewSingletonApi))" Importance="high" />
+        <Message Text="[CuteSakikoMod] Detected game version: '$(_Sts2GameVersion)' (STS2_AT_LEAST_0_113_0 = $(_Sts2HasNewSingletonApi)) RitsuLib=${RitsuLibPackageId} $([System.String]::Copy('$(DefineConstants)').Contains('STS2_AT_LEAST_0_114_0'))" Importance="high" />
     </Target>
 
     <!-- 引用 -->
