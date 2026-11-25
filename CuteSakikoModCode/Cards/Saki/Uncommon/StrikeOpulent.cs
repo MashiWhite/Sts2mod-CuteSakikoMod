@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -32,6 +32,14 @@ public class StrikeOpulent : CuteSakikoModCard
             {
                 var allCards = card?.Owner?.PlayerCombatState?.AllCards;
                 if (allCards == null) return 0;
+                return allCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
+            });
+            yield return new CalculationBaseVar(1m);
+            yield return new CalculationExtraVar(1m);
+            yield return AttackHitCountVar.CreateCalculated("TotalHits", (card, _) =>
+            {
+                var allCards = card?.Owner?.PlayerCombatState?.AllCards;
+                if (allCards == null) return 0m;
                 return allCards.Count(c => c.Keywords.Contains(CutesakiKeywords.Playpiano.GetModCardKeyword()));
             });
         }

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -16,7 +16,8 @@ public class FingerExercise() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(3m, ValueProp.Move)
+        new DamageVar(3m, ValueProp.Move),
+        AttackHitCountVar.Create(3)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -25,7 +26,7 @@ public class FingerExercise() : CuteAnonCard(1, CardType.Attack, CardRarity.Comm
 
         TriggerBanter();
 
-        var hitCount = 3; // 固定攻击3次
+        var hitCount = DynamicVars["Repeat"].IntValue;
         var damage = DynamicVars.Damage.BaseValue;
 
         await DamageCmd.Attack(damage)

@@ -1,4 +1,4 @@
-﻿using CuteSakikoMod.CuteSakikoModCode.Others;
+using CuteSakikoMod.CuteSakikoModCode.Others;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Basic;
 using CuteSakikoMod.CuteSakikoModCode.Powers.Debuff;
 using MegaCrit.Sts2.Core.Commands;
@@ -20,7 +20,17 @@ public class StrikeFast() : CuteSakikoModCard(1, CardType.Attack, CardRarity.Com
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(6m, ValueProp.Move),
-        new RepeatVar(1)
+        new RepeatVar(1),
+        new CalculationBaseVar(1m),
+        new CalculationExtraVar(1m),
+        AttackHitCountVar.CreateCalculated("TotalHits", (card, _) =>
+        {
+            var owner = card.Owner;
+            var pressure = owner?.Creature?.GetPower<PressurePower>();
+            return pressure != null && pressure.Amount > 0
+                ? card.DynamicVars["Repeat"].BaseValue
+                : 0m;
+        })
     ];
 
     protected override bool ShouldGlowGoldInternal

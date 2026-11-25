@@ -1,4 +1,4 @@
-﻿// 3. 普通攻击：造成 2 点伤害 2 次，升级时增加 Block 变量（按用户要求）
+// 3. 普通攻击：造成 2 点伤害 2 次，升级时增加 Block 变量（按用户要求）
 
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -16,7 +16,8 @@ public class ParkingNekoThree : NekoCard
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
-        new DamageVar(2m, ValueProp.Move)
+        new DamageVar(2m, ValueProp.Move),
+        AttackHitCountVar.Create(2)
     };
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -24,7 +25,7 @@ public class ParkingNekoThree : NekoCard
         var damage = (int)DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
-            .WithHitCount(2)
+            .WithHitCount(DynamicVars["Repeat"].IntValue)
             .Targeting(cardPlay.Target)
             .Execute(choiceContext);
     }
