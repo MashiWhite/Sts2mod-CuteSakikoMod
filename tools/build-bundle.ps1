@@ -9,9 +9,9 @@
 #   compat/<版本>/CuteSakikoMod.Compat.dll + compat-target.txt
 #
 # 用法：
-#   pwsh -File tools\build-bundle.ps1 -GameVersions '0.107.1,0.111.0,0.113.0' -Deploy
+#   pwsh -File tools\build-bundle.ps1 -GameVersions '0.107.1,0.111.0,0.113.0,0.114.0' -Deploy
 param(
-    [string[]]$GameVersions = @('0.107.1', '0.111.0', '0.113.0'),
+    [string[]]$GameVersions = @('0.107.1', '0.111.0', '0.113.0', '0.114.0'),
     [string]$OutDir = 'E:\SLJT2\.build-check\mainmod-bundle',
     [switch]$Deploy,
     [string]$ModsDir = 'E:\SteamLibrary\steamapps\common\Slay the Spire 2\mods'
@@ -34,19 +34,23 @@ function Resolve-RefsDir([string]$Version) {
 }
 
 function Resolve-RitsuLib([string]$Version) {
-    if ([version]$Version -ge [version]'0.113.0') {
+    # RitsuLib 0.6.16 起支持 0.114：主包按 0.114 API 编译，旧版本必须用对应的 Compat 包。
+    $pkgVersion = '0.6.16'
+    if ([version]$Version -ge [version]'0.114.0') {
         return @{
             Id = 'STS2.RitsuLib'
-            Version = '0.6.14'
-            Runtime = 'E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\sts2.ritsulib\0.6.14\lib\net9.0\STS2-RitsuLib.Runtime.dll'
+            Version = $pkgVersion
+            Runtime = "E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\sts2.ritsulib\$pkgVersion\lib\net9.0\STS2-RitsuLib.Runtime.dll"
         }
     }
-    $compatVersion = if ([version]$Version -ge [version]'0.111.0') { '0.111.0' } else { '0.107.1' }
+    $compatVersion = if ([version]$Version -ge [version]'0.113.0') { '0.113.0' }
+                     elseif ([version]$Version -ge [version]'0.111.0') { '0.111.0' }
+                     else { '0.107.1' }
     $pkgName = "sts2.ritsulib.compat.$compatVersion"
-    $runtime = "E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\$pkgName\0.6.14\lib\net9.0\STS2-RitsuLib.Runtime.dll"
+    $runtime = "E:\SLJT2\Rider\RiderProjects\CuteSakikoMod\packages\$pkgName\$pkgVersion\lib\net9.0\STS2-RitsuLib.Runtime.dll"
     return @{
         Id = "STS2.RitsuLib.Compat.$compatVersion"
-        Version = '0.6.14'
+        Version = $pkgVersion
         Runtime = $runtime
     }
 }
